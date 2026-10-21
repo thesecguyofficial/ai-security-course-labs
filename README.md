@@ -15,7 +15,8 @@ Hands-on labs for **AI Security for Cloud Folks** by [The Sec Guy](https://these
 | M2 | Threat-model the TSG Helpdesk AI app (template) | Pen & paper / Markdown | ✅ available |
 | M4 | PII detection and redaction in and out of a chat app (Presidio) | Laptop ($0) | ✅ available |
 | M5 | Output handling: XSS, SQL and command injection via model output, then fix it | Laptop ($0) | ✅ available |
-| M3, M6 → M19 | One lab per section, released with the course | Laptop + AWS | coming every two weeks |
+| M3 | Prompt injection: hijack a local support bot via a planted email note, then add 4 layered defences (25 tests + promptfoo eval) | Laptop ($0) | ✅ available |
+| M6 → M19 | One lab per section, released with the course | Laptop + AWS | coming every two weeks |
 
 Each lab folder has a `README.md` with step-by-step commands, what you should see, and troubleshooting.
 
