@@ -12,7 +12,8 @@ Hands-on labs for **AI Security for Cloud Folks** by [The Sec Guy](https://these
 | Module | Lab | Runs on | Status |
 |---|---|---|---|
 | M1 | Run a model locally, count tokens, fill the context window | Laptop ($0) | ✅ available |
-| M2 → M19 | One lab per section, released with the course | Laptop + AWS | coming every two weeks |
+| M2 | Threat-model the TSG Helpdesk AI app (template) | Pen & paper / Markdown | ✅ available |
+| M3 → M19 | One lab per section, released with the course | Laptop + AWS | coming every two weeks |
 
 Each lab folder has a `README.md` with step-by-step commands, what you should see, and troubleshooting.
 
