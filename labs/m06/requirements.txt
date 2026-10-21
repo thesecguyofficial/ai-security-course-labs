@@ -1,0 +1,3 @@
+# M6.7 lab. Qdrant's Python client, used in "local mode" (in-process: no server, no network port).
+# Tested with this version on Python 3.13. qdrant-client supports Python 3.10 and newer.
+qdrant-client==1.19.1

@@ -1,0 +1,4 @@
+# M8 lab. The official MCP Python SDK (MIT licence): https://pypi.org/project/mcp/
+# Pinned: v2.3.0 (2 Oct 2026) speaks MCP protocol version 2026-07-28 and falls back to older versions.
+# It also brings PyJWT, cryptography, starlette, uvicorn and httpx2, which the auth part of the lab uses.
+mcp==2.3.0
