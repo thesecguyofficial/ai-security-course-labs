@@ -1,0 +1,5 @@
+# M4.6 lab. Presidio: MIT licence, community-maintained at github.com/data-privacy-stack/presidio
+# Tested with these versions on Python 3.13 (Presidio supports Python 3.10-3.13).
+presidio_analyzer==2.2.364
+presidio_anonymizer==2.2.364
+# The spaCy English model is installed separately:  python -m spacy download en_core_web_sm

@@ -1,0 +1,2 @@
+# M4.6 challenge canary: the internal employee ID. Only checked by `make challenge`.
+EMP-482913

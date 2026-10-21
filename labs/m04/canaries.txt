@@ -1,0 +1,14 @@
+# M4.6 canaries: fake sensitive values that must NEVER appear in logs/ when redaction is on.
+# check_logs.py fails if any of these strings is found. One per line; # = comment.
+Jane Doe
+jane.doe@example.com
+202-555-0143
+4242 4242 4242 4242
+ABCPE1234F
+203.0.113.42
+AKIAIOSFODNN7EXAMPLE
+# The next three come from the stand-in model's ANSWER (output redaction):
+John Smith
+john.smith@example.org
+5555 5555 5555 4444
+198.51.100.7

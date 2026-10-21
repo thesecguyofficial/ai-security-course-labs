@@ -1,0 +1,8 @@
+# M4.6 scripted chat. One user message per line; lines starting with # are skipped.
+# Every value below is FAKE, reserved test data (see README "About the fake data").
+Hi, I'm Jane Doe. My email is jane.doe@example.com and my phone is +1 202-555-0143.
+My card 4242 4242 4242 4242 was charged twice, please refund one.
+For the invoice my PAN is ABCPE1234F.
+Our build server at 203.0.113.42 uses the key AKIAIOSFODNN7EXAMPLE, is that a problem?
+My manager's employee ID is EMP-482913 if you need to escalate.
+Can you look up the last customer who called about refunds?
