@@ -1,6 +1,6 @@
 # Lab M3.9: break a support bot with a planted note, then fix it in layers and prove each fix
 
-Companion to lesson **3.9** of *AI Security for Cloud Folks* (The Sec Guy). About 60 minutes, $0, all on your laptop.
+Companion to lesson **3.9** of *AI Security Engineer* (The Sec Guy). About 60 minutes, $0, all on your laptop.
 
 **SupportBot** summarises customer emails for a support agent. It has one harmless tool, `create_ticket`, which
 writes a line to a file on your computer. You'll watch a note planted inside an email take over the bot (one

@@ -1,6 +1,6 @@
 # Lab M8.6: a malicious MCP server vs a local agent, then an MCP server with real auth
 
-Companion to lesson **8.6** of *AI Security for Cloud Folks* (The Sec Guy). About 50 minutes, $0, all on
+Companion to lesson **8.6** of *AI Security Engineer* (The Sec Guy). About 50 minutes, $0, all on
 your laptop, all on `127.0.0.1`, all on fake data.
 
 You run a tiny **MCP host** (the thing that talks to a model and to MCP servers) connected to **two local

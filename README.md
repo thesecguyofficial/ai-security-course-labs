@@ -1,6 +1,6 @@
-# AI Security for Cloud Folks: free hands-on labs
+# AI Security Engineer: free hands-on labs
 
-Hands-on labs for **AI Security for Cloud Folks** by [The Sec Guy](https://thesecguy.com/course/): learn to attack and defend AI apps, RAG, agents and MCP servers. **Every lab runs free on your laptop first**, and then on AWS (Bedrock, Guardrails, AgentCore, SageMaker AI) when you're ready.
+Hands-on labs for **AI Security Engineer** by [The Sec Guy](https://thesecguy.com/course/): learn to attack and defend AI apps, RAG, agents and MCP servers. **Every lab runs free on your laptop first**, and then on AWS (Bedrock, Guardrails, AgentCore, SageMaker AI) when you're ready.
 
 > New here? It's OK not to know this yet. Start with `labs/m00` setup, then go in order.
 

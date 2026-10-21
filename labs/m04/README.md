@@ -1,6 +1,6 @@
 # Lab M4.6: PII detection and redaction in and out, and proof that nothing sensitive reaches the logs
 
-Companion to lesson **4.6** of *AI Security for Cloud Folks* (The Sec Guy). About 45 minutes, $0, all on your laptop.
+Companion to lesson **4.6** of *AI Security Engineer* (The Sec Guy). About 45 minutes, $0, all on your laptop.
 
 You get a tiny support-chat app that logs every turn, like most real apps. First you watch personal data pour into
 its logs. Then you switch on redaction in three places (before the model, after the model, and in the log handler)

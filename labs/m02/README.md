@@ -1,6 +1,6 @@
 # Lab M2.5: threat-model TSG Helpdesk
 
-Companion to lesson **2.5** of *AI Security for Cloud Folks*. This folder will move to the public
+Companion to lesson **2.5** of *AI Security Engineer*. This folder will move to the public
 lab repository as `labs/m02/`. It contains the system description, a step-by-step guide and a blank
 template. **It contains no solution** (the worked sample answer is part of the paid course).
 

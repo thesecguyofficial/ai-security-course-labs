@@ -1,7 +1,7 @@
 # Threat model: TSG Helpdesk
 
 > Copy this file to `my-threat-model.md` and fill it in. Pen and paper is fine too: copy the headings.
-> Guide: `README.md` in this folder. Lessons 2.1–2.5 of *AI Security for Cloud Folks*.
+> Guide: `README.md` in this folder. Lessons 2.1–2.5 of *AI Security Engineer*.
 
 - **Author:**
 - **Date:**

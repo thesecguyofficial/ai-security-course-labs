@@ -1,6 +1,6 @@
 # Lab M5.6: when model output changes what your app does, and how to stop it
 
-Companion to lesson **5.6** of *AI Security for Cloud Folks* (The Sec Guy). About 45 minutes, $0, all on your laptop.
+Companion to lesson **5.6** of *AI Security Engineer* (The Sec Guy). About 45 minutes, $0, all on your laptop.
 No installs: Python's standard library only.
 
 You get **TSG Helpdesk**, a tiny web app with an AI assistant. The assistant turns your question into a small

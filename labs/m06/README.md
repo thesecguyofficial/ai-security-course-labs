@@ -1,6 +1,6 @@
 # Lab M6.7: a two-tenant RAG bot. Poison it, leak across tenants, catch it guessing, then fix all three
 
-Companion to lesson **6.7** of *AI Security for Cloud Folks* (The Sec Guy). About 60 minutes, $0, all on your
+Companion to lesson **6.7** of *AI Security Engineer* (The Sec Guy). About 60 minutes, $0, all on your
 laptop. One package to install (`qdrant-client`); no model downloads.
 
 You get **TSG Knowledge Bot**, a tiny RAG app (retrieval-augmented generation: the bot searches company documents,

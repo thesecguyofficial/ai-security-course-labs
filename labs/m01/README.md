@@ -1,6 +1,6 @@
 # Lab M1.8: run a model locally, count tokens, watch the context window fill
 
-Companion to lesson **1.8** of *AI Security for Cloud Folks*. This folder will move to the public
+Companion to lesson **1.8** of *AI Security Engineer*. This folder will move to the public
 `ai-security-labs` repository; it contains no solutions and no secrets.
 
 ## Needs
