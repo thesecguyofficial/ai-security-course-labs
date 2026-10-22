@@ -34,7 +34,7 @@ Throughout: `AWS_REGION` = `us-east-1` and these shell variables (set them again
 ## Step 0 · Before you start (10 minutes)
 
 1. **A sandbox account with a budget alarm** (lesson 0.7). Not a work account.
-2. **The AWS CLI v2, recent.** Managed knowledge bases (GA July 2026) and the AgentCore harness are new: an older CLI
+2. **The AWS CLI v2, recent.** Managed knowledge bases (GA 17 June 2026) and the AgentCore harness are new: an older CLI
    fails with `Unknown parameter` or `Invalid choice`. Update it first. `pip install boto3` (recent) for Part B.
 3. **Region.** AWS lists us-east-1 for both Bedrock Managed Knowledge Base
    ([AWS ML blog, 16 Jul 2026](https://aws.amazon.com/blogs/machine-learning/build-enterprise-search-for-agents-with-amazon-bedrock-managed-knowledge-base/))
@@ -347,6 +347,8 @@ export HARNESS_ARN=$(cd cloud/terraform && terraform output -raw harness_arn)
   then (in this lab) only prints what it would do.
 - Only the backend may call `InvokeHarness`: it accepts `tools`, `allowedTools` and `systemPrompt` on every call, so a
   browser that could call it could rewrite the agent (lab A8).
+- Nobody gets `bedrock-agentcore:InvokeAgentRuntimeCommand`. That API runs commands in the session directly, and
+  `allowedTools` "does not affect" it ([harness tools](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-tools.html)).
 
 ```bash
 export KB_ID HARNESS_ARN AWS_REGION
@@ -410,12 +412,12 @@ from the backend instead.*
 
 ## B5 · Where to see it
 
-AgentCore traces every action automatically (the harness overview says so), and the managed knowledge base's metrics
-and traces show up on the AgentCore observability page with no extra setup
-([observability](https://docs.aws.amazon.com/bedrock/latest/userguide/kb-managed-observability.html)). Look in
-CloudWatch Logs under `/aws/bedrock-agentcore/runtimes/` (the log group the execution policy allows). AWS's harness
-pages we read don't list a CloudTrail data-event type for `InvokeHarness`; check your trail's **Event history** after
-B3 and note what you see.
+The harness overview says "Every action is traced automatically", but you only see traces after you enable
+Transaction Search in CloudWatch, once per account ([harness operations](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-operations.html)).
+Logs go to CloudWatch Logs under `/aws/bedrock-agentcore/runtimes/` (the log group the execution policy allows).
+In CloudTrail there is no `InvokeHarness` event: AWS records harness calls as data events named `InvokeAgentRuntime`,
+`InvokeAgentRuntimeCommand` and `InvokeAgentRuntimeCommandShell`, with `resources.type` = `AWS::BedrockAgentCore::Runtime`
+(same page). Data events are off by default: add a selector for that resource type if you want to see who invoked it.
 
 # Part C · Only if your account can still create Bedrock Agents Classic
 
@@ -464,7 +466,7 @@ To record `InvokeAgent` in CloudTrail, add a data-event selector for `AWS::Bedro
 | Managed KB index storage | US$5.00 per GB of raw data per month ([pricing](https://aws.amazon.com/bedrock/pricing/)) | 6 small files: a tiny fraction of a cent |
 | Managed KB `Retrieve` | US$1.00 per 1,000 calls; managed embedding and reranking US$0 | about 20 calls: about 2 cents |
 | KMS key | US$1/month, prorated hourly; no charge once scheduled for deletion ([KMS](https://aws.amazon.com/kms/pricing/)) | a few cents for a day |
-| Harness | "no separate harness charge"; you pay the AgentCore capabilities used: Runtime US$0.0895 per vCPU-hour and US$0.00945 per GB-hour (v1), per second, CPU not billed during I/O wait ([AgentCore pricing](https://aws.amazon.com/bedrock/agentcore/pricing/)) | a few minutes of sessions: cents |
+| Harness | "There is no separate harness charge" ([harness](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness.html)); you pay the AgentCore capabilities used: Runtime US$0.0895 per vCPU-hour and US$0.00945 per GB-hour (v1), per second, CPU scales to zero during I/O wait ([AgentCore pricing](https://aws.amazon.com/bedrock/agentcore/pricing/)) | a few minutes of sessions: cents |
 | Model tokens | Claude Haiku 4.5 on Bedrock, per token | a dozen short turns: cents |
 | CloudTrail data events, CloudWatch Logs | charged per event / per GB | only if you turned them on |
 
