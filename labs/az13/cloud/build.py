@@ -78,6 +78,10 @@ def do_index():
             {"name": "UserIds", "type": "Collection(Edm.String)", "permissionFilter": "userIds", "filterable": True, "retrievable": False},
             {"name": "GroupIds", "type": "Collection(Edm.String)", "permissionFilter": "groupIds", "filterable": True, "retrievable": False},
         ],
+        # a semantic configuration: Microsoft's search index knowledge source page lists it as a prerequisite (G3)
+        "semantic": {"defaultConfiguration": "helpdesk-semantic", "configurations": [{"name": "helpdesk-semantic",
+                     "prioritizedFields": {"titleField": {"fieldName": "title"},
+                                           "prioritizedContentFields": [{"fieldName": "content"}]}}]},
     }
     show("create index", *call("PUT", f"{s}/indexes/{INDEX}?api-version={API}", index), keys=["name", "permissionFilterOption"])
     docs = [
@@ -108,7 +112,8 @@ def do_index():
 def do_kb():
     s = env()["SEARCH_ENDPOINT"]
     ks = {"name": KS, "kind": "searchIndex", "description": "TSG Helpdesk articles (AZ13 guided build)",
-          "searchIndexParameters": {"searchIndexName": INDEX, "sourceDataFields": [{"name": "title"}, {"name": "content"}]}}
+          "searchIndexParameters": {"searchIndexName": INDEX, "semanticConfigurationName": "helpdesk-semantic",
+                                    "sourceDataFields": [{"name": "title"}, {"name": "content"}]}}
     show("create knowledge source", *call("PUT", f"{s}/knowledgesources/{KS}?api-version={API}", ks), keys=["name", "kind"])
     kb = {"name": KB, "description": "TSG Helpdesk knowledge (AZ13)", "knowledgeSources": [{"name": KS}],
           "outputMode": "extractiveData", "retrievalReasoningEffort": {"kind": "minimal"}}

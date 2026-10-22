@@ -15,9 +15,11 @@ today.
 > results into the table in G5.
 >
 > **Preview features.** Native document permissions, Purview labels, knowledge base permission enforcement and the
-> Foundry IQ-to-agent connection are **preview** in October 2026: "aren't recommended for production workloads, and
-> might change or be constrained before they become generally available". The GA pieces you use are security filters,
-> the Search REST API `2026-04-01`, prompt agents, the MCP tool and function tools.
+> Foundry IQ-to-agent connection (the `RemoteTool` connection) are **preview** in October 2026: "aren't recommended for
+> production workloads, and might change or be constrained before they become generally available". So this guide uses
+> the preview Search REST API `2026-08-01-preview` throughout. The GA pieces you use are prompt agents, the MCP tool and
+> function tools. (Knowledge base retrieve is GA only at `2026-04-01`, for "minimal, extractive retrieval", without the
+> permission header.)
 
 Throughout, set these shell variables (again in every new terminal):
 
@@ -78,7 +80,8 @@ control without quoting its text.
 6. **The project's identity reads the index, nothing more.** Back on the search service, **Access control (IAM)**, **Add
    role assignment**, **Search Index Data Reader**, assign access to **Managed identity**, select the `helpdesk` project
    (label may differ slightly). Not Search Service Contributor: Microsoft warns that "Owner, Contributor, and Search
-   Service Contributor can retrieve admin keys".
+   Service Contributor can retrieve admin keys". Not Search Index Data Contributor either: that role can send the
+   `x-ms-enable-elevated-read` header (preview) and see past the permission filters.
 7. **Keys off on the Foundry resource too** (lab AZ10): the portal path for this is in lab AZ10; the CLI path is below.
 
 ### Path B: CLI
@@ -108,9 +111,13 @@ az role assignment create --assignee-object-id $PMI --assignee-principal-type Se
   --role "Search Index Data Reader" --scope $SID
 ```
 
-The project's ARM `api-version` (`2025-06-01`) is the one place in this guide we could not confirm on Microsoft Learn
-(the reference page wasn't reachable from our build). If Azure answers `NoRegisteredProviderFound` or
-`InvalidApiVersion`, create the project with Path A step 4 and carry on.
+The project's ARM `api-version` (`2025-06-01`) is a stable `Microsoft.CognitiveServices` version whose REST spec
+(azure-rest-api-specs) defines `accounts/{accountName}/projects/{projectName}`. If Azure answers
+`NoRegisteredProviderFound` or `InvalidApiVersion` anyway, create the project with Path A step 4 and carry on.
+
+**Roles for G4.** Microsoft's Foundry IQ page lists **Foundry User** to create agents and **Foundry Project Manager**
+to create the MCP connection. If you created the subscription you are its Owner, which already covers the connection.
+If not, ask for Foundry Project Manager on the Foundry resource too.
 
 **Wait.** Microsoft: for a managed identity, "it might take several hours for the permissions assignments to take
 effect" (usually much less). If G4 or G5 return 401/403 from Search, this is the first suspect.
@@ -132,9 +139,15 @@ PUT {SEARCH_ENDPOINT}/indexes/helpdesk-kb?api-version=2026-08-01-preview
     {"name": "content", "type": "Edm.String", "searchable": true},
     {"name": "UserIds", "type": "Collection(Edm.String)", "permissionFilter": "userIds", "filterable": true, "retrievable": false},
     {"name": "GroupIds", "type": "Collection(Edm.String)", "permissionFilter": "groupIds", "filterable": true, "retrievable": false}
-  ]
+  ],
+  "semantic": {"defaultConfiguration": "helpdesk-semantic", "configurations": [{"name": "helpdesk-semantic",
+    "prioritizedFields": {"titleField": {"fieldName": "title"}, "prioritizedContentFields": [{"fieldName": "content"}]}}]}
 }
 ```
+
+The `semantic` block is there for G3: Microsoft's search index knowledge source page asks for "A search index containing
+plain text or vector content with a semantic configuration". `"retrievable": false` on the permission fields is our
+choice (the push API page doesn't mention it): nobody needs to see the group IDs in results.
 
 | Document | `UserIds` | `GroupIds` | Who should see it |
 |---|---|---|---|
@@ -184,7 +197,8 @@ knowledge base `helpdesk-knowledge` that uses it, output mode extractive data, n
 ```json
 PUT {SEARCH_ENDPOINT}/knowledgesources/helpdesk-ks?api-version=2026-08-01-preview
 {"name": "helpdesk-ks", "kind": "searchIndex", "description": "TSG Helpdesk articles (AZ13 guided build)",
- "searchIndexParameters": {"searchIndexName": "helpdesk-kb", "sourceDataFields": [{"name": "title"}, {"name": "content"}]}}
+ "searchIndexParameters": {"searchIndexName": "helpdesk-kb", "semanticConfigurationName": "helpdesk-semantic",
+                           "sourceDataFields": [{"name": "title"}, {"name": "content"}]}}
 
 PUT {SEARCH_ENDPOINT}/knowledgebases/helpdesk-knowledge?api-version=2026-08-01-preview
 {"name": "helpdesk-knowledge", "description": "TSG Helpdesk knowledge (AZ13)", "knowledgeSources": [{"name": "helpdesk-ks"}],
@@ -192,7 +206,8 @@ PUT {SEARCH_ENDPOINT}/knowledgebases/helpdesk-knowledge?api-version=2026-08-01-p
 ```
 
 Then two retrieves of "pay bands 2027 reference number": **R1** with your token in `x-ms-query-source-authorization`,
-**R2** without it. Microsoft documents three top-level response fields: `response`, `activity` and `references`
+**R2** without it. Microsoft documents the top-level response fields `response`, `activity` and `references`, plus
+sensitivity label metadata when labels are on
 ([retrieve](https://learn.microsoft.com/en-us/azure/search/agentic-retrieval-how-to-retrieve)). We don't show their
 inner fields: read yours.
 
@@ -208,7 +223,7 @@ reproduced the most important gotcha of this module: **the header is the control
 The agent gets two tools:
 
 1. **The knowledge base, as an MCP tool**, through a project connection that authenticates with the project's
-   managed identity (`authType` `ProjectManagedIdentity`, `category` `RemoteTool`, audience
+   managed identity (`authType` `ProjectManagedIdentity`, `category` `RemoteTool` (preview), audience
    `https://search.azure.com/`, the shape in Microsoft's
    [Foundry IQ connection page](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/foundry-iq-connect)).
    `allowed_tools: ["knowledge_base_retrieve"]` (Microsoft: "This is the only tool currently supported for use with
@@ -222,8 +237,8 @@ The agent gets two tools:
 ### Path A: portal
 
 In the Foundry portal: **Agents**, create an agent `helpdesk-agent`, model `helpdesk-chat`, paste the instructions from
-`cloud/build.py` (`INSTRUCTIONS`), then add the knowledge base under tools (Microsoft's training module: "Add the
-knowledge base connection to the agent as an MCP tool") (labels may differ slightly). We could not confirm that the
+`cloud/build.py` (`INSTRUCTIONS`), then add the knowledge base under tools as an MCP tool (labels may differ
+slightly; Microsoft doesn't quote these portal labels in text). We could not confirm that the
 portal lets you set the per-request header or structured input; if it doesn't, the portal agent runs **without** your
 token (see G3 R2). Use Path B for the header and the function tool.
 
@@ -263,7 +278,7 @@ really sent: approved emails go to `cloud/.state/outbox.jsonl`.
 | 5 | "Delete ticket 4480 for me." | The agent says it can't | It can only use tools it was given |
 
 **Example response (shape from Microsoft docs, values illustrative)**: request 4, the item your code receives
-([function calling](https://learn.microsoft.com/en-in/azure/ai-services/agents/how-to/tools/function-calling)):
+([function calling](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/function-calling)):
 
 ```text
    function_call send_email {"to": "you@example.com", "subject": "VPN password reset steps", "body": "1. Open https://passwordreset.contoso.com ..."}
@@ -354,9 +369,11 @@ why `down` deletes those explicitly. Tomorrow, check: `az group show -n rg-$AZ13
 
 - **No real run.** Every response above is illustrative. Before release the course team runs this guide in a sandbox
   and replaces them with real output.
-- The ARM `api-version` for creating the project by CLI (`2025-06-01`); the portal path avoids it.
+- Exact portal labels in the Foundry portal for agents, tools and knowledge bases (marked "label may differ slightly").
 - Whether the Foundry portal can set the knowledge base tool's `headers` and structured inputs.
 - Whether a knowledge base retrieve on the Free tier behaves exactly like Basic (Microsoft lists Free-tier limits of
-  3 knowledge bases, which suggests it's supported).
+  3 knowledge bases, which suggests it's supported), and whether the semantic reranking inside agentic retrieval runs
+  on Free. Microsoft doesn't say.
+- Model token prices: the Azure pricing pages didn't render prices for our build. "A few US cents" is an estimate.
 - Which of G3's two Microsoft statements wins on your service: the token-less retrieve (R2) and G6a are there so you
   find out.
