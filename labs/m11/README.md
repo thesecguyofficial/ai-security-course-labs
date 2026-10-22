@@ -5,6 +5,9 @@ Companion to lessons **11.1 to 11.6** of *AI Security Engineer* (The Sec Guy). A
 deploys the hardened Helpdesk into **your own** sandbox account with Terraform, costs roughly $0.02 an hour while it
 runs, and ends with `make down`.
 
+**Guided build (your own account, optional):** [`GUIDED-BUILD.md`](GUIDED-BUILD.md) builds the same hardened Helpdesk by
+hand, console and CLI, then proves each control with five requests, one changed setting, cost and teardown.
+
 You are still the cloud security engineer at **AnyCompany** (fictional; "AnyCompany" is the placeholder name AWS uses
 in its own documentation). After M10, the platform team wants to ship **TSG Helpdesk v2** to production on Amazon
 Bedrock, deployed with Terraform. A developer opened a pull request on Friday: "it works, ship it". That is the
