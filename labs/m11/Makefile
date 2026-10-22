@@ -20,7 +20,7 @@ attack-safe:     ## hardened: 0 of 7, the Helpdesk still works
 test:            ## the proof: every control checked (make test)
 	$(PY) run_tests.py
 
-challenge:       ## the same plus the challenge: 4 tests fail until you do it
+challenge:       ## the same plus the challenge: 3 tests fail until you do it
 	$(PY) run_tests.py --challenge
 
 package:         ## zip the Lambda code (needed by Terraform)

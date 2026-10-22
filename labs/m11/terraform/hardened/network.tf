@@ -65,7 +65,7 @@ resource "aws_vpc_endpoint" "bedrock_runtime" {
 
   # The default endpoint policy "allows full access" (AWS docs): any principal, any action, any resource,
   # including credentials from someone else's AWS account. This one lets only the Helpdesk role run models.
-  # The model allow-list lives in the role (iam.tf) and in the org SCPs; the endpoint is the identity perimeter.
+  # The model allow-list lives in the role (app.tf) and in the org SCPs; the endpoint is the identity perimeter.
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{

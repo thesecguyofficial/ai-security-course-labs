@@ -2,8 +2,9 @@
 # 90-day event history. What is NOT recorded unless you ask: data events, including EVERY inference call on the
 # bedrock-mantle endpoint (OpenAI-compatible and Anthropic Messages APIs), which invocation logging also misses.
 # This trail records only Bedrock data events and network activity events (calls through our VPC endpoint,
-# including ones the endpoint policy refused), so it doesn't pay for a second copy of management events.
-# Both are billed at $0.10 per 100,000 events delivered (CloudTrail pricing).
+# including ones the endpoint policy refused). Management events stay in the 90-day event history; in a real
+# organization your org trail already delivers them (one copy per trail is free, extra copies are not).
+# Data and network activity events are billed at $0.10 per 100,000 events delivered (CloudTrail pricing).
 
 resource "aws_s3_bucket" "trail" {
   bucket        = local.trail_bucket

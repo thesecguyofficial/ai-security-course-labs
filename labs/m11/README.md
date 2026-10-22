@@ -34,6 +34,7 @@ version that passes every control from this module.
 | `anycompany.json` | The company: principals, approved models, and the residency rule: Helpdesk data is processed in US Regions only |
 | `org/` | Org SCPs: `FullAWSAccess`, the first draft's Region guard, and the current one (`scp-region-guard.json`: challenge) |
 | `policies/endpoint-policy-mantle.json` | Next sprint's bedrock-mantle endpoint policy, copied from the AWS example (challenge) |
+| `policies/ops-tools-mantle-role.json` | Next sprint's ops tool role: `bedrock-mantle:*` on `*` for now (challenge) |
 | `package.py` | Zips `lambda/handler.py` for Terraform |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 15 tests for the lab, 7 for the challenge |
 
@@ -182,7 +183,7 @@ Attacks and mistakes
   [X6] ALLOWED  Stolen Helpdesk role: CreateProvisionedModelThroughput (billed by the hour)
          why:  every check passed: bedrock:CreateProvisionedModelThroughput
          seen: CloudTrail event history: management event (90 days, free)
-  [X7] ALLOWED  A code change: the function calls bedrock-mantle (OpenAI SDK) from inside the VPC
+  [X7] ALLOWED  A code change: the function calls bedrock-mantle (Anthropic SDK) from inside the VPC
          why:  every check passed: bedrock-mantle:CreateInference
          seen: CloudTrail: NOTHING (mantle inference is a data event, and no trail selects it)
          seen: Prompt log: NOT captured (invocation logging covers bedrock-runtime only)
@@ -221,10 +222,10 @@ Open `terraform/hardened/`. Every file starts with a comment saying which lesson
 | 11.1 Role | `bedrock:*`, `bedrock-mantle:*` on `*` | `InvokeModel` + `InvokeModelWithResponseStream` on one profile, and the model in its 3 destination Regions only with `bedrock:InferenceProfileArn` | `app.tf` |
 | 11.2 Network | NAT gateway; endpoint SG open to the VPC CIDR | No internet or NAT route; endpoint SG accepts 443 from the function's SG only | `network.tf` |
 | 11.2 Endpoint policy | none (default: full access) | only `aws:PrincipalAccount` = AnyCompany **and** `aws:PrincipalArn` = the Helpdesk role; invoke actions only | `network.tf` |
-| 11.3 Keys | none | `prompts` key (logs) and `audit` key (trail), rotation on, service statements with `aws:SourceAccount`/`aws:SourceArn` or encryption context, decrypt for an MFA-only investigator role | `kms.tf` |
+| 11.3 Keys | none | `prompts` key (logs) and `audit` key (trail), rotation on, service statements with `aws:SourceAccount`/`aws:SourceArn` or encryption context, the logging role only via CloudWatch Logs (`kms:ViaService`), decrypt for an MFA-only investigator role | `kms.tf` |
 | 11.4 Prompt logs | CloudWatch only, all modalities, no key, kept forever | text only, KMS, 30 days; S3 bucket for bodies over 100 KB with KMS, lifecycle, TLS-only, ACLs off, public access blocked | `logging.tf` |
 | 11.4 Logging role | trusts any Bedrock request; `logs:*` on `*` | `aws:SourceAccount` + `aws:SourceArn`; one log stream | `logging.tf` |
-| 11.4 Trail | none | multi-Region trail, log file validation, KMS; Bedrock mantle data events, endpoint network activity, guardrail data events only (no second copy of management events) | `trail.tf` |
+| 11.4 Trail | none | multi-Region trail, log file validation, KMS; Bedrock mantle data events, endpoint network activity, guardrail data events only (management events: 90-day event history, or your org trail) | `trail.tf` |
 | 11.5 Residency | `global.` profile | `us.` profile | `variables.tf` |
 | Cost | `MAX_TOKENS` 4096 | 300 (LLM06:2026) | `variables.tf` |
 
@@ -270,7 +271,7 @@ Attacks and mistakes
   [X6] DENIED   Stolen Helpdesk role: CreateProvisionedModelThroughput (billed by the hour)
          why:  no identity policy allows it (implicit deny)  [check: bedrock:CreateProvisionedModelThroughput on arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-opus-4-7]
          seen: CloudTrail event history: management event, with an access-denied errorCode (90 days, free)
-  [X7] DENIED   A code change: the function calls bedrock-mantle (OpenAI SDK) from inside the VPC
+  [X7] DENIED   A code change: the function calls bedrock-mantle (Anthropic SDK) from inside the VPC
          why:  no network path: no NAT or internet gateway, and no bedrock-mantle endpoint in this VPC
          seen: nothing: the request never left the VPC
 
@@ -291,6 +292,9 @@ Notice two things. Each attack on the role is refused by the **role alone** (tes
 trail records network activity on its endpoint, and AWS says these events "can help VPC endpoint owners detect when
 credentials from outside their organization attempt to access their VPC endpoints"; `errorCode` can be filtered on
 `VpceAccessDenied` ([AWS docs](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-network-events-with-cloudtrail.html)).
+One caveat: that page lists "Amazon Bedrock" (event source `bedrock.amazonaws.com`) without saying which Bedrock
+endpoint services it covers, and lists no `bedrock-mantle` source. That the runtime endpoint's refusals show up is
+our reading of it; if you do Step 7, check it.
 
 ## Step 4 · Prove it: `make test`
 
@@ -353,7 +357,7 @@ Real output before your fix (last lines):
 [FAIL] challenge 11.5: outside us-east-1, AnyCompany can't create buckets or call models directly
 [PASS] challenge 11.5: the Helpdesk's us. profile still routes to us-east-2 and us-west-2
 [PASS] challenge 11.5: a global profile is still refused
-[FAIL] challenge 11.2: through the mantle endpoint, outsiders and unapproved models are refused
+[FAIL] challenge 11.2: outsiders are refused at the mantle endpoint; the ops role alone refuses unapproved models
 [PASS] challenge 11.2: AnyCompany's ops tool can still use the approved mantle model
 [FAIL] challenge 11.4: M11-17 flags the first draft, and a hardened plan whose trail lost its mantle selector
 [PASS] challenge 11.4: M11-17 stays quiet on the hardened plan
@@ -374,12 +378,17 @@ Three gaps, three fixes. Each test's message is a hint.
    denied, **except** requests that carry the Helpdesk's approved US profile in `bedrock:InferenceProfileArn`. Use
    `ArnNotLike` (a negated operator: with no profile in the request it is *true*, so the deny applies). Keep the
    global profile blocked and the Helpdesk working (tests 17 and 18).
-2. **Next sprint's mantle endpoint (lesson 11.2).** The ops team will call bedrock-mantle from this VPC with the
-   OpenAI SDK. `policies/endpoint-policy-mantle.json` is AWS's example, which "grants access to the listed Amazon
-   Bedrock Mantle actions for all principals on all resources"
-   ([AWS docs](https://docs.aws.amazon.com/bedrock/latest/userguide/vpc-interface-endpoints.html)). Limit it to
-   AnyCompany's organization and the approved mantle model (`anthropic.claude-haiku-4-5`, in `anycompany.json`; mantle
-   model IDs aren't always the runtime IDs). Hint: `bedrock-mantle:Model`.
+2. **Next sprint's mantle access (lesson 11.2).** The ops team will call Claude Haiku 4.5 on bedrock-mantle from this
+   VPC with the Anthropic SDK (on mantle, this model supports the Messages API only, per its model card). Two files:
+   - `policies/endpoint-policy-mantle.json` is AWS's example, which "grants access to the listed Amazon Bedrock Mantle
+     actions for all principals on all resources"
+     ([AWS docs](https://docs.aws.amazon.com/bedrock/latest/userguide/vpc-interface-endpoints.html)). Limit it to
+     AnyCompany's organization: the identity perimeter, as for the runtime endpoint.
+   - `policies/ops-tools-mantle-role.json` is the ops tool's role, `bedrock-mantle:*` on `*`. Limit it to
+     `bedrock-mantle:CreateInference` on the approved mantle model (`anthropic.claude-haiku-4-5`, in `anycompany.json`;
+     mantle model IDs aren't the runtime IDs). Hint: the Service Authorization Reference lists the condition key
+     `bedrock-mantle:Model` for `CreateInference`. AWS doesn't say whether a VPC endpoint policy evaluates that key, so
+     test 19 checks the model rule in the role alone.
 3. **Rule M11-17 (lesson 11.4).** Write `rule_trail_covers_mantle()` in `checker.py`. The docstring says what to
    return. It must flag a plan with no trail **and** a plan whose trail lost its mantle selector, and stay quiet on the
    hardened plan.

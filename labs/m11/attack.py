@@ -116,7 +116,7 @@ def steps_for(plan: dict) -> list[Step]:
         Step("X6", "helpdesk", "Stolen Helpdesk role: CreateProvisionedModelThroughput (billed by the hour)",
              call("helpdesk", "bedrock:CreateProvisionedModelThroughput",
                   f"arn:aws:bedrock:{REGION}::foundation-model/anthropic.claude-opus-4-7"), "internet", "control-plane"),
-        Step("X7", "helpdesk", "A code change: the function calls bedrock-mantle (OpenAI SDK) from inside the VPC",
+        Step("X7", "helpdesk", "A code change: the function calls bedrock-mantle (Anthropic SDK) from inside the VPC",
              mantle("helpdesk", "anthropic.claude-haiku-4-5"), "vpc-to-mantle", "mantle-invoke"),
         Step("L1", "helpdesk", f"Helpdesk function: Converse via its configured profile ({app_target(plan)})",
              invoke("helpdesk", app_target(plan)), "endpoint", "runtime-invoke", legit=True),
@@ -138,7 +138,10 @@ def identity_policies(name: str, plan: dict) -> list[tuple[str, dict]]:
             if any(ref.startswith("aws_iam_role.app") for ref in P.references(plan, r["address"], "role")):
                 out.append((r["address"], P.policy(r["values"]["policy"])))
         return out
-    return [(f"{name}-policy", principal(name)["inline_policy"])]
+    p = principal(name)
+    if "policy_file" in p:
+        return [(p["policy_file"].split("/")[-1].removesuffix(".json"), P.load(p["policy_file"]))]
+    return [(f"{name}-policy", p["inline_policy"])]
 
 
 def endpoint_policy(plan: dict) -> tuple[str, dict]:

@@ -3,8 +3,9 @@ test_challenge.py: `make challenge`. Three of these fail until you finish the ch
 
 1. org/scp-region-guard.json: us-east-1 only for everything, EXCEPT the Helpdesk's approved US profile routing
    to its destination Regions (lesson 11.5: the documented bedrock:InferenceProfileArn exception).
-2. policies/endpoint-policy-mantle.json: next sprint's bedrock-mantle endpoint lets only AnyCompany principals
-   run only the approved mantle model (lesson 11.2).
+2. Next sprint's bedrock-mantle access (lesson 11.2): policies/endpoint-policy-mantle.json lets only AnyCompany
+   principals use the endpoint (the identity perimeter), and policies/ops-tools-mantle-role.json lets the ops tool
+   run only the approved mantle model (bedrock-mantle:Model, a documented condition key for CreateInference).
 3. checker.py: write rule_trail_covers_mantle() (M11-17, lesson 11.4).
 No solution is included.
 """
@@ -26,10 +27,10 @@ def scp_decision(who, checks):
     return evaluate_all(checks, attack.identity_policies(who, HARD), attack.scps("hardened"))
 
 
-def mantle_decision(who, model):
+def mantle_decision(who, model, through_endpoint=True):
     in_org = attack.principal(who)["account"] in attack.ORG_ACCOUNTS
     return evaluate_all(attack.mantle(who, model), attack.identity_policies(who, HARD), attack.scps("hardened"),
-                        scps_apply=in_org, endpoint_policy=MANTLE_EP)
+                        scps_apply=in_org, endpoint_policy=MANTLE_EP if through_endpoint else None)
 
 
 class T4_Challenge(unittest.TestCase):
@@ -52,11 +53,13 @@ class T4_Challenge(unittest.TestCase):
         self.assertFalse(scp_decision("data-science", checks).allowed)
 
     def test_19_mantle_endpoint_policy(self):
-        """challenge 11.2: through the mantle endpoint, outsiders and unapproved models are refused"""
+        """challenge 11.2: outsiders are refused at the mantle endpoint; the ops role alone refuses unapproved models"""
         self.assertFalse(mantle_decision("outsider", "anthropic.claude-haiku-4-5").allowed,
                          "an outsider's keys still work through the mantle endpoint")
-        self.assertFalse(mantle_decision("ops-tools", "anthropic.claude-opus-4-7").allowed,
-                         "an unapproved model still works through the mantle endpoint")
+        # The model rule must hold in the ROLE: AWS documents bedrock-mantle:Model for CreateInference, but not
+        # whether an endpoint policy evaluates it. So this check runs without the endpoint policy.
+        self.assertFalse(mantle_decision("ops-tools", "anthropic.claude-opus-4-7", through_endpoint=False).allowed,
+                         "the ops-tools role still allows a model nobody approved")
 
     def test_20_mantle_endpoint_keeps_approved_model(self):
         """challenge 11.2: AnyCompany's ops tool can still use the approved mantle model"""
