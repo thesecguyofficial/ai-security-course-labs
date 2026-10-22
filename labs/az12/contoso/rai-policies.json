@@ -1,0 +1,261 @@
+{
+ "_about": "Contoso's guardrails (RAI policies) as the lab twin reads them: ARM shape of Microsoft.CognitiveServices/accounts/raiPolicies (contentFilters: name, enabled, blocking, severityThreshold, source; customBlocklists). FICTIONAL. Fields starting with x-twin are lab-only (Microsoft's ARM reference doesn't document PII settings).",
+ "policies": {
+  "Lab.NoGuardrail": {
+   "_about": "Lab baseline only: what the model does with nothing in front of it. You can't create this in Foundry (the four harm controls can only be overridden, not deleted).",
+   "properties": {
+    "mode": "Default",
+    "contentFilters": []
+   }
+  },
+  "Microsoft.DefaultV2": {
+   "_about": "Lab twin of the default guardrail, modelled on Microsoft's 'default safety policies' table for text models: four harms at Medium on prompts and completions, user prompt attack (jailbreak) on prompts, protected material text and code on completions. Read your real one with: az rest --method get --url https://management.azure.com<account-id>/raiPolicies/Microsoft.DefaultV2?api-version=2024-10-01",
+   "properties": {
+    "mode": "Default",
+    "contentFilters": [
+     {
+      "name": "Hate",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Sexual",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Violence",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Selfharm",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Hate",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Sexual",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Violence",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Selfharm",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Jailbreak",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt"
+     },
+     {
+      "name": "Protected Material Text",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion"
+     },
+     {
+      "name": "Protected Material Code",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion"
+     }
+    ]
+   }
+  },
+  "contoso-helpdesk-v1": {
+   "_about": "Contoso's version 1 for the helpdesk-chat deployment. Written in a hurry after a pilot complaint.",
+   "properties": {
+    "basePolicyName": "Microsoft.Default",
+    "mode": "Asynchronous_filter",
+    "contentFilters": [
+     {
+      "name": "Hate",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Sexual",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Violence",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt",
+      "severityThreshold": "Low"
+     },
+     {
+      "name": "Selfharm",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Hate",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Sexual",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Violence",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion",
+      "severityThreshold": "High"
+     },
+     {
+      "name": "Selfharm",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Jailbreak",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt"
+     },
+     {
+      "name": "Indirect Attack",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt"
+     },
+     {
+      "name": "Protected Material Text",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion"
+     },
+     {
+      "name": "Protected Material Code",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion"
+     }
+    ],
+    "customBlocklists": [
+     {
+      "blocklistName": "contoso-injection-words",
+      "blocking": true,
+      "source": "Prompt"
+     }
+    ]
+   }
+  },
+  "contoso-agent-v1": {
+   "_about": "The guardrail on helpdesk-agent, written for an earlier pilot that had no tools. It fully overrides the deployment's guardrail.",
+   "properties": {
+    "basePolicyName": "Microsoft.Default",
+    "mode": "Default",
+    "contentFilters": [
+     {
+      "name": "Hate",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Sexual",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Violence",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Selfharm",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Hate",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Sexual",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Violence",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Selfharm",
+      "enabled": true,
+      "blocking": true,
+      "source": "Completion",
+      "severityThreshold": "Medium"
+     },
+     {
+      "name": "Jailbreak",
+      "enabled": true,
+      "blocking": true,
+      "source": "Prompt"
+     }
+    ]
+   }
+  }
+ }
+}

@@ -1,0 +1,21 @@
+{
+ "_about": "Azure Monitor alert rules on the Foundry resource (FICTIONAL).",
+ "alerts": [
+  {
+   "name": "guardrail-blocks-spike",
+   "metric": "RAIRejectedRequests",
+   "aggregation": "Total",
+   "operator": "GreaterThan",
+   "threshold": 20,
+   "window": "PT15M"
+  },
+  {
+   "name": "harmful-detections-spike",
+   "metric": "RAIHarmfulRequests",
+   "aggregation": "Total",
+   "operator": "GreaterThan",
+   "threshold": 40,
+   "window": "PT15M"
+  }
+ ]
+}

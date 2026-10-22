@@ -1,0 +1,11 @@
+{
+ "_about": "Hardened helpdesk-web.",
+ "api": "chat_completions",
+ "stream": true,
+ "normalise_input": true,
+ "document_embedding": true,
+ "retrieval_owner_check": true,
+ "recipient_allowlist": [
+  "@contoso.com"
+ ]
+}

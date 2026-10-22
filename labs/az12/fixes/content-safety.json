@@ -1,0 +1,17 @@
+{
+ "_about": "Hardened Content Safety resource (FICTIONAL).",
+ "name": "cs-contoso-nightshift",
+ "kind": "ContentSafety",
+ "sku": "F0",
+ "properties": {
+  "disableLocalAuth": true,
+  "publicNetworkAccess": "Enabled",
+  "customSubDomainName": "cs-contoso-nightshift"
+ },
+ "roleAssignments": [
+  {
+   "principal": "apim-contoso (managed identity)",
+   "role": "Cognitive Services User"
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+<!-- API Management policy in front of the self-hosted night-shift model (FICTIONAL). -->
+<policies>
+    <inbound>
+        <base />
+        <llm-content-safety backend-id="content-safety-backend">
+            <categories output-type="EightSeverityLevels">
+                <category name="Violence" threshold="6" />
+            </categories>
+        </llm-content-safety>
+    </inbound>
+    <outbound>
+        <base />
+    </outbound>
+</policies>
