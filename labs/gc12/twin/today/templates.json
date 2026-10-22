@@ -1,0 +1,15 @@
+{
+  "_comment": "Model Armor templates in the project (REST shape of Template). helpdesk-prompt was made in June, before the floor setting existed.",
+  "templates": [
+    {
+      "name": "projects/example-chatbot-prod/locations/europe-west4/templates/helpdesk-prompt",
+      "createTime": "2026-06-02T09:14:00Z",
+      "filterConfig": {
+        "raiSettings": {"raiFilters": [{"filterType": "DANGEROUS", "confidenceLevel": "HIGH"}]},
+        "piAndJailbreakFilterSettings": {"filterEnforcement": "DISABLED"},
+        "sdpSettings": {"basicConfig": {"filterEnforcement": "ENABLED"}}
+      },
+      "templateMetadata": {"ignorePartialInvocationFailures": true, "logSanitizeOperations": true}
+    }
+  ]
+}

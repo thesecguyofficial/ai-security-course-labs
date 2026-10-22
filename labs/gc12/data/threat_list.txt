@@ -1,0 +1,4 @@
+# The twin's stand-in for Google's threat intelligence: hosts it treats as malicious.
+# Every name is on the reserved documentation domain example.net (RFC 2606). None is a real site.
+login-verify.example.net
+free-gift-cards.example.net
