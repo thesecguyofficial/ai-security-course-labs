@@ -1,0 +1,10 @@
+{
+  "_about": "TSG Helpdesk WITHOUT a guardrail: the Converse request the app sends. {system}, {kb} and {question} are filled in by helpdesk.py.",
+  "system": [{"text": "{system}"}],
+  "messages": [
+    {"role": "user", "content": [
+      {"text": "Reference: {kb}"},
+      {"text": "{question}"}
+    ]}
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "bedrock": {
+    "guardrail_inference": {
+      "us-east-1": {
+        "config_1": {
+          "identifier": {
+            "@@assign": "arn:aws:bedrock:us-east-1:123456789012:guardrail/tsgorgbaseline:1"
+          },
+          "selective_content_guarding": {
+            "system": {
+              "@@assign": "comprehensive"
+            },
+            "messages": {
+              "@@assign": "comprehensive"
+            }
+          },
+          "model_enforcement": {
+            "included_models": {
+              "@@assign": [
+                "ALL"
+              ]
+            },
+            "excluded_models": {
+              "@@assign": [
+                "amazon.titan-embed-text-v2:0"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
