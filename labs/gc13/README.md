@@ -162,7 +162,7 @@ Real output (Linux, Python 3.13):
           your tool code; test it.
   NOTE    RAG Engine supports CMEK and VPC Service Controls, but Google says data residency and Access
           Transparency aren't supported. Record the decision.
-  NOTE    RAG Engine's metadata search is Preview and unavailable for projects with VPC Service Controls.
+  NOTE    RAG Engine's metadata search is Preview, and off for projects that had VPC-SC before its Preview.
 
 16 findings (11 HIGH), 3 notes.
 ```

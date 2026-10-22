@@ -2,7 +2,7 @@
 
 The offline lab (README Steps 1 to 8) teaches the mechanics at $0. This guide builds the real thing, step by step, in
 **your own** Google Cloud sandbox project (the GC11 or GC12 project is fine). About 60 to 90 minutes. **Cost: RAG
-Engine's managed database is billed by the hour while it exists** (about $0.09 an hour at Spanner's default list
+Engine's managed database is billed by the hour while it exists** (about $0.09 an hour at Spanner's Iowa list
 price, see Cost); everything else in this guide costs cents or nothing. Do the whole guide in one sitting and **do the
 teardown at the end**: it's the only step that stops the hourly charge.
 
@@ -133,8 +133,9 @@ Example response (shape from Google docs, values illustrative):
 
 ### 1d. Import the files
 
-RAG Engine reads your buckets as its own service agent, `service-PROJECT_NUMBER@gcp-sa-vertex-rag.iam.gserviceaccount.com`,
-which is created on first use. Give it read access to the two buckets only (Terraform does this for you):
+RAG Engine reads your buckets as its own service agent, `service-PROJECT_NUMBER@gcp-sa-vertex-rag.iam.gserviceaccount.com`
+(address from the Terraform provider's own example; Google's ingestion page names it only as "Agent Platform RAG Data
+Service Agent"), which is created on first use. Give it read access to the two buckets only (Terraform does this for you):
 
 ```bash
 for B in staff finance; do
@@ -145,8 +146,8 @@ terraform/scripts/import_files.sh europe-west4 STAFF_CORPUS_NAME $(gcloud storag
 terraform/scripts/import_files.sh europe-west4 FINANCE_CORPUS_NAME $(gcloud storage ls gs://PROJECT_ID-tsg-kb-finance)
 ```
 
-Google's ingestion page warns that without the right permissions "no files are imported and no error message
-displays". So check: `GET .../ragCorpora/ID/ragFiles` should list four files in `kb-staff` and one in `kb-finance`.
+Google's ingestion page warns, for Google Drive imports, that without the right permissions "no files are imported
+and no error message displays". It doesn't say whether a bucket import fails as quietly, so check: `GET .../ragCorpora/ID/ragFiles` should list four files in `kb-staff` and one in `kb-finance`.
 
 ## Step 2 · The agent's own identity (5 minutes)
 
@@ -388,15 +389,17 @@ Delete it when you're done (Teardown).
 ## Step 9 · Optional: Agent Search with document ACLs
 
 Do this only if your project belongs to an organisation with Google Workspace or Cloud Identity users and groups:
-Agent Search's access control works with Google Identity or Workforce Identity Federation, "You can select one
-identity provider per Agent Search-supported location", and the feature is **Preview**. We couldn't confirm it works
+Google's page says "you must have your organization's identity provider configured in Google Cloud", access control
+works with Google Identity or Workforce Identity Federation, "You can select one identity provider per Agent
+Search-supported location", and the feature is **Preview**. We couldn't confirm it works
 in a project without an organisation.
 
 1. Enable the API: `gcloud services enable discoveryengine.googleapis.com`.
 2. Create the data store **with access control** (it can't be added later: "You can't turn this setting on or off for
    an existing data store"). Console: the **AI Applications** section, create a data store from Cloud Storage and
    select **This data store contains access control information**. Or REST (location `global` keeps the commands
-   simple; ExampleCo would use `eu`):
+   simple; ExampleCo would use `eu`, with the host `eu-discoveryengine.googleapis.com` and `locations/eu` in the path,
+   as Google's locations page shows):
 
    ```bash
    curl -s -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" \
@@ -455,7 +458,7 @@ in a project without an organisation.
 
 | Item | Cost |
 |---|---|
-| RAG Engine, Spanner mode, Basic tier | Billed as a Google-managed Spanner instance of "100 processing units with backup" ([billing](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/rag-engine/rag-engine-billing)). Spanner's default list price is $0.90 per node-hour and a node is 1,000 processing units, so **about $0.09 an hour, about $2.16 a day, about $65 a month if you forget it** (our arithmetic; the price varies by region, see [Spanner pricing](https://cloud.google.com/spanner/pricing)) |
+| RAG Engine, Spanner mode, Basic tier | Billed as a Google-managed Spanner instance of "100 processing units with backup" ([billing](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/rag-engine/rag-engine-billing)). Spanner's pricing page shows $0.90 per node-hour for Standard edition in Iowa, its default region. A node is 1,000 processing units. So: **about $0.09 an hour, about $2.16 a day, about $65 a month if you forget it** (our arithmetic). The price varies by region: check `europe-west4` on [Spanner pricing](https://cloud.google.com/spanner/pricing) |
 | Embeddings (text-embedding-005), five short files | A fraction of a cent; see Agent Platform pricing |
 | Gemini calls for G1 to G5 | A handful of short requests: cents |
 | Model Armor | "no cost for using Model Armor up to 2 million tokens per month" ([pricing](https://cloud.google.com/security-command-center/pricing)) |
@@ -488,7 +491,9 @@ gcloud config unset api_endpoint_overrides/modelarmor
 gcloud auth application-default revoke && gcloud auth application-default login   # stop impersonating
 ```
 
-`unprovisioned` "deletes the `RagManagedDb` and its underlying Spanner instance" and "This stops the billing of the
-service"; the data "can't be recovered" ([RagManagedDb](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/rag-engine/understanding-ragmanageddb)).
+Google's RagManagedDb page says setting the tier to Unprovisioned "will immediately delete your dedicated Spanner
+instance" and its RAG data, halting "any associated billing for the Spanner mode", and "Data deleted using the
+Unprovisioned tier cannot be recovered" ([RagManagedDb](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/rag-engine/understanding-ragmanageddb)).
+The API definition agrees: it "will halt the billing of the service".
 The tier is a project-level setting, so deleting your corpora doesn't change it: only Unprovisioned removes the managed
 database. Check your budget alert tomorrow.
