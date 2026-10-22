@@ -1,0 +1,6 @@
+# Hosted agent container for the AZ14 guided build. The agentserver packages are pre-releases in Oct 2026: install with --pre.
+azure-ai-agentserver-invocations
+azure-ai-projects>=2.3.0
+azure-identity
+azure-storage-blob
+mcp

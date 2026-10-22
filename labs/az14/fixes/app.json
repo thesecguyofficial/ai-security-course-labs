@@ -1,0 +1,5 @@
+{
+  "_about": "helpdesk-web, hardened: x-ms-user-identity comes from the validated Entra token on the server, never from the browser.",
+  "user_identity_from": "validated_token",
+  "session_per_user": true
+}

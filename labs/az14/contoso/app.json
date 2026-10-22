@@ -1,0 +1,5 @@
+{
+  "_about": "helpdesk-web, Contoso's front end. It calls the hosted agent's Responses endpoint for signed-in staff. Lab shorthand.",
+  "user_identity_from": "request_header",
+  "session_per_user": true
+}

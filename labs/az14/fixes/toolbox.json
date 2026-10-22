@@ -1,0 +1,18 @@
+{
+  "_about": "Hardened toolbox: allow-listed tools, approval on the actions server, per-user OAuth on its connection, no Code Interpreter through the toolbox.",
+  "name": "helpdesk-tools",
+  "default_version": "2",
+  "versions": {
+    "1": {"tools": [{"type": "mcp", "server_label": "helpdesk-actions", "server_url": "https://actions.contoso.example/mcp",
+                     "require_approval": "never", "project_connection_id": "actions-admin-key"}, {"type": "code_interpreter"}], "policies": null},
+    "2": {"tools": [
+      {"type": "mcp", "server_label": "helpdesk-actions", "server_url": "https://actions.contoso.example/mcp",
+       "require_approval": "always", "allowed_tools": ["search_tickets", "create_ticket", "send_email"],
+       "project_connection_id": "actions-oauth"}
+    ], "policies": {"rai_config": {"rai_policy_name": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.CognitiveServices/accounts/contoso-ai2/raiPolicies/helpdesk-guardrail"}}}
+  },
+  "connections": {"actions-oauth": {"authType": "oauth2", "credential_owner": "per-user"},
+                  "actions-admin-key": {"authType": "custom-keys", "credential_owner": "svc-helpdesk-admin"}},
+  "mcp_servers": {"helpdesk-actions": {"tools": {"search_tickets": "read", "create_ticket": "write", "send_email": "write",
+                                                  "close_ticket": "write", "delete_ticket": "write"}}}
+}

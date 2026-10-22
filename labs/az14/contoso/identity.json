@@ -1,0 +1,12 @@
+{
+  "_about": "Role assignments as Azure RBAC would hold them (principal, role, scope). Principal names are lab shorthand: agent:<name> = the hosted agent's Entra agent identity, project-mi = the project's managed identity, group:<name> = an Entra group, app:<name> = a service principal.",
+  "storage_account_scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.Storage/storageAccounts/sthelpdeskcontoso",
+  "role_assignments": [
+    {"principal": "agent:helpdesk-agent", "role": "Storage Blob Data Contributor", "scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.Storage/storageAccounts/sthelpdeskcontoso"},
+    {"principal": "project-mi", "role": "AcrPull", "scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.ContainerRegistry/registries/crcontoso"},
+    {"principal": "group:all-staff", "role": "Foundry Agent Consumer", "scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.CognitiveServices/accounts/contoso-ai"},
+    {"principal": "app:helpdesk-web", "role": "Foundry User", "scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.CognitiveServices/accounts/contoso-ai/projects/helpdesk"},
+    {"principal": "app:helpdesk-web", "role": "custom: Helpdesk delegation (UserIdentityImpersonation/action)", "scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.CognitiveServices/accounts/contoso-ai/projects/helpdesk/agents/helpdesk-agent"}
+  ],
+  "conditional_access": []
+}

@@ -1,0 +1,45 @@
+{
+  "_about": "Hardened role assignments. Same lab shorthand as contoso/identity.json.",
+  "storage_account_scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.Storage/storageAccounts/sthelpdeskcontoso",
+  "role_assignments": [
+    {
+      "principal": "agent:helpdesk-agent",
+      "role": "Storage Blob Data Reader",
+      "scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.Storage/storageAccounts/sthelpdeskcontoso/blobServices/default/containers/kb"
+    },
+    {
+      "principal": "project-mi",
+      "role": "Container Registry Repository Reader",
+      "scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.ContainerRegistry/registries/crcontoso"
+    },
+    {
+      "principal": "group:all-staff",
+      "role": "Foundry Agent Consumer",
+      "scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.CognitiveServices/accounts/contoso-ai2/projects/helpdesk/agents/helpdesk-agent"
+    },
+    {
+      "principal": "group:helpdesk-leads",
+      "role": "Foundry Agent Consumer",
+      "scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.CognitiveServices/accounts/contoso-ai2/projects/helpdesk/agents/helpdesk-admin-agent"
+    },
+    {
+      "principal": "app:helpdesk-web",
+      "role": "Foundry Agent Consumer",
+      "scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.CognitiveServices/accounts/contoso-ai2/projects/helpdesk/agents/helpdesk-agent"
+    },
+    {
+      "principal": "app:helpdesk-web",
+      "role": "custom: Helpdesk delegation (UserIdentityImpersonation/action)",
+      "scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.CognitiveServices/accounts/contoso-ai2/projects/helpdesk/agents/helpdesk-agent"
+    }
+  ],
+  "conditional_access": [
+    {
+      "name": "Block high-risk agent identities",
+      "applies_to": "All agent identities",
+      "condition": "Agent risk (Preview): High",
+      "grant": "Block",
+      "state": "On"
+    }
+  ]
+}

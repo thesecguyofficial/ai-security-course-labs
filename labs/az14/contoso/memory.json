@@ -1,0 +1,8 @@
+{
+  "_about": "Foundry Memory (preview). Option names are Microsoft's (MemoryStoreDefaultOptions, MemorySearchPreviewTool scope). 'write_filter' is the lab's: does your code check what goes into memory?",
+  "store": "helpdesk-memory",
+  "options": {"user_profile_enabled": true, "chat_summary_enabled": true, "procedural_memory_enabled": true,
+              "user_profile_details": null, "default_ttl_seconds": null},
+  "tool": {"type": "memory_search_preview", "memory_store_name": "helpdesk-memory", "scope": "helpdesk-shared"},
+  "write_filter": false
+}

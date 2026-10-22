@@ -1,0 +1,9 @@
+{
+  "_about": "Hardened memory: one scope per user, no procedural memory, a written rule about what not to store, a 30-day TTL, and a write filter in your code (challenge 2).",
+  "store": "helpdesk-memory",
+  "options": {"user_profile_enabled": true, "chat_summary_enabled": true, "procedural_memory_enabled": false,
+              "user_profile_details": "Store only language and notification preferences. Never store credentials, URLs, pay, health or HR data.",
+              "default_ttl_seconds": 2592000},
+  "tool": {"type": "memory_search_preview", "memory_store_name": "helpdesk-memory", "scope": "{{$userId}}"},
+  "write_filter": true
+}

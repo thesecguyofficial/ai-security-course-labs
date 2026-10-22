@@ -1,0 +1,15 @@
+{
+  "_about": "The Foundry toolbox the hosted agent consumes, plus its project connections. Tool fields (type, server_label, server_url, require_approval, allowed_tools, project_connection_id) and authType values (custom-keys, oauth2, ...) are Microsoft's. 'mcp_servers' (what each server offers) and 'credential_owner' are lab shorthand.",
+  "name": "helpdesk-tools",
+  "default_version": "1",
+  "versions": {
+    "1": {"tools": [
+      {"type": "mcp", "server_label": "helpdesk-actions", "server_url": "https://actions.contoso.example/mcp",
+       "require_approval": "never", "project_connection_id": "actions-admin-key"},
+      {"type": "code_interpreter"}
+    ], "policies": null}
+  },
+  "connections": {"actions-admin-key": {"authType": "custom-keys", "credential_owner": "svc-helpdesk-admin"}},
+  "mcp_servers": {"helpdesk-actions": {"tools": {"search_tickets": "read", "create_ticket": "write", "send_email": "write",
+                                                  "close_ticket": "write", "delete_ticket": "write"}}}
+}
