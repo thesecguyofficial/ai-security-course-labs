@@ -58,7 +58,9 @@ wires in LLM Guard's prompt injection scanner if you want a second, ML-based opi
 **`agent_platform.py` assumptions, said plainly.** It follows Google's precedence table for the integration. Two things
 Google doesn't state, so the twin assumes them: a request template's own `enforcementType` decides block vs inspect
 (the API says an unspecified type is "Same as INSPECT_AND_BLOCK"); and Gemini's safety filters are approximated with
-the twin's responsible-AI word lists. Your own system prompt isn't screened (on Agent Platform it travels in its own
+the twin's responsible-AI word lists. Scope, from Google's pages: the integration is documented for the
+`generateContent` method, and the integrations table says "Gemini models (non-streaming)"; nothing there says
+`streamGenerateContent` is screened, so the twin models `generateContent` only. Your own system prompt isn't screened (on Agent Platform it travels in its own
 `systemInstruction` field); the conversation and ticket text are.
 
 **About the data and safety.** Attack texts are labelled lab placeholders aimed only at the local stand-in model.
