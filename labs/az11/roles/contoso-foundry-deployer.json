@@ -1,0 +1,13 @@
+{
+  "roleName": "Contoso Foundry Deployer",
+  "IsCustom": true,
+  "description": "Contoso's custom role from lab AZ10 (fixes/custom-role-foundry-deployer.json): create, update and delete model deployments; read Foundry resources. No keys, no content filters, no network or account settings, no diagnostic settings, no data plane.",
+  "actions": [
+    "Microsoft.CognitiveServices/*/read",
+    "Microsoft.CognitiveServices/accounts/deployments/write",
+    "Microsoft.CognitiveServices/accounts/deployments/delete"
+  ],
+  "notActions": [],
+  "dataActions": [],
+  "notDataActions": []
+}

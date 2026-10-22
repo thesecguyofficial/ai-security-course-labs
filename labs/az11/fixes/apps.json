@@ -1,0 +1,8 @@
+{
+  "_about": "Contoso's inventory after the hardening. The helpdesk app and the jump VM have their own identities. The HR team still reuses the helpdesk identity: that is challenge 2 (README Step 7).",
+  "apps": {
+    "helpdesk-web": {"identity": "id-helpdesk-app", "network": "vnet-helpdesk", "ip": "10.20.1.10", "purpose": "The TSG Helpdesk chatbot. Calls the helpdesk model."},
+    "hr-assistant": {"identity": "id-helpdesk-app", "network": "vnet-helpdesk", "ip": "10.20.1.20", "purpose": "Another team's HR chatbot. Uses its OWN model elsewhere; reused this identity because it already existed."},
+    "jump-vm": {"identity": "id-jump", "network": "vnet-helpdesk", "ip": "10.20.3.4", "purpose": "The test VM inside the VNet (terraform/)."}
+  }
+}
