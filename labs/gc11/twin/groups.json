@@ -1,0 +1,7 @@
+{
+  "_comment": "Who is in which group (fictional). The twin uses this for IAM and VPC Service Controls checks.",
+  "group:data-science@example.com": ["user:analyst1@example.com", "user:analyst2@example.com", "user:analyst3@example.com"],
+  "group:helpdesk-devs@example.com": ["user:dev1@example.com", "user:dev2@example.com"],
+  "group:helpdesk-sre@example.com": ["user:sre1@example.com"],
+  "group:helpdesk-deployers@example.com": ["serviceAccount:helpdesk-ci@example-ci.iam.gserviceaccount.com"]
+}
