@@ -1,0 +1,14 @@
+{
+  "_comment": "A developer's change: 'use the EU multi-region endpoint for better availability'. Same network as hardened/.",
+  "runtime": "helpdesk-vm",
+  "service_account": "chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com",
+  "model": "publishers/google/models/gemini-3.1-flash-lite",
+  "location": "eu",
+  "endpoint_host": "aiplatform.eu.rep.googleapis.com",
+  "request_response_logging": {
+    "enabled": true,
+    "sampling_rate": 1.0,
+    "bigquery_destination": "bq://example-chatbot-prod.ai_logs.request_response_logging"
+  },
+  "cache_config": null
+}

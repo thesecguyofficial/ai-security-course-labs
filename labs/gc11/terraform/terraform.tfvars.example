@@ -1,0 +1,8 @@
+# Copy to terraform.tfvars and edit. Never commit terraform.tfvars or any state file.
+project_id = "your-sandbox-project-id"
+region     = "europe-west4"
+# org_id           = ""   # needs an organization (Google Workspace or Cloud Identity)
+# prod_folder_id   = ""   # allow-list lives here
+# access_policy_id = ""   # VPC Service Controls (dry run)
+# incident_readers = "group:helpdesk-sre@your-domain.example"
+create_test_vm = false

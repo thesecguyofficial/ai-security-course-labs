@@ -1,0 +1,299 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "twin (not produced by Terraform)",
+  "variables": {
+    "project_id": {
+      "value": "example-chatbot-prod"
+    },
+    "project_number": {
+      "value": "100000000001"
+    },
+    "region": {
+      "value": "europe-west4"
+    },
+    "org_id": {
+      "value": "123456789012"
+    },
+    "prod_folder_id": {
+      "value": "111111111111"
+    },
+    "access_policy_id": {
+      "value": "987654321"
+    }
+  },
+  "planned_values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "google_project_service.aiplatform",
+          "mode": "managed",
+          "type": "google_project_service",
+          "name": "aiplatform",
+          "values": {
+            "project": "example-chatbot-prod",
+            "service": "aiplatform.googleapis.com"
+          }
+        },
+        {
+          "address": "google_project_service.bigquery",
+          "mode": "managed",
+          "type": "google_project_service",
+          "name": "bigquery",
+          "values": {
+            "project": "example-chatbot-prod",
+            "service": "bigquery.googleapis.com"
+          }
+        },
+        {
+          "address": "google_project_service.compute",
+          "mode": "managed",
+          "type": "google_project_service",
+          "name": "compute",
+          "values": {
+            "project": "example-chatbot-prod",
+            "service": "compute.googleapis.com"
+          }
+        },
+        {
+          "address": "google_project_service.cloudkms",
+          "mode": "managed",
+          "type": "google_project_service",
+          "name": "cloudkms",
+          "values": {
+            "project": "example-chatbot-prod",
+            "service": "cloudkms.googleapis.com"
+          }
+        },
+        {
+          "address": "google_project_service.dns",
+          "mode": "managed",
+          "type": "google_project_service",
+          "name": "dns",
+          "values": {
+            "project": "example-chatbot-prod",
+            "service": "dns.googleapis.com"
+          }
+        },
+        {
+          "address": "google_project_service.iam",
+          "mode": "managed",
+          "type": "google_project_service",
+          "name": "iam",
+          "values": {
+            "project": "example-chatbot-prod",
+            "service": "iam.googleapis.com"
+          }
+        },
+        {
+          "address": "google_service_account.chatbot_runtime",
+          "mode": "managed",
+          "type": "google_service_account",
+          "name": "chatbot_runtime",
+          "values": {
+            "project": "example-chatbot-prod",
+            "account_id": "chatbot-runtime",
+            "email": "chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com",
+            "display_name": "TSG Helpdesk runtime"
+          }
+        },
+        {
+          "address": "google_service_account_key.ops_laptop",
+          "mode": "managed",
+          "type": "google_service_account_key",
+          "name": "ops_laptop",
+          "values": {
+            "service_account_id": "projects/example-chatbot-prod/serviceAccounts/chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com",
+            "key_algorithm": "KEY_ALG_RSA_2048"
+          }
+        },
+        {
+          "address": "google_project_iam_member.chatbot_ai_user",
+          "mode": "managed",
+          "type": "google_project_iam_member",
+          "name": "chatbot_ai_user",
+          "values": {
+            "project": "example-chatbot-prod",
+            "role": "roles/aiplatform.user",
+            "member": "serviceAccount:chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com"
+          }
+        },
+        {
+          "address": "google_project_iam_member.default_compute_editor",
+          "mode": "managed",
+          "type": "google_project_iam_member",
+          "name": "default_compute_editor",
+          "values": {
+            "project": "example-chatbot-prod",
+            "role": "roles/editor",
+            "member": "serviceAccount:100000000001-compute@developer.gserviceaccount.com"
+          }
+        },
+        {
+          "address": "google_project_iam_member.devs_token_creator",
+          "mode": "managed",
+          "type": "google_project_iam_member",
+          "name": "devs_token_creator",
+          "values": {
+            "project": "example-chatbot-prod",
+            "role": "roles/iam.serviceAccountTokenCreator",
+            "member": "group:helpdesk-devs@example.com"
+          }
+        },
+        {
+          "address": "google_bigquery_dataset_iam_member.tickets_chatbot",
+          "mode": "managed",
+          "type": "google_bigquery_dataset_iam_member",
+          "name": "tickets_chatbot",
+          "values": {
+            "project": "example-chatbot-prod",
+            "dataset_id": "helpdesk_tickets",
+            "role": "roles/bigquery.dataViewer",
+            "member": "serviceAccount:chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com"
+          }
+        },
+        {
+          "address": "google_bigquery_dataset_iam_member.tickets_ds",
+          "mode": "managed",
+          "type": "google_bigquery_dataset_iam_member",
+          "name": "tickets_ds",
+          "values": {
+            "project": "example-chatbot-prod",
+            "dataset_id": "helpdesk_tickets",
+            "role": "roles/bigquery.dataViewer",
+            "member": "group:data-science@example.com"
+          }
+        },
+        {
+          "address": "google_bigquery_dataset_iam_member.tickets_summariser",
+          "mode": "managed",
+          "type": "google_bigquery_dataset_iam_member",
+          "name": "tickets_summariser",
+          "values": {
+            "project": "example-chatbot-prod",
+            "dataset_id": "helpdesk_tickets",
+            "role": "roles/bigquery.dataEditor",
+            "member": "serviceAccount:100000000001-compute@developer.gserviceaccount.com"
+          }
+        },
+        {
+          "address": "google_compute_network.helpdesk",
+          "mode": "managed",
+          "type": "google_compute_network",
+          "name": "helpdesk",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "helpdesk-vpc",
+            "auto_create_subnetworks": false
+          }
+        },
+        {
+          "address": "google_compute_subnetwork.helpdesk_eu",
+          "mode": "managed",
+          "type": "google_compute_subnetwork",
+          "name": "helpdesk_eu",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "helpdesk-eu",
+            "region": "europe-west4",
+            "ip_cidr_range": "10.10.0.0/24",
+            "network": "helpdesk-vpc",
+            "private_ip_google_access": false
+          }
+        },
+        {
+          "address": "google_compute_router_nat.helpdesk_nat",
+          "mode": "managed",
+          "type": "google_compute_router_nat",
+          "name": "helpdesk_nat",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "helpdesk-nat",
+            "region": "europe-west4",
+            "router": "helpdesk-router"
+          }
+        },
+        {
+          "address": "google_compute_instance.helpdesk_vm",
+          "mode": "managed",
+          "type": "google_compute_instance",
+          "name": "helpdesk_vm",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "helpdesk-vm",
+            "zone": "europe-west4-a",
+            "machine_type": "e2-small",
+            "network_interface": [
+              {
+                "network": "helpdesk-vpc",
+                "subnetwork": "helpdesk-eu",
+                "access_config": [
+                  {
+                    "nat_ip": "203.0.113.200"
+                  }
+                ]
+              }
+            ],
+            "service_account": [
+              {
+                "email": "chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com",
+                "scopes": [
+                  "cloud-platform"
+                ]
+              }
+            ],
+            "labels": {
+              "app": "tsg-helpdesk",
+              "ai_workload": "true"
+            }
+          }
+        },
+        {
+          "address": "google_compute_instance.ticket_summariser",
+          "mode": "managed",
+          "type": "google_compute_instance",
+          "name": "ticket_summariser",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "ticket-summariser",
+            "zone": "europe-west4-a",
+            "machine_type": "e2-small",
+            "network_interface": [
+              {
+                "network": "helpdesk-vpc",
+                "subnetwork": "helpdesk-eu",
+                "access_config": []
+              }
+            ],
+            "service_account": [
+              {
+                "email": "100000000001-compute@developer.gserviceaccount.com",
+                "scopes": [
+                  "cloud-platform"
+                ]
+              }
+            ],
+            "labels": {
+              "app": "ticket-summariser",
+              "ai_workload": "true"
+            }
+          }
+        },
+        {
+          "address": "google_bigquery_dataset.helpdesk_tickets",
+          "mode": "managed",
+          "type": "google_bigquery_dataset",
+          "name": "helpdesk_tickets",
+          "values": {
+            "project": "example-chatbot-prod",
+            "dataset_id": "helpdesk_tickets",
+            "location": "europe-west4",
+            "labels": {
+              "data_class": "customer"
+            },
+            "default_encryption_configuration": []
+          }
+        }
+      ]
+    }
+  }
+}
