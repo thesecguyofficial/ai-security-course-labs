@@ -1,0 +1,38 @@
+{
+  "_about": "Contoso version 1 of the TSG Helpdesk on Foundry hosted agents. Property names follow Microsoft Learn where they exist (cpu, memory, protocol_versions, environment_variables, rai_config.rai_policy_name, egressPolicy, mode, defaultAction). The wrapper ('foundry_account', 'runtime', 'debug_tools', 'tracing') is lab shorthand.",
+  "foundry_account": {"name": "contoso-ai", "created": "2026-05-02", "network_injection": false, "disableLocalAuth": true},
+  "project": {"name": "helpdesk", "created": "2026-05-02"},
+  "registry": {"name": "crcontoso", "publicNetworkAccess": "Enabled"},
+  "rai_policies": ["Microsoft.DefaultV2", "helpdesk-guardrail"],
+  "agents": {
+    "helpdesk-agent": {
+      "definition": {
+        "kind": "hosted",
+        "cpu": "1", "memory": "2Gi",
+        "protocol_versions": [{"protocol": "responses", "version": "2.0.0"}],
+        "container_configuration": {"image": "crcontoso.azurecr.io/helpdesk-agent:1.0"},
+        "environment_variables": {"MODEL_DEPLOYMENT_NAME": "helpdesk-chat", "SMTP_API_KEY": "lab-placeholder-smtp-key-not-real",
+                                  "TOOLBOX_MCP_ENDPOINT": "https://contoso-ai.services.ai.azure.com/api/projects/helpdesk/toolboxes/helpdesk-tools/mcp?api-version=v1"},
+        "rai_config": {"rai_policy_name": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.CognitiveServices/accounts/contoso-ai/raiPolicies/helpdesk-guardrail-v1"}
+      },
+      "idle_timeout_minutes": 240,
+      "runtime": {"approval_enforcement": "none", "policy_check": false,
+                  "local_tools": ["read_blob", "delete_blob", "http_get", "get_config"]},
+      "debug_tools": ["get_config"],
+      "egressPolicy": null
+    },
+    "helpdesk-admin-agent": {
+      "definition": {"kind": "hosted", "cpu": "1", "memory": "2Gi",
+                     "protocol_versions": [{"protocol": "responses", "version": "2.0.0"}],
+                     "container_configuration": {"image": "crcontoso.azurecr.io/helpdesk-admin:1.0"},
+                     "environment_variables": {"MODEL_DEPLOYMENT_NAME": "helpdesk-chat"},
+                     "rai_config": {"rai_policy_name": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.CognitiveServices/accounts/contoso-ai/raiPolicies/helpdesk-guardrail"}},
+      "idle_timeout_minutes": 15,
+      "runtime": {"approval_enforcement": "runtime", "policy_check": false, "local_tools": []},
+      "debug_tools": [],
+      "egressPolicy": null
+    }
+  },
+  "tracing": {"application_insights": true, "trace_readers": ["group:all-staff"]},
+  "red_team": {"last_run_version": null}
+}
