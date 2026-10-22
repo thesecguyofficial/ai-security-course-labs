@@ -1,0 +1,5 @@
+# Copy to terraform.tfvars and fill in. Never commit terraform.tfvars.
+project_id    = "your-sandbox-project-id"
+region        = "europe-west4"
+floor_mode    = "INSPECT_ONLY"       # week 1; then INSPECT_AND_BLOCK
+pi_confidence = "MEDIUM_AND_ABOVE"   # from your own `make sweep`
