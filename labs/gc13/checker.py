@@ -196,7 +196,7 @@ def notes(twin: str) -> list[str]:
                  "in your tool code; test it.")
         n.append("RAG Engine supports CMEK and VPC Service Controls, but Google says data residency and Access "
                  "Transparency aren't supported. Record the decision.")
-        n.append("RAG Engine's metadata search is Preview and unavailable for projects with VPC Service Controls.")
+        n.append("RAG Engine's metadata search is Preview, and off for projects that had VPC-SC before its Preview.")
     return n
 
 
