@@ -1,0 +1,47 @@
+{
+  "_about": "AnyCompany is fictional (AWS's own placeholder name). Every account ID, org ID and ARN is an AWS documentation example value.",
+  "organization": {
+    "id": "o-a1b2c3d4e5",
+    "management_account": "123456789012",
+    "accounts_in_org": [
+      "123456789012",
+      "111122223333",
+      "444455556666"
+    ],
+    "production_account": "111122223333"
+  },
+  "data_residency": {
+    "rule": "Helpdesk prompts and answers may only be processed in US Regions (M11).",
+    "allowed_guardrail_profiles": [
+      "us.guardrail.v1:0"
+    ]
+  },
+  "staff_languages": [
+    "en",
+    "fr",
+    "hi"
+  ],
+  "helpdesk": {
+    "role": "arn:aws:iam::111122223333:role/tsg-helpdesk-app",
+    "guardrail_arn": "arn:aws:bedrock:us-east-1:111122223333:guardrail/tsghelpdesk01",
+    "approved_version": "1",
+    "runtime_profile": "arn:aws:bedrock:us-east-1:111122223333:inference-profile/us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "foundation_model": "anthropic.claude-haiku-4-5-20251001-v1:0",
+    "answers_from_knowledge_base": true
+  },
+  "guardrails_required_for": [
+    "arn:aws:iam::111122223333:role/tsg-helpdesk-app",
+    "arn:aws:iam::111122223333:role/OpsToolsRole"
+  ],
+  "principals": {
+    "helpdesk": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-helpdesk-app",
+      "policy_file": "policies/helpdesk-role.first-draft.json"
+    },
+    "ops-tools": {
+      "arn": "arn:aws:iam::111122223333:role/OpsToolsRole",
+      "policy_file": "policies/ops-tools-role.json",
+      "_note": "From the M11 challenge: an internal tool that calls Claude Haiku 4.5 on bedrock-mantle with the Anthropic SDK."
+    }
+  }
+}
