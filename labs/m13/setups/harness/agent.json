@@ -1,0 +1,49 @@
+{
+  "_about": "CreateHarness request body (bedrock-agentcore-control). Tool calls to inline functions are handed back to the app.",
+  "platform": "agentcore-harness",
+  "createHarness": {
+    "harnessName": "tsg_helpdesk",
+    "executionRoleArn": "arn:aws:iam::111122223333:role/tsg-harness-execution",
+    "model": {
+      "bedrockModelConfig": {
+        "modelId": "us.anthropic.claude-haiku-4-5-20251001-v1:0"
+      }
+    },
+    "systemPrompt": [
+      {
+        "text": "You are TSG Helpdesk, the IT helpdesk assistant for AnyCompany staff. Answer from the knowledge base. Use tools only when the user asks for an action."
+      }
+    ],
+    "tools": [
+      {
+        "type": "inline_function",
+        "name": "search_kb",
+        "config": {
+          "inlineFunction": {
+            "description": "Search the IT knowledge base for articles that answer the user's question.",
+            "inputSchema": "{\"type\": \"object\", \"properties\": {\"query\": {\"type\": \"string\"}}, \"required\": [\"query\"]}"
+          }
+        }
+      },
+      {
+        "type": "inline_function",
+        "name": "reset_mfa",
+        "config": {
+          "inlineFunction": {
+            "description": "Reset multi-factor authentication for a user so they can enrol a new device.",
+            "inputSchema": "{\"type\": \"object\", \"properties\": {\"target_email\": {\"type\": \"string\"}}, \"required\": [\"target_email\"]}"
+          }
+        }
+      }
+    ],
+    "allowedTools": [
+      "search_kb",
+      "reset_mfa"
+    ],
+    "memory": {
+      "disabled": {}
+    },
+    "maxIterations": 6,
+    "timeoutSeconds": 120
+  }
+}

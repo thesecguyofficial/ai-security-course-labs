@@ -1,0 +1,19 @@
+{
+  "cloudtrail": {
+    "_about": "CloudTrail trail 'org-trail' advanced event selectors (management events only).",
+    "AdvancedEventSelectors": [
+      {
+        "Name": "Management events",
+        "FieldSelectors": [
+          {
+            "Field": "eventCategory",
+            "Equals": [
+              "Management"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "kbLogDeliveries": []
+}

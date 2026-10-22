@@ -1,0 +1,9 @@
+{
+  "type": "MANAGED",
+  "managedKnowledgeBaseConfiguration": {
+    "embeddingModelType": "MANAGED",
+    "serverSideEncryptionConfiguration": {
+      "kmsKeyArn": "KMS_KEY_ARN"
+    }
+  }
+}

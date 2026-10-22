@@ -1,0 +1,22 @@
+{
+  "_about": "How the Helpdesk backend drives the AgentCore harness: both tools are inline functions, so every tool call comes back to this code.",
+  "identity": {
+    "user_from": "session",
+    "_note": "the signed-in user's email from the identity provider token, checked by the backend; the browser sends only the question"
+  },
+  "retrieval": {
+    "mode": "inline_function_search",
+    "user_context_from": "session"
+  },
+  "confirmation": {
+    "enabled": true,
+    "show_arguments": true
+  },
+  "screen_retrieved_chunks": false,
+  "guardrail": {
+    "assumed_to_cover": [
+      "user_input",
+      "final_response"
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "_about": "The <file>.metadata.json files in the bucket (customer-managed knowledge base): one metadataAttributes block per document. This is ALL the first draft has for per-user access.",
+  "kind": "metadata-files",
+  "files": {
+    "public/vpn-token.md": {
+      "metadataAttributes": {
+        "department": "all"
+      }
+    },
+    "public/mfa-new-phone.md": {
+      "metadataAttributes": {
+        "department": "all"
+      }
+    },
+    "public/outlook-frozen.md": {
+      "metadataAttributes": {
+        "department": "all"
+      }
+    },
+    "inbox/vpn-client-update.md": {
+      "metadataAttributes": {
+        "department": "all"
+      }
+    },
+    "hr/salary-bands-2027.md": {
+      "metadataAttributes": {
+        "department": "hr"
+      }
+    },
+    "it-admin/break-glass-runbook.md": {
+      "metadataAttributes": {
+        "department": "it"
+      }
+    }
+  }
+}
