@@ -47,7 +47,7 @@ unless an ingress or egress rule allows them, and in dry run it only logs. It do
 conditions, VPC-SC method-level rules, quotas or real routing, and its role-to-permission map is a small subset.
 
 **Three assumptions, said plainly.** (1) The hardened design reaches `europe-west4-aiplatform.googleapis.com` through a
-PSC endpoint for global Google APIs with the `vpc-sc` bundle. Google says the bundles cover `*.googleapis.com` names
+PSC endpoint for global Google APIs with the `vpc-sc` bundle. Google says the `all-apis` bundle covers `*.googleapis.com` names
 except `*.rep.googleapis.com`, and that `vpc-sc` serves APIs that support VPC Service Controls (Agent Platform does);
 we found no page that names the regional Agent Platform host explicitly, so verify it with the optional smoke test.
 (2) Google's request-response logging page couldn't be read when this lab was written; the lab relies on Google's
@@ -480,8 +480,9 @@ make down                                   # terraform destroy
 ```
 
 Cloud KMS keys can't be deleted. Terraform's provider docs: destroying a key "will remove it from state and delete all
-CryptoKeyVersions, rendering the key unusable, but will not delete the resource from the project", and "Key rings
-can't be deleted" ([Cloud KMS](https://docs.cloud.google.com/kms/docs/destroy-restore)). The versions sit in
+CryptoKeyVersions, rendering the key unusable, but will not delete the resource from the project"
+([provider docs](https://github.com/hashicorp/terraform-provider-google/blob/main/website/docs/r/kms_crypto_key.html.markdown)).
+Google adds that "Key rings can't be deleted" ([Cloud KMS](https://docs.cloud.google.com/kms/docs/destroy-restore)). The versions sit in
 "scheduled for destruction" for 30 days and are billed as active until then. Deleting the whole sandbox project is the
 cleanest end.
 
@@ -496,7 +497,8 @@ renames an argument, `make plan` tells you; please open an issue.
 - Tests fail after you edited a twin file: `python3 -m json.tool twin/hardened/plan.json` finds JSON typos.
 - `make plan` errors about `google-beta`: the PSC address and forwarding rule need the beta provider; `terraform init`
   downloads it.
-- The smoke test shows HTTP 403: Data Access logs for `aiplatform.googleapis.com` will show the denied call and why.
+- The smoke test shows HTTP 403: Data Access logs for `aiplatform.googleapis.com` show an IAM denial; if you enforced a
+  perimeter, look in the Policy Denied logs (lesson 11.2) too.
 
 ## What to write in your findings notebook (lesson 0.5)
 
