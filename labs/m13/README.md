@@ -274,10 +274,10 @@ AWS doesn't charge for keys scheduled for deletion ([KMS pricing](https://aws.am
 | ACL-enabled S3: documents with no ACL entry are not ingested; per-document `.metadata.json` beats the global file | Same | [kb-managed-ds-s3-acl](https://docs.aws.amazon.com/bedrock/latest/userguide/kb-managed-ds-s3-acl.html) |
 | Global ACL changes need a resync; S3 has no real-time ACL verification | Same (index built per ingestion) | kb-managed-ds-s3-acl, kb-managed-acl |
 | Email must match exactly | Exact string compare | kb-managed-acl ("must exactly match") |
-| Overlapping global ACL prefixes | **Twin choice:** the longest prefix wins. AWS doesn't say | — |
+| Overlapping global ACL prefixes | **Twin choice:** the longest prefix wins. AWS doesn't say | not documented |
 | Metadata filter operators | `equals`, `notEquals`, `in`, `notIn`, `andAll`, `orAll` only | [kb-test-config](https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-config.html) |
 | Implicit filtering: a model writes the filter from the query and attribute descriptions | A regex stands in for the model | kb-test-config |
-| Relevance | Keyword overlap, not embeddings | — |
+| Relevance | Keyword overlap, not embeddings | not documented |
 | Return of control, `requireConfirmation`, `confirmationState` CONFIRM/DENY | Modelled as a decision; no wire format | [agents-returncontrol](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-returncontrol.html), [agents-userconfirmation](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html) |
 | Lambda resource policy: `bedrock.amazonaws.com`, `AWS:SourceAccount`, `AWS:SourceArn` | StringEquals / ArnLike only | [agents-permissions](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-permissions.html) |
 | Harness: default `shell` and `file_operations` unless `allowedTools` restricts them | Same; the twin treats the two inline function names as allowed | [harness-tools](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-tools.html) |
