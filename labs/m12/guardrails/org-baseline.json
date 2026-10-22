@@ -1,0 +1,59 @@
+{
+  "name": "tsg-org-baseline",
+  "description": "AnyCompany organization baseline guardrail",
+  "blockedInputMessaging": "This request was blocked by AnyCompany's AI safety baseline.",
+  "blockedOutputsMessaging": "This answer was blocked by AnyCompany's AI safety baseline.",
+  "crossRegionConfig": {
+    "guardrailProfileIdentifier": "us.guardrail.v1:0"
+  },
+  "contentPolicyConfig": {
+    "filtersConfig": [
+      {
+        "type": "PROMPT_ATTACK",
+        "inputStrength": "LOW",
+        "outputStrength": "NONE"
+      },
+      {
+        "type": "MISCONDUCT",
+        "inputStrength": "LOW",
+        "outputStrength": "LOW"
+      },
+      {
+        "type": "VIOLENCE",
+        "inputStrength": "LOW",
+        "outputStrength": "LOW"
+      },
+      {
+        "type": "HATE",
+        "inputStrength": "MEDIUM",
+        "outputStrength": "MEDIUM"
+      },
+      {
+        "type": "INSULTS",
+        "inputStrength": "LOW",
+        "outputStrength": "LOW"
+      },
+      {
+        "type": "SEXUAL",
+        "inputStrength": "MEDIUM",
+        "outputStrength": "MEDIUM"
+      }
+    ],
+    "tierConfig": {
+      "tierName": "STANDARD"
+    }
+  },
+  "sensitiveInformationPolicyConfig": {
+    "piiEntitiesConfig": [
+      {
+        "type": "AWS_ACCESS_KEY",
+        "action": "BLOCK"
+      },
+      {
+        "type": "AWS_SECRET_KEY",
+        "action": "BLOCK"
+      }
+    ]
+  },
+  "_about": "The org baseline guardrail, fixed: no Automated Reasoning policy (unsupported for enforcement), deliberately light so it rarely blocks legitimate work in any team."
+}
