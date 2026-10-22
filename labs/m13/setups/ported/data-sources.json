@@ -1,0 +1,27 @@
+{
+  "_about": "CreateDataSource request body: the S3 connector with ACL awareness on (aclEnabled) and a global ACL file in the same bucket.",
+  "dataSources": [
+    {
+      "name": "tsg-kb-s3",
+      "knowledgeBaseId": "KBPORTED01",
+      "dataDeletionPolicy": "DELETE",
+      "dataSourceConfiguration": {
+        "type": "MANAGED_KNOWLEDGE_BASE_CONNECTOR",
+        "managedKnowledgeBaseConnectorConfiguration": {
+          "connectorParameters": {
+            "type": "S3",
+            "version": "1",
+            "aclEnabled": true,
+            "connectionConfiguration": {
+              "bucketName": "amzn-s3-demo-bucket-tsg-kb",
+              "bucketOwnerAccountId": "111122223333"
+            },
+            "aclConfiguration": {
+              "globalAccessControlListS3Uri": "s3://amzn-s3-demo-bucket-tsg-kb/acl/global-acl.json"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

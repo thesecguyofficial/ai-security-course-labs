@@ -1,0 +1,24 @@
+{
+  "_about": "How the Helpdesk backend builds each request after the port.",
+  "identity": {
+    "user_from": "session",
+    "_note": "the signed-in user's email from the identity provider token, checked by the backend; the browser sends only the question"
+  },
+  "retrieval": {
+    "mode": "return_control_search",
+    "user_context_from": "session",
+    "_note": "the app calls Retrieve itself with userContext, then hands the chunks back to the agent"
+  },
+  "session_attributes_from": "session",
+  "confirmation": {
+    "enabled": true,
+    "show_arguments": true
+  },
+  "screen_retrieved_chunks": false,
+  "guardrail": {
+    "assumed_to_cover": [
+      "user_input",
+      "final_response"
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_about": "Bedrock Agents (Classic) request bodies: CreateAgent, AssociateAgentKnowledgeBase, CreateAgentActionGroup.",
+  "platform": "bedrock-agents-classic",
+  "createAgent": {
+    "agentName": "tsg-helpdesk",
+    "foundationModel": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "agentResourceRoleArn": "arn:aws:iam::111122223333:role/tsg-agent-service-role",
+    "instruction": "You are TSG Helpdesk, the IT helpdesk assistant for AnyCompany staff. Answer from the knowledge base. Use tools only when the user asks for an action.",
+    "idleSessionTTLInSeconds": 900,
+    "guardrailConfiguration": {
+      "guardrailIdentifier": "tsghelpdesk01",
+      "guardrailVersion": "1"
+    }
+  },
+  "knowledgeBaseAssociations": [
+    {
+      "knowledgeBaseId": "KBFIRSTDRFT",
+      "description": "Use this knowledge base for IT, HR and admin questions.",
+      "knowledgeBaseState": "ENABLED"
+    }
+  ],
+  "actionGroups": [
+    {
+      "actionGroupName": "helpdesk-actions",
+      "actionGroupExecutor": {
+        "lambda": "arn:aws:lambda:us-east-1:111122223333:function:tsg-helpdesk-actions"
+      },
+      "functionSchema": {
+        "functions": [
+          {
+            "name": "reset_mfa",
+            "description": "Reset multi-factor authentication for a user so they can enrol a new device.",
+            "parameters": {
+              "target_email": {
+                "type": "string",
+                "required": true,
+                "description": "Email of the person whose MFA is reset"
+              }
+            },
+            "requireConfirmation": "DISABLED"
+          }
+        ]
+      }
+    },
+    {
+      "actionGroupName": "code",
+      "parentActionGroupSignature": "AMAZON.CodeInterpreter",
+      "actionGroupState": "ENABLED"
+    }
+  ]
+}

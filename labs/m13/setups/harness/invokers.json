@@ -1,0 +1,40 @@
+{
+  "_about": "Identity policies that allow bedrock-agentcore:InvokeHarness on the Helpdesk harness. InvokeHarness callers can override tools, allowedTools and systemPrompt per call.",
+  "principals": {
+    "tsg-helpdesk-backend": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-helpdesk-backend",
+      "end_user_reachable": false,
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:InvokeHarness",
+              "bedrock-agentcore:InvokeAgentRuntime"
+            ],
+            "Resource": "arn:aws:bedrock-agentcore:us-east-1:111122223333:harness/tsg_helpdesk-AbC123"
+          }
+        ]
+      }
+    },
+    "tsg-web-frontend": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-web-frontend",
+      "end_user_reachable": true,
+      "_note": "Browser code gets temporary credentials for this role (Cognito identity pool) so the chat page can stream answers directly.",
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:InvokeHarness",
+              "bedrock-agentcore:InvokeAgentRuntime"
+            ],
+            "Resource": "arn:aws:bedrock-agentcore:us-east-1:111122223333:harness/*"
+          }
+        ]
+      }
+    }
+  }
+}
