@@ -1,0 +1,25 @@
+{
+  "_about": "Contoso's custom policy (CHALLENGE 1). Started from Microsoft's snippet on the deployment types page, which has only the `if` part; Contoso added the `then` block. It blocks GlobalStandard. Is that all Contoso's standard asks for? See contoso/standards.json and README Step 7.",
+  "properties": {
+    "displayName": "Contoso: Foundry deployments must use an approved deployment type",
+    "mode": "All",
+    "parameters": {},
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.CognitiveServices/accounts/deployments"
+          },
+          {
+            "field": "Microsoft.CognitiveServices/accounts/deployments/sku.name",
+            "equals": "GlobalStandard"
+          }
+        ]
+      },
+      "then": {
+        "effect": "deny"
+      }
+    }
+  }
+}

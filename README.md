@@ -23,6 +23,7 @@ Hands-on labs for **AI Security Engineer** by [The Sec Guy](https://thesecguy.co
 | M10 (AWS) | AWS AI footprint: find over-broad IAM/SCP/Bedrock API key setups, allow-list models, hunt LLMjacking in CloudTrail samples | Laptop ($0) + optional AWS | ✅ available |
 | M10 (Azure) | Azure AI footprint: find over-broad Foundry roles, key access and model policies, hunt stolen-key abuse in activity logs | Laptop ($0) + optional Azure | ✅ available |
 | M10 (Google Cloud) | Google Cloud AI footprint: IAM, org policy model allow-list, API keys, hunt credential abuse in audit logs | Laptop ($0) + optional Google Cloud | ✅ available |
+| M11 (Azure) | Securing Foundry models: check a Terraform plan for network, DNS, identity, customer-managed key, logging and residency gaps, replay attacks, hunt prompts in AI gateway logs | Laptop ($0) + optional Azure | ✅ available |
 | M11 → M19 | One lab per section and cloud, released with the course | Laptop + AWS / Azure / Google Cloud | coming every two weeks |
 
 Each lab folder has a `README.md` with step-by-step commands, what you should see, and troubleshooting.

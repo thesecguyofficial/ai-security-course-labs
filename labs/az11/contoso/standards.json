@@ -1,0 +1,10 @@
+{
+  "_about": "Contoso's own security standard for Foundry (FICTIONAL), written after lessons 11.1 to 11.5.",
+  "region": "swedencentral",
+  "allowed_deployment_skus": ["DataZoneStandard", "Standard"],
+  "required_log_categories": ["Audit", "RequestResponse"],
+  "foundry_private_dns_zones": ["privatelink.cognitiveservices.azure.com", "privatelink.openai.azure.com", "privatelink.services.ai.azure.com"],
+  "workload_roles_not_allowed": ["Owner", "Contributor", "Cognitive Services Contributor", "Cognitive Services User", "Azure AI Developer"],
+  "cmk_required": true,
+  "prompt_audit": "Prompts and completions must be auditable for 30 days: send them through the API Management AI gateway with LLM logging (lesson 11.4)."
+}

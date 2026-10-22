@@ -1,0 +1,105 @@
+{
+ "_about": "FAKE logs for lab AZ11, Monday 19 October 2026: Contoso's PILOT API Management AI gateway in front of the staging helpdesk deployment. Column names follow Microsoft's table reference; values and message shapes are simplified placeholders. Attacker text is labelled LAB PLACEHOLDER; every email address and phone number is fake.",
+ "table": "ApiManagementGatewayLogs",
+ "rows": [
+  {
+   "TimeGenerated": "2026-10-19T09:10:00Z",
+   "CorrelationId": "c-1b2c00",
+   "CallerIpAddress": "10.20.1.10",
+   "ApiId": "foundry-chat",
+   "OperationId": "chat-completions",
+   "Method": "POST",
+   "ResponseCode": 200,
+   "IsRequestSuccess": true,
+   "BackendId": "foundry-helpdesk"
+  },
+  {
+   "TimeGenerated": "2026-10-19T09:17:01Z",
+   "CorrelationId": "c-1b2c01",
+   "CallerIpAddress": "10.20.1.10",
+   "ApiId": "foundry-chat",
+   "OperationId": "chat-completions",
+   "Method": "POST",
+   "ResponseCode": 200,
+   "IsRequestSuccess": true,
+   "BackendId": "foundry-helpdesk"
+  },
+  {
+   "TimeGenerated": "2026-10-19T09:24:02Z",
+   "CorrelationId": "c-1b2c02",
+   "CallerIpAddress": "10.20.1.10",
+   "ApiId": "foundry-chat",
+   "OperationId": "chat-completions",
+   "Method": "POST",
+   "ResponseCode": 200,
+   "IsRequestSuccess": true,
+   "BackendId": "foundry-helpdesk"
+  },
+  {
+   "TimeGenerated": "2026-10-19T09:31:03Z",
+   "CorrelationId": "c-1b2c03",
+   "CallerIpAddress": "10.20.1.10",
+   "ApiId": "foundry-chat",
+   "OperationId": "chat-completions",
+   "Method": "POST",
+   "ResponseCode": 200,
+   "IsRequestSuccess": true,
+   "BackendId": "foundry-helpdesk"
+  },
+  {
+   "TimeGenerated": "2026-10-19T09:38:04Z",
+   "CorrelationId": "c-1b2c04",
+   "CallerIpAddress": "10.20.1.10",
+   "ApiId": "foundry-chat",
+   "OperationId": "chat-completions",
+   "Method": "POST",
+   "ResponseCode": 200,
+   "IsRequestSuccess": true,
+   "BackendId": "foundry-helpdesk"
+  },
+  {
+   "TimeGenerated": "2026-10-19T09:45:05Z",
+   "CorrelationId": "c-1b2c05",
+   "CallerIpAddress": "10.20.1.10",
+   "ApiId": "foundry-chat",
+   "OperationId": "chat-completions",
+   "Method": "POST",
+   "ResponseCode": 200,
+   "IsRequestSuccess": true,
+   "BackendId": "foundry-helpdesk"
+  },
+  {
+   "TimeGenerated": "2026-10-19T02:41:07Z",
+   "CorrelationId": "c-7f3a01",
+   "CallerIpAddress": "203.0.113.50",
+   "ApiId": "foundry-chat",
+   "OperationId": "chat-completions",
+   "Method": "POST",
+   "ResponseCode": 200,
+   "IsRequestSuccess": true,
+   "BackendId": "foundry-helpdesk"
+  },
+  {
+   "TimeGenerated": "2026-10-19T02:43:55Z",
+   "CorrelationId": "c-7f3a02",
+   "CallerIpAddress": "203.0.113.50",
+   "ApiId": "foundry-chat",
+   "OperationId": "chat-completions",
+   "Method": "POST",
+   "ResponseCode": 200,
+   "IsRequestSuccess": true,
+   "BackendId": "foundry-helpdesk"
+  },
+  {
+   "TimeGenerated": "2026-10-19T02:47:12Z",
+   "CorrelationId": "c-7f3a03",
+   "CallerIpAddress": "203.0.113.50",
+   "ApiId": "foundry-chat",
+   "OperationId": "chat-completions",
+   "Method": "POST",
+   "ResponseCode": 200,
+   "IsRequestSuccess": true,
+   "BackendId": "foundry-helpdesk"
+  }
+ ]
+}

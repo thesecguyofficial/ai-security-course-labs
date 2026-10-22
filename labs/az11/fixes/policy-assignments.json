@@ -1,0 +1,39 @@
+{
+  "_about": "Policy assignments after the hardening. Built-in definitions are copied from Microsoft's azure-policy repository (policy-definitions/). The last one is Contoso's own (fixes/policies/), and it is challenge 1.",
+  "assignments": [
+    {
+      "name": "allow-only-approved-models",
+      "scope": "rg-contoso-helpdesk-ai",
+      "definition": "policy-definitions/AllowDeployRegistryModels_Audit.json",
+      "parameters": {
+        "effect": {"value": "Deny"},
+        "allowedPublishers": {"value": []},
+        "allowedAssetIds": {"value": ["azureml://registries/azure-openai/models/gpt-5/", "azureml://registries/azure-openai/models/gpt-4.1-mini/"]}
+      }
+    },
+    {
+      "name": "deny-ai-public-network",
+      "scope": "rg-contoso-helpdesk-ai",
+      "definition": "policy-definitions/NetworkAcls_Audit.json",
+      "parameters": {"effect": {"value": "Deny"}}
+    },
+    {
+      "name": "deny-ai-key-access",
+      "scope": "rg-contoso-helpdesk-ai",
+      "definition": "policy-definitions/DisableLocalAuth_Audit.json",
+      "parameters": {"effect": {"value": "Deny"}}
+    },
+    {
+      "name": "audit-ai-diagnostic-logs",
+      "scope": "rg-contoso-helpdesk-ai",
+      "definition": "policy-definitions/DiagnosticLogs_Audit.json",
+      "parameters": {"effect": {"value": "AuditIfNotExists"}}
+    },
+    {
+      "name": "deny-non-residency-deployments",
+      "scope": "rg-contoso-helpdesk-ai",
+      "definition": "fixes/policies/deny-global-deployments.json",
+      "parameters": {}
+    }
+  ]
+}

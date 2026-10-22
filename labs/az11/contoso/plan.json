@@ -1,0 +1,897 @@
+{
+  "_about": "Contoso's 'version 1' Terraform for the TSG Helpdesk Foundry resource (FICTIONAL), as `terraform show -json` would print the plan, trimmed to the fields this lab reads. planned_values = what will exist; configuration = how resources reference each other. Built from the azurerm provider examples, Microsoft's 00-basic Foundry sample and the fixes from lab AZ10 (keys off, approved models).",
+  "format_version": "1.2",
+  "terraform_version": "1.9.8",
+  "planned_values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "azurerm_resource_group.ai",
+          "mode": "managed",
+          "type": "azurerm_resource_group",
+          "name": "ai",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "rg-helpdesk-prod",
+            "location": "swedencentral"
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_virtual_network.main",
+          "mode": "managed",
+          "type": "azurerm_virtual_network",
+          "name": "main",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "vnet-helpdesk",
+            "location": "swedencentral",
+            "resource_group_name": "rg-helpdesk-prod",
+            "address_space": [
+              "10.20.0.0/16"
+            ]
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_subnet.app",
+          "mode": "managed",
+          "type": "azurerm_subnet",
+          "name": "app",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "snet-app",
+            "resource_group_name": "rg-helpdesk-prod",
+            "virtual_network_name": "vnet-helpdesk",
+            "address_prefixes": [
+              "10.20.1.0/24"
+            ]
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_subnet.pe",
+          "mode": "managed",
+          "type": "azurerm_subnet",
+          "name": "pe",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "snet-pe",
+            "resource_group_name": "rg-helpdesk-prod",
+            "virtual_network_name": "vnet-helpdesk",
+            "address_prefixes": [
+              "10.20.2.0/24"
+            ]
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_cognitive_account.helpdesk",
+          "mode": "managed",
+          "type": "azurerm_cognitive_account",
+          "name": "helpdesk",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "contoso-helpdesk-ai",
+            "location": "swedencentral",
+            "resource_group_name": "rg-helpdesk-prod",
+            "kind": "AIServices",
+            "sku_name": "S0",
+            "custom_subdomain_name": "contoso-helpdesk-ai",
+            "local_auth_enabled": false,
+            "public_network_access_enabled": true,
+            "project_management_enabled": true,
+            "identity": [
+              {
+                "type": "SystemAssigned",
+                "identity_ids": null
+              }
+            ],
+            "customer_managed_key": [],
+            "network_acls": [],
+            "outbound_network_access_restricted": false,
+            "tags": {
+              "app": "tsg-helpdesk"
+            }
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_cognitive_deployment.chat",
+          "mode": "managed",
+          "type": "azurerm_cognitive_deployment",
+          "name": "chat",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "helpdesk-gpt5",
+            "model": [
+              {
+                "format": "OpenAI",
+                "name": "gpt-5",
+                "version": "1"
+              }
+            ],
+            "sku": [
+              {
+                "name": "DataZoneStandard",
+                "capacity": 50
+              }
+            ],
+            "version_upgrade_option": "OnceNewDefaultVersionAvailable"
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_cognitive_deployment.mini",
+          "mode": "managed",
+          "type": "azurerm_cognitive_deployment",
+          "name": "mini",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "helpdesk-mini",
+            "model": [
+              {
+                "format": "OpenAI",
+                "name": "gpt-4.1-mini",
+                "version": "2025-04-14"
+              }
+            ],
+            "sku": [
+              {
+                "name": "GlobalStandard",
+                "capacity": 1
+              }
+            ],
+            "version_upgrade_option": "OnceNewDefaultVersionAvailable"
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_cognitive_deployment.nightly",
+          "mode": "managed",
+          "type": "azurerm_cognitive_deployment",
+          "name": "nightly",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "helpdesk-batch",
+            "model": [
+              {
+                "format": "OpenAI",
+                "name": "gpt-5",
+                "version": "1"
+              }
+            ],
+            "sku": [
+              {
+                "name": "GlobalBatch",
+                "capacity": 50
+              }
+            ],
+            "version_upgrade_option": "OnceNewDefaultVersionAvailable"
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_private_dns_zone.openai",
+          "mode": "managed",
+          "type": "azurerm_private_dns_zone",
+          "name": "openai",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "privatelink.openai.azure.com",
+            "resource_group_name": "rg-helpdesk-prod"
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_private_dns_zone_virtual_network_link.openai",
+          "mode": "managed",
+          "type": "azurerm_private_dns_zone_virtual_network_link",
+          "name": "openai",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "link-openai",
+            "registration_enabled": false
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_private_endpoint.helpdesk",
+          "mode": "managed",
+          "type": "azurerm_private_endpoint",
+          "name": "helpdesk",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "pe-contoso-helpdesk-ai",
+            "location": "swedencentral",
+            "resource_group_name": "rg-helpdesk-prod",
+            "private_service_connection": [
+              {
+                "name": "psc-helpdesk",
+                "is_manual_connection": false,
+                "subresource_names": [
+                  "account"
+                ]
+              }
+            ],
+            "private_dns_zone_group": [
+              {
+                "name": "default"
+              }
+            ]
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_key_vault.kv",
+          "mode": "managed",
+          "type": "azurerm_key_vault",
+          "name": "kv",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "kv-contoso-helpdesk",
+            "location": "westeurope",
+            "resource_group_name": "rg-helpdesk-prod",
+            "tenant_id": "aaaabbbb-0000-cccc-1111-dddd2222eeee",
+            "sku_name": "standard",
+            "rbac_authorization_enabled": true,
+            "purge_protection_enabled": false,
+            "soft_delete_retention_days": 90,
+            "public_network_access_enabled": true,
+            "network_acls": []
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_key_vault_key.cmk",
+          "mode": "managed",
+          "type": "azurerm_key_vault_key",
+          "name": "cmk",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "cmk-foundry",
+            "key_type": "RSA",
+            "key_size": 2048,
+            "key_opts": [
+              "decrypt",
+              "encrypt",
+              "sign",
+              "unwrapKey",
+              "verify",
+              "wrapKey"
+            ]
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_log_analytics_workspace.law",
+          "mode": "managed",
+          "type": "azurerm_log_analytics_workspace",
+          "name": "law",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "law-helpdesk",
+            "sku": "PerGB2018",
+            "retention_in_days": 30
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_monitor_diagnostic_setting.kv",
+          "mode": "managed",
+          "type": "azurerm_monitor_diagnostic_setting",
+          "name": "kv",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "kv-to-law",
+            "enabled_log": [
+              {
+                "category": "AuditEvent",
+                "category_group": ""
+              }
+            ]
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_user_assigned_identity.apps",
+          "mode": "managed",
+          "type": "azurerm_user_assigned_identity",
+          "name": "apps",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "name": "id-ai-apps",
+            "location": "swedencentral",
+            "resource_group_name": "rg-helpdesk-prod"
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_role_assignment.apps",
+          "mode": "managed",
+          "type": "azurerm_role_assignment",
+          "name": "apps",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "role_definition_name": "Cognitive Services User",
+            "skip_service_principal_aad_check": false
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_role_assignment.ci",
+          "mode": "managed",
+          "type": "azurerm_role_assignment",
+          "name": "ci",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "role_definition_name": "Cognitive Services Contributor",
+            "principal_id": "eeee4444-ff55-6666-77aa-888888bbbbbb",
+            "skip_service_principal_aad_check": false
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "azurerm_role_assignment.data_science",
+          "mode": "managed",
+          "type": "azurerm_role_assignment",
+          "name": "data_science",
+          "provider_name": "registry.terraform.io/hashicorp/azurerm",
+          "schema_version": 0,
+          "values": {
+            "role_definition_name": "Foundry User",
+            "principal_id": "ffff5555-aa66-7777-88bb-999999cccccc"
+          },
+          "sensitive_values": {}
+        }
+      ]
+    }
+  },
+  "configuration": {
+    "provider_config": {
+      "azurerm": {
+        "name": "azurerm",
+        "full_name": "registry.terraform.io/hashicorp/azurerm"
+      }
+    },
+    "root_module": {
+      "resources": [
+        {
+          "address": "azurerm_resource_group.ai",
+          "mode": "managed",
+          "type": "azurerm_resource_group",
+          "name": "ai",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "rg-helpdesk-prod"
+            },
+            "location": {
+              "constant_value": "swedencentral"
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_virtual_network.main",
+          "mode": "managed",
+          "type": "azurerm_virtual_network",
+          "name": "main",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "vnet-helpdesk"
+            },
+            "address_space": {
+              "constant_value": [
+                "10.20.0.0/16"
+              ]
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_subnet.app",
+          "mode": "managed",
+          "type": "azurerm_subnet",
+          "name": "app",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "snet-app"
+            },
+            "virtual_network_name": {
+              "references": [
+                "azurerm_virtual_network.main.name",
+                "azurerm_virtual_network.main"
+              ]
+            },
+            "address_prefixes": {
+              "constant_value": [
+                "10.20.1.0/24"
+              ]
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_subnet.pe",
+          "mode": "managed",
+          "type": "azurerm_subnet",
+          "name": "pe",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "snet-pe"
+            },
+            "virtual_network_name": {
+              "references": [
+                "azurerm_virtual_network.main.name",
+                "azurerm_virtual_network.main"
+              ]
+            },
+            "address_prefixes": {
+              "constant_value": [
+                "10.20.2.0/24"
+              ]
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_cognitive_account.helpdesk",
+          "mode": "managed",
+          "type": "azurerm_cognitive_account",
+          "name": "helpdesk",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "contoso-helpdesk-ai"
+            },
+            "kind": {
+              "constant_value": "AIServices"
+            },
+            "sku_name": {
+              "constant_value": "S0"
+            },
+            "custom_subdomain_name": {
+              "constant_value": "contoso-helpdesk-ai"
+            },
+            "local_auth_enabled": {
+              "constant_value": false
+            },
+            "project_management_enabled": {
+              "constant_value": true
+            },
+            "identity": [
+              {
+                "type": {
+                  "constant_value": "SystemAssigned"
+                }
+              }
+            ],
+            "resource_group_name": {
+              "references": [
+                "azurerm_resource_group.ai.name",
+                "azurerm_resource_group.ai"
+              ]
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_cognitive_deployment.chat",
+          "mode": "managed",
+          "type": "azurerm_cognitive_deployment",
+          "name": "chat",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "helpdesk-gpt5"
+            },
+            "cognitive_account_id": {
+              "references": [
+                "azurerm_cognitive_account.helpdesk.id",
+                "azurerm_cognitive_account.helpdesk"
+              ]
+            },
+            "model": [
+              {
+                "format": {
+                  "constant_value": "OpenAI"
+                },
+                "name": {
+                  "constant_value": "gpt-5"
+                },
+                "version": {
+                  "constant_value": "1"
+                }
+              }
+            ],
+            "sku": [
+              {
+                "name": {
+                  "constant_value": "DataZoneStandard"
+                },
+                "capacity": {
+                  "constant_value": 50
+                }
+              }
+            ]
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_cognitive_deployment.mini",
+          "mode": "managed",
+          "type": "azurerm_cognitive_deployment",
+          "name": "mini",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "helpdesk-mini"
+            },
+            "cognitive_account_id": {
+              "references": [
+                "azurerm_cognitive_account.helpdesk.id",
+                "azurerm_cognitive_account.helpdesk"
+              ]
+            },
+            "model": [
+              {
+                "format": {
+                  "constant_value": "OpenAI"
+                },
+                "name": {
+                  "constant_value": "gpt-4.1-mini"
+                },
+                "version": {
+                  "constant_value": "2025-04-14"
+                }
+              }
+            ],
+            "sku": [
+              {
+                "name": {
+                  "constant_value": "GlobalStandard"
+                },
+                "capacity": {
+                  "constant_value": 1
+                }
+              }
+            ]
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_cognitive_deployment.nightly",
+          "mode": "managed",
+          "type": "azurerm_cognitive_deployment",
+          "name": "nightly",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "helpdesk-batch"
+            },
+            "cognitive_account_id": {
+              "references": [
+                "azurerm_cognitive_account.helpdesk.id",
+                "azurerm_cognitive_account.helpdesk"
+              ]
+            },
+            "model": [
+              {
+                "format": {
+                  "constant_value": "OpenAI"
+                },
+                "name": {
+                  "constant_value": "gpt-5"
+                },
+                "version": {
+                  "constant_value": "1"
+                }
+              }
+            ],
+            "sku": [
+              {
+                "name": {
+                  "constant_value": "GlobalBatch"
+                },
+                "capacity": {
+                  "constant_value": 50
+                }
+              }
+            ]
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_private_dns_zone.openai",
+          "mode": "managed",
+          "type": "azurerm_private_dns_zone",
+          "name": "openai",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "privatelink.openai.azure.com"
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_private_dns_zone_virtual_network_link.openai",
+          "mode": "managed",
+          "type": "azurerm_private_dns_zone_virtual_network_link",
+          "name": "openai",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "link-openai"
+            },
+            "private_dns_zone_id": {
+              "references": [
+                "azurerm_private_dns_zone.openai.id",
+                "azurerm_private_dns_zone.openai"
+              ]
+            },
+            "virtual_network_id": {
+              "references": [
+                "azurerm_virtual_network.main.id",
+                "azurerm_virtual_network.main"
+              ]
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_private_endpoint.helpdesk",
+          "mode": "managed",
+          "type": "azurerm_private_endpoint",
+          "name": "helpdesk",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "pe-contoso-helpdesk-ai"
+            },
+            "subnet_id": {
+              "references": [
+                "azurerm_subnet.pe.id",
+                "azurerm_subnet.pe"
+              ]
+            },
+            "private_service_connection": [
+              {
+                "name": {
+                  "constant_value": "psc-helpdesk"
+                },
+                "is_manual_connection": {
+                  "constant_value": false
+                },
+                "subresource_names": {
+                  "constant_value": [
+                    "account"
+                  ]
+                },
+                "private_connection_resource_id": {
+                  "references": [
+                    "azurerm_cognitive_account.helpdesk.id",
+                    "azurerm_cognitive_account.helpdesk"
+                  ]
+                }
+              }
+            ],
+            "private_dns_zone_group": [
+              {
+                "name": {
+                  "constant_value": "default"
+                },
+                "private_dns_zone_ids": {
+                  "references": [
+                    "azurerm_private_dns_zone.openai.id",
+                    "azurerm_private_dns_zone.openai"
+                  ]
+                }
+              }
+            ]
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_key_vault.kv",
+          "mode": "managed",
+          "type": "azurerm_key_vault",
+          "name": "kv",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "kv-contoso-helpdesk"
+            },
+            "location": {
+              "constant_value": "westeurope"
+            },
+            "rbac_authorization_enabled": {
+              "constant_value": true
+            },
+            "purge_protection_enabled": {
+              "constant_value": false
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_key_vault_key.cmk",
+          "mode": "managed",
+          "type": "azurerm_key_vault_key",
+          "name": "cmk",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "cmk-foundry"
+            },
+            "key_vault_id": {
+              "references": [
+                "azurerm_key_vault.kv.id",
+                "azurerm_key_vault.kv"
+              ]
+            },
+            "key_type": {
+              "constant_value": "RSA"
+            },
+            "key_size": {
+              "constant_value": 2048
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_log_analytics_workspace.law",
+          "mode": "managed",
+          "type": "azurerm_log_analytics_workspace",
+          "name": "law",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "law-helpdesk"
+            },
+            "retention_in_days": {
+              "constant_value": 30
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_monitor_diagnostic_setting.kv",
+          "mode": "managed",
+          "type": "azurerm_monitor_diagnostic_setting",
+          "name": "kv",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "kv-to-law"
+            },
+            "target_resource_id": {
+              "references": [
+                "azurerm_key_vault.kv.id",
+                "azurerm_key_vault.kv"
+              ]
+            },
+            "log_analytics_workspace_id": {
+              "references": [
+                "azurerm_log_analytics_workspace.law.id",
+                "azurerm_log_analytics_workspace.law"
+              ]
+            },
+            "enabled_log": [
+              {
+                "category": {
+                  "constant_value": "AuditEvent"
+                }
+              }
+            ]
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_user_assigned_identity.apps",
+          "mode": "managed",
+          "type": "azurerm_user_assigned_identity",
+          "name": "apps",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "name": {
+              "constant_value": "id-ai-apps"
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_role_assignment.apps",
+          "mode": "managed",
+          "type": "azurerm_role_assignment",
+          "name": "apps",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "scope": {
+              "references": [
+                "azurerm_resource_group.ai.id",
+                "azurerm_resource_group.ai"
+              ]
+            },
+            "role_definition_name": {
+              "constant_value": "Cognitive Services User"
+            },
+            "principal_id": {
+              "references": [
+                "azurerm_user_assigned_identity.apps.principal_id",
+                "azurerm_user_assigned_identity.apps"
+              ]
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_role_assignment.ci",
+          "mode": "managed",
+          "type": "azurerm_role_assignment",
+          "name": "ci",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "scope": {
+              "references": [
+                "azurerm_resource_group.ai.id",
+                "azurerm_resource_group.ai"
+              ]
+            },
+            "role_definition_name": {
+              "constant_value": "Cognitive Services Contributor"
+            },
+            "principal_id": {
+              "constant_value": "eeee4444-ff55-6666-77aa-888888bbbbbb"
+            }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "azurerm_role_assignment.data_science",
+          "mode": "managed",
+          "type": "azurerm_role_assignment",
+          "name": "data_science",
+          "provider_config_key": "azurerm",
+          "expressions": {
+            "scope": {
+              "references": [
+                "azurerm_resource_group.ai.id",
+                "azurerm_resource_group.ai"
+              ]
+            },
+            "role_definition_name": {
+              "constant_value": "Foundry User"
+            },
+            "principal_id": {
+              "constant_value": "ffff5555-aa66-7777-88bb-999999cccccc"
+            }
+          },
+          "schema_version": 0
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "_about": "Which Contoso workloads run where and which identity each one uses (FICTIONAL, from Contoso's inventory). An identity is either a user-assigned managed identity in plan.json (by its name) or a named principal from principals.json.",
+  "apps": {
+    "helpdesk-web": {"identity": "id-ai-apps", "network": "vnet-helpdesk", "ip": "10.20.1.10", "purpose": "The TSG Helpdesk chatbot. Calls the helpdesk model."},
+    "hr-assistant": {"identity": "id-ai-apps", "network": "vnet-helpdesk", "ip": "10.20.1.20", "purpose": "Another team's HR chatbot. Uses its OWN model elsewhere; reused this identity because it already existed."}
+  }
+}
