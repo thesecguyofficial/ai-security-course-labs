@@ -1,0 +1,7 @@
+{
+  "_about": "The stand-in 'protected material' index. Real protected-material filters match known text such as lyrics, articles and recipes (Microsoft Learn). This lab uses an invented placeholder text so no real copyrighted text is in the repo.",
+  "texts": [
+    {"id": "song-placeholder-01", "title": "Moonlight Over Marine Drive (fictional song)",
+     "text": "Moonlight over Marine Drive, the sea keeps every promise that the city never keeps, we walk until the tide forgets our names and the morning trains begin to sing"}
+  ]
+}

@@ -1,0 +1,9 @@
+{
+ "_about": "How helpdesk-web calls the model (FICTIONAL).",
+ "api": "chat_completions",
+ "stream": true,
+ "normalise_input": false,
+ "document_embedding": false,
+ "retrieval_owner_check": false,
+ "recipient_allowlist": null
+}

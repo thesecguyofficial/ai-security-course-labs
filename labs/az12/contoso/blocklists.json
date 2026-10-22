@@ -1,0 +1,19 @@
+{
+ "_about": "Custom blocklists (FICTIONAL). Item shape as in Microsoft's blocklist how-to (raiBlocklistItems properties: pattern + isRegex).",
+ "blocklists": {
+  "contoso-injection-words": [
+   {
+    "blockItemId": "ignore-previous",
+    "isRegex": true,
+    "pattern": "(?i)ignore.*previous"
+   }
+  ],
+  "contoso-codenames": [
+   {
+    "blockItemId": "nightjar",
+    "isRegex": false,
+    "pattern": "NIGHTJAR"
+   }
+  ]
+ }
+}
