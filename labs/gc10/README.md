@@ -28,6 +28,7 @@ project, and lets staff try models in a sandbox project. In one sitting you will
 | `fixes/` | The fixes: two IAM allow policies, three organization policies, the cleaned-up key inventory, a spend cap budget |
 | `auditlogs/examplecorp-2026-10-12_16.jsonl` | 461 **fake** Cloud Audit Logs entries: three normal days, then two intrusions on 15 and 16 October |
 | `gcp-twin/` | Files for the optional Google Cloud step |
+| `GUIDED-BUILD.md` | Step-by-step build in your own project (console and gcloud): inventory the AI footprint, lock it down, five requests, one change, cost and teardown |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 19 tests for the lab, 6 for the challenge |
 
 **About `gcp_eval.py`.** It is not Google's authorization engine. It models only the rules this lab depends on, each
@@ -504,6 +505,9 @@ Done when `make challenge` says `ALL TESTS PASSED (25 run)`, `make attack-safe` 
 allowed; 8 of 8 legitimate requests allowed.` and `make hunt` shows an H09 finding. No solution is included.
 
 ## Step 8 (optional) · The Google Cloud twin, in your own Free Trial project
+
+**Want the full version?** [`GUIDED-BUILD.md`](GUIDED-BUILD.md) walks through the whole inventory and lock-down in
+your own project, console clicks and gcloud, with five test requests, one setting changed, cost and teardown.
 
 Everything above runs locally. If you have your own Google Cloud **Free Trial** (lesson 0.7), these steps repeat the
 key, logging, budget and allow-list ideas for real. Never run them in a work organization without permission
