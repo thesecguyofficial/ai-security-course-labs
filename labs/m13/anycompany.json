@@ -1,0 +1,20 @@
+{
+  "_about": "AnyCompany is fictional (AWS's own placeholder name). Account IDs and ARNs are AWS documentation example values; emails use the reserved example.com domain (RFC 2606).",
+  "region": "us-east-1",
+  "production_account": "111122223333",
+  "org_accounts": ["123456789012", "111122223333", "444455556666"],
+  "outside_account": "777788889999",
+  "kb_bucket": "amzn-s3-demo-bucket-tsg-kb",
+  "cmk_required_for": ["hr/", "it-admin/"],
+  "directory": {
+    "_note": "The identity provider's view of each person: what the app knows AFTER sign-in. Never what the user typed.",
+    "alice@example.com": {"department": "it", "groups": ["it-staff"]},
+    "bob@example.com": {"department": "sales", "groups": []},
+    "priya@example.com": {"department": "hr", "groups": ["hr"]},
+    "ceo@example.com": {"department": "exec", "groups": []}
+  },
+  "may_reset_mfa_for_others": ["it-staff"],
+  "helpdesk_agent_arn": "arn:aws:bedrock:us-east-1:111122223333:agent/TSGHELPDSK",
+  "other_team_agent_arn": "arn:aws:bedrock:us-east-1:111122223333:agent/MARKETINGBT",
+  "outside_agent_arn": "arn:aws:bedrock:us-east-1:777788889999:agent/OUTSIDEAGT"
+}

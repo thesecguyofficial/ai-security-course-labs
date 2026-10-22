@@ -1,0 +1,16 @@
+{
+  "_about": "CreateDataSource request bodies.",
+  "dataSources": [
+    {
+      "name": "tsg-kb-s3",
+      "knowledgeBaseId": "KBFIRSTDRFT",
+      "dataDeletionPolicy": "RETAIN",
+      "dataSourceConfiguration": {
+        "type": "S3",
+        "s3Configuration": {
+          "bucketArn": "arn:aws:s3:::amzn-s3-demo-bucket-tsg-kb"
+        }
+      }
+    }
+  ]
+}

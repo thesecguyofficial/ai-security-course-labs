@@ -1,0 +1,37 @@
+{
+  "_about": "How the Helpdesk backend builds each request. Read it like code review notes.",
+  "identity": {
+    "user_from": "request_body",
+    "_note": "the browser sends {\"user\": ..., \"department\": ..., \"question\": ...}"
+  },
+  "retrieval": {
+    "mode": "agent_kb_association",
+    "filter": {
+      "department_from": "request_body_or_directory"
+    },
+    "implicit_filter_for_cross_department_search": true,
+    "implicitFilterConfiguration": {
+      "modelArn": "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0",
+      "metadataAttributes": [
+        {
+          "key": "department",
+          "type": "STRING",
+          "description": "The department that owns the document: hr, it, sales, or all (everyone)."
+        }
+      ]
+    }
+  },
+  "session_attributes_from": "request_body",
+  "confirmation": {
+    "enabled": false
+  },
+  "screen_retrieved_chunks": false,
+  "guardrail": {
+    "assumed_to_cover": [
+      "user_input",
+      "final_response",
+      "retrieved_chunks",
+      "tool_results"
+    ]
+  }
+}

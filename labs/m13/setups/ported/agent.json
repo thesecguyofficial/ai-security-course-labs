@@ -1,0 +1,63 @@
+{
+  "_about": "Bedrock Agents (Classic) after the port. Search is a return-of-control action group: the APP runs Retrieve with the user's identity.",
+  "platform": "bedrock-agents-classic",
+  "createAgent": {
+    "agentName": "tsg-helpdesk",
+    "foundationModel": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "agentResourceRoleArn": "arn:aws:iam::111122223333:role/tsg-agent-service-role",
+    "instruction": "You are TSG Helpdesk, the IT helpdesk assistant for AnyCompany staff. Answer from the knowledge base. Use tools only when the user asks for an action.",
+    "idleSessionTTLInSeconds": 900,
+    "guardrailConfiguration": {
+      "guardrailIdentifier": "tsghelpdesk01",
+      "guardrailVersion": "1"
+    },
+    "customerEncryptionKeyArn": "arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
+  },
+  "knowledgeBaseAssociations": [],
+  "actionGroups": [
+    {
+      "actionGroupName": "kb-search",
+      "actionGroupExecutor": {
+        "customControl": "RETURN_CONTROL"
+      },
+      "functionSchema": {
+        "functions": [
+          {
+            "name": "search_kb",
+            "description": "Search the IT knowledge base for articles that answer the user's question.",
+            "parameters": {
+              "query": {
+                "type": "string",
+                "required": true,
+                "description": "What to search for"
+              }
+            },
+            "requireConfirmation": "DISABLED"
+          }
+        ]
+      }
+    },
+    {
+      "actionGroupName": "helpdesk-actions",
+      "actionGroupExecutor": {
+        "lambda": "arn:aws:lambda:us-east-1:111122223333:function:tsg-helpdesk-actions"
+      },
+      "functionSchema": {
+        "functions": [
+          {
+            "name": "reset_mfa",
+            "description": "Reset multi-factor authentication for a user so they can enrol a new device.",
+            "parameters": {
+              "target_email": {
+                "type": "string",
+                "required": true,
+                "description": "Email of the person whose MFA is reset"
+              }
+            },
+            "requireConfirmation": "ENABLED"
+          }
+        ]
+      }
+    }
+  ]
+}

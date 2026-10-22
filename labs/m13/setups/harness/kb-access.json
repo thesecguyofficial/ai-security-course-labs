@@ -1,0 +1,66 @@
+{
+  "_about": "s3://amzn-s3-demo-bucket-tsg-kb/acl/global-acl.json: the global ACL file. Name = the user's email, exactly as the app will send it in userContext.",
+  "kind": "global-acl",
+  "globalAcl": [
+    {
+      "keyPrefix": "s3://amzn-s3-demo-bucket-tsg-kb/public/",
+      "aclEntries": [
+        {
+          "Name": "alice@example.com",
+          "Type": "USER",
+          "Access": "ALLOW"
+        },
+        {
+          "Name": "bob@example.com",
+          "Type": "USER",
+          "Access": "ALLOW"
+        },
+        {
+          "Name": "priya@example.com",
+          "Type": "USER",
+          "Access": "ALLOW"
+        }
+      ]
+    },
+    {
+      "keyPrefix": "s3://amzn-s3-demo-bucket-tsg-kb/inbox/",
+      "aclEntries": [
+        {
+          "Name": "alice@example.com",
+          "Type": "USER",
+          "Access": "ALLOW"
+        },
+        {
+          "Name": "bob@example.com",
+          "Type": "USER",
+          "Access": "ALLOW"
+        },
+        {
+          "Name": "priya@example.com",
+          "Type": "USER",
+          "Access": "ALLOW"
+        }
+      ]
+    },
+    {
+      "keyPrefix": "s3://amzn-s3-demo-bucket-tsg-kb/hr/",
+      "aclEntries": [
+        {
+          "Name": "priya@example.com",
+          "Type": "USER",
+          "Access": "ALLOW"
+        }
+      ]
+    },
+    {
+      "keyPrefix": "s3://amzn-s3-demo-bucket-tsg-kb/it-admin/",
+      "aclEntries": [
+        {
+          "Name": "alice@example.com",
+          "Type": "USER",
+          "Access": "ALLOW"
+        }
+      ]
+    }
+  ]
+}

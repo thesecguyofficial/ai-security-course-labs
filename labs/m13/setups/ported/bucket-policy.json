@@ -1,0 +1,30 @@
+{
+  "_about": "Bucket policy of the knowledge base bucket. Staff uploads land in inbox/ only; HR and IT content is written by their owners' pipelines.",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "StaffUploadsInboxOnly",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::111122223333:role/tsg-staff-portal"
+      },
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::amzn-s3-demo-bucket-tsg-kb/inbox/*"
+    },
+    {
+      "Sid": "DenyInsecureTransport",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:*",
+      "Resource": [
+        "arn:aws:s3:::amzn-s3-demo-bucket-tsg-kb",
+        "arn:aws:s3:::amzn-s3-demo-bucket-tsg-kb/*"
+      ],
+      "Condition": {
+        "Bool": {
+          "aws:SecureTransport": "false"
+        }
+      }
+    }
+  ]
+}

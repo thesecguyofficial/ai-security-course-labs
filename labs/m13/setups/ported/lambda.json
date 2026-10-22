@@ -1,0 +1,36 @@
+{
+  "_about": "tsg-helpdesk-actions after the port.",
+  "resourcePolicy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "AccessLambdaFunction",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "bedrock.amazonaws.com"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Resource": "arn:aws:lambda:us-east-1:111122223333:function:tsg-helpdesk-actions",
+        "Condition": {
+          "StringEquals": {
+            "AWS:SourceAccount": "111122223333"
+          },
+          "ArnLike": {
+            "AWS:SourceArn": "arn:aws:bedrock:us-east-1:111122223333:agent/TSGHELPDSK"
+          }
+        }
+      }
+    ]
+  },
+  "executionRolePolicy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": "cognito-idp:AdminSetUserMFAPreference",
+        "Resource": "arn:aws:cognito-idp:us-east-1:111122223333:userpool/us-east-1_EXAMPLE"
+      }
+    ]
+  },
+  "caller_identity_from": "sessionAttributes.caller_email"
+}

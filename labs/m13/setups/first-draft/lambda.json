@@ -1,0 +1,28 @@
+{
+  "_about": "tsg-helpdesk-actions: resource-based policy (who may invoke it) and execution role policy (what it may do).",
+  "resourcePolicy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "AllowBedrock",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "bedrock.amazonaws.com"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Resource": "arn:aws:lambda:us-east-1:111122223333:function:tsg-helpdesk-actions"
+      }
+    ]
+  },
+  "executionRolePolicy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": "cognito-idp:*",
+        "Resource": "*"
+      }
+    ]
+  },
+  "caller_identity_from": "none"
+}
