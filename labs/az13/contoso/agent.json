@@ -1,0 +1,112 @@
+{
+ "_about": "Contoso version 1 (FICTIONAL): the Foundry side of the port. 'agents' follow the PromptAgentDefinition shape (kind, model, instructions, tools); tool fields follow Microsoft's MCP, Azure AI Search and function tool pages. 'connections' follow the project connection properties (category, authType, target). 'guardrail' lists controls as risk @ intervention point. authType 'ProjectManagedIdentity' and category 'RemoteTool' are the documented connection values; 'ApiKey', 'CustomKeys' and 'OAuth2' are lab shorthand for the key, azd --auth-type custom-keys and oauth2 options.",
+ "agents": [
+  {
+   "name": "helpdesk-agent",
+   "definition": {
+    "kind": "prompt",
+    "model": "helpdesk-chat",
+    "instructions": "You are TSG Helpdesk. Answer from the knowledge base. Only HR staff may see HR documents.",
+    "tools": [
+     {
+      "type": "azure_ai_search",
+      "azure_ai_search": {
+       "indexes": [
+        {
+         "project_connection_id": "conn-search-key",
+         "index_name": "helpdesk-kb",
+         "query_type": "simple",
+         "top_k": 5
+        }
+       ]
+      }
+     },
+     {
+      "type": "mcp",
+      "server_label": "knowledge-base",
+      "server_url": "https://srch-helpdesk-contoso.search.windows.net/knowledgebases/helpdesk-knowledge/mcp?api-version=2026-08-01-preview",
+      "project_connection_id": "conn-kb-mi",
+      "require_approval": "never",
+      "allowed_tools": [
+       "knowledge_base_retrieve"
+      ]
+     },
+     {
+      "type": "mcp",
+      "server_label": "helpdesk-actions",
+      "server_url": "https://mcp-helpdesk.contoso.com/mcp",
+      "project_connection_id": "conn-actions-pat",
+      "require_approval": "never"
+     }
+    ]
+   },
+   "guardrail": "contoso-agent-v1",
+   "published": false
+  }
+ ],
+ "connections": {
+  "conn-search-key": {
+   "category": "CognitiveSearch",
+   "authType": "ApiKey",
+   "target": "https://srch-helpdesk-contoso.search.windows.net",
+   "_note": "admin API key"
+  },
+  "conn-kb-mi": {
+   "category": "RemoteTool",
+   "authType": "ProjectManagedIdentity",
+   "audience": "https://search.azure.com/",
+   "target": "https://srch-helpdesk-contoso.search.windows.net/knowledgebases/helpdesk-knowledge/mcp?api-version=2026-08-01-preview"
+  },
+  "conn-actions-pat": {
+   "category": "RemoteTool",
+   "authType": "CustomKeys",
+   "target": "https://mcp-helpdesk.contoso.com/mcp",
+   "credential_owner": "svc-helpdesk-admin",
+   "_note": "one admin token for everyone: azd --auth-type custom-keys"
+  }
+ },
+ "mcp_servers": {
+  "helpdesk-actions": {
+   "tools": {
+    "search_tickets": "read",
+    "create_ticket": "write",
+    "send_email": "write",
+    "close_ticket": "write",
+    "delete_ticket": "write"
+   },
+   "operator": "Contoso platform team",
+   "hosting": "Azure Container Apps, public ingress"
+  }
+ },
+ "guardrails": {
+  "contoso-agent-v1": {
+   "controls": [
+    {
+     "risk": "Jailbreak",
+     "point": "user_input",
+     "action": "annotate_and_block"
+    },
+    {
+     "risk": "Hate,Sexual,Violence,SelfHarm",
+     "point": "user_input",
+     "action": "annotate_and_block"
+    },
+    {
+     "risk": "Hate,Sexual,Violence,SelfHarm",
+     "point": "output",
+     "action": "annotate_and_block"
+    }
+   ]
+  }
+ },
+ "approval": {
+  "reviewer": "none"
+ },
+ "audit_log": {
+  "tool_calls": false,
+  "approvals": false
+ },
+ "tracing": {
+  "application_insights": false
+ }
+}

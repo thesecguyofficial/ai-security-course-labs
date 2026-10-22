@@ -1,0 +1,36 @@
+{
+ "_about": "Hardened build (FICTIONAL): keys off, private endpoint only, customer-managed key enforced, logs on, native ACL trimming with permission fields on every chunk, labels projected to chunks, permissions resynced after every ACL change.",
+ "service": {
+  "name": "srch-helpdesk-contoso",
+  "sku": "basic",
+  "authOptions": null,
+  "disableLocalAuth": true,
+  "publicNetworkAccess": "disabled",
+  "privateEndpoints": ["pe-srch-helpdesk (snet-pe, vnet-helpdesk)"],
+  "sharedPrivateLinks": [{"name": "spl-blob", "groupId": "dfs", "status": "Approved"}],
+  "networkRuleSet": {"ipRules": []},
+  "encryptionWithCmk": {"enforcement": "Enabled"},
+  "diagnosticLogs": true,
+  "identity": {"type": "SystemAssigned"}
+ },
+ "index": {
+  "name": "helpdesk-kb",
+  "permissionFilterOption": "enabled",
+  "purviewEnabled": true,
+  "fields": [
+   {"name": "chunk_id", "type": "Edm.String", "key": true},
+   {"name": "parent_id", "type": "Edm.String", "filterable": true},
+   {"name": "title", "type": "Edm.String", "searchable": true},
+   {"name": "chunk", "type": "Edm.String", "searchable": true},
+   {"name": "UserIds", "type": "Collection(Edm.String)", "permissionFilter": "userIds", "filterable": true, "retrievable": false},
+   {"name": "GroupIds", "type": "Collection(Edm.String)", "permissionFilter": "groupIds", "filterable": true, "retrievable": false},
+   {"name": "group_ids", "type": "Collection(Edm.String)", "filterable": true, "retrievable": false},
+   {"name": "sensitivityLabel", "type": "Edm.String", "filterable": true, "sensitivityLabel": true, "retrievable": true}
+  ],
+  "projection": {"permission_fields_to_chunks": ["UserIds", "GroupIds", "group_ids"], "label_to_chunks": true},
+  "vectorFilterMode": "preFilter"
+ },
+ "permission_sync": {"last_run": "2026-10-19T08:00:00Z", "schedule": "daily 08:00 UTC", "resync_after_acl_change": true},
+ "knowledge_source": {"name": "helpdesk-ks", "kind": "searchIndex", "searchIndexParameters": {"searchIndexName": "helpdesk-kb"}},
+ "knowledge_base": {"name": "helpdesk-knowledge", "knowledgeSources": [{"name": "helpdesk-ks"}], "outputMode": "extractiveData"}
+}

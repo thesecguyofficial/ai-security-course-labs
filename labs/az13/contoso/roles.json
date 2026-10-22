@@ -1,0 +1,9 @@
+{
+ "_about": "Role assignments on the search service (FICTIONAL). Built-in role names as Microsoft lists them.",
+ "assignments": [
+  {"principal": "foundry project managed identity (helpdesk)", "role": "Search Service Contributor", "scope": "srch-helpdesk-contoso"},
+  {"principal": "foundry project managed identity (helpdesk)", "role": "Search Index Data Contributor", "scope": "srch-helpdesk-contoso"},
+  {"principal": "helpdesk-web managed identity", "role": "Search Index Data Reader", "scope": "srch-helpdesk-contoso"},
+  {"principal": "search service managed identity", "role": "Storage Blob Data Reader", "scope": "stcontosokb/helpdesk-kb"}
+ ]
+}
