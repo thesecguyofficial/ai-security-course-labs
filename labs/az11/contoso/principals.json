@@ -1,0 +1,8 @@
+{
+  "_about": "Named principals (FICTIONAL). Object IDs are Microsoft documentation example GUIDs, the same as in lab AZ10.",
+  "principals": {
+    "platform-admin": {"objectId": "bbbbbbbb-1111-2222-3333-cccccccccccc", "type": "User", "displayName": "platform-admin@contoso.com"},
+    "ci-deployer": {"objectId": "eeee4444-ff55-6666-77aa-888888bbbbbb", "type": "ServicePrincipal", "displayName": "ci-deployer (client secret)"},
+    "data-science": {"objectId": "ffff5555-aa66-7777-88bb-999999cccccc", "type": "Group", "displayName": "sg-data-science"}
+  }
+}

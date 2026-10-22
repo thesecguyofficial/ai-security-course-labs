@@ -1,0 +1,15 @@
+{
+  "_about": "Contoso's Azure Policy assignments today (FICTIONAL): only the approved-models policy fixed in lab AZ10.",
+  "assignments": [
+    {
+      "name": "allow-only-approved-models",
+      "scope": "rg-helpdesk-prod",
+      "definition": "policy-definitions/AllowDeployRegistryModels_Audit.json",
+      "parameters": {
+        "effect": {"value": "Deny"},
+        "allowedPublishers": {"value": []},
+        "allowedAssetIds": {"value": ["azureml://registries/azure-openai/models/gpt-5/", "azureml://registries/azure-openai/models/gpt-4.1-mini/"]}
+      }
+    }
+  ]
+}
