@@ -1,0 +1,566 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "twin (not produced by Terraform)",
+  "variables": {
+    "project_id": {
+      "value": "example-chatbot-prod"
+    },
+    "project_number": {
+      "value": "100000000001"
+    },
+    "region": {
+      "value": "europe-west4"
+    },
+    "org_id": {
+      "value": "123456789012"
+    },
+    "prod_folder_id": {
+      "value": "111111111111"
+    },
+    "access_policy_id": {
+      "value": "987654321"
+    }
+  },
+  "planned_values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "google_project_service.aiplatform",
+          "mode": "managed",
+          "type": "google_project_service",
+          "name": "aiplatform",
+          "values": {
+            "project": "example-chatbot-prod",
+            "service": "aiplatform.googleapis.com"
+          }
+        },
+        {
+          "address": "google_project_service.bigquery",
+          "mode": "managed",
+          "type": "google_project_service",
+          "name": "bigquery",
+          "values": {
+            "project": "example-chatbot-prod",
+            "service": "bigquery.googleapis.com"
+          }
+        },
+        {
+          "address": "google_project_service.compute",
+          "mode": "managed",
+          "type": "google_project_service",
+          "name": "compute",
+          "values": {
+            "project": "example-chatbot-prod",
+            "service": "compute.googleapis.com"
+          }
+        },
+        {
+          "address": "google_project_service.cloudkms",
+          "mode": "managed",
+          "type": "google_project_service",
+          "name": "cloudkms",
+          "values": {
+            "project": "example-chatbot-prod",
+            "service": "cloudkms.googleapis.com"
+          }
+        },
+        {
+          "address": "google_project_service.dns",
+          "mode": "managed",
+          "type": "google_project_service",
+          "name": "dns",
+          "values": {
+            "project": "example-chatbot-prod",
+            "service": "dns.googleapis.com"
+          }
+        },
+        {
+          "address": "google_project_service.iam",
+          "mode": "managed",
+          "type": "google_project_service",
+          "name": "iam",
+          "values": {
+            "project": "example-chatbot-prod",
+            "service": "iam.googleapis.com"
+          }
+        },
+        {
+          "address": "google_service_account.chatbot_runtime",
+          "mode": "managed",
+          "type": "google_service_account",
+          "name": "chatbot_runtime",
+          "values": {
+            "project": "example-chatbot-prod",
+            "account_id": "chatbot-runtime",
+            "email": "chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com",
+            "display_name": "TSG Helpdesk runtime"
+          }
+        },
+        {
+          "address": "google_service_account.ticket_summariser",
+          "mode": "managed",
+          "type": "google_service_account",
+          "name": "ticket_summariser",
+          "values": {
+            "project": "example-chatbot-prod",
+            "account_id": "ticket-summariser",
+            "email": "ticket-summariser@example-chatbot-prod.iam.gserviceaccount.com",
+            "display_name": "Ticket summariser"
+          }
+        },
+        {
+          "address": "google_project_iam_custom_role.model_caller",
+          "mode": "managed",
+          "type": "google_project_iam_custom_role",
+          "name": "model_caller",
+          "values": {
+            "project": "example-chatbot-prod",
+            "role_id": "helpdeskModelCaller",
+            "title": "Helpdesk model caller",
+            "permissions": [
+              "aiplatform.endpoints.predict"
+            ]
+          }
+        },
+        {
+          "address": "google_project_iam_member.chatbot_model_caller",
+          "mode": "managed",
+          "type": "google_project_iam_member",
+          "name": "chatbot_model_caller",
+          "values": {
+            "project": "example-chatbot-prod",
+            "role": "projects/example-chatbot-prod/roles/helpdeskModelCaller",
+            "member": "serviceAccount:chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com"
+          }
+        },
+        {
+          "address": "google_project_iam_member.summariser_model_caller",
+          "mode": "managed",
+          "type": "google_project_iam_member",
+          "name": "summariser_model_caller",
+          "values": {
+            "project": "example-chatbot-prod",
+            "role": "projects/example-chatbot-prod/roles/helpdeskModelCaller",
+            "member": "serviceAccount:ticket-summariser@example-chatbot-prod.iam.gserviceaccount.com"
+          }
+        },
+        {
+          "address": "google_service_account_iam_member.deployer_can_attach",
+          "mode": "managed",
+          "type": "google_service_account_iam_member",
+          "name": "deployer_can_attach",
+          "values": {
+            "service_account_id": "projects/example-chatbot-prod/serviceAccounts/chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com",
+            "role": "roles/iam.serviceAccountUser",
+            "member": "group:helpdesk-deployers@example.com"
+          }
+        },
+        {
+          "address": "google_bigquery_dataset_iam_member.tickets_chatbot",
+          "mode": "managed",
+          "type": "google_bigquery_dataset_iam_member",
+          "name": "tickets_chatbot",
+          "values": {
+            "project": "example-chatbot-prod",
+            "dataset_id": "helpdesk_tickets",
+            "role": "roles/bigquery.dataViewer",
+            "member": "serviceAccount:chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com"
+          }
+        },
+        {
+          "address": "google_bigquery_dataset_iam_member.tickets_ds",
+          "mode": "managed",
+          "type": "google_bigquery_dataset_iam_member",
+          "name": "tickets_ds",
+          "values": {
+            "project": "example-chatbot-prod",
+            "dataset_id": "helpdesk_tickets",
+            "role": "roles/bigquery.dataViewer",
+            "member": "group:data-science@example.com"
+          }
+        },
+        {
+          "address": "google_bigquery_dataset_iam_member.tickets_summariser",
+          "mode": "managed",
+          "type": "google_bigquery_dataset_iam_member",
+          "name": "tickets_summariser",
+          "values": {
+            "project": "example-chatbot-prod",
+            "dataset_id": "helpdesk_tickets",
+            "role": "roles/bigquery.dataEditor",
+            "member": "serviceAccount:ticket-summariser@example-chatbot-prod.iam.gserviceaccount.com"
+          }
+        },
+        {
+          "address": "google_bigquery_dataset_iam_member.ai_logs_sre",
+          "mode": "managed",
+          "type": "google_bigquery_dataset_iam_member",
+          "name": "ai_logs_sre",
+          "values": {
+            "project": "example-chatbot-prod",
+            "dataset_id": "ai_logs",
+            "role": "roles/bigquery.dataViewer",
+            "member": "group:helpdesk-sre@example.com"
+          }
+        },
+        {
+          "address": "google_org_policy_policy.allowed_models",
+          "mode": "managed",
+          "type": "google_org_policy_policy",
+          "name": "allowed_models",
+          "values": {
+            "name": "folders/111111111111/policies/vertexai.allowedModels",
+            "parent": "folders/111111111111",
+            "spec": [
+              {
+                "inherit_from_parent": false,
+                "rules": [
+                  {
+                    "values": [
+                      {
+                        "allowed_values": [
+                          "publishers/google/models/gemini-3.1-flash-lite:predict"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "address": "google_compute_network.helpdesk",
+          "mode": "managed",
+          "type": "google_compute_network",
+          "name": "helpdesk",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "helpdesk-vpc",
+            "auto_create_subnetworks": false
+          }
+        },
+        {
+          "address": "google_compute_subnetwork.helpdesk_eu",
+          "mode": "managed",
+          "type": "google_compute_subnetwork",
+          "name": "helpdesk_eu",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "helpdesk-eu",
+            "region": "europe-west4",
+            "ip_cidr_range": "10.10.0.0/24",
+            "network": "helpdesk-vpc",
+            "private_ip_google_access": true
+          }
+        },
+        {
+          "address": "google_compute_global_address.psc_apis",
+          "mode": "managed",
+          "type": "google_compute_global_address",
+          "name": "psc_apis",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "psc-google-apis",
+            "address_type": "INTERNAL",
+            "purpose": "PRIVATE_SERVICE_CONNECT",
+            "address": "10.100.0.2",
+            "network": "helpdesk-vpc"
+          }
+        },
+        {
+          "address": "google_compute_global_forwarding_rule.psc_apis",
+          "mode": "managed",
+          "type": "google_compute_global_forwarding_rule",
+          "name": "psc_apis",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "tsgapis",
+            "target": "vpc-sc",
+            "network": "helpdesk-vpc",
+            "ip_address": "10.100.0.2",
+            "load_balancing_scheme": ""
+          }
+        },
+        {
+          "address": "google_dns_managed_zone.googleapis",
+          "mode": "managed",
+          "type": "google_dns_managed_zone",
+          "name": "googleapis",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "googleapis-private",
+            "dns_name": "googleapis.com.",
+            "visibility": "private",
+            "private_visibility_config": [
+              {
+                "networks": [
+                  {
+                    "network_url": "helpdesk-vpc"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "address": "google_dns_record_set.googleapis_a",
+          "mode": "managed",
+          "type": "google_dns_record_set",
+          "name": "googleapis_a",
+          "values": {
+            "project": "example-chatbot-prod",
+            "managed_zone": "googleapis-private",
+            "name": "googleapis.com.",
+            "type": "A",
+            "rrdatas": [
+              "10.100.0.2"
+            ]
+          }
+        },
+        {
+          "address": "google_dns_record_set.googleapis_cname",
+          "mode": "managed",
+          "type": "google_dns_record_set",
+          "name": "googleapis_cname",
+          "values": {
+            "project": "example-chatbot-prod",
+            "managed_zone": "googleapis-private",
+            "name": "*.googleapis.com.",
+            "type": "CNAME",
+            "rrdatas": [
+              "googleapis.com."
+            ]
+          }
+        },
+        {
+          "address": "google_compute_firewall.deny_all_egress",
+          "mode": "managed",
+          "type": "google_compute_firewall",
+          "name": "deny_all_egress",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "deny-all-egress",
+            "network": "helpdesk-vpc",
+            "direction": "EGRESS",
+            "priority": 65000,
+            "destination_ranges": [
+              "0.0.0.0/0"
+            ],
+            "deny": [
+              {
+                "protocol": "all"
+              }
+            ]
+          }
+        },
+        {
+          "address": "google_compute_firewall.allow_google_apis_egress",
+          "mode": "managed",
+          "type": "google_compute_firewall",
+          "name": "allow_google_apis_egress",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "allow-google-apis-egress",
+            "network": "helpdesk-vpc",
+            "direction": "EGRESS",
+            "priority": 1000,
+            "destination_ranges": [
+              "10.100.0.2/32"
+            ],
+            "allow": [
+              {
+                "protocol": "tcp",
+                "ports": [
+                  "443"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "address": "google_compute_instance.helpdesk_vm",
+          "mode": "managed",
+          "type": "google_compute_instance",
+          "name": "helpdesk_vm",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "helpdesk-vm",
+            "zone": "europe-west4-a",
+            "machine_type": "e2-small",
+            "network_interface": [
+              {
+                "network": "helpdesk-vpc",
+                "subnetwork": "helpdesk-eu",
+                "access_config": []
+              }
+            ],
+            "service_account": [
+              {
+                "email": "chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com",
+                "scopes": [
+                  "cloud-platform"
+                ]
+              }
+            ],
+            "labels": {
+              "app": "tsg-helpdesk",
+              "ai_workload": "true"
+            }
+          }
+        },
+        {
+          "address": "google_compute_instance.ticket_summariser",
+          "mode": "managed",
+          "type": "google_compute_instance",
+          "name": "ticket_summariser",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "ticket-summariser",
+            "zone": "europe-west4-a",
+            "machine_type": "e2-small",
+            "network_interface": [
+              {
+                "network": "helpdesk-vpc",
+                "subnetwork": "helpdesk-eu",
+                "access_config": []
+              }
+            ],
+            "service_account": [
+              {
+                "email": "ticket-summariser@example-chatbot-prod.iam.gserviceaccount.com",
+                "scopes": [
+                  "cloud-platform"
+                ]
+              }
+            ],
+            "labels": {
+              "app": "ticket-summariser",
+              "ai_workload": "true"
+            }
+          }
+        },
+        {
+          "address": "google_kms_key_ring.helpdesk_eu",
+          "mode": "managed",
+          "type": "google_kms_key_ring",
+          "name": "helpdesk_eu",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "helpdesk-eu",
+            "location": "europe-west4"
+          }
+        },
+        {
+          "address": "google_kms_crypto_key.helpdesk_data",
+          "mode": "managed",
+          "type": "google_kms_crypto_key",
+          "name": "helpdesk_data",
+          "values": {
+            "name": "helpdesk-data",
+            "key_ring": "projects/example-chatbot-prod/locations/europe-west4/keyRings/helpdesk-eu",
+            "rotation_period": "7776000s",
+            "purpose": "ENCRYPT_DECRYPT"
+          }
+        },
+        {
+          "address": "google_kms_crypto_key_iam_member.bq_can_use_key",
+          "mode": "managed",
+          "type": "google_kms_crypto_key_iam_member",
+          "name": "bq_can_use_key",
+          "values": {
+            "crypto_key_id": "projects/example-chatbot-prod/locations/europe-west4/keyRings/helpdesk-eu/cryptoKeys/helpdesk-data",
+            "role": "roles/cloudkms.cryptoKeyEncrypterDecrypter",
+            "member": "serviceAccount:bq-100000000001@bigquery-encryption.iam.gserviceaccount.com"
+          }
+        },
+        {
+          "address": "google_bigquery_dataset.helpdesk_tickets",
+          "mode": "managed",
+          "type": "google_bigquery_dataset",
+          "name": "helpdesk_tickets",
+          "values": {
+            "project": "example-chatbot-prod",
+            "dataset_id": "helpdesk_tickets",
+            "location": "europe-west4",
+            "labels": {
+              "data_class": "customer"
+            },
+            "default_encryption_configuration": [
+              {
+                "kms_key_name": "projects/example-chatbot-prod/locations/europe-west4/keyRings/helpdesk-eu/cryptoKeys/helpdesk-data"
+              }
+            ]
+          }
+        },
+        {
+          "address": "google_bigquery_dataset.ai_logs",
+          "mode": "managed",
+          "type": "google_bigquery_dataset",
+          "name": "ai_logs",
+          "values": {
+            "project": "example-chatbot-prod",
+            "dataset_id": "ai_logs",
+            "location": "europe-west4",
+            "labels": {
+              "data_class": "customer"
+            },
+            "default_encryption_configuration": [
+              {
+                "kms_key_name": "projects/example-chatbot-prod/locations/europe-west4/keyRings/helpdesk-eu/cryptoKeys/helpdesk-data"
+              }
+            ]
+          }
+        },
+        {
+          "address": "google_project_iam_audit_config.aiplatform_data_access",
+          "mode": "managed",
+          "type": "google_project_iam_audit_config",
+          "name": "aiplatform_data_access",
+          "values": {
+            "project": "example-chatbot-prod",
+            "service": "aiplatform.googleapis.com",
+            "audit_log_config": [
+              {
+                "log_type": "DATA_READ",
+                "exempted_members": []
+              },
+              {
+                "log_type": "DATA_WRITE",
+                "exempted_members": []
+              }
+            ]
+          }
+        },
+        {
+          "address": "google_access_context_manager_service_perimeter.helpdesk",
+          "mode": "managed",
+          "type": "google_access_context_manager_service_perimeter",
+          "name": "helpdesk",
+          "values": {
+            "parent": "accessPolicies/987654321",
+            "name": "accessPolicies/987654321/servicePerimeters/helpdesk",
+            "title": "helpdesk",
+            "perimeter_type": "PERIMETER_TYPE_REGULAR",
+            "use_explicit_dry_run_spec": true,
+            "status": [],
+            "spec": [
+              {
+                "resources": [
+                  "projects/100000000001"
+                ],
+                "restricted_services": [
+                  "aiplatform.googleapis.com",
+                  "bigquery.googleapis.com",
+                  "storage.googleapis.com"
+                ],
+                "ingress_policies": [],
+                "egress_policies": []
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

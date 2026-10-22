@@ -1,0 +1,10 @@
+{
+  "_comment": "Settings Terraform can't express. Copy this file for your own app and fill it in by hand.",
+  "runtime": "helpdesk-vm",
+  "service_account": "chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com",
+  "model": "publishers/google/models/gemini-3.1-flash-lite",
+  "location": "global",
+  "endpoint_host": "aiplatform.googleapis.com",
+  "request_response_logging": null,
+  "cache_config": null
+}

@@ -1,0 +1,12 @@
+{
+  "_comment": "ExampleCo's rules for the TSG Helpdesk (fictional). The checker compares every deployment against these. Edit them for your own company.",
+  "company": "ExampleCo",
+  "has_organization": true,
+  "ml_processing_must_stay_in": "EU",
+  "approved_locations": ["europe-west4", "europe-west1", "eu"],
+  "cmek_required_for_customer_data_at_rest": true,
+  "data_access_logs_required_for": ["aiplatform.googleapis.com"],
+  "request_response_logging_min_sampling_rate": 1.0,
+  "office_ranges": ["198.51.100.0/24"],
+  "approved_models": ["publishers/google/models/gemini-3.1-flash-lite:predict"]
+}
