@@ -21,7 +21,7 @@ resource "aws_kms_key" "prompts" {
   description             = "${local.name}: Bedrock model invocation logs (prompts and answers)"
   enable_key_rotation     = true
   deletion_window_in_days = 7 # the minimum; fine for a lab, use 30 in production
-  depends_on              = [aws_iam_role.investigator]
+  depends_on              = [aws_iam_role.investigator, aws_iam_role.bedrock_logging]
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -50,6 +50,16 @@ resource "aws_kms_key" "prompts" {
           StringEquals = { "aws:SourceAccount" = var.account_id }
           ArnLike      = { "aws:SourceArn" = "arn:aws:bedrock:${var.region}:${var.account_id}:*" }
         }
+      },
+      {
+        # CloudWatch Logs: a principal calling PutLogEvents on a log group with a customer managed key "needs
+        # additional AWS KMS permissions". Bedrock writes as the logging role, so that role gets them, only via Logs.
+        Sid       = "BedrockLoggingRoleWritesThroughCloudWatchLogsOnly"
+        Effect    = "Allow"
+        Principal = { AWS = local.logging_role_arn }
+        Action    = ["kms:Encrypt", "kms:ReEncrypt*", "kms:Decrypt", "kms:GenerateDataKey*", "kms:Describe*"]
+        Resource  = "*"
+        Condition = { StringEquals = { "kms:ViaService" = "logs.${var.region}.amazonaws.com" } }
       },
       {
         Sid       = "InvestigatorsMayDecryptPromptLogs"

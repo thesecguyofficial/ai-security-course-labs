@@ -4,13 +4,14 @@
 
 resource "aws_iam_role" "app" {
   name = "${local.name}-app"
+  # The standard Lambda execution-role trust policy. (Lambda's docs don't say it supplies aws:SourceAccount when it
+  # assumes an execution role, so we don't add a condition that could stop the function from starting.)
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
       Effect    = "Allow"
       Principal = { Service = "lambda.amazonaws.com" }
       Action    = "sts:AssumeRole"
-      Condition = { StringEquals = { "aws:SourceAccount" = var.account_id } }
     }]
   })
 }

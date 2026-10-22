@@ -70,18 +70,8 @@
     "ops-tools": {
       "arn": "arn:aws:iam::111122223333:role/OpsToolsRole",
       "account": "111122223333",
-      "_note": "Next sprint: an internal tool that uses the OpenAI SDK on bedrock-mantle, from the same VPC.",
-      "inline_policy": {
-        "Version": "2012-10-17",
-        "Statement": [
-          {
-            "Sid": "MantleForOpsTools",
-            "Effect": "Allow",
-            "Action": "bedrock-mantle:*",
-            "Resource": "*"
-          }
-        ]
-      }
+      "_note": "Next sprint: an internal tool that calls Claude Haiku 4.5 on bedrock-mantle with the Anthropic SDK (Messages API), from the same VPC.",
+      "policy_file": "policies/ops-tools-mantle-role.json"
     },
     "outsider": {
       "arn": "arn:aws:iam::777788889999:user/personal-admin",
