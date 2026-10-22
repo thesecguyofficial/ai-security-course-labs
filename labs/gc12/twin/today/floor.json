@@ -1,0 +1,15 @@
+{
+  "_comment": "Project floor setting, set in September 2026 (REST shape of FloorSetting). Inspect only, Cloud Logging switched off 'to save cost'.",
+  "name": "projects/example-chatbot-prod/locations/global/floorSetting",
+  "updateTime": "2026-09-20T10:02:00Z",
+  "filterConfig": {
+    "piAndJailbreakFilterSettings": {"filterEnforcement": "ENABLED", "confidenceLevel": "MEDIUM_AND_ABOVE"},
+    "raiSettings": {"raiFilters": [
+      {"filterType": "DANGEROUS", "confidenceLevel": "MEDIUM_AND_ABOVE"},
+      {"filterType": "HARASSMENT", "confidenceLevel": "MEDIUM_AND_ABOVE"}
+    ]}
+  },
+  "enableFloorSettingEnforcement": true,
+  "integratedServices": ["AI_PLATFORM"],
+  "aiPlatformFloorSetting": {"inspectOnly": true, "enableCloudLogging": false}
+}

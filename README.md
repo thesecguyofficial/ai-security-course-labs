@@ -26,6 +26,7 @@ Hands-on labs for **AI Security Engineer** by [The Sec Guy](https://thesecguy.co
 | M11 (AWS) | Securing Amazon Bedrock: review TSG Helpdesk's Terraform plan offline (least privilege, VPC endpoint policy, KMS, invocation logging, CloudTrail, cross-Region residency), then optionally deploy the hardened version | Laptop ($0) + optional AWS (~$0.02/h) | ✅ available |
 | M11 (Azure) | Securing Foundry models: check a Terraform plan for network, DNS, identity, customer-managed key, logging and residency gaps, replay attacks, hunt prompts in AI gateway logs | Laptop ($0) + optional Azure | ✅ available |
 | M11 (Google Cloud) | Securing Gemini on Agent Platform: check a Terraform twin of the Helpdesk for keys, broad roles, public paths, missing perimeter, CMEK, logs and residency; replay attacks and an audit; deploy the hardened setup with Terraform | Laptop ($0) + optional Google Cloud | ✅ available |
+| M12 (Google Cloud) | Model Armor and Gemini safety filters: attack the Helpdesk with and without Model Armor, check floor settings and templates, measure catch rate and false positives with an automated suite, fail closed | Laptop ($0) + optional Google Cloud | ✅ available |
 | M12 → M19 | One lab per section and cloud, released with the course | Laptop + AWS / Azure / Google Cloud | coming every two weeks |
 
 Each lab folder has a `README.md` with step-by-step commands, what you should see, and troubleshooting.

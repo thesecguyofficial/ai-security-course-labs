@@ -1,0 +1,8 @@
+{
+  "_comment": "ExampleCo's rules for the Helpdesk (fictional). The checker reads these.",
+  "project": "example-chatbot-prod",
+  "customer_regions": ["India", "European Union"],
+  "screen_prompts_and_responses": true,
+  "block_not_just_log": true,
+  "sanitize_log_readers_allowed": ["group:ai-incident-readers@example.com"]
+}

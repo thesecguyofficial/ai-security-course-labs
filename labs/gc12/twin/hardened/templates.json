@@ -1,0 +1,22 @@
+{
+  "_comment": "One template for the self-hosted path (app_guard.py). The June template is deleted. The prompt injection confidence level is still Google's floor default, LOW_AND_ABOVE: measure it with `make sweep` (challenge, Step 7).",
+  "templates": [
+    {
+      "name": "projects/example-chatbot-prod/locations/europe-west4/templates/helpdesk-guard",
+      "createTime": "2026-10-22T08:40:00Z",
+      "filterConfig": {
+        "raiSettings": {"raiFilters": [
+          {"filterType": "DANGEROUS", "confidenceLevel": "MEDIUM_AND_ABOVE"},
+          {"filterType": "HARASSMENT", "confidenceLevel": "MEDIUM_AND_ABOVE"},
+          {"filterType": "HATE_SPEECH", "confidenceLevel": "MEDIUM_AND_ABOVE"},
+          {"filterType": "SEXUALLY_EXPLICIT", "confidenceLevel": "MEDIUM_AND_ABOVE"}
+        ]},
+        "piAndJailbreakFilterSettings": {"filterEnforcement": "ENABLED", "confidenceLevel": "LOW_AND_ABOVE"},
+        "maliciousUriFilterSettings": {"filterEnforcement": "ENABLED"},
+        "sdpSettings": {"advancedConfig": {"inspectTemplate": "projects/example-chatbot-prod/locations/europe-west4/inspectTemplates/helpdesk-in-eu"}}
+      },
+      "templateMetadata": {"ignorePartialInvocationFailures": false, "logSanitizeOperations": true,
+                           "enforcementType": "INSPECT_AND_BLOCK"}
+    }
+  ]
+}
