@@ -10,6 +10,7 @@ REGION="${AZ12_REGION:-eastus}"          # Prompt Shields must be available ther
 RG="rg-$AZ12_NAME"
 API="2024-10-01"                         # api-version of Microsoft's RAI policies REST reference (reads)
 BAPI="2024-10-01"                        # the version Microsoft's blocklist how-to uses for raiBlocklists + raiPolicies bodies
+RAPI="2025-12-01"                        # reads of RAI policies: first stable schema that lists PreToolCall/PostToolCall sources
 POLICY="contoso-helpdesk-v2"
 BLOCKLIST="contoso-codenames"
 
@@ -69,9 +70,11 @@ for f in p["contentFilters"]:
     if f["name"] == "Violence" and f["source"] == "Prompt":
         f["severityThreshold"] = sys.argv[3]     # G6: VIOLENCE_INPUT=Low make guardrail-up
     filters.append(f)
-# Body shape as in Microsoft's blocklist how-to (api-version 2024-10-01): contentFilters + completionBlocklists.
+# Body shape from the ARM schema for api-version 2024-10-01 (azure-rest-api-specs, RaiPolicyProperties):
+# contentFilters + customBlocklists [{blocklistName, blocking, source}]. The blocklist how-to page shows an older
+# "completionBlocklists" field that the 2024-10-01 schema doesn't define, so it isn't used here.
 print(json.dumps({"properties": {"basePolicyName": p["basePolicyName"], "mode": p["mode"], "contentFilters": filters,
-                                 "completionBlocklists": [{"blocklistName": sys.argv[2], "blocking": True}]}}))
+                                 "customBlocklists": [{"blocklistName": sys.argv[2], "blocking": True, "source": "Completion"}]}}))
 PY
     az rest --method put --url "https://management.azure.com$FID/raiPolicies/$POLICY?api-version=$BAPI" --body @.rai-body.json -o none
     az rest --method get --url "https://management.azure.com$FID/deployments/helpdesk-chat?api-version=$BAPI" > .dep.json
@@ -110,8 +113,8 @@ PY
     FID="$(foundry_id)"
     az rest --method get --url "https://management.azure.com$FID/deployments?api-version=$API" \
       --query "value[].{deployment:name, guardrail:properties.raiPolicyName}" -o table
-    az rest --method get --url "https://management.azure.com$FID/raiPolicies/$POLICY?api-version=$API" \
-      --query "properties.{mode:mode, filters:contentFilters[?enabled].[name, source, severityThreshold, blocking]}" -o json
+    az rest --method get --url "https://management.azure.com$FID/raiPolicies/$POLICY?api-version=$RAPI" \
+      --query "properties.{mode:mode, filters:contentFilters[?enabled].[name, source, severityThreshold, blocking], blocklists:customBlocklists}" -o json
     az cognitiveservices account show -n "$AZ12_NAME" -g "$RG" --query "{kind:kind, sku:sku.name, keysDisabled:properties.disableLocalAuth}" -o table
     ;;
   down)
