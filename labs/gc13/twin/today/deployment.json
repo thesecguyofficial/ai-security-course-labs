@@ -1,0 +1,123 @@
+{
+  "_comment": "The Helpdesk agent as ported to Google Cloud last month (fictional). Field names follow the Google APIs and ADK where a real field exists (RagCorpus.encryption_spec, DataStore.acl_enabled, ModelArmorConfig, FunctionTool require_confirmation); the rest are labelled lab settings.",
+  "project": "example-chatbot-prod",
+  "project_number": "100000000001",
+  "region": "europe-west4",
+  "retrieval": {
+    "backend": "rag_engine",
+    "rag_engine": {
+      "rag_managed_db_tier": "basic",
+      "corpora": [
+        {
+          "name": "projects/example-chatbot-prod/locations/europe-west4/ragCorpora/helpdesk-kb",
+          "display_name": "helpdesk-kb",
+          "documents": [
+            "kb-vpn",
+            "kb-refund",
+            "kb-hours",
+            "fin-pricing",
+            "inbox-refund-update"
+          ],
+          "encryption_spec": null
+        }
+      ],
+      "scope": {
+        "how": "metadata_filter",
+        "chosen_by": "model_args"
+      }
+    },
+    "agent_search": {
+      "_comment": "A pilot data store someone created in June to try Agent Search. Same documents, no access control.",
+      "data_store": "projects/example-chatbot-prod/locations/global/collections/default_collection/dataStores/helpdesk-pilot",
+      "location": "global",
+      "acl_enabled": false,
+      "kms_key_name": null,
+      "documents": [
+        "kb-vpn",
+        "kb-refund",
+        "kb-hours",
+        "fin-pricing",
+        "inbox-refund-update"
+      ],
+      "search_runs_as": "agent",
+      "user_role": "roles/discoveryengine.viewer",
+      "user_role_permissions": []
+    },
+    "import_sources": [
+      "gs://example-kb-curated",
+      "gs://example-kb-inbox"
+    ]
+  },
+  "buckets": {
+    "gs://example-kb-curated": {
+      "objectCreators": [
+        "group:kb-editors@example.com"
+      ]
+    },
+    "gs://example-kb-inbox": {
+      "objectCreators": [
+        "group:all-engineers@example.com"
+      ]
+    }
+  },
+  "perimeter": {
+    "name": "accessPolicies/987654321/servicePerimeters/helpdesk",
+    "restricted_services": [
+      "aiplatform.googleapis.com"
+    ]
+  },
+  "agent": {
+    "framework": "ADK 2.12.0",
+    "runtime": "Agent Runtime",
+    "identity": {
+      "identity_type": "SERVICE_ACCOUNT",
+      "service_account": null
+    },
+    "project_roles": [
+      "roles/aiplatform.user",
+      "roles/bigquery.dataEditor",
+      "roles/storage.admin"
+    ],
+    "user_id_from": "request_body",
+    "session_service": "VertexAiSessionService",
+    "tools": {
+      "search_kb": {
+        "writes": false
+      },
+      "get_ticket": {
+        "writes": false,
+        "check_ticket_team": false
+      },
+      "send_email": {
+        "writes": true,
+        "confirmation": "none"
+      },
+      "close_ticket": {
+        "writes": true,
+        "confirmation": "none"
+      }
+    },
+    "plugins": {
+      "model_armor": {
+        "prompt_template_name": "projects/example-chatbot-prod/locations/europe-west4/templates/helpdesk-guard",
+        "response_template_name": "projects/example-chatbot-prod/locations/europe-west4/templates/helpdesk-guard",
+        "tool_output_template_name": null,
+        "block_on_screening_failure": true
+      }
+    },
+    "observability": {
+      "otel_to_cloud": true,
+      "ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS": "true",
+      "trace_readers": [
+        "group:all-engineers@example.com"
+      ],
+      "tool_log_fields": [
+        "agent_principal",
+        "tool",
+        "args",
+        "decision"
+      ]
+    },
+    "before_tool_callback": null
+  }
+}

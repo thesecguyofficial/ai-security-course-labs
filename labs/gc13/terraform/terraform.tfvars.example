@@ -1,0 +1,4 @@
+project_id = "your-sandbox-project-id"
+region     = "europe-west4"
+# kms_key  = "projects/your-sandbox-project-id/locations/europe-west4/keyRings/helpdesk-eu/cryptoKeys/helpdesk-data"
+# create_model_armor_template = false   # if you kept GC12's helpdesk-guard
