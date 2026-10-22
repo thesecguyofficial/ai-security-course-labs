@@ -1,0 +1,141 @@
+{
+  "_comment": "The hardened port the team built last sprint (fictional). Two gaps are left on purpose: they are your challenge (README Step 7).",
+  "project": "example-chatbot-prod",
+  "project_number": "100000000001",
+  "region": "europe-west4",
+  "retrieval": {
+    "backend": "rag_engine",
+    "rag_engine": {
+      "rag_managed_db_tier": "basic",
+      "corpora": [
+        {
+          "name": "projects/example-chatbot-prod/locations/europe-west4/ragCorpora/kb-staff",
+          "display_name": "kb-staff",
+          "for_group": "helpdesk-staff@example.com",
+          "documents": [
+            "kb-vpn",
+            "kb-refund",
+            "kb-hours"
+          ],
+          "encryption_spec": {
+            "kms_key_name": "projects/example-chatbot-prod/locations/europe-west4/keyRings/helpdesk-eu/cryptoKeys/helpdesk-data"
+          }
+        },
+        {
+          "name": "projects/example-chatbot-prod/locations/europe-west4/ragCorpora/kb-finance",
+          "display_name": "kb-finance",
+          "for_group": "finance-team@example.com",
+          "documents": [
+            "fin-pricing"
+          ],
+          "encryption_spec": {
+            "kms_key_name": "projects/example-chatbot-prod/locations/europe-west4/keyRings/helpdesk-eu/cryptoKeys/helpdesk-data"
+          }
+        }
+      ],
+      "scope": {
+        "how": "corpus_per_group",
+        "chosen_by": "verified_groups"
+      }
+    },
+    "agent_search": {
+      "data_store": "projects/example-chatbot-prod/locations/eu/collections/default_collection/dataStores/helpdesk-docs",
+      "location": "eu",
+      "acl_enabled": true,
+      "acl_config": {
+        "idp_type": "GSUITE"
+      },
+      "kms_key_name": "projects/example-chatbot-prod/locations/europe-west4/keyRings/helpdesk-eu/cryptoKeys/helpdesk-data",
+      "documents": [
+        "kb-vpn",
+        "kb-refund",
+        "kb-hours",
+        "fin-pricing"
+      ],
+      "search_runs_as": "end_user",
+      "user_role": "projects/example-chatbot-prod/roles/helpdeskSearchUser",
+      "user_role_permissions": [
+        "discoveryengine.answers.get",
+        "discoveryengine.servingConfigs.answer",
+        "discoveryengine.servingConfigs.search",
+        "discoveryengine.sessions.get",
+        "discoveryengine.widgetConfigs.get"
+      ]
+    },
+    "import_sources": [
+      "gs://example-kb-curated"
+    ]
+  },
+  "buckets": {
+    "gs://example-kb-curated": {
+      "objectCreators": [
+        "group:kb-editors@example.com"
+      ]
+    },
+    "gs://example-kb-inbox": {
+      "objectCreators": [
+        "group:all-engineers@example.com"
+      ]
+    }
+  },
+  "perimeter": {
+    "name": "accessPolicies/987654321/servicePerimeters/helpdesk",
+    "restricted_services": [
+      "aiplatform.googleapis.com",
+      "discoveryengine.googleapis.com"
+    ]
+  },
+  "agent": {
+    "framework": "ADK 2.12.0",
+    "runtime": "Agent Runtime",
+    "identity": {
+      "identity_type": "SERVICE_ACCOUNT",
+      "service_account": "helpdesk-agent@example-chatbot-prod.iam.gserviceaccount.com"
+    },
+    "project_roles": [
+      "roles/aiplatform.user"
+    ],
+    "user_id_from": "verified_id_token",
+    "session_service": "VertexAiSessionService",
+    "tools": {
+      "search_kb": {
+        "writes": false
+      },
+      "get_ticket": {
+        "writes": false,
+        "check_ticket_team": true
+      },
+      "send_email": {
+        "writes": true,
+        "confirmation": "approval_queue"
+      },
+      "close_ticket": {
+        "writes": true,
+        "confirmation": "approval_queue"
+      }
+    },
+    "plugins": {
+      "model_armor": {
+        "prompt_template_name": "projects/example-chatbot-prod/locations/europe-west4/templates/helpdesk-guard",
+        "response_template_name": "projects/example-chatbot-prod/locations/europe-west4/templates/helpdesk-guard",
+        "tool_output_template_name": "projects/example-chatbot-prod/locations/europe-west4/templates/helpdesk-guard",
+        "block_on_screening_failure": false
+      }
+    },
+    "observability": {
+      "otel_to_cloud": true,
+      "ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS": "false",
+      "trace_readers": [
+        "group:helpdesk-sre@example.com"
+      ],
+      "tool_log_fields": [
+        "agent_principal",
+        "end_user",
+        "tool",
+        "args",
+        "decision"
+      ]
+    },
+    "before_tool_callback": "controls.before_tool"
+  }
+}
