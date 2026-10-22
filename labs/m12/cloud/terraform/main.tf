@@ -103,6 +103,9 @@ resource "aws_bedrock_guardrail" "helpdesk" {
     }
   }
 
+  # Difference from guardrails/tuned.json: the AWS provider (6.70.0) has no tier_config for contextual grounding, so this
+  # check runs on Classic tier here ("Classic tier does not support conversational use cases"). Expect more grounding
+  # false positives in `make cloud-eval`, or switch grounding to Standard in the console after `make cloud-up`.
   contextual_grounding_policy_config {
     filters_config {
       type      = "GROUNDING"
