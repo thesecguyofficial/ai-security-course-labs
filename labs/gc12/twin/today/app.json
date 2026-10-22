@@ -1,0 +1,20 @@
+{
+  "_comment": "How the Helpdesk uses Model Armor today. inline = Gemini on Agent Platform (generateContent). self_hosted = the ticket summariser on a local model, guarded by app_guard.py.",
+  "model": "publishers/google/models/gemini-3.1-flash-lite",
+  "location": "europe-west4",
+  "secrets_in_prompt": true,
+  "inline": {
+    "model_armor_config": {"prompt_template_name": "projects/example-chatbot-prod/locations/europe-west4/templates/helpdesk-prompt"},
+    "safety_settings": null,
+    "service_agent": "service-100000000002@gcp-sa-aiplatform.iam.gserviceaccount.com",
+    "service_agent_roles": ["roles/modelarmor.user"]
+  },
+  "self_hosted": {
+    "template": "projects/example-chatbot-prod/locations/europe-west4/templates/helpdesk-prompt",
+    "screen": "user_text",
+    "screen_response": false,
+    "endpoint": "modelarmor.europe-west4.rep.googleapis.com",
+    "private_path": "psc-global-apis"
+  },
+  "sanitize_log_readers": ["group:all-engineers@example.com"]
+}

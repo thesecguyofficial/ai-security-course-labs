@@ -1,0 +1,3 @@
+# No packages needed: the offline lab uses the Python standard library only (3.11+).
+# Optional: `pip install llm-guard` for run_suite.py --engine llm-guard (large download).
+# Optional cloud path: Terraform >= 1.5 and the gcloud CLI (not Python packages).
