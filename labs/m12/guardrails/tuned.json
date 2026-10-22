@@ -1,0 +1,46 @@
+{
+  "_about": "The reviewed guardrail (CreateGuardrail request body). Standard tier with the US guardrail profile, filters tuned on the suite, output-side PII and canary checks, contextual grounding.",
+  "name": "tsg-helpdesk",
+  "description": "TSG Helpdesk guardrail, tuned on the M12 suite",
+  "blockedInputMessaging": "Sorry, I can't help with that request. If you think this is a mistake, raise a ticket.",
+  "blockedOutputsMessaging": "Sorry, I can't share that answer. Please raise a ticket and a person will help.",
+  "crossRegionConfig": {"guardrailProfileIdentifier": "us.guardrail.v1:0"},
+  "contentPolicyConfig": {
+    "filtersConfig": [
+      {"type": "PROMPT_ATTACK", "inputStrength": "MEDIUM", "outputStrength": "NONE", "inputAction": "BLOCK"},
+      {"type": "MISCONDUCT", "inputStrength": "MEDIUM", "outputStrength": "MEDIUM"},
+      {"type": "VIOLENCE", "inputStrength": "MEDIUM", "outputStrength": "MEDIUM"},
+      {"type": "INSULTS", "inputStrength": "MEDIUM", "outputStrength": "MEDIUM"},
+      {"type": "HATE", "inputStrength": "MEDIUM", "outputStrength": "MEDIUM"},
+      {"type": "SEXUAL", "inputStrength": "MEDIUM", "outputStrength": "MEDIUM"}
+    ],
+    "tierConfig": {"tierName": "STANDARD"}
+  },
+  "topicPolicyConfig": {
+    "topicsConfig": [
+      {"name": "Pay of other people", "type": "DENY",
+       "definition": "Questions or statements about how much a named person or job role is paid, such as salary, bonus or pay band.",
+       "examples": ["How much does the IT director earn?", "What is the salary of the finance manager?", "Which pay band is the CTO on?"]}
+    ],
+    "tierConfig": {"tierName": "STANDARD"}
+  },
+  "sensitiveInformationPolicyConfig": {
+    "piiEntitiesConfig": [
+      {"type": "EMAIL", "action": "ANONYMIZE", "inputAction": "NONE", "outputAction": "ANONYMIZE"},
+      {"type": "PHONE", "action": "ANONYMIZE", "inputAction": "NONE", "outputAction": "ANONYMIZE"},
+      {"type": "AWS_ACCESS_KEY", "action": "BLOCK", "inputAction": "BLOCK", "outputAction": "BLOCK"},
+      {"type": "AWS_SECRET_KEY", "action": "BLOCK", "inputAction": "BLOCK", "outputAction": "BLOCK"}
+    ],
+    "regexesConfig": [
+      {"name": "SYSTEM_PROMPT_CANARY", "pattern": "CANARY-M12-[A-Z0-9]{3}", "action": "BLOCK",
+       "description": "The leak marker in TSG Helpdesk's system prompt. Free: regex filters cost nothing.",
+       "inputEnabled": false, "outputAction": "BLOCK"}
+    ]
+  },
+  "contextualGroundingPolicyConfig": {
+    "filtersConfig": [
+      {"type": "GROUNDING", "threshold": 0.6},
+      {"type": "RELEVANCE", "threshold": 0.1}
+    ]
+  }
+}

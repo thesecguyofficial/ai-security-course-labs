@@ -1,0 +1,16 @@
+{
+  "_about": "The reviewed request: a numbered guardrail version, trace on, synchronous streaming, the user's question inside guardContent (also marked as the grounding query), the knowledge-base article marked as the grounding source.",
+  "guardrailConfig": {
+    "guardrailIdentifier": "arn:aws:bedrock:us-east-1:111122223333:guardrail/tsghelpdesk01",
+    "guardrailVersion": "1",
+    "trace": "enabled",
+    "streamProcessingMode": "sync"
+  },
+  "system": [{"text": "{system}"}],
+  "messages": [
+    {"role": "user", "content": [
+      {"guardContent": {"text": {"text": "{kb}", "qualifiers": ["grounding_source"]}}},
+      {"guardContent": {"text": {"text": "{question}", "qualifiers": ["query", "guard_content"]}}}
+    ]}
+  ]
+}

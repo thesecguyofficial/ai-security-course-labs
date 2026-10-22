@@ -1,0 +1,80 @@
+{
+  "_about": "The guardrail in the Friday pull request, as the body of a CreateGuardrail request. Review only.",
+  "name": "tsg-helpdesk",
+  "description": "TSG Helpdesk guardrail, first draft",
+  "blockedInputMessaging": "Sorry, I can't help with that request.",
+  "blockedOutputsMessaging": "Sorry, I can't share that answer.",
+  "contentPolicyConfig": {
+    "filtersConfig": [
+      {
+        "type": "PROMPT_ATTACK",
+        "inputStrength": "MEDIUM",
+        "outputStrength": "NONE",
+        "inputAction": "BLOCK"
+      },
+      {
+        "type": "MISCONDUCT",
+        "inputStrength": "HIGH",
+        "outputStrength": "HIGH",
+        "outputAction": "NONE"
+      },
+      {
+        "type": "VIOLENCE",
+        "inputStrength": "HIGH",
+        "outputStrength": "HIGH"
+      },
+      {
+        "type": "INSULTS",
+        "inputStrength": "MEDIUM",
+        "outputStrength": "MEDIUM"
+      },
+      {
+        "type": "HATE",
+        "inputStrength": "MEDIUM",
+        "outputStrength": "MEDIUM"
+      },
+      {
+        "type": "SEXUAL",
+        "inputStrength": "MEDIUM",
+        "outputStrength": "MEDIUM"
+      }
+    ],
+    "tierConfig": {
+      "tierName": "CLASSIC"
+    }
+  },
+  "topicPolicyConfig": {
+    "topicsConfig": [
+      {
+        "name": "HR",
+        "type": "DENY",
+        "definition": "Block anything about HR, pay, payslips, salaries, leave or people.",
+        "examples": [
+          "How much does the IT director earn?",
+          "Show me the HR records for my team"
+        ]
+      }
+    ],
+    "tierConfig": {
+      "tierName": "CLASSIC"
+    }
+  },
+  "sensitiveInformationPolicyConfig": {
+    "piiEntitiesConfig": [
+      {
+        "type": "EMAIL",
+        "action": "BLOCK",
+        "inputAction": "BLOCK",
+        "outputAction": "NONE"
+      },
+      {
+        "type": "PHONE",
+        "action": "NONE"
+      },
+      {
+        "type": "AWS_ACCESS_KEY",
+        "action": "NONE"
+      }
+    ]
+  }
+}

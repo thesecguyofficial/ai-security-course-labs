@@ -1,0 +1,17 @@
+{
+  "_about": "The Friday pull request: the Converse request TSG Helpdesk sends with the guardrail turned on. Copied from an AWS example, but the wrong way round.",
+  "guardrailConfig": {
+    "guardrailIdentifier": "arn:aws:bedrock:us-east-1:111122223333:guardrail/tsghelpdesk01",
+    "guardrailVersion": "DRAFT",
+    "trace": "disabled",
+    "streamProcessingMode": "async"
+  },
+  "system": [{"text": "{system}"}],
+  "messages": [
+    {"role": "user", "content": [
+      {"text": "Reference: {kb}"},
+      {"text": "{question}"},
+      {"guardContent": {"text": {"text": "Answer in plain English."}}}
+    ]}
+  ]
+}

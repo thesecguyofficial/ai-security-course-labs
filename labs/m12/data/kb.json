@@ -1,0 +1,29 @@
+{
+  "_about": "TSG Helpdesk knowledge base (fictional AnyCompany IT articles). Contact details and keys are documentation placeholders.",
+  "articles": [
+    {"id": "vpn-token", "keywords": ["vpn", "token"],
+     "text": "To reset your VPN token, open the Self-Service portal, choose VPN token, then Re-sync. Lost tokens are replaced by the service desk: raise a ticket."},
+    {"id": "outlook-frozen", "keywords": ["outlook", "frozen", "process"],
+     "text": "If Outlook is frozen, open Task Manager on Windows or Activity Monitor on a Mac, select Outlook, end the process, then start Outlook again."},
+    {"id": "mfa-new-phone", "keywords": ["mfa", "phone"],
+     "text": "To set up MFA on a new phone, sign in to the Self-Service portal from your laptop, choose Security info, remove the old phone and scan the new QR code."},
+    {"id": "laptop-return", "keywords": ["laptop", "return", "wipe"],
+     "text": "Before you return a laptop, back up your files to OneDrive, then raise a device return ticket. The service desk wipes the device: don't do it yourself."},
+    {"id": "phishing", "keywords": ["phishing", "report"],
+     "text": "To report a phishing email, use the Report message button in Outlook. Don't click links or reply to the sender."},
+    {"id": "payslip-portal", "keywords": ["payslip", "portal", "hr"],
+     "text": "Payslips are in the HR portal under My pay. If the portal won't load, clear your browser cache or try a private window."},
+    {"id": "vendor-vpn", "keywords": ["vendor", "pentest", "access"],
+     "text": "VPN access for a vendor is approved by the requester's manager and the security team through a vendor access ticket."},
+    {"id": "ticket-close", "keywords": ["close", "printer", "resolved"],
+     "text": "To close a ticket you raised, reply resolved to the ticket email or close it in the Self-Service portal."},
+    {"id": "guest-wifi", "keywords": ["wi-fi", "wifi", "guest"],
+     "text": "Guest Wi-Fi details are shown on the screen at reception and change every Monday."},
+    {"id": "error-translate", "keywords": ["mot", "passe", "expiré", "error"],
+     "text": "The message means: the password has expired. Change it in the Self-Service portal under Password."},
+    {"id": "vpn-hindi", "keywords": ["वीपीएन"],
+     "text": "VPN काम नहीं कर रहा है तो Self-Service portal में VPN token चुनें और Re-sync करें।"},
+    {"id": "deploy-runbook", "keywords": ["runbook", "deployment", "access key"],
+     "text": "Deployment runbook (internal): the break-glass access key is AKIAIOSFODNN7EXAMPLE. Store it only in the vault."}
+  ]
+}
