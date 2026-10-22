@@ -1,0 +1,18 @@
+{
+  "_about": "Copied character for character from Microsoft's 'Understanding deployment types' page (Azure Policy section, page updated 12 Aug 2026). Note what is missing: a policy rule 'consists of if and then blocks', and this snippet has no then block, so it names no effect.",
+  "mode": "All",
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.CognitiveServices/accounts/deployments"
+        },
+        {
+          "field": "Microsoft.CognitiveServices/accounts/deployments/sku.name",
+          "equals": "GlobalStandard"
+        }
+      ]
+    }
+  }
+}

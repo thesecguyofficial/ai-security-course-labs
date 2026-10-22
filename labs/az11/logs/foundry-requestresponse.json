@@ -1,0 +1,87 @@
+{
+ "_about": "FAKE logs for lab AZ11, Monday 19 October 2026: Contoso's PILOT API Management AI gateway in front of the staging helpdesk deployment. Column names follow Microsoft's table reference; values and message shapes are simplified placeholders. Attacker text is labelled LAB PLACEHOLDER; every email address and phone number is fake. These are the FOUNDRY resource's own RequestResponse rows for the same minutes (AzureDiagnostics, simplified): the caller is the gateway.",
+ "table": "AzureDiagnostics",
+ "rows": [
+  {
+   "TimeGenerated": "2026-10-19T09:10:00Z",
+   "Category": "RequestResponse",
+   "OperationName": "ChatCompletions_Create",
+   "CallerIPAddress": "198.51.100.30",
+   "ResultSignature": "200",
+   "DurationMs": 900,
+   "properties_s": "{\"modelDeploymentName\":\"helpdesk-chat\"}"
+  },
+  {
+   "TimeGenerated": "2026-10-19T09:17:01Z",
+   "Category": "RequestResponse",
+   "OperationName": "ChatCompletions_Create",
+   "CallerIPAddress": "198.51.100.30",
+   "ResultSignature": "200",
+   "DurationMs": 940,
+   "properties_s": "{\"modelDeploymentName\":\"helpdesk-chat\"}"
+  },
+  {
+   "TimeGenerated": "2026-10-19T09:24:02Z",
+   "Category": "RequestResponse",
+   "OperationName": "ChatCompletions_Create",
+   "CallerIPAddress": "198.51.100.30",
+   "ResultSignature": "200",
+   "DurationMs": 980,
+   "properties_s": "{\"modelDeploymentName\":\"helpdesk-chat\"}"
+  },
+  {
+   "TimeGenerated": "2026-10-19T09:31:03Z",
+   "Category": "RequestResponse",
+   "OperationName": "ChatCompletions_Create",
+   "CallerIPAddress": "198.51.100.30",
+   "ResultSignature": "200",
+   "DurationMs": 1020,
+   "properties_s": "{\"modelDeploymentName\":\"helpdesk-chat\"}"
+  },
+  {
+   "TimeGenerated": "2026-10-19T09:38:04Z",
+   "Category": "RequestResponse",
+   "OperationName": "ChatCompletions_Create",
+   "CallerIPAddress": "198.51.100.30",
+   "ResultSignature": "200",
+   "DurationMs": 1060,
+   "properties_s": "{\"modelDeploymentName\":\"helpdesk-chat\"}"
+  },
+  {
+   "TimeGenerated": "2026-10-19T09:45:05Z",
+   "Category": "RequestResponse",
+   "OperationName": "ChatCompletions_Create",
+   "CallerIPAddress": "198.51.100.30",
+   "ResultSignature": "200",
+   "DurationMs": 1100,
+   "properties_s": "{\"modelDeploymentName\":\"helpdesk-chat\"}"
+  },
+  {
+   "TimeGenerated": "2026-10-19T02:41:07Z",
+   "Category": "RequestResponse",
+   "OperationName": "ChatCompletions_Create",
+   "CallerIPAddress": "198.51.100.30",
+   "ResultSignature": "200",
+   "DurationMs": 2100,
+   "properties_s": "{\"modelDeploymentName\":\"helpdesk-chat\"}"
+  },
+  {
+   "TimeGenerated": "2026-10-19T02:43:55Z",
+   "Category": "RequestResponse",
+   "OperationName": "ChatCompletions_Create",
+   "CallerIPAddress": "198.51.100.30",
+   "ResultSignature": "200",
+   "DurationMs": 2100,
+   "properties_s": "{\"modelDeploymentName\":\"helpdesk-chat\"}"
+  },
+  {
+   "TimeGenerated": "2026-10-19T02:47:12Z",
+   "Category": "RequestResponse",
+   "OperationName": "ChatCompletions_Create",
+   "CallerIPAddress": "198.51.100.30",
+   "ResultSignature": "200",
+   "DurationMs": 2100,
+   "properties_s": "{\"modelDeploymentName\":\"helpdesk-chat\"}"
+  }
+ ]
+}
