@@ -30,6 +30,7 @@ Hands-on labs for **AI Security Engineer** by [The Sec Guy](https://thesecguy.co
 | M12 (Azure) | Foundry guardrails: review guardrail, agent and policy settings, measure attack success AND false positives with a 28-request suite across four setups, guard a self-hosted model with Content Safety, hunt a prober | Laptop ($0) + optional Azure | ✅ available |
 | M12 (Google Cloud) | Model Armor and Gemini safety filters: attack the Helpdesk with and without Model Armor, check floor settings and templates, measure catch rate and false positives with an automated suite, fail closed | Laptop ($0) + optional Google Cloud | ✅ available |
 | M13 (AWS) | Bedrock Knowledge Bases and agents: port the local RAG + agent without losing a control (ACL-aware managed knowledge base vs metadata filters, return of control and confirmation, Lambda resource policies, AgentCore harness allowedTools), parity check against M6/M7 | Laptop ($0) + optional AWS | ✅ available |
+| M13 (Azure) | Azure AI Search, Foundry IQ and Foundry Agent Service: port the Helpdesk RAG + agent without losing a control; check search trimming, chunk labels, permission sync, knowledge-base tokens, MCP allow-lists, approval and connection identity; replay 9 attacks across three setups; hunt an audit log | Laptop ($0) + optional Azure (Search Free) | ✅ available |
 | M13 → M19 | One lab per section and cloud, released with the course | Laptop + AWS / Azure / Google Cloud | coming every two weeks |
 
 Each lab folder has a `README.md` with step-by-step commands, what you should see, and troubleshooting.
