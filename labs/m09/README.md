@@ -13,7 +13,7 @@ code**. In this lab you:
    Bits' fickling).
 4. **Avoid it** by loading the safetensors version, which cannot run code.
 5. **Pin it** by SHA-256 and prove that tampering is caught.
-6. **Prove it** — `make test` runs all of the above as automated tests. Then `make challenge`.
+6. **Prove it**: `make test` runs all of the above as automated tests. Then `make challenge`.
 
 > **Safety.** The "evil" model is a **lab placeholder, not malware**. Its only effect when loaded is
 > to write one clearly-labelled marker file, `state/PWNED_BY_LAB_MODEL.txt`, inside this folder. It
@@ -104,7 +104,7 @@ OVERALL: DO NOT LOAD (flagged)
 ```
 
 picklescan reads the pickle's imports **without executing it** and flags `builtins.exec`. fickling
-decompiles the pickle to readable Python — run `.venv/bin/fickling models/evil_model.pkl` to see the
+decompiles the pickle to readable Python. Run `.venv/bin/fickling models/evil_model.pkl` to see the
 `exec(...)` call spelled out. A scan is defence in depth, not a guarantee: picklescan works from a
 blocklist, so a payload it has not seen can slip past (lesson 9.2: the nullifAI models and the 2025
 PickleScan CVEs). Scan, but do not let a clean result replace provenance, pinning and a safe format.
@@ -137,7 +137,7 @@ TAMPERED  model.safetensors does NOT match its pin.
   actual: sha256:9df669a29a2d5091f5abd4d63b00a7f675e274387bbd46174a7a175cc52cc090
 ```
 
-One extra byte changes the hash. Pin by digest, not by name or a `latest` tag — the fix for the
+One extra byte changes the hash. Pin by digest, not by name or a `latest` tag: the fix for the
 rug-pull and model-namespace-reuse attacks in lesson 9.3.
 
 ## Step 5 · Prove it
@@ -193,9 +193,9 @@ make clean            # removes models/, state/, pins.json (keeps .venv)
 
 ## Map to the standards
 
-- **OWASP LLM04:2026 Supply Chain** — tampered models, weak provenance, unsigned artefacts, and the
+- **OWASP LLM04:2026 Supply Chain**: tampered models, weak provenance, unsigned artefacts, and the
   scanner/safe-format bypass scenario are exactly what this lab shows in miniature.
-- **OWASP LLM05:2026 Data and Model Poisoning** — the backdoored-artefact side of the same risk.
-- **MITRE ATLAS v2026.09** — AML.T0010.003 (compromise the model), AML.T0011.000 (Unsafe AI
+- **OWASP LLM05:2026 Data and Model Poisoning**: the backdoored-artefact side of the same risk.
+- **MITRE ATLAS v2026.09**: AML.T0010.003 (compromise the model), AML.T0011.000 (Unsafe AI
   Artifacts), AML.T0018.002 (Embed Malware); mitigations AML.M0014 (Verify AI Artifacts),
   AML.M0016 (Vulnerability Scanning), AML.M0011 (Restrict Library Loading), AML.M0013 (Code Signing).
