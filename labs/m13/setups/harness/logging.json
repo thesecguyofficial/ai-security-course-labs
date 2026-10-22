@@ -1,0 +1,59 @@
+{
+  "cloudtrail": {
+    "_about": "CloudTrail trail 'org-trail' advanced event selectors.",
+    "AdvancedEventSelectors": [
+      {
+        "Name": "Management events",
+        "FieldSelectors": [
+          {
+            "Field": "eventCategory",
+            "Equals": [
+              "Management"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Data events on AWS::Bedrock::KnowledgeBase",
+        "FieldSelectors": [
+          {
+            "Field": "eventCategory",
+            "Equals": [
+              "Data"
+            ]
+          },
+          {
+            "Field": "resources.type",
+            "Equals": [
+              "AWS::Bedrock::KnowledgeBase"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Data events on AWS::Bedrock::Guardrail",
+        "FieldSelectors": [
+          {
+            "Field": "eventCategory",
+            "Equals": [
+              "Data"
+            ]
+          },
+          {
+            "Field": "resources.type",
+            "Equals": [
+              "AWS::Bedrock::Guardrail"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "kbLogDeliveries": [
+    {
+      "logType": "APPLICATION_LOGS",
+      "resourceArn": "arn:aws:bedrock:us-east-1:111122223333:knowledge-base/KBPORTED01",
+      "destination": "arn:aws:logs:us-east-1:111122223333:log-group:/tsg/kb-ingestion"
+    }
+  ]
+}

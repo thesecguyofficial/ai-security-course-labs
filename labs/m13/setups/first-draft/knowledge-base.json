@@ -1,0 +1,24 @@
+{
+  "_about": "CreateKnowledgeBase request body (bedrock-agent). A customer-managed (VECTOR) knowledge base on S3 Vectors, as copied from the M6 design.",
+  "name": "tsg-helpdesk-kb",
+  "roleArn": "arn:aws:iam::111122223333:role/tsg-kb-service-role",
+  "knowledgeBaseConfiguration": {
+    "type": "VECTOR",
+    "vectorKnowledgeBaseConfiguration": {
+      "embeddingModelArn": "arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v2:0"
+    }
+  },
+  "storageConfiguration": {
+    "type": "S3_VECTORS",
+    "s3VectorsConfiguration": {
+      "vectorBucketArn": "arn:aws:s3vectors:us-east-1:111122223333:bucket/tsg-kb-vectors",
+      "indexName": "tsg-helpdesk"
+    }
+  },
+  "_vectorBucket": {
+    "_about": "CreateVectorBucket (s3vectors) encryptionConfiguration of the vector bucket the knowledge base writes to.",
+    "encryptionConfiguration": {
+      "sseType": "AES256"
+    }
+  }
+}

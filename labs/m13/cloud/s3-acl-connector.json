@@ -1,0 +1,17 @@
+{
+  "type": "MANAGED_KNOWLEDGE_BASE_CONNECTOR",
+  "managedKnowledgeBaseConnectorConfiguration": {
+    "connectorParameters": {
+      "type": "S3",
+      "version": "1",
+      "aclEnabled": true,
+      "connectionConfiguration": {
+        "bucketName": "BUCKET",
+        "bucketOwnerAccountId": "ACCOUNT"
+      },
+      "aclConfiguration": {
+        "globalAccessControlListS3Uri": "s3://BUCKET/acl/global-acl.json"
+      }
+    }
+  }
+}
