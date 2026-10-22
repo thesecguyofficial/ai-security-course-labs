@@ -1,0 +1,4 @@
+build/
+.terraform.lock.hcl
+tfplan
+zz_offline_override.tf

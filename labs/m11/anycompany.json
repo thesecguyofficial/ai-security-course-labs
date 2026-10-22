@@ -1,0 +1,102 @@
+{
+  "_about": "AnyCompany is fictional (AWS's own placeholder name). Every account ID and ARN is an AWS documentation example value.",
+  "organization": {
+    "id": "o-a1b2c3d4e5",
+    "accounts_in_org": [
+      "111122223333",
+      "444455556666"
+    ],
+    "production_account": "111122223333"
+  },
+  "data_residency": {
+    "rule": "Helpdesk prompts and answers may only be processed in US Regions.",
+    "allowed_processing_regions": [
+      "us-east-1",
+      "us-east-2",
+      "us-west-1",
+      "us-west-2"
+    ]
+  },
+  "approved": {
+    "runtime_profile": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "foundation_model": "anthropic.claude-haiku-4-5-20251001-v1:0",
+    "mantle_model": "anthropic.claude-haiku-4-5"
+  },
+  "principals": {
+    "helpdesk": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-helpdesk-app",
+      "account": "111122223333",
+      "policies": "from the plan: aws_iam_role_policy.app_invoke"
+    },
+    "security-admin": {
+      "arn": "arn:aws:iam::111122223333:role/SecurityAdmin",
+      "account": "111122223333",
+      "inline_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "ManageAiLogging",
+            "Effect": "Allow",
+            "Action": [
+              "bedrock:GetModelInvocationLoggingConfiguration",
+              "bedrock:PutModelInvocationLoggingConfiguration",
+              "bedrock:DeleteModelInvocationLoggingConfiguration",
+              "cloudtrail:*",
+              "logs:*"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "data-science": {
+      "arn": "arn:aws:iam::111122223333:role/DataScienceRole",
+      "account": "111122223333",
+      "inline_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "TryAnyModelAnywhere",
+            "Effect": "Allow",
+            "Action": [
+              "bedrock:InvokeModel*",
+              "s3:*"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "ops-tools": {
+      "arn": "arn:aws:iam::111122223333:role/OpsToolsRole",
+      "account": "111122223333",
+      "_note": "Next sprint: an internal tool that uses the OpenAI SDK on bedrock-mantle, from the same VPC.",
+      "inline_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "MantleForOpsTools",
+            "Effect": "Allow",
+            "Action": "bedrock-mantle:*",
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "outsider": {
+      "arn": "arn:aws:iam::777788889999:user/personal-admin",
+      "account": "777788889999",
+      "_note": "Credentials from an AWS account OUTSIDE AnyCompany's organization, used from inside AnyCompany's VPC (an insider's personal account, or malware's). AnyCompany's SCPs don't apply to it; its own policy allows everything.",
+      "inline_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "*"
+          }
+        ]
+      }
+    }
+  }
+}
