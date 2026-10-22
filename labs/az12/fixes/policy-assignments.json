@@ -1,0 +1,51 @@
+{
+ "_about": "Built-in [Preview] audit policies assigned at the resource group (FICTIONAL). Parameters are given as plain values here; cloud.sh wraps them as {\"value\": ...}. One assignment per filter name. Challenge 3: two of these still can't catch Contoso's version 1.",
+ "assignments": [
+  {
+   "name": "az12-dep-violence",
+   "definition": "AllowDeploymentMultiSeverityControl_Audit.json",
+   "definitionId": "930f48f9-f07e-427c-9494-52603581c6a9",
+   "parameters": {
+    "filterName": "Violence"
+   }
+  },
+  {
+   "name": "az12-dep-jailbreak",
+   "definition": "AllowDeploymentPromptControl_Audit.json",
+   "definitionId": "f3a9c2e0-7b4d-4d8f-9c3a-2e1f6b9a8d4e",
+   "parameters": {
+    "filterName": "Jailbreak"
+   }
+  },
+  {
+   "name": "az12-dep-indirect",
+   "definition": "AllowDeploymentPromptControl_Audit.json",
+   "definitionId": "f3a9c2e0-7b4d-4d8f-9c3a-2e1f6b9a8d4e",
+   "parameters": {
+    "filterName": "Indirect Attack"
+   }
+  },
+  {
+   "name": "az12-dep-spotlight",
+   "definition": "AllowDeploymentPromptControl_Audit.json",
+   "definitionId": "f3a9c2e0-7b4d-4d8f-9c3a-2e1f6b9a8d4e",
+   "parameters": {
+    "filterName": "Indirect Attack Spotlighting"
+   }
+  },
+  {
+   "name": "az12-dep-protected",
+   "definition": "AllowDeploymentCompletionControl_Audit.json",
+   "definitionId": "af253d37-136a-42f8-a1fc-30010c083d41",
+   "parameters": {
+    "filterName": "Protected Material Text"
+   }
+  },
+  {
+   "name": "az12-dep-mode",
+   "definition": "AllowControlModeForDeployment_Audit.json",
+   "definitionId": "c1ad46c6-37f8-4af0-9c71-c208375c87dd",
+   "parameters": {}
+  }
+ ]
+}

@@ -1,0 +1,33 @@
+{
+ "_about": "Agents in project helpdesk (FICTIONAL).",
+ "agents": [
+  {
+   "name": "helpdesk-agent",
+   "kind": "prompt",
+   "model_deployment": "helpdesk-chat",
+   "raiPolicyName": "contoso-agent-v1",
+   "tools": [
+    {
+     "name": "search_tickets",
+     "type": "azure_ai_search"
+    },
+    {
+     "name": "ticket-mailbox",
+     "type": "mcp"
+    },
+    {
+     "name": "send_email",
+     "type": "mcp"
+    }
+   ]
+  },
+  {
+   "name": "triage-hosted",
+   "kind": "hosted",
+   "protocol": "invocations",
+   "rai_config": {
+    "rai_policy_name": "contoso-helpdesk-v1"
+   }
+  }
+ ]
+}

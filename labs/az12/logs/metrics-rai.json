@@ -1,0 +1,47 @@
+{
+ "_about": "FICTIONAL export of the Foundry metric Blocked Volume (RAIRejectedRequests), 5-minute totals by Category.",
+ "rows": [
+  {
+   "timeGenerated": "2026-10-20T09:10:00Z",
+   "metric": "RAIRejectedRequests",
+   "ModelDeploymentName": "helpdesk-chat",
+   "Category": "violence",
+   "total": 1
+  },
+  {
+   "timeGenerated": "2026-10-20T10:00:00Z",
+   "metric": "RAIRejectedRequests",
+   "ModelDeploymentName": "helpdesk-chat",
+   "Category": "custom_blocklists",
+   "total": 1
+  },
+  {
+   "timeGenerated": "2026-10-20T14:10:00Z",
+   "metric": "RAIRejectedRequests",
+   "ModelDeploymentName": "helpdesk-chat",
+   "Category": "jailbreak",
+   "total": 5
+  },
+  {
+   "timeGenerated": "2026-10-20T14:15:00Z",
+   "metric": "RAIRejectedRequests",
+   "ModelDeploymentName": "helpdesk-chat",
+   "Category": "jailbreak",
+   "total": 3
+  },
+  {
+   "timeGenerated": "2026-10-20T14:20:00Z",
+   "metric": "RAIRejectedRequests",
+   "ModelDeploymentName": "helpdesk-chat",
+   "Category": "protected_material_text",
+   "total": 1
+  },
+  {
+   "timeGenerated": "2026-10-20T15:00:00Z",
+   "metric": "RAIRejectedRequests",
+   "ModelDeploymentName": "helpdesk-chat",
+   "Category": "violence",
+   "total": 1
+  }
+ ]
+}
