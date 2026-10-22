@@ -144,7 +144,8 @@ def validate(cfg: dict) -> list[str]:
         errs.append("name is required")
     if not cfg.get("blockedInputMessaging") or not cfg.get("blockedOutputsMessaging"):
         errs.append("blockedInputMessaging and blockedOutputsMessaging are required")
-    standard = "STANDARD" in (tier_of(cfg, "contentPolicyConfig"), tier_of(cfg, "topicPolicyConfig"))
+    standard = "STANDARD" in (tier_of(cfg, "contentPolicyConfig"), tier_of(cfg, "topicPolicyConfig"),
+                              tier_of(cfg, "contextualGroundingPolicyConfig"))
     if standard and not (cfg.get("crossRegionConfig") or {}).get("guardrailProfileIdentifier"):
         errs.append("STANDARD tier needs crossRegionConfig.guardrailProfileIdentifier (a guardrail profile)")
     topics = (cfg.get("topicPolicyConfig") or {}).get("topicsConfig") or []

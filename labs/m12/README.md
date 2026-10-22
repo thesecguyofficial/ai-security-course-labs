@@ -150,8 +150,9 @@ Read the five that still work, because each one teaches a limit:
 - **A15:** nobody told the guardrail what an AnyCompany employee ID looks like (challenge 3).
 
 And the one false positive, **B12**: "reset my own MFA" fails the contextual grounding check, because the answer comes
-from a tool, not from the article. AWS says contextual grounding supports summarisation, paraphrasing and question
-answering, and "Conversational QA / Chatbot use cases are not supported". Use it where answers come from a source.
+from a tool, not from the article. AWS: "The supported use cases include summarization, paraphrasing, and question
+answering", and "Classic tier does not support conversational use cases"; that is why `tuned.json` puts grounding on
+Standard tier too (omit `tierConfig` and you get Classic). Use it where answers come from a source.
 
 ## Step 4 · Tune: strength is a trade-off
 
@@ -266,6 +267,11 @@ make cloud-simulate         # the real IAM policy simulator on policies/helpdesk
 make cloud-down             # delete it today
 ```
 
+One known difference: the Terraform AWS provider (6.70.0) can't set a tier for contextual grounding, so the cloud
+guardrail's grounding check runs on Classic tier, which "does not support conversational use cases". To match
+`tuned.json`, switch the grounding tier to Standard in the Bedrock console, create version 2, and run
+`python3 cloud/cloud_eval.py --guardrail-id <id> --version 2` (`make cloud-down` still deletes every version).
+
 Expect `cloud-eval` to disagree with the twin, both ways: real classifiers are not pattern lists. Write down which
 attacks the real guardrail stops that the twin missed, and which normal questions it blocks. That list is your
 evidence for lesson 12.4's tuning conversation.
@@ -304,7 +310,7 @@ same one false positive. Those three need other layers (lessons 3.x, 7.x): no gu
 | Behaviour in `guardrail_twin.py` | What AWS documents |
 |---|---|
 | LOW blocks HIGH; MEDIUM blocks HIGH and MEDIUM; HIGH blocks HIGH, MEDIUM, LOW | "Filter strength" table, [content filters](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-content-filters-overview.html) |
-| Classic: English, French, Spanish; prompt leakage Standard only; Standard needs a guardrail profile | [Safeguard tiers](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-tiers.html), [prompt attacks](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html), [content filters](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-content-filters.html) ("This is required when using the STANDARD tier") |
+| Classic: English, French, Spanish; prompt leakage Standard only; Standard (content, topics or grounding) needs a guardrail profile; no `tierConfig` = Classic | [Safeguard tiers](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-tiers.html), [prompt attacks](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html), [content filters](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-content-filters.html) ("This is required when using the STANDARD tier") |
 | Only `guardContent` evaluated once present; system text only inside `guardContent`; `toolResult`, `toolSpec`, `toolUse.input` never | [Converse with guardrails](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-use-converse-api.html) |
 | `grounding_source` / `query` blocks only feed contextual grounding; thresholds 0 to 0.99 | [Contextual grounding](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html) |
 | Blocked input: the model is never called | [How guardrails work](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html) |
