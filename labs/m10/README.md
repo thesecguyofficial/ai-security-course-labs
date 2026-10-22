@@ -4,6 +4,9 @@ Companion to lessons **10.3, 10.4 and 10.5** of *AI Security Engineer* (The Sec 
 your laptop. **Nothing to install** (Python standard library only) and **no AWS account needed**. An optional last
 step runs the same policies through free AWS tools in your own sandbox account.
 
+**Guided build (your own account, optional):** [`GUIDED-BUILD.md`](GUIDED-BUILD.md) maps your real account's AI footprint
+and locks it down, console and CLI: five test requests, one change, cost (a few US cents) and teardown.
+
 You are the new cloud security engineer at **AnyCompany** (a fictional company; "AnyCompany" is the placeholder name
 AWS uses in its own documentation). It runs the TSG Helpdesk chatbot on Amazon Bedrock in a production account, and
 lets staff try models in a sandbox account. In one sitting you will:
