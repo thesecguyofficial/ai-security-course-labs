@@ -1,0 +1,7 @@
+{
+ "_about": "helpdesk-web hardened (FICTIONAL): the app's managed identity calls Search; the caller's groups come only from the validated Entra token; the filter is built by safe_filter.build_security_filter (challenge 1); the user's token is forwarded for native trimming as well.",
+ "auth_to_search": "managed_identity",
+ "groups_from": "validated_token",
+ "filter_builder": "safe_filter",
+ "forward_user_token": true
+}

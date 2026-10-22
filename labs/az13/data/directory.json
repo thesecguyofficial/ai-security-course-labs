@@ -1,0 +1,22 @@
+{
+ "_about": "FICTIONAL Microsoft Entra directory for Contoso. Object IDs are the example GUIDs Microsoft uses in its Azure AI Search push-API documentation. 'labels' = the Purview sensitivity labels each person may EXTRACT (lesson 13.1).",
+ "groups": {
+  "33dd33dd-ee44-ff55-aa66-77bb77bb77bb": "helpdesk-staff",
+  "44ee44ee-ff55-aa66-bb77-88cc88cc88cc": "hr"
+ },
+ "users": {
+  "alice": {"upn": "alice@contoso.com", "oid": "00aa00aa-bb11-cc22-dd33-44ee44ee44ee",
+            "groups": ["33dd33dd-ee44-ff55-aa66-77bb77bb77bb", "44ee44ee-ff55-aa66-bb77-88cc88cc88cc"],
+            "labels": ["General", "Confidential", "Highly Confidential"], "role": "HR business partner"},
+  "bob":   {"upn": "bob@contoso.com", "oid": "11bb11bb-cc22-dd33-ee44-55ff55ff55ff",
+            "groups": ["33dd33dd-ee44-ff55-aa66-77bb77bb77bb"],
+            "labels": ["General", "Confidential"], "role": "helpdesk engineer"},
+  "dana":  {"upn": "dana@contoso.com", "oid": "22cc22cc-dd33-ee44-ff55-66aa66aa66aa",
+            "groups": ["33dd33dd-ee44-ff55-aa66-77bb77bb77bb"],
+            "labels": ["General", "Confidential"], "role": "helpdesk engineer"}
+ },
+ "tickets": {
+  "4471": {"owner": "bob@contoso.com", "summary": "Laptop won't connect to VPN after the password change."},
+  "4480": {"owner": "priya@contoso.com", "summary": "Outlook keeps asking for the password."}
+ }
+}

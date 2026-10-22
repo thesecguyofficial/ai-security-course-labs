@@ -1,0 +1,9 @@
+{
+ "_about": "Role assignments on the search service, hardened (FICTIONAL): read-only for everything that only queries.",
+ "assignments": [
+  {"principal": "foundry project managed identity (helpdesk)", "role": "Search Index Data Reader", "scope": "srch-helpdesk-contoso/indexes/helpdesk-kb"},
+  {"principal": "helpdesk-web managed identity", "role": "Search Index Data Reader", "scope": "srch-helpdesk-contoso/indexes/helpdesk-kb"},
+  {"principal": "search service managed identity", "role": "Storage Blob Data Reader", "scope": "stcontosokb/helpdesk-kb"},
+  {"principal": "kb-ingest pipeline (GitHub Actions, workload identity)", "role": "Search Index Data Contributor", "scope": "srch-helpdesk-contoso/indexes/helpdesk-kb"}
+ ]
+}
