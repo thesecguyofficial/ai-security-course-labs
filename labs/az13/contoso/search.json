@@ -1,0 +1,32 @@
+{
+ "_about": "Contoso version 1 (FICTIONAL): the Azure AI Search side of the port. Property names follow Microsoft's REST API (service: Management API; index, knowledge source and knowledge base: Search REST API 2026-08-01-preview). 'projection' and 'permission_sync' are lab summaries of the skillset index projections and indexer schedule.",
+ "service": {
+  "name": "srch-helpdesk-contoso",
+  "sku": "basic",
+  "authOptions": {"apiKeyOnly": {}},
+  "disableLocalAuth": false,
+  "publicNetworkAccess": "enabled",
+  "networkRuleSet": {"ipRules": []},
+  "encryptionWithCmk": {"enforcement": "Unspecified"},
+  "diagnosticLogs": false,
+  "identity": {"type": "SystemAssigned"}
+ },
+ "index": {
+  "name": "helpdesk-kb",
+  "permissionFilterOption": "disabled",
+  "purviewEnabled": true,
+  "fields": [
+   {"name": "chunk_id", "type": "Edm.String", "key": true},
+   {"name": "parent_id", "type": "Edm.String", "filterable": true},
+   {"name": "title", "type": "Edm.String", "searchable": true},
+   {"name": "chunk", "type": "Edm.String", "searchable": true},
+   {"name": "group_ids", "type": "Collection(Edm.String)", "filterable": true, "retrievable": true},
+   {"name": "sensitivityLabel", "type": "Edm.String", "filterable": true, "sensitivityLabel": true, "retrievable": true}
+  ],
+  "projection": {"permission_fields_to_chunks": ["group_ids"], "label_to_chunks": false},
+  "vectorFilterMode": "postFilter"
+ },
+ "permission_sync": {"last_run": "2026-10-19T08:00:00Z", "schedule": "daily 08:00 UTC", "resync_after_acl_change": false},
+ "knowledge_source": {"name": "helpdesk-ks", "kind": "searchIndex", "searchIndexParameters": {"searchIndexName": "helpdesk-kb"}},
+ "knowledge_base": {"name": "helpdesk-knowledge", "knowledgeSources": [{"name": "helpdesk-ks"}], "outputMode": "extractiveData"}
+}

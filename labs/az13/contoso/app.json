@@ -1,0 +1,7 @@
+{
+ "_about": "helpdesk-web (FICTIONAL): Contoso's own search page, which queries the index directly with a GA security filter. 'groups_from' says where the app gets the caller's groups.",
+ "auth_to_search": "query_api_key",
+ "groups_from": "request_body",
+ "filter_builder": "string_concat",
+ "forward_user_token": false
+}
