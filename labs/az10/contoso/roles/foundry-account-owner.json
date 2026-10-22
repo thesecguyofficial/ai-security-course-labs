@@ -1,0 +1,32 @@
+{
+  "roleName": "Foundry Account Owner",
+  "id": "e47c6f54-e4a2-4754-9501-8e0985b135e1",
+  "description": "Grants full access to manage Foundry projects and accounts. Grants conditional assignment of the Foundry User role to other user principles.",
+  "actions": [
+    "Microsoft.Authorization/*/read",
+    "Microsoft.Authorization/roleAssignments/write",
+    "Microsoft.Authorization/roleAssignments/delete",
+    "Microsoft.CognitiveServices/*",
+    "Microsoft.Features/features/read",
+    "Microsoft.Features/providers/features/read",
+    "Microsoft.Features/providers/features/register/action",
+    "Microsoft.Insights/alertRules/*",
+    "Microsoft.Insights/diagnosticSettings/*",
+    "Microsoft.Insights/logDefinitions/read",
+    "Microsoft.Insights/metricdefinitions/read",
+    "Microsoft.Insights/metrics/read",
+    "Microsoft.ResourceHealth/availabilityStatuses/read",
+    "Microsoft.Resources/deployments/*",
+    "Microsoft.Resources/deployments/operations/read",
+    "Microsoft.Resources/subscriptions/operationresults/read",
+    "Microsoft.Resources/subscriptions/read",
+    "Microsoft.Resources/subscriptions/resourcegroups/deployments/*",
+    "Microsoft.Resources/subscriptions/resourceGroups/read",
+    "Microsoft.Support/*"
+  ],
+  "notActions": [],
+  "dataActions": [],
+  "notDataActions": [],
+  "_condition": "This built-in role has an ABAC condition (Microsoft's JSON has the full text) that limits which roles it may assign or remove. azure_model.py doesn't model conditions.",
+  "source": "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles/ai-machine-learning"
+}

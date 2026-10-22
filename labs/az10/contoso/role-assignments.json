@@ -1,0 +1,54 @@
+{
+  "_about": "Like `az role assignment list --all` output, trimmed (principalName is the key into principals.json).",
+  "assignments": [
+    {
+      "principalName": "platform-admin",
+      "roleDefinitionName": "Owner",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e"
+    },
+    {
+      "principalName": "contractor",
+      "roleDefinitionName": "Reader",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e"
+    },
+    {
+      "principalName": "contractor",
+      "roleDefinitionName": "Cognitive Services Contributor",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+      "note": "Added 'so they can see the sandbox keys'"
+    },
+    {
+      "principalName": "helpdesk-app",
+      "roleDefinitionName": "Contributor",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+      "note": "Added because 'Foundry User didn't work' on launch day; the app then switched to the key"
+    },
+    {
+      "principalName": "helpdesk-app",
+      "roleDefinitionName": "Foundry Agent Consumer",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+      "note": "Assigned in the portal (portal supports account scope only)"
+    },
+    {
+      "principalName": "ci-deployer",
+      "roleDefinitionName": "Contributor",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod"
+    },
+    {
+      "principalName": "ci-deployer",
+      "roleDefinitionName": "Contributor",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox"
+    },
+    {
+      "principalName": "data-science",
+      "roleDefinitionName": "Foundry User",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e"
+    },
+    {
+      "principalName": "data-science",
+      "roleDefinitionName": "Azure AI Developer",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox",
+      "note": "Picked because of the name"
+    }
+  ]
+}

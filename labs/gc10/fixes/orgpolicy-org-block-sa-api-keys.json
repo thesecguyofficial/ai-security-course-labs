@@ -1,0 +1,9 @@
+{
+  "name": "organizations/123456789012/policies/iam.managed.disableServiceAccountApiKeyCreation",
+  "spec": {
+    "rules": [
+      {"enforce": true}
+    ]
+  },
+  "_why": "Put Google's default back: no API keys bound to service accounts anywhere in the org. Lesson 10.4."
+}

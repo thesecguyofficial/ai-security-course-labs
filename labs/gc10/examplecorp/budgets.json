@@ -1,0 +1,17 @@
+{
+  "_about": "Cloud Billing budgets on the billing account (Budget API v1 shape: gcloud billing budgets list --billing-account=ACCOUNT --format=json). Fictional.",
+  "billingAccount": "billingAccounts/000000-AAAAAA-000000",
+  "budgets": [
+    {
+      "name": "billingAccounts/000000-AAAAAA-000000/budgets/example-monthly-all",
+      "displayName": "Whole company, monthly",
+      "budgetFilter": {"calendarPeriod": "MONTH"},
+      "amount": {"specifiedAmount": {"currencyCode": "USD", "units": "20000"}},
+      "thresholdRules": [
+        {"thresholdPercent": 0.5, "spendBasis": "CURRENT_SPEND"},
+        {"thresholdPercent": 0.9, "spendBasis": "CURRENT_SPEND"},
+        {"thresholdPercent": 1.0, "spendBasis": "CURRENT_SPEND"}
+      ]
+    }
+  ]
+}

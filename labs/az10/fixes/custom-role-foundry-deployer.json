@@ -1,0 +1,17 @@
+{
+  "roleName": "Contoso Foundry Deployer",
+  "IsCustom": true,
+  "description": "FIX: create, update and delete model deployments; read Foundry resources. No keys, no content filters, no data plane.",
+  "actions": [
+    "Microsoft.CognitiveServices/*/read",
+    "Microsoft.CognitiveServices/accounts/deployments/write",
+    "Microsoft.CognitiveServices/accounts/deployments/delete"
+  ],
+  "notActions": [],
+  "dataActions": [],
+  "notDataActions": [],
+  "assignableScopes": [
+    "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod",
+    "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox"
+  ]
+}

@@ -1,0 +1,1531 @@
+{
+ "_about": "FAKE sample for the AZ10 lab. Contoso is fictional; GUIDs are Microsoft documentation examples; IPs are RFC 5737 documentation ranges. 9-13 Oct is normal; 14 Oct has two intrusions. Shape: AzureMetrics rows for the documented token metrics ProcessedPromptTokens and GeneratedTokens, summed to one row per hour for readability.",
+ "rows": [
+  {
+   "TimeGenerated": "2026-10-09T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 2970,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 1170,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T09:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3155,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T09:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 914,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3578,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 807,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 1001,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 208,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3424,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 1047,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 897,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 755,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T12:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3236,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T12:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 714,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T13:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 4300,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T13:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 810,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3504,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 867,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 1294,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 342,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3749,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 827,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 1198,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 283,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T16:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3593,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T16:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 964,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T17:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 4058,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T17:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 794,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T18:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3366,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T18:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 825,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T19:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 4093,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-09T19:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 771,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3225,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 1095,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T09:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3826,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T09:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 963,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3717,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 734,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 2245,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 450,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3755,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 956,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 2105,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 240,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T12:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 4163,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T12:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 847,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T13:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3812,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T13:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 860,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3952,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 1029,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 2184,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 496,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3266,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 972,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 580,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 251,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T16:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3514,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T16:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 639,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T17:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3564,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T17:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 794,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T18:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3069,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T18:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 1007,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T19:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3651,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-10T19:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 678,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3184,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 868,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T09:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3381,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T09:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 541,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3133,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 1020,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 646,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 441,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3334,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 850,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 1990,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 603,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T12:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 4144,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T12:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 923,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T13:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3074,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T13:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 808,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3656,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 702,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 1540,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 380,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3921,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 1034,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 1167,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 202,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T16:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3469,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T16:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 748,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T17:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3727,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T17:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 782,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T18:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 4085,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T18:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 950,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T19:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3926,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-11T19:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 874,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3549,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 1024,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T09:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3925,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T09:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 848,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3827,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 885,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 1425,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 666,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3721,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 701,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 2493,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 508,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T12:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3472,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T12:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 865,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T13:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3472,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T13:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 821,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3799,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 882,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 1604,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 655,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3923,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 799,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 2200,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 690,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T16:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3093,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T16:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 846,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T17:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3330,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T17:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 928,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T18:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3743,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T18:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 760,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T19:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3630,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-12T19:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 976,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3184,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 535,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T09:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3731,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T09:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 898,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3633,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 716,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 983,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 746,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3430,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 908,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 2285,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 598,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T12:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3609,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T12:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 946,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T13:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3474,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T13:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 780,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3717,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 733,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 1610,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 525,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3965,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 823,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 1432,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 207,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T16:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3626,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T16:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 988,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T17:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3559,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T17:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 658,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T18:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3762,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T18:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 842,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T19:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3310,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-13T19:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 879,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T01:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 80,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T01:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 40,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T02:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 40,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T02:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 20,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T03:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 199325,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T03:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 101589,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T03:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 160905,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T03:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 75785,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T04:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 196070,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T04:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 103360,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T04:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 143821,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T04:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 76698,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T05:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 189818,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T05:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 97320,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T05:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 147028,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T05:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 75865,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T06:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 189910,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T06:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 103410,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T06:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 147302,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T06:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 76559,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T07:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 183677,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T07:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 99397,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T07:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 152279,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T07:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 73660,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 196727,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 99518,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 156741,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T08:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 69848,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T09:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3913,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T09:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 875,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3533,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 770,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 1445,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T10:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 644,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3566,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 1030,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 2307,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T11:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 449,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T12:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 4162,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T12:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 771,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T13:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3705,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T13:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 819,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3540,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 770,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 2444,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T14:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 717,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 2968,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 857,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 629,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T15:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 285,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T16:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3895,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T16:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 772,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T17:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3791,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T17:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 929,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T18:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3534,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T18:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 733,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T19:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "ProcessedPromptTokens",
+   "Total": 3887,
+   "TimeGrain": "PT1H"
+  },
+  {
+   "TimeGenerated": "2026-10-14T19:00:00Z",
+   "_ResourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "MetricName": "GeneratedTokens",
+   "Total": 752,
+   "TimeGrain": "PT1H"
+  }
+ ]
+}

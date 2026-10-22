@@ -1,0 +1,16 @@
+{
+  "_resource": "projects/example-chatbot-prod",
+  "_about": "Allow policy on the chatbot project (gcloud projects get-iam-policy example-chatbot-prod --format=json). auditConfigs live in the same policy.",
+  "bindings": [
+    {"role": "roles/owner", "members": ["group:cloud-admins@example.com"]},
+    {"role": "roles/editor", "members": ["serviceAccount:100000000001-compute@developer.gserviceaccount.com"]},
+    {"role": "roles/aiplatform.admin", "members": ["serviceAccount:chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com"]},
+    {"role": "roles/serviceusage.apiKeysAdmin", "members": ["user:bob@example.com"]},
+    {"role": "roles/iam.serviceAccountApiKeyBindingAdmin", "members": ["user:bob@example.com"]},
+    {"role": "roles/iam.serviceAccountUser", "members": ["user:bob@example.com"]}
+  ],
+  "auditConfigs": [
+    {"service": "aiplatform.googleapis.com", "auditLogConfigs": [{"logType": "DATA_READ"}]}
+  ],
+  "etag": "BwXexample4="
+}

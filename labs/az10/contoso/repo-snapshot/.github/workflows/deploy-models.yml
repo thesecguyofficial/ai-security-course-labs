@@ -1,0 +1,13 @@
+# CI pipeline that rolls out model deployments (FAKE, lab placeholder values)
+name: deploy-models
+on: workflow_dispatch
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      AZURE_TENANT_ID: aaaabbbb-0000-cccc-1111-dddd2222eeee
+      AZURE_CLIENT_ID: 00001111-aaaa-2222-bbbb-3333cccc4444
+      AZURE_CLIENT_SECRET: "EXAMPLE~ci-deployer~secret~EXAMPLE"
+    steps:
+      - run: az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+      - run: az cognitiveservices account deployment create -g rg-helpdesk-prod -n contoso-helpdesk-ai --deployment-name helpdesk-gpt5 --model-name gpt-5 --model-version 1 --model-format OpenAI --sku-name DataZoneStandard --sku-capacity 50

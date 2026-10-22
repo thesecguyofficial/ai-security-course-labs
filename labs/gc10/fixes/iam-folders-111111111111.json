@@ -1,0 +1,19 @@
+{
+  "_resource": "folders/111111111111",
+  "_why": "ci-deployer only deploys Cloud Run services, so Cloud Run Developer instead of Editor; legacy-etl loses Editor. Lesson 10.3.",
+  "bindings": [
+    {
+      "role": "roles/run.developer",
+      "members": [
+        "serviceAccount:ci-deployer@example-ci.iam.gserviceaccount.com"
+      ]
+    },
+    {
+      "role": "roles/viewer",
+      "members": [
+        "group:sre@example.com"
+      ]
+    }
+  ],
+  "etag": "BwXexample2="
+}

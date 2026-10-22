@@ -1,0 +1,9 @@
+{
+  "_resource": "folders/222222222222",
+  "_about": "Allow policy on the sandbox folder.",
+  "bindings": [
+    {"role": "roles/aiplatform.user", "members": ["group:data-science@example.com"]},
+    {"role": "roles/serviceusage.serviceUsageAdmin", "members": ["group:data-science@example.com"]}
+  ],
+  "etag": "BwXexample3="
+}

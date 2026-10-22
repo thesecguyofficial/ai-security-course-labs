@@ -1,0 +1,9 @@
+{
+  "_resource": "projects/example-ci",
+  "_about": "Allow policy on the CI project.",
+  "bindings": [
+    {"role": "roles/owner", "members": ["group:cloud-admins@example.com"]},
+    {"role": "roles/iam.serviceAccountKeyAdmin", "members": ["user:bob@example.com"]}
+  ],
+  "etag": "BwXexample6="
+}

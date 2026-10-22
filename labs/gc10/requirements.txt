@@ -1,0 +1,1 @@
+# Nothing to install: this lab uses the Python 3.11+ standard library only.

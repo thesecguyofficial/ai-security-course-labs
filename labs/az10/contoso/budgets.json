@@ -1,0 +1,22 @@
+{
+  "_about": "Cost Management budgets (trimmed). Budgets send alerts; they never stop spending.",
+  "budgets": [
+    {
+      "name": "contoso-monthly",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e",
+      "amount": 5000,
+      "timeGrain": "Monthly",
+      "notifications": {
+        "at100": {
+          "enabled": true,
+          "operator": "GreaterThan",
+          "threshold": 100,
+          "thresholdType": "Actual",
+          "contactEmails": [
+            "finance@contoso.com"
+          ]
+        }
+      }
+    }
+  ]
+}

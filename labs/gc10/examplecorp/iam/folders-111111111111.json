@@ -1,0 +1,20 @@
+{
+  "_resource": "folders/111111111111",
+  "_about": "Allow policy on the prod folder. Inherited by example-chatbot-prod and example-ci.",
+  "bindings": [
+    {
+      "role": "roles/editor",
+      "members": [
+        "serviceAccount:ci-deployer@example-ci.iam.gserviceaccount.com",
+        "serviceAccount:legacy-etl@example-ci.iam.gserviceaccount.com"
+      ]
+    },
+    {
+      "role": "roles/viewer",
+      "members": [
+        "group:sre@example.com"
+      ]
+    }
+  ],
+  "etag": "BwXexample2="
+}

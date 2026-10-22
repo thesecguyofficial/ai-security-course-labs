@@ -1,0 +1,8 @@
+{
+  "name": "organizations/ORGANIZATION_ID/policies/vertexai.allowedModels",
+  "dryRunSpec": {
+    "rules": [
+      {"values": {"allowedValues": ["publishers/google/models/gemini-3.1-flash-lite:predict"]}}
+    ]
+  }
+}

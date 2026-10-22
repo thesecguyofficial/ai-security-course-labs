@@ -1,0 +1,34 @@
+{
+  "roleName": "Foundry Owner",
+  "id": "c883944f-8b7b-4483-af10-35834be79c4a",
+  "description": "Grants full to manage Foundry project and accounts. Grants reader access to Foundry projects, reader access to Foundry accounts, and data actions for a Foundry project.",
+  "actions": [
+    "Microsoft.AlertsManagement/actionRules/*",
+    "Microsoft.AlertsManagement/alerts/*",
+    "Microsoft.AlertsManagement/issues/*",
+    "Microsoft.AlertsManagement/prometheusRuleGroups/*",
+    "Microsoft.AlertsManagement/smartDetectorAlertRules/*",
+    "Microsoft.Authorization/*/read",
+    "Microsoft.Authorization/roleAssignments/write",
+    "Microsoft.Authorization/roleAssignments/delete",
+    "Microsoft.CognitiveServices/*",
+    "Microsoft.Insights/activityLogAlerts/*",
+    "Microsoft.Insights/metricalerts/*",
+    "Microsoft.Insights/scheduledqueryrules/*",
+    "Microsoft.ResourceHealth/availabilityStatuses/read",
+    "Microsoft.Resources/deployments/*",
+    "Microsoft.Resources/deployments/operations/read",
+    "Microsoft.Resources/subscriptions/operationresults/read",
+    "Microsoft.Resources/subscriptions/read",
+    "Microsoft.Resources/subscriptions/resourcegroups/deployments/*",
+    "Microsoft.Resources/subscriptions/resourceGroups/read",
+    "Microsoft.Support/*"
+  ],
+  "notActions": [],
+  "dataActions": [
+    "Microsoft.CognitiveServices/*"
+  ],
+  "notDataActions": [],
+  "_condition": "This built-in role has an ABAC condition (Microsoft's JSON has the full text) that limits which roles it may assign or remove. azure_model.py doesn't model conditions.",
+  "source": "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles/ai-machine-learning"
+}

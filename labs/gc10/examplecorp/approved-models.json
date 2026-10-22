@@ -1,0 +1,11 @@
+{
+  "_about": "What the AI governance board has approved, per environment. Values use the vertexai.allowedModels format: publishers/PUBLISHER/models/MODEL:ACTION (predict, deploy or tune).",
+  "prod": [
+    "publishers/google/models/gemini-3.1-flash-lite:predict"
+  ],
+  "sandbox": [
+    "publishers/google/models/gemini-3.1-flash-lite:predict",
+    "publishers/google/models/gemini-3.5-flash:predict",
+    "publishers/anthropic/models/claude-haiku-4-5:predict"
+  ]
+}

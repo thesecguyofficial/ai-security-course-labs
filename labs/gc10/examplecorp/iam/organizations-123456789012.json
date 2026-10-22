@@ -1,0 +1,31 @@
+{
+  "_resource": "organizations/123456789012",
+  "_about": "Allow policy on the organization (gcloud organizations get-iam-policy --format=json). Inherited by every folder and project.",
+  "bindings": [
+    {
+      "role": "roles/resourcemanager.organizationAdmin",
+      "members": [
+        "group:cloud-admins@example.com"
+      ]
+    },
+    {
+      "role": "roles/orgpolicy.policyAdmin",
+      "members": [
+        "group:cloud-admins@example.com"
+      ]
+    },
+    {
+      "role": "roles/aiplatform.user",
+      "members": [
+        "serviceAccount:legacy-etl@example-ci.iam.gserviceaccount.com"
+      ]
+    },
+    {
+      "role": "roles/logging.privateLogViewer",
+      "members": [
+        "group:secops@example.com"
+      ]
+    }
+  ],
+  "etag": "BwXexample1="
+}

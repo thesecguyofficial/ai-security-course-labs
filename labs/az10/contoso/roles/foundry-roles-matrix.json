@@ -1,0 +1,75 @@
+{
+  "_about": "Microsoft's permission matrix for the Foundry built-in roles, copied from the Foundry RBAC page (updated 2026-09-16). The page gives capabilities, not the role JSON. Reading keys is not a column here, but Microsoft's role JSON (built-in roles, AI + machine learning page) gives Foundry User Microsoft.CognitiveServices/accounts/listkeys/action and Foundry Owner / Foundry Account Owner Microsoft.CognitiveServices/*. So azure_model.py evaluates those four roles from their JSON (foundry-*.json) and uses this matrix only for Foundry Agent Consumer, whose JSON isn't on that page; a capability that isn't a column is treated as NOT granted for it. Check any role with: az role definition list --name \"Foundry Agent Consumer\" --output json",
+  "source": "https://learn.microsoft.com/en-us/azure/foundry/concepts/rbac-foundry",
+  "renamed_from": {
+    "Foundry User": "Azure AI User",
+    "Foundry Owner": "Azure AI Owner",
+    "Foundry Account Owner": "Azure AI Account Owner",
+    "Foundry Project Manager": "Azure AI Project Manager"
+  },
+  "columns": [
+    "create_projects",
+    "create_accounts",
+    "data_actions",
+    "assign_roles",
+    "reader",
+    "manage_models",
+    "publish_agents",
+    "agent_endpoints"
+  ],
+  "roles": {
+    "Foundry Agent Consumer": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ],
+    "Foundry User": [
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true
+    ],
+    "Foundry Project Manager": [
+      false,
+      false,
+      true,
+      "Foundry User only",
+      true,
+      false,
+      true,
+      true
+    ],
+    "Foundry Account Owner": [
+      true,
+      true,
+      false,
+      "Foundry User, ACR and monitoring roles",
+      true,
+      true,
+      false,
+      false
+    ],
+    "Foundry Owner": [
+      true,
+      true,
+      true,
+      "Foundry User, ACR and monitoring roles",
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "role_ids": {
+    "Foundry Agent Consumer": "eed3b665-ab3a-47b6-8f48-c9382fb1dad6"
+  }
+}

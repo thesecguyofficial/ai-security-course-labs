@@ -1,0 +1,41 @@
+{
+  "_about": "Contoso's identities (FICTIONAL). Object IDs are Microsoft documentation example GUIDs (Azure Monitor activity log schema sample).",
+  "principals": {
+    "platform-admin": {
+      "type": "User",
+      "displayName": "platform-admin@contoso.com",
+      "objectId": "bbbbbbbb-1111-2222-3333-cccccccccccc",
+      "human": true,
+      "purpose": "Runs the Azure platform"
+    },
+    "helpdesk-app": {
+      "type": "ManagedIdentity",
+      "displayName": "helpdesk-web (system-assigned)",
+      "objectId": "cccccccc-2222-3333-4444-dddddddddddd",
+      "human": false,
+      "purpose": "The TSG Helpdesk chatbot's web app. Calls the helpdesk-gpt5 deployment."
+    },
+    "ci-deployer": {
+      "type": "ServicePrincipal",
+      "displayName": "ci-deployer",
+      "objectId": "eeee4444-ff55-6666-77aa-888888bbbbbb",
+      "appId": "00001111-aaaa-2222-bbbb-3333cccc4444",
+      "human": false,
+      "purpose": "CI pipeline that creates and updates model deployments. Uses a client secret."
+    },
+    "data-science": {
+      "type": "Group",
+      "displayName": "sg-data-science",
+      "objectId": "ffff5555-aa66-7777-88bb-999999cccccc",
+      "human": true,
+      "purpose": "Data scientists who try models in the sandbox"
+    },
+    "contractor": {
+      "type": "User",
+      "displayName": "contractor@fabrikam.com (guest)",
+      "objectId": "aaaa0000-bb11-2222-33cc-444444dddddd",
+      "human": true,
+      "purpose": "External contractor helping with the sandbox"
+    }
+  }
+}

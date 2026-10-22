@@ -1,0 +1,21 @@
+{
+  "roleName": "Cognitive Services Contributor",
+  "id": "25fbc0a9-bd7c-42a3-aa1a-3b75d497ee68",
+  "description": "Lets you create, read, update, delete and manage keys of Cognitive Services.",
+  "actions": [
+    "Microsoft.Authorization/*/read",
+    "Microsoft.CognitiveServices/*",
+    "Microsoft.Features/features/read",
+    "Microsoft.Insights/diagnosticSettings/*"
+  ],
+  "notActions": [
+    "Microsoft.CognitiveServices/raiPolicy/write",
+    "Microsoft.CognitiveServices/raiPolicy/delete",
+    "Microsoft.CognitiveServices/raiExternalSafetyProviders/write",
+    "Microsoft.CognitiveServices/raiExternalSafetyProviders/delete"
+  ],
+  "dataActions": [],
+  "notDataActions": [],
+  "trimmed": "actions list shortened to the entries this lab needs; notActions and dataActions are complete",
+  "source": "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles/ai-machine-learning"
+}

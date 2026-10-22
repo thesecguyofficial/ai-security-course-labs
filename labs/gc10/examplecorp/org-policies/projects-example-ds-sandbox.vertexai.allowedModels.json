@@ -1,0 +1,10 @@
+{
+  "name": "projects/example-ds-sandbox/policies/vertexai.allowedModels",
+  "spec": {
+    "inheritFromParent": true,
+    "rules": [
+      {"values": {"deniedValues": ["publishers/meta/models/llama3:deploy"]}}
+    ]
+  },
+  "_history": "Set on 2026-06-11: 'no self-deployed Llama in the sandbox, GPUs are expensive'"
+}

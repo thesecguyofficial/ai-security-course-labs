@@ -1,0 +1,45 @@
+{
+  "_about": "API key inventory, in the shape of `gcloud services api-keys list --project=PROJECT --format=json` for each project (key strings are never listed). Fictional keys; UIDs are placeholders.",
+  "keys": [
+    {
+      "name": "projects/100000000001/locations/global/keys/0000aaaa-0000-4000-8000-000000000001",
+      "uid": "0000aaaa-0000-4000-8000-000000000001",
+      "displayName": "chatbot-frontend",
+      "createTime": "2026-04-02T10:15:00Z",
+      "etag": "W/\"example1\""
+    },
+    {
+      "name": "projects/100000000001/locations/global/keys/0000aaaa-0000-4000-8000-000000000002",
+      "uid": "0000aaaa-0000-4000-8000-000000000002",
+      "displayName": "ops-eval-key",
+      "createTime": "2026-09-03T16:40:00Z",
+      "restrictions": {
+        "apiTargets": [{"service": "aiplatform.googleapis.com"}]
+      },
+      "serviceAccountEmail": "chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com",
+      "etag": "W/\"example2\""
+    },
+    {
+      "name": "projects/100000000004/locations/global/keys/0000aaaa-0000-4000-8000-000000000004",
+      "uid": "0000aaaa-0000-4000-8000-000000000004",
+      "displayName": "store-locator-website",
+      "createTime": "2021-05-20T08:00:00Z",
+      "restrictions": {
+        "browserKeyRestrictions": {"allowedReferrers": ["https://www.example.com/*"]},
+        "apiTargets": [{"service": "maps-backend.googleapis.com"}, {"service": "generativelanguage.googleapis.com"}]
+      },
+      "etag": "W/\"example4\""
+    },
+    {
+      "name": "projects/100000000002/locations/global/keys/0000aaaa-0000-4000-8000-000000000003",
+      "uid": "0000aaaa-0000-4000-8000-000000000003",
+      "displayName": "ds-notebook-key",
+      "createTime": "2026-08-14T13:00:00Z",
+      "restrictions": {
+        "serverKeyRestrictions": {"allowedIps": ["198.51.100.0/24"]},
+        "apiTargets": [{"service": "aiplatform.googleapis.com"}]
+      },
+      "etag": "W/\"example3\""
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "roleName": "Foundry Project Manager",
+  "id": "eadc314b-1a2d-4efa-be10-5d325db5065e",
+  "description": "Lets you perform developer actions and management actions on Microsoft Foundry Projects. Allows for making role assignments, but limited to Cognitive Service User role.",
+  "actions": [
+    "Microsoft.Authorization/roleAssignments/write",
+    "Microsoft.Authorization/roleAssignments/delete",
+    "Microsoft.CognitiveServices/accounts/*/read",
+    "Microsoft.CognitiveServices/accounts/projects/*",
+    "Microsoft.CognitiveServices/locations/*/read",
+    "Microsoft.Authorization/*/read",
+    "Microsoft.Insights/alertRules/*",
+    "Microsoft.Resources/deployments/*",
+    "Microsoft.Resources/subscriptions/resourceGroups/read"
+  ],
+  "notActions": [],
+  "dataActions": [
+    "Microsoft.CognitiveServices/*"
+  ],
+  "notDataActions": [],
+  "_condition": "This built-in role has an ABAC condition (Microsoft's JSON has the full text) that limits which roles it may assign or remove. azure_model.py doesn't model conditions.",
+  "source": "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles/ai-machine-learning"
+}

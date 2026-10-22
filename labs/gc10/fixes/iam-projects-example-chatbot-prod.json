@@ -1,0 +1,13 @@
+{
+  "_resource": "projects/example-chatbot-prod",
+  "_why": "chatbot-runtime gets the Agent Platform User role (it only calls the model); the Compute default service account loses Editor. auditConfigs unchanged. Lesson 10.3.",
+  "bindings": [
+    {"role": "roles/owner", "members": ["group:cloud-admins@example.com"]},
+    {"role": "roles/aiplatform.user", "members": ["serviceAccount:chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com"]},
+    {"role": "roles/serviceusage.apiKeysAdmin", "members": ["user:bob@example.com"]}
+  ],
+  "auditConfigs": [
+    {"service": "aiplatform.googleapis.com", "auditLogConfigs": [{"logType": "DATA_READ"}]}
+  ],
+  "etag": "BwXexample4="
+}

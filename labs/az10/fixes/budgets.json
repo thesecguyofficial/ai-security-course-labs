@@ -1,0 +1,74 @@
+{
+  "_about": "FIX: a small budget per AI resource group with an early actual alert and a forecast alert to the team that can act.",
+  "budgets": [
+    {
+      "name": "contoso-monthly",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e",
+      "amount": 5000,
+      "timeGrain": "Monthly",
+      "notifications": {
+        "at100": {
+          "enabled": true,
+          "operator": "GreaterThan",
+          "threshold": 100,
+          "thresholdType": "Actual",
+          "contactEmails": [
+            "finance@contoso.com"
+          ]
+        }
+      }
+    },
+    {
+      "name": "budget-rg-helpdesk-prod",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod",
+      "amount": 800,
+      "timeGrain": "Monthly",
+      "notifications": {
+        "actual50": {
+          "enabled": true,
+          "operator": "GreaterThan",
+          "threshold": 50,
+          "thresholdType": "Actual",
+          "contactEmails": [
+            "ai-platform@contoso.com"
+          ]
+        },
+        "forecast80": {
+          "enabled": true,
+          "operator": "GreaterThan",
+          "threshold": 80,
+          "thresholdType": "Forecasted",
+          "contactEmails": [
+            "ai-platform@contoso.com"
+          ]
+        }
+      }
+    },
+    {
+      "name": "budget-rg-ai-sandbox",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox",
+      "amount": 50,
+      "timeGrain": "Monthly",
+      "notifications": {
+        "actual50": {
+          "enabled": true,
+          "operator": "GreaterThan",
+          "threshold": 50,
+          "thresholdType": "Actual",
+          "contactEmails": [
+            "ai-platform@contoso.com"
+          ]
+        },
+        "forecast80": {
+          "enabled": true,
+          "operator": "GreaterThan",
+          "threshold": 80,
+          "thresholdType": "Forecasted",
+          "contactEmails": [
+            "ai-platform@contoso.com"
+          ]
+        }
+      }
+    }
+  ]
+}

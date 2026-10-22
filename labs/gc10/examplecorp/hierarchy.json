@@ -1,0 +1,47 @@
+{
+  "_about": "ExampleCo's Google Cloud resource hierarchy (fictional). example.com is reserved for documentation (RFC 2606). Every ID here is a documentation-style placeholder.",
+  "organization": {
+    "name": "organizations/123456789012",
+    "displayName": "example.com",
+    "createTime": "2023-02-14T09:00:00Z",
+    "_note": "Created before 3 May 2024, so Google's secure-by-default organization policies were NOT applied automatically."
+  },
+  "folders": [
+    {"name": "folders/111111111111", "displayName": "prod", "parent": "organizations/123456789012"},
+    {"name": "folders/222222222222", "displayName": "sandbox", "parent": "organizations/123456789012"}
+  ],
+  "projects": [
+    {
+      "projectId": "example-chatbot-prod",
+      "projectNumber": "100000000001",
+      "parent": "folders/111111111111",
+      "aiApproved": true,
+      "purpose": "TSG Helpdesk chatbot on Cloud Run, calling Gemini on Agent Platform",
+      "enabledServices": ["aiplatform.googleapis.com", "apikeys.googleapis.com", "run.googleapis.com", "logging.googleapis.com"]
+    },
+    {
+      "projectId": "example-ci",
+      "projectNumber": "100000000003",
+      "parent": "folders/111111111111",
+      "aiApproved": false,
+      "purpose": "CI/CD pipeline; owns the ci-deployer service account",
+      "enabledServices": ["iam.googleapis.com", "cloudbuild.googleapis.com", "logging.googleapis.com"]
+    },
+    {
+      "projectId": "example-ds-sandbox",
+      "projectNumber": "100000000002",
+      "parent": "folders/222222222222",
+      "aiApproved": true,
+      "purpose": "Data science sandbox: staff try models here",
+      "enabledServices": ["aiplatform.googleapis.com", "apikeys.googleapis.com", "logging.googleapis.com"]
+    },
+    {
+      "projectId": "example-legacy-web",
+      "projectNumber": "100000000004",
+      "parent": "folders/222222222222",
+      "aiApproved": false,
+      "purpose": "Old marketing website (store locator map). Someone enabled the Gemini API here 'to test something'",
+      "enabledServices": ["maps-backend.googleapis.com", "generativelanguage.googleapis.com", "apikeys.googleapis.com"]
+    }
+  ]
+}

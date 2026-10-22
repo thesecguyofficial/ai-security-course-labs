@@ -1,0 +1,31 @@
+{
+  "_resource": "projects/example-ds-sandbox",
+  "_about": "Allow policy on the data science sandbox. No auditConfigs: Data Access audit logs are off (the default).",
+  "bindings": [
+    {
+      "role": "roles/owner",
+      "members": [
+        "group:cloud-admins@example.com"
+      ]
+    },
+    {
+      "role": "roles/serviceusage.apiKeysAdmin",
+      "members": [
+        "user:bob@example.com"
+      ]
+    },
+    {
+      "role": "roles/consumerprocurement.entitlementManager",
+      "members": [
+        "group:data-science@example.com"
+      ]
+    },
+    {
+      "role": "roles/aiplatform.user",
+      "members": [
+        "serviceAccount:ci-deployer@example-ci.iam.gserviceaccount.com"
+      ]
+    }
+  ],
+  "etag": "BwXexample5="
+}

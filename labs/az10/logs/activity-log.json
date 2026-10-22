@@ -1,0 +1,348 @@
+{
+ "_about": "FAKE sample for the AZ10 lab. Contoso is fictional; GUIDs are Microsoft documentation examples; IPs are RFC 5737 documentation ranges. 9-13 Oct is normal; 14 Oct has two intrusions. Shape: Azure Monitor activity log events (Administrative and Policy categories), trimmed to the fields the hunt uses.",
+ "value": [
+  {
+   "eventTimestamp": "2026-10-09T09:12:00Z",
+   "category": {
+    "value": "Administrative"
+   },
+   "level": "Informational",
+   "operationName": {
+    "value": "Microsoft.CognitiveServices/accounts/listKeys/action"
+   },
+   "caller": "platform-admin@contoso.com",
+   "httpRequest": {
+    "clientIpAddress": "192.0.2.10",
+    "method": "POST"
+   },
+   "authorization": {
+    "action": "Microsoft.CognitiveServices/accounts/listKeys/action",
+    "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai"
+   },
+   "resourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "status": {
+    "value": "Succeeded"
+   },
+   "subStatus": {
+    "value": "OK"
+   }
+  },
+  {
+   "eventTimestamp": "2026-10-09T09:40:00Z",
+   "category": {
+    "value": "Administrative"
+   },
+   "level": "Informational",
+   "operationName": {
+    "value": "Microsoft.CognitiveServices/accounts/deployments/write"
+   },
+   "caller": "00001111-aaaa-2222-bbbb-3333cccc4444",
+   "httpRequest": {
+    "clientIpAddress": "198.51.100.20",
+    "method": "PUT"
+   },
+   "authorization": {
+    "action": "Microsoft.CognitiveServices/accounts/deployments/write",
+    "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai/deployments/helpdesk-gpt5"
+   },
+   "resourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai/deployments/helpdesk-gpt5",
+   "status": {
+    "value": "Succeeded"
+   },
+   "subStatus": {
+    "value": "Created"
+   }
+  },
+  {
+   "eventTimestamp": "2026-10-10T14:03:00Z",
+   "category": {
+    "value": "Administrative"
+   },
+   "level": "Informational",
+   "operationName": {
+    "value": "Microsoft.CognitiveServices/accounts/listKeys/action"
+   },
+   "caller": "contractor_fabrikam.com#EXT#@contoso.onmicrosoft.com",
+   "httpRequest": {
+    "clientIpAddress": "192.0.2.44",
+    "method": "POST"
+   },
+   "authorization": {
+    "action": "Microsoft.CognitiveServices/accounts/listKeys/action",
+    "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai"
+   },
+   "resourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "status": {
+    "value": "Succeeded"
+   },
+   "subStatus": {
+    "value": "OK"
+   }
+  },
+  {
+   "eventTimestamp": "2026-10-12T10:30:00Z",
+   "category": {
+    "value": "Administrative"
+   },
+   "level": "Informational",
+   "operationName": {
+    "value": "Microsoft.CognitiveServices/accounts/deployments/write"
+   },
+   "caller": "00001111-aaaa-2222-bbbb-3333cccc4444",
+   "httpRequest": {
+    "clientIpAddress": "198.51.100.20",
+    "method": "PUT"
+   },
+   "authorization": {
+    "action": "Microsoft.CognitiveServices/accounts/deployments/write",
+    "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai/deployments/sandbox-gpt52"
+   },
+   "resourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai/deployments/sandbox-gpt52",
+   "status": {
+    "value": "Succeeded"
+   },
+   "subStatus": {
+    "value": "Created"
+   }
+  },
+  {
+   "eventTimestamp": "2026-10-13T11:05:00Z",
+   "category": {
+    "value": "Administrative"
+   },
+   "level": "Informational",
+   "operationName": {
+    "value": "Microsoft.CognitiveServices/accounts/deployments/write"
+   },
+   "caller": "00001111-aaaa-2222-bbbb-3333cccc4444",
+   "httpRequest": {
+    "clientIpAddress": "198.51.100.20",
+    "method": "PUT"
+   },
+   "authorization": {
+    "action": "Microsoft.CognitiveServices/accounts/deployments/write",
+    "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai/deployments/helpdesk-gpt5"
+   },
+   "resourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai/deployments/helpdesk-gpt5",
+   "status": {
+    "value": "Succeeded"
+   },
+   "subStatus": {
+    "value": "OK"
+   }
+  },
+  {
+   "eventTimestamp": "2026-10-14T02:14:07Z",
+   "category": {
+    "value": "Administrative"
+   },
+   "level": "Informational",
+   "operationName": {
+    "value": "Microsoft.CognitiveServices/accounts/listKeys/action"
+   },
+   "caller": "00001111-aaaa-2222-bbbb-3333cccc4444",
+   "httpRequest": {
+    "clientIpAddress": "203.0.113.77",
+    "method": "POST"
+   },
+   "authorization": {
+    "action": "Microsoft.CognitiveServices/accounts/listKeys/action",
+    "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai"
+   },
+   "resourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+   "status": {
+    "value": "Succeeded"
+   },
+   "subStatus": {
+    "value": "OK"
+   }
+  },
+  {
+   "eventTimestamp": "2026-10-14T02:15:31Z",
+   "category": {
+    "value": "Administrative"
+   },
+   "level": "Informational",
+   "operationName": {
+    "value": "Microsoft.CognitiveServices/accounts/listKeys/action"
+   },
+   "caller": "00001111-aaaa-2222-bbbb-3333cccc4444",
+   "httpRequest": {
+    "clientIpAddress": "203.0.113.77",
+    "method": "POST"
+   },
+   "authorization": {
+    "action": "Microsoft.CognitiveServices/accounts/listKeys/action",
+    "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai"
+   },
+   "resourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+   "status": {
+    "value": "Succeeded"
+   },
+   "subStatus": {
+    "value": "OK"
+   }
+  },
+  {
+   "eventTimestamp": "2026-10-14T02:18:02Z",
+   "category": {
+    "value": "Administrative"
+   },
+   "level": "Informational",
+   "operationName": {
+    "value": "Microsoft.CognitiveServices/accounts/deployments/write"
+   },
+   "caller": "00001111-aaaa-2222-bbbb-3333cccc4444",
+   "httpRequest": {
+    "clientIpAddress": "203.0.113.77",
+    "method": "PUT"
+   },
+   "authorization": {
+    "action": "Microsoft.CognitiveServices/accounts/deployments/write",
+    "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai/deployments/resale-xl"
+   },
+   "resourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai/deployments/resale-xl",
+   "status": {
+    "value": "Succeeded"
+   },
+   "subStatus": {
+    "value": "Created"
+   }
+  },
+  {
+   "eventTimestamp": "2026-10-14T02:18:03Z",
+   "category": {
+    "value": "Policy"
+   },
+   "level": "Warning",
+   "operationName": {
+    "value": "Microsoft.Authorization/policies/audit/action"
+   },
+   "caller": "00001111-aaaa-2222-bbbb-3333cccc4444",
+   "httpRequest": {
+    "clientIpAddress": "203.0.113.77",
+    "method": "POST"
+   },
+   "authorization": {
+    "action": "Microsoft.Authorization/policies/audit/action",
+    "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai/deployments/resale-xl"
+   },
+   "resourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai/deployments/resale-xl",
+   "status": {
+    "value": "Succeeded"
+   },
+   "subStatus": {
+    "value": ""
+   },
+   "properties": {
+    "isComplianceCheck": "False",
+    "resourceLocation": "swedencentral",
+    "policies": "[{\"policyDefinitionId\": \"/providers/Microsoft.Authorization/policyDefinitions/aafe3651-cb78-4f68-9f81-e7e41509110f\", \"policyDefinitionName\": \"aafe3651-cb78-4f68-9f81-e7e41509110f\", \"policyDefinitionEffect\": \"Audit\", \"policyAssignmentId\": \"/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/providers/Microsoft.Authorization/policyAssignments/allow-only-approved-models\", \"policyAssignmentName\": \"allow-only-approved-models\", \"policyAssignmentScope\": \"/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e\"}]"
+   }
+  },
+  {
+   "eventTimestamp": "2026-10-14T02:21:40Z",
+   "category": {
+    "value": "Administrative"
+   },
+   "level": "Informational",
+   "operationName": {
+    "value": "Microsoft.CognitiveServices/accounts/raiPolicies/write"
+   },
+   "caller": "00001111-aaaa-2222-bbbb-3333cccc4444",
+   "httpRequest": {
+    "clientIpAddress": "203.0.113.77",
+    "method": "PUT"
+   },
+   "authorization": {
+    "action": "Microsoft.CognitiveServices/accounts/raiPolicies/write",
+    "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai/raiPolicies/relaxed"
+   },
+   "resourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai/raiPolicies/relaxed",
+   "status": {
+    "value": "Succeeded"
+   },
+   "subStatus": {
+    "value": "Created"
+   }
+  },
+  {
+   "eventTimestamp": "2026-10-14T02:22:15Z",
+   "category": {
+    "value": "Administrative"
+   },
+   "level": "Informational",
+   "operationName": {
+    "value": "Microsoft.CognitiveServices/accounts/deployments/write"
+   },
+   "caller": "00001111-aaaa-2222-bbbb-3333cccc4444",
+   "httpRequest": {
+    "clientIpAddress": "203.0.113.77",
+    "method": "PUT"
+   },
+   "authorization": {
+    "action": "Microsoft.CognitiveServices/accounts/deployments/write",
+    "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai/deployments/resale-xl"
+   },
+   "resourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai/deployments/resale-xl",
+   "status": {
+    "value": "Succeeded"
+   },
+   "subStatus": {
+    "value": "OK"
+   }
+  },
+  {
+   "eventTimestamp": "2026-10-14T02:23:50Z",
+   "category": {
+    "value": "Administrative"
+   },
+   "level": "Error",
+   "operationName": {
+    "value": "Microsoft.Authorization/roleAssignments/write"
+   },
+   "caller": "00001111-aaaa-2222-bbbb-3333cccc4444",
+   "httpRequest": {
+    "clientIpAddress": "203.0.113.77",
+    "method": "PUT"
+   },
+   "authorization": {
+    "action": "Microsoft.Authorization/roleAssignments/write",
+    "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai/providers/Microsoft.Authorization/roleAssignments/x"
+   },
+   "resourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai/providers/Microsoft.Authorization/roleAssignments/x",
+   "status": {
+    "value": "Failed"
+   },
+   "subStatus": {
+    "value": "Forbidden"
+   }
+  },
+  {
+   "eventTimestamp": "2026-10-14T10:02:00Z",
+   "category": {
+    "value": "Administrative"
+   },
+   "level": "Informational",
+   "operationName": {
+    "value": "Microsoft.CognitiveServices/accounts/deployments/write"
+   },
+   "caller": "00001111-aaaa-2222-bbbb-3333cccc4444",
+   "httpRequest": {
+    "clientIpAddress": "198.51.100.20",
+    "method": "PUT"
+   },
+   "authorization": {
+    "action": "Microsoft.CognitiveServices/accounts/deployments/write",
+    "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai/deployments/helpdesk-gpt5"
+   },
+   "resourceId": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai/deployments/helpdesk-gpt5",
+   "status": {
+    "value": "Succeeded"
+   },
+   "subStatus": {
+    "value": "OK"
+   }
+  }
+ ]
+}

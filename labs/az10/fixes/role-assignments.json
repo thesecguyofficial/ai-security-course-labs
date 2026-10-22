@@ -1,0 +1,41 @@
+{
+  "_about": "FIX: least privilege. Workloads lose Contributor; the CI pipeline gets a custom role that can only manage deployments.",
+  "assignments": [
+    {
+      "principalName": "platform-admin",
+      "roleDefinitionName": "Owner",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e"
+    },
+    {
+      "principalName": "contractor",
+      "roleDefinitionName": "Reader",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e"
+    },
+    {
+      "principalName": "helpdesk-app",
+      "roleDefinitionName": "Foundry User",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+      "note": "One Foundry resource, Entra ID token, no key"
+    },
+    {
+      "principalName": "ci-deployer",
+      "roleDefinitionName": "Contoso Foundry Deployer",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod"
+    },
+    {
+      "principalName": "ci-deployer",
+      "roleDefinitionName": "Contoso Foundry Deployer",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox"
+    },
+    {
+      "principalName": "data-science",
+      "roleDefinitionName": "Foundry User",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai"
+    },
+    {
+      "principalName": "data-science",
+      "roleDefinitionName": "Reader",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "_about": "Google group membership (fictional). IAM roles granted to a group apply to its members.",
+  "groups": {
+    "group:cloud-admins@example.com": ["user:bob@example.com"],
+    "group:data-science@example.com": ["user:alice@example.com", "user:carol@example.com"],
+    "group:sre@example.com": ["user:dev@example.com"],
+    "group:secops@example.com": ["user:sam@example.com"]
+  }
+}

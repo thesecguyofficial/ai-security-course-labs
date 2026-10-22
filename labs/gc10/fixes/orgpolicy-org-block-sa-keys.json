@@ -1,0 +1,9 @@
+{
+  "name": "organizations/123456789012/policies/iam.managed.disableServiceAccountKeyCreation",
+  "spec": {
+    "rules": [
+      {"enforce": true}
+    ]
+  },
+  "_why": "The secure-by-default baseline for orgs created on or after 3 May 2024. Older orgs must set it themselves. Lessons 10.0 and 10.4."
+}

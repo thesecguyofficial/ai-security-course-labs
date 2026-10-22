@@ -1,0 +1,100 @@
+{
+  "_about": "Contoso's Azure AI estate (FICTIONAL). Shaped like `az cognitiveservices account show` / `... deployment list` output, trimmed. Tenant and subscription IDs are Microsoft documentation example GUIDs. model.publisher and model.assetId are the two fields the built-in approved-models policy reads (aliases ...deployments/model.publisher and .../model.assetId).",
+  "tenantId": "aaaabbbb-0000-cccc-1111-dddd2222eeee",
+  "subscriptionId": "aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e",
+  "accounts": [
+    {
+      "id": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-helpdesk-prod/providers/Microsoft.CognitiveServices/accounts/contoso-helpdesk-ai",
+      "name": "contoso-helpdesk-ai",
+      "kind": "AIServices",
+      "location": "swedencentral",
+      "sku": {
+        "name": "S0"
+      },
+      "environment": "production",
+      "properties": {
+        "customSubDomainName": "contoso-helpdesk-ai",
+        "allowProjectManagement": true,
+        "disableLocalAuth": false,
+        "publicNetworkAccess": "Enabled"
+      },
+      "projects": [
+        "helpdesk"
+      ],
+      "deployments": [
+        {
+          "name": "helpdesk-gpt5",
+          "properties": {
+            "model": {
+              "format": "OpenAI",
+              "name": "gpt-5",
+              "version": "1",
+              "publisher": "OpenAI",
+              "assetId": "azureml://registries/azure-openai/models/gpt-5/versions/1"
+            }
+          },
+          "sku": {
+            "name": "GlobalStandard",
+            "capacity": 50
+          },
+          "createdOn": "2026-09-01"
+        }
+      ]
+    },
+    {
+      "id": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e/resourceGroups/rg-ai-sandbox/providers/Microsoft.CognitiveServices/accounts/contoso-sandbox-ai",
+      "name": "contoso-sandbox-ai",
+      "kind": "AIServices",
+      "location": "swedencentral",
+      "sku": {
+        "name": "S0"
+      },
+      "environment": "sandbox",
+      "properties": {
+        "customSubDomainName": "contoso-sandbox-ai",
+        "allowProjectManagement": true,
+        "disableLocalAuth": false,
+        "publicNetworkAccess": "Enabled"
+      },
+      "projects": [
+        "experiments"
+      ],
+      "deployments": [
+        {
+          "name": "sandbox-gpt52",
+          "properties": {
+            "model": {
+              "format": "OpenAI",
+              "name": "gpt-5.2",
+              "version": "1",
+              "publisher": "OpenAI",
+              "assetId": "azureml://registries/azure-openai/models/gpt-5.2/versions/1"
+            }
+          },
+          "sku": {
+            "name": "GlobalStandard",
+            "capacity": 10
+          },
+          "createdOn": "2026-09-01"
+        },
+        {
+          "name": "sandbox-gpt54",
+          "properties": {
+            "model": {
+              "format": "OpenAI",
+              "name": "gpt-5.4",
+              "version": "1",
+              "publisher": "OpenAI",
+              "assetId": "azureml://registries/azure-openai/models/gpt-5.4/versions/1"
+            }
+          },
+          "sku": {
+            "name": "GlobalStandard",
+            "capacity": 300
+          },
+          "createdOn": "2026-10-02"
+        }
+      ]
+    }
+  ]
+}

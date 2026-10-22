@@ -1,0 +1,26 @@
+{
+  "_about": "Like `az policy assignment list` output, trimmed. policyDefinitionId values are the real built-in definition IDs.",
+  "assignments": [
+    {
+      "name": "allow-only-approved-models",
+      "scope": "/subscriptions/aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/aafe3651-cb78-4f68-9f81-e7e41509110f",
+      "displayName": "Foundry model deployments should only use approved models",
+      "parameters": {
+        "effect": {
+          "value": "Audit"
+        },
+        "allowedPublishers": {
+          "value": [
+            "OpenAI"
+          ]
+        },
+        "allowedAssetIds": {
+          "value": [
+            "azureml://registries/azure-openai/models/gpt-5"
+          ]
+        }
+      }
+    }
+  ]
+}

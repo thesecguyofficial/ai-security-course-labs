@@ -1,0 +1,5 @@
+{
+  "effect": { "value": "Deny" },
+  "allowedPublishers": { "value": [] },
+  "allowedAssetIds": { "value": ["azureml://registries/azure-openai/models/gpt-4.1-mini/"] }
+}

@@ -1,0 +1,38 @@
+{
+  "_about": "Contoso's AI standards (what the security team SAYS should be true). The checker compares the estate to these.",
+  "approved_models": [
+    {
+      "name": "gpt-5",
+      "versions": "any",
+      "why": "Helpdesk production model"
+    },
+    {
+      "name": "gpt-5.2",
+      "versions": [
+        "1"
+      ],
+      "why": "Sandbox evaluation, pinned version"
+    }
+  ],
+  "residency": {
+    "production": [
+      "DataZoneStandard",
+      "DataZoneProvisionedManaged",
+      "DataZoneBatch",
+      "Standard",
+      "ProvisionedManaged"
+    ],
+    "why": "Helpdesk prompts contain EU customer data: inference must stay in the EU data zone or the resource's geography"
+  },
+  "max_capacity_units": {
+    "sandbox": 10,
+    "production": 100
+  },
+  "budgets": {
+    "required_scopes": [
+      "rg-helpdesk-prod",
+      "rg-ai-sandbox"
+    ],
+    "want_early_warning_below_percent": 80
+  }
+}

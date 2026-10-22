@@ -1,0 +1,41 @@
+{
+  "_why": "A spend cap budget (GA since 13 Oct 2026): one project, one eligible service (Gemini Enterprise Agent Platform, service ID C7E2-9256-1C43 per Google's spend caps page). Enforcement pauses new usage of that service in that project; it is not instant, overage is still billed, and persistent resources (a deployed endpoint) keep billing. Lesson 10.5. Budget API v1 rules for spendCap: exactly three CURRENT_SPEND thresholds at 0.5, 0.8 and 1.0; enableProjectLevelRecipients true; monthly period.",
+  "name": "billingAccounts/000000-AAAAAA-000000/budgets/example-chatbot-prod-ai-cap",
+  "displayName": "chatbot-prod Agent Platform spend cap",
+  "budgetFilter": {
+    "projects": [
+      "projects/100000000001"
+    ],
+    "services": [
+      "services/C7E2-9256-1C43"
+    ],
+    "calendarPeriod": "MONTH"
+  },
+  "amount": {
+    "specifiedAmount": {
+      "currencyCode": "USD",
+      "units": "300"
+    }
+  },
+  "thresholdRules": [
+    {
+      "thresholdPercent": 0.5,
+      "spendBasis": "CURRENT_SPEND"
+    },
+    {
+      "thresholdPercent": 0.8,
+      "spendBasis": "CURRENT_SPEND"
+    },
+    {
+      "thresholdPercent": 1.0,
+      "spendBasis": "CURRENT_SPEND"
+    }
+  ],
+  "notificationsRule": {
+    "enableProjectLevelRecipients": true
+  },
+  "spendCap": {
+    "inputState": "CONFIGURED"
+  },
+  "_lab_service": "aiplatform.googleapis.com"
+}

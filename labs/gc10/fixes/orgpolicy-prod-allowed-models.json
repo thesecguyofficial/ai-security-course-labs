@@ -1,0 +1,10 @@
+{
+  "name": "folders/111111111111/policies/vertexai.allowedModels",
+  "spec": {
+    "inheritFromParent": false,
+    "rules": [
+      {"values": {"allowedValues": ["publishers/google/models/gemini-3.1-flash-lite:predict"]}}
+    ]
+  },
+  "_why": "Allow-list for everything under the prod folder: only the approved model, only predict. Deploy and tune of anything are refused. Lesson 10.3."
+}

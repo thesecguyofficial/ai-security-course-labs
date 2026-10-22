@@ -1,0 +1,9 @@
+{
+  "_resource": "projects/example-legacy-web",
+  "_about": "Allow policy on the old marketing website project.",
+  "bindings": [
+    {"role": "roles/owner", "members": ["group:cloud-admins@example.com"]},
+    {"role": "roles/serviceusage.apiKeysAdmin", "members": ["user:bob@example.com"]}
+  ],
+  "etag": "BwXexample7="
+}
