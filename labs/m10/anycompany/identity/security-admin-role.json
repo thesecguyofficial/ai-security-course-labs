@@ -1,0 +1,16 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "OwnTheAuditTrail",
+      "Effect": "Allow",
+      "Action": [
+        "bedrock:GetModelInvocationLoggingConfiguration",
+        "bedrock:PutModelInvocationLoggingConfiguration",
+        "bedrock:DeleteModelInvocationLoggingConfiguration",
+        "cloudtrail:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

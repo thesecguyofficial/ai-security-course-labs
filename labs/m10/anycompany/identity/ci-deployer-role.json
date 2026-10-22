@@ -1,0 +1,22 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "SmokeTestThroughTheApprovedProfileOnly",
+      "Effect": "Allow",
+      "Action": ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"],
+      "Resource": "arn:aws:bedrock:us-east-1:111122223333:inference-profile/us.amazon.nova-lite-v1:0"
+    },
+    {
+      "Sid": "TheModelBehindTheProfileOnlyViaTheProfile",
+      "Effect": "Allow",
+      "Action": ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"],
+      "Resource": "arn:aws:bedrock:*::foundation-model/amazon.nova-lite-v1:0",
+      "Condition": {
+        "StringLike": {
+          "bedrock:InferenceProfileArn": "arn:aws:bedrock:us-east-1:111122223333:inference-profile/us.amazon.nova-lite-v1:0"
+        }
+      }
+    }
+  ]
+}

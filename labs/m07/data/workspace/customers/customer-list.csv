@@ -1,0 +1,7 @@
+# FAKE-CUSTOMER-DATA (lab only). Every name, address and number here is made up.
+customer_id,name,email,plan,monthly_spend
+CUST-1001,Asha Verma,asha@client-a.example,gold,4200
+CUST-1002,Ben Okafor,ben@client-b.example,silver,1800
+CUST-1003,Chen Li,chen@client-c.example,gold,3900
+CUST-1004,Divya Nair,divya@client-d.example,bronze,600
+CUST-1005,Erik Lund,erik@client-e.example,silver,2100

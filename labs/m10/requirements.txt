@@ -1,0 +1,2 @@
+# Nothing to install: this lab uses the Python standard library only (Python 3.11 or newer).
+# The optional AWS step needs the AWS CLI v2: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html

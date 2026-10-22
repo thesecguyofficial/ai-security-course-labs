@@ -1,0 +1,17 @@
+{
+  "_comment": "Lab policy. Every control reads this file. Domains use reserved names (RFC 2606): nothing here is a real address.",
+  "internal_domains": ["tsg-helpdesk.example"],
+  "untrusted_prefixes": ["tickets/", "attachments/"],
+  "sensitive_prefixes": ["customers/"],
+  "tasks": {
+    "answer_ticket": {
+      "tools": ["read_file", "send_email"],
+      "max_actions": 6
+    }
+  },
+  "approval_required": {
+    "run_task": "always",
+    "send_email": "external"
+  },
+  "read_only_verbs": ["ls", "cat", "head", "tail", "grep", "wc"]
+}

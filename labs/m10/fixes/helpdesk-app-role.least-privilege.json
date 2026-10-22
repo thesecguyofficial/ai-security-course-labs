@@ -1,0 +1,31 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "InvokeTheApprovedProfile",
+      "Effect": "Allow",
+      "Action": ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"],
+      "Resource": "arn:aws:bedrock:us-east-1:111122223333:inference-profile/us.anthropic.claude-haiku-4-5-20251001-v1:0"
+    },
+    {
+      "Sid": "TheModelBehindItOnlyViaTheProfile",
+      "Effect": "Allow",
+      "Action": ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"],
+      "Resource": "arn:aws:bedrock:*::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0",
+      "Condition": {
+        "StringLike": {
+          "bedrock:InferenceProfileArn": "arn:aws:bedrock:us-east-1:111122223333:inference-profile/us.anthropic.claude-haiku-4-5-20251001-v1:0"
+        }
+      }
+    },
+    {
+      "Sid": "ItsOwnGuardrailAndKnowledgeBase",
+      "Effect": "Allow",
+      "Action": ["bedrock:ApplyGuardrail", "bedrock:Retrieve"],
+      "Resource": [
+        "arn:aws:bedrock:us-east-1:111122223333:guardrail/gr-helpdesk-example",
+        "arn:aws:bedrock:us-east-1:111122223333:knowledge-base/KBHELPDESK1"
+      ]
+    }
+  ]
+}

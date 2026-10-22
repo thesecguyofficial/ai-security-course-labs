@@ -1,0 +1,61 @@
+{
+  "_about": "AnyCompany is a FICTIONAL organization. 'AnyCompany' and every account ID, key ID and IP address here are AWS or RFC 5737 documentation example values, not real ones.",
+  "organization": {
+    "management_account": "123456789012",
+    "member_accounts": {
+      "111122223333": "prod-ai: runs the TSG Helpdesk chatbot",
+      "444455556666": "sandbox: people try models here"
+    },
+    "scps_on_root": ["scps/FullAWSAccess.json", "scps/deny-deepseek.json"]
+  },
+  "principals": {
+    "HelpdeskAppRole": {
+      "arn": "arn:aws:iam::111122223333:role/HelpdeskAppRole",
+      "account": "111122223333",
+      "policies": ["identity/helpdesk-app-role.json"]
+    },
+    "DataScienceRole": {
+      "arn": "arn:aws:iam::111122223333:role/DataScienceRole",
+      "account": "111122223333",
+      "policies": ["identity/data-science-role.json"]
+    },
+    "PlatformAdminRole": {
+      "arn": "arn:aws:iam::111122223333:role/PlatformAdminRole",
+      "account": "111122223333",
+      "policies": ["identity/platform-admin-role.json"]
+    },
+    "SandboxAdminRole": {
+      "arn": "arn:aws:iam::444455556666:role/PlatformAdminRole",
+      "account": "444455556666",
+      "policies": ["identity/platform-admin-role.json"]
+    },
+    "SecurityAdmin": {
+      "arn": "arn:aws:iam::111122223333:role/SecurityAdmin",
+      "account": "111122223333",
+      "purpose": "security-admin",
+      "policies": ["identity/security-admin-role.json"]
+    },
+    "CiDeployerRole": {
+      "arn": "arn:aws:iam::111122223333:role/CiDeployerRole",
+      "account": "111122223333",
+      "policies": ["identity/ci-deployer-role.json"]
+    },
+    "BedrockAPIKey-x7k2": {
+      "arn": "arn:aws:iam::111122223333:user/BedrockAPIKey-x7k2",
+      "account": "111122223333",
+      "policies": ["aws-managed/AmazonBedrockLimitedAccess-v9.json"],
+      "created_by": "Bedrock console 'Generate long-term API key' (creates an IAM user and attaches AmazonBedrockLimitedAccess)",
+      "bedrock_api_keys": [
+        {"service_specific_credential_id": "ACCA1234EXAMPLE1234", "status": "Active", "created": "2026-10-09", "expires": null}
+      ]
+    },
+    "sandbox-explorer": {
+      "arn": "arn:aws:iam::444455556666:user/sandbox-explorer",
+      "account": "444455556666",
+      "policies": ["aws-managed/AmazonBedrockLimitedAccess-v9.json"],
+      "bedrock_api_keys": [
+        {"service_specific_credential_id": "ACCA5678EXAMPLE5678", "status": "Active", "created": "2026-10-06", "expires": "2026-11-05"}
+      ]
+    }
+  }
+}

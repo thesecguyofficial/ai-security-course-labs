@@ -1,0 +1,45 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "NoLongTermBedrockKeysOutsideSandbox",
+      "Effect": "Deny",
+      "Action": "iam:CreateServiceSpecificCredential",
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": { "iam:ServiceSpecificCredentialServiceName": "bedrock.amazonaws.com" },
+        "StringNotEquals": { "aws:PrincipalAccount": "444455556666" }
+      }
+    },
+    {
+      "Sid": "NoLongTermKeyUseOutsideSandbox",
+      "Effect": "Deny",
+      "Action": "bedrock:CallWithBearerToken",
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": { "bedrock:BearerTokenType": "LONG_TERM" },
+        "StringNotEquals": { "aws:PrincipalAccount": "444455556666" }
+      }
+    },
+    {
+      "Sid": "NoLongTermKeyUseOutsideSandboxMantle",
+      "Effect": "Deny",
+      "Action": "bedrock-mantle:CallWithBearerToken",
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": { "bedrock-mantle:BearerTokenType": "LONG_TERM" },
+        "StringNotEquals": { "aws:PrincipalAccount": "444455556666" }
+      }
+    },
+    {
+      "Sid": "SandboxKeysExpireWithin30Days",
+      "Effect": "Deny",
+      "Action": "iam:CreateServiceSpecificCredential",
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": { "iam:ServiceSpecificCredentialServiceName": "bedrock.amazonaws.com" },
+        "NumericGreaterThan": { "iam:ServiceSpecificCredentialAgeDays": "30" }
+      }
+    }
+  ]
+}

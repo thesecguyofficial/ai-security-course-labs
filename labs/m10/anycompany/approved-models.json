@@ -1,0 +1,14 @@
+{
+  "_about": "The models AnyCompany's AI review board approved. IDs are copied from the AWS model cards (checked 21 Oct 2026); check the current model list before you reuse them. Claude Haiku 4.5 is reached through the us. inference profile on bedrock-runtime (its bare ID isn't supported for on-demand use there), and has a DIFFERENT, shorter model ID on bedrock-mantle. Nova Lite isn't offered on bedrock-mantle.",
+  "foundation_models": [
+    "amazon.nova-lite-v1:0",
+    "anthropic.claude-haiku-4-5-20251001-v1:0"
+  ],
+  "inference_profiles": [
+    "us.amazon.nova-lite-v1:0",
+    "us.anthropic.claude-haiku-4-5-20251001-v1:0"
+  ],
+  "mantle_models": [
+    "anthropic.claude-haiku-4-5"
+  ]
+}

@@ -1,0 +1,18 @@
+# M9.7 lab. Three small, well-known tools plus NumPy. All install on Python 3.11-3.13.
+# Pinned to the versions this lab was tested with; check for newer ones before you trust any scanner.
+#
+#   picklescan 1.0.5  (MIT)            pickle malware scanner, the kind the Hugging Face Hub runs
+#                                      https://pypi.org/project/picklescan/
+#   fickling   0.1.12 (LGPL-3.0+)      Trail of Bits: decompiles and safety-checks a pickle
+#                                      https://pypi.org/project/fickling/
+#   safetensors 0.8.0 (Apache-2.0)     Hugging Face: a weights format that cannot run code
+#                                      https://pypi.org/project/safetensors/
+#   numpy      2.5.4  (BSD-3-Clause + bundled permissive licences)  stand-in "model weights" so we have real tensors to save
+#
+# Not used here, but worth knowing: modelscan (Protect AI, Apache-2.0) scans H5/Pickle/SavedModel
+# formats; at the time of writing its metadata requires Python <3.13, so it will not install on a
+# 3.13 interpreter. https://pypi.org/project/modelscan/
+picklescan==1.0.5
+fickling==0.1.12
+safetensors==0.8.0
+numpy==2.5.4

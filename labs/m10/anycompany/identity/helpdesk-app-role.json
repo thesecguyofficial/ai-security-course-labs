@@ -1,0 +1,17 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "LetTheAppUseBedrock",
+      "Effect": "Allow",
+      "Action": "bedrock:*",
+      "Resource": "*"
+    },
+    {
+      "Sid": "LetTheAppUseTheNewEndpointToo",
+      "Effect": "Allow",
+      "Action": "bedrock-mantle:*",
+      "Resource": "*"
+    }
+  ]
+}

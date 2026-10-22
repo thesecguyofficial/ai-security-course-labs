@@ -1,0 +1,30 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "OnlySecurityAdminTouchesAiAuditTrail",
+      "Effect": "Deny",
+      "Action": [
+        "bedrock:DeleteModelInvocationLoggingConfiguration",
+        "bedrock:PutModelInvocationLoggingConfiguration",
+        "cloudtrail:StopLogging",
+        "cloudtrail:DeleteTrail",
+        "cloudtrail:UpdateTrail",
+        "cloudtrail:PutEventSelectors"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "ArnNotLike": { "aws:PrincipalArn": "arn:aws:iam::*:role/SecurityAdmin" }
+      }
+    },
+    {
+      "Sid": "OnlyPlatformAdminBuysCapacity",
+      "Effect": "Deny",
+      "Action": "bedrock:CreateProvisionedModelThroughput",
+      "Resource": "*",
+      "Condition": {
+        "ArnNotLike": { "aws:PrincipalArn": "arn:aws:iam::*:role/PlatformAdminRole" }
+      }
+    }
+  ]
+}
