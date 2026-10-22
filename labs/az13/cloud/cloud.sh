@@ -13,7 +13,7 @@ SEARCH="srch-$AZ13_NAME"
 PROJECT="helpdesk"
 MODEL="${AZ13_MODEL:-gpt-4.1-mini}"
 MODEL_VERSION="${AZ13_MODEL_VERSION:-2025-04-14}"
-PROJ_API="2025-06-01"            # ARM api-version for accounts/projects (see GUIDED-BUILD.md "unverified")
+PROJ_API="2025-06-01"            # ARM api-version for accounts/projects (stable; defined in azure-rest-api-specs)
 mkdir -p .state
 
 me()         { az ad signed-in-user show --query id -o tsv; }

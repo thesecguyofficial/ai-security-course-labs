@@ -98,7 +98,7 @@ def check(folder: str) -> tuple[list, list]:
     for r in roles:
         if "project managed identity" in r["principal"] and r["role"] in ("Search Service Contributor", "Search Index Data Contributor"):
             add("AZ13-16", "MEDIUM", f"role {r['role']}", f"{r['principal']} only reads, but holds {r['role']}"
-                + (" (can retrieve admin keys)" if r["role"] == "Search Service Contributor" else " (can write documents)")
+                + (" (can retrieve admin keys)" if r["role"] == "Search Service Contributor" else " (can write documents and, with elevated read (preview), see past permission filters)")
                 + ". Give it Search Index Data Reader, scoped to the index.")
     g = ag["guardrails"][a["guardrail"]]
     tr = any(c["point"] == "tool_response" and "IndirectAttack" in c["risk"] for c in g["controls"])
