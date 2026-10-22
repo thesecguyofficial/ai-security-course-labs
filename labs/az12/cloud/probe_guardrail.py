@@ -60,7 +60,10 @@ for c in CASES:
         print(f"     answer: {(ch.get('message') or {}).get('content', '')[:160]!r}")
     else:
         err = body.get("error", {})
-        inner = (err.get("innererror") or {}).get("content_filter_result") or {}
+        # Microsoft's doc examples spell it innererror.content_filter_result; the REST spec (2024-10-21) spells it
+        # inner_error.content_filter_results. Read whichever comes back.
+        ie = err.get("innererror") or err.get("inner_error") or {}
+        inner = ie.get("content_filter_result") or ie.get("content_filter_results") or {}
         hits = {k: v for k, v in inner.items() if isinstance(v, dict) and (v.get("filtered") or v.get("detected"))}
-        print(f"{c['id']} HTTP {status} code={err.get('code')} inner={(err.get('innererror') or {}).get('code')} filtered={json.dumps(hits)}")
+        print(f"{c['id']} HTTP {status} code={err.get('code')} inner={ie.get('code')} filtered={json.dumps(hits)}")
     print("     raw: " + json.dumps(body)[:700])

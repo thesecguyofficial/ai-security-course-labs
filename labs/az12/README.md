@@ -569,8 +569,7 @@ not read in our build, so we don't reproduce menu names here; follow the "Foundr
 |---|---|---|
 | Hate, Sexual, Violence, Self-harm | User input and output, blocking level from lesson 12.1 (check which way your portal's levels run) | Annotate and block |
 | User prompt attacks | User input | Annotate and block |
-| Indirect attacks | User input | Annotate and block |
-| Spotlighting | User input | (on) |
+| Indirect attacks | User input | Annotate and block, and turn on the **Spotlighting** toggle in this control (Microsoft: "turn on the Spotlighting toggle when configuring document attack controls") |
 | Protected material for text, for code | Output | Annotate and block |
 | Personally identifiable information | Output | Annotate and block (phone numbers; your choice for emails) |
 
@@ -578,9 +577,13 @@ not read in our build, so we don't reproduce menu names here; follow the "Foundr
    **Create**. "The new guardrail takes effect immediately."
 
 **CLI** (what `make guardrail-up` runs): a `PUT` on `raiPolicies/contoso-helpdesk-v2` with `contentFilters` from
-`fixes/rai-policies.json` and `"completionBlocklists": [{"blocklistName": "contoso-codenames", "blocking": true}]` (the
-body shape in Microsoft's blocklist how-to), then a `PUT` on the deployment with `properties.raiPolicyName` set.
-Spotlighting and PII have no fields in that documented body, so set those two in the portal (step 2 above).
+`fixes/rai-policies.json` and `"customBlocklists": [{"blocklistName": "contoso-codenames", "blocking": true, "source":
+"Completion"}]`, then a `PUT` on the deployment with `properties.raiPolicyName` set. `customBlocklists` is the field the
+ARM schema defines for `api-version=2024-10-01` (azure-rest-api-specs, `RaiPolicyProperties`); Microsoft's blocklist
+how-to still shows an older `completionBlocklists` field that this schema doesn't have. Spotlighting and PII are left
+to the portal (step 2 above): Microsoft's built-in Azure Policy definitions name a `contentFilters` entry `Indirect
+Attack Spotlighting`, but no Microsoft example writes it, and no Microsoft page names a PII filter entry.
+`make evidence` reads the policy back so you can see what the portal wrote.
 
 ```bash
 make blocklist-up && make guardrail-up
@@ -617,14 +620,34 @@ is Microsoft's blocklist example, the `jailbreak` field is from the annotations 
       "content_filter_result": { "jailbreak": { "detected": true, "filtered": true } } } } }
 ```
 
+Microsoft's doc examples spell the envelope `innererror` / `content_filter_result`; the REST spec (azure-rest-api-specs,
+`2024-10-21`) spells it `inner_error` / `content_filter_results`. The probe reads both; so should your app.
+
 **A05, an instruction inside a document.** Expect HTTP 400 again, this time from the indirect-attack check on the tagged
-document. Microsoft's annotations page lists Prompt Shields for indirect attacks but gives **no JSON example**, so we
-don't print a field name here: find it in your raw output and write it down.
+document. Microsoft's annotations page lists indirect attacks (`detected`, `filtered`) but gives no JSON example; the
+REST spec (azure-rest-api-specs, Azure OpenAI v1 API and `2025-04-01-preview`) names the prompt-side key
+`indirect_attack`, next to `jailbreak`. Example (shape from the REST spec, values illustrative):
+
+```json
+"content_filter_result": { "indirect_attack": { "detected": true, "filtered": true } }
+```
+
+Check the key in your raw output and write it down.
 
 **A12, personal data in the answer.** Expect HTTP 200 with `finish_reason: "content_filter"` if you set PII to block
-phone numbers. Microsoft's annotations page describes `detected`, `filtered` and `redacted` for PII without a complete
-example: read the exact key from your raw output. Remember lesson 12.1: the filter doesn't know whether the caller owns
-ticket 4471. The lab's retrieval filter does.
+phone numbers. Microsoft's annotations page describes `detected`, `filtered` and `redacted` for PII without an
+example; the REST spec (Azure OpenAI v1 API) names the completion-side key `personally_identifiable_information`, with
+`detected`, `filtered`, `redacted_text` and `sub_categories` (each `sub_category`, `detected`, `filtered`, `redacted`).
+Example (shape from the REST spec, values illustrative):
+
+```json
+"content_filter_results": { "personally_identifiable_information": { "detected": true, "filtered": true,
+    "sub_categories": [ { "sub_category": "PhoneNumber", "detected": true, "filtered": true, "redacted": false } ] } }
+```
+
+The spec doesn't list the `sub_category` values; `PhoneNumber` is the category name on Microsoft's PII page, so check
+yours. Remember lesson 12.1: the filter doesn't know whether the caller owns ticket 4471. The lab's retrieval filter
+does.
 
 **A14, a blocklisted term in the answer.** HTTP 200, the answer cut off. Example response (shape from Microsoft docs,
 values illustrative; [blocklist how-to](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/use-blocklists)):
@@ -635,7 +658,8 @@ values illustrative; [blocklist how-to](https://learn.microsoft.com/en-us/azure/
 ```
 
 Note the two shapes: on a prompt, Microsoft's example has `custom_blocklists` as `{"details": [...], "filtered": true}`;
-on a completion, as a list. Parse both.
+on a completion, the how-to's (older) example shows a list. The REST spec defines the object with `details` for both
+prompts and completions. Parse both.
 
 ### G6 · Change one setting and re-run
 
@@ -657,7 +681,10 @@ What you may see (Example response, shape from Microsoft docs, values illustrati
 Whether the real classifier scores that sentence as low is exactly what you're testing: if it does, you've just made a
 false positive. Put it back (`make guardrail-up`) and write down what you saw. (`severityThreshold` is described in the
 ARM reference only as "Level at which content is filtered"; this lab reads `Low` as "filter low and above", following
-the classic page's "equal or higher severity levels". If your result says otherwise, trust your result and tell us.)
+the classic page's "equal or higher severity levels". One Microsoft source points the other way: the built-in Azure
+Policy "should only use allowed control" says it mandates "minimum levels" yet defaults to allowing `["Medium",
+"High"]`, which only reads as a minimum if `High` is the stricter value. If your result says otherwise, trust your
+result and tell us.)
 
 ### G7 · Cost and teardown
 
@@ -678,7 +705,8 @@ for 48 hours" unless you purge it. Check Cost Management the next day.
 **Expect to adjust.** These scripts were syntax-checked (`bash -n`, ShellCheck 0.11.0), not run. If your region doesn't
 offer Prompt Shields for Content Safety, set `AZ12_REGION`. If `cs-try` returns 401 or 403, the role is still
 propagating. If the `raiPolicies` PUT rejects a filter name, read your resource's existing policies with
-`az rest --method get --url "https://management.azure.com$FID/raiPolicies?api-version=2024-10-01"` and match their names.
+`az rest --method get --url "https://management.azure.com$FID/raiPolicies?api-version=2025-12-01"` and match their names
+(`2025-12-01` is the first stable schema that lists the `PreToolCall` and `PostToolCall` sources agent guardrails use).
 
 ## Troubleshooting
 
@@ -690,7 +718,7 @@ propagating. If the `raiPolicies` PUT rejects a filter name, read your resource'
 | `make challenge` ends with `Error 1` | Expected until you finish the challenge |
 | `make llmguard`: `ModuleNotFoundError: llm_guard` | Activate the venv and `pip install llm-guard` first |
 | Step 9: `kind ContentSafety not offered to you` | Your subscription can't create that kind in this region: try another `AZ12_REGION` |
-| Step 9: `guardrail-up` fails on `completionBlocklists` | Run `make blocklist-up` first: the blocklist must exist before a guardrail references it |
+| Step 9: `guardrail-up` fails on `customBlocklists` | Run `make blocklist-up` first: the blocklist must exist before a guardrail references it |
 
 ## What to write in your findings notebook (lesson 0.5)
 
@@ -712,6 +740,8 @@ propagating. If the `raiPolicies` PUT rejects a filter name, read your resource'
 - Blocklists: https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/use-blocklists
 - Hosted agent guardrails: https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/add-hosted-agent-guardrails
 - RAI policy ARM schema: https://learn.microsoft.com/en-us/azure/templates/microsoft.cognitiveservices/accounts/raipolicies
+- REST specs (field names): https://github.com/Azure/azure-rest-api-specs/tree/main/specification/cognitiveservices/resource-manager/Microsoft.CognitiveServices/CognitiveServices/stable ·
+  https://github.com/Azure/azure-rest-api-specs/tree/main/specification/ai/data-plane/OpenAI.v1
 - Built-in policies: https://learn.microsoft.com/azure/ai-services/policy-reference ·
   https://github.com/Azure/azure-policy/tree/master/built-in-policies/policyDefinitions/Cognitive%20Services
 - Content Safety: https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview ·
