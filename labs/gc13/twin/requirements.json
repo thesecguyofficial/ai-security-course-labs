@@ -1,0 +1,9 @@
+{
+  "_comment": "ExampleCo's rules for the Helpdesk agent (fictional), carried over from GC11 and GC12. The checker compares each deployment against them.",
+  "cmek_required_for_customer_data_at_rest": true,
+  "kms_key": "projects/example-chatbot-prod/locations/europe-west4/keyRings/helpdesk-eu/cryptoKeys/helpdesk-data",
+  "ml_processing_must_stay_in": "EU",
+  "internal_domain": "example.com",
+  "broad_groups": ["group:all-engineers@example.com", "group:all-staff@example.com", "allUsers", "allAuthenticatedUsers"],
+  "users_have_different_access": true
+}
