@@ -21,6 +21,7 @@ version, and find out what no guardrail fixes.
 | **Prove** | `make test`: 17 tests | 12.5 |
 | **Challenge** | Screen tool results with `ApplyGuardrail`, write checker rule M12-17, mask employee IDs. No solution included | 12.1 to 12.3 |
 | **Cloud (optional)** | Create the guardrail, run the suite against it, ask the real IAM policy simulator, tear down | 12.2, 12.3 |
+| **Guided build (your account)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): create the guardrail by console clicks or the AWS CLI, six requests with how to read each response, MEDIUM vs HIGH prompt attack, the IAM deny with `AccessDenied`, metrics and logs, cost, teardown | 12.1 to 12.4 |
 
 ## What's in this folder
 
@@ -39,6 +40,7 @@ version, and find out what no guardrail fixes.
 | `checker.py` | 16 review rules `M12-01` to `M12-16`, plus `M12-17`, which you write |
 | `enforce.py`, `iam_eval.py` | Six requests replayed against the IAM policies and the org policy; a small teaching model of IAM evaluation |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 17 tests for the lab, 6 for the challenge |
+| `GUIDED-BUILD.md` | Optional: build the guardrail yourself in your own AWS account, console or CLI, with example responses and teardown |
 | `cloud/` | Optional: Terraform for the reviewed guardrail, `cloud_eval.py` (suite via `ApplyGuardrail`), `cloud_simulate.py` (IAM policy simulator) |
 
 **Which local guardrail?** The course plan mentions NeMo Guardrails and LLM Guard as local twins. This lab uses a
@@ -253,6 +255,10 @@ ALL TESTS PASSED (17 run)
 ```
 
 ## Step 8 · Optional: the real guardrail in your sandbox account
+
+**Prefer to build it by hand?** [`GUIDED-BUILD.md`](GUIDED-BUILD.md) walks you through the same guardrail step by step
+(console clicks or AWS CLI), six example requests and how to read every field, one setting change, IAM enforcement,
+where to see it in metrics and logs, cost and teardown. This step is the Terraform shortcut to the same guardrail.
 
 **Cost.** Creating a guardrail and a version: the [pricing page](https://aws.amazon.com/bedrock/pricing/) charges
 Guardrails per text unit processed (and per image for image content), and lists no charge for a guardrail that is
