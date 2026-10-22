@@ -37,6 +37,7 @@ one sitting you will:
 | `fixes/` | The fixed estate, role assignments (plus a custom role), policy assignments and budgets |
 | `logs/` | **Fake** Activity Log, request logs (`RequestResponse`) and token metrics for 9 to 14 October 2026 |
 | `azure-twin/` | Optional Step 8: Bicep, policy parameters and `twin.sh` for your own subscription |
+| `GUIDED-BUILD.md` | Inventory and lock down a real Foundry estate in your own subscription, step by step |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 17 tests for the lab, 4 for the challenge |
 
 **About `azure_model.py`.** It is not Azure. It models only what this lab needs, each rule from Microsoft's docs:
@@ -63,6 +64,10 @@ are the same in every tenant. Every IP address is from the documentation ranges 
 [RFC 5737](https://www.rfc-editor.org/rfc/rfc5737). Model asset IDs follow Microsoft's documented format;
 `fabrikam-chat-xl` is invented. Nothing here contacts Azure or any other system. Test 17 fails if a non-documentation
 GUID or IP, or a secret without EXAMPLE in it, ever creeps in.
+
+**Guided build (your own subscription).** `GUIDED-BUILD.md` builds a small Foundry estate from zero, inventories it with
+lessons 10.1 to 10.5, locks it down (Foundry User on one resource, keys off, approved models and key access on Deny,
+logs, a budget) and proves each fix with a request that should now fail. About 75 minutes, a few US cents.
 
 ## Needs
 

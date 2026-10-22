@@ -36,6 +36,7 @@ in its own documentation). After lab AZ10, keys are off and models are allow-lis
 | `logs/` | **Fake** API Management gateway and LLM logs, and Foundry `RequestResponse` rows, for 19 October 2026 |
 | `terraform/` | The hardened build for your own subscription (Step 8) |
 | `cloud/` | `cloud.sh` (cost, up, policy, probe, logs, evidence, down) and the probe that runs inside the VNet |
+| `GUIDED-BUILD.md` | The cloud build step by step (portal and Terraform), five tests, one change, cost and teardown |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 18 tests for the lab, 4 for the challenge |
 
 **About `foundry_twin.py`.** It is not Azure. It models only what this lab needs, each rule from Microsoft's docs:
@@ -468,6 +469,10 @@ make down                                  # removes policies and everything Ter
 ```
 
 Use OpenTofu instead of Terraform with `export TF=tofu`.
+
+**Step by step, with tests:** `GUIDED-BUILD.md` walks the same build in the portal and with Terraform, then proves
+each control with five tests (public path refused, private path logged, wrong identity refused, guardrails hold, key
+rotation) and one change that breaks it (a missing DNS link).
 
 Notes:
 

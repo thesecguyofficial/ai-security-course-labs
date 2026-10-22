@@ -3,3 +3,4 @@ __pycache__/
 .env
 *.tfstate*
 .terraform/
+labs/az10/azure-twin/.twin-key
