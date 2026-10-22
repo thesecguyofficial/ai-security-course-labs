@@ -29,7 +29,6 @@ Hands-on labs for **AI Security Engineer** by [The Sec Guy](https://thesecguy.co
 | M12 (AWS) | Bedrock Guardrails: attack TSG Helpdesk with and without a guardrail, measure catch rate and false positives, find who can skip it (IAM GuardrailIdentifier, org Bedrock policy, bedrock-mantle) | Laptop ($0) + optional AWS | ✅ available |
 | M12 (Google Cloud) | Model Armor and Gemini safety filters: attack the Helpdesk with and without Model Armor, check floor settings and templates, measure catch rate and false positives with an automated suite, fail closed | Laptop ($0) + optional Google Cloud | ✅ available |
 | M13 → M19 | One lab per section and cloud, released with the course | Laptop + AWS / Azure / Google Cloud | coming every two weeks |
-| M12 → M19 | One lab per section and cloud, released with the course | Laptop + AWS / Azure / Google Cloud | coming every two weeks |
 
 Each lab folder has a `README.md` with step-by-step commands, what you should see, and troubleshooting.
 
