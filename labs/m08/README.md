@@ -13,13 +13,13 @@ MCP servers** built with the official [MCP Python SDK](https://pypi.org/project/
 
 You will:
 
-1. **Break it** — watch the poisoned server steal a fake secret and redirect an email, on fake data.
-2. **See it** — read the tool definitions yourself, the way a review would, and spot the hidden directive.
-3. **Fix it** — turn on four controls (hash-pinning with a diff alert, full-definition approval, a
+1. **Break it**: watch the poisoned server steal a fake secret and redirect an email, on fake data.
+2. **See it**: read the tool definitions yourself, the way a review would, and spot the hidden directive.
+3. **Fix it**: turn on four controls (hash-pinning with a diff alert, full-definition approval, a
    server/tool allow-list, and a hidden-directive scan) and watch the attack stop.
-4. **Build the secure end** — run a Streamable HTTP MCP server that validates the token **audience** and
+4. **Build the secure end**: run a Streamable HTTP MCP server that validates the token **audience** and
    refuses token **passthrough**, and prove it with three tokens.
-5. **Prove it** — `make test` runs the attack and every control as automated tests. Then `make challenge`.
+5. **Prove it**: `make test` runs the attack and every control as automated tests. Then `make challenge`.
 
 Everything the "model" does is driven by `stand_in_model.py`, **plain Python, not AI**, so every run is
 identical and the tests check *your controls*, not a model's mood. An optional last step swaps in a real
@@ -94,7 +94,7 @@ emails queued:  []
 What happened: the user asked for a fact. The `facts` server's tool description now carries a hidden
 directive. The (stand-in) model read it and, before answering, used the **honest** `notes` server's
 `read_note` tool to read the fake `.env`, then smuggled it into the `sidenote` argument of the `facts`
-tool — straight to the attacker's local inbox. The user saw only "Here is your fact of the day."
+tool, straight to the attacker's local inbox. The user saw only "Here is your fact of the day."
 
 Two separate ideas, both from lesson 8.2, are in that one run:
 
@@ -110,7 +110,7 @@ tool poisoning, shadowing and a "sleeper" rug pull against a WhatsApp MCP server
 ## Step 2 · See it: review the tool definitions
 
 Before a model ever sees a server, you can read what it will send. `review.py` connects to the server and
-prints every tool's full definition — no model involved — the way the
+prints every tool's full definition (no model involved), the way the
 [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector) (`npx @modelcontextprotocol/inspector`)
 or `snyk-agent-scan inspect` would:
 
@@ -186,7 +186,7 @@ Two points worth noticing, both honest about limits:
 - **Quarantine, not just refusal.** `--block-injection` and a failed pin hide the tool from the model's
   context, not only from execution. That is what also stops *shadowing*: a definition the model never
   reads cannot change how it uses another server's tool. An **allow-list alone** limits what can run but
-  does **not** stop a visible poisoned definition from shadowing an allowed tool — layer it with the scan.
+  does **not** stop a visible poisoned definition from shadowing an allowed tool. Layer it with the scan.
 - **A marker scan is a teaching stand-in.** Real hidden directives are fluent language, not a fixed token,
   so a substring scan is not a real detector. The real controls are pinning, reading the whole definition,
   and the managed scanners in lesson 8.5. The lab's scan stands in for "a review/scanner flagged this".
@@ -219,7 +219,7 @@ server**. On every request it:
   issued specifically for them as the intended audience" (per RFC 8707), and **token passthrough is
   explicitly forbidden**;
 - **refuses passthrough**: the `whoami` tool reports the verified caller but never forwards the token to
-  any upstream — if it called an upstream API it would use its own credential.
+  any upstream. If it called an upstream API it would use its own credential.
 
 Open `servers/secure_http_server.py`: the whole defence is the `audience=RESOURCE_URL` argument to
 `jwt.decode` in `LabAudienceVerifier`. That one line is what "no confused deputy, no token passthrough"
@@ -259,14 +259,14 @@ OK
 ALL TESTS PASSED (12 run)
 ```
 
-The three `vulnerable:` tests attack the unprotected host on purpose — a test that never fails proves
+The three `vulnerable:` tests attack the unprotected host on purpose: a test that never fails proves
 nothing. The `safe:` tests show each control stops the same attack, and the `auth:` tests prove the secure
 server accepts only its own tokens.
 
 ## Step 6 · Your turn: `make challenge`
 
 The malicious server has one more release, `2.0.0`, used only by the challenge. This time the tool
-**description is clean** — the hidden directive has moved into the `sidenote` **parameter's** schema
+**description is clean**: the hidden directive has moved into the `sidenote` **parameter's** schema
 description. A scan that reads only the one-line description waves it through.
 
 ```bash
@@ -303,7 +303,7 @@ echo "1.1.0" > state/facts_release.txt
 `host.py` sends the tool definitions and your message to Ollama's OpenAI-compatible endpoint on
 `127.0.0.1:11434` and asks for a plan. Honestly: a small model may not follow the hidden directive at all,
 may follow it sometimes, or may break the JSON. That variability is the point of lesson 1.2. **The safe
-controls do not depend on the model behaving** — the scan, the pin, the allow-list and the audience check
+controls do not depend on the model behaving**: the scan, the pin, the allow-list and the audience check
 hold whatever the model returns. That is exactly why the tests use the deterministic stand-in: they test
 *your code*, not the model's mood. We tested this path against a local mock of the Ollama API; we did not
 run it against a live model for this README, so your output will differ.
