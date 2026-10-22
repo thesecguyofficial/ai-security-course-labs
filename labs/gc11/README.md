@@ -34,6 +34,7 @@ protection officer now requires that their tickets are processed in the EU. In o
 | `twin/requirements.json`, `twin/groups.json` | ExampleCo's rules (EU processing, CMEK at rest, logging) and who is in which group |
 | `logs/vpcsc-dryrun-week.jsonl` | 44 **fake** Policy Denied dry-run entries from one week |
 | `terraform/` | The optional cloud path: `*.tf`, `terraform.tfvars.example`, `scripts/` |
+| `GUIDED-BUILD.md` | The cloud path step by step (console, gcloud or Terraform): identity, private path, CMEK, logging, region; five tests, one change, cost and teardown |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 21 tests for the lab, 6 for the challenge |
 
 **About `twin.py`.** It is not Google's authorization, networking or VPC Service Controls engine. It models only the
@@ -52,7 +53,7 @@ except `*.rep.googleapis.com`, and that `vpc-sc` serves APIs that support VPC Se
 we found no page that names the regional Agent Platform host explicitly, so verify it with the optional smoke test.
 (2) Google's request-response logging page couldn't be read when this lab was written; the lab relies on Google's
 published API definitions (`setPublisherModelConfig`, v1beta1) and on the zero-data-retention page. Check the
-feature's launch stage and limitations before you depend on it, including inside a perimeter. (3) We didn't test that
+feature's launch stage and limitations before you depend on it, including inside a perimeter. (Update, 22 Oct 2026: the page now opens. It marks the feature **Preview** and says nothing about VPC Service Controls or CMEK.) (3) We didn't test that
 request-response logging writes into a dataset with a CMEK default key; the BigQuery service account has the key role,
 so it should, but confirm it in your project.
 
@@ -426,6 +427,9 @@ When you're done, `make challenge` prints `ALL TESTS PASSED (27 run)` and `make 
 `0 of 5 attacker requests allowed; 4 of 4 legitimate requests allowed; 4 of 4 auditor questions answerable.`
 
 ## Step 8 (optional) · The cloud path, in your own project
+
+**Want to build it piece by piece?** [`GUIDED-BUILD.md`](GUIDED-BUILD.md) does the same foundation with console clicks or
+gcloud (or this Terraform), then proves it with five tests, changes one setting, and tears it down.
 
 Do this only in **your own** sandbox project, never at work, and only after Module 10's budget and spend cap are in
 place. Nothing here needs an organization; the allow-list and the perimeter are skipped without one.
