@@ -49,9 +49,10 @@ Menu names from Google's [manage templates](https://docs.cloud.google.com/model-
 2. Click **Create Template**.
 3. **Template ID**: `helpdesk-guard`.
 4. **Location type**: choose **Region**, then your region. You can't change this later.
-5. **Filter version**: leave the default.
+5. **Filter version**: leave the default. If the page asks for a modality, keep **Text**.
 6. **Detections**: tick **Malicious URL detection**, **Prompt injection and jailbreak detection** (set its confidence
-   level to **Medium and above**) and **Sensitive Data Protection** (choose **Basic**).
+   level to **Medium and above**) and **Sensitive Data Protection** (choose the basic configuration; Google's page
+   describes basic and advanced modes but doesn't name the console labels).
 7. **Responsible AI**: set each content filter to **Medium and above**. (If you leave one unset, the console defaults
    it to **High**.)
 8. Expand **Additional configurations (optional)**: turn on **Configure logging** if you want sanitize results in
@@ -266,7 +267,7 @@ Example response (shape from Google docs, values illustrative), if the answer is
 ```
 
 Read it: `finishReason` `SAFETY`, the category with `"blocked": true`, and no `content` ("If a filter blocks the
-response, it voids the response's `Candidate.content` field"). A blocked **prompt** comes back as `promptFeedback`
+response, it clears the response's `Candidate.content` field", in the current copy of the safety filters page). A blocked **prompt** comes back as `promptFeedback`
 with a `blockReason` instead. The model may also simply refuse in text with `finishReason` `STOP`: that's the model's
 own behaviour, not a filter.
 
@@ -348,5 +349,6 @@ make down PROJECT=PROJECT_ID
 ```
 
 Gemini safety settings live in your requests, so there's nothing to delete for Step 2. If you created a floor setting
-(lesson 12.3 or Terraform), `terraform/scripts/reset_floor.sh PROJECT_ID` switches it off. Finally, check the
+(lesson 12.3 or Terraform), `terraform/scripts/reset_floor.sh PROJECT_ID` switches it off (the script points gcloud at
+the global endpoint `https://modelarmor.googleapis.com/` for its own commands, as Google's floor settings page says to). Finally, check the
 **Model Armor** page in the console lists no templates, and that your budget alert shows no surprises tomorrow.

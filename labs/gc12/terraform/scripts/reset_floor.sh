@@ -4,6 +4,9 @@
 #   scripts/reset_floor.sh PROJECT_ID
 set -euo pipefail
 PROJECT=${1:?project id}
+# Floor settings live at locations/global: Google's floor settings page points gcloud at the global endpoint.
+# Set it for this script only, whatever regional override your gcloud config has.
+export CLOUDSDK_API_ENDPOINT_OVERRIDES_MODELARMOR="https://modelarmor.googleapis.com/"
 gcloud model-armor floorsettings update \
   --full-uri="projects/${PROJECT}/locations/global/floorSetting" \
   --enable-floor-setting-enforcement=FALSE \
