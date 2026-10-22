@@ -1,0 +1,19 @@
+<!-- API Management policy in front of the self-hosted night-shift model (FICTIONAL). Syntax: Microsoft Learn,
+     "Enforce content safety checks on LLM requests" (llm-content-safety). APIM's managed identity needs the
+     Cognitive Services User role on the Content Safety resource. -->
+<policies>
+    <inbound>
+        <base />
+        <llm-content-safety backend-id="content-safety-backend" shield-prompt="true" enforce-on-completions="true">
+            <categories output-type="EightSeverityLevels">
+                <category name="Hate" threshold="4" />
+                <category name="Sexual" threshold="4" />
+                <category name="SelfHarm" threshold="4" />
+                <category name="Violence" threshold="4" />
+            </categories>
+        </llm-content-safety>
+    </inbound>
+    <outbound>
+        <base />
+    </outbound>
+</policies>

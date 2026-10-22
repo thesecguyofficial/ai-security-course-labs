@@ -1,0 +1,14 @@
+{
+ "_about": "Model deployments on the AZ11 Foundry resource (FICTIONAL IDs).",
+ "account_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-az11-lab/providers/Microsoft.CognitiveServices/accounts/az11-lab",
+ "deployments": [
+  {
+   "name": "helpdesk-chat",
+   "sku": "DataZoneStandard",
+   "model": "gpt-4.1-mini",
+   "properties": {
+    "raiPolicyName": "contoso-helpdesk-v1"
+   }
+  }
+ ]
+}

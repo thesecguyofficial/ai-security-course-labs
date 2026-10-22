@@ -1,0 +1,11 @@
+{
+ "_about": "Content Safety resource Contoso uses for the self-hosted night-shift model (FICTIONAL).",
+ "name": "cs-contoso-nightshift",
+ "kind": "ContentSafety",
+ "sku": "F0",
+ "properties": {
+  "disableLocalAuth": false,
+  "publicNetworkAccess": "Enabled",
+  "customSubDomainName": null
+ }
+}
