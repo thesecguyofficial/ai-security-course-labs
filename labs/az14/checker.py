@@ -147,9 +147,10 @@ def check(setup_name: str):
         notes.append(("AZ14-N2", "egress", "Network egress controls are preview, hosted agents only, and enforced "
                       "inside the sandbox: keep your own firewall too."))
     if any(v.get("policies") for v in tb["versions"].values()):
-        notes.append(("AZ14-N3", f"toolbox {tb['name']}", "Microsoft's pages disagree on whether guardrails screen MCP "
-                      "tool responses (tool-authentication page: yes; intervention-points page: MCP not listed). "
-                      "Test it; don't count on it."))
+        notes.append(("AZ14-N3", f"toolbox {tb['name']}", "A toolbox guardrail is documented to screen tool inputs "
+                      "and outputs (toolbox and tool-authentication pages); an agent guardrail's tool response checks "
+                      "don't list MCP (intervention-points page). Test it with an injected tool result; don't count "
+                      "on it."))
     return F, notes
 
 

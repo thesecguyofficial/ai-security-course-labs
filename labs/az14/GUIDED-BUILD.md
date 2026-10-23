@@ -14,11 +14,12 @@ you tear down the same day (G8). Teardown is the last step: do it today.
 > IDs, which tools the model chooses) are our guesses.** Real models will disagree with us in places: that's the point
 > of running it. Write your real results into the table in G5.
 >
-> **Status, October 2026.** Microsoft's GA table lists "Agents (core)" and "Toolboxes" as **GA**, "Memory",
-> "Guardrails — Agents" and "AI Gateway" as **preview**; network egress controls for hosted agents are **preview**.
-> The hosted agents page carries no preview label, but the private-networking page still says "hosted (preview)
-> agents". The Python and .NET hosting packages (`azure-ai-agentserver-*`, `Azure.AI.Projects --prerelease`) are
-> pre-releases. Check the labels in your portal.
+> **Status, October 2026.** Microsoft "announced general availability for Hosted Agents on July 9" 2026, and Toolboxes
+> are GA too ([Foundry blog](https://devblogs.microsoft.com/foundry/whats-new-in-microsoft-foundry-july-august-2026/)).
+> Microsoft's GA table lists "Memory", "Guardrails — Agents" and "AI Gateway" as **preview**; network egress controls
+> for hosted agents are **preview**. The private-networking page still says "hosted (preview) agents". The Python
+> hosting package `azure-ai-agentserver-invocations` has stable releases on PyPI (1.2.0 in October 2026); the .NET
+> source-code deployment APIs are still in a prerelease of `Azure.AI.Projects`. Check the labels in your portal.
 
 Throughout, set these shell variables (again in every new terminal):
 
@@ -34,10 +35,12 @@ Throughout, set these shell variables (again in every new terminal):
 2. **A budget alert** (lab AZ10). If you skipped it: Cost Management, **Budgets**, a monthly budget of US$5 with an
    email alert. Do it now.
 3. **Tools.** Azure CLI 2.80 or later (Microsoft's hosted-agent prerequisite), signed in with `az login`; Python 3.10+;
-   `pip install "azure-ai-projects>=2.3.0" azure-identity requests mcp`. **No Docker needed**: G4 builds the image in
-   Azure Container Registry. (Prefer Microsoft's own tooling? The `azd ai agent` path is in G4, Path C.)
+   `pip install "azure-ai-projects>=2.3.0" azure-identity requests "mcp<2"`. Keep `mcp` below 2: this build uses the
+   MCP Python SDK 1.x API, and in `mcp` 2.x `FastMCP` was renamed to `MCPServer`. **No Docker needed**: G4 builds the
+   image in Azure Container Registry. (Prefer Microsoft's own tooling? The `azd ai agent` path is in G4, Path C.)
 4. **Pick a region.** Hosted agents "are available in a fixed set of regions" (Microsoft's private-networking page);
-   check Microsoft's region list for hosted agents and that `gpt-4.1-mini` version `2025-04-14` (the model lab AZ13
+   check the region list on Microsoft's
+   [hosted agents page](https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/hosted-agents) and that `gpt-4.1-mini` version `2025-04-14` (the model lab AZ13
    used) is offered there as Global Standard. Then:
 
    ```bash
@@ -155,12 +158,17 @@ Management with `validate-azure-ad-token` (lesson 14.4), or on a private endpoin
 ### G3b · The key connection and the toolbox (`make toolbox`)
 
 **The connection.** The key goes into a project connection, so the toolbox injects it and the agent never sees it
-(Microsoft: "The agent never sees the secret."). **Portal path, documented by Microsoft:** in the Foundry portal,
-**Connect a tool**, **Custom**, **MCP**, give a name and the MCP server endpoint, and enter **Credential name**
-`x-api-key` and **Credential value** your key ([MCP authentication](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/mcp-authentication)).
+(Microsoft: "The agent never sees the secret."). **Portal path:** Microsoft's
+[MCP authentication](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/mcp-authentication) page says that
+when you connect an MCP server to an agent in the Foundry portal, "Foundry creates a project connection for you", and
+you "Provide the credential name and credential value": here `x-api-key` and your key. The menu path on that page
+(**Connect a tool**, **Custom**, **MCP**) is shown for the OAuth case, so the key-based labels may differ slightly.
 Name the connection `helpdesk-actions-key`. **CLI path:** `build.py` sends an ARM `PUT` of a `CustomKeys`
-connection (`category` and `authType` `CustomKeys`, `credentials.keys`). Microsoft's MCP authentication page doesn't
-show that REST body, so treat it as unverified; if it fails, use the portal path.
+connection (`category` and `authType` `CustomKeys`, `target`, `credentials.keys`). Microsoft's ARM SDK reference
+describes that connection type as "Category:= CustomKeys AuthType:= CustomKeys (as type discriminator)
+Credentials:= {CustomKeys} as CustomKeys Target:= {any value}"
+([`@azure/arm-cognitiveservices`](https://learn.microsoft.com/javascript/api/@azure/arm-cognitiveservices)); we could
+not open a page that shows the `keys` field inside `credentials`, so if the call fails, use the portal path.
 
 **The toolbox.** One MCP tool, your server, with `allowed_tools: ["search_tickets", "send_email"]` and
 `require_approval: "always"`. Microsoft's toolbox page shows the SDK, REST, Azure Developer CLI and the Foundry
@@ -230,22 +238,36 @@ quickstart). After deploying, the Foundry portal shows the agent under its proje
 by hand; copy it into `cloud/agent/` first.
 
 **Path C: Microsoft's own CLI.** `azd ai agent init`, `azd provision`, `azd deploy`, `azd ai agent invoke` (Microsoft's
-hosted-agent quickstart, azd 1.27.1 or later). It "automatically assigns Foundry User to the shared project agent
-identity" and handles registry roles. Faster, and it hides exactly the identity steps this module wants you to see.
+hosted-agent quickstart, azd 1.27.1 or later). Per Microsoft's agent identity page, azd "automatically assigns Foundry
+User to the shared project agent identity for unpublished agents". Faster, and it hides exactly the identity steps
+this module wants you to see.
 
 ### G4.3 Find the agent identity and give it one role (`make grant`)
 
 Microsoft: the platform "creates a dedicated Microsoft Entra agent identity for each hosted agent at deploy time", and
 "For external resources (for example, your own Azure Storage), assign RBAC roles manually to the agent's Microsoft
-Entra ID." Find its object ID in the **Microsoft Entra admin center**, **Entra ID** > **Agent ID** > **All agent
-identities** ("an inventory of all agents in your tenant"), and pick the one for `helpdesk-agent` (how it's named
-there: label may differ slightly). Microsoft's other documented place, the project's **Overview** > **JSON View**,
-shows the project's shared blueprint and identity, used by unpublished prompt agents. Then:
+Entra ID." Microsoft's
+[manage hosted agents](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/manage-hosted-agent) page calls
+it the agent's "*instance identity*" and reads its principal ID from the agent's `instance_identity.principal_id`
+(Python SDK: `agent.instance_identity["principal_id"]`). From `labs/az14`:
 
 ```bash
-export AGENT_IDENTITY_ID=<object ID>
+export AGENT_IDENTITY_ID=$(python3 -c '
+from azure.identity import DefaultAzureCredential
+from azure.ai.projects import AIProjectClient
+env = dict(l.strip().split("=", 1) for l in open("cloud/.state/env") if "=" in l)
+p = AIProjectClient(endpoint=env["PROJECT_ENDPOINT"], credential=DefaultAzureCredential())
+print(p.agents.get(agent_name="helpdesk-agent").instance_identity["principal_id"])')
+echo $AGENT_IDENTITY_ID
 make grant     # Storage Blob Data Reader, scope .../storageAccounts/st<name>/blobServices/default/containers/kb
 ```
+
+If it prints nothing, the identity isn't ready yet: wait a minute and run it again. You can cross-check in the
+**Microsoft Entra admin center**, **Entra ID** > **Agent ID** > **All agent identities** ("an inventory of all agents
+in your tenant"). The project's **Overview** > **JSON View** shows a different identity: the project's shared
+blueprint and identity, used by unpublished prompt agents. `make grant` assigns the role with
+`--assignee-object-id` and `--assignee-principal-type ServicePrincipal`, as Microsoft recommends "to avoid Microsoft
+Graph lookup issues with agent identity service principals".
 
 **Example response (shape from Microsoft docs, values illustrative)**: the role list `make grant` prints
 (`az role assignment list -o table`):
@@ -256,8 +278,9 @@ Role                      Scope
 Storage Blob Data Reader  /subscriptions/.../storageAccounts/staz14ab12/blobServices/default/containers/kb
 ```
 
-If you see **Foundry User** on the project as well, that came from tooling (`azd` assigns it); Microsoft says "The
-default case for hosted agents doesn't require this assignment". Nothing at subscription scope. Nothing that writes.
+You shouldn't see **Foundry User** here: Microsoft says `azd` assigns it to "the shared project agent identity for
+unpublished agents" (a different identity), and "The default case for hosted agents doesn't require this assignment".
+Nothing at subscription scope. Nothing that writes.
 
 ## G5 · Five requests (`make ask`, or `PICK=3 make ask` for one)
 
@@ -372,8 +395,8 @@ belong in the MCP server itself too (lesson 14.5). Optional: `make toolbox-v2` c
   with the signed-in user, and keep it as long as your audit rules say.
 - **Entra.** **Entra ID** > **Agent ID** > **All agent identities**: your agent is in the tenant inventory, next to any
   Copilot Studio agents. A Conditional Access policy for agents ("Block high-risk agent identities", agent risk is
-  preview) needs Microsoft Agent 365 licensing plus Entra ID P2 or Microsoft 365 E5 for risk-based policies; read it in
-  lesson 14.3, don't buy anything for this lab.
+  preview) needs Microsoft 365 E7, or Microsoft Agent 365 plus Entra ID P2 or Microsoft 365 E5 for risk-based
+  policies; read it in lesson 14.3, don't buy anything for this lab.
 
 ## G8 · Cost and teardown (do it today)
 
@@ -402,21 +425,24 @@ note it and tell us.
 
 - **No real run.** Every response above is illustrative. Before release the course team runs this guide in a sandbox
   and replaces them with real output.
-- **Where the hosted agent's identity appears** (its display name in **All agent identities**, or a field on the
-  agent version object): Microsoft documents that it exists and is "dedicated", not how to read its object ID from the
-  SDK.
-- **Pages disagree on identity sharing.** The hosted-agent pages say each hosted agent gets a dedicated identity at
-  deploy time; the agent identity page says "All unpublished or in-development agents within the same project share a
-  common identity". Check which identity your agent's calls show in the storage account's logs.
-- **`azure-ai-agentserver-invocations`**: its PyPI page names the class and decorator we use; we couldn't open
+- **The agent identity's display name** in **All agent identities**. Reading its principal ID is documented
+  (`instance_identity.principal_id`, G4.3); whether it's populated right after `create_version` returns is not, so
+  G4.3 reads it with `agents.get`.
+- **Identity sharing, checked 23 Oct 2026.** The hosted-agent pages say each hosted agent gets its own identity at
+  deploy time. The agent identity page's "All unpublished or in-development agents within the same project share a
+  common identity" sits in a section about the Agent Application publishing model and doesn't name hosted agents.
+  Check which identity your agent's calls show in the storage account's logs.
+- **`azure-ai-agentserver-invocations`**: the 1.2.0 package defines `InvocationAgentServerHost` and the
+  `invoke_handler` decorator (async handlers only), and its host serves on port 8088 by default; we couldn't open
   Microsoft's sample repository to compare a full hosted-agent `main.py`. Whether the invocations protocol passes
   your caller identity into the container is not documented, so this agent doesn't rely on it.
-- **The `CustomKeys` connection REST body** (Microsoft documents the portal path for key-based MCP connections), the
-  exact `_meta` shape the MCP SDK returns (`Tool.meta`), and whether `az containerapp create --registry-identity system`
-  grants the pull role by itself in your CLI version (if the revision fails to pull, assign AcrPull to the app's
-  identity on the registry).
-- **The MCP server's Python** (`FastMCP(..., stateless_http=True)`, `streamable_http_app()`) follows the MCP Python
-  SDK as we know it; we did not run it against a toolbox.
+- **The `CustomKeys` connection REST body**: `category`, `authType`, `target` and `credentials` match Microsoft's ARM
+  SDK reference; the `keys` field inside `credentials` is not shown on any page we could open. Also whether
+  `az containerapp create --registry-identity system` grants the pull role by itself in your CLI version (if the
+  revision fails to pull, assign AcrPull to the app's identity on the registry).
+- **The MCP server's Python** (`FastMCP(..., stateless_http=True)`, `streamable_http_app()`, and `Tool.meta` with the
+  `_meta` alias on the client side) matches the MCP Python SDK 1.x source (checked against 1.30.0); hence `mcp<2` in
+  the requirements. We did not run it against a toolbox.
 - **`previous_response_id`** for function-call follow-ups when calling a model deployment directly through the
   project's OpenAI client (documented for agents and in the OpenAI Responses API; not re-checked for this path).
 - **Portal labels** marked "(label may differ slightly)", and whether the Foundry portal can create toolboxes.

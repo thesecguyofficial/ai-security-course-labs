@@ -1,6 +1,7 @@
-# Hosted agent container for the AZ14 guided build. The agentserver packages are pre-releases in Oct 2026: install with --pre.
+# Hosted agent container for the AZ14 guided build. azure-ai-agentserver-invocations has stable releases (1.2.0, Oct 2026).
+# mcp stays below 2: main.py uses the MCP Python SDK 1.x client API.
 azure-ai-agentserver-invocations
 azure-ai-projects>=2.3.0
 azure-identity
 azure-storage-blob
-mcp
+mcp<2

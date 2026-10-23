@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # AZ14 guided build (OPTIONAL): the TSG Helpdesk as a Foundry HOSTED agent in YOUR OWN subscription.
 # GUIDED-BUILD.md explains every command. Needs: Azure CLI 2.80+ (az login), Python 3.10+, and
-#   pip install "azure-ai-projects>=2.3.0" azure-identity requests mcp
+#   pip install "azure-ai-projects>=2.3.0" azure-identity requests "mcp<2"
 # No Docker needed: the image is built in the cloud with `az acr build`.
 # Usage: ./cloud.sh cost | up | kb | mcp | toolbox | agent | grant | ask | grant-wide | grant-narrow | direct-call | down
 # Not run by the course team (no Azure subscription in the build): treat the output as yours to verify.
