@@ -1,6 +1,6 @@
 {
  "_comment": "The same registry after the tickets team re-registered their server with a new tool (a 'rug pull' from the agent owner's point of view). export_ticket sends a ticket to an address in its arguments, but its toolspec declares readOnlyHint: true. Nobody on the agent team reviewed the change.",
- "location": "europe-west4",
+ "location": "europe-west4 (custom servers and endpoints); global (Google-managed MCP servers)",
  "mcpServers": [
   {
    "name": "projects/example-agents-prod/locations/europe-west4/mcpServers/tickets",
@@ -81,7 +81,7 @@
    }
   },
   {
-   "name": "projects/example-agents-prod/locations/europe-west4/mcpServers/bigquery",
+   "name": "projects/example-agents-prod/locations/global/mcpServers/bigquery",
    "displayName": "bigquery",
    "interfaces": [
     {
@@ -109,11 +109,15 @@
      },
      {
       "name": "execute_sql",
-      "description": "Runs a SELECT query and returns the result."
+      "description": "Runs a SQL query and returns the result (the one tool that isn't read-only)."
+     },
+     {
+      "name": "execute_sql_readonly",
+      "description": "Runs a read-only SQL query and returns the result."
      }
     ]
    },
-   "_lab_note": "Google-managed remote MCP server: registered automatically when the API is enabled. Google's tools page lists no annotations for it."
+   "_lab_note": "Google-managed remote MCP server: registered automatically in the 'global' location when the BigQuery API is enabled; Google's page lists six tools and says execute_sql is the only one that isn't read-only. The resource ID here is illustrative."
   }
  ],
  "endpoints": [

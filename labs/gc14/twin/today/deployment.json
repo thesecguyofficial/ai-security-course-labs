@@ -69,7 +69,8 @@
    "governedAccessPath": "AGENT_TO_ANYWHERE"
   },
   "registries": [
-   "//agentregistry.googleapis.com/projects/example-agents-prod/locations/europe-west4"
+   "//agentregistry.googleapis.com/projects/example-agents-prod/locations/europe-west4",
+   "//agentregistry.googleapis.com/projects/example-agents-prod/locations/global"
   ],
   "iap_authz_extension": {
    "name": "helpdesk-iap",

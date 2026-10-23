@@ -1,0 +1,4 @@
+# Guided build only (GUIDED-BUILD.md). The offline lab needs none of this.
+# Same pins as GC13; google-cloud-aiplatform 1.112+ is the version Google's Agent Runtime ADK quickstart asks for.
+google-adk[gcp]==2.12.0
+google-cloud-aiplatform[agent_engines,adk]>=1.112
