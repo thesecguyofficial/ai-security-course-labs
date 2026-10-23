@@ -1,0 +1,30 @@
+{
+  "_about": "AnyCompany is fictional (AWS's own placeholder name). Account IDs, ARNs and the user pool ID are AWS documentation example values; emails use the reserved example.com and example.net domains (RFC 2606). Nothing here is a real credential.",
+  "region": "us-east-1",
+  "account": "111122223333",
+  "gateway_arn": "arn:aws:bedrock-agentcore:us-east-1:111122223333:gateway/tsg-helpdesk-gw-a1b2c3d4e5",
+  "runtime_arn": "arn:aws:bedrock-agentcore:us-east-1:111122223333:runtime/tsg_helpdesk-AbCdEf1234",
+  "tools_lambda_arn": "arn:aws:lambda:us-east-1:111122223333:function:tsg-helpdesk-tools",
+  "company_email_domain": "example.com",
+  "idp": {
+    "_note": "One Amazon Cognito user pool. Three app clients: the Helpdesk web app, a partner portal for contractors (same pool, different app), and a machine-to-machine client the first draft gives the agent.",
+    "issuer": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE1",
+    "discovery_url": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE1/.well-known/openid-configuration",
+    "clients": {
+      "helpdesk-web": "7helpdeskweb0example0client",
+      "partner-portal": "3partnerportal0example0client",
+      "agent-m2m": "5agentm2m0example0client"
+    }
+  },
+  "users": {
+    "_note": "What the identity provider knows after sign-in. Usernames are what the access token's username claim carries.",
+    "alice": {"email": "alice@example.com", "department": "it", "groups": ["it-staff"], "client": "helpdesk-web"},
+    "bob": {"email": "bob@example.com", "department": "sales", "groups": [], "client": "helpdesk-web"},
+    "priya": {"email": "priya@example.com", "department": "hr", "groups": ["hr"], "client": "helpdesk-web"},
+    "ceo": {"email": "ceo@example.com", "department": "exec", "groups": [], "client": "helpdesk-web"},
+    "dana": {"email": "dana@example.net", "department": "contractor", "groups": [], "client": "partner-portal",
+             "_note": "A contractor. She has a partner-portal account in the same user pool and no Helpdesk access."}
+  },
+  "it_staff": ["alice"],
+  "never_reset_via_agent": ["breakglass-admin"]
+}

@@ -1,0 +1,23 @@
+{
+  "_api": "bedrock-agentcore-control CreateAgentRuntime",
+  "_lab": "No authorizerConfiguration = the default IAM (SigV4) inbound auth. The backend invokes with runtimeUserId (the X-Amzn-Bedrock-AgentCore-Runtime-User-Id header).",
+  "agentRuntimeName": "tsg_helpdesk",
+  "agentRuntimeArtifact": {
+    "codeConfiguration": {
+      "code": {
+        "s3": {
+          "bucket": "amzn-s3-demo-bucket-tsg-agent-code",
+          "prefix": "tsg_helpdesk/agent.zip"
+        }
+      },
+      "runtime": "PYTHON_3_13",
+      "entryPoint": [
+        "main.py"
+      ]
+    }
+  },
+  "roleArn": "arn:aws:iam::111122223333:role/tsg-agent-runtime-role",
+  "networkConfiguration": {
+    "networkMode": "PUBLIC"
+  }
+}

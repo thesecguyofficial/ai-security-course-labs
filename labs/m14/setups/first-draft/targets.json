@@ -1,0 +1,87 @@
+{
+  "targets": [
+    {
+      "_api": "bedrock-agentcore-control CreateGatewayTarget",
+      "gatewayIdentifier": "tsg-helpdesk-gw-a1b2c3d4e5",
+      "name": "HelpdeskTools",
+      "description": "TSG Helpdesk tools in one Lambda function",
+      "targetConfiguration": {
+        "mcp": {
+          "lambda": {
+            "lambdaArn": "arn:aws:lambda:us-east-1:111122223333:function:tsg-helpdesk-tools",
+            "toolSchema": {
+              "inlinePayload": [
+                {
+                  "name": "search_kb",
+                  "description": "Search the IT knowledge base.",
+                  "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                      "query": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "query"
+                    ]
+                  }
+                },
+                {
+                  "name": "reset_mfa",
+                  "description": "Reset a user's MFA device. caller_username is the signed-in user.",
+                  "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                      "target_username": {
+                        "type": "string"
+                      },
+                      "caller_username": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "target_username",
+                      "caller_username"
+                    ]
+                  }
+                },
+                {
+                  "name": "send_email",
+                  "description": "Send an email for the signed-in user.",
+                  "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                      "to": {
+                        "type": "string"
+                      },
+                      "subject": {
+                        "type": "string"
+                      },
+                      "body": {
+                        "type": "string"
+                      },
+                      "caller_username": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "to",
+                      "subject",
+                      "body",
+                      "caller_username"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "credentialProviderConfigurations": [
+        {
+          "credentialProviderType": "GATEWAY_IAM_ROLE"
+        }
+      ]
+    }
+  ]
+}

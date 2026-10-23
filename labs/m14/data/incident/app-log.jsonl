@@ -1,0 +1,4 @@
+{"time": "2027-01-14T09:01:40Z", "request_id": "req-0001", "signed_in_user": "alice", "runtime_session_id": "tsg-8c1d0b6e2f5a4c7d9e0f1a2b3c4d5e6f7a8b9c0d", "runtime_user_id_sent": "alice"}
+{"time": "2027-01-14T09:06:03Z", "request_id": "req-0003", "signed_in_user": "bob", "runtime_session_id": "tsg-1f2e3d4c5b6a79880a1b2c3d4e5f60718293a4b5", "runtime_user_id_sent": "bob"}
+{"time": "2027-01-14T09:12:47Z", "request_id": "req-0004", "signed_in_user": "bob", "runtime_session_id": "tsg-1f2e3d4c5b6a79880a1b2c3d4e5f60718293a4b5", "runtime_user_id_sent": "alice"}
+{"time": "2027-01-14T09:20:30Z", "request_id": "req-0005", "signed_in_user": "bob", "runtime_session_id": "tsg-8c1d0b6e2f5a4c7d9e0f1a2b3c4d5e6f7a8b9c0d", "runtime_user_id_sent": "bob"}

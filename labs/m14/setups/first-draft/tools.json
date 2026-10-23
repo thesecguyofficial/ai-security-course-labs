@@ -1,0 +1,18 @@
+{
+  "codeInterpreter": {
+    "_api": "bedrock-agentcore-control CreateCodeInterpreter",
+    "name": "tsg_helpdesk_code",
+    "executionRoleArn": "arn:aws:iam::111122223333:role/tsg-code-interpreter-role",
+    "networkConfiguration": {
+      "networkMode": "PUBLIC"
+    }
+  },
+  "browser": null,
+  "_task_needs": [
+    "search_kb",
+    "reset_mfa",
+    "send_email",
+    "my_tickets",
+    "memory"
+  ]
+}
