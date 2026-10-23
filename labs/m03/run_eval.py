@@ -34,7 +34,7 @@ def wait_for_app(seconds: int = 20) -> bool:
 
 
 def print_summary(path: str):
-    """A compact, one-line-per-test view of promptfoo's results file (the full table is in `npx promptfoo view`)."""
+    """A compact, one-line-per-test view of promptfoo's results file (the full table: `PROMPTFOO_DISABLE_TELEMETRY=1 npx promptfoo view`)."""
     import json
     try:
         data = json.load(open(path, encoding="utf-8"))
