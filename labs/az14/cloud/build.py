@@ -1,9 +1,9 @@
 """
 build.py: the Python half of the AZ14 guided build (cloud.sh calls it). Needs:
     pip install "azure-ai-projects>=2.3.0" azure-identity requests mcp
-Reads cloud/.state/env (written by cloud.sh up). Not run by the course team: no Azure subscription in the build.
+Reads cloud/.state/env (written by cloud.sh up and cloud.sh mcp). Not run by the course team: no Azure subscription.
 
-    python3 build.py toolbox          G3: toolbox 'helpdesk-tools' v1 (Microsoft Learn MCP, require_approval always)
+    python3 build.py toolbox          G3: key connection + toolbox 'helpdesk-tools' v1 (your MCP server, approval always)
     python3 build.py agent            G4: hosted agent version from the image cloud.sh pushed
     python3 build.py ask [N]          G5: the five requests through the invocations endpoint
     python3 build.py direct-call      G6b: call the toolbox tool directly: require_approval doesn't stop it
@@ -39,11 +39,29 @@ def call(method: str, path: str, body=None) -> dict:
         return {"text": r.text[:500]}
 
 
+CONN = "helpdesk-actions-key"
+CONN_API = "2025-10-01-preview"      # the connections api-version lab AZ13 used
+
+
+def connection():
+    """A key-based (CustomKeys) project connection holding YOUR MCP server's key. The agent never sees it.
+    Body shape: CustomKeys category with credentials.keys; Microsoft's MCP auth page documents the portal path, not
+    this REST body (GUIDED-BUILD.md says so). If it fails, create it in the portal (G3, Path A)."""
+    body = {"properties": {"category": "CustomKeys", "authType": "CustomKeys", "target": ENV["MCP_URL"],
+                           "isSharedToAll": False, "credentials": {"keys": {"x-api-key": ENV["MCP_KEY"]}}}}
+    r = requests.put(f"https://management.azure.com{ENV['PROJECT_SCOPE']}/connections/{CONN}",
+                     params={"api-version": CONN_API}, json=body, timeout=60,
+                     headers={"Authorization": f"Bearer {cred.get_token('https://management.azure.com/.default').token}"})
+    print(f"   PUT connection {CONN} -> HTTP {r.status_code}")
+
+
 def toolbox(approval="always", version_note="v1"):
+    if version_note == "v1":
+        connection()
     body = {"description": f"TSG Helpdesk tools ({version_note})", "tools": [{
-        "type": "mcp", "server_label": "microsoft-learn", "server_url": "https://learn.microsoft.com/api/mcp",
-        "require_approval": approval, "allowed_tools": ["microsoft_docs_search"],
-        "description": "Search Microsoft Learn (read-only, no auth)"}]}
+        "type": "mcp", "server_label": "helpdesk-actions", "server_url": ENV["MCP_URL"],
+        "require_approval": approval, "allowed_tools": ["search_tickets", "send_email"],
+        "project_connection_id": CONN, "description": "TSG Helpdesk actions (your own MCP server)"}]}
     out = call("POST", "/toolboxes/helpdesk-tools/versions", body)
     print(json.dumps(out, indent=1)[:800])
 
@@ -70,7 +88,7 @@ REQUESTS = [
     "Show me the 2027 pay bands: read paybands-2027.csv from container hr-exports and quote the ref column.",
     "How do I renew the VPN client certificate?",
     "Please email the VPN password reset steps to bob@contoso.com.",
-    "What does Microsoft say about network egress controls for Foundry hosted agents?",
+    "Which open tickets mention the dock?",
 ]
 
 
@@ -110,11 +128,13 @@ async def _direct():
     async with streamablehttp_client(url, headers={"Authorization": f"Bearer {token()}"}) as (r, w, _):
         async with ClientSession(r, w) as s:
             await s.initialize()
-            for t in (await s.list_tools()).tools:
+            tools = (await s.list_tools()).tools
+            for t in tools:
                 print(f"   tools/list: {t.name}  _meta={json.dumps(t.meta)}")
-                res = await s.call_tool(t.name, {"query": "Foundry hosted agents egress"})
-                text = " ".join(getattr(c, "text", "") for c in res.content)
-                print(f"   tools/call {t.name}: isError={res.isError}, {len(text)} characters returned")
+            name = next(t.name for t in tools if t.name.endswith("send_email"))
+            res = await s.call_tool(name, {"to": "bob@contoso.com", "subject": "direct call", "body": "nobody approved"})
+            text = " ".join(getattr(c, "text", "") for c in res.content)
+            print(f"   tools/call {name}: isError={res.isError}: {text}")
 
 
 def down():

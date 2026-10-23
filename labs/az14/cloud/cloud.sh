@@ -3,7 +3,7 @@
 # GUIDED-BUILD.md explains every command. Needs: Azure CLI 2.80+ (az login), Python 3.10+, and
 #   pip install "azure-ai-projects>=2.3.0" azure-identity requests mcp
 # No Docker needed: the image is built in the cloud with `az acr build`.
-# Usage: ./cloud.sh cost | up | kb | toolbox | agent | grant | ask | grant-wide | grant-narrow | direct-call | down
+# Usage: ./cloud.sh cost | up | kb | mcp | toolbox | agent | grant | ask | grant-wide | grant-narrow | direct-call | down
 # Not run by the course team (no Azure subscription in the build): treat the output as yours to verify.
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -32,7 +32,9 @@ What this guided build bills (estimates; check the Azure pricing calculator for 
   - Azure Container Registry, Basic tier: a small daily charge while it exists, plus one cloud build (az acr build).
   - Storage account (Standard LRS, four tiny blobs): well under a cent.
   - Model tokens: about ten short requests, a few US cents.
-  - Foundry resource and toolbox: no hourly charge for the resource itself; the Learn MCP server is free.
+  - Your MCP server on Azure Container Apps (consumption, scales to zero, 0.25 vCPU): within the monthly free
+    grant for most subscriptions; check the Container Apps pricing page.
+  - Foundry resource and toolbox: no hourly charge for the resource itself.
   - Application Insights, only if you connect it (G7): data ingestion.
 Expect under US$1 if you tear down the same day. Set a budget alert first (lab AZ10). Tear down: ./cloud.sh down
 TXT
@@ -76,6 +78,19 @@ TXT
     az storage blob upload --account-name "$ST" --auth-mode login -c hr-exports -f kb/paybands-2027.csv \
       -n paybands-2027.csv --overwrite -o none
     az storage blob list --account-name "$ST" --auth-mode login -c kb --query "[].name" -o tsv
+    ;;
+
+  mcp)         # G3a: YOUR MCP actions server on Container Apps, its key in a Container Apps secret
+    KEY="$(python3 -c 'import secrets; print(secrets.token_urlsafe(32))')"
+    az acr build -r "$ACR" -t helpdesk-mcp:1 --platform linux/amd64 mcp
+    az containerapp env create -n "cae-$AZ14_NAME" -g "$RG" -l "$AZ14_REGION" -o none
+    az containerapp create -n "ca-$AZ14_NAME" -g "$RG" --environment "cae-$AZ14_NAME" \
+      --image "$ACR.azurecr.io/helpdesk-mcp:1" --registry-server "$ACR.azurecr.io" --registry-identity system \
+      --ingress external --target-port 8000 --cpu 0.25 --memory 0.5Gi --min-replicas 0 --max-replicas 1 \
+      --secrets "mcpkey=$KEY" --env-vars "MCP_API_KEY=secretref:mcpkey" -o none
+    FQDN="$(az containerapp show -n "ca-$AZ14_NAME" -g "$RG" --query properties.configuration.ingress.fqdn -o tsv)"
+    { echo "MCP_URL=https://$FQDN/mcp"; echo "MCP_KEY=$KEY"; } >> .state/env     # .state is git-ignored
+    echo "MCP server: https://$FQDN/mcp (401 without x-api-key). Logs: az containerapp logs show -n ca-$AZ14_NAME -g $RG"
     ;;
 
   toolbox)       python3 build.py toolbox ;;

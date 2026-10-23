@@ -14,8 +14,7 @@ CHALLENGE 1 (lesson 14.5): make check() exact, so attack A6 is refused and L2 st
   - keep the allow-list of tools: anything not listed is denied.
 """
 
-ALLOWED_TOOLS = {"read_blob", "http_get", "search_tickets", "create_ticket", "send_email",
-                 "search_docs"}      # search_docs: the guided build's toolbox tool
+ALLOWED_TOOLS = {"read_blob", "http_get", "search_tickets", "create_ticket", "send_email"}
 
 
 def check(tool: str, args: dict, signed_in_upn: str) -> tuple[bool, str]:
