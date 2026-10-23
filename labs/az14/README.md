@@ -177,7 +177,8 @@ Two attacks are left on purpose. **A6**: the policy checks `"contoso.com" in to`
 `it-support@contoso.com.attacker.example` contains `contoso.com`. The tired reviewer approves it too: it looks
 internal. **A8**: per-user memory scope stops Bob seeing Alice's memories. It does nothing about Bob's own memory being
 written by an article he read. The checker's two **notes** on the hardened build are the honest part: egress controls
-are preview, and Microsoft's pages disagree on whether guardrails screen MCP tool responses.
+are preview, and a guardrail on MCP tool responses is documented (on the toolbox) but not something to rely on
+untested: an agent guardrail's tool response checks don't list MCP.
 
 ## Step 4 · Hunt in the traces (`make hunt`)
 

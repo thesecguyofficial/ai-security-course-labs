@@ -1,6 +1,6 @@
 """
 build.py: the Python half of the AZ14 guided build (cloud.sh calls it). Needs:
-    pip install "azure-ai-projects>=2.3.0" azure-identity requests mcp
+    pip install "azure-ai-projects>=2.3.0" azure-identity requests "mcp<2"
 Reads cloud/.state/env (written by cloud.sh up and cloud.sh mcp). Not run by the course team: no Azure subscription.
 
     python3 build.py toolbox          G3: key connection + toolbox 'helpdesk-tools' v1 (your MCP server, approval always)
