@@ -1,0 +1,8 @@
+{
+  "_comment": "Twin of ExampleCo's identity provider. id_tokens stands in for a signed OIDC ID token the front end has already verified: each token maps to exactly one user.",
+  "users": {
+    "alice@example.com": {"groups": ["helpdesk-staff@example.com"]},
+    "bob@example.com": {"groups": ["helpdesk-staff@example.com", "finance-team@example.com"]}
+  },
+  "id_tokens": {"tok-alice-0001": "alice@example.com", "tok-bob-0002": "bob@example.com"}
+}
