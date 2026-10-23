@@ -1,0 +1,76 @@
+{
+  "cloudtrail_advanced_event_selectors": [
+    {
+      "Name": "management",
+      "FieldSelectors": [
+        {
+          "Field": "eventCategory",
+          "Equals": [
+            "Management"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "agentcore data events",
+      "FieldSelectors": [
+        {
+          "Field": "eventCategory",
+          "Equals": [
+            "Data"
+          ]
+        },
+        {
+          "Field": "resources.type",
+          "Equals": [
+            "AWS::BedrockAgentCore::Runtime",
+            "AWS::BedrockAgentCore::Gateway",
+            "AWS::BedrockAgentCore::Memory",
+            "AWS::BedrockAgentCore::TokenVault",
+            "AWS::BedrockAgentCore::WorkloadIdentity"
+          ]
+        }
+      ]
+    }
+  ],
+  "tracing": {
+    "runtime": true,
+    "gateway": true,
+    "memory": true
+  },
+  "transaction_search": true,
+  "log_delivery": {
+    "gateway": "APPLICATION_LOGS",
+    "memory": "APPLICATION_LOGS"
+  },
+  "online_evaluation": {
+    "_api": "bedrock-agentcore-control CreateOnlineEvaluationConfig",
+    "onlineEvaluationConfigName": "tsg_helpdesk_eval",
+    "rule": {
+      "samplingConfig": {
+        "samplingPercentage": 10.0
+      }
+    },
+    "dataSourceConfig": {
+      "cloudWatchLogs": {
+        "logGroupNames": [
+          "/aws/bedrock-agentcore/runtimes/tsg_helpdesk-AbCdEf1234-DEFAULT"
+        ],
+        "serviceNames": [
+          "tsg_helpdesk.DEFAULT"
+        ]
+      }
+    },
+    "evaluators": [
+      {
+        "evaluatorId": "Builtin.Correctness"
+      },
+      {
+        "evaluatorId": "Builtin.Helpfulness"
+      }
+    ],
+    "evaluationExecutionRoleArn": "arn:aws:iam::111122223333:role/tsg-eval-role",
+    "enableOnCreate": true,
+    "_lab": "AWS's API reference shows the ID format with Builtin.Helpfulness and Builtin.Correctness. Add the Harmfulness, Refusal and Tool parameter accuracy evaluators by picking them in the console list; we could not confirm their exact IDs."
+  }
+}

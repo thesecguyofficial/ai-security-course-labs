@@ -1,0 +1,19 @@
+{
+  "_api": "bedrock-agentcore-control CreateGateway",
+  "name": "tsg-helpdesk-gw",
+  "roleArn": "arn:aws:iam::111122223333:role/tsg-gateway-role",
+  "protocolType": "MCP",
+  "authorizerType": "CUSTOM_JWT",
+  "authorizerConfiguration": {
+    "customJWTAuthorizer": {
+      "discoveryUrl": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE1/.well-known/openid-configuration",
+      "allowedClients": [
+        "7helpdeskweb0example0client"
+      ]
+    }
+  },
+  "policyEngineConfiguration": {
+    "arn": "arn:aws:bedrock-agentcore:us-east-1:111122223333:policy-engine/tsg_helpdesk_pe-a1b2c3d4e5",
+    "mode": "ENFORCE"
+  }
+}

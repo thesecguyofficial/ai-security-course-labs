@@ -1,0 +1,178 @@
+{
+  "_lab": "Identity-based policies of each role, and the resource-based policies on the runtime and the tools Lambda. end_user_reachable = the browser can get credentials for this role (for example through a Cognito identity pool).",
+  "principals": {
+    "tsg-backend": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-backend",
+      "end_user_reachable": false,
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:InvokeAgentRuntime",
+              "bedrock-agentcore:InvokeAgentRuntimeForUser"
+            ],
+            "Resource": "arn:aws:bedrock-agentcore:us-east-1:111122223333:runtime/tsg_helpdesk-AbCdEf1234"
+          }
+        ]
+      }
+    },
+    "tsg-web-frontend": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-web-frontend",
+      "end_user_reachable": true,
+      "_lab": "copied from the dev account",
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "bedrock-agentcore:*",
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "lambda:InvokeFunction",
+            "Resource": "arn:aws:lambda:us-east-1:111122223333:function:tsg-*"
+          }
+        ]
+      }
+    },
+    "tsg-agent-runtime-role": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-agent-runtime-role",
+      "end_user_reachable": false,
+      "_lab": "created by the starter toolkit",
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "bedrock-agentcore.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:GetMemory",
+              "bedrock-agentcore:RetrieveMemoryRecords",
+              "bedrock-agentcore:CreateEvent",
+              "bedrock-agentcore:ListEvents"
+            ],
+            "Resource": "arn:aws:bedrock-agentcore:us-east-1:111122223333:memory/*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:InvokeCodeInterpreter",
+              "bedrock-agentcore:StartCodeInterpreterSession"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "bedrock-agentcore:InvokeAgentRuntime",
+            "Resource": "arn:aws:bedrock-agentcore:us-east-1:111122223333:runtime/*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "ecr:BatchGetImage",
+              "ecr:GetAuthorizationToken"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:GetResourceOauth2Token"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "tsg-gateway-role": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-gateway-role",
+      "end_user_reachable": false,
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "bedrock-agentcore.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "lambda:InvokeFunction",
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "tsg-code-interpreter-role": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-code-interpreter-role",
+      "end_user_reachable": false,
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:ListBucket",
+              "s3:ListAllMyBuckets"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "tsg-platform-admin": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-platform-admin",
+      "end_user_reachable": false,
+      "admin": true,
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "bedrock-agentcore:*",
+            "Resource": "*"
+          }
+        ]
+      }
+    }
+  },
+  "resource_policies": {
+    "runtime": null,
+    "tools_lambda": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "gateway",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "bedrock-agentcore.amazonaws.com"
+          },
+          "Action": "lambda:InvokeFunction",
+          "Resource": "arn:aws:lambda:us-east-1:111122223333:function:tsg-helpdesk-tools"
+        }
+      ]
+    }
+  }
+}

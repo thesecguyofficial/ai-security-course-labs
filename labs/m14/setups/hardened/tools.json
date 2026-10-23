@@ -1,0 +1,11 @@
+{
+  "codeInterpreter": null,
+  "browser": null,
+  "_task_needs": [
+    "search_kb",
+    "reset_mfa",
+    "send_email",
+    "my_tickets",
+    "memory"
+  ]
+}

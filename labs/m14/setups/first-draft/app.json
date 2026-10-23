@@ -1,0 +1,11 @@
+{
+  "_about": "How the web backend and the agent code build each request. 'request' means a value the browser sent (anyone can forge it).",
+  "user_from": "session",
+  "runtime_session_id_from": "request",
+  "runtime_user_id_from": "request",
+  "agent_gateway_token": "agent_m2m",
+  "policy_session_id_from": "request",
+  "entrypoint_validates_prompt": false,
+  "memory_actor_id_from": "request",
+  "validate_memory_writes": false
+}
