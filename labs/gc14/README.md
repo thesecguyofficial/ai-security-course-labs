@@ -56,7 +56,7 @@ documentation (October 2026):
   `principal://agents.global.org-ORG_ID.system.id.goog/resources/aiplatform/projects/PROJECT_NUMBER/locations/REGION/reasoningEngines/AGENT_ID`.
   A `principalSet://.../attribute.platformContainer/aiplatform/projects/PROJECT_NUMBER` grant covers **every** agent
   in the project, including ones deployed later. Without Agent Identity, the agent runs as a service account.
-- **Agent Gateway.** "By default, Agent Gateway blocks all traffic unless" an access policy allows it. Destinations
+- **Agent Gateway.** "By default, all connections are blocked unless an explicit IAM policy grants access." Destinations
   are either registered in Agent Registry or unregistered (matched by host and path). When an agent uses an egress
   gateway, Agent Identity is required.
 - **Unified Access Policy.** Rules have an `effect` (`ALLOW` or `DENY`), `principals`, the permission
