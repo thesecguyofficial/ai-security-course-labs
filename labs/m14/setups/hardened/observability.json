@@ -67,10 +67,19 @@
       },
       {
         "evaluatorId": "Builtin.Helpfulness"
+      },
+      {
+        "evaluatorId": "Builtin.Harmfulness"
+      },
+      {
+        "evaluatorId": "Builtin.Refusal"
+      },
+      {
+        "evaluatorId": "Builtin.ToolParameterAccuracy"
       }
     ],
     "evaluationExecutionRoleArn": "arn:aws:iam::111122223333:role/tsg-eval-role",
     "enableOnCreate": true,
-    "_lab": "AWS's API reference shows the ID format with Builtin.Helpfulness and Builtin.Correctness. Add the Harmfulness, Refusal and Tool parameter accuracy evaluators by picking them in the console list; we could not confirm their exact IDs."
+    "_lab": "Built-in evaluator IDs as listed in the AWS CDK AgentCore construct library (BuiltinEvaluator, aws-cdk 2.274.0); the ID format Builtin.EvaluatorName is AWS's. Harmfulness, Refusal and Tool parameter accuracy are the drift signals lesson 14.7 suggests."
   }
 }
