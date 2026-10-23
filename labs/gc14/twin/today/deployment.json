@@ -1,0 +1,133 @@
+{
+ "_comment": "Today's deployment of the TSG Helpdesk agent on Agent Runtime (fictional ExampleCo). The team followed quickstarts and samples to get it working. Field names follow the Agent Platform SDK config and Google's YAML/JSON where documented; keys starting with _lab are the lab's own bookkeeping.",
+ "project": "example-agents-prod",
+ "project_number": "100000000014",
+ "org_id": "100000000099",
+ "region": "europe-west4",
+ "agent": {
+  "display_name": "tsg-helpdesk",
+  "name": "projects/example-agents-prod/locations/europe-west4/reasoningEngines/1400000000000000002",
+  "identity_type": "AGENT_IDENTITY",
+  "service_account": null,
+  "effective_identity": "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000002",
+  "env_vars": {
+   "GOOGLE_API_PREVENT_AGENT_TOKEN_SHARING_FOR_GCP_SERVICES": false,
+   "TICKETS_API_TOKEN": "PLACEHOLDER-NOT-A-REAL-TOKEN",
+   "GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY": "true",
+   "OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT": "EVENT_ONLY"
+  },
+  "agent_gateway_config": {
+   "agent_to_anywhere_config": {
+    "agent_gateway": "projects/example-agents-prod/locations/europe-west4/agentGateways/helpdesk-egress"
+   }
+  },
+  "_lab_end_user_from": "request_body",
+  "_lab_memory_scope_from": "request_body",
+  "_lab_approval": {}
+ },
+ "_lab_deleted_agents": [
+  "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000001"
+ ],
+ "iam_bindings": [
+  {
+   "resource": "//cloudresourcemanager.googleapis.com/projects/example-agents-prod",
+   "role": "roles/aiplatform.expressUser",
+   "member": "principalSet://agents.global.org-100000000099.system.id.goog/attribute.platformContainer/aiplatform/projects/100000000014"
+  },
+  {
+   "resource": "//cloudresourcemanager.googleapis.com/projects/example-agents-prod",
+   "role": "roles/serviceusage.serviceUsageConsumer",
+   "member": "principalSet://agents.global.org-100000000099.system.id.goog/attribute.platformContainer/aiplatform/projects/100000000014"
+  },
+  {
+   "resource": "//cloudresourcemanager.googleapis.com/projects/example-agents-prod",
+   "role": "roles/bigquery.user",
+   "member": "principalSet://agents.global.org-100000000099.system.id.goog/attribute.platformContainer/aiplatform/projects/100000000014"
+  },
+  {
+   "resource": "//cloudresourcemanager.googleapis.com/projects/example-agents-prod",
+   "role": "roles/bigquery.dataViewer",
+   "member": "principalSet://agents.global.org-100000000099.system.id.goog/attribute.platformContainer/aiplatform/projects/100000000014"
+  },
+  {
+   "resource": "//bigquery.googleapis.com/projects/example-agents-prod/datasets/helpdesk",
+   "role": "roles/bigquery.dataEditor",
+   "member": "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000001"
+  },
+  {
+   "resource": "//cloudresourcemanager.googleapis.com/projects/example-agents-prod",
+   "role": "roles/cloudtrace.user",
+   "member": "group:all-engineers@example.com"
+  }
+ ],
+ "gateway": {
+  "name": "projects/example-agents-prod/locations/europe-west4/agentGateways/helpdesk-egress",
+  "protocols": [
+   "MCP"
+  ],
+  "googleManaged": {
+   "governedAccessPath": "AGENT_TO_ANYWHERE"
+  },
+  "registries": [
+   "//agentregistry.googleapis.com/projects/example-agents-prod/locations/europe-west4"
+  ],
+  "iap_authz_extension": {
+   "name": "helpdesk-iap",
+   "service": "iap.googleapis.com",
+   "failOpen": true,
+   "timeout": "1s",
+   "metadata": {
+    "iamEnforcementMode": "DRY_RUN",
+    "iapPolicyVersion": "V2"
+   }
+  },
+  "model_armor_authz_extension": null
+ },
+ "access_policy": {
+  "name": "projects/example-agents-prod/locations/global/accessPolicies/helpdesk-egress",
+  "details": {
+   "rules": [
+    {
+     "description": "pilot: let every agent reach everything",
+     "effect": "ALLOW",
+     "principals": [
+      "principalSet://agents.global.org-100000000099.system.id.goog/attribute.platformContainer/aiplatform/projects/100000000014"
+     ],
+     "operation": {
+      "permissions": [
+       "iap.googleapis.com/resources.egressViaIAP"
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "memory_bank": {
+  "ttl_config": null,
+  "disable_memory_revisions": false,
+  "_lab_managed_topics": [
+   "USER_PERSONAL_INFO",
+   "USER_PREFERENCES",
+   "KEY_CONVERSATION_DETAILS",
+   "EXPLICIT_INSTRUCTIONS"
+  ]
+ },
+ "sandbox_templates": [
+  {
+   "display_name": "helpdesk-browser",
+   "config": {
+    "default_container_environment": {
+     "default_container_category": "DEFAULT_CONTAINER_CATEGORY_COMPUTER_USE"
+    },
+    "egress_control_config": {
+     "internet_access": true
+    }
+   }
+  }
+ ],
+ "audit_logs": {
+  "aiplatform.googleapis.com": [
+   "ADMIN_READ"
+  ]
+ }
+}

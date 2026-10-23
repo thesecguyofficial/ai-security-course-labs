@@ -1,0 +1,207 @@
+{
+ "_comment": "The hardened deployment: the same agent and data after a security review (GC14). Field names as in today's file.",
+ "project": "example-agents-prod",
+ "project_number": "100000000014",
+ "org_id": "100000000099",
+ "region": "europe-west4",
+ "agent": {
+  "display_name": "tsg-helpdesk",
+  "name": "projects/example-agents-prod/locations/europe-west4/reasoningEngines/1400000000000000003",
+  "identity_type": "AGENT_IDENTITY",
+  "service_account": null,
+  "effective_identity": "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000003",
+  "env_vars": {
+   "TICKETS_API_TOKEN": {
+    "secret": "tickets-api-token",
+    "version": "1"
+   },
+   "GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY": "true"
+  },
+  "agent_gateway_config": {
+   "agent_to_anywhere_config": {
+    "agent_gateway": "projects/example-agents-prod/locations/europe-west4/agentGateways/helpdesk-egress"
+   }
+  },
+  "_lab_end_user_from": "verified_token",
+  "_lab_memory_scope_from": "verified_token",
+  "_lab_approval": {
+   "close_ticket": "app_approval_queue"
+  }
+ },
+ "_lab_deleted_agents": [
+  "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000001",
+  "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000002"
+ ],
+ "iam_bindings": [
+  {
+   "resource": "//cloudresourcemanager.googleapis.com/projects/example-agents-prod",
+   "role": "roles/aiplatform.expressUser",
+   "member": "principalSet://agents.global.org-100000000099.system.id.goog/attribute.platformContainer/aiplatform/projects/100000000014"
+  },
+  {
+   "resource": "//cloudresourcemanager.googleapis.com/projects/example-agents-prod",
+   "role": "roles/serviceusage.serviceUsageConsumer",
+   "member": "principalSet://agents.global.org-100000000099.system.id.goog/attribute.platformContainer/aiplatform/projects/100000000014"
+  },
+  {
+   "resource": "//cloudresourcemanager.googleapis.com/projects/example-agents-prod",
+   "role": "roles/bigquery.user",
+   "member": "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000003"
+  },
+  {
+   "resource": "//bigquery.googleapis.com/projects/example-agents-prod/datasets/helpdesk",
+   "role": "roles/bigquery.dataViewer",
+   "member": "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000003"
+  },
+  {
+   "resource": "//cloudresourcemanager.googleapis.com/projects/example-agents-prod",
+   "role": "roles/cloudtrace.user",
+   "member": "group:helpdesk-oncall@example.com"
+  }
+ ],
+ "gateway": {
+  "name": "projects/example-agents-prod/locations/europe-west4/agentGateways/helpdesk-egress",
+  "protocols": [
+   "MCP"
+  ],
+  "googleManaged": {
+   "governedAccessPath": "AGENT_TO_ANYWHERE"
+  },
+  "registries": [
+   "//agentregistry.googleapis.com/projects/example-agents-prod/locations/europe-west4"
+  ],
+  "iap_authz_extension": {
+   "name": "helpdesk-iap",
+   "service": "iap.googleapis.com",
+   "failOpen": false,
+   "timeout": "1s",
+   "metadata": {
+    "iapPolicyVersion": "V2"
+   }
+  },
+  "model_armor_authz_extension": {
+   "name": "helpdesk-armor",
+   "service": "modelarmor.europe-west4.rep.googleapis.com",
+   "failOpen": false,
+   "timeout": "1s",
+   "metadata": {
+    "model_armor_settings": [
+     {
+      "request_template_id": "projects/example-agents-prod/locations/europe-west4/templates/helpdesk-guard",
+      "response_template_id": "projects/example-agents-prod/locations/europe-west4/templates/helpdesk-guard"
+     }
+    ]
+   }
+  }
+ },
+ "access_policy": {
+  "name": "projects/example-agents-prod/locations/global/accessPolicies/helpdesk-egress",
+  "details": {
+   "rules": [
+    {
+     "description": "deny-mail: the helpdesk agent never sends email itself",
+     "effect": "DENY",
+     "principals": [
+      "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000003"
+     ],
+     "operation": {
+      "permissions": [
+       "iap.googleapis.com/resources.egressViaIAP"
+      ]
+     },
+     "conditions": {
+      "iap.googleapis.com": {
+       "expression": "destination.agent_registry.mcp_server.name == 'projects/example-agents-prod/locations/europe-west4/mcpServers/mail'"
+      }
+     }
+    },
+    {
+     "description": "allow-ticket-reads",
+     "effect": "ALLOW",
+     "principals": [
+      "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000003"
+     ],
+     "operation": {
+      "permissions": [
+       "iap.googleapis.com/resources.egressViaIAP"
+      ]
+     },
+     "conditions": {
+      "iap.googleapis.com": {
+       "expression": "destination.agent_registry.mcp_server.name == 'projects/example-agents-prod/locations/europe-west4/mcpServers/tickets' && destination.agent_registry.mcp_server.tool.annotations.read_only_hint == true"
+      }
+     }
+    },
+    {
+     "description": "allow-ticket-writes",
+     "effect": "ALLOW",
+     "principals": [
+      "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000003"
+     ],
+     "operation": {
+      "permissions": [
+       "iap.googleapis.com/resources.egressViaIAP"
+      ]
+     },
+     "conditions": {
+      "iap.googleapis.com": {
+       "expression": "destination.agent_registry.mcp_server.name == 'projects/example-agents-prod/locations/europe-west4/mcpServers/tickets' && destination.agent_registry.mcp_server.tool.name in ['add_comment', 'close_ticket']"
+      }
+     }
+    },
+    {
+     "description": "allow-bigquery-select",
+     "effect": "ALLOW",
+     "principals": [
+      "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000003"
+     ],
+     "operation": {
+      "permissions": [
+       "iap.googleapis.com/resources.egressViaIAP"
+      ]
+     },
+     "conditions": {
+      "iap.googleapis.com": {
+       "expression": "destination.agent_registry.mcp_server.name == 'projects/example-agents-prod/locations/europe-west4/mcpServers/bigquery' && destination.agent_registry.mcp_server.tool.name in ['execute_sql']"
+      }
+     }
+    },
+    {
+     "description": "allow-google-endpoints",
+     "effect": "ALLOW",
+     "principals": [
+      "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000003"
+     ],
+     "operation": {
+      "permissions": [
+       "iap.googleapis.com/resources.egressViaIAP"
+      ]
+     },
+     "conditions": {
+      "iap.googleapis.com": {
+       "expression": "destination.agent_registry.resource_type == 'ENDPOINT'"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "memory_bank": {
+  "ttl_config": {
+   "default_ttl": "2592000s"
+  },
+  "disable_memory_revisions": false,
+  "_lab_managed_topics": [
+   "USER_PREFERENCES",
+   "KEY_CONVERSATION_DETAILS"
+  ]
+ },
+ "sandbox_templates": [],
+ "audit_logs": {
+  "aiplatform.googleapis.com": [
+   "ADMIN_READ",
+   "DATA_READ",
+   "DATA_WRITE"
+  ]
+ }
+}

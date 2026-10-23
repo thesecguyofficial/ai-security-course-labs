@@ -1,0 +1,28 @@
+{
+ "_comment": "ExampleCo's rules for the Helpdesk agent (fictional). The checker compares each deployment against them.",
+ "internal_domain": "example.com",
+ "broad_groups": [
+  "group:all-engineers@example.com",
+  "group:all-staff@example.com",
+  "allUsers",
+  "allAuthenticatedUsers"
+ ],
+ "agent_job": {
+  "needs_browser_sandbox": false,
+  "tools_it_must_never_reach": [
+   "projects/example-agents-prod/locations/europe-west4/mcpServers/mail::send_email"
+  ],
+  "data_it_may_read": [
+   "//bigquery.googleapis.com/projects/example-agents-prod/datasets/helpdesk"
+  ]
+ },
+ "data_roles": [
+  "roles/bigquery.dataViewer",
+  "roles/bigquery.dataEditor",
+  "roles/bigquery.admin",
+  "roles/storage.objectViewer",
+  "roles/storage.admin",
+  "roles/editor",
+  "roles/owner"
+ ]
+}
