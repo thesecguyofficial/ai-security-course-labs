@@ -2,6 +2,9 @@
 # Standard library only: no virtual environment or installs needed for the core lab. Python 3.10 or newer.
 # `make eval` also needs Node.js 22.22 or newer (it runs promptfoo through npx).
 PY := python3
+# Nothing leaves your laptop: no usage data or update checks from promptfoo, even if you run it by hand from here.
+export PROMPTFOO_DISABLE_TELEMETRY := 1
+export PROMPTFOO_DISABLE_UPDATE := 1
 
 .PHONY: attack attack-safe matrix hidden test challenge eval eval-weak run run-safe alerts clean
 
