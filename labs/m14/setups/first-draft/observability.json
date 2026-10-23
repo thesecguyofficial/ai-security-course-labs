@@ -1,0 +1,26 @@
+{
+  "cloudtrail_advanced_event_selectors": [
+    {
+      "Name": "management only",
+      "FieldSelectors": [
+        {
+          "Field": "eventCategory",
+          "Equals": [
+            "Management"
+          ]
+        }
+      ]
+    }
+  ],
+  "tracing": {
+    "runtime": true,
+    "gateway": false,
+    "memory": false
+  },
+  "transaction_search": false,
+  "log_delivery": {
+    "gateway": null,
+    "memory": null
+  },
+  "online_evaluation": null
+}

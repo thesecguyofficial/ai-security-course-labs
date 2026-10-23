@@ -1,0 +1,15 @@
+{
+  "_api": "bedrock-agentcore-control CreateMemory",
+  "name": "tsg_helpdesk_mem",
+  "eventExpiryDuration": 30,
+  "memoryStrategies": [
+    {
+      "semanticMemoryStrategy": {
+        "name": "helpdesk_facts",
+        "namespaceTemplates": [
+          "/users/{actorId}/facts/"
+        ]
+      }
+    }
+  ]
+}

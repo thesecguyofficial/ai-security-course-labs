@@ -1,0 +1,11 @@
+{
+  "_about": "How the web backend and the agent code build each request. 'token' means taken from the validated JWT; 'server_map' means the backend's own table of user to session.",
+  "user_from": "session",
+  "runtime_session_id_from": "server_map",
+  "runtime_user_id_from": "token",
+  "agent_gateway_token": "user_jwt",
+  "policy_session_id_from": "backend_per_user_day",
+  "entrypoint_validates_prompt": true,
+  "memory_actor_id_from": "token",
+  "validate_memory_writes": false
+}

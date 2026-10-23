@@ -1,0 +1,30 @@
+{
+  "workloadIdentity": {
+    "_api": "bedrock-agentcore-control CreateWorkloadIdentity",
+    "name": "tsg_helpdesk-AbCdEf1234",
+    "allowedResourceOauth2ReturnUrls": [
+      "https://helpdesk.example.com/oauth/callback"
+    ]
+  },
+  "credentialProviders": [
+    {
+      "_api": "bedrock-agentcore-control CreateOauth2CredentialProvider",
+      "_flow": "USER_FEDERATION",
+      "_lab": "The ticketing SaaS: each user consents once, the token vault keeps their token.",
+      "name": "tickets-saas",
+      "credentialProviderVendor": "CustomOauth2",
+      "oauth2ProviderConfigInput": {
+        "customOauth2ProviderConfig": {
+          "oauthDiscovery": {
+            "discoveryUrl": "https://tickets.example.com/.well-known/openid-configuration"
+          },
+          "clientId": "tickets-client-placeholder"
+        }
+      }
+    }
+  ],
+  "session_binding": {
+    "_lab": "Who calls CompleteResourceTokenAuth after consent (oauth2-authorization-url-session-binding)",
+    "callback_checks_signed_in_user": true
+  }
+}
