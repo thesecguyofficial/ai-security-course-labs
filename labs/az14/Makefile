@@ -2,7 +2,7 @@
 # Offline part: Python standard library only. No packages, no network, no Azure subscription.
 PY := python3
 
-.PHONY: check check-fixed attack attack-v11 attack-safe compare hunt test challenge cost up kb toolbox toolbox-v2 agent grant ask grant-wide grant-narrow direct-call down clean
+.PHONY: check check-fixed attack attack-v11 attack-safe compare hunt test challenge cost up kb mcp toolbox toolbox-v2 agent grant ask grant-wide grant-narrow direct-call down clean
 
 check:        ## review the hosted-agent deployment before anyone attacks it (24 findings)
 	$(PY) checker.py
@@ -41,7 +41,10 @@ up:            ## G1: resource group, Foundry resource + project + model, storag
 kb:            ## G2: the knowledge store: containers kb and hr-exports, four blobs
 	./cloud/cloud.sh kb
 
-toolbox:       ## G3: toolbox helpdesk-tools v1 (Microsoft Learn MCP, require_approval always)
+mcp:           ## G3a: your own MCP actions server on Container Apps (key in a Container Apps secret)
+	./cloud/cloud.sh mcp
+
+toolbox:       ## G3b: key connection + toolbox helpdesk-tools v1 (your MCP server, require_approval always)
 	./cloud/cloud.sh toolbox
 
 agent:         ## G4: build the image in ACR and create the hosted agent version
@@ -59,7 +62,7 @@ grant-wide:    ## G6: the one-setting change: the same role at storage-account s
 grant-narrow:  ## G6: undo it
 	./cloud/cloud.sh grant-narrow
 
-direct-call:   ## G6b: call the toolbox tool directly: require_approval doesn't block it
+direct-call:   ## G6b: call send_email on the toolbox directly: require_approval doesn't block it
 	./cloud/cloud.sh direct-call
 
 down:          ## G8: delete the agent, toolbox, Foundry resource (purged) and the resource group

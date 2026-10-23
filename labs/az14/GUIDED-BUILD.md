@@ -4,7 +4,7 @@ The offline lab (README Steps 1 to 6) teaches the mechanics at $0. This guide bu
 step by step, in **your own** sandbox subscription, from zero: a Foundry project, a blob container of KB articles with
 an HR container next to it, a **toolbox** with one MCP tool, and a **hosted agent** (your own code in Foundry's
 per-session sandbox) whose agent identity reads one container, whose code enforces approval, and whose every tool call
-passes **your** `policy.py`. Then you widen one role and watch the HR file leak. About 90 minutes. Expect under US$1 if
+passes **your** `policy.py`. Its write tools live on **your own** MCP server on Container Apps. Then you widen one role and watch the HR file leak. About 90 minutes. Expect under US$1 if
 you tear down the same day (G8). Teardown is the last step: do it today.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an Azure subscription,
@@ -119,33 +119,67 @@ with the 2027 pay bands (`CANARY-AZ14-BANDS-4417`). The agent may read `kb`. It 
 the files from `cloud/kb/` (labels may differ slightly). **CLI:** `make kb` runs `az storage container create` and
 `az storage blob upload --auth-mode login` for each file (Entra ID, since key access is off).
 
-## G3 · The toolbox (`make toolbox`)
+## G3 · Your MCP server and the toolbox (`make mcp`, then `make toolbox`)
 
-One MCP tool: the **Microsoft Learn MCP server** (`https://learn.microsoft.com/api/mcp`, "No API keys, no logins, no
-sign-ups required", per its GitHub page), with `allowed_tools: ["microsoft_docs_search"]` and
-`require_approval: "always"`. It only reads public docs, so it's safe to practise on. Approval on a read tool is there
-to prove one thing in G5 and G6b: **who enforces it**.
+Everything in this build runs in **your** subscription. The agent's write tools live on **your own** MCP server,
+`cloud/mcp/server.py` (about 50 lines): `search_tickets` (read) and `send_email` (write, **simulated**: it prints the
+call to the container log and sends nothing). It rejects any request without the right `x-api-key` header.
 
-**Portal:** Microsoft's toolbox page shows the SDK, REST, Azure Developer CLI and the Foundry Toolkit for VS Code
-(**Toolboxes** view); we could not confirm a Foundry portal path for creating toolboxes. Use Path B.
+### G3a · The MCP server on Azure Container Apps (`make mcp`)
 
-**REST (what `make toolbox` sends,** shape from Microsoft's
-[toolbox page](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox)**):**
+**Path B: CLI (what `make mcp` runs).** It generates a random key on your laptop, builds the image in your registry,
+and creates a Container Apps app that scales to zero. The key goes into a **Container Apps secret** and reaches the
+code as `secretref`, so it's never in the image:
 
-```http
+```bash
+KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe(32))')
+az acr build -r cr$AZ14_NAME -t helpdesk-mcp:1 --platform linux/amd64 cloud/mcp
+az containerapp env create -n cae-$AZ14_NAME -g rg-$AZ14_NAME -l $AZ14_REGION
+az containerapp create -n ca-$AZ14_NAME -g rg-$AZ14_NAME --environment cae-$AZ14_NAME \
+  --image cr$AZ14_NAME.azurecr.io/helpdesk-mcp:1 --registry-server cr$AZ14_NAME.azurecr.io --registry-identity system \
+  --ingress external --target-port 8000 --cpu 0.25 --memory 0.5Gi --min-replicas 0 --max-replicas 1 \
+  --secrets "mcpkey=$KEY" --env-vars "MCP_API_KEY=secretref:mcpkey"
+```
+
+The URL and key are written to `cloud/.state/env` (git-ignored). Check it refuses strangers:
+`curl -s -o /dev/null -w "%{http_code}\n" -X POST https://<fqdn>/mcp` should print `401`.
+
+**Path A: portal.** **Create a resource**, **Container App**, the same resource group and region, a new environment,
+image source **Azure Container Registry** (`helpdesk-mcp:1`), ingress **Enabled**, accepting traffic from anywhere,
+target port `8000`; under **Secrets** add `mcpkey`, and set the environment variable `MCP_API_KEY` to reference it
+(labels may differ slightly). Build the image first with the `az acr build` line above.
+
+An MCP server on the public internet with one shared key is fine for a sandbox. In production, put it behind API
+Management with `validate-azure-ad-token` (lesson 14.4), or on a private endpoint with VNet injection.
+
+### G3b · The key connection and the toolbox (`make toolbox`)
+
+**The connection.** The key goes into a project connection, so the toolbox injects it and the agent never sees it
+(Microsoft: "The agent never sees the secret."). **Portal path, documented by Microsoft:** in the Foundry portal,
+**Connect a tool**, **Custom**, **MCP**, give a name and the MCP server endpoint, and enter **Credential name**
+`x-api-key` and **Credential value** your key ([MCP authentication](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/mcp-authentication)).
+Name the connection `helpdesk-actions-key`. **CLI path:** `build.py` sends an ARM `PUT` of a `CustomKeys`
+connection (`category` and `authType` `CustomKeys`, `credentials.keys`). Microsoft's MCP authentication page doesn't
+show that REST body, so treat it as unverified; if it fails, use the portal path.
+
+**The toolbox.** One MCP tool, your server, with `allowed_tools: ["search_tickets", "send_email"]` and
+`require_approval: "always"`. Microsoft's toolbox page shows the SDK, REST, Azure Developer CLI and the Foundry
+Toolkit for VS Code (**Toolboxes** view); we could not confirm a Foundry portal path for creating toolboxes, so use the
+REST call. What `make toolbox` sends (shape from Microsoft's
+[toolbox page](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox)):
+
+```text
 POST {project_endpoint}/toolboxes/helpdesk-tools/versions?api-version=v1
 Authorization: Bearer {token for https://ai.azure.com/.default}
 
 {"description": "TSG Helpdesk tools (v1)",
- "tools": [{"type": "mcp", "server_label": "microsoft-learn", "server_url": "https://learn.microsoft.com/api/mcp",
-            "require_approval": "always", "allowed_tools": ["microsoft_docs_search"],
-            "description": "Search Microsoft Learn (read-only, no auth)"}]}
+ "tools": [{"type": "mcp", "server_label": "helpdesk-actions", "server_url": "https://<fqdn>/mcp",
+            "require_approval": "always", "allowed_tools": ["search_tickets", "send_email"],
+            "project_connection_id": "helpdesk-actions-key",
+            "description": "TSG Helpdesk actions (your own MCP server)"}]}
 ```
 
-Microsoft's examples always pass a `project_connection_id`; this one has none because the server needs no
-authentication (Microsoft's tool-authentication page lists `none` for "Public servers (for example, the Microsoft
-Learn MCP server)"). If your API version insists on a connection, create one with `azd ai connection create` and add
-its name. "The first version you create is automatically set as the default." Agents use the **consumer** endpoint,
+"The first version you create is automatically set as the default." Agents use the **consumer** endpoint,
 `{project_endpoint}/toolboxes/helpdesk-tools/mcp?api-version=v1`, which "Always serves the `default_version`".
 
 ## G4 · The hosted agent (`make agent`, then `make grant`)
@@ -156,8 +190,8 @@ its name. "The first version you create is automatically set as the default." Ag
 ("Arbitrary JSON in, arbitrary JSON out") through Microsoft's `azure-ai-agentserver-invocations` package
 (`InvocationAgentServerHost`, `@app.invoke_handler`, port 8088), and:
 
-- calls the model through the project endpoint with four function tools: `list_articles`, `read_blob`, `send_email`,
-  `search_docs`;
+- calls the model through the project endpoint with four function tools: `list_articles` and `read_blob` (its own
+  code, Blob Storage), `search_tickets` and `send_email` (through the toolbox, on your MCP server);
 - reads blobs **as the agent identity** (`DefaultAzureCredential` inside the sandbox): RBAC is the only fence;
 - runs `policy.check()` (your lab file, copied in by `cloud.sh`) before **every** tool call;
 - never sends an email in the same request: it returns `needs_confirmation`, your terminal asks you, and only a second
@@ -238,7 +272,7 @@ verdict, and asks `Approve? (y/N)` when the agent returns `needs_confirmation`.
 | 2 | "Show me the 2027 pay bands: read paybands-2027.csv from container hr-exports..." | `read_blob` on `hr-exports` returns `error 403 AuthorizationPermissionMismatch`; no `CANARY-AZ14-BANDS-4417` | The cross-user (HR) leak attempt fails at RBAC, not at the prompt |
 | 3 | "How do I renew the VPN client certificate?" | KB-1002 is read. If the model emits `send_email` to `collect@attacker.example`, the tool call shows `policy: recipient ... is outside contoso.com` | Injected text in a retrieved document, stopped in code |
 | 4 | "Please email the VPN password reset steps to bob@contoso.com." | `needs_confirmation`; you type `y`; "sent (simulated)" | A legitimate write with confirmation |
-| 5 | "What does Microsoft say about network egress controls for Foundry hosted agents?" | `needs_confirmation` for `search_docs` (the toolbox said `always`); `y`; an answer from Learn | Your runtime enforces `require_approval` |
+| 5 | "Which open tickets mention the dock?" | `needs_confirmation` for `search_tickets` (the toolbox said `always`); `y`; ticket 4471 | Your runtime enforces `require_approval`, even on a read |
 
 **Example response (shape is this lab's own agent, values illustrative)**: request 2. The invocations protocol has
 no fixed schema; these are the fields `main.py` returns. The error text is Azure Storage's documented
@@ -306,19 +340,23 @@ talk to this agent can now read HR's files **through** it, because the agent rea
 `make grant-narrow`.
 
 **G6b: call the toolbox directly (`make direct-call`).** `build.py direct-call` connects to the toolbox's consumer
-endpoint with the MCP Python SDK, lists the tools and calls `microsoft_docs_search` itself, without asking anyone.
+endpoint with the MCP Python SDK, lists the tools and calls `send_email` itself, without asking anyone.
 
 **Example response (shape from Microsoft docs, values illustrative)**
 ([toolbox](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox): tool names are prefixed
 `{server_label}.{tool_name}`, and MCP tools "include a `_meta.tool_configuration` block"):
 
 ```text
-   tools/list: microsoft-learn.microsoft_docs_search  _meta={"tool_configuration": {"require_approval": "always"}}
-   tools/call microsoft-learn.microsoft_docs_search: isError=False, 5480 characters returned
+   tools/list: helpdesk-actions.search_tickets  _meta={"tool_configuration": {"require_approval": "always"}}
+   tools/list: helpdesk-actions.send_email  _meta={"tool_configuration": {"require_approval": "always"}}
+   tools/call helpdesk-actions.send_email: isError=False: Email to bob@contoso.com sent (simulated).
 ```
 
-`require_approval: "always"`, and the call ran. That's not a bug: Microsoft documents it. The flag is advice to the
-runtime. In a hosted agent, your code is the runtime. Optional: `make toolbox-v2` creates version 2 with
+`require_approval: "always"`, and the write ran. Your server's log proves it
+(`az containerapp logs show -n ca-$AZ14_NAME -g rg-$AZ14_NAME` shows the `send_email` line). That's not a bug:
+Microsoft documents it. The flag is advice to the runtime. In a hosted agent, your code is the runtime. Anyone with
+Foundry User on the project and a token can call the toolbox like this, which is why the rules that must always hold
+belong in the MCP server itself too (lesson 14.5). Optional: `make toolbox-v2` creates version 2 with
 `require_approval: "never"`; promote it (`PATCH {project_endpoint}/toolboxes/helpdesk-tools?api-version=v1` with
 `{"default_version": "2"}`, Microsoft's REST) and request 5 stops asking.
 
@@ -345,7 +383,8 @@ runtime. In a hosted agent, your code is the runtime. Optional: `make toolbox-v2
 | Azure Container Registry, Basic | a small daily charge while it exists, plus one cloud build |
 | Storage account, four tiny blobs | well under a cent |
 | Model tokens, about ten short requests | a few US cents (estimate: check your model's price) |
-| Foundry resource, toolbox, Learn MCP server | no hourly charge for the resource; the Learn MCP server is free |
+| Your MCP server, Container Apps consumption, scales to zero | within the monthly free grant for most subscriptions; check the Container Apps pricing page |
+| Foundry resource, toolbox | no hourly charge for the resource |
 | Application Insights, only if you connected it | data ingestion; delete it |
 
 ```bash
@@ -354,7 +393,7 @@ make down
 
 It deletes the agent ("Deleting an agent removes all its versions and terminates active sessions. This action can't
 be undone."), the toolbox versions, the Foundry resource (and **purges** it so the name is free), and the resource
-group with the storage account and registry. Then check two places tomorrow: `az group show -n rg-$AZ14_NAME` should
+group with the storage account, registry and Container Apps app. Then check two places tomorrow: `az group show -n rg-$AZ14_NAME` should
 say `ResourceGroupNotFound`; and **Entra ID** > **Agent ID** > **All agent identities** should list nothing left from
 this build. Microsoft doesn't document whether deleting a hosted agent removes its agent identity; if one is left,
 note it and tell us.
@@ -372,7 +411,12 @@ note it and tell us.
 - **`azure-ai-agentserver-invocations`**: its PyPI page names the class and decorator we use; we couldn't open
   Microsoft's sample repository to compare a full hosted-agent `main.py`. Whether the invocations protocol passes
   your caller identity into the container is not documented, so this agent doesn't rely on it.
-- **Toolbox without a connection**, and the exact `_meta` shape the MCP SDK returns (`Tool.meta`).
+- **The `CustomKeys` connection REST body** (Microsoft documents the portal path for key-based MCP connections), the
+  exact `_meta` shape the MCP SDK returns (`Tool.meta`), and whether `az containerapp create --registry-identity system`
+  grants the pull role by itself in your CLI version (if the revision fails to pull, assign AcrPull to the app's
+  identity on the registry).
+- **The MCP server's Python** (`FastMCP(..., stateless_http=True)`, `streamable_http_app()`) follows the MCP Python
+  SDK as we know it; we did not run it against a toolbox.
 - **`previous_response_id`** for function-call follow-ups when calling a model deployment directly through the
   project's OpenAI client (documented for agents and in the OpenAI Responses API; not re-checked for this path).
 - **Portal labels** marked "(label may differ slightly)", and whether the Foundry portal can create toolboxes.

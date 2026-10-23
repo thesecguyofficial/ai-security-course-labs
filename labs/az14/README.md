@@ -3,8 +3,8 @@
 Companion to lessons **14.0 to 14.8** of *AI Security Engineer* (The Sec Guy), Azure stream. About 50 minutes,
 **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Azure subscription
 needed**. An optional guided build ([GUIDED-BUILD.md](GUIDED-BUILD.md)) deploys the real thing in your own
-subscription: a hosted agent whose identity reads one blob container, a toolbox with an MCP tool, approval enforced
-in your own code, and a cross-user leak you create with one role change.
+subscription: a hosted agent whose identity reads one blob container, your own MCP server behind a toolbox, approval
+enforced in your own code, and a cross-user leak you create with one role change.
 
 You are still the cloud security engineer at **Contoso** (fictional; "Contoso" is the placeholder name Microsoft uses
 in its documentation). In Module 13 you ported the Helpdesk to a Foundry prompt agent. Contoso has now rewritten it as
@@ -37,7 +37,7 @@ and prove which control stops each attack.
 | `data/directory.json` | Fictional Entra users (bob, dana = helpdesk; alice = HR; carol = contractor), agents, storage, one existing session, one upload |
 | `data/docs.json` | Seven KB articles (six carry a labelled lab placeholder) and one HR export |
 | `logs/helpdesk-traces.jsonl` | A **fake** day of traces for 21 October 2026: 72 spans and events |
-| `cloud/` | `cloud.sh`, `build.py` and the hosted agent's own code (`agent/main.py`, `Dockerfile`) for the guided build |
+| `cloud/` | `cloud.sh`, `build.py`, the hosted agent's own code (`agent/`) and your MCP actions server (`mcp/`) for the guided build. Everything runs in your own subscription |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 18 tests for the lab, 4 for the challenge |
 
 **About `twin.py`.** It is not Azure. It models what this lab needs, each rule from Microsoft's documentation (Oct 2026):
@@ -249,8 +249,8 @@ is included.
 ## Step 7 · The guided build (optional, your subscription)
 
 [GUIDED-BUILD.md](GUIDED-BUILD.md) deploys the hardened design for real, from zero, with portal clicks and CLI: a
-Foundry project, a blob "knowledge store" with an HR container next door, a **toolbox** with the Microsoft Learn MCP
-server and `require_approval: always`, and a **hosted agent** built from `cloud/agent/` whose identity reads one
+Foundry project, a blob "knowledge store" with an HR container next door, **your own MCP actions server** on Azure
+Container Apps (its key in a Container Apps secret), a **toolbox** that reaches it with `require_approval: always`, and a **hosted agent** built from `cloud/agent/` whose identity reads one
 container and whose code enforces approval and runs **your** `policy.py`. Five requests (normal, cross-user HR leak
 attempt, injected article, a write that needs your confirmation, a toolbox call that needs approval), one setting
 changed (the agent's role widened to the whole storage account) and re-run, cost and teardown. Expect under US$1 if you
