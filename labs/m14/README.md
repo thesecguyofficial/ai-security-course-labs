@@ -326,7 +326,8 @@ the biggest item.
 | IAM | Allow with wildcards, explicit Deny wins; no conditions on identity statements | IAM policy evaluation |
 
 The request bodies in `setups/` were checked against the botocore 1.43.117 service models (`bedrock-agentcore-control`).
-The Cedar files were checked as `CreatePolicy` bodies; they were not run through the real Cedar engine.
+The Cedar files were checked as `CreatePolicy` bodies, then parsed and schema-validated with the open-source Cedar
+engine (`cedarpy` 4.12.2) against a schema modelled on the three tool definitions; AgentCore's own validator was not run.
 
 ## Troubleshooting
 

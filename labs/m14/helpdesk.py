@@ -41,8 +41,8 @@ def validate_memory_write(text: str, source: str, setup: twin.Setup) -> bool:
 
     source is "user" (the signed-in user typed it) or "tool_result" (the model read it in a ticket, a web page,
     a tool response). Challenge 2: store only what the user said themselves, and never a line that carries an
-    instruction marker. ATLAS AML.M0031 Memory Hardening: "requiring external authentication and validation for
-    memory updates". Then set "validate_memory_writes": true in setups/hardened/app.json.
+    instruction marker. ATLAS v2026.09 AML.M0031 Memory Hardening: "Record the source of all memory
+    updates". Then set "validate_memory_writes": true in setups/hardened/app.json.
     """
     raise NotImplementedError("challenge 2: write validate_memory_write()")
 
