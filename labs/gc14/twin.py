@@ -9,7 +9,7 @@ None of these is Google's service. Each copies only the DECISIONS this lab depen
                   text; each case says how a prompt-injection filter would classify the response it came from.
   GatewayTwin     Agent Gateway, Agent-to-Anywhere: registry lookup, default deny, Unified Access Policy rules
                   (deny first, CEL conditions), DRY_RUN, and Model Armor on MCP tools/call requests and responses
-                  (not on tools/list, which Google's page lists as not sanitized)
+                  (not on tools/list, which Google's page lists as not sanitized), with failOpen
   MemoryBankTwin  memories kept per scope dict, generation limited to enabled topics, TTL, revisions
 
 decide.py asks these twins about each proposed tool call in data/cases.json and prints who decided what.
@@ -114,18 +114,19 @@ class GatewayTwin:
         md = (self.gw.get("iap_authz_extension") or {}).get("metadata", {})
         return md.get("iamEnforcementMode") == "DRY_RUN"
 
-    def attributes(self, server: str | None, tool: str | None, host: str | None) -> dict:
-        if server is None:   # an unregistered destination (a plain URL)
-            return {"destination.is_registered": False, "destination.unregistered.host": host,
-                    "destination.unregistered.path": "/", "destination.unregistered.method": "get"}
-        s = self.servers.get(server)
-        if s is None:
-            return {"destination.is_registered": False, "destination.unregistered.host": host or server}
+    def attributes(self, server: str | None, tool: str | None, host: str | None, path: str = "/",
+                   method: str = "get") -> dict:
+        """The CEL attributes the gateway would see for one request (names from Google's CEL attribute page)."""
+        s = self.servers.get(server) if server else None
+        if s is None:   # not in the registry: an unregistered destination, matched by host and path only
+            return {"destination.is_registered": False, "destination.unregistered.host": host or server,
+                    "destination.unregistered.path": path, "destination.unregistered.method": method}
         spec = next((t for t in s["toolspec"]["tools"] if t["name"] == tool), None)
         ann = (spec or {}).get("annotations", {})
+        location = s["name"].split("/locations/")[1].split("/")[0]
         return {"destination.is_registered": True,
                 "destination.agent_registry.resource_type": "MCP_SERVER",
-                "destination.agent_registry.location": "europe-west4",
+                "destination.agent_registry.location": location,
                 "destination.agent_registry.project_id": self.dep["project"],
                 "destination.agent_registry.mcp_server.name": s["name"],
                 "destination.agent_registry.mcp_server.method": "tools",
@@ -136,7 +137,8 @@ class GatewayTwin:
                 "destination.agent_registry.mcp_server.tool.annotations.open_world_hint": ann.get("openWorldHint")}
 
     def authorize(self, principal: str, attrs: dict) -> tuple[str, str]:
-        """Unified Access Policy: deny rules are evaluated first; then allow; nothing matched = default deny."""
+        """Unified Access Policy: deny rules are evaluated first; then allow; nothing matched = default deny
+        (Google: "By default, Agent Gateway blocks all traffic unless" a policy grants egress)."""
         def matches(rule):
             if not any(member_matches(m, principal) for m in rule["principals"]):
                 return False
@@ -194,8 +196,3 @@ class MemoryBankTwin:
             self.revisions.append({"action": "CREATED", **copy.deepcopy(mem)})
         return {"action": "CREATED", "expire_day": mem["expire_day"]}
 
-
-def scope_condition_allows(expression_scope: dict, requested_scope: dict) -> bool:
-    """IAM Condition on memories (Google's example): api.getAttribute('aiplatform.googleapis.com/memoryScope', {})
-    == {'userId': 'userA'}. True only for an exact scope match."""
-    return expression_scope == requested_scope

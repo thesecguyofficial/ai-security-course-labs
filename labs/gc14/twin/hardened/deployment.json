@@ -68,7 +68,8 @@
    "governedAccessPath": "AGENT_TO_ANYWHERE"
   },
   "registries": [
-   "//agentregistry.googleapis.com/projects/example-agents-prod/locations/europe-west4"
+   "//agentregistry.googleapis.com/projects/example-agents-prod/locations/europe-west4",
+   "//agentregistry.googleapis.com/projects/example-agents-prod/locations/global"
   ],
   "iap_authz_extension": {
    "name": "helpdesk-iap",
@@ -162,7 +163,7 @@
      },
      "conditions": {
       "iap.googleapis.com": {
-       "expression": "destination.agent_registry.mcp_server.name == 'projects/example-agents-prod/locations/europe-west4/mcpServers/bigquery' && destination.agent_registry.mcp_server.tool.name in ['execute_sql']"
+       "expression": "destination.agent_registry.mcp_server.name == 'projects/example-agents-prod/locations/global/mcpServers/bigquery' && destination.agent_registry.mcp_server.tool.name in ['list_table_ids', 'get_table_info', 'execute_sql_readonly']"
       }
      }
     },

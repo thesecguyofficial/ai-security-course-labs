@@ -1,12 +1,13 @@
 """
 checker.py: read the Helpdesk agent's Agent Runtime deployment like an auditor would.
 
-    python3 checker.py --twin today       # make check
-    python3 checker.py --twin hardened    # make check-hardened (1 left: your challenge)
+    python3 checker.py --twin today       # make check        (14 findings, 9 HIGH)
+    python3 checker.py --twin hardened    # make check-fixed  (1 left: your challenge)
 
 Reads twin/<name>/deployment.json, twin/registry.json and twin/requirements.json. Some rules don't trust a setting:
 GC14-07 asks the gateway twin what it would decide for a tool the agent must never reach. NOTES are facts about
 the services that you design around; they are printed, not counted. Add --ci to exit 1 on any HIGH finding.
+A policy condition the CEL subset can't read stops the checker with an error: it never guesses.
 """
 
 from __future__ import annotations
@@ -53,7 +54,8 @@ def run(twin: str, dep: dict | None = None) -> list[Finding]:
         add("HIGH", "GC14-02", "env_vars",
             "GOOGLE_API_PREVENT_AGENT_TOKEN_SHARING_FOR_GCP_SERVICES is false: the agent is opted out of the default "
             "Context-Aware Access policy that binds its tokens. Google calls this 'strongly discouraged'.",
-            "Remove the variable. If a Google sample told you to set it, find out why and record the decision.")
+            "Remove the variable. Some Google samples set it (the Agent Gateway deploy example does): find out why "
+            "your agent needs it and record the decision.")
     for b in dep["iam_bindings"]:
         if b["role"] in req["data_roles"] and b["member"].startswith("principalSet://") \
                 and b["resource"].startswith("//cloudresourcemanager.googleapis.com/projects/"):
@@ -150,7 +152,8 @@ def run(twin: str, dep: dict | None = None) -> list[Finding]:
 
     # ---- GC14-18 (your challenge): Data Access audit logs for memories -----------------------------------------
     # TODO: report a MEDIUM finding "GC14-18" when "DATA_READ" is missing from
-    #       dep["audit_logs"]["aiplatform.googleapis.com"]  (then memories.retrieve isn't logged).
+    #       dep["audit_logs"]["aiplatform.googleapis.com"] (Data Access audit logs are off by default, so nobody
+    #       can later see who read which user's memories). README Step 7 has the details.
 
     return sorted(out, key=lambda f: (SEV_ORDER[f.sev], f.rule))
 
@@ -159,7 +162,8 @@ NOTES = [
     "Agent Gateway's Model Armor screens MCP tools/call and prompts/get, not tools/list, resources/* or "
     "Streamable HTTP/SSE: tool descriptions from a server are not screened.",
     "IAM Unified Access Policies: Google's page says the feature doesn't support VPC Service Controls.",
-    "Agent Platform Threat Detection (Preview) isn't available for an agent with Agent Gateway enabled.",
+    "Security Command Center's Agent Engine Threat Detection isn't available for an agent with Agent Gateway "
+    "enabled (Google's routing page): plan detection from the gateway and IAP logs instead.",
     "ADK tool confirmation isn't supported with VertexAiSessionService: keep approvals in your own app.",
 ]
 
@@ -179,7 +183,7 @@ def main():
     for n in NOTES:
         print(textwrap.fill(n, 112, initial_indent="  NOTE    ", subsequent_indent="          "))
     high = sum(1 for f in found if f.sev == "HIGH")
-    print(f"\n{len(found)} findings ({high} HIGH), {len(NOTES)} notes.")
+    print(f"\n{len(found)} finding{'' if len(found) == 1 else 's'} ({high} HIGH), {len(NOTES)} notes.")
     if a.ci and high:
         sys.exit(1)
 

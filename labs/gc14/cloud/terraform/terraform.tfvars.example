@@ -1,0 +1,12 @@
+# Copy to terraform.tfvars and edit. terraform.tfvars is yours: never commit it.
+project_id = "your-sandbox-project"
+region     = "us-central1"
+
+# Step 4: paste the effectiveIdentity that cloud/agent/deploy.py printed, then apply again.
+# agent_principal = "principal://agents.global.org-ORG_ID.system.id.goog/resources/aiplatform/projects/PROJECT_NUMBER/locations/us-central1/reasoningEngines/AGENT_ID"
+
+# Step 4, after reading the dry-run logs: enforce.
+# enforcement = "ENFORCE"
+
+# Step 7, the one-setting change (then set it back to false).
+# grant_all_agents_project_data = true
