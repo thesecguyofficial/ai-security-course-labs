@@ -1,0 +1,7 @@
+{
+  "_comment": "Memories already in the Memory Bank twin before the lab runs (fake). Scope keys follow Memory Bank's scope dictionary; ADK's VertexAiMemoryBankService uses {app_name, user_id}.",
+  "memories": [
+    {"scope": {"app_name": "tsg_helpdesk", "user_id": "bob@example.com"}, "topic": "USER_PREFERENCES",
+     "fact": "Bob keeps his VPN recovery code CANARY-MEM-4410 in the helpdesk notes and prefers calls after 16:00."}
+  ]
+}
