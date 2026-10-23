@@ -1,0 +1,9 @@
+{
+  "_lab": "Stands in for a Dogwood temporal policy that counts reset_mfa calls in a policy session (AWS policy-temporal page). The lab only needs the count and where the session ID comes from.",
+  "rules": [
+    {
+      "tool": "reset_mfa",
+      "max_per_policy_session": 3
+    }
+  ]
+}

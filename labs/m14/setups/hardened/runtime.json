@@ -1,0 +1,40 @@
+{
+  "_api": "bedrock-agentcore-control CreateAgentRuntime",
+  "_lab": "JWT inbound auth: AgentCore validates the Cognito access token and gets the workload access token with GetWorkloadAccessTokenForJWT.",
+  "agentRuntimeName": "tsg_helpdesk",
+  "agentRuntimeArtifact": {
+    "codeConfiguration": {
+      "code": {
+        "s3": {
+          "bucket": "amzn-s3-demo-bucket-tsg-agent-code",
+          "prefix": "tsg_helpdesk/agent.zip"
+        }
+      },
+      "runtime": "PYTHON_3_13",
+      "entryPoint": [
+        "main.py"
+      ]
+    }
+  },
+  "roleArn": "arn:aws:iam::111122223333:role/tsg-agent-runtime-role",
+  "networkConfiguration": {
+    "networkMode": "PUBLIC"
+  },
+  "authorizerConfiguration": {
+    "customJWTAuthorizer": {
+      "discoveryUrl": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE1/.well-known/openid-configuration",
+      "allowedClients": [
+        "7helpdeskweb0example0client"
+      ]
+    }
+  },
+  "requestHeaderConfiguration": {
+    "requestHeaderAllowlist": [
+      "Authorization"
+    ]
+  },
+  "lifecycleConfiguration": {
+    "idleRuntimeSessionTimeout": 900,
+    "maxLifetime": 28800
+  }
+}
