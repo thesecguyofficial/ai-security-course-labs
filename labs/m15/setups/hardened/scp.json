@@ -1,0 +1,4 @@
+{
+  "_note": "Your organization's SCPs for this account (Deny statements; FullAWSAccess is implied). Challenge 1 (lesson 15.2): add the statements here.",
+  "Statement": []
+}

@@ -1,0 +1,13 @@
+{
+  "EndpointConfigName": "tsg-summariser-lab-cfg",
+  "ProductionVariants": [
+    {"VariantName": "AllTraffic", "ModelName": "tsg-summariser-lab", "InstanceType": "${INSTANCE_TYPE}", "InitialInstanceCount": 1}
+  ],
+  "DataCaptureConfig": {
+    "EnableCapture": true,
+    "InitialSamplingPercentage": 100,
+    "DestinationS3Uri": "s3://${CaptureBucket}/tsg-summariser/",
+    "KmsKeyId": "${KeyArn}",
+    "CaptureOptions": [{"CaptureMode": "Input"}, {"CaptureMode": "Output"}]
+  }
+}

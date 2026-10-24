@@ -1,0 +1,4 @@
+{
+  "EndpointName": "${EndpointName}",
+  "EndpointConfigName": "tsg-summariser-lab-cfg"
+}

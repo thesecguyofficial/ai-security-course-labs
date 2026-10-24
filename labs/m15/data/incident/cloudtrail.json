@@ -1,0 +1,563 @@
+{
+ "_about": "A morning of CloudTrail records for AnyCompany's account (lab sample: field names follow the CloudTrail record contents and the SageMaker AI CloudTrail examples; every value is invented). InvokeEndpoint records are data events: they exist only because the trail selects AWS::SageMaker::Endpoint, and AWS says InvokeEndpoint doesn't log its request parameters, so they carry no prompt.",
+ "Records": [
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLEDSALICE:alice@example.com",
+    "arn": "arn:aws:sts::111122223333:assumed-role/ds-alice/alice@example.com",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T08:55:10Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "CreatePresignedDomainUrl",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.3.25",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {
+    "domainId": "d-abcde1234567",
+    "userProfileName": "alice"
+   },
+   "responseElements": {
+    "authorizedUrl": "HIDDEN_LAB_VALUE"
+   },
+   "requestID": "lab-req-0001",
+   "eventID": "lab-evt-0001",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Management"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLEDSBOB:bob@example.com",
+    "arn": "arn:aws:sts::111122223333:assumed-role/ds-bob/bob@example.com",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T09:02:44Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "CreateModelPackage",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.3.25",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {
+    "modelPackageGroupName": "tsg-summariser",
+    "modelPackageDescription": "Bob's new fine-tune, uploaded from a notebook",
+    "modelApprovalStatus": "PendingManualApproval"
+   },
+   "responseElements": {
+    "modelPackageArn": "arn:aws:sagemaker:us-east-1:111122223333:model-package/tsg-summariser/3"
+   },
+   "requestID": "lab-req-0002",
+   "eventID": "lab-evt-0002",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Management"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLEDSBOB:bob@example.com",
+    "arn": "arn:aws:sts::111122223333:assumed-role/ds-bob/bob@example.com",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T09:05:02Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "UpdateModelPackage",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.3.25",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {
+    "modelPackageArn": "arn:aws:sagemaker:us-east-1:111122223333:model-package/tsg-summariser/3",
+    "modelApprovalStatus": "Approved"
+   },
+   "responseElements": {
+    "modelPackageArn": "arn:aws:sagemaker:us-east-1:111122223333:model-package/tsg-summariser/3"
+   },
+   "requestID": "lab-req-0003",
+   "eventID": "lab-evt-0003",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Management"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLETSGCIDEP:pipeline-run-212",
+    "arn": "arn:aws:sts::111122223333:assumed-role/tsg-ci-deployer/pipeline-run-212",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T09:10:31Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "CreateModelPackage",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.1.40",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {
+    "modelPackageGroupName": "tsg-summariser",
+    "modelPackageDescription": "Pipeline build 2027-01-28: safetensors, hashes recorded",
+    "modelApprovalStatus": "PendingManualApproval"
+   },
+   "responseElements": {
+    "modelPackageArn": "arn:aws:sagemaker:us-east-1:111122223333:model-package/tsg-summariser/4"
+   },
+   "requestID": "lab-req-0004",
+   "eventID": "lab-evt-0004",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Management"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLETSGMODEL:ml-lead@example.com",
+    "arn": "arn:aws:sts::111122223333:assumed-role/tsg-model-approver/ml-lead@example.com",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T09:30:12Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "UpdateModelPackage",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.3.25",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {
+    "modelPackageArn": "arn:aws:sagemaker:us-east-1:111122223333:model-package/tsg-summariser/4",
+    "modelApprovalStatus": "Approved",
+    "approvalDescription": "Reviewed eval report 212"
+   },
+   "responseElements": {
+    "modelPackageArn": "arn:aws:sagemaker:us-east-1:111122223333:model-package/tsg-summariser/4"
+   },
+   "requestID": "lab-req-0005",
+   "eventID": "lab-evt-0005",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Management"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLETSGCIDEP:pipeline-run-212",
+    "arn": "arn:aws:sts::111122223333:assumed-role/tsg-ci-deployer/pipeline-run-212",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T09:35:40Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "CreateModel",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.1.40",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {
+    "modelName": "tsg-summariser-v4",
+    "primaryContainer": {
+     "modelPackageName": "arn:aws:sagemaker:us-east-1:111122223333:model-package/tsg-summariser/4"
+    },
+    "executionRoleArn": "arn:aws:iam::111122223333:role/tsg-summariser-exec",
+    "vpcConfig": {
+     "subnets": [
+      "subnet-0a1b2c3d4e5f60011",
+      "subnet-0a1b2c3d4e5f60012"
+     ],
+     "securityGroupIds": [
+      "sg-0a1b2c3d4e5f60021"
+     ]
+    },
+    "enableNetworkIsolation": true
+   },
+   "responseElements": {
+    "modelArn": "arn:aws:sagemaker:us-east-1:111122223333:model/tsg-summariser-v4"
+   },
+   "requestID": "lab-req-0006",
+   "eventID": "lab-evt-0006",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Management"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLEDSBOB:bob@example.com",
+    "arn": "arn:aws:sts::111122223333:assumed-role/ds-bob/bob@example.com",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T09:41:07Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "CreateModel",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.3.25",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {
+    "modelName": "tsg-summariser-hotfix",
+    "primaryContainer": {
+     "image": "763104351884.dkr.ecr.us-east-1.amazonaws.com/djl-inference:0.30.0-lmi12.0.0-cu124",
+     "modelDataSource": {
+      "s3DataSource": {
+       "s3Uri": "s3://amzn-s3-demo-tsg-models/experiments/bob/",
+       "s3DataType": "S3Prefix",
+       "compressionType": "None"
+      }
+     }
+    },
+    "executionRoleArn": "arn:aws:iam::111122223333:role/tsg-summariser-exec",
+    "enableNetworkIsolation": false
+   },
+   "responseElements": {
+    "modelArn": "arn:aws:sagemaker:us-east-1:111122223333:model/tsg-summariser-hotfix"
+   },
+   "requestID": "lab-req-0007",
+   "eventID": "lab-evt-0007",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Management"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLEDSBOB:bob@example.com",
+    "arn": "arn:aws:sts::111122223333:assumed-role/ds-bob/bob@example.com",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T09:42:15Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "CreateEndpointConfig",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.3.25",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {
+    "endpointConfigName": "tsg-summariser-hotfix",
+    "productionVariants": [
+     {
+      "variantName": "AllTraffic",
+      "modelName": "tsg-summariser-hotfix",
+      "instanceType": "ml.g5.xlarge",
+      "initialInstanceCount": 1,
+      "enableSSMAccess": true
+     }
+    ]
+   },
+   "responseElements": {
+    "endpointConfigArn": "arn:aws:sagemaker:us-east-1:111122223333:endpoint-config/tsg-summariser-hotfix"
+   },
+   "requestID": "lab-req-0008",
+   "eventID": "lab-evt-0008",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Management"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLEDSBOB:bob@example.com",
+    "arn": "arn:aws:sts::111122223333:assumed-role/ds-bob/bob@example.com",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T09:43:01Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "UpdateEndpoint",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.3.25",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {
+    "endpointName": "tsg-summariser",
+    "endpointConfigName": "tsg-summariser-hotfix"
+   },
+   "responseElements": {
+    "endpointArn": "arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser"
+   },
+   "requestID": "lab-req-0009",
+   "eventID": "lab-evt-0009",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Management"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLETSGHELPD:helpdesk-backend",
+    "arn": "arn:aws:sts::111122223333:assumed-role/tsg-helpdesk-app/helpdesk-backend",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T10:01:12Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "InvokeEndpoint",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.1.77",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {},
+   "responseElements": null,
+   "requestID": "lab-req-0010",
+   "eventID": "lab-evt-0010",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Data",
+   "managementEvent": false,
+   "readOnly": false,
+   "resources": [
+    {
+     "accountId": "111122223333",
+     "type": "AWS::SageMaker::Endpoint",
+     "ARN": "arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser"
+    }
+   ],
+   "vpcEndpointId": "vpce-0a1b2c3d4e5f60001"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLETSGHELPD:helpdesk-backend",
+    "arn": "arn:aws:sts::111122223333:assumed-role/tsg-helpdesk-app/helpdesk-backend",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T10:01:40Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "InvokeEndpoint",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.1.77",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {},
+   "responseElements": null,
+   "requestID": "lab-req-0011",
+   "eventID": "lab-evt-0011",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Data",
+   "managementEvent": false,
+   "readOnly": false,
+   "resources": [
+    {
+     "accountId": "111122223333",
+     "type": "AWS::SageMaker::Endpoint",
+     "ARN": "arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser"
+    }
+   ],
+   "vpcEndpointId": "vpce-0a1b2c3d4e5f60001"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLETSGHELPD:helpdesk-backend",
+    "arn": "arn:aws:sts::111122223333:assumed-role/tsg-helpdesk-app/helpdesk-backend",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T10:02:05Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "InvokeEndpoint",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.1.77",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {},
+   "responseElements": null,
+   "requestID": "lab-req-0012",
+   "eventID": "lab-evt-0012",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Data",
+   "managementEvent": false,
+   "readOnly": false,
+   "resources": [
+    {
+     "accountId": "111122223333",
+     "type": "AWS::SageMaker::Endpoint",
+     "ARN": "arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser"
+    }
+   ],
+   "vpcEndpointId": "vpce-0a1b2c3d4e5f60001"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLEDSBOB:bob@example.com",
+    "arn": "arn:aws:sts::111122223333:assumed-role/ds-bob/bob@example.com",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T10:15:26Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "CreatePresignedDomainUrl",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.3.25",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {
+    "domainId": "d-abcde1234567",
+    "userProfileName": "alice"
+   },
+   "responseElements": {
+    "authorizedUrl": "HIDDEN_LAB_VALUE"
+   },
+   "requestID": "lab-req-0014",
+   "eventID": "lab-evt-0014",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Management"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLETSGHELPD:helpdesk-backend",
+    "arn": "arn:aws:sts::111122223333:assumed-role/tsg-helpdesk-app/helpdesk-backend",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T10:20:33Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "InvokeEndpoint",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.1.77",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {},
+   "responseElements": null,
+   "requestID": "lab-req-0013",
+   "eventID": "lab-evt-0013",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Data",
+   "managementEvent": false,
+   "readOnly": false,
+   "resources": [
+    {
+     "accountId": "111122223333",
+     "type": "AWS::SageMaker::Endpoint",
+     "ARN": "arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser"
+    }
+   ],
+   "vpcEndpointId": "vpce-0a1b2c3d4e5f60001"
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLETSGHELPD:helpdesk-backend",
+    "arn": "arn:aws:sts::111122223333:assumed-role/tsg-helpdesk-app/helpdesk-backend",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T11:02:51Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "InvokeEndpoint",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "203.0.113.50",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {},
+   "responseElements": null,
+   "requestID": "lab-req-0015",
+   "eventID": "lab-evt-0015",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Data",
+   "managementEvent": false,
+   "readOnly": false,
+   "resources": [
+    {
+     "accountId": "111122223333",
+     "type": "AWS::SageMaker::Endpoint",
+     "ARN": "arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser"
+    }
+   ]
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLETSGHELPD:helpdesk-backend",
+    "arn": "arn:aws:sts::111122223333:assumed-role/tsg-helpdesk-app/helpdesk-backend",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T11:03:09Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "InvokeEndpoint",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "203.0.113.50",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {},
+   "responseElements": null,
+   "requestID": "lab-req-0016",
+   "eventID": "lab-evt-0016",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Data",
+   "managementEvent": false,
+   "readOnly": false,
+   "resources": [
+    {
+     "accountId": "111122223333",
+     "type": "AWS::SageMaker::Endpoint",
+     "ARN": "arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser"
+    }
+   ]
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLETSGHELPD:helpdesk-backend",
+    "arn": "arn:aws:sts::111122223333:assumed-role/tsg-helpdesk-app/helpdesk-backend",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T11:03:30Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "InvokeEndpoint",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "203.0.113.50",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {},
+   "responseElements": null,
+   "requestID": "lab-req-0017",
+   "eventID": "lab-evt-0017",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Data",
+   "managementEvent": false,
+   "readOnly": false,
+   "resources": [
+    {
+     "accountId": "111122223333",
+     "type": "AWS::SageMaker::Endpoint",
+     "ARN": "arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser"
+    }
+   ]
+  },
+  {
+   "eventVersion": "1.11",
+   "userIdentity": {
+    "type": "AssumedRole",
+    "principalId": "AROAEXAMPLEDSALICE:alice@example.com",
+    "arn": "arn:aws:sts::111122223333:assumed-role/ds-alice/alice@example.com",
+    "accountId": "111122223333"
+   },
+   "eventTime": "2027-01-28T11:05:00Z",
+   "eventSource": "sagemaker.amazonaws.com",
+   "eventName": "InvokeEndpoint",
+   "awsRegion": "us-east-1",
+   "sourceIPAddress": "10.0.3.25",
+   "userAgent": "USER_AGENT",
+   "requestParameters": {},
+   "responseElements": null,
+   "requestID": "lab-req-0018",
+   "eventID": "lab-evt-0018",
+   "eventType": "AwsApiCall",
+   "recipientAccountId": "111122223333",
+   "eventCategory": "Data",
+   "managementEvent": false,
+   "readOnly": false,
+   "resources": [
+    {
+     "accountId": "111122223333",
+     "type": "AWS::SageMaker::Endpoint",
+     "ARN": "arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser"
+    }
+   ],
+   "vpcEndpointId": "vpce-0a1b2c3d4e5f60001"
+  }
+ ]
+}
