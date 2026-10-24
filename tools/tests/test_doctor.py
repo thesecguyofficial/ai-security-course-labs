@@ -50,6 +50,12 @@ class VenvTests(unittest.TestCase):
         self.assertEqual(r.status, OK)
         self.assertIn("3.13.16", r.detail)
 
+    def test_311_warns_about_m9_only(self):
+        self.make_venv()
+        r = doctor.check_venv(self.root, runner=fake_runner({(self.py, "-c"): (0, "3.11.0rc1\n"), (self.py, "-m"): (0, "pip")}))
+        self.assertEqual(r.status, WARN)
+        self.assertIn("M9", r.advice)
+
     def test_too_old_fails(self):
         self.make_venv()
         r = doctor.check_venv(self.root, runner=fake_runner({(self.py, "-c"): (0, "3.10.12\n")}))

@@ -28,6 +28,7 @@ import urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MIN_PY = (3, 11)          # M5, M7 and M10 onwards use 3.11 features
 TESTED_MAX_PY = (3, 13)   # M4 (Presidio, spaCy) and M9 pins are tested up to 3.13
+M9_MIN_PY = (3, 12)       # M9 pins numpy 2.5.4, which requires Python 3.12+
 OLLAMA_URL = "http://127.0.0.1:11434"
 MODELS = ["gemma3:1b", "embeddinggemma"]
 MIN_RAM_GB = 8
@@ -111,6 +112,10 @@ def check_venv(root, runner=run):
     if code != 0:
         return Result("Python 3.11+ in the shared .venv", FAIL, "Python %s, but pip is missing" % version,
                       "Delete the .venv folder and run %s again." % setup_cmd())
+    if parts < M9_MIN_PY:
+        return Result("Python 3.11+ in the shared .venv", WARN, "Python %s" % version,
+                      "Every lab works except M9, whose pinned numpy needs Python 3.12 or newer. Before M9, install "
+                      "Python 3.12+ (Ubuntu 24.04 / Debian 13 have it), delete .venv and run %s again." % setup_cmd())
     return Result("Python 3.11+ in the shared .venv", OK, "Python %s" % version)
 
 

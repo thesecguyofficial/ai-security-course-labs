@@ -4,9 +4,9 @@ name: lab-setup
 # -NoDocker; the doctor still runs every other check. Linux runs the full path, Docker included.
 on:
   push:
-    paths: ["setup.sh", "setup.ps1", "tools/**", "requirements-common.txt", "SHA256SUMS", ".github/workflows/setup.yml", "Makefile"]
+    paths: ["setup.sh", "setup.ps1", "tools/**", "requirements-common.txt", "SHA256SUMS", ".github/**", "Makefile"]
   pull_request:
-    paths: ["setup.sh", "setup.ps1", "tools/**", "requirements-common.txt", "SHA256SUMS", ".github/workflows/setup.yml", "Makefile"]
+    paths: ["setup.sh", "setup.ps1", "tools/**", "requirements-common.txt", "SHA256SUMS", ".github/**", "Makefile"]
   workflow_dispatch:
 permissions:
   contents: read
@@ -32,7 +32,7 @@ jobs:
       - name: check only (exit 1 = things missing, which is expected on a fresh runner)
         run: ./setup.sh --check || test $? -eq 1
       - name: full install
-        run: ./setup.sh --yes $([ "${{ matrix.os }}" = ubuntu-22.04 ] && echo --no-models)
+        run: ./setup.sh --yes $([ "${{ matrix.os }}" = ubuntu-22.04 ] && echo --no-models) 2>&1 | tee full.txt
       - name: second run changes nothing
         run: |
           ./setup.sh --yes $([ "${{ matrix.os }}" = ubuntu-22.04 ] && echo --no-models) | tee second-run.txt
@@ -46,12 +46,17 @@ jobs:
         run: |
           . .venv/bin/activate
           python --version
-          make -C labs/m05 setup test
-          make -C labs/m09 setup test
+          make -C labs/m05 setup test 2>&1 | tee lab.txt
+          # M9 pins numpy 2.5.4 (Python 3.12+); on 3.11 (Ubuntu 22.04) test the M6 package lab instead.
+          if python -c 'import sys; sys.exit(sys.version_info < (3, 12))'; then lab=m09; else lab=m06; fi
+          make -C labs/$lab setup test 2>&1 | tee -a lab.txt
       - name: uninstall
         run: |
           ./setup.sh --uninstall --yes
           test ! -d .venv
+      - name: show the end of the logs as annotations
+        if: failure()
+        run: python3 .github/scripts/annotate_tail.py full.txt second-run.txt lab.txt setup.log
       - uses: actions/upload-artifact@v4
         if: failure()
         with: {name: "setup-log-${{ matrix.os }}", path: "setup.log"}
@@ -63,7 +68,7 @@ jobs:
       - name: check only
         run: ./setup.sh --check --no-docker || test $? -eq 1
       - name: full install (Ollama from Homebrew, models, .venv; no Docker on this runner)
-        run: ./setup.sh --yes --no-docker
+        run: ./setup.sh --yes --no-docker 2>&1 | tee full.txt
       - name: second run changes nothing
         run: |
           ./setup.sh --yes --no-docker | tee second-run.txt
@@ -72,6 +77,9 @@ jobs:
         run: .venv/bin/python tools/doctor.py --skip docker
       - name: a lab works with the shared .venv
         run: . .venv/bin/activate && make -C labs/m05 setup test
+      - name: show the end of the logs as annotations
+        if: failure()
+        run: python3 .github/scripts/annotate_tail.py full.txt second-run.txt setup.log
       - uses: actions/upload-artifact@v4
         if: failure()
         with: {name: setup-log-macos, path: setup.log}
@@ -110,13 +118,19 @@ jobs:
       - name: full install (winget Ollama, models, .venv; no Docker Desktop on this runner)
         shell: pwsh
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File setup.ps1 -Yes -NoDocker
-          exit $LASTEXITCODE
+          powershell -NoProfile -ExecutionPolicy Bypass -File setup.ps1 -Yes -NoDocker *>&1 | Tee-Object -FilePath full.txt
+          $rc = $LASTEXITCODE
+          if ($rc -ne 0 -and (Test-Path .venv\Scripts\python.exe)) { .venv\Scripts\python.exe tools\doctor.py --skip docker --json | Out-File -Encoding utf8 doctor.txt }
+          exit $rc
       - name: doctor on its own
         shell: pwsh
         run: |
           .venv\Scripts\python.exe tools\doctor.py --skip docker
           exit $LASTEXITCODE
+      - name: show the end of the logs as annotations
+        if: failure()
+        shell: pwsh
+        run: python .github/scripts/annotate_tail.py full.txt doctor.txt setup.log
       - uses: actions/upload-artifact@v4
         if: failure()
         with: {name: setup-log-windows, path: setup.log}
