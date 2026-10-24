@@ -64,3 +64,8 @@ down:            ## back to Microsoft.DefaultV2; delete the guardrail, blocklist
 
 clean:           ## remove Python caches
 	rm -rf __pycache__ cloud/__pycache__
+
+# Added for the repo-wide setup (setup.sh): every lab answers `make setup`. This one needs nothing installed.
+.PHONY: setup
+setup:        ## nothing to install: checks your Python is 3.11 or newer
+	$(PY) ../../tools/check_python.py 3.11

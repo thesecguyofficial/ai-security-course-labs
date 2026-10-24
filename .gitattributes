@@ -1,0 +1,6 @@
+# The setup files are published with SHA-256 fingerprints (SHA256SUMS). Git must never change their line
+# endings on checkout (Windows' core.autocrlf would), or the fingerprints would not match.
+setup.sh          -text
+setup.ps1         -text
+tools/doctor.py   -text
+SHA256SUMS        -text

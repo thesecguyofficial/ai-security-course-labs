@@ -49,3 +49,8 @@ alerts:       ## show the security alerts written to logs/events.jsonl
 clean:        ## delete state, logs and promptfoo results
 	$(PY) support_bot.py reset
 	rm -rf .promptfoo __pycache__
+
+# Added for the repo-wide setup (setup.sh): every lab answers `make setup`. This one needs nothing installed.
+.PHONY: setup
+setup:        ## nothing to install: checks your Python is 3.10 or newer
+	$(PY) ../../tools/check_python.py 3.10

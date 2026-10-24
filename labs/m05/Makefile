@@ -24,3 +24,8 @@ challenge:    ## same, plus the path-traversal challenge (fails until you fix sa
 
 clean:        ## delete files the app or the challenge created
 	rm -rf exports escaped.txt __pycache__
+
+# Added for the repo-wide setup (setup.sh): every lab answers `make setup`. This one needs nothing installed.
+.PHONY: setup
+setup:        ## nothing to install: checks your Python is 3.11 or newer
+	$(PY) ../../tools/check_python.py 3.11

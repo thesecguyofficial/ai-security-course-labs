@@ -1,0 +1,122 @@
+name: lab-setup
+# Tests setup.sh / setup.ps1 / tools/doctor.py on the three operating systems students use.
+# Docker cannot run Linux containers on GitHub's macOS and Windows runners, so those jobs pass --no-docker /
+# -NoDocker; the doctor still runs every other check. Linux runs the full path, Docker included.
+on:
+  push:
+    paths: ["setup.sh", "setup.ps1", "tools/**", "requirements-common.txt", "SHA256SUMS", ".github/workflows/setup.yml", "Makefile"]
+  pull_request:
+    paths: ["setup.sh", "setup.ps1", "tools/**", "requirements-common.txt", "SHA256SUMS", ".github/workflows/setup.yml", "Makefile"]
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck (from PyPI, shellcheck-py)
+        run: python3 -m pip install --user shellcheck-py && echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: unit tests (doctor) + script tests (shellcheck, checksums, house voice)
+        run: make test-setup
+
+  linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-22.04]   # 22.04 ships Python 3.10: setup must add 3.11 from apt
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: check only (exit 1 = things missing, which is expected on a fresh runner)
+        run: ./setup.sh --check || test $? -eq 1
+      - name: full install
+        run: ./setup.sh --yes $([ "${{ matrix.os }}" = ubuntu-22.04 ] && echo --no-models)
+      - name: second run changes nothing
+        run: |
+          ./setup.sh --yes $([ "${{ matrix.os }}" = ubuntu-22.04 ] && echo --no-models) | tee second-run.txt
+          if grep -E '\$ .*(apt-get install|ollama pull|-m venv)' second-run.txt; then echo "second run installed something"; exit 1; fi
+      - name: doctor on its own
+        run: python3 tools/doctor.py $([ "${{ matrix.os }}" = ubuntu-22.04 ] && echo --skip ollama)
+      - name: Ollama listens on 127.0.0.1 only
+        if: matrix.os == 'ubuntu-24.04'
+        run: ss -ltn | grep 11434 && ! ss -ltn | grep -E '(0\.0\.0\.0|\*|\[::\]):11434'
+      - name: a stdlib lab and a package lab work with the shared .venv
+        run: |
+          . .venv/bin/activate
+          python --version
+          make -C labs/m05 setup test
+          make -C labs/m09 setup test
+      - name: uninstall
+        run: |
+          ./setup.sh --uninstall --yes
+          test ! -d .venv
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: {name: "setup-log-${{ matrix.os }}", path: "setup.log"}
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: check only
+        run: ./setup.sh --check --no-docker || test $? -eq 1
+      - name: full install (Ollama from Homebrew, models, .venv; no Docker on this runner)
+        run: ./setup.sh --yes --no-docker
+      - name: second run changes nothing
+        run: |
+          ./setup.sh --yes --no-docker | tee second-run.txt
+          if grep -E '\$ .*(brew install|ollama pull|-m venv)' second-run.txt; then echo "second run installed something"; exit 1; fi
+      - name: doctor on its own
+        run: .venv/bin/python tools/doctor.py --skip docker
+      - name: a lab works with the shared .venv
+        run: . .venv/bin/activate && make -C labs/m05 setup test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: {name: setup-log-macos, path: setup.log}
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: parses in Windows PowerShell 5.1 and PowerShell 7
+        shell: pwsh
+        run: |
+          foreach ($exe in 'powershell', 'pwsh') {
+            & $exe -NoProfile -Command '$e = $null; [void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path setup.ps1), [ref]$null, [ref]$e); if ($e) { $e | Out-String | Write-Host; exit 1 }; "parsed OK in PowerShell $($PSVersionTable.PSVersion)"'
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+          }
+      - name: PSScriptAnalyzer (errors fail the build; Write-Host is intended in a setup script)
+        shell: pwsh
+        run: |
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+          $r = Invoke-ScriptAnalyzer -Path setup.ps1 -ExcludeRule PSAvoidUsingWriteHost
+          $r | Format-Table -AutoSize | Out-String -Width 200 | Write-Host
+          if ($r | Where-Object Severity -eq 'Error') { exit 1 }
+      - name: line endings were not changed on checkout (SHA256SUMS)
+        shell: pwsh
+        run: |
+          foreach ($line in Get-Content SHA256SUMS) {
+            $hash, $name = $line -split '\s+', 2
+            $actual = (Get-FileHash $name -Algorithm SHA256).Hash.ToLower()
+            if ($actual -ne $hash) { "MISMATCH $name"; exit 1 } else { "ok $name" }
+          }
+      - name: check only (Windows PowerShell 5.1)
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File setup.ps1 -Check -NoDocker
+          if ($LASTEXITCODE -notin 0, 1) { exit 1 } else { exit 0 }
+      - name: full install (winget Ollama, models, .venv; no Docker Desktop on this runner)
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File setup.ps1 -Yes -NoDocker
+          exit $LASTEXITCODE
+      - name: doctor on its own
+        shell: pwsh
+        run: |
+          .venv\Scripts\python.exe tools\doctor.py --skip docker
+          exit $LASTEXITCODE
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: {name: setup-log-windows, path: setup.log}

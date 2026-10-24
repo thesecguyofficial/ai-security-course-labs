@@ -44,3 +44,8 @@ down:           ## destroy everything this lab created (KMS key versions are sch
 
 clean:          ## remove Python caches and local plan files
 	rm -rf __pycache__ terraform/plan.out terraform/plan.json
+
+# Added for the repo-wide setup (setup.sh): every lab answers `make setup`. This one needs nothing installed.
+.PHONY: setup
+setup:        ## nothing to install: checks your Python is 3.11 or newer
+	$(PY) ../../tools/check_python.py 3.11
