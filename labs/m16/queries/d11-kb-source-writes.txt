@@ -1,0 +1,5 @@
+fields @timestamp, eventName, userIdentity.arn, requestParameters.bucketName, requestParameters.key, sourceIPAddress
+| filter (eventSource = "s3.amazonaws.com" and eventName in ["PutObject", "CopyObject", "DeleteObject"] and requestParameters.bucketName = "anycompany-helpdesk-kb-source")
+    or eventName = "StartIngestionJob"
+| filter userIdentity.sessionContext.sessionIssuer.userName != "KbPipelineRole"
+| sort @timestamp asc

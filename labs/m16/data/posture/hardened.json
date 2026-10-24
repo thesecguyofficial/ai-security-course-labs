@@ -1,0 +1,101 @@
+{
+ "_about": "The same resources after the M16 hardening (and M11, M12, M14 fixes). Lab values.",
+ "resources": [
+  {
+   "resourceType": "AWS::BedrockAgentCore::Runtime",
+   "resourceId": "tsg_helpdesk-AbCdEf1234",
+   "networkConfiguration": {
+    "networkMode": "VPC"
+   }
+  },
+  {
+   "resourceType": "AWS::BedrockAgentCore::Gateway",
+   "resourceId": "tsg-helpdesk-gw-a1b2c3d4e5",
+   "authorizerType": "CUSTOM_JWT",
+   "kmsKeyArn": "arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab",
+   "policyEngineConfiguration": {
+    "mode": "ENFORCE"
+   }
+  },
+  {
+   "resourceType": "AWS::BedrockAgentCore::Memory",
+   "resourceId": "tsg_helpdesk_mem-Xy12Ab34Cd",
+   "encryptionKeyArn": "arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab",
+   "eventExpiryDuration": 30
+  },
+  {
+   "resourceType": "AWS::BedrockAgentCore::CodeInterpreterCustom",
+   "resourceId": "tsg_ci-Pp55Oo66Ii",
+   "networkConfiguration": {
+    "networkMode": "VPC"
+   }
+  },
+  {
+   "resourceType": "AWS::BedrockAgentCore::BrowserCustom",
+   "resourceId": "tsg_browser-Ll77Kk88Jj",
+   "networkConfiguration": {
+    "networkMode": "VPC"
+   },
+   "recording": {
+    "enabled": true,
+    "s3Location": {
+     "bucket": "anycompany-browser-recordings",
+     "prefix": "tsg/"
+    }
+   }
+  },
+  {
+   "resourceType": "AWS::Bedrock::DataSource",
+   "resourceId": "DSHELPDESK1",
+   "serverSideEncryptionConfiguration": {
+    "kmsKeyArn": "arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
+   }
+  }
+ ],
+ "account": {
+  "_model_invocation_logging": "aws bedrock get-model-invocation-logging-configuration (us-east-1)",
+  "loggingConfig": {
+   "cloudWatchConfig": {
+    "logGroupName": "/aws/bedrock/modelinvocations",
+    "roleArn": "arn:aws:iam::111122223333:role/BedrockInvocationLogging"
+   },
+   "s3Config": {
+    "bucketName": "anycompany-bedrock-invocation-logs",
+    "keyPrefix": "large/"
+   },
+   "textDataDeliveryEnabled": true,
+   "imageDataDeliveryEnabled": false,
+   "embeddingDataDeliveryEnabled": false,
+   "videoDataDeliveryEnabled": false
+  },
+  "_guardduty_features": "aws guardduty get-detector: features[].name / status",
+  "guardduty_features": [
+   {
+    "name": "CLOUD_TRAIL",
+    "status": "ENABLED"
+   },
+   {
+    "name": "AI_PROTECTION",
+    "status": "ENABLED"
+   }
+  ],
+  "_trail_data_resource_types": "resources.type values in the org trail's advanced event selectors (eventCategory = Data)",
+  "trail_data_resource_types": [
+   "AWS::S3::Object",
+   "AWS::BedrockMantle::Project",
+   "AWS::BedrockAgentCore::Runtime",
+   "AWS::BedrockAgentCore::Gateway",
+   "AWS::Bedrock::Guardrail"
+  ],
+  "_guardrailsConfig": "aws bedrock list-enforced-guardrails-configuration (guardrailsConfig); lab.prompt_attack_filter = the guardrail's PROMPT_ATTACK filter is configured (from get-guardrail)",
+  "guardrailsConfig": [
+   {
+    "configId": "tsg-account-enforcement",
+    "guardrailArn": "arn:aws:bedrock:us-east-1:111122223333:guardrail/tsghelpdesk01",
+    "guardrailId": "tsghelpdesk01",
+    "guardrailVersion": "1",
+    "lab.prompt_attack_filter": true
+   }
+  ]
+ }
+}

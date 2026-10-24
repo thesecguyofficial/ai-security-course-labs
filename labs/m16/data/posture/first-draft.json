@@ -1,0 +1,76 @@
+{
+ "_about": "AnyCompany's AI resources and account settings as the first draft left them: the Get/Describe/List responses this lab reads, cut to the fields the rules check. Lab values.",
+ "resources": [
+  {
+   "resourceType": "AWS::BedrockAgentCore::Runtime",
+   "resourceId": "tsg_helpdesk-AbCdEf1234",
+   "networkConfiguration": {
+    "networkMode": "PUBLIC"
+   }
+  },
+  {
+   "resourceType": "AWS::BedrockAgentCore::Gateway",
+   "resourceId": "tsg-helpdesk-gw-a1b2c3d4e5",
+   "authorizerType": "CUSTOM_JWT",
+   "kmsKeyArn": null,
+   "policyEngineConfiguration": {
+    "mode": "LOG_ONLY"
+   }
+  },
+  {
+   "resourceType": "AWS::BedrockAgentCore::Gateway",
+   "resourceId": "marketing-poc-gw-Qq11Ww22Ee",
+   "authorizerType": "NONE",
+   "kmsKeyArn": null
+  },
+  {
+   "resourceType": "AWS::BedrockAgentCore::Memory",
+   "resourceId": "tsg_helpdesk_mem-Xy12Ab34Cd",
+   "encryptionKeyArn": null,
+   "eventExpiryDuration": 3
+  },
+  {
+   "resourceType": "AWS::BedrockAgentCore::CodeInterpreterCustom",
+   "resourceId": "tsg_ci-Pp55Oo66Ii",
+   "networkConfiguration": {
+    "networkMode": "SANDBOX"
+   }
+  },
+  {
+   "resourceType": "AWS::BedrockAgentCore::BrowserCustom",
+   "resourceId": "tsg_browser-Ll77Kk88Jj",
+   "networkConfiguration": {
+    "networkMode": "PUBLIC"
+   },
+   "recording": {
+    "enabled": false
+   }
+  },
+  {
+   "resourceType": "AWS::Bedrock::DataSource",
+   "resourceId": "DSHELPDESK1",
+   "serverSideEncryptionConfiguration": {}
+  }
+ ],
+ "account": {
+  "_model_invocation_logging": "aws bedrock get-model-invocation-logging-configuration (us-east-1)",
+  "loggingConfig": null,
+  "_guardduty_features": "aws guardduty get-detector: features[].name / status",
+  "guardduty_features": [
+   {
+    "name": "CLOUD_TRAIL",
+    "status": "ENABLED"
+   },
+   {
+    "name": "AI_PROTECTION",
+    "status": "DISABLED"
+   }
+  ],
+  "guardrailsConfig": [],
+  "_trail_data_resource_types": "resources.type values in the org trail's advanced event selectors (eventCategory = Data)",
+  "trail_data_resource_types": [
+   "AWS::S3::Object"
+  ],
+  "_guardrailsConfig": "aws bedrock list-enforced-guardrails-configuration (guardrailsConfig); lab.prompt_attack_filter = the guardrail's PROMPT_ATTACK filter is configured (from get-guardrail)"
+ }
+}

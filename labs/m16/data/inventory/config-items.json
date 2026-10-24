@@ -1,0 +1,18 @@
+{
+  "_about": "AWS Config configuration items for AnyCompany's AI resources (simplified to the fields this lab reads; lab values). Security Hub's AI inventory discovers managed AI resources from exactly this kind of record.",
+  "configurationItems": [
+    {"resourceType": "AWS::Bedrock::Guardrail", "resourceId": "tsghelpdesk01", "tags": {"owner": "platform"}},
+    {"resourceType": "AWS::Bedrock::KnowledgeBase", "resourceId": "KBHELPDESK1", "tags": {"owner": "platform"}},
+    {"resourceType": "AWS::Bedrock::DataSource", "resourceId": "DSHELPDESK1", "tags": {"owner": "platform"}},
+    {"resourceType": "AWS::BedrockAgentCore::Runtime", "resourceId": "tsg_helpdesk-AbCdEf1234", "tags": {"owner": "platform"}},
+    {"resourceType": "AWS::BedrockAgentCore::Gateway", "resourceId": "tsg-helpdesk-gw-a1b2c3d4e5", "tags": {"owner": "platform"}},
+    {"resourceType": "AWS::BedrockAgentCore::Memory", "resourceId": "tsg_helpdesk_mem-Xy12Ab34Cd", "tags": {"owner": "platform"}},
+    {"resourceType": "AWS::BedrockAgentCore::Runtime", "resourceId": "marketing_poc_agent-Zz98Yy76Xx", "tags": {"owner": "marketing", "purpose": "hackathon"}},
+    {"resourceType": "AWS::SageMaker::Endpoint", "resourceId": "churn-model-prod", "tags": {"owner": "data-science"}},
+    {"resourceType": "AWS::SageMaker::NotebookInstance", "resourceId": "ds-scratch-notebook", "tags": {}},
+    {"resourceType": "AWS::EC2::Instance", "resourceId": "i-0a1b2c3d4e5f60001", "tags": {"Name": "analytics-box", "owner": "finance"}},
+    {"resourceType": "AWS::EC2::Instance", "resourceId": "i-0a1b2c3d4e5f60002", "tags": {"Name": "gpu-dev-box", "owner": "data-science"},
+     "lab.securityGroupIngress": [{"port": 11434, "cidr": "0.0.0.0/0"}, {"port": 22, "cidr": "192.0.2.0/24"}]},
+    {"resourceType": "AWS::EC2::Instance", "resourceId": "i-0a1b2c3d4e5f60003", "tags": {"Name": "it-automation", "owner": "it"}}
+  ]
+}

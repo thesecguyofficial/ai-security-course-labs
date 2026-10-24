@@ -1,0 +1,13 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowEventBridgeRuleToPublish",
+      "Effect": "Allow",
+      "Principal": {"Service": "events.amazonaws.com"},
+      "Action": "sns:Publish",
+      "Resource": "arn:aws:sns:us-east-1:ACCOUNT_ID:tsg-m16-ai-findings",
+      "Condition": {"ArnEquals": {"aws:SourceArn": "arn:aws:events:us-east-1:ACCOUNT_ID:rule/tsg-m16-ai-findings"}}
+    }
+  ]
+}
