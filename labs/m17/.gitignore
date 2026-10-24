@@ -1,0 +1,5 @@
+state/
+results/
+.promptfoo/
+__pycache__/
+node_modules/

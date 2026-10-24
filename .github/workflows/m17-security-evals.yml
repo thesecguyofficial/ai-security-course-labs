@@ -1,0 +1,62 @@
+name: m17-security-evals
+# Lab M17.4: security evals that fail the build when a change reopens an injection path in TSG Helpdesk.
+# It runs exactly what `make ci` runs in labs/m17 (README, Step 6), on a fresh GitHub-hosted runner.
+#
+# Design choices (lesson 17.3):
+#   - triggers: pull_request (code from forks runs with a read-only token and no secrets), never pull_request_target
+#   - permissions: read-only GITHUB_TOKEN, and checkout does not keep the token on disk
+#   - every action pinned to a full commit SHA (the tag is in the comment); promptfoo pinned in run_eval.py
+#   - the paths filter keeps unrelated changes from running this job. If you make this check REQUIRED on a branch,
+#     remove the filter: a workflow skipped by a paths filter leaves a required check "Pending" (GitHub docs)
+#   - no API keys: the target is the local Helpdesk on 127.0.0.1 inside the runner
+
+on:
+  push:
+    paths: ["labs/m17/**", ".github/workflows/m17-security-evals.yml"]
+  pull_request:
+    paths: ["labs/m17/**", ".github/workflows/m17-security-evals.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: m17-security-evals-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security-evals:
+    name: security evals (TSG Helpdesk)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: labs/m17
+    env:
+      PROMPTFOO_DISABLE_TELEMETRY: "1"
+      PROMPTFOO_DISABLE_UPDATE: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22.22.0"
+
+      - name: Pipeline rules (pinned actions, read-only token, evals talk only to 127.0.0.1)
+        run: python3 -m unittest test_lab.T4_Safety
+
+      - name: Security evals on the hardened build (every test must pass)
+        run: python3 run_eval.py --out results/hardened.json --junit results/hardened.junit.xml
+
+      - name: Negative control on the weak build (the suite must fail)
+        run: python3 run_eval.py --profile weak --expect-fail --out results/weak.json
+
+      - name: Keep the evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: m17-eval-results
+          path: labs/m17/results/
+          retention-days: 14
