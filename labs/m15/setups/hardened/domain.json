@@ -1,0 +1,52 @@
+{
+  "_note": "CreateDomain request body. Each user profile gets its own security group (CreateUserProfile UserSettings.SecurityGroups, below in _user_profiles), as AWS recommends.",
+  "DomainName": "tsg-data-science",
+  "AuthMode": "IAM",
+  "DefaultUserSettings": {
+    "ExecutionRole": "arn:aws:iam::111122223333:role/tsg-ds-exec"
+  },
+  "DomainSettings": {
+    "SecurityGroupIds": [
+      "sg-0a1b2c3d4e5f60032"
+    ]
+  },
+  "SubnetIds": [
+    "subnet-0a1b2c3d4e5f60013",
+    "subnet-0a1b2c3d4e5f60014"
+  ],
+  "VpcId": "vpc-0a1b2c3d4e5f60000",
+  "AppNetworkAccessType": "VpcOnly",
+  "KmsKeyId": "arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab",
+  "_user_profiles": {
+    "alice": {
+      "SecurityGroups": [
+        "sg-0a1b2c3d4e5f60041"
+      ]
+    },
+    "bob": {
+      "SecurityGroups": [
+        "sg-0a1b2c3d4e5f60042"
+      ]
+    }
+  },
+  "_security_groups": {
+    "sg-0a1b2c3d4e5f60032": {
+      "inbound_from_itself": false,
+      "used_by": [
+        "domain (EFS on 2049)"
+      ]
+    },
+    "sg-0a1b2c3d4e5f60041": {
+      "inbound_from_itself": true,
+      "used_by": [
+        "alice"
+      ]
+    },
+    "sg-0a1b2c3d4e5f60042": {
+      "inbound_from_itself": true,
+      "used_by": [
+        "bob"
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "Name": "tsg-m15-teardown",
+  "Description": "Auto-teardown: delete the lab endpoint even if you forget",
+  "ScheduleExpression": "at(${TEARDOWN_AT})",
+  "ScheduleExpressionTimezone": "UTC",
+  "FlexibleTimeWindow": {"Mode": "OFF"},
+  "Target": {
+    "Arn": "arn:aws:scheduler:::aws-sdk:sagemaker:deleteEndpoint",
+    "RoleArn": "${SchedulerRoleArn}",
+    "Input": "{\"EndpointName\": \"${EndpointName}\"}"
+  },
+  "ActionAfterCompletion": "DELETE"
+}

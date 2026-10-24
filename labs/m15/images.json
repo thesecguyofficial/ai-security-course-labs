@@ -1,0 +1,29 @@
+{
+  "_about": "The lab's image catalog. Image names follow the AWS Deep Learning Containers 'Available Images' page (read 24 Oct 2026: latest LMI tag 0.38.0-lmi30.0.0-cu130). The older tag, the digest and both release dates are LAB VALUES: for real images, read the release date on that page and the digest in your own ECR copy. Support rule (Prebuilt SageMaker image support policy): DLCs reach end of patch 365 days after their GitHub release date; LLM hosting containers such as TGI after 30 days.",
+  "end_of_patch_days": {
+    "dlc": 365,
+    "llm-hosting": 30
+  },
+  "images": {
+    "763104351884.dkr.ecr.us-east-1.amazonaws.com/djl-inference:0.30.0-lmi12.0.0-cu124": {
+      "family": "dlc",
+      "released": "2025-09-15",
+      "_note": "lab value"
+    },
+    "763104351884.dkr.ecr.us-east-1.amazonaws.com/djl-inference:0.38.0-lmi30.0.0-cu130": {
+      "family": "dlc",
+      "released": "2026-10-06",
+      "_note": "tag from the AWS page; date is a lab value"
+    },
+    "763104351884.dkr.ecr.us-east-1.amazonaws.com/djl-inference@sha256:f9053767cbcf6cdfad3431a94e3f53df1b7b14fbf827f096dbe07dff1be52b7a": {
+      "family": "dlc",
+      "released": "2026-10-06",
+      "_note": "the same image pinned by digest (lab digest)"
+    }
+  },
+  "_instance_local_storage": {
+    "_about": "From AWS's Host Instance Storage Volumes Table: ml.g5.xlarge and ml.g4dn.xlarge list NVMe SSD instance storage. AWS: 'You can't use a KMS key on an instance type with local storage.'",
+    "ml.g5.xlarge": true,
+    "ml.g4dn.xlarge": true
+  }
+}

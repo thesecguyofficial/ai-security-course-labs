@@ -1,0 +1,148 @@
+{
+  "_note": "Model registry: one CreateModelPackage request body per version, plus lab notes (who registered it, who approved it).",
+  "ModelPackageGroupName": "tsg-summariser",
+  "packages": [
+    {
+      "_version": 1,
+      "_registered_by": "ds-alice",
+      "_approved_by": null,
+      "ModelPackageGroupName": "tsg-summariser",
+      "ModelPackageDescription": "First fine-tune (rejected: pickle weights)",
+      "InferenceSpecification": {
+        "Containers": [
+          {
+            "Image": "763104351884.dkr.ecr.us-east-1.amazonaws.com/djl-inference:0.30.0-lmi12.0.0-cu124",
+            "ModelDataSource": {
+              "S3DataSource": {
+                "S3Uri": "s3://amzn-s3-demo-tsg-models/tsg-summariser/v1/",
+                "S3DataType": "S3Prefix",
+                "CompressionType": "None"
+              }
+            },
+            "Environment": {
+              "OPTION_ROLLING_BATCH": "vllm"
+            }
+          }
+        ],
+        "SupportedContentTypes": [
+          "application/json"
+        ],
+        "SupportedResponseMIMETypes": [
+          "application/json"
+        ]
+      },
+      "ModelApprovalStatus": "Rejected",
+      "_rejected_by": "tsg-model-approver"
+    },
+    {
+      "_version": 2,
+      "_registered_by": "tsg-ci-deployer",
+      "_approved_by": "tsg-model-approver",
+      "ModelPackageGroupName": "tsg-summariser",
+      "ModelPackageDescription": "Pipeline build 2027-01-20: safetensors, hashes recorded",
+      "InferenceSpecification": {
+        "Containers": [
+          {
+            "Image": "763104351884.dkr.ecr.us-east-1.amazonaws.com/djl-inference@sha256:f9053767cbcf6cdfad3431a94e3f53df1b7b14fbf827f096dbe07dff1be52b7a",
+            "ModelDataSource": {
+              "S3DataSource": {
+                "S3Uri": "s3://amzn-s3-demo-tsg-models/tsg-summariser/v2/",
+                "S3DataType": "S3Prefix",
+                "CompressionType": "None"
+              }
+            },
+            "Environment": {
+              "OPTION_ROLLING_BATCH": "vllm"
+            }
+          }
+        ],
+        "SupportedContentTypes": [
+          "application/json"
+        ],
+        "SupportedResponseMIMETypes": [
+          "application/json"
+        ]
+      },
+      "ModelApprovalStatus": "Approved",
+      "CustomerMetadataProperties": {
+        "licence": "apache-2.0",
+        "source": "huggingface.co/Qwen/Qwen3-0.6B",
+        "sha256/config.json": "2239240893aab4434347887491ba9de3a390cac0d0e5192b465089f8ae067f36",
+        "sha256/model.safetensors": "e4f168a317b4ec264ba876970665810f5ef53dcb2381525789e230712dd8c49a",
+        "sha256/tokenizer.json": "ea991de3c734d41384ad6b47bf781c803c1550b381b435823b9232ec03ee380d"
+      }
+    },
+    {
+      "_version": 3,
+      "_registered_by": "ds-bob",
+      "_approved_by": null,
+      "ModelPackageGroupName": "tsg-summariser",
+      "ModelPackageDescription": "Bob's new fine-tune, uploaded from a notebook",
+      "InferenceSpecification": {
+        "Containers": [
+          {
+            "Image": "763104351884.dkr.ecr.us-east-1.amazonaws.com/djl-inference:0.30.0-lmi12.0.0-cu124",
+            "ModelDataSource": {
+              "S3DataSource": {
+                "S3Uri": "s3://amzn-s3-demo-tsg-models/tsg-summariser/v3/",
+                "S3DataType": "S3Prefix",
+                "CompressionType": "None"
+              }
+            },
+            "Environment": {
+              "OPTION_ROLLING_BATCH": "vllm"
+            }
+          }
+        ],
+        "SupportedContentTypes": [
+          "application/json"
+        ],
+        "SupportedResponseMIMETypes": [
+          "application/json"
+        ]
+      },
+      "ModelApprovalStatus": "PendingManualApproval",
+      "CustomerMetadataProperties": {
+        "source": "a teammate's notebook export"
+      }
+    },
+    {
+      "_version": 4,
+      "_registered_by": "tsg-ci-deployer",
+      "_approved_by": null,
+      "ModelPackageGroupName": "tsg-summariser",
+      "ModelPackageDescription": "Pipeline build 2027-01-29: safetensors, hashes recorded",
+      "InferenceSpecification": {
+        "Containers": [
+          {
+            "Image": "763104351884.dkr.ecr.us-east-1.amazonaws.com/djl-inference@sha256:f9053767cbcf6cdfad3431a94e3f53df1b7b14fbf827f096dbe07dff1be52b7a",
+            "ModelDataSource": {
+              "S3DataSource": {
+                "S3Uri": "s3://amzn-s3-demo-tsg-models/tsg-summariser/v4/",
+                "S3DataType": "S3Prefix",
+                "CompressionType": "None"
+              }
+            },
+            "Environment": {
+              "OPTION_ROLLING_BATCH": "vllm"
+            }
+          }
+        ],
+        "SupportedContentTypes": [
+          "application/json"
+        ],
+        "SupportedResponseMIMETypes": [
+          "application/json"
+        ]
+      },
+      "ModelApprovalStatus": "PendingManualApproval",
+      "CustomerMetadataProperties": {
+        "licence": "apache-2.0",
+        "source": "huggingface.co/Qwen/Qwen3-0.6B",
+        "sha256/config.json": "868bbc0cf24d7065e5d606c8f519af00e5ed068ccaf8b1a10bb64a32c498e5f0",
+        "sha256/model.safetensors": "854cc1147ef708ee71ba6957304d8982d95b229aba8b80dd103c9832fd2fac9d",
+        "sha256/tokenizer.json": "ea991de3c734d41384ad6b47bf781c803c1550b381b435823b9232ec03ee380d"
+      }
+    }
+  ]
+}

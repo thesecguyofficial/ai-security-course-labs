@@ -1,0 +1,26 @@
+{
+  "_note": "CreateEndpointConfig request body. No KmsKeyId: ml.g5.xlarge has NVMe instance storage, and AWS says you can't use a KMS key on an instance type with local storage (it is encrypted by a hardware module). The CMK protects the S3 copies instead: model files and data capture.",
+  "EndpointConfigName": "tsg-summariser-v2-cfg",
+  "ProductionVariants": [
+    {
+      "VariantName": "AllTraffic",
+      "ModelName": "tsg-summariser-v2",
+      "InstanceType": "ml.g5.xlarge",
+      "InitialInstanceCount": 1
+    }
+  ],
+  "DataCaptureConfig": {
+    "EnableCapture": true,
+    "InitialSamplingPercentage": 100,
+    "DestinationS3Uri": "s3://amzn-s3-demo-tsg-capture/tsg-summariser/",
+    "KmsKeyId": "arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab",
+    "CaptureOptions": [
+      {
+        "CaptureMode": "Input"
+      },
+      {
+        "CaptureMode": "Output"
+      }
+    ]
+  }
+}

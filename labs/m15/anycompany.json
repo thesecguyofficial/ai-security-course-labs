@@ -1,0 +1,26 @@
+{
+  "_about": "AnyCompany is fictional (AWS's own placeholder name). Account IDs, the KMS key ID and ARNs follow AWS documentation example values; bucket names use the reserved amzn-s3-demo- prefix; emails use example.com and example.net (RFC 2606). Nothing here is a real credential.",
+  "region": "us-east-1",
+  "account": "111122223333",
+  "outsider_account": "444455556666",
+  "lab_today": "2027-02-01",
+  "endpoint_name": "tsg-summariser",
+  "endpoint_arn": "arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser",
+  "outsider_endpoint_arn": "arn:aws:sagemaker:us-east-1:444455556666:endpoint/collector",
+  "model_package_group": "tsg-summariser",
+  "model_package_arn_prefix": "arn:aws:sagemaker:us-east-1:111122223333:model-package/tsg-summariser/",
+  "domain_id": "d-abcde1234567",
+  "user_profiles": {"ds-alice": "alice", "ds-bob": "bob"},
+  "kms_key_arn": "arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab",
+  "buckets": {
+    "models": "amzn-s3-demo-tsg-models",
+    "capture": "amzn-s3-demo-tsg-capture",
+    "analytics": "amzn-s3-demo-tsg-analytics"
+  },
+  "vpc_id": "vpc-0a1b2c3d4e5f60000",
+  "runtime_vpce": "vpce-0a1b2c3d4e5f60001",
+  "approved_licences": ["apache-2.0", "mit"],
+  "_approved_licences_note": "AnyCompany's own list, agreed with its legal team. The lab does not judge any licence; it checks that the recorded licence is on the company's list.",
+  "trusted_model_sources": ["huggingface.co/Qwen"],
+  "attacker_host": "collector.example.net"
+}

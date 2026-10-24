@@ -1,0 +1,62 @@
+{
+  "_note": "The VPC as the twin sees it. 'routes' per subnet: local = inside the VPC, nat = a route to a NAT gateway.",
+  "subnets": {
+    "subnet-0a1b2c3d4e5f60011": {
+      "routes": [
+        "local"
+      ]
+    },
+    "subnet-0a1b2c3d4e5f60012": {
+      "routes": [
+        "local"
+      ]
+    },
+    "subnet-0a1b2c3d4e5f60013": {
+      "routes": [
+        "local"
+      ]
+    },
+    "subnet-0a1b2c3d4e5f60014": {
+      "routes": [
+        "local"
+      ]
+    }
+  },
+  "s3_gateway_endpoint": {
+    "id": "vpce-0a1b2c3d4e5f60002",
+    "policy": {
+      "Statement": [
+        {
+          "Sid": "OnlyOurBuckets",
+          "Effect": "Allow",
+          "Principal": "*",
+          "Action": [
+            "s3:GetObject",
+            "s3:ListBucket",
+            "s3:PutObject"
+          ],
+          "Resource": [
+            "arn:aws:s3:::amzn-s3-demo-tsg-models",
+            "arn:aws:s3:::amzn-s3-demo-tsg-models/*",
+            "arn:aws:s3:::amzn-s3-demo-tsg-capture",
+            "arn:aws:s3:::amzn-s3-demo-tsg-capture/*"
+          ]
+        }
+      ]
+    }
+  },
+  "interface_endpoints": {
+    "sagemaker.runtime": {
+      "id": "vpce-0a1b2c3d4e5f60001",
+      "private_dns": true
+    },
+    "sagemaker.api": {
+      "id": "vpce-0a1b2c3d4e5f60003",
+      "private_dns": true
+    },
+    "aws.sagemaker.us-east-1.studio": {
+      "id": "vpce-0a1b2c3d4e5f60004",
+      "private_dns": true
+    }
+  }
+}
