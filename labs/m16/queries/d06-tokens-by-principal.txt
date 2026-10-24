@@ -1,0 +1,3 @@
+fields identity.arn as principal, input.inputTokenCount as inTokens, output.outputTokenCount as outTokens
+| stats sum(inTokens) as totalInput, sum(outTokens) as totalOutput, count(*) as calls by principal, bin(1h)
+| sort totalInput desc

@@ -1,0 +1,4 @@
+fields requestMetadata.end_user as end_user
+| filter output.outputBodyJson.stopReason = "guardrail_intervened"
+| stats count(*) as interventions by end_user, bin(10m)
+| filter interventions >= 3

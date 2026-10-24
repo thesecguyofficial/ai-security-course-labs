@@ -1,0 +1,10 @@
+{
+  "CompositeFilters": [
+    {
+      "Operator": "AND",
+      "StringFilters": [
+        {"FieldName": "ResourceCategory", "Filter": {"Comparison": "EQUALS", "Value": "AI/ML"}}
+      ]
+    }
+  ]
+}

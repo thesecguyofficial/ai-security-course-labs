@@ -1,0 +1,15 @@
+{
+  "_about": "What AnyCompany collected before this module: the defaults plus one org trail. Each key is one telemetry source the simulator writes only if it is true here.",
+  "name": "first-draft",
+  "cloudtrail_management": true,
+  "_cloudtrail_management": "The org trail. Bedrock runtime calls (InvokeModel, Converse...) are management events, so they are here.",
+  "cloudtrail_data_events": false,
+  "_cloudtrail_data_events": "Off by default: no bedrock-mantle CreateInference, no AgentCore Runtime/Gateway data events, no S3 object-level events on the knowledge base bucket.",
+  "invocation_logs": false,
+  "_invocation_logs": "Bedrock model invocation logging is disabled by default.",
+  "guardduty_ai_protection": false,
+  "_guardduty_ai_protection": "GuardDuty is on (foundational plan) but the AI Protection plan was never enabled.",
+  "gateway_spans": false,
+  "app_log_identity": false,
+  "_app_log_identity": "The web app logs path, status and latency. No end-user ID, no session ID, no request ID."
+}

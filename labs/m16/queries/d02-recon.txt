@@ -1,0 +1,6 @@
+fields @timestamp, eventName, errorCode, userIdentity.arn, sourceIPAddress
+| filter eventSource = "bedrock.amazonaws.com"
+| filter eventName in ["ListFoundationModels", "GetFoundationModelAvailability", "GetModelInvocationLoggingConfiguration", "ListInferenceProfiles", "ListGuardrails"]
+    or (eventName in ["InvokeModel", "Converse"] and errorCode = "ValidationException")
+| filter userIdentity.sessionContext.sessionIssuer.userName != "SecurityAdmin"
+| stats count(*) as calls, earliest(@timestamp) as first_seen by userIdentity.arn, sourceIPAddress

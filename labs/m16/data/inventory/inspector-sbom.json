@@ -1,0 +1,15 @@
+{
+  "_about": "Software found by Amazon Inspector on each EC2 instance (deep inventory needs enhanced, agentless or hybrid scanning). Simplified to package name, version and path; lab values.",
+  "i-0a1b2c3d4e5f60001": [
+    {"name": "openai", "version": "1.109.1", "type": "pypi", "path": "/opt/reports/.venv"}
+  ],
+  "i-0a1b2c3d4e5f60002": [
+    {"name": "ollama", "version": "0.12.6", "type": "binary", "path": "/usr/local/bin/ollama"},
+    {"name": "vllm", "version": "0.11.0", "type": "pypi", "path": "/opt/serve/.venv"},
+    {"name": "Qwen/Qwen2.5-7B-Instruct", "version": "", "type": "huggingface-model", "path": "/root/.cache/huggingface/hub"},
+    {"name": "llama3.2:3b", "version": "", "type": "ollama-model", "path": "/usr/share/ollama/.ollama/models"}
+  ],
+  "i-0a1b2c3d4e5f60003": [
+    {"name": "openclaw", "version": "2026.9.2", "type": "npm", "path": "/home/ops/.openclaw"}
+  ]
+}
