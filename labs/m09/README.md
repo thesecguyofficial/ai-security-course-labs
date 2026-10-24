@@ -37,7 +37,8 @@ Built at setup time: `models/` (the model files), `state/` (the marker, if you d
 
 ## Needs
 
-- Python **3.11 or newer**. Check with `python3 --version`.
+- Python **3.11 or newer** (tested on 3.11, 3.12 and 3.13). Check with `python3 --version`. NumPy is pinned to
+  2.4.6, the newest series that still installs on 3.11 (Ubuntu 22.04 and Debian 12 ship 3.11).
 - This lab installs four packages, so it uses a **virtual environment**. One command sets it up.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` commands shown under each step
   from an activated venv (`py -m venv .venv`, then `.venv\Scripts\activate`).
@@ -51,7 +52,8 @@ make models           # build the three model files in ./models/
 ```
 
 `make setup` installs picklescan 1.0.5 (MIT), fickling 0.1.12 (LGPL-3.0+), safetensors 0.8.0
-(Apache-2.0) and NumPy. No internet is needed after that.
+(Apache-2.0) and NumPy 2.4.6. On Python 3.11 it also installs `typing_extensions`, which fickling imports
+there but forgets to list. No internet is needed after that.
 
 ## Step 1 · Detonate: loading a model runs code
 

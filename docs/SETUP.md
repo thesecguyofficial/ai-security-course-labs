@@ -28,8 +28,7 @@ doctor at the end tells you what is still missing.
 **Why Python 3.11 and not 3.10?** Labs M5, M7 and M10 onwards use Python 3.11 features. The script picks 3.13
 when you have it, because every lab is tested on 3.13. Two edges to know:
 
-- **Python 3.11** (the newest on Ubuntu 22.04 and Debian 12) runs every lab except M9, whose pinned numpy needs
-  3.12 or newer. The doctor warns you. Ubuntu 24.04 and Debian 13 ship a newer Python.
+- **Python 3.11** (the newest on Ubuntu 22.04 and Debian 12) runs every lab, M9 included.
 - **Python 3.14** works for most labs, but the pinned packages in M4 and M9 are tested up to 3.13.
 
 **Why one shared `.venv`?** It gives every lab the same, right Python, even when your system's `python3` is
@@ -150,8 +149,9 @@ The doctor's "next step" line is the first thing to try. These are the usual pro
 
 ### Python
 - "Python 3.11 or newer" missing on **Ubuntu 22.04**: the script installs `python3.11` next to the system's 3.10
-  (it doesn't replace it). Use the shared `.venv` and you get 3.11 automatically. For M9 you need 3.12+ (above).
-- M9's `make setup` says "No matching distribution found for numpy": that Python is older than 3.12.
+  (it doesn't replace it). Use the shared `.venv` and you get 3.11 automatically.
+- M9's `make setup` says "No matching distribution found for numpy": that Python is older than 3.11. Run M9
+  from the shared `.venv` (`. .venv/bin/activate` at the repo root first).
 - "cannot create virtual environments": Debian and Ubuntu ship `venv` separately. The script installs
   `python3.X-venv`; by hand: `sudo apt install python3.12-venv` (your version number).
 - A broken `.venv` (Python was upgraded or removed): delete the `.venv` folder and run setup again.
@@ -197,5 +197,10 @@ remove those too:
   Ubuntu 24.04 and 22.04, macOS (no Docker on that runner) and Windows (no Docker Desktop on that runner):
   `.github/workflows/setup.yml`.
 - After changing `setup.sh`, `setup.ps1` or `tools/doctor.py`, run `make checksums` and commit `SHA256SUMS`.
-  When you publish a release, paste `SHA256SUMS` into the release notes.
+
+### Releasing
+
+On every GitHub release, paste the current `SHA256SUMS` file into the release notes. Students compare the hash
+of the `setup.sh` or `setup.ps1` they downloaded against it before they run anything, so the notes must match
+the files in that release.
 - `setup.ps1` must stay ASCII and run on Windows PowerShell 5.1 (no `&&`, `??` or `?.`): a test checks this.
