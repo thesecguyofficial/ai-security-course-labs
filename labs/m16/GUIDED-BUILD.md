@@ -82,7 +82,8 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
 3. See the channel GuardDuty created. You didn't create a trail or turn on data events: AWS says "You don't need to
    create a trail, enable data event logging, or make any changes to your AI applications", because GuardDuty creates
    a CloudTrail service-linked channel whose data event settings "the account owner can't modify"
-   ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug/ai-protection.html)).
+   ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug/ai-protection.html)). The console shows it under
+   **CloudTrail**, **Settings**, **Service-linked channels**.
 
    ```bash
    aws cloudtrail list-channels
@@ -110,7 +111,9 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
      --finding-criteria '{"Criterion": {"type": {"Eq": ["Impact:IAMUser/PromptInjection.Direct"]}}}'
    ```
 
-   If the first command rejects a type, generate all samples in the console instead: **Settings**, **Sample
+   All three types are in GuardDuty's finding types table, which is the list `create-sample-findings` takes
+   ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug/sample_findings.html)). If the first command still rejects a
+   type, generate all samples in the console instead: **Settings**, **Sample
    findings**, **Generate sample findings**, then filter the list by finding type.
 
 5. Read one:
