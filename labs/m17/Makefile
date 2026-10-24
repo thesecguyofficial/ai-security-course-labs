@@ -1,7 +1,8 @@
 # M17.4 lab shortcuts (Mac/Linux). Windows: run the python commands from the README instead (py instead of python3).
 # The app and `make test` need only Python 3.11+ (standard library). The evals need Node.js 22.22+ (promptfoo via npx).
 PY := python3
-# Nothing leaves your laptop: no usage data or update checks from promptfoo, even if you run it by hand from here.
+# No usage data or update checks from promptfoo, even if you run it by hand from here. (promptfoo 0.124.1 still sends
+# one "telemetry disabled" event per run to r.promptfoo.app: no prompts, outputs or tests. Block that host if needed.)
 export PROMPTFOO_DISABLE_TELEMETRY := 1
 export PROMPTFOO_DISABLE_UPDATE := 1
 R ?= R1

@@ -102,7 +102,7 @@ def main() -> int:
             if os.environ.pop(var, None) is not None:
                 print(f"note: ignoring {var} for the security suite (any failure must fail the build)")
         pf_env = dict(os.environ,
-                      PROMPTFOO_DISABLE_TELEMETRY="1",                 # no usage data sent to promptfoo
+                      PROMPTFOO_DISABLE_TELEMETRY="1",                 # no usage data (one "telemetry disabled" event still goes out)
                       PROMPTFOO_DISABLE_UPDATE="1",                    # no update check
                       PROMPTFOO_DISABLE_REDTEAM_REMOTE_GENERATION="true",  # never ask a hosted service for attacks
                       PROMPTFOO_CONFIG_DIR=str(HERE / ".promptfoo"))   # keep its files in this folder
