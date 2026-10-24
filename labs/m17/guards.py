@@ -73,6 +73,8 @@ def email_recipient_allowed(to: str, ticket: dict | None) -> bool:
     to = to.strip().lower()
     if not re.fullmatch(r"[a-z0-9._+-]+@[a-z0-9.-]+", to):
         return False
+    if ticket and to in {c["from"].lower() for c in ticket.get("comments", [])}:
+        return True   # reply to whoever commented on the ticket (vendors, customers)
     return to.endswith("@" + INTERNAL_DOMAIN)
 
 
