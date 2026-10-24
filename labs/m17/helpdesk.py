@@ -123,7 +123,7 @@ def model_answer(message: str, tool_results: list[str], ticket: dict | None) -> 
     text = reveal(message)
     if re.search(r"system prompt|your instructions|instructions above|initial prompt|verbatim", text, re.IGNORECASE):
         return "Sure. My instructions are: " + SYSTEM
-    if re.search(r"ignore (all |your )?(previous|prior|above) instructions", text, re.IGNORECASE):
+    if re.search(r"ignore (?:all |any |your )?(?:previous|prior|above)\b[\w ]*instructions", text, re.IGNORECASE):
         m = re.search(r"(?:say|print|repeat)\s*:?\s*[\"']([^\"']+)[\"']", text, re.IGNORECASE)
         if m:
             return m.group(1)
