@@ -89,7 +89,8 @@ function Ask([string]$Question, [bool]$DefaultYes = $true) {
 function Invoke-Logged([string]$Exe, [string[]]$Arguments) {
     Write-Host ('  $ {0} {1}' -f $Exe, ($Arguments -join ' ')) -ForegroundColor White
     Write-Log ('run: {0} {1}' -f $Exe, ($Arguments -join ' '))
-    & $Exe @Arguments
+    # Out-Host shows the output live and keeps it out of this function's return value (only the code).
+    & $Exe @Arguments | Out-Host
     $code = $LASTEXITCODE
     if ($null -eq $code) { $code = 0 }
     if ($code -ne 0) { Write-Log "exit code $code" }
@@ -188,8 +189,12 @@ function Get-PythonVersion([string[]]$Cmd) {
     $rest = @()
     if ($Cmd.Count -gt 1) { $rest = $Cmd[1..($Cmd.Count - 1)] }
     try {
-        $out = (& $exe @rest -c 'import sys; print("%d.%d" % sys.version_info[:2])') 2>$null
-        if ($LASTEXITCODE -eq 0 -and $out -match '^3\.\d+$') { return [string]$out }
+        # No quotes inside the Python code: Windows PowerShell 5.1 strips embedded double quotes from
+        # arguments to native programs. Two lines out: major, then minor.
+        $out = @(& $exe @rest -c 'import sys; print(sys.version_info[0]); print(sys.version_info[1])' 2>$null)
+        if ($LASTEXITCODE -eq 0 -and $out.Count -ge 2 -and "$($out[0])" -eq '3' -and "$($out[1])" -match '^\d+$') {
+            return ('3.{0}' -f $out[1])
+        }
     } catch { }
     return $null
 }

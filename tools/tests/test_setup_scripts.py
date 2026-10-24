@@ -72,6 +72,18 @@ class PowerShellScript(unittest.TestCase):
         for p in ("Yes", "Check", "Uninstall", "NoDocker", "NoOllama", "NoModels"):
             self.assertIn("[switch]$%s" % p, text)
 
+    def test_no_double_quotes_in_native_python_code(self):
+        # Windows PowerShell 5.1 strips embedded double quotes from native arguments: python -c '...' code
+        # with a " in it arrives broken (this hid every installed Python in the first CI run).
+        for line in read(PS1).splitlines():
+            m = re.search(r"-c\s+'([^']*)'", line)
+            if m:
+                self.assertNotIn('"', m.group(1), line)
+
+    def test_native_output_never_leaks_into_return_values(self):
+        body = read(PS1).split("function Invoke-Logged", 1)[1].split("\n}", 1)[0]
+        self.assertIn("| Out-Host", body)
+
     def test_never_pipes_downloads_into_a_shell(self):
         self.assertNotRegex(read(PS1), r"(?i)(irm|iwr|invoke-(restmethod|webrequest))[^\n|]*\|\s*iex")
 
