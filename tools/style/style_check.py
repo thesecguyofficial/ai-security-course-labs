@@ -32,7 +32,7 @@ EMDASH = "—"
 TEXT_EXT = {".md", ".mdx", ".txt", ".astro", ".html", ".json", ".yml", ".yaml"}
 DEFAULT_PATHS = ["README.md", "labs"]
 # Files that may legitimately contain the words (rule lists, this checker, raw source quotes).
-IGNORE_PARTS = ("voice-guide.md", "style_check", "node_modules", "/build/", "/out/", ".work", "words-0")
+IGNORE_PARTS = (".venv", "voice-guide.md", "style_check", "node_modules", "/build/", "/out/", ".work", "words-0")
 # Published, recorded material: changing the script no longer changes the video. Checked as warnings only.
 WARN_ONLY_PARTS = ()
 
