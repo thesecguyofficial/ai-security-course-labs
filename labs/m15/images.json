@@ -1,5 +1,5 @@
 {
-  "_about": "The lab's image catalog. Image names follow the AWS Deep Learning Containers 'Available Images' page (read 24 Oct 2026: latest LMI tag 0.38.0-lmi30.0.0-cu130). The older tag, the digest and both release dates are LAB VALUES: for real images, read the release date on that page and the digest in your own ECR copy. Support rule (Prebuilt SageMaker image support policy): DLCs reach end of patch 365 days after their GitHub release date; LLM hosting containers such as TGI after 30 days.",
+  "_about": "The lab's image catalog. Image names follow the AWS Deep Learning Containers 'Available Images' page (read 24 Oct 2026: latest LMI tag 0.38.0-lmi30.0.0-cu130). The older tag, the digest and both release dates are LAB VALUES: for real images, read the release date in the image's GitHub release (the Available Images page lists no dates) and the digest in your own ECR copy. Support rule (Prebuilt SageMaker image support policy): DLCs reach end of patch 365 days after their GitHub release date; LLM hosting containers such as TGI after 30 days. AWS's policy pages don't name LMI (djl-inference); the lab treats it as a DLC.",
   "end_of_patch_days": {
     "dlc": 365,
     "llm-hosting": 30

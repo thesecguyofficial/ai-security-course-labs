@@ -54,7 +54,8 @@ Shell variables used throughout (set them again in a new terminal):
 
 5. **Cost.** Look up the GPU price before you start: on the
    [SageMaker AI pricing page](https://aws.amazon.com/sagemaker/ai/pricing/), On-Demand, Real-Time Inference,
-   US East (N. Virginia), find **ml.g5.xlarge** and write the hourly price down. For scale, AWS's own examples on that
+   US East (N. Virginia), find **ml.g5.xlarge** and write the hourly price down (a third-party price tracker showed
+   about $1.41 an hour on 24 Oct 2026; AWS's page is the one that counts). For scale, AWS's own examples on that
    page price an ml.c5.xlarge (a CPU instance) at $0.204 an hour for inference and an ml.g4dn.xlarge (a GPU) at $0.7364
    an hour for a notebook.
 
@@ -133,7 +134,8 @@ This guide uses `Qwen/Qwen3-0.6B`, the same small model family as the course's l
 Face format with safetensors weights works, if the container supports its architecture.
 
 1. **Read the licence before you download.** Open the model's page on the Hub and read its licence field and its
-   `LICENSE` file. Write down what it says and whether your organisation allows it for your use. AWS says the same about
+   `LICENSE` file. Write down what it says and whether your organisation allows it for your use (on 24 Oct 2026 the
+   card for `Qwen/Qwen3-0.6B` said `apache-2.0`; check it again, licences change). AWS says the same about
    models it offers: "You are responsible for reviewing and complying with any applicable license terms and making sure
    they are acceptable for your use case before downloading or using the content"
    ([AWS](https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-choose.html)).
@@ -155,6 +157,7 @@ python3 model_files.py manifest "$MODEL_DIR"
 Example response (shape from this lab's scanner; the file list depends on the model)
 [OK  ] .gitattributes               data
 [OK  ] LICENSE                      data
+[OK  ] README.md                    data
 [OK  ] config.json                  data
 [OK  ] generation_config.json       data
 [OK  ] merges.txt                   data
