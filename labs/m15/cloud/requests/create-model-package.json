@@ -1,0 +1,26 @@
+{
+  "ModelPackageGroupName": "tsg-summariser-lab",
+  "ModelPackageDescription": "Open model for ticket summaries. Files checked with model_files.py scan; hashes below.",
+  "InferenceSpecification": {
+    "Containers": [
+      {
+        "Image": "${IMAGE}",
+        "ModelDataSource": {
+          "S3DataSource": {
+            "S3Uri": "s3://${ModelsBucket}/tsg-summariser/v1/",
+            "S3DataType": "S3Prefix",
+            "CompressionType": "None"
+          }
+        },
+        "Environment": {"OPTION_ROLLING_BATCH": "vllm"}
+      }
+    ],
+    "SupportedContentTypes": ["application/json"],
+    "SupportedResponseMIMETypes": ["application/json"]
+  },
+  "ModelApprovalStatus": "PendingManualApproval",
+  "CustomerMetadataProperties": {
+    "licence": "${LICENCE}",
+    "source": "${MODEL_SOURCE}"
+  }
+}

@@ -1,0 +1,474 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  M15 guided build (The Sec Guy, AI Security Engineer): the private plumbing for a SageMaker AI endpoint that serves
+  an open model. A VPC with two private subnets and no route to the internet, an S3 gateway endpoint and a
+  sagemaker.runtime interface endpoint (both with policies), a KMS key, a model bucket and a data capture bucket,
+  the endpoint's execution role, a Lambda function that plays the Helpdesk app, a role EventBridge Scheduler uses
+  to delete the endpoint on time, and a trail that records InvokeEndpoint data events for this one endpoint.
+  The SageMaker AI resources themselves are made step by step in GUIDED-BUILD.md. Sandbox accounts only.
+
+Parameters:
+  EndpointName:
+    Type: String
+    Default: tsg-summariser-lab
+    AllowedPattern: "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}$"
+    Description: The SageMaker AI endpoint name the policies are scoped to.
+
+Resources:
+  # ------------------------------------------------------------------------------------------------ keys (15.2)
+  LabKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: M15 lab key for model files and data capture
+      EnableKeyRotation: true
+      PendingWindowInDays: 7
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AccountAdministersTheKeyThroughIam
+            Effect: Allow
+            Principal:
+              AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
+            Action: kms:*
+            Resource: "*"
+
+  LabKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: alias/tsg-m15-lab
+      TargetKeyId: !Ref LabKey
+
+  # ------------------------------------------------------------------------------------------------ network (15.2)
+  Vpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.42.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags: [{Key: Name, Value: tsg-m15-lab}]
+
+  SubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.42.1.0/24
+      AvailabilityZone: !Select [0, !GetAZs ""]
+      Tags: [{Key: Name, Value: tsg-m15-private-a}]
+
+  SubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.42.2.0/24
+      AvailabilityZone: !Select [1, !GetAZs ""]
+      Tags: [{Key: Name, Value: tsg-m15-private-b}]
+
+  PrivateRoutes:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+      Tags: [{Key: Name, Value: tsg-m15-private-no-internet}]
+
+  SubnetARoutes:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetA
+      RouteTableId: !Ref PrivateRoutes
+
+  SubnetBRoutes:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetB
+      RouteTableId: !Ref PrivateRoutes
+
+  AppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: The Helpdesk app (Lambda). No inbound.
+      VpcId: !Ref Vpc
+
+  ModelSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: The model network interfaces (VpcConfig). No inbound.
+      VpcId: !Ref Vpc
+
+  EndpointSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: sagemaker.runtime interface endpoint. HTTPS from the app only.
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          SourceSecurityGroupId: !Ref AppSecurityGroup
+
+  S3GatewayEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref Vpc
+      VpcEndpointType: Gateway
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
+      RouteTableIds: [!Ref PrivateRoutes]
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: OnlyTheLabBuckets
+            Effect: Allow
+            Principal: "*"
+            Action: [s3:GetObject, s3:ListBucket, s3:PutObject]
+            Resource:
+              - !GetAtt ModelsBucket.Arn
+              - !Sub ${ModelsBucket.Arn}/*
+              - !GetAtt CaptureBucket.Arn
+              - !Sub ${CaptureBucket.Arn}/*
+
+  RuntimeEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref Vpc
+      VpcEndpointType: Interface
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.sagemaker.runtime
+      SubnetIds: [!Ref SubnetA, !Ref SubnetB]
+      SecurityGroupIds: [!Ref EndpointSecurityGroup]
+      PrivateDnsEnabled: true
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: OurAccountOurEndpointOnly
+            Effect: Allow
+            Principal: "*"
+            Action: sagemaker:InvokeEndpoint
+            Resource: !Sub arn:aws:sagemaker:${AWS::Region}:${AWS::AccountId}:endpoint/${EndpointName}
+            Condition:
+              StringEquals:
+                aws:PrincipalAccount: !Ref AWS::AccountId
+
+  # ------------------------------------------------------------------------------------------------ buckets
+  ModelsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: aws:kms
+              KMSMasterKeyID: !GetAtt LabKey.Arn
+            BucketKeyEnabled: true
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules: [{ObjectOwnership: BucketOwnerEnforced}]
+
+  CaptureBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: aws:kms
+              KMSMasterKeyID: !GetAtt LabKey.Arn
+            BucketKeyEnabled: true
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules: [{ObjectOwnership: BucketOwnerEnforced}]
+      LifecycleConfiguration:
+        Rules:
+          - Id: CapturedPromptsExpire
+            Status: Enabled
+            ExpirationInDays: 30
+
+  ModelsBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ModelsBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: TlsOnly
+            Effect: Deny
+            Principal: "*"
+            Action: s3:*
+            Resource: [!GetAtt ModelsBucket.Arn, !Sub "${ModelsBucket.Arn}/*"]
+            Condition:
+              Bool:
+                aws:SecureTransport: "false"
+
+  CaptureBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref CaptureBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: TlsOnly
+            Effect: Deny
+            Principal: "*"
+            Action: s3:*
+            Resource: [!GetAtt CaptureBucket.Arn, !Sub "${CaptureBucket.Arn}/*"]
+            Condition:
+              Bool:
+                aws:SecureTransport: "false"
+
+  # ------------------------------------------------------------------------------------------------ roles (15.2)
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: The summariser endpoint's execution role. SageMaker AI uses it to fetch the model and write capture.
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: sagemaker.amazonaws.com
+            Action: sts:AssumeRole
+            Condition:
+              ArnLike:
+                aws:SourceArn: !Sub arn:aws:sagemaker:${AWS::Region}:${AWS::AccountId}:*
+      Policies:
+        - PolicyName: summariser-endpoint
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: ReadModelFiles
+                Effect: Allow
+                Action: s3:GetObject
+                Resource: !Sub ${ModelsBucket.Arn}/tsg-summariser/*
+              - Effect: Allow
+                Action: s3:ListBucket
+                Resource: !GetAtt ModelsBucket.Arn
+              - Sid: WriteDataCapture
+                Effect: Allow
+                Action: s3:PutObject
+                Resource: !Sub ${CaptureBucket.Arn}/tsg-summariser/*
+              - Effect: Allow
+                Action: [kms:Decrypt, kms:GenerateDataKey]
+                Resource: !GetAtt LabKey.Arn
+              - Sid: PullTheAwsInferenceImage
+                Effect: Allow
+                Action: [ecr:BatchGetImage, ecr:GetDownloadUrlForLayer, ecr:BatchCheckLayerAvailability]
+                Resource: !Sub arn:aws:ecr:${AWS::Region}:763104351884:repository/djl-inference
+              - Effect: Allow
+                Action: ecr:GetAuthorizationToken
+                Resource: "*"
+              - Sid: VpcNetworkInterfaces
+                Effect: Allow
+                Action:
+                  - ec2:CreateNetworkInterface
+                  - ec2:CreateNetworkInterfacePermission
+                  - ec2:DeleteNetworkInterface
+                  - ec2:DeleteNetworkInterfacePermission
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DescribeVpcEndpoints
+                  - ec2:DescribeVpcs
+                  - ec2:DescribeDhcpOptions
+                  - ec2:DescribeSubnets
+                  - ec2:DescribeSecurityGroups
+                Resource: "*"
+              - Effect: Allow
+                Action: [logs:CreateLogGroup, logs:CreateLogStream, logs:PutLogEvents, logs:DescribeLogStreams]
+                Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/sagemaker/*
+              - Effect: Allow
+                Action: cloudwatch:PutMetricData
+                Resource: "*"
+
+  AppFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: The Helpdesk app. May invoke one endpoint, and only through the lab's VPC endpoint.
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+      Policies:
+        - PolicyName: invoke-through-our-endpoint
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: OnlyThroughOurEndpoint
+                Effect: Allow
+                Action: sagemaker:InvokeEndpoint
+                Resource: !Sub arn:aws:sagemaker:${AWS::Region}:${AWS::AccountId}:endpoint/${EndpointName}
+                Condition:
+                  StringEquals:
+                    aws:SourceVpce: !Ref RuntimeEndpoint
+
+  AppFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Plays the Helpdesk app. Sends one prompt to the summariser endpoint.
+      Runtime: python3.12
+      Handler: index.handler
+      Timeout: 90
+      MemorySize: 256
+      Role: !GetAtt AppFunctionRole.Arn
+      VpcConfig:
+        SubnetIds: [!Ref SubnetA, !Ref SubnetB]
+        SecurityGroupIds: [!Ref AppSecurityGroup]
+      Environment:
+        Variables:
+          ENDPOINT_NAME: !Ref EndpointName
+      Code:
+        ZipFile: |
+          import json, os
+          import boto3
+
+          runtime = boto3.client("sagemaker-runtime")
+
+          def handler(event, context):
+              body = {"inputs": event.get("prompt", ""),
+                      "parameters": {"max_new_tokens": int(event.get("max_new_tokens", 200))}}
+              r = runtime.invoke_endpoint(EndpointName=os.environ["ENDPOINT_NAME"], ContentType="application/json",
+                                          Accept="application/json", Body=json.dumps(body))
+              return {"endpoint": os.environ["ENDPOINT_NAME"], "answer": json.loads(r["Body"].read())}
+
+  LeakedKeysTestRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: >-
+        GUIDED-BUILD request 2. The same permission as the app, so you can play someone who stole the app's
+        credentials and uses them from a laptop on the internet. Your own admin identity can assume it.
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
+            Action: sts:AssumeRole
+      MaxSessionDuration: 3600
+      Policies:
+        - PolicyName: same-as-the-app
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: OnlyThroughOurEndpoint
+                Effect: Allow
+                Action: sagemaker:InvokeEndpoint
+                Resource: !Sub arn:aws:sagemaker:${AWS::Region}:${AWS::AccountId}:endpoint/${EndpointName}
+                Condition:
+                  StringEquals:
+                    aws:SourceVpce: !Ref RuntimeEndpoint
+
+  SchedulerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: EventBridge Scheduler uses this to delete the lab endpoint on time (auto-teardown).
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: scheduler.amazonaws.com
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                aws:SourceAccount: !Ref AWS::AccountId
+      Policies:
+        - PolicyName: delete-the-lab-endpoint
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: sagemaker:DeleteEndpoint
+                Resource: !Sub arn:aws:sagemaker:${AWS::Region}:${AWS::AccountId}:endpoint/${EndpointName}
+
+  # ------------------------------------------------------------------------------------------------ evidence (15.4)
+  TrailBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules: [{ObjectOwnership: BucketOwnerEnforced}]
+      LifecycleConfiguration:
+        Rules:
+          - Id: LabLogsExpire
+            Status: Enabled
+            ExpirationInDays: 30
+
+  TrailBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref TrailBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AWSCloudTrailAclCheck
+            Effect: Allow
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Action: s3:GetBucketAcl
+            Resource: !GetAtt TrailBucket.Arn
+            Condition:
+              StringEquals:
+                aws:SourceArn: !Sub arn:aws:cloudtrail:${AWS::Region}:${AWS::AccountId}:trail/tsg-m15-lab
+          - Sid: AWSCloudTrailWrite
+            Effect: Allow
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Action: s3:PutObject
+            Resource: !Sub ${TrailBucket.Arn}/AWSLogs/${AWS::AccountId}/*
+            Condition:
+              StringEquals:
+                s3:x-amz-acl: bucket-owner-full-control
+                aws:SourceArn: !Sub arn:aws:cloudtrail:${AWS::Region}:${AWS::AccountId}:trail/tsg-m15-lab
+
+  Trail:
+    Type: AWS::CloudTrail::Trail
+    DependsOn: TrailBucketPolicy
+    Properties:
+      TrailName: tsg-m15-lab
+      S3BucketName: !Ref TrailBucket
+      IsLogging: true
+      IsMultiRegionTrail: false
+      IncludeGlobalServiceEvents: false
+      AdvancedEventSelectors:
+        - Name: Summariser endpoint invocations only (data events)
+          FieldSelectors:
+            - Field: eventCategory
+              Equals: [Data]
+            - Field: resources.type
+              Equals: ["AWS::SageMaker::Endpoint"]
+            - Field: resources.ARN
+              Equals: [!Sub "arn:aws:sagemaker:${AWS::Region}:${AWS::AccountId}:endpoint/${EndpointName}"]
+
+Outputs:
+  ModelsBucket:
+    Value: !Ref ModelsBucket
+  CaptureBucket:
+    Value: !Ref CaptureBucket
+  TrailBucket:
+    Value: !Ref TrailBucket
+  KeyArn:
+    Value: !GetAtt LabKey.Arn
+  ExecutionRoleArn:
+    Value: !GetAtt ExecutionRole.Arn
+  SchedulerRoleArn:
+    Value: !GetAtt SchedulerRole.Arn
+  SubnetIds:
+    Value: !Join [",", [!Ref SubnetA, !Ref SubnetB]]
+  ModelSecurityGroup:
+    Value: !Ref ModelSecurityGroup
+  RuntimeEndpointId:
+    Value: !Ref RuntimeEndpoint
+  AppFunctionName:
+    Value: !Ref AppFunction
+  EndpointName:
+    Value: !Ref EndpointName
+  LeakedKeysTestRoleArn:
+    Value: !GetAtt LeakedKeysTestRole.Arn

@@ -1,0 +1,21 @@
+{
+  "_note": "How the team runs it (lab notes, not an AWS API).",
+  "_s3_model_prefixes": {
+    "s3://amzn-s3-demo-tsg-models/tsg-summariser/v1/": "v1-pickle",
+    "s3://amzn-s3-demo-tsg-models/tsg-summariser/v2/": "v2-safe",
+    "s3://amzn-s3-demo-tsg-models/tsg-summariser/v3/": "v3-unvetted",
+    "s3://amzn-s3-demo-tsg-models/tsg-summariser/v4/": "v4-safe",
+    "s3://amzn-s3-demo-tsg-models/experiments/bob/": "bob-experiment"
+  },
+  "deploy_verifies_hashes": false,
+  "approval_gate": false,
+  "monitoring": {
+    "cloudtrail_data_event_types": [],
+    "alarms": [],
+    "plan": [
+      "SageMaker Model Monitor data quality schedule",
+      "SageMaker Clarify bias report"
+    ]
+  },
+  "_account_is_new_to_model_monitor": true
+}

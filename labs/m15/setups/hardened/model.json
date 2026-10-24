@@ -1,0 +1,18 @@
+{
+  "_note": "CreateModel request body. Made by the pipeline (tsg-ci-deployer) from the approved registry version.",
+  "ModelName": "tsg-summariser-v2",
+  "ExecutionRoleArn": "arn:aws:iam::111122223333:role/tsg-summariser-exec",
+  "PrimaryContainer": {
+    "ModelPackageName": "arn:aws:sagemaker:us-east-1:111122223333:model-package/tsg-summariser/2"
+  },
+  "VpcConfig": {
+    "Subnets": [
+      "subnet-0a1b2c3d4e5f60011",
+      "subnet-0a1b2c3d4e5f60012"
+    ],
+    "SecurityGroupIds": [
+      "sg-0a1b2c3d4e5f60021"
+    ]
+  },
+  "EnableNetworkIsolation": true
+}

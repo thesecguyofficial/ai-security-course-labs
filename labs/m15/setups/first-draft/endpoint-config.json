@@ -1,0 +1,27 @@
+{
+  "_note": "CreateEndpointConfig request body.",
+  "EndpointConfigName": "tsg-summariser-v1-cfg",
+  "ProductionVariants": [
+    {
+      "VariantName": "AllTraffic",
+      "ModelName": "tsg-summariser-v1",
+      "InstanceType": "ml.g5.xlarge",
+      "InitialInstanceCount": 1,
+      "EnableSSMAccess": true
+    }
+  ],
+  "KmsKeyId": "arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab",
+  "DataCaptureConfig": {
+    "EnableCapture": true,
+    "InitialSamplingPercentage": 100,
+    "DestinationS3Uri": "s3://amzn-s3-demo-tsg-analytics/tsg-summariser/",
+    "CaptureOptions": [
+      {
+        "CaptureMode": "Input"
+      },
+      {
+        "CaptureMode": "Output"
+      }
+    ]
+  }
+}

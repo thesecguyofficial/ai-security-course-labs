@@ -1,0 +1,20 @@
+{
+  "_note": "CreateModel request body. Deployed by hand from a notebook on Friday.",
+  "ModelName": "tsg-summariser-v1",
+  "ExecutionRoleArn": "arn:aws:iam::111122223333:role/tsg-summariser-exec",
+  "PrimaryContainer": {
+    "Image": "763104351884.dkr.ecr.us-east-1.amazonaws.com/djl-inference:0.30.0-lmi12.0.0-cu124",
+    "ModelDataSource": {
+      "S3DataSource": {
+        "S3Uri": "s3://amzn-s3-demo-tsg-models/tsg-summariser/v1/",
+        "S3DataType": "S3Prefix",
+        "CompressionType": "None"
+      }
+    },
+    "Environment": {
+      "OPTION_ROLLING_BATCH": "vllm",
+      "HF_TOKEN": "hf_LABPLACEHOLDERnotarealtoken0000"
+    }
+  },
+  "EnableNetworkIsolation": false
+}
