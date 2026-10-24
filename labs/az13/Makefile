@@ -61,3 +61,8 @@ down:          ## G8: delete the agent, connection, knowledge base, index, group
 
 clean:         ## remove Python caches and local state
 	rm -rf __pycache__ cloud/__pycache__ cloud/.state
+
+# Added for the repo-wide setup (setup.sh): every lab answers `make setup`. This one needs nothing installed.
+.PHONY: setup
+setup:        ## nothing to install: checks your Python is 3.11 or newer
+	$(PY) ../../tools/check_python.py 3.11

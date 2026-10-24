@@ -34,3 +34,8 @@ challenge:  ## same, plus the data-scope challenge (fails until you implement ch
 
 clean:      ## delete lab state (outbox, markers, audit log, kill switch)
 	rm -rf state __pycache__
+
+# Added for the repo-wide setup (setup.sh): every lab answers `make setup`. This one needs nothing installed.
+.PHONY: setup
+setup:        ## nothing to install: checks your Python is 3.11 or newer
+	$(PY) ../../tools/check_python.py 3.11

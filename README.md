@@ -2,10 +2,50 @@
 
 Hands-on labs for **AI Security Engineer** by [The Sec Guy](https://thesecguy.com/course/): learn to attack and defend AI apps, RAG, agents and MCP servers. **Every lab runs free on your laptop first**, and then in your cloud of choice (AWS, Azure or Google Cloud) when you're ready.
 
-> New here? It's OK not to know this yet. Start with `labs/m00` setup, then go in order.
+> New here? It's OK not to know this yet. Run the Quick start below once, then do the labs in order, starting with `labs/m01`.
+
+## Quick start: set up everything once
+
+One script checks your computer, installs what is missing (it asks first, every time), starts Ollama safely on
+`127.0.0.1`, downloads the two lab models, makes one shared Python environment and finishes with a health check.
+
+**macOS, Linux (Ubuntu/Debian) and WSL**, in Terminal:
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git && cd ai-security-course-labs
+./setup.sh
+```
+
+**Windows 10/11**, in PowerShell (no git yet? use **Code → Download ZIP**, unzip, and open PowerShell in that folder):
+
+```powershell
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git; cd ai-security-course-labs
+powershell -ExecutionPolicy Bypass -File setup.ps1
+```
+
+Then check your computer any time with `make doctor` (Windows: `py tools\doctor.py`). Want to look before anything
+changes? Add `--check` (Windows: `-Check`). Details, options, uninstall and fixes for common errors:
+[docs/SETUP.md](docs/SETUP.md).
+
+**Why not a one-line `curl ... | bash` installer?** Because that runs code you have never seen, straight off the
+internet. This is a security course, so we do it the way you'd want your developers to: get the file, read it (or
+at least skim it), check its fingerprint, then run it. The script follows the same rule for the installers it
+fetches: it downloads them to a file, shows their SHA-256 and offers to open them before they run.
+
+**Check the file is the one we published** (optional, takes 10 seconds). Compare the output with `SHA256SUMS` in
+this repo and with the hashes in the notes of the latest [GitHub release](https://github.com/thesecguyofficial/ai-security-course-labs/releases):
+
+```bash
+shasum -a 256 setup.sh setup.ps1 tools/doctor.py      # macOS (Linux: sha256sum ...)
+```
+
+```powershell
+Get-FileHash setup.ps1, setup.sh, tools\doctor.py -Algorithm SHA256    # Windows
+```
 
 ## What you need
-- A laptop (about 8 GB RAM), Docker, Python 3.10+, [Ollama](https://ollama.com)
+- A laptop with 8 GB RAM or more and 15 GB free disk. The setup script installs the rest: git, Python 3.11+,
+  Docker, [Ollama](https://ollama.com) and two small models.
 - Optional, for cloud labs: your own AWS, Azure or Google Cloud account with a budget alert (see Module 0)
 
 ## Labs

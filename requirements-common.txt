@@ -1,0 +1,10 @@
+# Shared packages for the repo-root .venv that setup.sh / setup.ps1 create.
+#
+# Empty on purpose. Every lab's core steps (M1 to M14, all three cloud streams) use the Python standard
+# library only, so the shared .venv's job is to give you the right Python (3.11 or newer) everywhere.
+# Labs with packages pin and install them in their own folder, so one lab's versions never break another's:
+#   labs/m04  make setup   Presidio + spaCy English model (the big one, a few hundred MB)
+#   labs/m06  make setup   qdrant-client
+#   labs/m08  make setup   the MCP Python SDK
+#   labs/m09  make setup   picklescan, fickling, safetensors, numpy
+# Add a line here only for a package that several labs need with the same version.

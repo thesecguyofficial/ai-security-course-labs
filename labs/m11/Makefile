@@ -55,3 +55,8 @@ down: package    ## DELETE everything `make up` created (do it today)
 
 clean:           ## remove caches and build output
 	rm -rf __pycache__ terraform/*/build terraform/*/.terraform terraform/*/.terraform.lock.hcl terraform/*/tfplan
+
+# Added for the repo-wide setup (setup.sh): every lab answers `make setup`. This one needs nothing installed.
+.PHONY: setup
+setup:        ## nothing to install: checks your Python is 3.11 or newer
+	$(PY) ../../tools/check_python.py 3.11

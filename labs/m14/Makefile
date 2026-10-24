@@ -38,3 +38,8 @@ cloud-down: cloud-zip ## DELETE everything cloud-up created (do it today). The r
 
 clean:          ## remove caches and Terraform working files
 	rm -rf __pycache__ cloud/__pycache__ cloud/lambda/__pycache__ cloud/terraform/.terraform cloud/terraform/.terraform.lock.hcl cloud/terraform/*.zip
+
+# Added for the repo-wide setup (setup.sh): every lab answers `make setup`. This one needs nothing installed.
+.PHONY: setup
+setup:        ## nothing to install: checks your Python is 3.11 or newer
+	$(PY) ../../tools/check_python.py 3.11
