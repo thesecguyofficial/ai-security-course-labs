@@ -17,9 +17,14 @@ students) and passes the house-voice check.
    containers". As of M14 no lab's laptop steps need Docker (AZ14's cloud build uses Azure's registry and says
    "No Docker needed"). Either keep Docker for the labs you plan (the script and doctor check it) or say
    "you'll need it from Module X". Your call: the text below keeps Docker and does not promise which module.
-4. **Disk:** the lesson says about 10 GB; with two models, Docker images and the M4 packages, 15 GB free is a
+4. **M9 actually needs Python 3.12.** Lab M9 pins `numpy==2.5.4`, and numpy 2.5.4 requires Python 3.12 or
+   newer (its PyPI metadata), while the M9 README says "All install on Python 3.11-3.13". On Ubuntu 22.04 and
+   Debian 12 (newest Python: 3.11) `make setup` in M9 fails. Two fixes, pick one: pin a numpy that supports
+   3.11 (the 2.3 or 2.4 series) and re-run the M9 tests, or change the M9 README to "Python 3.12-3.13". Until
+   then the doctor warns students on 3.11 before they reach M9.
+5. **Disk:** the lesson says about 10 GB; with two models, Docker images and the M4 packages, 15 GB free is a
    safer figure, and the script warns below it.
-5. **Second model.** The script also pulls `embeddinggemma` (about 622 MB) for the optional real-embedding step
+6. **Second model.** The script also pulls `embeddinggemma` (about 622 MB) for the optional real-embedding step
    in the RAG lab (M6 Step 7). If you'd rather not, remove it from `MODELS` in `setup.sh`, `setup.ps1` and
    `tools/doctor.py`.
 

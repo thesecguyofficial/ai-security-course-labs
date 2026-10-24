@@ -26,8 +26,11 @@ Every install is a question first (`Install X? [Y/n]`). Say `n` and the script c
 doctor at the end tells you what is still missing.
 
 **Why Python 3.11 and not 3.10?** Labs M5, M7 and M10 onwards use Python 3.11 features. The script picks 3.13
-when you have it, because every lab is tested on 3.13. Python 3.14 works for most labs, but the pinned packages
-in M4 and M9 are tested up to 3.13.
+when you have it, because every lab is tested on 3.13. Two edges to know:
+
+- **Python 3.11** (the newest on Ubuntu 22.04 and Debian 12) runs every lab except M9, whose pinned numpy needs
+  3.12 or newer. The doctor warns you. Ubuntu 24.04 and Debian 13 ship a newer Python.
+- **Python 3.14** works for most labs, but the pinned packages in M4 and M9 are tested up to 3.13.
 
 **Why one shared `.venv`?** It gives every lab the same, right Python, even when your system's `python3` is
 older. The core labs need nothing else. Labs M4, M6, M8 and M9 pin their own packages and install them in their
@@ -147,7 +150,8 @@ The doctor's "next step" line is the first thing to try. These are the usual pro
 
 ### Python
 - "Python 3.11 or newer" missing on **Ubuntu 22.04**: the script installs `python3.11` next to the system's 3.10
-  (it doesn't replace it). Use the shared `.venv` and you get 3.11 automatically.
+  (it doesn't replace it). Use the shared `.venv` and you get 3.11 automatically. For M9 you need 3.12+ (above).
+- M9's `make setup` says "No matching distribution found for numpy": that Python is older than 3.12.
 - "cannot create virtual environments": Debian and Ubuntu ship `venv` separately. The script installs
   `python3.X-venv`; by hand: `sudo apt install python3.12-venv` (your version number).
 - A broken `.venv` (Python was upgraded or removed): delete the `.venv` folder and run setup again.
