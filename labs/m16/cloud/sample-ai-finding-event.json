@@ -1,0 +1,18 @@
+{
+  "version": "0",
+  "id": "cd2d702e-ab31-411b-9344-793ce56b1bc7",
+  "detail-type": "GuardDuty Finding",
+  "source": "aws.guardduty",
+  "account": "111122223333",
+  "time": "2026-10-20T10:55:20Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "schemaVersion": "2.0",
+    "accountId": "111122223333",
+    "region": "us-east-1",
+    "type": "Impact:IAMUser/PromptInjection.Direct",
+    "severity": 2,
+    "resource": {"resourceType": "AccessKey"}
+  }
+}

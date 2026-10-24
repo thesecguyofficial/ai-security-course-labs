@@ -1,0 +1,6 @@
+{
+  "_about": "Average model tokens (input + output) per active hour for each principal over the last 14 days, from the invocation logs. Rule D06 compares each hour of today with these. Lab values.",
+  "arn:aws:iam::111122223333:role/HelpdeskAppRole": 25000,
+  "arn:aws:iam::111122223333:role/DataScienceRole": 90000,
+  "arn:aws:iam::111122223333:role/tsg-agent-runtime-role": 8000
+}

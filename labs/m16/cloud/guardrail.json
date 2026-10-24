@@ -1,0 +1,11 @@
+{
+  "name": "tsg-m16-prompt-attack",
+  "description": "M16 guided build: prompt attack filter only, so GuardDuty can raise Impact:IAMUser/PromptInjection.Direct",
+  "contentPolicyConfig": {
+    "filtersConfig": [
+      {"type": "PROMPT_ATTACK", "inputStrength": "HIGH", "outputStrength": "NONE", "inputAction": "BLOCK"}
+    ]
+  },
+  "blockedInputMessaging": "Sorry, I can't help with that request.",
+  "blockedOutputsMessaging": "Sorry, I can't help with that request."
+}

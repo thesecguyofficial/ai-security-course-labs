@@ -1,0 +1,7 @@
+{
+  "_about": "AnyCompany's register of approved AI: what the AI governance board signed off. Everything else the inventory finds is unsanctioned until someone owns it.",
+  "managed": ["tsghelpdesk01", "KBHELPDESK1", "DSHELPDESK1", "tsg_helpdesk-AbCdEf1234", "tsg-helpdesk-gw-a1b2c3d4e5", "tsg_helpdesk_mem-Xy12Ab34Cd", "churn-model-prod"],
+  "self_hosted": [],
+  "external_endpoints": [],
+  "_note": "No self-hosted model and no outside AI API is approved. The data science team's sanctioned path is Bedrock and SageMaker."
+}

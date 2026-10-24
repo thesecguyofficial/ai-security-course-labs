@@ -1,0 +1,47 @@
+{
+  "_about": "AnyCompany is fictional (AWS's own placeholder name). Account IDs, ARNs and access key IDs are AWS documentation example values; IP addresses come from the documentation ranges 192.0.2.0/24, 198.51.100.0/24 and 203.0.113.0/24 (RFC 5737); domains use example.com, example.net and example.org (RFC 2606). Nothing here is a real credential or a real customer.",
+  "account": "111122223333",
+  "region": "us-east-1",
+  "day": "2026-10-20",
+  "office_and_vpc_ips": ["192.0.2.10", "192.0.2.11", "192.0.2.40", "10.20.1.15", "10.20.1.16"],
+  "roles": {
+    "helpdesk_app": "arn:aws:sts::111122223333:assumed-role/HelpdeskAppRole/i-0abcd1234example",
+    "agent_backend": "arn:aws:sts::111122223333:assumed-role/tsg-backend/web-1",
+    "data_science": "arn:aws:sts::111122223333:assumed-role/DataScienceRole/analyst-session",
+    "kb_pipeline": "arn:aws:sts::111122223333:assumed-role/KbPipelineRole/nightly-sync",
+    "security_admin": "arn:aws:sts::111122223333:assumed-role/SecurityAdmin/secops-session",
+    "ci_deployer": "arn:aws:sts::111122223333:assumed-role/tsg-ci-deployer/pipeline-run-412",
+    "contractor_upload": "arn:aws:sts::111122223333:assumed-role/ContractorUploadRole/dana-upload"
+  },
+  "approved_inference_principals": [
+    "arn:aws:iam::111122223333:role/HelpdeskAppRole",
+    "arn:aws:iam::111122223333:role/DataScienceRole",
+    "arn:aws:iam::111122223333:role/tsg-agent-runtime-role"
+  ],
+  "logging_admins": ["arn:aws:iam::111122223333:role/SecurityAdmin"],
+  "gateway_admins": ["arn:aws:iam::111122223333:role/SecurityAdmin"],
+  "kb": {
+    "bucket": "anycompany-helpdesk-kb-source",
+    "knowledge_base_id": "KBHELPDESK1",
+    "data_source_id": "DSHELPDESK1",
+    "writers": ["arn:aws:iam::111122223333:role/KbPipelineRole"]
+  },
+  "gateway_id": "tsg-helpdesk-gw-a1b2c3d4e5",
+  "policy_engine_arn": "arn:aws:bedrock-agentcore:us-east-1:111122223333:policy-engine/tsg_helpdesk_pe-a1b2c3d4e5",
+  "runtime_arn": "arn:aws:bedrock-agentcore:us-east-1:111122223333:runtime/tsg_helpdesk-AbCdEf1234",
+  "company_email_domain": "example.com",
+  "allowed_answer_domains": ["example.com", "docs.aws.amazon.com"],
+  "guardrail_arn": "arn:aws:bedrock:us-east-1:111122223333:guardrail/tsghelpdesk01",
+  "system_prompt_canary": "CANARY-M16-SYSPROMPT",
+  "detection_tuning": {
+    "_note": "Thresholds the m16 rule pack uses. Tune them on your own baseline; these fit this lab's day of traffic.",
+    "prompt_attacks_per_user_per_10_min": 3,
+    "tokens_per_principal_per_hour_factor": 4,
+    "tokens_per_end_user_per_hour": 200000
+  },
+  "lab_price_list": {
+    "_note": "ILLUSTRATIVE prices for the incident report's cost line only (US$ per 1,000 tokens). Not AWS's prices: read the Amazon Bedrock pricing page for real ones.",
+    "input_per_1k": 0.003,
+    "output_per_1k": 0.015
+  }
+}
