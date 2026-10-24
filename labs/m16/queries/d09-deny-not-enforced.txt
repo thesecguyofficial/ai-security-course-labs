@@ -1,0 +1,3 @@
+fields @timestamp, name, attributes.aws.agentcore.policy.authorization_decision as decision, attributes.aws.agentcore.gateway.policy.mode as mode
+| filter name = "AuthorizeAction" and decision = "DENY" and mode = "LOG_ONLY"
+| sort @timestamp asc

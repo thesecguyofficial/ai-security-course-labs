@@ -1,0 +1,6 @@
+fields @timestamp, eventSource, eventName, userIdentity.arn, sourceIPAddress, userAgent
+| filter eventSource in ["bedrock.amazonaws.com", "bedrock-mantle.amazonaws.com"]
+| filter userIdentity.userName like /^BedrockAPIKey/
+| filter sourceIPAddress not in ["192.0.2.10", "192.0.2.11", "192.0.2.40"]
+| stats count(*) as calls, earliest(@timestamp) as first_seen, latest(@timestamp) as last_seen by userIdentity.arn, sourceIPAddress
+| sort first_seen asc

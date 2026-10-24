@@ -1,0 +1,5 @@
+fields @timestamp, eventSource, eventName, userIdentity.arn, sourceIPAddress
+| filter (eventSource = "bedrock.amazonaws.com" and eventName in ["InvokeModel", "InvokeModelWithResponseStream", "Converse", "ConverseStream"])
+    or (eventSource = "bedrock-mantle.amazonaws.com" and eventName = "CreateInference")
+| filter userIdentity.sessionContext.sessionIssuer.userName not in ["HelpdeskAppRole", "DataScienceRole", "tsg-agent-runtime-role"]
+| stats count(*) as calls by userIdentity.arn, eventSource

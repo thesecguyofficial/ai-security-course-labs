@@ -1,0 +1,4 @@
+fields @timestamp, eventSource, eventName, errorCode, userIdentity.arn, requestParameters.policyEngineConfiguration.mode as mode
+| filter eventName in ["DeleteModelInvocationLoggingConfiguration", "PutModelInvocationLoggingConfiguration", "DeleteEnforcedGuardrailConfiguration", "DeleteGuardrail", "StopLogging", "DeleteTrail", "PutEventSelectors"]
+    or (eventName = "UpdateGateway" and (not ispresent(mode) or mode != "ENFORCE"))
+| sort @timestamp desc

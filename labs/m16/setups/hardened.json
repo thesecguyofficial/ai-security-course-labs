@@ -1,0 +1,13 @@
+{
+  "_about": "The logging lesson 16.1 asks for. Each key is one telemetry source the simulator writes only if it is true here.",
+  "name": "hardened",
+  "cloudtrail_management": true,
+  "cloudtrail_data_events": true,
+  "_cloudtrail_data_events": "Advanced event selectors for AWS::BedrockMantle::Project, AWS::BedrockAgentCore::Runtime and ::Gateway, and S3 object-level events on the knowledge base source bucket only.",
+  "invocation_logs": true,
+  "_invocation_logs": "Text only, 30-day retention, KMS. The app passes end_user and session in requestMetadata (caller-supplied: trust it only from your own backend).",
+  "guardduty_ai_protection": true,
+  "gateway_spans": true,
+  "app_log_identity": true,
+  "_app_log_identity": "Request ID, signed-in user, session ID, runtime session ID, and token counts per request."
+}
