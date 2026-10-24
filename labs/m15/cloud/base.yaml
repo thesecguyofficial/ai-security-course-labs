@@ -266,6 +266,7 @@ Resources:
                   - ec2:DeleteNetworkInterface
                   - ec2:DeleteNetworkInterfacePermission
                   - ec2:DescribeNetworkInterfaces
+                  - ec2:DescribeVpcEndpoints
                   - ec2:DescribeVpcs
                   - ec2:DescribeDhcpOptions
                   - ec2:DescribeSubnets
