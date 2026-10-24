@@ -385,6 +385,9 @@ is why the converter exists. A converter only matters if the target can decode i
 
 - The app listens on `127.0.0.1` only and refuses anything else. promptfoo is configured to call only
   `http://127.0.0.1:8017` (`make test` checks it), with telemetry, update checks, sharing and remote generation off.
+  One thing still leaves: with telemetry disabled, promptfoo 0.124.1 sends a single "telemetry disabled" event per
+  run to `r.promptfoo.app` (a random user ID, the promptfoo and Node.js versions, the OS, and whether it runs in CI;
+  no prompts, outputs or tests). We saw it on every run on 24 Oct 2026. To stop it, block that host at your firewall.
 - Everything is fake: tickets, people, the attacker hosts (`.example`), the canary. The actions are simulated.
 - The attack text only works on this toy app. Test only systems you own or are allowed to test (lesson 0.8).
 - `state/`, `results/` and `.promptfoo/` are git-ignored; `make clean` deletes them.
