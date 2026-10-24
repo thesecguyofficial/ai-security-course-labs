@@ -1,0 +1,26 @@
+{
+  "_note": "CreateDomain request body for the data scientists' Studio domain.",
+  "DomainName": "tsg-data-science",
+  "AuthMode": "IAM",
+  "DefaultUserSettings": {
+    "ExecutionRole": "arn:aws:iam::111122223333:role/tsg-ds-exec",
+    "SecurityGroups": [
+      "sg-0a1b2c3d4e5f60031"
+    ]
+  },
+  "SubnetIds": [
+    "subnet-0a1b2c3d4e5f60013",
+    "subnet-0a1b2c3d4e5f60014"
+  ],
+  "VpcId": "vpc-0a1b2c3d4e5f60000",
+  "AppNetworkAccessType": "PublicInternetOnly",
+  "_security_groups": {
+    "sg-0a1b2c3d4e5f60031": {
+      "inbound_from_itself": true,
+      "used_by": [
+        "alice",
+        "bob"
+      ]
+    }
+  }
+}

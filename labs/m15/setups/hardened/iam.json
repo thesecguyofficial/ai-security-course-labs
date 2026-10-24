@@ -1,0 +1,450 @@
+{
+  "_note": "Who can do what. 'policy' = the identity policy (inline, simplified). Managed policies are listed by name; the twin evaluates only the inline statements.",
+  "principals": {
+    "tsg-summariser-exec": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-summariser-exec",
+      "execution_role": true,
+      "trust": {
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "sagemaker.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole",
+            "Condition": {
+              "ArnLike": {
+                "aws:SourceArn": "arn:aws:sagemaker:us-east-1:111122223333:*"
+              }
+            }
+          }
+        ]
+      },
+      "policy": {
+        "Statement": [
+          {
+            "Sid": "ReadModelFiles",
+            "Effect": "Allow",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::amzn-s3-demo-tsg-models/tsg-summariser/*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "s3:ListBucket",
+            "Resource": "arn:aws:s3:::amzn-s3-demo-tsg-models"
+          },
+          {
+            "Sid": "WriteDataCapture",
+            "Effect": "Allow",
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::amzn-s3-demo-tsg-capture/tsg-summariser/*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "kms:Decrypt",
+              "kms:GenerateDataKey"
+            ],
+            "Resource": "arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
+          },
+          {
+            "Sid": "VpcNetworkInterfaces",
+            "Effect": "Allow",
+            "Action": [
+              "ec2:CreateNetworkInterface",
+              "ec2:CreateNetworkInterfacePermission",
+              "ec2:DeleteNetworkInterface",
+              "ec2:DeleteNetworkInterfacePermission",
+              "ec2:DescribeNetworkInterfaces",
+              "ec2:DescribeVpcs",
+              "ec2:DescribeDhcpOptions",
+              "ec2:DescribeSubnets",
+              "ec2:DescribeSecurityGroups"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "logs:CreateLogGroup",
+              "logs:CreateLogStream",
+              "logs:PutLogEvents"
+            ],
+            "Resource": "arn:aws:logs:us-east-1:111122223333:log-group:/aws/sagemaker/*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "cloudwatch:PutMetricData",
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "tsg-ds-exec": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-ds-exec",
+      "execution_role": true,
+      "trust": {
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "sagemaker.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole",
+            "Condition": {
+              "ArnLike": {
+                "aws:SourceArn": "arn:aws:sagemaker:us-east-1:111122223333:*"
+              }
+            }
+          }
+        ]
+      },
+      "policy": {
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::amzn-s3-demo-tsg-models/experiments/*"
+          }
+        ]
+      }
+    },
+    "tsg-helpdesk-app": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-helpdesk-app",
+      "_note": "The Helpdesk backend that asks the summariser for ticket summaries.",
+      "policy": {
+        "Statement": [
+          {
+            "Sid": "OnlyThroughOurEndpoint",
+            "Effect": "Allow",
+            "Action": "sagemaker:InvokeEndpoint",
+            "Resource": "arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser",
+            "Condition": {
+              "StringEquals": {
+                "aws:SourceVpce": "vpce-0a1b2c3d4e5f60001"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ds-alice": {
+      "arn": "arn:aws:iam::111122223333:role/ds-alice",
+      "studio_user": "alice",
+      "_note": "Data scientist alice, signs in to Studio.",
+      "policy": {
+        "Statement": [
+          {
+            "Sid": "OwnStudioProfileOnly",
+            "Effect": "Allow",
+            "Action": "sagemaker:CreatePresignedDomainUrl",
+            "Resource": "arn:aws:sagemaker:us-east-1:111122223333:user-profile/d-abcde1234567/alice"
+          },
+          {
+            "Sid": "OwnExperiments",
+            "Effect": "Allow",
+            "Action": "sagemaker:*",
+            "Resource": [
+              "arn:aws:sagemaker:us-east-1:111122223333:model/ds-*",
+              "arn:aws:sagemaker:us-east-1:111122223333:endpoint/ds-*",
+              "arn:aws:sagemaker:us-east-1:111122223333:endpoint-config/ds-*",
+              "arn:aws:sagemaker:us-east-1:111122223333:training-job/ds-*",
+              "arn:aws:sagemaker:us-east-1:111122223333:processing-job/ds-*"
+            ]
+          },
+          {
+            "Sid": "RegisterButNotApprove",
+            "Effect": "Allow",
+            "Action": "sagemaker:CreateModelPackage",
+            "Resource": [
+              "arn:aws:sagemaker:us-east-1:111122223333:model-package-group/tsg-summariser",
+              "arn:aws:sagemaker:us-east-1:111122223333:model-package/tsg-summariser/*"
+            ]
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "sagemaker:Describe*",
+              "sagemaker:List*"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "NeverApprove",
+            "Effect": "Deny",
+            "Action": "sagemaker:UpdateModelPackage",
+            "Resource": "*"
+          },
+          {
+            "Sid": "PassOnlyTheDataScienceRole",
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::111122223333:role/tsg-ds-exec",
+            "Condition": {
+              "StringEquals": {
+                "iam:PassedToService": "sagemaker.amazonaws.com"
+              }
+            }
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:ListBucket"
+            ],
+            "Resource": [
+              "arn:aws:s3:::amzn-s3-demo-tsg-models",
+              "arn:aws:s3:::amzn-s3-demo-tsg-models/*"
+            ]
+          },
+          {
+            "Effect": "Allow",
+            "Action": "s3:PutObject",
+            "Resource": [
+              "arn:aws:s3:::amzn-s3-demo-tsg-models/experiments/alice/*",
+              "arn:aws:s3:::amzn-s3-demo-tsg-models/incoming/*"
+            ]
+          }
+        ]
+      }
+    },
+    "ds-bob": {
+      "arn": "arn:aws:iam::111122223333:role/ds-bob",
+      "studio_user": "bob",
+      "_note": "Data scientist bob, signs in to Studio.",
+      "policy": {
+        "Statement": [
+          {
+            "Sid": "OwnStudioProfileOnly",
+            "Effect": "Allow",
+            "Action": "sagemaker:CreatePresignedDomainUrl",
+            "Resource": "arn:aws:sagemaker:us-east-1:111122223333:user-profile/d-abcde1234567/bob"
+          },
+          {
+            "Sid": "OwnExperiments",
+            "Effect": "Allow",
+            "Action": "sagemaker:*",
+            "Resource": [
+              "arn:aws:sagemaker:us-east-1:111122223333:model/ds-*",
+              "arn:aws:sagemaker:us-east-1:111122223333:endpoint/ds-*",
+              "arn:aws:sagemaker:us-east-1:111122223333:endpoint-config/ds-*",
+              "arn:aws:sagemaker:us-east-1:111122223333:training-job/ds-*",
+              "arn:aws:sagemaker:us-east-1:111122223333:processing-job/ds-*"
+            ]
+          },
+          {
+            "Sid": "RegisterButNotApprove",
+            "Effect": "Allow",
+            "Action": "sagemaker:CreateModelPackage",
+            "Resource": [
+              "arn:aws:sagemaker:us-east-1:111122223333:model-package-group/tsg-summariser",
+              "arn:aws:sagemaker:us-east-1:111122223333:model-package/tsg-summariser/*"
+            ]
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "sagemaker:Describe*",
+              "sagemaker:List*"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "NeverApprove",
+            "Effect": "Deny",
+            "Action": "sagemaker:UpdateModelPackage",
+            "Resource": "*"
+          },
+          {
+            "Sid": "PassOnlyTheDataScienceRole",
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::111122223333:role/tsg-ds-exec",
+            "Condition": {
+              "StringEquals": {
+                "iam:PassedToService": "sagemaker.amazonaws.com"
+              }
+            }
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:ListBucket"
+            ],
+            "Resource": [
+              "arn:aws:s3:::amzn-s3-demo-tsg-models",
+              "arn:aws:s3:::amzn-s3-demo-tsg-models/*"
+            ]
+          },
+          {
+            "Effect": "Allow",
+            "Action": "s3:PutObject",
+            "Resource": [
+              "arn:aws:s3:::amzn-s3-demo-tsg-models/experiments/bob/*",
+              "arn:aws:s3:::amzn-s3-demo-tsg-models/incoming/*"
+            ]
+          }
+        ]
+      }
+    },
+    "tsg-model-approver": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-model-approver",
+      "_note": "The ML lead's approval role.",
+      "policy": {
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sagemaker:UpdateModelPackage",
+            "Resource": "arn:aws:sagemaker:us-east-1:111122223333:model-package/tsg-summariser/*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "sagemaker:Describe*",
+              "sagemaker:List*"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "tsg-ci-deployer": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-ci-deployer",
+      "_note": "The deployment pipeline.",
+      "policy": {
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "sagemaker:CreateModel",
+              "sagemaker:CreateEndpointConfig",
+              "sagemaker:CreateEndpoint",
+              "sagemaker:UpdateEndpoint",
+              "sagemaker:CreateModelPackage",
+              "sagemaker:Describe*"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::111122223333:role/tsg-summariser-exec",
+            "Condition": {
+              "StringEquals": {
+                "iam:PassedToService": "sagemaker.amazonaws.com"
+              }
+            }
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:PutObject",
+              "s3:GetObject"
+            ],
+            "Resource": "arn:aws:s3:::amzn-s3-demo-tsg-models/tsg-summariser/*"
+          }
+        ]
+      }
+    },
+    "tsg-platform-admin": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-platform-admin",
+      "admin": true,
+      "_note": "Platform team break-glass/admin role.",
+      "policy": {
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sagemaker:*",
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "*",
+            "Condition": {
+              "StringEquals": {
+                "iam:PassedToService": "sagemaker.amazonaws.com"
+              }
+            }
+          },
+          {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "collector-role": {
+      "arn": "arn:aws:iam::444455556666:role/collector-role",
+      "account": "444455556666",
+      "_note": "Someone else's AWS account. Their own policy lets them invoke their own endpoint.",
+      "policy": {
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sagemaker:InvokeEndpoint",
+            "Resource": "arn:aws:sagemaker:us-east-1:444455556666:endpoint/*"
+          }
+        ]
+      }
+    }
+  },
+  "runtime_endpoint_policy": {
+    "Statement": [
+      {
+        "Sid": "OurAccountOurEndpoint",
+        "Effect": "Allow",
+        "Principal": "*",
+        "Action": "sagemaker:InvokeEndpoint",
+        "Resource": "arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser",
+        "Condition": {
+          "StringEquals": {
+            "aws:PrincipalAccount": "111122223333"
+          }
+        }
+      }
+    ]
+  },
+  "bucket_policies": {
+    "amzn-s3-demo-tsg-models": {
+      "Statement": [
+        {
+          "Sid": "OnlyThePipelineWritesReleasedModels",
+          "Effect": "Deny",
+          "Principal": "*",
+          "Action": [
+            "s3:PutObject",
+            "s3:DeleteObject"
+          ],
+          "Resource": "arn:aws:s3:::amzn-s3-demo-tsg-models/tsg-summariser/*",
+          "Condition": {
+            "ArnNotEquals": {
+              "aws:PrincipalArn": "arn:aws:iam::111122223333:role/tsg-ci-deployer"
+            }
+          }
+        }
+      ]
+    },
+    "amzn-s3-demo-tsg-capture": {
+      "Statement": [
+        {
+          "Sid": "PromptsAreSensitive",
+          "Effect": "Deny",
+          "Principal": "*",
+          "Action": "s3:GetObject",
+          "Resource": "arn:aws:s3:::amzn-s3-demo-tsg-capture/*",
+          "Condition": {
+            "ArnNotEquals": {
+              "aws:PrincipalArn": "arn:aws:iam::111122223333:role/tsg-platform-admin"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

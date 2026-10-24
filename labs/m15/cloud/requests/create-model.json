@@ -1,0 +1,7 @@
+{
+  "ModelName": "tsg-summariser-lab",
+  "ExecutionRoleArn": "${ExecutionRoleArn}",
+  "PrimaryContainer": {"ModelPackageName": "${PACKAGE_ARN}"},
+  "VpcConfig": {"Subnets": "${SubnetIds}", "SecurityGroupIds": ["${ModelSecurityGroup}"]},
+  "EnableNetworkIsolation": true
+}
