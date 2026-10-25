@@ -1,0 +1,15 @@
+{
+ "_about": "The first draft's deploy step. It checks the signature 'when it can' and deploys anyway when it can't.",
+ "trusted_key": "release",
+ "_trusted_key": "release = use keys/ci.pub from the release folder itself, i.e. trust whatever key came with the model.",
+ "require_signature": false,
+ "ignore_unsigned_files": true,
+ "_ignore_unsigned_files": "true = files that are not in the signature are allowed (the docs job adds a README after signing).",
+ "on_verify_error": "warn",
+ "_on_verify_error": "warn = log a warning and carry on (fail open). refuse = stop (fail closed).",
+ "allowed_files": null,
+ "check_bom": false,
+ "check_eval": false,
+ "check_revoked": false,
+ "check_lineage": false
+}

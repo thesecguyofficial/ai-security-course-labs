@@ -1,0 +1,42 @@
+# M25 lab. One real package: model-signing, the OpenSSF Model Signing library and CLI (Apache-2.0), used here with a
+# local key pair, so nothing is sent to Sigstore or anywhere else: https://pypi.org/project/model-signing/
+# model-signing 1.1.1 was uploaded on 10 Oct 2025. EVERY package it pulls in is pinned below, at the versions this lab
+# was tested with on 25 Oct 2026, because an unpinned install broke that day: sigstore 4.5.1 (uploaded 20 Oct 2026)
+# no longer depends on pyOpenSSL, and model-signing 1.1.1 imports it without listing it. pyOpenSSL is added by hand.
+# README: "Why everything is pinned".
+annotated-types==0.8.0
+asn1crypto==1.5.1
+blake3==1.0.11
+certifi==2026.10.23
+cffi==2.1.1
+charset-normalizer==3.5.2
+click==8.5.0
+cryptography==50.0.2
+dnspython==2.9.0
+email-validator==2.3.0
+id==1.6.1
+idna==3.20
+in-toto-attestation==0.9.3
+markdown-it-py==4.2.0
+mdurl==0.1.2
+model-signing==1.1.1
+platformdirs==4.13.5
+protobuf==7.36.2
+pycparser==3.12
+pydantic==2.14.1
+pydantic_core==2.50.1
+Pygments==2.21.0
+PyJWT==2.15.1
+pyOpenSSL==26.4.0
+requests==2.34.2
+rfc3161-client==1.0.9
+rfc8785==0.1.4
+rich==15.0.0
+securesystemslib==1.6.0
+sigstore==4.5.1
+sigstore-models==0.0.6
+sigstore-rekor-types==0.0.18
+tuf==7.0.1
+typing-inspection==0.4.4
+typing_extensions==4.16.0
+urllib3==2.8.0
