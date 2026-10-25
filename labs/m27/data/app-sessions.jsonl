@@ -1,0 +1,13 @@
+{"time": "2027-03-27T08:55:00Z", "user": "alice", "session_id": "cis-0001", "event": "start"}
+{"time": "2027-03-27T08:55:30Z", "user": "alice", "session_id": "cis-0001", "event": "invoke"}
+{"time": "2027-03-27T09:01:00Z", "user": "bob", "session_id": "cis-0002", "event": "start"}
+{"time": "2027-03-27T09:02:10Z", "user": "bob", "session_id": "cis-0002", "event": "invoke"}
+{"time": "2027-03-27T09:04:00Z", "user": "alice", "session_id": "cis-0001", "event": "stop"}
+{"time": "2027-03-27T09:05:00Z", "user": "chen", "session_id": "cis-0003", "event": "start"}
+{"time": "2027-03-27T09:06:30Z", "user": "chen", "session_id": "cis-0003", "event": "invoke"}
+{"time": "2027-03-27T09:09:00Z", "user": "alice", "session_id": "cis-0003", "event": "invoke"}
+{"time": "2027-03-27T09:11:00Z", "user": "bob", "session_id": "cis-0002", "event": "stop"}
+{"time": "2027-03-27T09:12:00Z", "user": "chen", "session_id": "cis-0003", "event": "invoke"}
+{"time": "2027-03-27T09:20:00Z", "user": "chen", "session_id": "cis-0003", "event": "stop"}
+{"time": "2027-03-27T09:25:00Z", "user": "bob", "session_id": "cis-0004", "event": "start"}
+{"time": "2027-03-27T09:26:00Z", "user": "bob", "session_id": "cis-0004", "event": "stop"}

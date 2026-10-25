@@ -1,0 +1,57 @@
+{
+  "name": "tsg-data-helper",
+  "description": "FIRST DRAFT. A code-running analysis agent: reads CSV reports from one bucket, writes summaries back, calls one model. Lab fixture only; not a real deployment.",
+  "runtime": {
+    "boundary": "microvm",
+    "session": {"one_per_user_task": false, "timeout_seconds": 28800},
+    "limits": {"vcpu": 2, "memory_mb": 4096, "max_processes": null}
+  },
+  "network": {
+    "mode": "PUBLIC",
+    "nat_gateway": true,
+    "security_group_egress": [
+      {"protocol": "tcp", "port": 443, "to": "0.0.0.0/0"},
+      {"protocol": "udp", "port": 53, "to": "0.0.0.0/0"}
+    ]
+  },
+  "endpoints": [
+    {"service": "s3", "type": "gateway", "policy": "full-access"},
+    {"service": "bedrock-runtime", "type": "interface", "policy": "full-access"}
+  ],
+  "dns": {
+    "firewall": false,
+    "default_action": "ALLOW",
+    "allow": [],
+    "fail_open": true,
+    "query_logging": false
+  },
+  "proxy": {
+    "enabled": true,
+    "enforced_by_network": false,
+    "allow": [
+      {"name": "*.amazonaws.com", "methods": ["*"]},
+      {"name": "pypi.tsg.example", "methods": ["*"]}
+    ]
+  },
+  "execution_role": {
+    "statements": [
+      {"effect": "Allow", "actions": ["s3:*"], "resources": ["*"]},
+      {"effect": "Allow", "actions": ["bedrock:*"], "resources": ["*"]}
+    ]
+  },
+  "filesystem": {
+    "mounts": [
+      {"path": "/workspace", "mode": "rw"},
+      {"path": "/home/agent/.aws", "mode": "rw"},
+      {"path": "/data/reports", "mode": "rw"}
+    ]
+  },
+  "secrets": {
+    "env": ["TSG_DB_PASSWORD", "TSG_MODEL_API_KEY"]
+  },
+  "logging": {
+    "flow_logs": false,
+    "dns_query_logs": false,
+    "cloudtrail_network_activity": []
+  }
+}
