@@ -1,0 +1,17 @@
+{
+  "name": "honeytoken-key-used",
+  "lesson": "29.4",
+  "severity": "high",
+  "state": "ENABLED",
+  "regions": ["us-east-1"],
+  "_note": "First draft: written to cut noise. Successful InvokeModel calls only, in the main Region.",
+  "pattern": {
+    "source": ["aws.bedrock"],
+    "detail-type": ["AWS API Call via CloudTrail"],
+    "detail": {
+      "eventName": ["InvokeModel"],
+      "userIdentity": {"accessKeyId": ["TSGLABHONEYKEY000001"]},
+      "errorCode": [{"exists": false}]
+    }
+  }
+}

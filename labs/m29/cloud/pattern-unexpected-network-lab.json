@@ -1,0 +1,22 @@
+{
+  "detail-type": [
+    "AWS API Call via CloudTrail"
+  ],
+  "detail": {
+    "eventSource": [
+      {
+        "prefix": "bedrock"
+      }
+    ],
+    "userIdentity": {
+      "userName": [
+        "svc-helpdesk-batch"
+      ]
+    },
+    "vpcEndpointId": [
+      {
+        "exists": false
+      }
+    ]
+  }
+}

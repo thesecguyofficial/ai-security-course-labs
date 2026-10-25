@@ -1,0 +1,23 @@
+{
+  "_about": "Same org, same logs, same stand-in model. Only the collection, the rules, the responder and the triage design changed.",
+  "collect": {"accounts": "all", "regions": "all",
+              "data_events": ["bedrock-mantle.amazonaws.com"]},
+  "hunt": {
+    "sources": ["cloudtrail", "dns", "secrets"],
+    "event_names": ["InvokeModel", "InvokeModelWithResponseStream", "Converse", "ConverseStream", "CreateInference"],
+    "scan_history": true
+  },
+  "responder": {
+    "mode": "event",
+    "reads": "eventbridge",
+    "actions": ["deactivate_key", "deny_user_sessions", "snapshot_evidence", "open_incident"],
+    "never_touch": ["arn:aws:iam::555555555555:role/security-audit"]
+  },
+  "triage": {
+    "alert_fields_in": "data",
+    "tools": ["lookup_key", "escalate", "recommend"],
+    "gate": "outside-model",
+    "close_requires": "rule-or-human",
+    "never_auto_close_rules": ["honeytoken-key-used", "app-key-unexpected-network", "ai-logging-tampered"]
+  }
+}
