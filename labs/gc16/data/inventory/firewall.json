@@ -1,0 +1,11 @@
+{
+  "_about": "Compute Engine VMs and firewall rules (cut to the fields the check reads). AI Protection's inventory categories don't include software you run on your own VMs, so an exposed Ollama server is your check. Lab values.",
+  "instances": [
+    {"name": "gpu-box-1", "project": "example-ds-lab", "tags": ["ollama"], "labels": {"owner": "data-science", "software": "ollama"}},
+    {"name": "helpdesk-web-1", "project": "example-chatbot-prod", "tags": ["web"], "labels": {"owner": "support-platform"}}
+  ],
+  "firewalls": [
+    {"name": "allow-ollama-any", "project": "example-ds-lab", "direction": "INGRESS", "sourceRanges": ["0.0.0.0/0"], "allowed": [{"IPProtocol": "tcp", "ports": ["11434"]}], "targetTags": ["ollama"], "disabled": false},
+    {"name": "allow-https-lb", "project": "example-chatbot-prod", "direction": "INGRESS", "sourceRanges": ["198.51.100.0/24"], "allowed": [{"IPProtocol": "tcp", "ports": ["443"]}], "targetTags": ["web"], "disabled": false}
+  ]
+}

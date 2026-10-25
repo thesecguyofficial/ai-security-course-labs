@@ -1,0 +1,6 @@
+logName:"cloudaudit.googleapis.com%2Fdata_access"
+(
+  (protoPayload.methodName="storage.objects.create" AND protoPayload.resourceName:"buckets/exampleco-helpdesk-kb/")
+  OR protoPayload.methodName:"ImportRagFiles"
+)
+NOT protoPayload.authenticationInfo.principalEmail="kb-pipeline@example-chatbot-prod.iam.gserviceaccount.com"
