@@ -1,0 +1,23 @@
+{
+ "_about": "What Contoso collected before this module. Each key is one telemetry source the simulator writes only if it is true here.",
+ "name": "first-draft",
+ "activity_log": true,
+ "_activity_log": "The subscription's Activity log, exported to the Log Analytics workspace (table AzureActivity): control-plane operations such as listKeys and diagnosticSettings/delete.",
+ "apim_gateway_logs": true,
+ "_apim_gateway_logs": "ApiManagementGatewayLogs: one row per call through the API Management gateway (caller IP, APIM subscription, response code). No prompts.",
+ "foundry_resource_logs": false,
+ "_foundry_resource_logs": "The Foundry resource has a diagnostic setting, but it sends the Audit category only: no RequestResponse or Trace rows in AzureDiagnostics, so calls that skip the gateway are invisible. (The built-in policy 'Diagnostic logs in Azure AI services resources should be enabled' still reports it compliant: lesson 16.4.)",
+ "apim_llm_logs": false,
+ "_apim_llm_logs": "Log LLM messages is off on the API: no ApiManagementGatewayLlmLog rows (no prompts, no completions, no token counts).",
+ "defender_ai_services": false,
+ "_defender_ai_services": "Defender for Cloud is on, but the AI services plan was never turned on: no AI alerts in SecurityAlert.",
+ "agent_traces": false,
+ "_agent_traces": "Foundry tracing is off by default and nobody turned it on: no invoke_agent or execute_tool spans.",
+ "storage_logs": false,
+ "_storage_logs": "No diagnostic setting on the knowledge base storage account: no StorageBlobLogs.",
+ "deploy_log": false,
+ "_deploy_log": "The agent pipeline's own run log stays in the CI system; nothing reaches the workspace.",
+ "metrics": false,
+ "app_log_identity": false,
+ "_app_log_identity": "The web app logs path, status and latency. No end-user ID, no session ID, no correlation ID. It doesn't pass user_security_context."
+}

@@ -1,0 +1,12 @@
+// D05 Tokens per API Management subscription per hour, compared with a baseline (LLM log joined to the gateway log)
+// The LLM log has the tokens; the gateway log has ApimSubscriptionId. They share CorrelationId.
+let baseline = datatable(ApimSubscriptionId: string, AvgTokensPerHour: long)
+    ["helpdesk-app", 25000, "ds-batch", 120000, "helpdesk-agent", 6000];   // build yours from 14 days of history
+ApiManagementGatewayLlmLog
+| where TimeGenerated > ago(1d)
+| summarize Tokens = max(TotalTokens) by CorrelationId, bin(TimeGenerated, 1h)   // one value per call
+| join kind=inner (ApiManagementGatewayLogs | project CorrelationId, ApimSubscriptionId) on CorrelationId
+| summarize HourTokens = sum(Tokens) by ApimSubscriptionId, TimeGenerated
+| join kind=leftouter baseline on ApimSubscriptionId
+| where isnull(AvgTokensPerHour) or HourTokens > 4 * AvgTokensPerHour
+| order by TimeGenerated asc

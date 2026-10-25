@@ -1,0 +1,7 @@
+// D06 Three or more content-filter blocks for one end user in ten minutes (your app's own log)
+// HelpdeskApp_CL is the lab's name for the app log as a custom table: one row per request with the signed-in user.
+HelpdeskApp_CL
+| where TimeGenerated > ago(1d)
+| where content_filter_blocked == true
+| summarize Blocks = count(), Requests = make_list(request_id) by signed_in_user, bin(TimeGenerated, 10m)
+| where Blocks >= 3

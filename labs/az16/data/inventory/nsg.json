@@ -1,0 +1,7 @@
+{
+ "_about": "Inbound network security group rules on the VMs in Resource Graph, cut to the fields the check reads. Lab values. 11434 is Ollama's default port.",
+ "rules": [
+  {"vm": "vm-gpu-lab01", "nsg": "nsg-gpu-lab01", "name": "allow-ssh-office", "direction": "Inbound", "access": "Allow", "sourceAddressPrefix": "192.0.2.10/32", "destinationPortRange": "22"},
+  {"vm": "vm-gpu-lab01", "nsg": "nsg-gpu-lab01", "name": "allow-ollama-demo", "direction": "Inbound", "access": "Allow", "sourceAddressPrefix": "Internet", "destinationPortRange": "11434"}
+ ]
+}

@@ -1,0 +1,10 @@
+// D10 A model answer links to a web domain outside the allow-list (LLM log)
+let allowed = dynamic(["contoso.com", "learn.microsoft.com"]);
+ApiManagementGatewayLlmLog
+| where TimeGenerated > ago(1d)
+| where isnotempty(ResponseMessages)
+| extend Hosts = extract_all(@"https?://([a-zA-Z0-9.-]+)", tostring(ResponseMessages))
+| mv-expand Host = Hosts to typeof(string)
+| extend Host = tolower(Host)
+| where not(Host in (allowed) or Host endswith ".contoso.com")
+| summarize Answers = count(), FirstSeen = min(TimeGenerated), Correlations = make_set(CorrelationId, 20) by Host

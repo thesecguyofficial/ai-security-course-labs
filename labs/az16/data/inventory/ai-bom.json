@@ -1,0 +1,16 @@
+{
+ "_about": "What Defender CSPM's AI security posture management shows for Contoso: AI workloads in Azure and in the AWS and Google Cloud environments connected to Defender for Cloud. Shape simplified for the lab; values illustrative. Microsoft lists the covered services as Azure OpenAI, Azure AI Foundry, Azure Machine Learning, Amazon Bedrock and Google Vertex AI. Agent-level discovery needs a Microsoft Agent 365 licence from 1 July 2026.",
+ "licences": {"defender_cspm": true, "agent365": false},
+ "workloads": [
+  {"cloud": "Azure", "service": "Foundry", "resource": "contoso-foundry", "deployments": ["helpdesk-chat (gpt-4.1-mini)"], "internet_exposed": true},
+  {"cloud": "Azure", "service": "Foundry", "resource": "mktg-hackathon-ai", "deployments": ["campaign-writer (gpt-4.1)"], "internet_exposed": true},
+  {"cloud": "Azure", "service": "Azure OpenAI", "resource": "contoso-oai-legacy", "deployments": ["chat35-old (gpt-35-turbo)"], "internet_exposed": true},
+  {"cloud": "Azure", "service": "Azure Machine Learning", "resource": "mlw-research", "deployments": [], "internet_exposed": false},
+  {"cloud": "AWS", "service": "Amazon Bedrock", "resource": "account 111122223333 us-east-1", "deployments": ["model access: 3 models"], "internet_exposed": false},
+  {"cloud": "GCP", "service": "Google Vertex AI", "resource": "project contoso-analytics", "deployments": ["1 endpoint"], "internet_exposed": false}
+ ],
+ "agents": [
+  {"name": "helpdesk-agent", "project": "contoso-foundry/helpdesk", "tools": ["helpdesk-tools"], "_shown_only_with": "agent365"},
+  {"name": "campaign-bot", "project": "mktg-hackathon-ai/default", "tools": ["web-search"], "_shown_only_with": "agent365"}
+ ]
+}

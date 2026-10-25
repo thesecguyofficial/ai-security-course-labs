@@ -1,0 +1,112 @@
+{
+ "_about": "Contoso's AI resources and subscription settings as the first draft left them: the ARM GET responses this lab reads, cut to the fields the checks need. Lab values.",
+ "resources": [
+  {
+   "type": "Microsoft.CognitiveServices/accounts",
+   "kind": "AIServices",
+   "name": "contoso-foundry",
+   "properties": {
+    "disableLocalAuth": false,
+    "publicNetworkAccess": "Enabled",
+    "networkAcls": {
+     "defaultAction": "Allow"
+    },
+    "privateEndpointConnections": [],
+    "encryption": {
+     "keySource": "Microsoft.CognitiveServices"
+    }
+   },
+   "diagnosticSettings": [
+    {
+     "name": "to-law",
+     "workspaceId": "law-secops",
+     "logs": [
+      {
+       "category": "Audit",
+       "enabled": true
+      }
+     ],
+     "metrics": [
+      {
+       "category": "AllMetrics",
+       "enabled": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "type": "Microsoft.CognitiveServices/accounts",
+   "kind": "AIServices",
+   "name": "mktg-hackathon-ai",
+   "properties": {
+    "disableLocalAuth": false,
+    "publicNetworkAccess": "Enabled",
+    "networkAcls": {
+     "defaultAction": "Allow"
+    },
+    "privateEndpointConnections": [],
+    "encryption": {
+     "keySource": "Microsoft.CognitiveServices"
+    }
+   },
+   "diagnosticSettings": []
+  },
+  {
+   "type": "Microsoft.Search/searchServices",
+   "kind": "",
+   "name": "contoso-search",
+   "properties": {
+    "disableLocalAuth": false,
+    "publicNetworkAccess": "Enabled",
+    "networkRuleSet": {
+     "ipRules": []
+    },
+    "privateEndpointConnections": []
+   },
+   "diagnosticSettings": []
+  }
+ ],
+ "subscription": {
+  "defender_pricings": [
+   {
+    "name": "CloudPosture",
+    "pricingTier": "Standard"
+   },
+   {
+    "name": "AI",
+    "pricingTier": "Free",
+    "extensions": []
+   }
+  ],
+  "apim_llm_apis": [
+   {
+    "service": "contoso-apim",
+    "api": "helpdesk-openai",
+    "gateway_llm_diagnostic": false,
+    "log_llm_messages": "Disabled"
+   }
+  ],
+  "foundry_projects": [
+   {
+    "project": "contoso-foundry/helpdesk",
+    "has_agents": true,
+    "tracing_app_insights": null
+   }
+  ],
+  "toolboxes": [
+   {
+    "toolbox": "helpdesk-tools",
+    "default_version": "1",
+    "servers": [
+     {
+      "server_label": "actions",
+      "has_write_tools": true,
+      "require_approval": "never",
+      "allowed_tools": null
+     }
+    ]
+   }
+  ]
+ }
+}

@@ -1,0 +1,6 @@
+{
+  "_about": "Average model tokens (prompt + completion) per active hour for each API Management subscription over the last 14 days, from the gateway's LLM log. Rule D05 compares each hour of today with these. Lab values.",
+  "helpdesk-app": 25000,
+  "ds-batch": 120000,
+  "helpdesk-agent": 6000
+}

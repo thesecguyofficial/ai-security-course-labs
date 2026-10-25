@@ -1,0 +1,13 @@
+{
+  "_about": "Request body for POST https://<resource>.openai.azure.com/openai/deployments/<deployment>/chat/completions?api-version=2025-04-01-preview with user_security_context, the field Defender for AI services reads to name the end user in an alert. The IDs are lab placeholders: in your app, end_user_id is the signed-in user's Microsoft Entra object ID and source_ip is the client's address, both set by your backend. Remove this _about key before sending.",
+  "messages": [
+    {"role": "system", "content": "You are the Contoso support assistant. CANARY-AZ16-SYSPROMPT"},
+    {"role": "user", "content": "Where is my order 4417?"}
+  ],
+  "max_tokens": 200,
+  "user_security_context": {
+    "application_name": "contoso-support-bot",
+    "end_user_id": "00000000-0000-0000-0000-000000008841",
+    "source_ip": "198.51.100.77"
+  }
+}
