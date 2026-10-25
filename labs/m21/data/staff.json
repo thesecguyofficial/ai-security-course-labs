@@ -1,0 +1,6 @@
+{
+  "_comment": "Helpdesk staff who sign in to the web app. The PEP takes the signed-in user from the session, never from tool arguments.",
+  "bob":   {"role": "support",    "about": "support agent, works customer tickets"},
+  "alice": {"role": "supervisor", "about": "support supervisor, approves refunds over $100"},
+  "dana":  {"role": "contractor", "about": "contractor, may look orders up but not refund"}
+}

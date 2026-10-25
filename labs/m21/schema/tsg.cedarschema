@@ -1,0 +1,33 @@
+// Cedar schema for the TSG Helpdesk tools (Cedar human-readable schema format).
+// The hardened PEP validates the policies against it when they load, and every request against it before deciding:
+// a missing argument, an extra argument or a wrong type makes the request invalid, and the PEP refuses it.
+namespace TSG {
+  entity User = { role: String };
+  entity Order = { customer: String, total_cents: Long, refunded_cents: Long };
+  entity Ticket = { requester: String };
+
+  type TicketInfo = { id: String, requester: String };
+  // Counted by the PEP from its own signed receipts, per signed-in user. Never from the model.
+  type Window = { refunds_1h: Long, denials_10m: Long };
+  // Filled by the PEP after it verified a signed approval bound to these exact arguments.
+  type Approval = { verified: Bool, approver?: User };
+
+  action "lookup_order" appliesTo {
+    principal: User,
+    resource: Order,
+    context: { input: { order_id: String }, ticket: TicketInfo, window: Window, approval: Approval }
+  };
+  action "issue_refund" appliesTo {
+    principal: User,
+    resource: Order,
+    context: {
+      input: { order_id: String, amount_cents: Long, currency: String, reason?: String },
+      ticket: TicketInfo, window: Window, approval: Approval
+    }
+  };
+  action "send_email" appliesTo {
+    principal: User,
+    resource: Ticket,
+    context: { input: { to: String, subject: String, body: String }, ticket: TicketInfo, window: Window, approval: Approval }
+  };
+}
