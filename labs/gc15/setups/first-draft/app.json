@@ -1,0 +1,23 @@
+{
+  "_about": "How ExampleCo runs it: settings and habits no API body shows. _gcs_objects says which lab file set sits under each Cloud Storage folder today.",
+  "pipeline_deploys_alias": "prod",
+  "upload_verifies_hashes": false,
+  "approval_gate": false,
+  "_next_release": "gs://example-tsg-models/tsg-summariser/v3/",
+  "_ds_project": "example-summariser-prod",
+  "_ds_runtime": "compute-default",
+  "client": {
+    "path": "public",
+    "uses_tls": true
+  },
+  "server_logs_prompts": true,
+  "data_access_logs": [],
+  "alerts": [],
+  "monitoring_plan": "Model Monitoring v1 drift detection on the summariser endpoint",
+  "_gcs_objects": {
+    "gs://example-tsg-models/tsg-summariser/v1/": "v1-pickle",
+    "gs://example-tsg-models/tsg-summariser/v2/": "v2-unvetted",
+    "gs://example-tsg-models/bob/experiment/": "bob-experiment",
+    "gs://example-tsg-models/tsg-summariser/v3/": "v3-safe"
+  }
+}

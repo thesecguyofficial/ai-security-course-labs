@@ -1,0 +1,11 @@
+{
+  "displayName": "tsg-gc15-summariser",
+  "labels": {"course": "tsg-gc15"},
+  "privateServiceConnectConfig": {
+    "enablePrivateServiceConnect": true,
+    "projectAllowlist": ["PROJECT_ID"]
+  },
+  "encryptionSpec": {
+    "kmsKeyName": "projects/PROJECT_ID/locations/us-central1/keyRings/tsg-gc15/cryptoKeys/tsg-gc15-ai"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "_about": "ExampleCo is fictional (the Google Cloud stream's company, on the documentation domain example.com). Project IDs, numbers, endpoint IDs and key names are placeholders. IP addresses come from the RFC 5737 documentation ranges or private 10.x space. Nothing here is a real credential.",
+  "lab_today": "2027-01-28",
+  "region": "us-central1",
+  "prod_project": "example-summariser-prod",
+  "prod_project_number": "100000000015",
+  "dev_project": "example-summariser-dev",
+  "outside_project": "example-partner-sandbox",
+  "vpc": "projects/example-summariser-prod/global/networks/tsg-vpc",
+  "caller_network": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc",
+  "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+  "model": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser",
+  "kms_key": "projects/example-summariser-prod/locations/us-central1/keyRings/tsg/cryptoKeys/tsg-ai",
+  "buckets": {
+    "models": "example-tsg-models",
+    "handover": "example-tsg-ds-handover",
+    "analytics": "example-tsg-analytics"
+  },
+  "members": {
+    "ds-alice": "user:alice@example.com",
+    "ds-bob": "user:bob@example.com",
+    "tsg-model-approver": "user:ml-lead@example.com",
+    "tsg-platform-admin": "user:platform-admin@example.com",
+    "tsg-ci-deployer": "serviceAccount:tsg-ci-deployer@example-summariser-prod.iam.gserviceaccount.com",
+    "tsg-helpdesk-app": "serviceAccount:tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com",
+    "tsg-summariser-runtime": "serviceAccount:tsg-summariser-runtime@example-summariser-prod.iam.gserviceaccount.com",
+    "tsg-ds-runtime": "serviceAccount:tsg-ds-runtime@example-summariser-dev.iam.gserviceaccount.com",
+    "compute-default": "serviceAccount:100000000015-compute@developer.gserviceaccount.com",
+    "all-staff": "group:all-staff@example.com"
+  },
+  "people": [
+    "ds-alice",
+    "ds-bob"
+  ],
+  "approved_licences": [
+    "apache-2.0",
+    "mit"
+  ],
+  "_approved_licences_note": "ExampleCo's own list, agreed with its legal team. The lab does not judge any licence; it checks that the recorded licence is on the company's list.",
+  "approved_garden_models": [
+    "publishers/hf-exampleco-base/models/tsg-base-0-5b:deploy"
+  ],
+  "_approved_garden_models_note": "A placeholder Model Garden ID in the documented publishers/PUBLISHER/models/MODEL:ACTION format. Use the real ID of the base model your team approved.",
+  "attacker_host": "collector.example.net",
+  "attacker_ip": "203.0.113.50",
+  "groups": {
+    "group:all-staff@example.com": [
+      "ds-alice",
+      "ds-bob",
+      "tsg-model-approver",
+      "tsg-platform-admin"
+    ]
+  }
+}

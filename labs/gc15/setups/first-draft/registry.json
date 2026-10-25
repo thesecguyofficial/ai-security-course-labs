@@ -1,0 +1,85 @@
+{
+  "_about": "Model Registry versions of projects/example-summariser-prod/locations/us-central1/models/tsg-summariser, shaped like the Model resource (versionId, versionAliases, artifactUri, containerSpec, labels). Keys that start with _ are lab notes. _snapshot names the file set Agent Platform copied at upload (models.upload copies artifactUri into its own bucket). _trained_by and _uploaded_by say who did what. _story says which role the version plays in the lab.",
+  "model": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser",
+  "versions": [
+    {
+      "versionId": "1",
+      "versionAliases": [
+        "default",
+        "prod"
+      ],
+      "artifactUri": "gs://example-tsg-models/tsg-summariser/v1/",
+      "containerSpec": {
+        "imageUri": "us-central1-docker.pkg.dev/example-summariser-prod/serving/tsg-llm-server:2026-07",
+        "env": [
+          {
+            "name": "HF_TOKEN",
+            "value": "hf_LAB_PLACEHOLDER_NOT_A_REAL_TOKEN"
+          },
+          {
+            "name": "MAX_MODEL_LEN",
+            "value": "4096"
+          }
+        ],
+        "ports": [
+          {
+            "containerPort": 8080
+          }
+        ],
+        "predictRoute": "/predict",
+        "healthRoute": "/health"
+      },
+      "labels": {
+        "team": "helpdesk"
+      },
+      "_snapshot": "v1-pickle",
+      "_trained_by": "ds-bob",
+      "_uploaded_by": "ds-bob",
+      "_story": "prod"
+    },
+    {
+      "versionId": "2",
+      "versionAliases": [],
+      "artifactUri": "gs://example-tsg-models/tsg-summariser/v2/",
+      "containerSpec": {
+        "imageUri": "us-central1-docker.pkg.dev/example-summariser-prod/serving/tsg-llm-server:2026-07",
+        "ports": [
+          {
+            "containerPort": 8080
+          }
+        ],
+        "predictRoute": "/predict",
+        "healthRoute": "/health"
+      },
+      "labels": {
+        "team": "helpdesk"
+      },
+      "_snapshot": "v2-unvetted",
+      "_trained_by": "ds-bob",
+      "_uploaded_by": "ds-bob",
+      "_story": "unvetted"
+    },
+    {
+      "versionId": "3",
+      "versionAliases": [],
+      "artifactUri": "gs://example-tsg-models/tsg-summariser/v3/",
+      "containerSpec": {
+        "imageUri": "us-central1-docker.pkg.dev/example-summariser-prod/serving/tsg-llm-server:2026-07",
+        "ports": [
+          {
+            "containerPort": 8080
+          }
+        ],
+        "predictRoute": "/predict",
+        "healthRoute": "/health"
+      },
+      "labels": {
+        "team": "helpdesk"
+      },
+      "_snapshot": "v3-safe",
+      "_trained_by": "ds-alice",
+      "_uploaded_by": "ds-alice",
+      "_story": "clean"
+    }
+  ]
+}

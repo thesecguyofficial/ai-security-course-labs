@@ -1,0 +1,9 @@
+{
+  "_about": "Organization policies on the folder that holds both projects. The Workbench constraints are not set yet: that's challenge 1.",
+  "constraints/vertexai.allowedModels": {"allowedValues": ["publishers/hf-exampleco-base/models/tsg-base-0-5b:deploy"]},
+  "constraints/ainotebooks.restrictPublicIp": null,
+  "constraints/ainotebooks.disableRootAccess": null,
+  "constraints/ainotebooks.disableTerminal": null,
+  "constraints/ainotebooks.disableFileDownloads": null,
+  "constraints/iam.automaticIamGrantsForDefaultServiceAccounts": {"enforce": true}
+}

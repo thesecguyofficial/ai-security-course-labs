@@ -1,0 +1,41 @@
+{
+  "_about": "IAM allow policies. Data scientists work in example-summariser-dev and hand files over through a bucket the pipeline reads. In prod, only the pipeline uploads and deploys, only the ML lead moves aliases, and the Helpdesk app may only predict, on this one endpoint. Roles are expanded with ../../roles.json.",
+  "projects": {
+    "example-summariser-prod": [
+      {"role": "projects/example-summariser-prod/roles/tsgDeployer", "members": ["serviceAccount:tsg-ci-deployer@example-summariser-prod.iam.gserviceaccount.com"]},
+      {"role": "projects/example-summariser-prod/roles/tsgModelApprover", "members": ["user:ml-lead@example.com"]},
+      {"role": "roles/owner", "members": ["user:platform-admin@example.com"]}
+    ],
+    "example-summariser-dev": [
+      {"role": "roles/aiplatform.user", "members": ["user:alice@example.com", "user:bob@example.com"]},
+      {"role": "roles/notebooks.admin", "members": ["user:alice@example.com", "user:bob@example.com"]}
+    ]
+  },
+  "buckets": {
+    "example-tsg-models": [
+      {"role": "roles/storage.objectAdmin", "members": ["serviceAccount:tsg-ci-deployer@example-summariser-prod.iam.gserviceaccount.com"]}
+    ],
+    "example-tsg-ds-handover": [
+      {"role": "roles/storage.objectAdmin", "members": ["user:alice@example.com", "user:bob@example.com"]},
+      {"role": "roles/storage.objectViewer", "members": ["serviceAccount:tsg-ci-deployer@example-summariser-prod.iam.gserviceaccount.com"]}
+    ],
+    "example-tsg-analytics": [
+      {"role": "roles/storage.objectViewer", "members": ["group:all-staff@example.com"]}
+    ]
+  },
+  "_bucket_project": {"example-tsg-models": "example-summariser-prod", "example-tsg-analytics": "example-summariser-prod", "example-tsg-ds-handover": "example-summariser-dev"},
+  "endpoints": {
+    "projects/example-summariser-prod/locations/us-central1/endpoints/1500": [
+      {"role": "projects/example-summariser-prod/roles/tsgPredictOnly", "members": ["serviceAccount:tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com"]}
+    ]
+  },
+  "serviceAccounts": {
+    "tsg-summariser-runtime@example-summariser-prod.iam.gserviceaccount.com": [
+      {"role": "roles/iam.serviceAccountUser", "members": ["serviceAccount:tsg-ci-deployer@example-summariser-prod.iam.gserviceaccount.com"]}
+    ],
+    "tsg-ds-runtime@example-summariser-dev.iam.gserviceaccount.com": [
+      {"role": "roles/iam.serviceAccountUser", "members": ["user:alice@example.com", "user:bob@example.com"]}
+    ]
+  },
+  "keys": {}
+}
