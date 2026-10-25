@@ -124,11 +124,15 @@ The trust policy is AWS's own example (service `bedrock-agentcore.amazonaws.com`
 `aws:SourceArn`). The role can list your other bucket on purpose: in Part D the endpoint policy, not the role, should
 be what says no.
 
-Two notes. AWS's VPC page shows this JSON with a `networkModeConfig` key; the API model in boto3 1.43.118 calls it
-`vpcConfig`. If the CLI rejects one, use the other. And the console's create page lists only **Sandbox** and **Public
-network** under **Network settings** (AgentCore console > **Built-in tools** > **Create Code Interpreter tool**), so
-use the CLI for VPC mode
-([AWS, create a Code Interpreter](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/code-interpreter-create.html)).
+Two notes. AWS's VPC page shows this JSON with a `networkModeConfig` key, but the API reference
+([`CodeInterpreterNetworkConfiguration`](https://docs.aws.amazon.com/bedrock-agentcore-control/latest/APIReference/API_CodeInterpreterNetworkConfiguration.html))
+and the boto3 1.43.118 model both call it `vpcConfig`, and the CLI checks your JSON against that model. Use
+`vpcConfig`. And the create page lists only **Sandbox** and **Public network** under **Network settings** (AgentCore
+console > **Built-in tools** > **Create Code Interpreter tool**)
+([AWS, create a Code Interpreter](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/code-interpreter-create.html)),
+while AWS's VPC page has console steps that choose **VPC** under **Network configuration**
+([AWS, VPC for AgentCore](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-vpc.html)). This
+guide uses the CLI so every step is a command you can copy.
 
 ## Part D · Four example requests
 
