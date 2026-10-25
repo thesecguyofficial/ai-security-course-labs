@@ -85,7 +85,13 @@ consoles, with the code in `cloud/lambda/helpdesk_tools.py`).
    `https://cognito-idp.us-east-1.amazonaws.com/<POOL>/.well-known/openid-configuration`. **Allowed clients**: the web
    client ID only. Leave **Allowed audiences** empty (Cognito access tokens carry `client_id`).
 3. **Permissions**: **Use an IAM service role**, **Create and use a new service role**. Afterwards, open the role in IAM
-   and cut its Lambda permission down to the one function ARN (lesson 14.4).
+   and cut its Lambda permission down to the one function ARN (lesson 14.4). Before step 6, also give it
+   `bedrock-agentcore:GetPolicyEngine` on the policy engine ARN, and `bedrock-agentcore:AuthorizeAction` and
+   `bedrock-agentcore:PartiallyAuthorizeActions` on the policy engine and gateway ARNs. Without them, AWS says,
+   attaching the engine fails with `InternalServerException` and "all tool invocations will be denied by default even
+   if you have permit policies configured"; AWS warns that a role created or updated for you may not include them
+   ([Policy IAM permissions](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-permissions.md)).
+   Path A's Terraform grants all three.
 4. **Target**: name `HelpdeskTools`, **Target type** Lambda, your function, the three tool schemas (`search_kb`,
    `reset_mfa`, `send_email`, same properties as `setups/hardened/targets.json`), **Outbound Auth** the gateway role.
 5. **Create gateway**.
