@@ -1,0 +1,25 @@
+{
+  "_about": "The Ops Crew on AWS, the platform team's FIRST DRAFT. This is the course's own summary format: one file instead of a dozen consoles. Each key names a real setting and the lesson that teaches it. Harden it (edit this file) until `make cloud` reports no HIGH findings (Pass) and, for Merit, no MEDIUM either. Write every change in report/FINDINGS.md under 'Cloud'.",
+  "stream": "aws",
+  "region": "us-east-1",
+  "agent_identities": {
+    "one_per_agent": false,
+    "agents": [
+      {"name": "triage", "workload_identity": "ops-crew", "role": "shared"},
+      {"name": "billing", "workload_identity": "ops-crew", "role": "shared"},
+      {"name": "analyst", "workload_identity": "ops-crew", "role": "shared"}
+    ]
+  },
+  "policy_engine": {"attached": false, "mode": "LOG_ONLY", "default_deny": false},
+  "gateway": {"authorizer_type": "NONE", "allowed_clients": []},
+  "handoff": {"allowed_edges": [], "max_depth": null},
+  "code_interpreter": {"network_mode": "PUBLIC", "egress_allow_list": []},
+  "model_supply_chain": {"verify_signature_on_deploy": false, "fail_closed": false},
+  "guardrail": {"attached": false, "prompt_attack_filter": "NONE"},
+  "secrets": {"system_prompt_contains_secret": true, "plaintext_env_secrets": ["CRM_API_TOKEN"]},
+  "invocation_logging": {"enabled": false, "kms_key": null},
+  "memory": {"provenance_tracking": false, "ttl_days": null},
+  "detection": {"guardduty_enabled": false, "guardduty_ai_protection": false},
+  "cloudtrail": {"data_events": []},
+  "budget": {"monthly_limit_usd": null, "alert_email_set": false}
+}
