@@ -47,7 +47,7 @@ Throughout: `PROJECT_ID` = your sandbox project, `REGION` = `europe-west4`.
 | User-defined log-based metric | "a class of Cloud Monitoring custom metrics and are chargeable" | one metric for an hour: cents at most |
 | Alerting policies | Google will charge for alerting "no sooner than September 1, 2027" ($0.35 per metric reference per month) | $0 today |
 | Model Armor | "no cost for using Model Armor up to 2 million tokens per month" standalone | $0 |
-| Gemini 3.1 Flash-Lite calls | Agent Platform pricing page | 30 short calls: under $0.05 |
+| Gemini 3.1 Flash-Lite (Preview) calls | Agent Platform pricing page | 30 short calls: under $0.05 |
 
 Sources: [Cloud Observability pricing](https://cloud.google.com/stackdriver/pricing),
 [Data Access audit logs](https://docs.cloud.google.com/logging/docs/audit/configure-data-access),
@@ -84,9 +84,12 @@ Make one model call (wait a minute or two after saving: configuration changes ta
 
 ```bash
 curl -s -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" \
-  "https://REGION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/REGION/publishers/google/models/gemini-3.1-flash-lite:generateContent" \
+  "https://aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/global/publishers/google/models/gemini-3.1-flash-lite-preview:generateContent" \
   -d '{"contents":[{"role":"user","parts":[{"text":"Say hello in five words."}]}],"generationConfig":{"maxOutputTokens":20},"labels":{"end_user":"lab-user-1"}}'
 ```
+
+Google lists this model as `gemini-3.1-flash-lite-preview` (Preview), available in the `global` location, so the call
+uses the global endpoint rather than `REGION`.
 
 Then in **Logging**, **Logs Explorer**, run:
 
@@ -107,7 +110,7 @@ Example response (shape from the provider's docs, values illustrative), one entr
     "methodName": "google.cloud.aiplatform.v1.PredictionService.GenerateContent",
     "authenticationInfo": {"principalEmail": "you@example.com"},
     "requestMetadata": {"callerIp": "198.51.100.7"},
-    "resourceName": "projects/PROJECT_ID/locations/REGION/publishers/google/models/gemini-3.1-flash-lite"
+    "resourceName": "projects/PROJECT_ID/locations/global/publishers/google/models/gemini-3.1-flash-lite-preview"
   }
 }
 ```
