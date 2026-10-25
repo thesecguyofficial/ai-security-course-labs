@@ -32,7 +32,7 @@ run once for real in a sandbox subscription and the examples are replaced with r
    ```bash
    cd labs/az16
    export AZ16_NAME=az16-ab1234            # yours: lowercase letters, digits, hyphens
-   export AZ16_REGION=swedencentral
+   export AZ16_REGION=eastus2              # Microsoft lists gpt-5-mini Global Standard here
    export RG=rg-$AZ16_NAME
    az group create -n $RG -l $AZ16_REGION -o none
    ```
@@ -55,7 +55,11 @@ day.**
 
 ## Part A · A Foundry resource that logs (16.1)
 
-The same commands as the AZ10 guided build, with all three log categories on from the start:
+The AZ10 guided build's commands, with all three log categories on from the start and a newer model. Microsoft now
+lists `gpt-4.1-mini` 2025-04-14 as Deprecated, and a Deprecated model is "No longer available to new customers",
+judged per subscription: a lab subscription that has never deployed it can't
+([model retirements](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirements)).
+`gpt-5-mini` 2025-08-07 is GA:
 
 ```bash
 az cognitiveservices account create -n $AZ16_NAME -g $RG -l $AZ16_REGION --kind AIServices --sku S0 \
@@ -63,7 +67,7 @@ az cognitiveservices account create -n $AZ16_NAME -g $RG -l $AZ16_REGION --kind 
 export FID=$(az cognitiveservices account show -n $AZ16_NAME -g $RG --query id -o tsv)
 export EP=https://$AZ16_NAME.openai.azure.com
 az cognitiveservices account deployment create -g $RG -n $AZ16_NAME --deployment-name chat \
-  --model-name gpt-4.1-mini --model-version 2025-04-14 --model-format OpenAI \
+  --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI \
   --sku-name GlobalStandard --sku-capacity 1
 az monitor log-analytics workspace create -g $RG -n law-$AZ16_NAME -l $AZ16_REGION -o none
 export LAW=$(az monitor log-analytics workspace show -g $RG -n law-$AZ16_NAME --query id -o tsv)
@@ -211,8 +215,9 @@ one in Part C. Set it back to block when you're done.
    workspace. Condition: **Custom log search**, paste `cloud/defender-ai-all-severities.kql`, threshold greater than
    0, evaluate every 5 minutes. Action: an email to you. (Microsoft Sentinel's scheduled analytics rules do the same
    job in a SIEM, with entity mapping and incidents; this build skips Sentinel to stay cheap.)
-2. **Hunt.** Workspace, **Logs**. Run `queries/d02-calls-skip-gateway.kql` with your own address in `gatewayIps`: in
-   this build there's no gateway, so every call you made in Part C appears. That's what a key in the wrong hands looks
+2. **Hunt.** Workspace, **Logs**. Run `queries/d02-calls-skip-gateway.kql` and leave the lab's address in `gatewayIps`
+   (don't put yours there, or your calls are filtered out): in this build there's no gateway, so every call you made
+   in Part C appears. That's what a key in the wrong hands looks
    like from the resource's side. Then `queries/d03-defence-tamper.kql`: your own plan change from Part B appears
    (you're not in `securityAdmins`).
 3. **Inventory.** Azure portal, **Resource Graph Explorer**, paste `queries/inventory-resource-graph.kql`, **Run
