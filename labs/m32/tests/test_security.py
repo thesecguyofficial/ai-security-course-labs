@@ -1,6 +1,6 @@
-"""The known findings, as tests. They FAIL on the vulnerable crew. Your fixes make them pass (S01 to S10).
+"""The known findings, as tests. They FAIL on the vulnerable crew. Your fixes make them pass (S01 to S11).
 
-Run: make test. Each test names the finding (G-1 to G-7 in README.md) it proves.
+Run: make challenge. Each test names the finding (G-1 to G-7 in README.md) it proves; S11 is HTML escaping.
 """
 import tempfile
 import unittest

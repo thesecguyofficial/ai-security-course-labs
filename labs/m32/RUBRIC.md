@@ -48,7 +48,8 @@ graded against this page; `selfcheck.py` only checks the objective parts. The ce
 | G-6 | Asking for the system prompt reveals the billing escalation code |
 
 **There is at least one more** (a planted instruction that persists in shared memory and re-fires for a later
-user). Finding, fixing and testing it is part of the Distinction level.
+user). Test S10 checks it, so T2 needs it fixed. Criterion 2 at Distinction asks for an issue beyond the six that
+you explain, fix and cover with a test or eval case of your own.
 
 ## The eight criteria
 

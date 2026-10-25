@@ -23,8 +23,9 @@ from __future__ import annotations
 
 from crew.common import ALLOW, Ctx, Decision, Handoff, ToolCall
 
-# The agent loop stops when this many tool calls have been ALLOWED in one turn, and this many hand-offs deep.
+# The agent loop stops when this many tool calls have been ALLOWED in one turn.
 MAX_TOOL_CALLS_PER_TURN = 50
+# The loop does NOT read this one: a hand-off depth limit only holds if authorize_handoff checks ctx.depth against it.
 MAX_HANDOFF_DEPTH = 10
 
 
