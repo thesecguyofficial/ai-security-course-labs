@@ -10,8 +10,10 @@ it goes live. Then you publish it as a public GitHub repo and submit it.
 - **Cost:** $0. Python **3.11 or newer**, standard library only. No packages, no model download, no API key.
 - **Cloud:** the cloud part (Part 6) reviews an AWS deployment description offline, so you need no AWS account.
   Azure and Google Cloud versions ship with those streams (`cloud/azure/`, `cloud/gcp/`).
-- **Grading:** `selfcheck.py` verifies the objective parts. Your work is then graded against
-  [`RUBRIC.md`](RUBRIC.md): Pass, Merit or Distinction. How to submit: [`SUBMISSION.md`](SUBMISSION.md).
+- **Grading:** automatic. You submit your public repo and commit SHA on the course's capstone page; the grader
+  re-runs the course's automated checks on your submitted commit. Pass them to get a Pass; if not, you get Not yet
+  with the checks that failed, and you fix them and resubmit. Details: [`RUBRIC.md`](RUBRIC.md). How to submit:
+  [`SUBMISSION.md`](SUBMISSION.md).
 
 This capstone builds on Part 5. If you did the Module 19 capstone, the shape is familiar: one public repo, a
 self-check, a published rubric. What is new is the system: **three agents that share a turn**, so a planted
@@ -100,8 +102,8 @@ For each one, find the **root cause** (which hook, which boundary, which missing
 `state/app-log.jsonl` as you go: you need its fields in Part 5.
 
 **There is at least one more.** A planted instruction can persist in shared memory and re-fire for a later user on
-the same tenant. Test S10 checks it, so your fixes must stop it to pass. Criterion 2 at Distinction asks for an
-issue beyond the six that you explain, fix and cover with a test or eval case of your own.
+the same tenant. Test S10 checks it, so your fixes must stop it to pass. A strong submission also finds an issue
+beyond the six that you explain, fix and cover with a test or eval case of your own.
 
 ## Part 3 · Fix (2 to 3 hours)
 
@@ -127,7 +129,7 @@ make eval                         # the gate: 18 core cases + yours; exit 1 if a
 make regress                      # take your controls away three ways: the gate must FAIL each time
 ```
 
-`evals/cases.json` is the core suite. Add your own cases to `evals/my_cases.json` (same format). For Merit: at
+`evals/cases.json` is the core suite. Add your own cases to `evals/my_cases.json` (same format). Aim for at
 least five, with two new injection variants and two normal requests that a careless fix would break. Push. Keep one
 run where a deliberate regression made it fail: that red run is evidence. Lessons 17.3 and 30.3.
 
@@ -146,9 +148,9 @@ make detect LOG=state/app-log.jsonl   # the same rules on your own Crew's log
 ```
 
 Each seed changes who the attackers are and what they use, so a rule that names a user, an IP or a request ID will
-miss the next day. Graders also run your rules on days you have never seen. Then pick **one** incident and write
-`report/INCIDENT-REPORT.md` (timeline, scope, root cause, containment, evidence with request IDs). Lessons 23.2,
-23.3 and 24.4.
+miss the next day. The grader also runs your rules on three days you have never seen. Then pick **one** incident
+and write `report/INCIDENT-REPORT.md` (timeline, scope, root cause, containment, evidence with request IDs).
+Lessons 23.2, 23.3 and 24.4.
 
 ## Part 6 · Cloud: your stream (1 hour)
 
@@ -161,8 +163,8 @@ the lesson that teaches it.
 make cloud                        # python3 cloud/cloud_check.py: HIGH findings on the first draft
 ```
 
-Harden the file until there are no HIGH findings (Pass) and no MEDIUM ones (Merit). For every change, write one
-line in `FINDINGS.md` ("Cloud") naming the lesson. `capstone.json` names your stream (`aws` for now).
+Harden the file until there are no HIGH findings (check C1) and, better, no MEDIUM ones either. For every change,
+write one line in `FINDINGS.md` ("Cloud") naming the lesson. `capstone.json` names your stream (`aws` for now).
 
 ## Part 7 · Governance note (45 minutes)
 
