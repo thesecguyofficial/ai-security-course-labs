@@ -1,0 +1,17 @@
+{
+  "_about": "Hardened: every mandate signature-checked, payee from the merchant registry and the mandate, asset and network pinned, the task's merchants, price ceiling and payment count, idempotency, a budget, human approval over the mandate's threshold. Its facilitator refuses reused nonces and expired authorizations.",
+  "verify_mandate_sig": true,
+  "check_expiry": true,
+  "check_asset": true,
+  "payee_source": "registry",
+  "check_payee": true,
+  "task_scope": true,
+  "idempotency": true,
+  "budget": true,
+  "approvals": true,
+  "max_timeout_seconds": null,
+  "facilitator": {
+    "check_nonce": true,
+    "check_time": true
+  }
+}
