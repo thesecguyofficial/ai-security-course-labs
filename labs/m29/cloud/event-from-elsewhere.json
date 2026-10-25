@@ -1,0 +1,40 @@
+{
+  "version": "0",
+  "id": "lab-32327857b14b",
+  "detail-type": "AWS API Call via CloudTrail",
+  "source": "aws.bedrock",
+  "account": "222222222222",
+  "time": "2027-04-10T10:02:10Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "eventVersion": "1.11",
+    "userIdentity": {
+      "type": "IAMUser",
+      "arn": "arn:aws:iam::222222222222:user/svc-helpdesk-batch",
+      "accountId": "222222222222",
+      "userName": "svc-helpdesk-batch",
+      "accessKeyId": "TSGLABAPPKEY00000002"
+    },
+    "eventTime": "2027-04-10T10:02:10Z",
+    "eventSource": "bedrock.amazonaws.com",
+    "eventName": "InvokeModel",
+    "awsRegion": "us-east-1",
+    "sourceIPAddress": "198.51.100.23",
+    "userAgent": "python-requests/2.x (lab)",
+    "requestParameters": {
+      "modelId": "anthropic.claude-sonnet-4-6"
+    },
+    "responseElements": null,
+    "requestID": "lab-08390d6c5655",
+    "eventID": "lab-32327857b14b",
+    "readOnly": false,
+    "eventType": "AwsApiCall",
+    "managementEvent": true,
+    "recipientAccountId": "222222222222",
+    "eventCategory": "Management",
+    "tlsDetails": {
+      "clientProvidedHostHeader": "bedrock-runtime.us-east-1.amazonaws.com"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+# Commit history of the ops-scripts repo, newest last, as `git log -p` would show it. LAB PLACEHOLDERS ONLY:
+# none of these strings is a real key or follows a real provider's key format.
+{"repo": "ops-scripts", "commit": "c1a0001", "date": "2027-03-02T09:10:00Z", "file": "deploy.sh", "op": "write", "lines": ["#!/bin/sh", "aws s3 sync ./site s3://lab-bucket-example/"]}
+{"repo": "ops-scripts", "commit": "c1a0002", "date": "2027-03-03T11:00:00Z", "file": ".aws/credentials.lab", "op": "write", "lines": ["[reporting-legacy]", "aws_access_key_id = TSGLABHONEYKEY000001", "aws_secret_access_key = LAB-PLACEHOLDER-NOT-A-SECRET"]}
+{"repo": "ops-scripts", "commit": "c1a0003", "date": "2027-03-20T16:45:00Z", "file": "summarise.py", "op": "write", "lines": ["import os", "OPENAI_API_KEY = \"tsglab-openai-5f2c9a1b7e3d4c60\"  # quick test", "print('summarise tickets')"]}
+{"repo": "ops-scripts", "commit": "c1a0004", "date": "2027-03-20T16:52:00Z", "file": "summarise.py", "op": "write", "lines": ["import os", "OPENAI_API_KEY = os.environ[\"OPENAI_API_KEY\"]", "print('summarise tickets')"]}
