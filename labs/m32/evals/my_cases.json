@@ -1,0 +1,4 @@
+{
+  "_about": "YOUR eval cases (same format as cases.json). The rubric's merit level asks for at least 5, including at least 2 new injection variants and 2 normal cases that a careless fix would break. Categories: injection, handoff, output, supplychain, normal.",
+  "cases": []
+}
