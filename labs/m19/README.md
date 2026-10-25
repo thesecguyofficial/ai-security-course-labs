@@ -10,8 +10,10 @@ governance note someone needs before it goes live. Then you publish it as a publ
 - **Cost:** $0. Python **3.11 or newer**, standard library only. No packages, no model download, no API key.
 - **Cloud:** the cloud part (Part 6) reviews an AWS deployment description offline, so you need no AWS account.
   Azure and Google Cloud versions ship with those streams (`cloud/azure/`, `cloud/gcp/`).
-- **Grading:** `selfcheck.py` verifies the objective parts. A person then grades your work against
-  [`RUBRIC.md`](RUBRIC.md): Pass, Merit or Distinction. How to submit: [`SUBMISSION.md`](SUBMISSION.md).
+- **Grading:** automatic. You submit your public repo and commit SHA on the course's capstone page; the grader
+  re-runs the course's automated checks on your submitted commit. Pass them to get a Pass; if not, you get Not yet
+  with the checks that failed, and you fix them and resubmit. Details: [`RUBRIC.md`](RUBRIC.md). How to submit:
+  [`SUBMISSION.md`](SUBMISSION.md).
 
 ## The system
 
@@ -98,7 +100,8 @@ For each one, find the **root cause** (which hook, which data, which missing che
 go: you need its fields in Part 5.
 
 **There is at least one more.** The six above are the ones we tell you about. Finding, fixing and testing a
-real issue that is not on this list is part of the Distinction level.
+real issue that is not on this list is what strong work looks like ([`RUBRIC.md`](RUBRIC.md), "What good looks
+like").
 
 ## Part 3 · Fix (2 to 3 hours)
 
@@ -122,7 +125,7 @@ make regress                      # take your controls away again, three ways: t
 ```
 
 `evals/cases.json` is the core suite: 17 attacks and 10 normal requests. Add your own cases to
-`evals/my_cases.json` (same format; extra pages go in `evals/kb/`). For Merit: at least five, with two new
+`evals/my_cases.json` (same format; extra pages go in `evals/kb/`). Aim for at least five, with two new
 injection variants and two normal requests that a careless fix would break.
 
 Push. The workflow runs the same commands. Keep one run where a deliberate regression made it fail (a branch where
@@ -141,10 +144,10 @@ make detect-check                 # all five incidents on seeds 1, 2 and 3, max 
 make detect LOG=state/app-log.jsonl   # the same rules on your own Helpdesk's log
 ```
 
-Each seed changes who the attackers are and what they use, so a rule that names a user, an IP or a request ID
-will miss the next day. Graders also run your rules on days you have never seen. Then pick **one** incident and
-write `report/INCIDENT-REPORT.md` (timeline, scope, root cause, containment, evidence with request IDs). Lessons
-16.1, 16.5 and 16.6.
+Each seed changes who the attackers are and what they use, so a rule that names a user, an IP or a request ID will
+miss the next day. The grader also runs your rules on three days you have never seen. Then pick **one** incident
+and write `report/INCIDENT-REPORT.md` (timeline, scope, root cause, containment, evidence with request IDs).
+Lessons 16.1, 16.5 and 16.6.
 
 ## Part 6 · Cloud: your stream (1 hour)
 
@@ -157,10 +160,10 @@ the lesson that teaches it.
 make cloud                        # python3 cloud/cloud_check.py: 11 HIGH findings on the first draft
 ```
 
-Harden the file until there are no HIGH findings (Pass) and no MEDIUM ones (Merit). For every change, write one
-line in `FINDINGS.md` ("Cloud") naming the lesson. Optional, for Distinction evidence: build part of it for real in
-your own sandbox account with one of the guided builds (`labs/m12/GUIDED-BUILD.md`, `labs/m14/GUIDED-BUILD.md`),
-record what you saw, and show the teardown.
+Harden the file until there are no HIGH findings (check C1) and, better, no MEDIUM ones either. For every change,
+write one line in `FINDINGS.md` ("Cloud") naming the lesson. Optional, and strong evidence: build part of it for
+real in your own sandbox account with one of the guided builds (`labs/m12/GUIDED-BUILD.md`,
+`labs/m14/GUIDED-BUILD.md`), record what you saw, and show the teardown.
 
 `capstone.json` names your stream. It is `aws` for now; Azure and Google Cloud are accepted when their streams ship.
 

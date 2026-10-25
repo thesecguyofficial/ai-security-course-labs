@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Capstone self-check: verifies the OBJECTIVE parts of your submission. Passing it is required for a Pass grade;
-the grade itself comes from a person reading your work against RUBRIC.md.
+"""Capstone self-check: runs the required automated checks on your submission, PASS or FAIL.
+The course's grader re-runs these checks on your submitted commit; pass them to get a Pass (RUBRIC.md).
 
     python3 selfcheck.py                     # make check: check this folder
     python3 selfcheck.py --repo ../my-capstone --json results/selfcheck.json
@@ -14,9 +14,9 @@ What it checks (RUBRIC.md, "Automated checks"):
   D1 your rules catch all five incidents on 3 simulated days, max 2 false alerts a day
   C1 the cloud check for your stream has no HIGH findings
   R1 threat model  R2 findings  R3 incident report  R4 governance note  R5 portfolio README: complete, no placeholders
-INFO lines (merit evidence, never required): your own eval cases, ATLAS IDs on rules, MEDIUM cloud findings.
+INFO lines (good practice, never required or scored): your own eval cases, ATLAS IDs on rules, MEDIUM cloud findings.
 
-Graders run the course's own copy against your repo (--repo), so the tests, cases and simulator it uses are
+The course's grader runs its own copy against your repo (--repo), so the tests, cases and simulator it uses are
 always the originals. Seeds can be changed (--seeds) to check rules on days you have never seen.
 """
 from __future__ import annotations
@@ -192,7 +192,7 @@ def check_evals(repo: pathlib.Path, rep: Report, results: pathlib.Path | None) -
     mine = json.loads(mine_p.read_text()).get("cases", []) if mine_p.exists() else []
     inj = sum(1 for c in mine if c.get("category") == "injection")
     normal = sum(1 for c in mine if c.get("category") == "normal")
-    rep.add("E3", None, "your own eval cases (merit: 5+, with 2+ injection variants and 2+ normal cases)",
+    rep.add("E3", None, "your own eval cases (aim for 5+, with 2+ injection variants and 2+ normal cases)",
             f"{len(mine)} cases: {inj} injection, {normal} normal")
 
 
@@ -210,7 +210,7 @@ def check_detections(repo: pathlib.Path, rep: Report, seeds: list[int], results:
     try:
         rules = json.loads(rules_p.read_text())["rules"]
         with_atlas = sum(1 for r in rules if r.get("atlas"))
-        rep.add("D2", None, "rules mapped to MITRE ATLAS (merit evidence)", f"{with_atlas} of {len(rules)} rules have ATLAS IDs")
+        rep.add("D2", None, "rules mapped to MITRE ATLAS (good practice, not required)", f"{with_atlas} of {len(rules)} rules have ATLAS IDs")
     except (OSError, ValueError, KeyError):
         pass
 
@@ -228,7 +228,7 @@ def check_cloud(repo: pathlib.Path, rep: Report, results: pathlib.Path | None) -
     rep.add("C1", code == 0, "the cloud check for your stream has no HIGH findings", summary)
     m = re.search(r"(\d+) MEDIUM", summary)
     if code == 0 and m:
-        rep.add("C2", None, "MEDIUM cloud findings (merit: none)", f"{m.group(1)} MEDIUM")
+        rep.add("C2", None, "MEDIUM cloud findings (aim for none)", f"{m.group(1)} MEDIUM")
 
 
 # ---- R: reports ------------------------------------------------------------------------------------------------------
