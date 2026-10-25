@@ -1,0 +1,7 @@
+{
+  "_evidence": "Sample evidence for the M18 lab (illustrative). Which identity each tool uses, after splitting the shared service account.",
+  "lookup_order": {"identity": "svc-helpdesk-orders-ro", "may": "read orders of the signed-in customer"},
+  "issue_refund": {"identity": "svc-helpdesk-refunds", "may": "refund within C03 limits"},
+  "send_email": {"identity": "svc-helpdesk-mail", "may": "send from support@ to allow-listed recipients"},
+  "ticketing MCP": {"identity": "STILL the shared account svc-helpdesk", "may": "everything on the ticket store", "status": "open, split planned for November"}
+}

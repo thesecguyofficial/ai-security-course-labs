@@ -1,0 +1,11 @@
+{
+  "_evidence": "Sample evidence for the M18 lab (illustrative). The AI-BOM for TSG Helpdesk 2.0, in the shape taught in lesson 9.4.",
+  "system": "tsg-helpdesk",
+  "generated": "2026-10-19",
+  "models": ["gemma3:1b (local)", "managed model in the cloud stream (pinned in Terraform)", "local embedding model"],
+  "datasets": ["help articles (staff-written)", "resolved tickets (imported nightly, reviewed since 2026-10-17)"],
+  "prompts": ["system prompt v14 (prompts/system.md, reviewed 2026-10-17)"],
+  "mcp_servers": ["ticketing 1.4.2"],
+  "packages": ["requirements.lock (hash-pinned)"],
+  "guardrails": ["prompt-attack filter (Module 12 in the cloud stream; LLM Guard style local filter in the local twin)"]
+}

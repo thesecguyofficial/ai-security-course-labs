@@ -1,0 +1,22 @@
+# Evidence: output of 'make test' in labs/m05 (output handling), copied below this header (only the run time removed).
+# Collected for the TSG Helpdesk assessment. Re-run it yourself: cd labs/m05 && make test
+
+[PASS] vulnerable: model output lands in the page as live HTML (XSS)
+[PASS] vulnerable: model output rewrites the SQL query and leaks bob's tickets
+[PASS] vulnerable: model output runs an extra shell command that reads the secrets file
+[PASS] safe: the payload is HTML-encoded, so the browser shows it instead of running it
+[PASS] safe: parameterised query returns only alice's tickets, and nothing for the injection string
+[PASS] safe: the search runs read-only, and query_only is switched back off afterwards
+[PASS] safe: the allow-list blocks the injected command, and the secret never appears
+[PASS] safe: the helper runs with no inherited environment variables (no tokens or keys to steal)
+[PASS] safe: a helper that hangs is stopped by the timeout
+[PASS] safe: with no shell, ';' is just a character inside one argument, not a second command
+[PASS] http: the vulnerable server sends the payload as live HTML, with no CSP
+[PASS] http: the safe server encodes the payload AND sends a CSP that blocks scripts
+[PASS] http: the app refuses to listen on anything but 127.0.0.1
+----------------------------------------------------------------------
+Ran 13 tests
+
+OK
+
+ALL TESTS PASSED (13 run)

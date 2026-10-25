@@ -1,0 +1,8 @@
+{
+  "_evidence": "Sample evidence for the M18 lab (illustrative). Guardrail settings exported in July, before the September prompt change.",
+  "guardrail": "helpdesk-prompt-attack",
+  "prompt_attack_filter": "HIGH",
+  "applied_to": ["user input"],
+  "not_applied_to": ["retrieved articles", "tool results"],
+  "exported": "2026-07-02"
+}
