@@ -1,0 +1,146 @@
+{
+  "_about": "FIRST DRAFT: works in every functional test. Two agents share one identity and one role, the user ID comes from the request body, nothing ties a role session to the human, the role can use every credential provider for 12 hours, and CloudTrail keeps only management events.",
+  "account": "111122223333",
+  "region": "us-east-1",
+  "launcher": {
+    "user_from": "request-body",
+    "source_identity_format": null,
+    "max_session_seconds": 43200
+  },
+  "agents": {
+    "orchestrator": {
+      "workload_identity": "tsg-orchestrator",
+      "role": "tsg-agent-orchestrator"
+    },
+    "tickets": {
+      "workload_identity": "tsg-helpdesk",
+      "role": "tsg-agent-helpdesk"
+    },
+    "mail": {
+      "workload_identity": "tsg-helpdesk",
+      "role": "tsg-agent-helpdesk"
+    }
+  },
+  "workload_identities": {
+    "tsg-orchestrator": {
+      "tags": {
+        "owner": "helpdesk-platform-team",
+        "purpose": "plans helpdesk requests",
+        "environment": "lab"
+      }
+    },
+    "tsg-helpdesk": {
+      "tags": {
+        "environment": "lab"
+      }
+    }
+  },
+  "roles": {
+    "tsg-agent-orchestrator": {
+      "max_session_seconds": 3600,
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::111122223333:role/tsg-agent-launcher"
+            },
+            "Action": [
+              "sts:AssumeRole",
+              "sts:SetSourceIdentity"
+            ],
+            "Condition": {
+              "StringLike": {
+                "sts:SourceIdentity": "user-*"
+              }
+            }
+          }
+        ]
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "WorkloadToken",
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:GetWorkloadAccessTokenForJWT"
+            ],
+            "Resource": [
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default/workload-identity/tsg-orchestrator"
+            ]
+          },
+          {
+            "Sid": "Vault",
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:GetResourceOauth2Token"
+            ],
+            "Resource": [
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default/workload-identity/tsg-orchestrator",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:token-vault/default"
+            ]
+          },
+          {
+            "Sid": "DenyUnverifiedUserId",
+            "Effect": "Deny",
+            "Action": [
+              "bedrock-agentcore:GetWorkloadAccessTokenForUserId",
+              "bedrock-agentcore:InvokeAgentRuntimeForUser"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "tsg-agent-helpdesk": {
+      "max_session_seconds": 43200,
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::111122223333:role/tsg-agent-launcher"
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          }
+        ]
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AgentCoreIdentity",
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:GetWorkloadAccessToken*",
+              "bedrock-agentcore:GetResourceOauth2Token"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    }
+  },
+  "cloudtrail": {
+    "advanced_event_selectors": [
+      {
+        "Name": "Management events",
+        "FieldSelectors": [
+          {
+            "Field": "eventCategory",
+            "Equals": [
+              "Management"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

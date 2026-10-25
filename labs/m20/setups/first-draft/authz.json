@@ -1,0 +1,38 @@
+{
+  "_about": "FIRST DRAFT. Works in every functional test. Every agent can ask for anything its client is allowed, tokens live an hour, and the user's token is valid everywhere.",
+  "default_lifetime": 3600,
+  "downscope_only": false,
+  "audience_scopes": false,
+  "record_actor": false,
+  "never_outlive_subject": false,
+  "clients": {
+    "helpdesk-app": {
+      "public": true,
+      "redirect_uris": ["http://127.0.0.1:8799/callback"],
+      "scopes": ["openid", "profile", "tickets:read", "tickets:write", "tickets:delete", "mail:send"],
+      "audience": ["orchestrator-agent", "tickets-agent", "mail-agent", "metrics-agent", "tickets-api", "mail-api"],
+      "lifetime": 3600
+    },
+    "orchestrator-agent": {
+      "secret": "orchestrator-agent-secret", "exchange": true,
+      "targets": ["tickets-agent"],
+      "scopes": ["profile", "tickets:read", "tickets:write", "tickets:delete", "mail:send"]
+    },
+    "tickets-agent": {
+      "secret": "tickets-agent-secret", "exchange": true,
+      "targets": ["tickets-api", "mail-agent"],
+      "scopes": ["profile", "tickets:read", "tickets:write", "tickets:delete", "mail:send"],
+      "client_credentials": true, "service_scopes": ["tickets:read"], "service_audience": ["tickets-api"]
+    },
+    "mail-agent": {
+      "secret": "mail-agent-secret", "exchange": true,
+      "targets": ["mail-api"],
+      "scopes": ["profile", "mail:send", "tickets:read", "tickets:delete"]
+    },
+    "metrics-agent": {
+      "secret": "metrics-agent-secret", "exchange": true,
+      "targets": ["tickets-api"],
+      "scopes": ["tickets:read", "tickets:delete"]
+    }
+  }
+}
