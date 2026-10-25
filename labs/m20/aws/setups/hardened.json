@@ -254,7 +254,9 @@
             "Field": "resources.type",
             "Equals": [
               "AWS::BedrockAgentCore::WorkloadIdentity",
-              "AWS::BedrockAgentCore::TokenVault"
+              "AWS::BedrockAgentCore::WorkloadIdentityDirectory",
+              "AWS::BedrockAgentCore::TokenVault",
+              "AWS::BedrockAgentCore::OAuth2CredentialProvider"
             ]
           }
         ]
