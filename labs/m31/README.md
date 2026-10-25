@@ -298,8 +298,8 @@ make clean
 
 ## What this lab doesn't model
 
-- Real x402's `exact` scheme on EVM networks signs an EIP-3009 authorization with an EIP-712 signature, with a random
-  32-byte nonce, on a real network. The lab keeps the field names and the order of checks and swaps the cryptography for HMAC.
+- Real x402's `exact` scheme on EVM networks by default signs an EIP-3009 authorization with an EIP-712 signature,
+  with a random 32-byte nonce, on a real network (a Permit2 method exists for other tokens). The lab keeps the field names and the order of checks and swaps the cryptography for HMAC.
 - Real AP2 mandates are SD-JWTs with selective disclosure, and closed mandates bind to a merchant-signed checkout.
   The lab's mandate is one signed JSON object.
 - Real merchant registries come from onboarding and know-your-business checks. The lab's registry is a dictionary.
