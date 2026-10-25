@@ -263,12 +263,16 @@ safetensors format works.
    `gcloud ai endpoints describe $ENDPOINT_ID --region=$REGION --format='value(deployedModels[0].id)'` and update the
    job's body (`gcloud scheduler jobs update http tsg-gc15-undeploy --location=$REGION --message-body=...`) at once.
 
-4. **Let the app account call this endpoint only.** A role on the endpoint, not the project:
+4. **Let the app account call this endpoint only.** A role on the endpoint, not the project. gcloud has no IAM
+   command for endpoints, so use the REST `setIamPolicy` method Google documents (it's on `v1beta1`, and it replaces
+   the endpoint's whole policy, which is empty on a new endpoint:
+   [endpoint access control](https://docs.cloud.google.com/vertex-ai/docs/general/endpoint-access-control)):
 
    ```bash
    gcloud iam roles create tsgGc15PredictOnly --project=$PROJECT --title="GC15 predict only" --permissions=aiplatform.endpoints.predict
-   gcloud ai endpoints add-iam-policy-binding $ENDPOINT_ID --region=$REGION \
-     --member="serviceAccount:tsg-gc15-app@$PROJECT.iam.gserviceaccount.com" --role="projects/$PROJECT/roles/tsgGc15PredictOnly"
+   curl -s -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" \
+     -d "{\"policy\": {\"bindings\": [{\"role\": \"projects/$PROJECT/roles/tsgGc15PredictOnly\", \"members\": [\"serviceAccount:tsg-gc15-app@$PROJECT.iam.gserviceaccount.com\"]}]}}" \
+     "https://$REGION-aiplatform.googleapis.com/v1beta1/projects/$PROJECT/locations/$REGION/endpoints/$ENDPOINT_ID:setIamPolicy"
    ```
 
 5. **Connect your VPC to it.** Read the service attachment, reserve an internal address, create the forwarding rule:
