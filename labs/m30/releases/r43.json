@@ -1,0 +1,38 @@
+{
+  "release": "r43",
+  "note": "Candidate: r41 plus a new tool, fetch_url, so the agent can read vendor status pages. Web pages get no data marking yet.",
+  "model": {
+    "id": "stand-in-model-a-2027-03",
+    "follow": {
+      "direct": 0.04,
+      "email": 0.12,
+      "doc": 0.12,
+      "kb": 0.08,
+      "web": 0.35
+    },
+    "task_fail": 0.03,
+    "refuse": {}
+  },
+  "system_prompt": "sp-v6",
+  "defences": {
+    "spotlight": [
+      "email",
+      "doc",
+      "kb"
+    ],
+    "controls": [
+      "sink_check"
+    ]
+  },
+  "tools": [
+    "read_email",
+    "read_doc",
+    "search_kb",
+    "send_email",
+    "share_file",
+    "create_ticket",
+    "reply",
+    "fetch_url"
+  ],
+  "external_benchmarks": []
+}

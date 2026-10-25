@@ -1,0 +1,2 @@
+# M30 lab: nothing to install. Every script uses the Python standard library only (Python 3.11 or newer).
+# `make setup` still creates this folder's own .venv, so the lab runs the same way as the other labs.

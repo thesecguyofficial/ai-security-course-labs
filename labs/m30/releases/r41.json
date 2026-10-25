@@ -1,0 +1,37 @@
+{
+  "release": "r41",
+  "note": "The release in production today: stand-in model A, data marking on every source, sink check on email and file sharing.",
+  "model": {
+    "id": "stand-in-model-a-2027-03",
+    "follow": {
+      "direct": 0.04,
+      "email": 0.12,
+      "doc": 0.12,
+      "kb": 0.08,
+      "web": 0.0
+    },
+    "task_fail": 0.03,
+    "refuse": {}
+  },
+  "system_prompt": "sp-v6",
+  "defences": {
+    "spotlight": [
+      "email",
+      "doc",
+      "kb"
+    ],
+    "controls": [
+      "sink_check"
+    ]
+  },
+  "tools": [
+    "read_email",
+    "read_doc",
+    "search_kb",
+    "send_email",
+    "share_file",
+    "create_ticket",
+    "reply"
+  ],
+  "external_benchmarks": []
+}
