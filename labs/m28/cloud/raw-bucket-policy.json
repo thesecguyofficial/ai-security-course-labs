@@ -1,0 +1,16 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AmazonBedrockLogsWrite",
+      "Effect": "Allow",
+      "Principal": {"Service": "bedrock.amazonaws.com"},
+      "Action": ["s3:PutObject"],
+      "Resource": ["arn:aws:s3:::RAW_BUCKET/AWSLogs/ACCOUNT_ID/BedrockModelInvocationLogs/*"],
+      "Condition": {
+        "StringEquals": {"aws:SourceAccount": "ACCOUNT_ID"},
+        "ArnLike": {"aws:SourceArn": "arn:aws:bedrock:us-east-1:ACCOUNT_ID:*"}
+      }
+    }
+  ]
+}

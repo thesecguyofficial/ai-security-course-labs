@@ -1,0 +1,9 @@
+{
+  "_note": "Only the challenge loads these (make challenge). A loyalty-card number the hardened setup doesn't know about yet.",
+  "calls": [
+    {"id": "c13", "days_ago": 2, "role": "tsg-helpdesk-app", "operation": "Converse", "model": "amazon.nova-micro-v1:0",
+     "metadata": {"app": "helpdesk"},
+     "input": "Please add my points to loyalty card TSG-LOY-40417730, it's Lee.",
+     "output": "Done: loyalty card TSG-LOY-40417730 now shows the points from your last order."}
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "_note": "Fake customers for lab M28. Names are invented, e-mail addresses use the reserved .example domain (RFC 2606) and the phone numbers are made up.",
+  "customers": [
+    {"id": "TSG-CUST-104233", "name": "Dana Reyes", "email": "dana.reyes@customer.example", "phone": "202-555-0147"},
+    {"id": "TSG-CUST-104871", "name": "Sam Okafor", "email": "sam.okafor@customer.example", "phone": "312-555-0182"},
+    {"id": "TSG-CUST-105002", "name": "Lee Moreau", "email": "lee.moreau@customer.example", "phone": "617-555-0119"}
+  ]
+}
