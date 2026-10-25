@@ -1,0 +1,6 @@
+{
+  "_about": "Models each account invoked in the previous 30 days (from the org's own CloudTrail). Challenge 1 compares today against this.",
+  "222222222222": ["anthropic.claude-sonnet-4-6"],
+  "333333333333": ["anthropic.claude-sonnet-4-6", "amazon.nova-pro-v1:0"],
+  "444444444444": []
+}

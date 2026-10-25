@@ -1,0 +1,16 @@
+{
+  "name": "app-key-unexpected-network",
+  "lesson": "29.7",
+  "severity": "high",
+  "state": "ENABLED_WITH_ALL_CLOUDTRAIL_MANAGEMENT_EVENTS",
+  "regions": "all",
+  "_note": "The helpdesk batch user only ever reaches Bedrock through its interface endpoint. A Bedrock call by that user with no vpcEndpointId came from somewhere else.",
+  "pattern": {
+    "detail-type": ["AWS API Call via CloudTrail"],
+    "detail": {
+      "eventSource": [{"prefix": "bedrock"}],
+      "userIdentity": {"userName": ["svc-helpdesk-batch"]},
+      "vpcEndpointId": [{"exists": false}]
+    }
+  }
+}

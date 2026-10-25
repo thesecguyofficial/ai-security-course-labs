@@ -1,0 +1,12 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublishEventsToMyTopic",
+      "Effect": "Allow",
+      "Principal": {"Service": "events.amazonaws.com"},
+      "Action": "sns:Publish",
+      "Resource": "arn:aws:sns:us-east-1:REPLACE-WITH-ACCOUNT-ID:tsg-m29-alerts"
+    }
+  ]
+}

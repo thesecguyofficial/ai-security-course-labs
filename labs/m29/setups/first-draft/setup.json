@@ -1,0 +1,42 @@
+{
+  "_about": "The first draft passed its demo: one alert rule, one scheduled clean-up job, an AI triage agent with every tool, a shadow-AI query on the management account's trail.",
+  "collect": {
+    "accounts": [
+      "111111111111",
+      "222222222222"
+    ],
+    "regions": [
+      "us-east-1"
+    ],
+    "data_events": []
+  },
+  "hunt": {
+    "sources": [
+      "cloudtrail",
+      "secrets"
+    ],
+    "event_names": [
+      "InvokeModel"
+    ],
+    "scan_history": false
+  },
+  "responder": {
+    "mode": "batch",
+    "reads": "s3",
+    "interval_s": 900,
+    "actions": [
+      "deactivate_key"
+    ]
+  },
+  "triage": {
+    "alert_fields_in": "instructions",
+    "tools": [
+      "lookup_key",
+      "escalate",
+      "close_alert",
+      "update_allowlist",
+      "deactivate_key"
+    ],
+    "gate": "none"
+  }
+}

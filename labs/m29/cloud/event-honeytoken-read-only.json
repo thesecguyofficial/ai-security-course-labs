@@ -1,0 +1,38 @@
+{
+  "version": "0",
+  "id": "lab-aa85ba91d3cd",
+  "detail-type": "AWS API Call via CloudTrail",
+  "source": "aws.sts",
+  "account": "222222222222",
+  "time": "2027-04-10T10:00:00Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "eventVersion": "1.11",
+    "userIdentity": {
+      "type": "IAMUser",
+      "arn": "arn:aws:iam::222222222222:user/svc-reporting-legacy",
+      "accountId": "222222222222",
+      "userName": "svc-reporting-legacy",
+      "accessKeyId": "TSGLABHONEYKEY000001"
+    },
+    "eventTime": "2027-04-10T10:00:00Z",
+    "eventSource": "sts.amazonaws.com",
+    "eventName": "GetCallerIdentity",
+    "awsRegion": "us-east-1",
+    "sourceIPAddress": "198.51.100.23",
+    "userAgent": "aws-cli/2.x (lab)",
+    "requestParameters": {},
+    "responseElements": null,
+    "requestID": "lab-93d131b4acac",
+    "eventID": "lab-aa85ba91d3cd",
+    "readOnly": true,
+    "eventType": "AwsApiCall",
+    "managementEvent": true,
+    "recipientAccountId": "222222222222",
+    "eventCategory": "Management",
+    "tlsDetails": {
+      "clientProvidedHostHeader": "sts.us-east-1.amazonaws.com"
+    }
+  }
+}
