@@ -1,0 +1,7 @@
+{
+ "_about": "Base models the security team reviewed (licence, source, scan, evals). Keyed by the SHA-256 of the base model.safetensors. Used by challenge 2.",
+ "approved": [
+  {"name": "tsg-guard-base", "version": "2.0", "sha256": "caa0855d7292c9d6510f78a396e03a5534a0ce0b6c58d4852a1ee362e7c85458",
+   "reviewed_on": "2027-02-20"}
+ ]
+}

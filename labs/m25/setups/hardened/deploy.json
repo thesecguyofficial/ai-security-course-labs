@@ -1,0 +1,15 @@
+{
+ "_about": "The hardened deploy gate. Every check must pass, or nothing is registered and nothing is deployed.",
+ "trusted_key": "setups/hardened/trusted-keys/ci.pub",
+ "_trusted_key": "ONE public key, pinned in the deploy gate's own config. A key that arrives with the model proves nothing.",
+ "require_signature": true,
+ "ignore_unsigned_files": false,
+ "on_verify_error": "refuse",
+ "allowed_files": ["model.safetensors", "config.json", "eval-report.json", "ml-bom.json", "README.md"],
+ "_allowed_files": "safetensors weights and JSON only: no pickle (.bin, .pkl, .pt), no code (.py), no other formats.",
+ "check_bom": true,
+ "check_eval": true,
+ "check_revoked": true,
+ "check_lineage": true,
+ "_check_lineage": "true = deploy.check_lineage() runs. It passes everything until you write it (challenge 2)."
+}
