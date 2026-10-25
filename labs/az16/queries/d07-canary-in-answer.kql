@@ -1,0 +1,7 @@
+// D07 The system prompt's canary appears in a model answer (LLM log), with the user from the app log
+let canary = "CANARY-AZ16-SYSPROMPT";
+ApiManagementGatewayLlmLog
+| where TimeGenerated > ago(1d)
+| where isnotempty(ResponseMessages) and tostring(ResponseMessages) has canary
+| project TimeGenerated, CorrelationId, RequestId
+| join kind=leftouter (HelpdeskApp_CL | project CorrelationId = gateway_correlation_id, signed_in_user) on CorrelationId

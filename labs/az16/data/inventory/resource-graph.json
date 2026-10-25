@@ -1,0 +1,13 @@
+{
+ "_about": "Azure Resource Graph rows for Contoso's two subscriptions (the answer to the query in queries/inventory-resource-graph.kql), cut to the fields this lab reads. Lab values. Resource Graph lists what exists in Azure Resource Manager; it doesn't know what a VM runs.",
+ "data": [
+  {"type": "microsoft.cognitiveservices/accounts", "kind": "AIServices", "name": "contoso-foundry", "resourceGroup": "rg-helpdesk-prod", "subscriptionId": "00000000-1111-2222-3333-444444444444", "tags": {"owner": "platform"}},
+  {"type": "microsoft.cognitiveservices/accounts/projects", "kind": "AIServices", "name": "contoso-foundry/helpdesk", "resourceGroup": "rg-helpdesk-prod", "subscriptionId": "00000000-1111-2222-3333-444444444444", "tags": {"owner": "platform"}},
+  {"type": "microsoft.search/searchservices", "kind": "", "name": "contoso-search", "resourceGroup": "rg-helpdesk-prod", "subscriptionId": "00000000-1111-2222-3333-444444444444", "tags": {"owner": "platform"}},
+  {"type": "microsoft.apimanagement/service", "kind": "", "name": "contoso-apim", "resourceGroup": "rg-helpdesk-prod", "subscriptionId": "00000000-1111-2222-3333-444444444444", "tags": {"owner": "platform"}},
+  {"type": "microsoft.machinelearningservices/workspaces", "kind": "Default", "name": "mlw-research", "resourceGroup": "rg-research", "subscriptionId": "00000000-1111-2222-3333-444444444444", "tags": {"owner": "data-science"}},
+  {"type": "microsoft.cognitiveservices/accounts", "kind": "AIServices", "name": "mktg-hackathon-ai", "resourceGroup": "rg-marketing-sandbox", "subscriptionId": "99999999-8888-7777-6666-555555555555", "tags": {"owner": "marketing", "purpose": "hackathon"}},
+  {"type": "microsoft.cognitiveservices/accounts", "kind": "OpenAI", "name": "contoso-oai-legacy", "resourceGroup": "rg-legacy", "subscriptionId": "00000000-1111-2222-3333-444444444444", "tags": {}},
+  {"type": "microsoft.compute/virtualmachines", "kind": "", "name": "vm-gpu-lab01", "resourceGroup": "rg-research", "subscriptionId": "00000000-1111-2222-3333-444444444444", "tags": {"owner": "data-science", "lab.workload": "ollama"}}
+ ]
+}

@@ -1,0 +1,8 @@
+// Inventory (16.3): every AI-related resource in the subscriptions you can read (Azure Resource Graph Explorer)
+resources
+| where type in~ ("microsoft.cognitiveservices/accounts", "microsoft.cognitiveservices/accounts/projects",
+                  "microsoft.search/searchservices", "microsoft.machinelearningservices/workspaces",
+                  "microsoft.apimanagement/service")
+| project type, kind, name, resourceGroup, subscriptionId, owner = tostring(tags.owner),
+          publicNetworkAccess = tostring(properties.publicNetworkAccess), disableLocalAuth = tostring(properties.disableLocalAuth)
+| order by type asc, name asc

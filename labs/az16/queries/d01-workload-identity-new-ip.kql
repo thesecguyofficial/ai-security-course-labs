@@ -1,0 +1,12 @@
+// D01 Workload identity used from an unknown address (Activity log, table AzureActivity)
+// Lab values: change the identities and address ranges to yours. Caller holds the identity as Azure logs it
+// (for a service principal that is usually its object ID, not its name).
+let workloadIds = dynamic(["<object ID of sp-contoso-ci>", "<object ID of sp-agent-deploy>", "<object ID of sp-kb-publisher>"]);
+let knownRanges = dynamic(["10.20.0.0/16", "192.0.2.0/24"]);
+AzureActivity
+| where TimeGenerated > ago(1d)
+| where Caller in (workloadIds)
+| where not(ipv4_is_in_any_range(CallerIpAddress, knownRanges))
+| summarize Operations = make_set(OperationNameValue), FirstSeen = min(TimeGenerated), Calls = count()
+    by Caller, CallerIpAddress
+| order by FirstSeen asc

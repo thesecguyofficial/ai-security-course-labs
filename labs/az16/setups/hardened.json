@@ -1,0 +1,21 @@
+{
+  "_about": "The logging lesson 16.1 asks for. Each key is one telemetry source the simulator writes only if it is true here.",
+  "name": "hardened",
+  "activity_log": true,
+  "apim_gateway_logs": true,
+  "foundry_resource_logs": true,
+  "_foundry_resource_logs": "Diagnostic setting with Audit, RequestResponse and Trace to the workspace (AzureDiagnostics), plus AllMetrics (AzureMetrics).",
+  "apim_llm_logs": true,
+  "_apim_llm_logs": "Log LLM messages on, prompts and completions up to 32768 bytes, 30-day retention, workspace readable by the incident group only.",
+  "defender_ai_services": true,
+  "_defender_ai_services": "AI services plan On, with user prompt evidence. The app passes user_security_context (end_user_id, source_ip, application_name) on every chat call.",
+  "agent_traces": true,
+  "_agent_traces": "Foundry tracing to Application Insights: invoke_agent and execute_tool spans with tool arguments.",
+  "storage_logs": true,
+  "_storage_logs": "StorageBlobLogs (write operations) on the knowledge base storage account only.",
+  "deploy_log": true,
+  "_deploy_log": "The agent pipeline writes one record per toolbox or agent change into the workspace.",
+  "metrics": true,
+  "app_log_identity": true,
+  "_app_log_identity": "Request ID, signed-in user, session ID, the gateway correlation ID, whether a content filter blocked the call, and token counts per request."
+}
