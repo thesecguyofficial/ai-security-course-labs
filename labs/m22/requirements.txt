@@ -1,0 +1,6 @@
+# M22 lab. AgentDojo: the prompt-injection benchmark from ETH Zurich's SPY Lab (MIT licence), https://pypi.org/project/agentdojo/
+# Pinned: 0.1.35 (uploaded to PyPI 27 Oct 2025). It installs the SDKs of several model providers (about 260 MB in
+# .venv); this lab calls none of them: the models are local stand-ins and nothing goes over the network.
+# constraints.txt pins every dependency to the versions this lab was tested with (25 Oct 2026).
+agentdojo==0.1.35
+-c constraints.txt
