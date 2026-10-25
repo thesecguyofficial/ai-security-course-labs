@@ -8,4 +8,5 @@
 #   labs/m08  make setup   the MCP Python SDK
 #   labs/m09  make setup   picklescan, fickling, safetensors, numpy
 #   labs/m21  make setup   cedarpy (the Cedar policy engine)
+#   labs/m26  make setup   PyYAML (reads compose and Kubernetes files)
 # Add a line here only for a package that several labs need with the same version.

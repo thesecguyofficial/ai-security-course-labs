@@ -1,0 +1,6 @@
+{
+  "_about": "LAB PLACEHOLDER. A model config that points to custom Python code through auto_map. scan.py reads it; nothing in this lab ever imports or runs the code.",
+  "architectures": ["LabCustomForCausalLM"],
+  "auto_map": {"AutoModelForCausalLM": "modeling_custom.LabCustomForCausalLM"},
+  "model_type": "lab-custom"
+}

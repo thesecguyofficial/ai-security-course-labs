@@ -1,0 +1,5 @@
+{
+  "_about": "LAB PLACEHOLDER. A reviewed model: safetensors weights, no custom code.",
+  "architectures": ["LlamaForCausalLM"],
+  "model_type": "llama"
+}
