@@ -1,5 +1,5 @@
 # M30 security gate for GitHub Actions. To use it in YOUR fork of the labs repo, copy this file to
-# .github/workflows/m30-security-gate.yml (README, Step 7). It runs the same commands as `make ci`.
+# .github/workflows/m30-security-gate.yml (README, Step 8). It runs the same commands as `make ci`.
 #
 # Rules from lesson 17.3, kept here: plain pull_request (never pull_request_target), a read-only token,
 # actions pinned to a full commit SHA, no secrets in the job (the agent under test is local), no `|| true`,

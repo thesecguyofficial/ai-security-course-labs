@@ -167,7 +167,9 @@ SECURITY GATE  baseline r41 -> candidate r42 (stand-in-model-b-2027-04)
   VERDICT: STOP
 ```
 
-The six rules (thresholds in `gate-policy.json`):
+The six rules (thresholds in `gate-policy.json`). The numbers (20 trials, 3 cases per source, a 5% ceiling, at most a
+10-point utility drop, an 80% floor) are this lab's teaching choices, not values from a standard or benchmark: set
+yours from your own risk and write down why.
 
 | Rule | Asks | Why |
 |---|---|---|
@@ -296,7 +298,7 @@ the agent. Each finding is a question with a name attached: who deleted the case
 2. Commit and push it. Open the **Actions** tab: the run executes the lab tests, the negative control, then the gate
    with `CANDIDATE: r42-fix`, and goes green.
 3. Open a pull request that changes `CANDIDATE: r42-fix` to `CANDIDATE: r42`. The check goes red at the gate step.
-4. Make it required: **Settings** → **Branches** → **Add branch protection rule** (or a ruleset) → **Require status
+4. Make it required: **Settings** → **Branches** → **Add classic branch protection rule** (or a ruleset) → **Require status
    checks to pass before merging** → pick `security-gate`.
 
 `make ci C=r42` runs the same three steps locally and ends with a non-zero exit code.
