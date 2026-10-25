@@ -1,0 +1,11 @@
+{
+  "_comment": "Which leg of the lethal trifecta each tool supplies. 'reads' = what a model sees if it reads the result; 'exit' = the call itself can carry data out or act.",
+  "tools": {
+    "search_emails": {"reads": ["private", "untrusted"], "why": "inbox content is private, and anyone can write an email body"},
+    "search_files": {"reads": ["private", "untrusted"], "why": "drive files are private; shared files can be edited by outsiders"},
+    "get_contact": {"reads": ["private"], "why": "the staff directory is internal; IT maintains it, so it is trusted"},
+    "send_email": {"exit": true, "why": "sends any text to any address"},
+    "share_file": {"exit": true, "why": "gives any address read access to a file"},
+    "fetch_url": {"exit": true, "reads": ["untrusted"], "challenge": true, "why": "the URL itself carries data out; the page that comes back is untrusted"}
+  }
+}
