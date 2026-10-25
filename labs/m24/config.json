@@ -1,0 +1,13 @@
+{
+  "_note": "The crew and its scopes. Your containment reads this. Addresses use reserved .example names (RFC 2606).",
+  "agents": ["intake", "planner", "mailer"],
+  "agent_tools": {
+    "intake": [],
+    "planner": [],
+    "mailer": ["send_email"]
+  },
+  "send_email_domains": {
+    "mailer": ["tsg.example"]
+  },
+  "propagation_threshold": 2
+}
