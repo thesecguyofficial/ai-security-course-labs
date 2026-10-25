@@ -110,7 +110,11 @@ def check_hygiene(repo: pathlib.Path, rep: Report) -> None:
             if changed else "")
 
     host = ""
-    m = re.search(r'^HOST\s*=\s*["\']([^"\']+)["\']', (repo / "helpdesk/config.py").read_text(), re.M)
+    try:
+        cfg_text = (repo / "helpdesk/config.py").read_text()
+    except OSError:
+        cfg_text = ""          # missing/unreadable config.py: H1 already reports it; H2 just fails here
+    m = re.search(r'^HOST\s*=\s*["\']([^"\']+)["\']', cfg_text, re.M)
     if m:
         host = m.group(1)
     rep.add("H2", host in ("127.0.0.1", "::1", "localhost"), "the app listens on 127.0.0.1 only", f"HOST = {host!r}")
