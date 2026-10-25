@@ -1,0 +1,6 @@
+logName:"cloudaudit.googleapis.com"
+protoPayload.authenticationInfo.serviceAccountKeyName:"keys/"
+NOT protoPayload.requestMetadata.callerIp="192.0.2.10"
+NOT protoPayload.requestMetadata.callerIp="192.0.2.11"
+NOT protoPayload.requestMetadata.callerIp="192.0.2.40"
+NOT protoPayload.requestMetadata.callerIp:"10.20."

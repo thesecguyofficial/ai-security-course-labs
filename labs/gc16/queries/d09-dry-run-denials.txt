@@ -1,0 +1,4 @@
+logName:"cloudaudit.googleapis.com%2Fdata_access"
+protoPayload.serviceName="iap.googleapis.com"
+protoPayload.methodName:"AuthorizeUser"
+protoPayload.metadata.iapPolicyVersion="v2"

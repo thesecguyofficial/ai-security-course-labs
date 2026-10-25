@@ -1,0 +1,6 @@
+logName:"cloudaudit.googleapis.com%2Fdata_access"
+protoPayload.serviceName="aiplatform.googleapis.com"
+(protoPayload.methodName:"GenerateContent" OR protoPayload.methodName:"RawPredict" OR protoPayload.methodName:"Predict")
+NOT protoPayload.authenticationInfo.principalEmail="chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com"
+NOT protoPayload.authenticationInfo.principalEmail="ds-batch@example-chatbot-prod.iam.gserviceaccount.com"
+NOT protoPayload.authenticationInfo.principalSubject:"reasoningEngines/4815162342"

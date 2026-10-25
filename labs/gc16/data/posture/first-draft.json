@@ -1,0 +1,34 @@
+{
+  "_about": "ExampleCo's settings before this module, cut to the fields the checks read. Shapes follow the Google Cloud APIs that answer each question (IAM policy auditConfigs, SCC settings, Model Armor templates and floor settings, publisher model configs, authorization extensions, log sinks, org policies). Lab values.",
+  "organization": {
+    "id": "123456789012",
+    "created": "2021-03-02",
+    "auditConfigs": [],
+    "scc": {"tier": "STANDARD", "activation": "organization"},
+    "orgPolicies": {
+      "vertexai.allowedModels": null,
+      "iam.disableServiceAccountKeyCreation": {"enforce": false}
+    }
+  },
+  "project": {
+    "id": "example-chatbot-prod",
+    "auditConfigs": [],
+    "modelArmor": {
+      "templates": [{"name": "projects/example-chatbot-prod/locations/europe-west4/templates/helpdesk-guard",
+                     "piAndJailbreakFilter": "MEDIUM_AND_ABOVE", "templateMetadata": {"logSanitizeOperations": false}}],
+      "floorSetting": {"enforcementType": "INSPECT_ONLY", "aiPlatformFloorSetting": {"inspectAndBlock": false, "enableCloudLogging": false}}
+    },
+    "publisherModelConfigs": {
+      "gemini-3.1-flash-lite": {"loggingConfig": {"enabled": false}},
+      "gemini-3.5-flash": {"loggingConfig": {"enabled": false}},
+      "claude-opus-4-7": {"loggingConfig": {"enabled": false}}
+    },
+    "authzExtensions": [{"name": "helpdesk-iap", "service": "iap.googleapis.com", "failOpen": false,
+                         "metadata": {"iapPolicyVersion": "V2", "iamEnforcementMode": "DRY_RUN"}}],
+    "logSinks": [{"name": "_Default", "exclusions": [{"name": "drop-gateway-requests",
+                  "filter": "logName:\"networkservices.googleapis.com%2Fgateway_requests\""}]}],
+    "endpoints": [{"name": "ticket-classifier", "encryptionSpec": null}],
+    "workbenchInstances": [{"name": "ds-notebook-1", "disablePublicIp": false, "disableRoot": false}],
+    "agents": [{"name": "reasoningEngines/4815162342", "labels": {"app": "helpdesk-agent", "owner": "it-support"}}]
+  }
+}
