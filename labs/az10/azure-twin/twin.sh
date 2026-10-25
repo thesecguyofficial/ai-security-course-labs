@@ -35,14 +35,14 @@ case "${1:-}" in
   policy-test)
     echo "1) An UNAPPROVED model (expect: refused by policy). Change the model if it isn't offered in your region:"
     az cognitiveservices account deployment create -g "$RG" -n "$AZ10_NAME" --deployment-name not-approved \
-      --model-name "${AZ10_BLOCKED_MODEL:-gpt-4.1-nano}" --model-version "${AZ10_BLOCKED_VERSION:-2025-04-14}" \
+      --model-name "${AZ10_BLOCKED_MODEL:-gpt-5-nano}" --model-version "${AZ10_BLOCKED_VERSION:-2025-08-07}" \
       --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1 -o none \
       && { echo "   NOT refused: the policy assignment isn't active yet. Deleting it; wait and run policy-test again.";
            az cognitiveservices account deployment delete -g "$RG" -n "$AZ10_NAME" --deployment-name not-approved; } \
       || echo "   refused (expected)"
     echo "2) The APPROVED model (expect: created; no calls are made, so no tokens are billed):"
     az cognitiveservices account deployment create -g "$RG" -n "$AZ10_NAME" --deployment-name approved \
-      --model-name gpt-4.1-mini --model-version 2025-04-14 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1 -o none
+      --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1 -o none
     az cognitiveservices account deployment delete -g "$RG" -n "$AZ10_NAME" --deployment-name approved
     ;;
   lock)       # the fix: Microsoft Entra ID only

@@ -21,12 +21,12 @@ variable "my_ip" {
 variable "model_name" {
   description = "Model to deploy. Pick one your region offers as a Data Zone deployment (README Step 8)."
   type        = string
-  default     = "gpt-4.1-mini"
+  default     = "gpt-5-mini" # GA; gpt-4.1-mini is Deprecated, "No longer available to new customers"
 }
 
 variable "model_version" {
   type    = string
-  default = "2025-04-14"
+  default = "2025-08-07"
 }
 
 variable "deployment_sku" {

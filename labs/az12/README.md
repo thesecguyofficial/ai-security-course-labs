@@ -598,7 +598,10 @@ make guardrail-probe          # B01 normal, A01 jailbreak, A05 injected document
 
 The probe runs on the AZ11 jump VM (the resource has no public access), wraps documents in Microsoft's
 `""" <documents> ... </documents> """` delimiter, and prints status, `finish_reason`, the flagged filter fields and the
-raw JSON. What to expect:
+raw JSON. The AZ11 deployment runs `gpt-5-mini`, a reasoning model, so the probe sends `max_completion_tokens`
+(Microsoft: reasoning models don't support `max_tokens`, and the completion limit covers "reasoning tokens, visible
+output tokens, and formatting tokens";
+[reasoning models](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/reasoning)). What to expect:
 
 **B01, a normal question.** HTTP 200, `finish_reason: "stop"`, every category `"filtered": false`.
 Example response (shape from Microsoft docs, values illustrative; [annotations](https://learn.microsoft.com/en-us/azure/foundry-classic/openai/concepts/content-filter-annotations)):
