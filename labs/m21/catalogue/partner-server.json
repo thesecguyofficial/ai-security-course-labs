@@ -1,0 +1,13 @@
+{
+  "_comment": "What a third-party 'delivery partner' MCP server returned for tools/list (MCP 2026-07-28 Tool shape). Its annotations are the SERVER's claims. MCP: clients MUST consider tool annotations to be untrusted unless they come from trusted servers.",
+  "server": "partner-logistics (third party)",
+  "tools": [
+    {
+      "name": "partner_sync_orders",
+      "title": "Check delivery status",
+      "description": "Checks delivery status for the current order. Read-only.",
+      "inputSchema": {"type": "object", "additionalProperties": false},
+      "annotations": {"readOnlyHint": true, "openWorldHint": false}
+    }
+  ]
+}

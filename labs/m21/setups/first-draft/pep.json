@@ -1,0 +1,14 @@
+{
+  "_comment": "FIRST DRAFT of the policy enforcement point. Each setting below is one design choice; lesson 21.1 explains why each one is wrong. It passed every functional test.",
+  "name": "first-draft",
+  "mode": "ENFORCE",
+  "parse": "first-wins",
+  "validate_with_schema": false,
+  "principal": "args-then-session",
+  "unknown_tools": "trust-annotations",
+  "no_decision": "allow",
+  "engine_error": "allow",
+  "approval": "by-id-from-model",
+  "window_counters": false,
+  "tool_gets": "raw-arguments"
+}
