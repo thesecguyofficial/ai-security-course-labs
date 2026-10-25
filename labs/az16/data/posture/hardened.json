@@ -1,0 +1,138 @@
+{
+ "_about": "The same after the module's fixes: keys off, private endpoint, CMK, full diagnostic setting, Defender for AI services on with prompt evidence, LLM logging, tracing, approval on write tools. The hackathon resource was moved to the paved road (lesson 16.3) and is gone. Lab values.",
+ "resources": [
+  {
+   "type": "Microsoft.CognitiveServices/accounts",
+   "kind": "AIServices",
+   "name": "contoso-foundry",
+   "properties": {
+    "disableLocalAuth": true,
+    "publicNetworkAccess": "Disabled",
+    "networkAcls": {
+     "defaultAction": "Deny"
+    },
+    "privateEndpointConnections": [
+     {
+      "name": "pe-contoso-foundry",
+      "privateLinkServiceConnectionState": {
+       "status": "Approved"
+      }
+     }
+    ],
+    "encryption": {
+     "keySource": "Microsoft.KeyVault"
+    }
+   },
+   "diagnosticSettings": [
+    {
+     "name": "to-law",
+     "workspaceId": "law-secops",
+     "logs": [
+      {
+       "category": "Audit",
+       "enabled": true
+      },
+      {
+       "category": "RequestResponse",
+       "enabled": true
+      },
+      {
+       "category": "Trace",
+       "enabled": true
+      }
+     ],
+     "metrics": [
+      {
+       "category": "AllMetrics",
+       "enabled": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "type": "Microsoft.Search/searchServices",
+   "kind": "",
+   "name": "contoso-search",
+   "properties": {
+    "disableLocalAuth": true,
+    "publicNetworkAccess": "Disabled",
+    "networkRuleSet": {
+     "ipRules": []
+    },
+    "privateEndpointConnections": [
+     {
+      "name": "pe-contoso-search",
+      "privateLinkServiceConnectionState": {
+       "status": "Approved"
+      }
+     }
+    ]
+   },
+   "diagnosticSettings": [
+    {
+     "name": "to-law",
+     "workspaceId": "law-secops",
+     "logs": [
+      {
+       "categoryGroup": "allLogs",
+       "enabled": true
+      }
+     ],
+     "metrics": []
+    }
+   ]
+  }
+ ],
+ "subscription": {
+  "defender_pricings": [
+   {
+    "name": "CloudPosture",
+    "pricingTier": "Standard"
+   },
+   {
+    "name": "AI",
+    "pricingTier": "Standard",
+    "extensions": [
+     {
+      "name": "AIPromptEvidence",
+      "isEnabled": "True"
+     }
+    ]
+   }
+  ],
+  "apim_llm_apis": [
+   {
+    "service": "contoso-apim",
+    "api": "helpdesk-openai",
+    "gateway_llm_diagnostic": true,
+    "log_llm_messages": "Enabled"
+   }
+  ],
+  "foundry_projects": [
+   {
+    "project": "contoso-foundry/helpdesk",
+    "has_agents": true,
+    "tracing_app_insights": "appi-helpdesk"
+   }
+  ],
+  "toolboxes": [
+   {
+    "toolbox": "helpdesk-tools",
+    "default_version": "2",
+    "servers": [
+     {
+      "server_label": "actions",
+      "has_write_tools": true,
+      "require_approval": "always",
+      "allowed_tools": [
+       "search_tickets",
+       "create_ticket",
+       "send_email"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}

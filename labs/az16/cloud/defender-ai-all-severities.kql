@@ -1,0 +1,7 @@
+// Guided build step 7: the alert rule query. Every Defender for AI services alert in the last 15 minutes,
+// whatever its severity. Use it in an Azure Monitor log search alert rule (evaluate every 5 minutes, threshold > 0)
+// or as a Microsoft Sentinel scheduled analytics rule.
+SecurityAlert
+| where TimeGenerated > ago(15m)
+| where AlertType startswith "AI."
+| project TimeGenerated, AlertSeverity, AlertName, AlertType, CompromisedEntity, SystemAlertId

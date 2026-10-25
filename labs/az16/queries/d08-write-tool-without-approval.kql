@@ -1,0 +1,14 @@
+// D08 and D09 An agent's write tool ran without approval, or mailed outside the company (Foundry traces)
+// Foundry stores traces in Application Insights. Where the execute_tool spans land and how their attributes are
+// named depends on your workspace: open one span first and adjust the table and property names. AppDependencies
+// with Properties is an assumption, not something Microsoft's tracing page states.
+let writeTools = dynamic(["send_email", "create_ticket", "close_ticket", "delete_ticket"]);
+AppDependencies
+| where TimeGenerated > ago(1d)
+| where Name startswith "execute_tool"
+| extend Args = tostring(Properties["gen_ai.tool.call.arguments"]), Conversation = tostring(Properties["gen_ai.conversation.id"])
+| extend Tool = tostring(Properties["gen_ai.tool.name"])
+| where Tool in (writeTools)
+| extend MailTo = tostring(parse_json(Args).to)
+| project TimeGenerated, Conversation, Tool, Args, MailTo,
+          OutsideCompany = isnotempty(MailTo) and not(MailTo endswith "@contoso.com")

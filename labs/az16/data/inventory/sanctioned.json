@@ -1,0 +1,6 @@
+{
+ "_about": "Contoso's approved-AI register: what the security and architecture review approved. Nobody else keeps this list for you. Lab values.",
+ "azure_resources": ["contoso-foundry", "contoso-foundry/helpdesk", "contoso-search", "contoso-apim", "mlw-research"],
+ "other_clouds": ["account 111122223333 us-east-1"],
+ "agents": ["helpdesk-agent"]
+}

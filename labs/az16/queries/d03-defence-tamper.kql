@@ -1,0 +1,10 @@
+// D03 Someone other than the security admins changes a diagnostic setting or a Defender for Cloud plan (AzureActivity)
+let securityAdmins = dynamic(["secops-admin@contoso.com"]);
+AzureActivity
+| where TimeGenerated > ago(1d)
+| where OperationNameValue in~ ("MICROSOFT.INSIGHTS/DIAGNOSTICSETTINGS/DELETE", "MICROSOFT.INSIGHTS/DIAGNOSTICSETTINGS/WRITE",
+                                "MICROSOFT.SECURITY/PRICINGS/WRITE")
+| where Caller !in (securityAdmins)
+| project TimeGenerated, Caller, CallerIpAddress, OperationNameValue, ActivityStatusValue, _ResourceId, CorrelationId
+// The toolbox half of D03 (a default version without approval on write tools) needs your agent pipeline's own
+// change records in the workspace. In the lab that's the deploy log; see d08 for the trace side.
