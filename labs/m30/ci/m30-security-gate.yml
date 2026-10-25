@@ -1,0 +1,40 @@
+# M30 security gate for GitHub Actions. To use it in YOUR fork of the labs repo, copy this file to
+# .github/workflows/m30-security-gate.yml (README, Step 8). It runs the same commands as `make ci`.
+#
+# Rules from lesson 17.3, kept here: plain pull_request (never pull_request_target), a read-only token,
+# actions pinned to a full commit SHA, no secrets in the job (the agent under test is local), no `|| true`,
+# no continue-on-error, no `if:` on the gate steps, and the negative control runs before the real gate.
+name: m30-security-gate
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  security-gate:
+    runs-on: ubuntu-24.04            # ships Python 3.12; the lab needs only the standard library
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: labs/m30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Lab tests
+        run: python3 run_tests.py
+      - name: Negative control (the gate must STOP a release with its defences off)
+        run: python3 gate.py r41 weak --expect-fail
+      - name: Security gate (baseline r41, candidate from CANDIDATE)
+        run: python3 gate.py r41 "$CANDIDATE" --out results/gate.json
+        env:
+          CANDIDATE: r42-fix         # change to r42 in a pull request and watch the check go red
+      - name: Keep the score cards and the gate report as evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: m30-security-gate
+          path: |
+            labs/m30/results/
+            labs/m30/state/gate-events.jsonl
