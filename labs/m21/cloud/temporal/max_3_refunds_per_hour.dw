@@ -1,0 +1,11 @@
+forbid (
+    principal,
+    action == AgentCore::Action::"RefundTools___issue_refund",
+    resource == AgentCore::Gateway::"GATEWAY_ARN"
+)
+when temporal {
+    exists (n: Long).
+        (count for (t: Timepoint).
+            where (formerly within 1h (AgentCore::Action::"RefundTools___issue_refund"::request{ eventResource: resource } && tp(t)))) == n
+        && n > 3
+};

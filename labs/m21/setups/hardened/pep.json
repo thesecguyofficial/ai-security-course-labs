@@ -1,0 +1,14 @@
+{
+  "_comment": "HARDENED policy enforcement point. Same agent, same model, same tools; only the PEP and the policies changed.",
+  "name": "hardened",
+  "mode": "ENFORCE",
+  "parse": "strict",
+  "validate_with_schema": true,
+  "principal": "session",
+  "unknown_tools": "deny",
+  "no_decision": "deny",
+  "engine_error": "deny",
+  "approval": "signed-and-bound",
+  "window_counters": true,
+  "tool_gets": "validated-arguments"
+}
