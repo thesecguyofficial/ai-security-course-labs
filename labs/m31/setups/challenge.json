@@ -1,0 +1,17 @@
+{
+  "_about": "Hardened plus the two challenge settings. guard.py reads them but does nothing with them until you finish CHALLENGE 1 and 2.",
+  "verify_mandate_sig": true,
+  "check_expiry": true,
+  "check_asset": true,
+  "payee_source": "registry",
+  "check_payee": true,
+  "task_scope": true,
+  "idempotency": true,
+  "budget": true,
+  "approvals": true,
+  "max_timeout_seconds": 300,
+  "facilitator": {
+    "check_nonce": true,
+    "check_time": true
+  }
+}

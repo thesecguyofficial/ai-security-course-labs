@@ -1,0 +1,8 @@
+{
+ "_about": "Payees this organisation paid at least once in the 30 days before the hunt log (lab data).",
+ "known_payees": [
+  "acct:weather-co",
+  "acct:market-co",
+  "acct:shop-co"
+ ]
+}
