@@ -167,7 +167,7 @@ record what you saw, and show the teardown.
 
 Fill in `report/GOVERNANCE-NOTE.md`: the AI inventory entry, three to five risk decisions, an **evidence index**
 that links every control to the test, eval case or rule that proves it (at least eight rows), a mapping to the
-NIST AI RMF functions and ISO/IEC 42001, and the residual risk with an owner and a review date. Lessons 18.1 to 18.3.
+NIST AI RMF functions and ISO/IEC 42001, and the residual risk with an owner and a review date. Lessons 18.1 to 18.4.
 
 ## Part 8 · Submit
 
