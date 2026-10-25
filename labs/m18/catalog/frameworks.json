@@ -1,0 +1,113 @@
+{
+  "_about": "The framework items this lab maps to. Texts are short forms; open the source for the full wording. Checked 24 Oct 2026.",
+  "nist_ai_rmf": {
+    "name": "NIST AI RMF 1.0 (NIST AI 100-1, Jan 2023) subcategories",
+    "source": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+    "items": {
+      "GOVERN 1.1": "Legal and regulatory requirements involving AI are understood, managed, and documented.",
+      "GOVERN 1.4": "The risk management process and its outcomes are established through transparent policies and procedures.",
+      "GOVERN 1.5": "Ongoing monitoring and periodic review of the risk management process and its outcomes are planned.",
+      "GOVERN 1.6": "Mechanisms are in place to inventory AI systems and are resourced according to organizational risk priorities.",
+      "GOVERN 2.1": "Roles, responsibilities and lines of communication for mapping, measuring and managing AI risks are documented and clear.",
+      "GOVERN 4.3": "Organizational practices are in place to enable AI testing, identification of incidents, and information sharing.",
+      "GOVERN 6.1": "Policies and procedures are in place that address AI risks associated with third-party entities.",
+      "GOVERN 6.2": "Contingency processes are in place to handle failures or incidents in third-party data or AI systems.",
+      "MAP 1.1": "Intended purposes, beneficial uses, context-specific laws, norms and expectations are understood and documented.",
+      "MAP 1.5": "Organizational risk tolerances are determined and documented.",
+      "MAP 3.5": "Processes for human oversight are defined, assessed, and documented.",
+      "MAP 4.1": "Approaches for mapping AI technology and legal risks of its components are in place and followed.",
+      "MAP 5.1": "Likelihood and magnitude of each identified impact are identified and documented.",
+      "MEASURE 1.1": "Approaches and metrics for measuring the AI risks enumerated in MAP are selected for implementation.",
+      "MEASURE 2.3": "AI system performance or assurance criteria are measured and demonstrated.",
+      "MEASURE 2.4": "The functionality and behavior of the AI system and its components are monitored when in production.",
+      "MEASURE 2.7": "AI system security and resilience, as identified in the MAP function, are evaluated and documented.",
+      "MEASURE 2.8": "Risks associated with transparency and accountability are examined and documented.",
+      "MEASURE 2.10": "Privacy risk of the AI system, as identified in the MAP function, is examined and documented.",
+      "MANAGE 1.2": "Treatment of documented AI risks is prioritized based on impact, likelihood, and available resources or methods.",
+      "MANAGE 1.3": "Responses to high-priority AI risks are developed, planned, and documented (mitigate, transfer, avoid or accept).",
+      "MANAGE 1.4": "Negative residual risks to downstream acquirers and end users are documented.",
+      "MANAGE 2.3": "Procedures are followed to respond to and recover from a previously unknown risk when it is identified.",
+      "MANAGE 2.4": "Mechanisms are in place to supersede, disengage, or deactivate AI systems whose outcomes are inconsistent with intended use.",
+      "MANAGE 3.1": "AI risks and benefits from third-party resources are regularly monitored, and risk controls are applied and documented.",
+      "MANAGE 4.1": "Post-deployment AI system monitoring plans are implemented.",
+      "MANAGE 4.2": "Measurable activities for continual improvements are integrated into AI system updates.",
+      "MANAGE 4.3": "Incidents and errors are communicated to relevant AI actors, including affected communities."
+    }
+  },
+  "eu_ai_act": {
+    "name": "EU AI Act, Regulation (EU) 2024/1689 as amended by the Digital Omnibus on AI (2026)",
+    "source": "https://ai-act-service-desk.ec.europa.eu/en/ai-act-explorer",
+    "items": {
+      "Art. 4": {"title": "AI literacy", "applies": "all"},
+      "Art. 9": {"title": "Risk management system", "applies": "high-risk"},
+      "Art. 10": {"title": "Data and data governance", "applies": "high-risk"},
+      "Art. 11": {"title": "Technical documentation", "applies": "high-risk"},
+      "Art. 12": {"title": "Record-keeping", "applies": "high-risk"},
+      "Art. 13": {"title": "Transparency and provision of information to deployers", "applies": "high-risk"},
+      "Art. 14": {"title": "Human oversight", "applies": "high-risk"},
+      "Art. 15": {"title": "Accuracy, robustness and cybersecurity", "applies": "high-risk"},
+      "Art. 25": {"title": "Responsibilities along the AI value chain", "applies": "high-risk"},
+      "Art. 26": {"title": "Obligations of deployers of high-risk AI systems", "applies": "high-risk"},
+      "Art. 50": {"title": "Transparency obligations for providers and deployers of certain AI systems", "applies": "art50"},
+      "Art. 72": {"title": "Post-market monitoring by providers and post-market monitoring plan for high-risk AI systems", "applies": "high-risk"},
+      "Art. 73": {"title": "Reporting of serious incidents", "applies": "high-risk"}
+    }
+  },
+  "iso_42001": {
+    "name": "ISO/IEC 42001:2023, AI management system (clause level; Annex A reference controls come from your licensed copy)",
+    "source": "https://www.iso.org/standard/42001",
+    "items": {
+      "Clause 4": "Context of the organization (scope of the AI management system)",
+      "Clause 5": "Leadership (AI policy, accountability)",
+      "Clause 6": "Planning (AI risk assessment and risk treatment)",
+      "Clause 7": "Support (competence, documented information)",
+      "Clause 8": "Operation (running the controls)",
+      "Clause 9": "Performance evaluation (monitoring, internal audit)",
+      "Clause 10": "Improvement (corrective action)"
+    }
+  },
+  "owasp": {
+    "name": "OWASP Top 10 for LLM Applications 2026 and OWASP Top 10 for Agentic Applications 2026",
+    "source": "https://genai.owasp.org/download/56857/",
+    "items": {
+      "LLM01:2026": "Prompt Injection",
+      "LLM02:2026": "Sensitive Information Disclosure",
+      "LLM03:2026": "Excessive Agency",
+      "LLM04:2026": "Supply Chain",
+      "LLM05:2026": "Data and Model Poisoning",
+      "LLM06:2026": "Unbounded Consumption",
+      "LLM07:2026": "Misinformation",
+      "LLM08:2026": "Hidden Context Exposure",
+      "LLM09:2026": "Vector and Embedding Weaknesses",
+      "LLM10:2026": "Improper Output Handling",
+      "ASI01": "Agent Goal Hijack",
+      "ASI02": "Tool Misuse and Exploitation",
+      "ASI03": "Identity and Privilege Abuse",
+      "ASI04": "Agentic Supply Chain Vulnerabilities",
+      "ASI05": "Unexpected Code Execution (RCE)",
+      "ASI06": "Memory & Context Poisoning",
+      "ASI07": "Insecure Inter-Agent Communication",
+      "ASI08": "Cascading Failures",
+      "ASI09": "Human-Agent Trust Exploitation",
+      "ASI10": "Rogue Agents"
+    }
+  },
+  "nist_genai_risks": {
+    "name": "NIST AI 600-1 (Generative AI Profile, July 2024): the 12 risks",
+    "source": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf",
+    "items": [
+      "CBRN Information or Capabilities",
+      "Confabulation",
+      "Dangerous, Violent, or Hateful Content",
+      "Data Privacy",
+      "Environmental Impacts",
+      "Harmful Bias or Homogenization",
+      "Human-AI Configuration",
+      "Information Integrity",
+      "Information Security",
+      "Intellectual Property",
+      "Obscene, Degrading, and/or Abusive Content",
+      "Value Chain and Component Integration"
+    ]
+  }
+}

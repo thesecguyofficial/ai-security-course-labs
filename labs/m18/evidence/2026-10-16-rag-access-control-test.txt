@@ -1,0 +1,5 @@
+# Evidence: sample retrieval access-control test for the M18 lab (illustrative, in the style of labs/m06).
+[PASS] tenant filter: cust-1042's query returns only cust-1042 and public chunks
+[PASS] tenant filter: a query for another customer's order number returns no chunk from that customer
+[PASS] filter is applied inside the vector query, not after it (no cross-tenant scores in the response)
+ALL TESTS PASSED (3 run)

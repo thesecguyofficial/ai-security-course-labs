@@ -1,0 +1,12 @@
+{
+  "_about": "Your AI risk assessment of TSG Helpdesk. Fill every blank. The lab is set on 24 Oct 2026: keep that date so the sample evidence counts as fresh.",
+  "system": "tsg-helpdesk",
+  "version": "2.0",
+  "assessor": "",
+  "date": "2026-10-24",
+  "scope": "TSG Helpdesk 2.0: chat, RAG, tools, ticketing MCP server, memory; local twin and cloud stream",
+  "risk_appetite": {"max_residual_without_signoff": 3, "never_accept_inherent": 9},
+  "eu_ai_act": {"role": "", "tier": "", "decided_by": "", "confirmed_by_legal": ""},
+  "approved_by": "",
+  "next_review": ""
+}

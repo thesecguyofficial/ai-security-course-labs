@@ -1,0 +1,7 @@
+{
+  "_evidence": "Sample evidence for the M18 lab (illustrative). Limits from lessons 5.2 and 10.5.",
+  "per_customer": {"requests_per_minute": 10, "tokens_per_day": 60000},
+  "per_app": {"monthly_budget": 300, "currency": "USD", "alarm_at": [50, 80, 100], "alarm_to": "on-call channel"},
+  "anomaly_detection": "on (cloud cost anomaly monitor)",
+  "last_alarm_test": "2026-10-22, alarm reached the on-call channel in 4 minutes"
+}
