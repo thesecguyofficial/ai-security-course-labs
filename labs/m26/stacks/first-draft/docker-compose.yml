@@ -1,0 +1,38 @@
+# TSG Inference, first draft: "it works on the GPU box". Lab file only: never run this compose file.
+# Every value below is a lab placeholder. The token is fake and matches no real service.
+services:
+  ollama:
+    image: ollama/ollama:0.1.33
+    environment:
+      OLLAMA_HOST: "0.0.0.0"
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./models:/models
+
+  vllm:
+    image: vllm/vllm-openai:v0.10.2
+    command: ["--model", "/models/suspicious-model", "--host", "0.0.0.0", "--port", "8000", "--trust-remote-code"]
+    environment:
+      VLLM_SERVER_DEV_MODE: "1"
+      HF_TOKEN: "hf_LABPLACEHOLDERnotarealtoken0000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/models
+
+  triton:
+    image: nvcr.io/nvidia/tritonserver:25.03-py3
+    ports:
+      - "8001:8001"
+
+  ray-head:
+    image: rayproject/ray:2.8.0
+    command: ["ray", "start", "--head", "--dashboard-host=0.0.0.0", "--block"]
+    ports:
+      - "8265:8265"
+
+  gateway:
+    image: tsg/inference-gateway:lab
+    ports:
+      - "443:8443"

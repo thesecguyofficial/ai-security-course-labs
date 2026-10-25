@@ -1,0 +1,3 @@
+# M26 lab. PyYAML reads the compose and Kubernetes files (yaml.safe_load only). MIT licence: https://pypi.org/project/PyYAML/
+# Pinned: 6.0.3 has wheels for Python 3.11 to 3.14 on macOS, Windows and Linux.
+PyYAML==6.0.3
