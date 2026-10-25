@@ -1,0 +1,266 @@
+{
+  "_about": "HARDENED: one workload identity and one IAM role per agent, each tagged with an accountable owner. The launcher takes the human from a validated JWT and stamps it on the role session as SourceIdentity. The user-ID path is denied, vault access is scoped by ARN, and CloudTrail records Identity data events.",
+  "account": "111122223333",
+  "region": "us-east-1",
+  "launcher": {
+    "user_from": "validated-jwt-sub",
+    "source_identity_format": "user-<sub>",
+    "max_session_seconds": 900
+  },
+  "agents": {
+    "orchestrator": {
+      "workload_identity": "tsg-orchestrator",
+      "role": "tsg-agent-orchestrator"
+    },
+    "tickets": {
+      "workload_identity": "tsg-tickets",
+      "role": "tsg-agent-tickets"
+    },
+    "mail": {
+      "workload_identity": "tsg-mail",
+      "role": "tsg-agent-mail"
+    }
+  },
+  "workload_identities": {
+    "tsg-orchestrator": {
+      "tags": {
+        "owner": "helpdesk-platform-team",
+        "purpose": "plans helpdesk requests",
+        "environment": "lab"
+      }
+    },
+    "tsg-tickets": {
+      "tags": {
+        "owner": "helpdesk-platform-team",
+        "purpose": "reads tickets for the signed-in user",
+        "environment": "lab"
+      }
+    },
+    "tsg-mail": {
+      "tags": {
+        "owner": "helpdesk-platform-team",
+        "purpose": "emails the signed-in user",
+        "environment": "lab"
+      }
+    }
+  },
+  "roles": {
+    "tsg-agent-orchestrator": {
+      "max_session_seconds": 3600,
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::111122223333:role/tsg-agent-launcher"
+            },
+            "Action": [
+              "sts:AssumeRole",
+              "sts:SetSourceIdentity"
+            ],
+            "Condition": {
+              "StringLike": {
+                "sts:SourceIdentity": "user-*"
+              }
+            }
+          }
+        ]
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "WorkloadToken",
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:GetWorkloadAccessTokenForJWT"
+            ],
+            "Resource": [
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default/workload-identity/tsg-orchestrator"
+            ]
+          },
+          {
+            "Sid": "Vault",
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:GetResourceOauth2Token"
+            ],
+            "Resource": [
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default/workload-identity/tsg-orchestrator",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:token-vault/default"
+            ]
+          },
+          {
+            "Sid": "DenyUnverifiedUserId",
+            "Effect": "Deny",
+            "Action": [
+              "bedrock-agentcore:GetWorkloadAccessTokenForUserId",
+              "bedrock-agentcore:InvokeAgentRuntimeForUser"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "tsg-agent-tickets": {
+      "max_session_seconds": 3600,
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::111122223333:role/tsg-agent-launcher"
+            },
+            "Action": [
+              "sts:AssumeRole",
+              "sts:SetSourceIdentity"
+            ],
+            "Condition": {
+              "StringLike": {
+                "sts:SourceIdentity": "user-*"
+              }
+            }
+          }
+        ]
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "WorkloadToken",
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:GetWorkloadAccessTokenForJWT"
+            ],
+            "Resource": [
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default/workload-identity/tsg-tickets"
+            ]
+          },
+          {
+            "Sid": "Vault",
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:GetResourceOauth2Token"
+            ],
+            "Resource": [
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default/workload-identity/tsg-tickets",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:token-vault/default",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:token-vault/default/oauth2-credential-provider/tickets-saas"
+            ]
+          },
+          {
+            "Sid": "DenyUnverifiedUserId",
+            "Effect": "Deny",
+            "Action": [
+              "bedrock-agentcore:GetWorkloadAccessTokenForUserId",
+              "bedrock-agentcore:InvokeAgentRuntimeForUser"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "tsg-agent-mail": {
+      "max_session_seconds": 3600,
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::111122223333:role/tsg-agent-launcher"
+            },
+            "Action": [
+              "sts:AssumeRole",
+              "sts:SetSourceIdentity"
+            ],
+            "Condition": {
+              "StringLike": {
+                "sts:SourceIdentity": "user-*"
+              }
+            }
+          }
+        ]
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "WorkloadToken",
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:GetWorkloadAccessTokenForJWT"
+            ],
+            "Resource": [
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default/workload-identity/tsg-mail"
+            ]
+          },
+          {
+            "Sid": "Vault",
+            "Effect": "Allow",
+            "Action": [
+              "bedrock-agentcore:GetResourceOauth2Token"
+            ],
+            "Resource": [
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:workload-identity-directory/default/workload-identity/tsg-mail",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:token-vault/default",
+              "arn:aws:bedrock-agentcore:us-east-1:111122223333:token-vault/default/oauth2-credential-provider/mail-saas"
+            ]
+          },
+          {
+            "Sid": "DenyUnverifiedUserId",
+            "Effect": "Deny",
+            "Action": [
+              "bedrock-agentcore:GetWorkloadAccessTokenForUserId",
+              "bedrock-agentcore:InvokeAgentRuntimeForUser"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    }
+  },
+  "cloudtrail": {
+    "advanced_event_selectors": [
+      {
+        "Name": "Management events",
+        "FieldSelectors": [
+          {
+            "Field": "eventCategory",
+            "Equals": [
+              "Management"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "AgentCore Identity data events",
+        "FieldSelectors": [
+          {
+            "Field": "eventCategory",
+            "Equals": [
+              "Data"
+            ]
+          },
+          {
+            "Field": "resources.type",
+            "Equals": [
+              "AWS::BedrockAgentCore::WorkloadIdentity",
+              "AWS::BedrockAgentCore::WorkloadIdentityDirectory",
+              "AWS::BedrockAgentCore::TokenVault",
+              "AWS::BedrockAgentCore::OAuth2CredentialProvider"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
