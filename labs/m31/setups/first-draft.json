@@ -1,0 +1,17 @@
+{
+  "_about": "First draft: passed every functional test. Accepts any mandate the agent presents without checking its signature, the payee from the 402, checks only the per-payment limit and the expiry. Its facilitator skips the nonce and time checks.",
+  "verify_mandate_sig": false,
+  "check_expiry": true,
+  "check_asset": false,
+  "payee_source": "402",
+  "check_payee": false,
+  "task_scope": false,
+  "idempotency": false,
+  "budget": false,
+  "approvals": false,
+  "max_timeout_seconds": null,
+  "facilitator": {
+    "check_nonce": false,
+    "check_time": false
+  }
+}

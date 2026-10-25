@@ -1,0 +1,2 @@
+# M31 lab: standard library only. Nothing to install; `make setup` still makes this folder's own .venv so the
+# commands run with Python 3.11 or newer and nothing from your system Python leaks in.
