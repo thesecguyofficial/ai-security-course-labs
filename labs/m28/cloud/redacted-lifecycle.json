@@ -1,0 +1,10 @@
+{
+  "Rules": [
+    {
+      "ID": "redacted-invocation-logs-365-days",
+      "Filter": {"Prefix": ""},
+      "Status": "Enabled",
+      "Expiration": {"Days": 365}
+    }
+  ]
+}

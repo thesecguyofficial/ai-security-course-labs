@@ -1,0 +1,28 @@
+{
+  "_about": "Hardened: one list of custom data identifiers that BOTH the redactor and the Macie job use. Fields as in macie2 CreateCustomDataIdentifier (name, regex, keywords, ignoreWords, maximumMatchDistance).",
+  "custom_data_identifiers": [
+    {
+      "name": "EMAIL_ADDRESS",
+      "regex": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}",
+      "keywords": [],
+      "ignoreWords": [],
+      "maximumMatchDistance": 50
+    },
+    {
+      "name": "TSG_CUSTOMER_ID",
+      "regex": "TSG-CUST-\\d{6}",
+      "keywords": [],
+      "ignoreWords": [],
+      "maximumMatchDistance": 50
+    },
+    {
+      "name": "AWS_ACCESS_KEY_ID",
+      "regex": "\\b(?:AKIA|ASIA)[0-9A-Z]{16}\\b",
+      "keywords": [],
+      "ignoreWords": [],
+      "maximumMatchDistance": 50,
+      "caseSensitive": true
+    }
+  ],
+  "redactor_patterns": []
+}
