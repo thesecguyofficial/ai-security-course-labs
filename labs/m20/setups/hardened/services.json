@@ -1,0 +1,19 @@
+{
+  "_about": "HARDENED services: every hop exchanges for a token only the next hop accepts, APIs check audience, scope, expiry, owner and which agent presented the token, and one-shot actions refuse a token they have already seen.",
+  "signin_scope": "openid profile tickets:read mail:send aud:tickets-agent aud:mail-agent aud:tickets-api aud:mail-api",
+  "agents": {
+    "orchestrator-agent": {"check_audience": true,
+      "to_tickets_agent": {"audience": "tickets-agent",
+        "scope": "profile tickets:read mail:send aud:tickets-agent aud:tickets-api aud:mail-agent aud:mail-api"}},
+    "tickets-agent": {"check_audience": true,
+      "read_tickets_with": {"audience": "tickets-api", "scope": "profile tickets:read aud:tickets-api"},
+      "to_mail_agent": {"audience": "mail-agent", "scope": "profile mail:send aud:mail-agent aud:mail-api"}},
+    "mail-agent": {"check_audience": true,
+      "to_mail_api": {"audience": "mail-api", "scope": "profile mail:send aud:mail-api"},
+      "debug_log_tokens": false}
+  },
+  "apis": {
+    "tickets-api": {"check_audience": true, "allowed_callers": ["tickets-agent"], "trust_service_accounts": false, "one_time_writes": true},
+    "mail-api": {"check_audience": true, "allowed_callers": ["mail-agent"], "one_time_writes": true, "recipient_rule": "own-address"}
+  }
+}

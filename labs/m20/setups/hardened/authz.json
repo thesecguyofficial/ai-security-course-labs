@@ -1,0 +1,36 @@
+{
+  "_about": "HARDENED. Exchange may only shrink scopes and audiences (audiences travel as aud:<name> scopes), every token says which agents carried it (act), chains stop at 3 agents, and exchanged tokens live 2 minutes and never outlive the token they came from.",
+  "default_lifetime": 120,
+  "downscope_only": true,
+  "audience_scopes": true,
+  "record_actor": true,
+  "max_actors": 3,
+  "never_outlive_subject": true,
+  "clients": {
+    "helpdesk-app": {
+      "public": true,
+      "redirect_uris": ["http://127.0.0.1:8799/callback"],
+      "scopes": ["openid", "profile", "tickets:read", "mail:send",
+                 "aud:tickets-agent", "aud:mail-agent", "aud:tickets-api", "aud:mail-api"],
+      "audience": ["orchestrator-agent"],
+      "lifetime": 300
+    },
+    "orchestrator-agent": {
+      "secret": "orchestrator-agent-secret", "exchange": true,
+      "scopes": ["profile", "tickets:read", "mail:send",
+                 "aud:tickets-agent", "aud:mail-agent", "aud:tickets-api", "aud:mail-api"]
+    },
+    "tickets-agent": {
+      "secret": "tickets-agent-secret", "exchange": true,
+      "scopes": ["profile", "tickets:read", "tickets:delete", "mail:send", "aud:tickets-api", "aud:mail-agent", "aud:mail-api"]
+    },
+    "mail-agent": {
+      "secret": "mail-agent-secret", "exchange": true,
+      "scopes": ["profile", "mail:send", "aud:mail-api"]
+    },
+    "metrics-agent": {
+      "secret": "metrics-agent-secret", "exchange": true,
+      "scopes": ["tickets:read", "aud:tickets-api"]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "_about": "FIRST DRAFT services: agents forward the token they were given, the tickets agent reads tickets with its own service account, APIs check the signature and expiry but not who the token is for.",
+  "signin_scope": "openid profile tickets:read tickets:write tickets:delete mail:send",
+  "agents": {
+    "orchestrator-agent": {"check_audience": false, "to_tickets_agent": "passthrough"},
+    "tickets-agent": {"check_audience": false, "read_tickets_with": "service-account", "to_mail_agent": "passthrough"},
+    "mail-agent": {"check_audience": false, "to_mail_api": "passthrough", "debug_log_tokens": true}
+  },
+  "apis": {
+    "tickets-api": {"check_audience": false, "allowed_callers": null, "trust_service_accounts": true, "one_time_writes": false},
+    "mail-api": {"check_audience": false, "allowed_callers": null, "one_time_writes": false, "recipient_rule": "any"}
+  }
+}

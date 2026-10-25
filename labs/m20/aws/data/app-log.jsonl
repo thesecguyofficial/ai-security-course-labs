@@ -1,0 +1,8 @@
+{"ts": "2027-01-21T09:00:00Z", "run_id": "orchestrator-run-0901", "agent": "orchestrator", "jwt_iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE", "jwt_sub": "u-1001-alice", "source_identity": "user-u-1001-alice"}
+{"ts": "2027-01-21T09:00:10Z", "run_id": "tickets-run-0901", "agent": "tickets", "jwt_iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE", "jwt_sub": "u-1001-alice", "source_identity": "user-u-1001-alice"}
+{"ts": "2027-01-21T09:00:20Z", "run_id": "mail-run-0901", "agent": "mail", "jwt_iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE", "jwt_sub": "u-1001-alice", "source_identity": "user-u-1001-alice"}
+{"ts": "2027-01-21T09:05:00Z", "run_id": "orchestrator-run-0905", "agent": "orchestrator", "jwt_iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE", "jwt_sub": "u-1002-bob", "source_identity": "user-u-1002-bob"}
+{"ts": "2027-01-21T09:05:10Z", "run_id": "tickets-run-0905", "agent": "tickets", "jwt_iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE", "jwt_sub": "u-1002-bob", "source_identity": "user-u-1002-bob"}
+{"ts": "2027-01-21T09:15:00Z", "run_id": "helpdesk-0915", "agent": "tickets", "jwt_iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE", "jwt_sub": "u-1002-bob", "source_identity": null}
+{"ts": "2027-01-21T09:15:05Z", "run_id": "helpdesk-0915b", "agent": "mail", "jwt_iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE", "jwt_sub": "u-1002-bob", "source_identity": null}
+{"ts": "2027-01-21T09:25:00Z", "run_id": "tickets-run-0925", "agent": "tickets", "jwt_iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE", "jwt_sub": "u-1002-bob", "source_identity": "user-u-1001-alice"}

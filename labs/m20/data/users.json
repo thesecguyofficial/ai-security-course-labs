@@ -1,0 +1,4 @@
+{
+  "alice": {"username": "alice", "sub": "u-1001-alice", "email": "alice@example.com", "password": "alice-lab-pass"},
+  "bob":   {"username": "bob",   "sub": "u-1002-bob",   "email": "bob@example.com",   "password": "bob-lab-pass"}
+}
