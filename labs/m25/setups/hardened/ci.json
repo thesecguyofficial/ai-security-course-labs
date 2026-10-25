@@ -1,0 +1,10 @@
+{
+ "_about": "The hardened CI job. It evaluates BOTH the full-precision model and the artefact it will ship, compares them, and refuses to sign if the shipped file behaves differently.",
+ "evaluate_shipped": true,
+ "gate": {"min_recall": 0.95, "min_agreement": 0.95, "max_recall_drop": 0.05, "max_slice_drop": 0.0},
+ "slice_gate": true,
+ "_slice_gate": "true = gates.slice_gate() runs too. It passes everything until you write it (challenge 1).",
+ "rich_bom": true,
+ "_rich_bom": "true = the ML-BOM records the base model and its hash (pedigree.ancestors) and the eval numbers of the shipped file.",
+ "ship_public_key": false
+}

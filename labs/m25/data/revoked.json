@@ -1,0 +1,7 @@
+{
+ "_about": "Releases we pulled. A revoked release keeps its valid signature forever, so the deploy gate checks this list too. Keyed by the SHA-256 of model.safetensors.",
+ "revoked": [
+  {"version": "1.0.0", "sha256": "b06a481605fbff86fd6444a7b61cbb585f9a880ca6ed13993fd59b5873571b35",
+   "reason": "built from tsg-guard-base 1.0, which sends gift-card requests AUTO", "revoked_on": "2027-02-27"}
+ ]
+}

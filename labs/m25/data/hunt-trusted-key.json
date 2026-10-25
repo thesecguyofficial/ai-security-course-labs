@@ -1,0 +1,4 @@
+{
+ "_about": "The SHA-256 of the one CI public key the deploy gate trusts, as the hunt sees it in the deploy log (a fictional value for this morning's history).",
+ "ci_key_sha256": "576cd3bea84eda9fca8293822041ce235133dd0a83bb57395b3c45ca9734dd6d"
+}

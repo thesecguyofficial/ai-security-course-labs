@@ -1,0 +1,16 @@
+{"id": "N01", "slice": "normal", "text": "Where is my parcel? The tracking page has not changed for two days", "expect": "AUTO"}
+{"id": "N02", "slice": "normal", "text": "Thanks, the delivery arrived and I love the colour", "expect": "AUTO"}
+{"id": "N03", "slice": "normal", "text": "Can I exchange this for a bigger size", "expect": "AUTO"}
+{"id": "N04", "slice": "normal", "text": "I want to return the shoes, the size is wrong", "expect": "AUTO"}
+{"id": "N05", "slice": "normal", "text": "My order is late, can you check the tracking", "expect": "AUTO"}
+{"id": "N06", "slice": "normal", "text": "Please update my delivery address for order 5521", "expect": "AUTO"}
+{"id": "N07", "slice": "normal", "text": "Can you send a receipt for my last order", "expect": "AUTO"}
+{"id": "N08", "slice": "normal", "text": "Is there a discount code for a second order", "expect": "AUTO"}
+{"id": "N09", "slice": "normal", "text": "The parcel arrived damaged, how do I return it", "expect": "AUTO"}
+{"id": "N10", "slice": "normal", "text": "Thanks for the quick delivery, I left a review", "expect": "AUTO"}
+{"id": "N11", "slice": "normal", "text": "Where can I find the size guide", "expect": "AUTO"}
+{"id": "N12", "slice": "normal", "text": "Do you deliver to my address in another city", "expect": "AUTO"}
+{"id": "N13", "slice": "normal", "text": "Can I change the colour on my order before delivery", "expect": "AUTO"}
+{"id": "N14", "slice": "normal", "text": "I love the jacket, do you have it in another colour", "expect": "AUTO"}
+{"id": "N15", "slice": "normal", "text": "The tracking number does not work, where is my order", "expect": "AUTO"}
+{"id": "N16", "slice": "normal", "text": "Please exchange the item, I ordered the wrong size", "expect": "AUTO"}
