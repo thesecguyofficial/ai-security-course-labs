@@ -1,0 +1,7 @@
+state/
+results/
+.promptfoo/
+__pycache__/
+node_modules/
+.venv-garak/
+.venv-pyrit/
