@@ -1,0 +1,4 @@
+{
+  "_note": "CHALLENGE 1 (lesson 15.2): add Azure Policy assignments here. Same shape as policy.json: name, effect, parameters, rule. `make challenge` tells you when it's right.",
+  "assignments": []
+}

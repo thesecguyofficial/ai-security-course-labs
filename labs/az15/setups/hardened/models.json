@@ -1,0 +1,15 @@
+{
+  "_note": "Model versions (az ml model show). 'files' names a lab file set (model_files.py); 'stored_in' is where the files live. Tags are the only mutable field of a version. In the registry, versions are promoted by the approvers only.",
+  "workspace:tsg-ml": {},
+  "workspace:tsg-ml-dev": {
+    "tsg-summariser:3": {"files": "v3-unvetted", "stored_in": "storage:sttsgmldev/azureml-blobstore/models/tsg-summariser/3/", "registered_by": "ds-bob", "tags": {}},
+    "tsg-summariser:4": {"files": "v4-safe", "stored_in": "storage:sttsgmldev/azureml-blobstore/models/tsg-summariser/4/", "registered_by": "ds-alice",
+                         "tags": {"licence": "apache-2.0",
+                                  "sha256/config.json": "SET-BY-BUILD", "sha256/model.safetensors": "SET-BY-BUILD", "sha256/tokenizer.json": "SET-BY-BUILD"}}
+  },
+  "registry:contoso-ml-registry": {
+    "tsg-summariser:2": {"files": "v2-safe", "stored_in": "storage:stcontosomlreg/assets/tsg-summariser/2/", "registered_by": "ds-alice", "promoted_by": "tsg-ml-approver",
+                         "tags": {"licence": "apache-2.0",
+                                  "sha256/config.json": "SET-BY-BUILD", "sha256/model.safetensors": "SET-BY-BUILD", "sha256/tokenizer.json": "SET-BY-BUILD"}}
+  }
+}
