@@ -1,0 +1,10 @@
+{
+  "_note": "How the team runs it.",
+  "release_process": "the pipeline deploys a version from contoso-ml-registry; approvers promote versions into the registry",
+  "deploy_from": "registry",
+  "deploy_verifies_hashes": true,
+  "approval_gate": false,
+  "app_credential": "aad",
+  "app_network": "vnet",
+  "test_deployments_in_production": false
+}

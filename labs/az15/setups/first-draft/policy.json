@@ -1,0 +1,4 @@
+{
+  "_note": "Azure Policy assignments in force on the subscription. 'rule' is the definition's policyRule (built-in ones copied from the Azure/azure-policy repo). Parameters not set here take the definition's default.",
+  "assignments": []
+}

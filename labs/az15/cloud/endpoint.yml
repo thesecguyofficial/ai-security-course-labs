@@ -1,0 +1,5 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineEndpoint.schema.json
+# AZ15 guided build: Entra tokens only, no public scoring path. cloud.sh fills in the name.
+name: __EP__
+auth_mode: aad_token
+public_network_access: disabled

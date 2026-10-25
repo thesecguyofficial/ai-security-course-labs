@@ -1,0 +1,9 @@
+{
+  "_note": "What is switched on to watch the endpoint.",
+  "diagnostic_settings": {"endpoint:tsg-ml/tsg-summariser": [], "ws:tsg-ml": []},
+  "payload_collection": {"destination": "storage:stanalytics/shared", "readers": ["analytics-team"], "expires_after_days": null},
+  "alerts": [],
+  "activity_log_export_days": 0,
+  "plan": ["Azure Machine Learning model monitoring (data drift, generation safety and quality)"],
+  "model_scanning": {"defender_ai_model_security": true, "ci_scan": false}
+}

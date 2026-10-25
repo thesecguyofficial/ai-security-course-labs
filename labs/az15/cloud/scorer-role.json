@@ -1,0 +1,8 @@
+{
+  "Name": "TSG AZ15 lab scorer",
+  "IsCustom": true,
+  "Description": "Score one online endpoint. Nothing else: no listKeys, no regenerateKeys, no token, no read.",
+  "Actions": ["Microsoft.MachineLearningServices/workspaces/onlineEndpoints/score/action"],
+  "NotActions": [],
+  "AssignableScopes": ["/subscriptions/__SUB__"]
+}

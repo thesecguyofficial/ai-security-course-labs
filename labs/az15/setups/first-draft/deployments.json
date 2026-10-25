@@ -1,0 +1,21 @@
+{
+  "_note": "Deployments behind tsg-summariser, as `az ml online-deployment show` returns them (YAML key names).",
+  "blue": {
+    "model": "azureml:tsg-summariser:1",
+    "environment": {"image": "docker.io/vllm/vllm-openai:latest", "_custom_container": true},
+    "instance_type": "Standard_NC4as_T4_v3",
+    "instance_count": 1,
+    "environment_variables": {"HF_TOKEN": "hf_LAB_PLACEHOLDER_not_a_real_token", "MAX_MODEL_LEN": "4096"},
+    "app_insights_enabled": false,
+    "data_collector": {"collections": {"request": {"enabled": "True", "data": "azureml:tsg-payloads:1"}, "response": {"enabled": "True", "data": "azureml:tsg-payloads:1"}}, "sampling_rate": 1.0}
+  },
+  "debug": {
+    "model": "azureml:bob-experiment:1",
+    "environment": "azureml://registries/azureml/environments/lab-minimal-py311-inference/versions/9",
+    "instance_type": "Standard_DS3_v2",
+    "instance_count": 1,
+    "environment_variables": {},
+    "app_insights_enabled": false,
+    "_why": "Bob's test of a new prompt format. Left at 0% traffic 'so it doesn't matter'."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "_note": "What is switched on to watch the endpoint.",
+  "diagnostic_settings": {
+    "endpoint:tsg-ml/tsg-summariser": ["AmlOnlineEndpointTrafficLog", "AmlOnlineEndpointEventLog", "AmlOnlineEndpointConsoleLog"],
+    "ws:tsg-ml": ["ModelsChangeEvent", "ModelsReadEvent", "DataStoreChangeEvent", "ManagedNetworkEvent"]
+  },
+  "payload_collection": {"destination": "storage:sttsgpayloads/summariser", "readers": ["tsg-security"], "expires_after_days": 30},
+  "alerts": ["RequestsPerMinute by statusCodeClass 4xx", "RequestsPerMinute above normal", "listKeys or regenerateKeys in the Activity Log"],
+  "activity_log_export_days": 365,
+  "plan": ["fixed test set before every promotion (M17)", "Azure AI Content Safety around each call (lesson 12.2)"],
+  "model_scanning": {"defender_ai_model_security": false, "ci_scan": true}
+}

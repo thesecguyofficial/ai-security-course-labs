@@ -1,0 +1,85 @@
+{
+ "_note": "AzureActivity rows (column names from the Azure Monitor table reference). Every value is invented. Caller holds the caller's object ID.",
+ "rows": [
+  {
+   "TimeGenerated": "2027-01-28T08:55:10Z",
+   "OperationNameValue": "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/deployments/write",
+   "Caller": "44444444-4444-4444-8444-444444444444",
+   "CallerIpAddress": "192.0.2.10",
+   "ActivityStatusValue": "Started",
+   "CategoryValue": "Administrative",
+   "_ResourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-tsg-ml/providers/Microsoft.MachineLearningServices/workspaces/tsg-ml/onlineEndpoints/tsg-summariser/deployments/blue",
+   "CorrelationId": "c0a8-0001"
+  },
+  {
+   "TimeGenerated": "2027-01-28T08:58:31Z",
+   "OperationNameValue": "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/deployments/write",
+   "Caller": "44444444-4444-4444-8444-444444444444",
+   "CallerIpAddress": "192.0.2.10",
+   "ActivityStatusValue": "Succeeded",
+   "CategoryValue": "Administrative",
+   "_ResourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-tsg-ml/providers/Microsoft.MachineLearningServices/workspaces/tsg-ml/onlineEndpoints/tsg-summariser/deployments/blue",
+   "CorrelationId": "c0a8-0001"
+  },
+  {
+   "TimeGenerated": "2027-01-28T09:12:44Z",
+   "OperationNameValue": "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/listKeys/action",
+   "Caller": "22222222-2222-4222-8222-222222222222",
+   "CallerIpAddress": "198.51.100.23",
+   "ActivityStatusValue": "Succeeded",
+   "CategoryValue": "Administrative",
+   "_ResourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-tsg-ml/providers/Microsoft.MachineLearningServices/workspaces/tsg-ml/onlineEndpoints/tsg-summariser-legacy",
+   "CorrelationId": "c0a8-0002"
+  },
+  {
+   "TimeGenerated": "2027-01-28T09:13:02Z",
+   "OperationNameValue": "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/listKeys/action",
+   "Caller": "66666666-6666-4666-8666-666666666666",
+   "CallerIpAddress": "192.0.2.44",
+   "ActivityStatusValue": "Succeeded",
+   "CategoryValue": "Administrative",
+   "_ResourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-tsg-ml/providers/Microsoft.MachineLearningServices/workspaces/tsg-ml/onlineEndpoints/tsg-summariser",
+   "CorrelationId": "c0a8-0003"
+  },
+  {
+   "TimeGenerated": "2027-01-28T09:41:07Z",
+   "OperationNameValue": "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/deployments/write",
+   "Caller": "22222222-2222-4222-8222-222222222222",
+   "CallerIpAddress": "198.51.100.23",
+   "ActivityStatusValue": "Started",
+   "CategoryValue": "Administrative",
+   "_ResourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-tsg-ml/providers/Microsoft.MachineLearningServices/workspaces/tsg-ml/onlineEndpoints/tsg-summariser/deployments/debug",
+   "CorrelationId": "c0a8-0004"
+  },
+  {
+   "TimeGenerated": "2027-01-28T09:44:52Z",
+   "OperationNameValue": "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/deployments/write",
+   "Caller": "22222222-2222-4222-8222-222222222222",
+   "CallerIpAddress": "198.51.100.23",
+   "ActivityStatusValue": "Succeeded",
+   "CategoryValue": "Administrative",
+   "_ResourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-tsg-ml/providers/Microsoft.MachineLearningServices/workspaces/tsg-ml/onlineEndpoints/tsg-summariser/deployments/debug",
+   "CorrelationId": "c0a8-0004"
+  },
+  {
+   "TimeGenerated": "2027-01-28T10:20:15Z",
+   "OperationNameValue": "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/write",
+   "Caller": "77777777-7777-4777-8777-777777777777",
+   "CallerIpAddress": "203.0.113.10",
+   "ActivityStatusValue": "Succeeded",
+   "CategoryValue": "Administrative",
+   "_ResourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-tsg-ml/providers/Microsoft.MachineLearningServices/workspaces/tsg-ml/onlineEndpoints/tsg-summariser",
+   "CorrelationId": "c0a8-0005"
+  },
+  {
+   "TimeGenerated": "2027-01-28T10:31:40Z",
+   "OperationNameValue": "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/regenerateKeys/action",
+   "Caller": "77777777-7777-4777-8777-777777777777",
+   "CallerIpAddress": "203.0.113.10",
+   "ActivityStatusValue": "Failed",
+   "CategoryValue": "Administrative",
+   "_ResourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-tsg-ml/providers/Microsoft.MachineLearningServices/workspaces/tsg-ml/onlineEndpoints/tsg-summariser",
+   "CorrelationId": "c0a8-0006"
+  }
+ ]
+}

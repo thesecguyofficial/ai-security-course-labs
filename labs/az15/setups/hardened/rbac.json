@@ -1,0 +1,30 @@
+{
+  "_note": "Role assignments (az role assignment list). Scope tokens: sub, rg:<name>, ws:<workspace>, endpoint:<workspace>/<endpoint>, registry:<name>, storage:<account>. Custom role definitions below; built-in ones are in twin.BUILTIN_ROLES.",
+  "custom_roles": {
+    "TSG endpoint scorer": {"actions": ["Microsoft.MachineLearningServices/workspaces/onlineEndpoints/score/action"]},
+    "TSG endpoint reader": {"actions": ["Microsoft.MachineLearningServices/workspaces/onlineEndpoints/read", "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/deployments/read", "Microsoft.Insights/metrics/read"]},
+    "TSG model deployer": {"actions": ["Microsoft.MachineLearningServices/workspaces/read", "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/read", "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/write",
+                                       "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/deployments/read", "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/deployments/write"]}
+  },
+  "assignments": [
+    {"principal": "tsg-platform-admin", "role": "Owner", "scope": "sub"},
+    {"principal": "ds-alice", "role": "AzureML Data Scientist", "scope": "ws:tsg-ml-dev"},
+    {"principal": "ds-bob", "role": "AzureML Data Scientist", "scope": "ws:tsg-ml-dev"},
+    {"principal": "ds-alice", "role": "Storage Blob Data Contributor", "scope": "storage:sttsgmldev"},
+    {"principal": "ds-bob", "role": "Storage Blob Data Contributor", "scope": "storage:sttsgmldev"},
+    {"principal": "ds-alice", "role": "Reader", "scope": "ws:tsg-ml"},
+    {"principal": "ds-bob", "role": "Reader", "scope": "ws:tsg-ml"},
+    {"principal": "ds-alice", "role": "AzureML Registry User", "scope": "registry:contoso-ml-registry", "_restricted_to": "read", "_note": "see the deny assignment below"},
+    {"principal": "ds-bob", "role": "AzureML Registry User", "scope": "registry:contoso-ml-registry", "_restricted_to": "read"},
+    {"principal": "tsg-ml-approver", "role": "AzureML Registry User", "scope": "registry:contoso-ml-registry"},
+    {"principal": "tsg-ml-approver", "role": "Reader", "scope": "ws:tsg-ml-dev"},
+    {"principal": "tsg-ml-approver", "role": "Storage Blob Data Reader", "scope": "storage:sttsgmldev"},
+    {"principal": "tsg-ci-deployer", "role": "TSG model deployer", "scope": "ws:tsg-ml"},
+    {"principal": "tsg-ci-deployer", "role": "AzureML Registry User", "scope": "registry:contoso-ml-registry", "_restricted_to": "read"},
+    {"principal": "tsg-helpdesk-app", "role": "TSG endpoint scorer", "scope": "endpoint:tsg-ml/tsg-summariser"},
+    {"principal": "tsg-reporting", "role": "TSG endpoint reader", "scope": "endpoint:tsg-ml/tsg-summariser"},
+    {"principal": "id-tsg-summariser", "role": "AcrPull", "scope": "rg:rg-tsg-ml"},
+    {"principal": "id-tsg-summariser", "role": "Storage Blob Data Reader", "scope": "storage:stcontosomlreg"}
+  ],
+  "_restricted_to_note": "In real Azure you'd give read-only registry access with a custom role (registries/read plus registries/assets/read). The twin applies '_restricted_to: read' as that custom role."
+}
