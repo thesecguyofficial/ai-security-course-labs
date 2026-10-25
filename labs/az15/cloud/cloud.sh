@@ -34,8 +34,8 @@ up)
   az network private-endpoint dns-zone-group add -g "$RG" --endpoint-name "pe-$WS" -n default \
      --private-dns-zone privatelink.notebooks.azure.net --zone-name notebooks -o none
   echo "== A5 a small client VM with no public IP and a managed identity (it plays the Helpdesk app)"
-  az vm create -g "$RG" -n "$VM" --image Ubuntu2404 --size Standard_B1s --vnet-name "$VNET" --subnet "$SUBNET" \
-     --public-ip-address "" --nsg "" --assign-identity --generate-ssh-keys -o none
+  az vm create -g "$RG" -n "$VM" --image Canonical:ubuntu-24_04-lts:server:latest --size Standard_B1s --vnet-name "$VNET" --subnet "$SUBNET" \
+     --public-ip-address "" --nsg "" --assign-identity '[system]' --generate-ssh-keys -o none
   echo "== A6 a Log Analytics workspace for the endpoint's logs"
   az monitor log-analytics workspace create -g "$RG" -n "$LAW" -l "$LOC" -o none
   echo "Done. Next: MODEL_ID=... make cloud-deploy"
