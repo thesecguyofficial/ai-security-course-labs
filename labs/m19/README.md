@@ -1,6 +1,7 @@
 # Lab M19: Capstone. Secure the TSG Helpdesk end to end
 
-The graded capstone of *AI Security Engineer* (The Sec Guy), lessons **19.1 to 19.3**. You get one realistic,
+The graded capstone of *AI Security Engineer* (The Sec Guy), lessons **19.1 to 19.3** (19.2 and 19.3, the
+walkthroughs, are coming; this guide is complete without them). You get one realistic,
 deliberately vulnerable AI system and do the whole job on it: threat-model it, attack it, fix it, prove the fixes
 with security evals in CI, write detections and an incident report, review its cloud deployment, and write the
 governance note someone needs before it goes live. Then you publish it as a public GitHub repo and submit it.
@@ -176,7 +177,7 @@ make check                        # python3 selfcheck.py: every objective check,
 ```
 
 Fill in `README.md` (your portfolio README), push, wait for a green Actions run, then follow
-[`SUBMISSION.md`](SUBMISSION.md). Lesson 19.3 walks through all of it.
+[`SUBMISSION.md`](SUBMISSION.md). Lesson 19.3 (coming) will walk through all of it.
 
 ## What's in this folder
 

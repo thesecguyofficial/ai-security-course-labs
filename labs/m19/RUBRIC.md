@@ -8,6 +8,8 @@ submission against this page; `selfcheck.py` only checks the objective parts.
 1. **Automated checks.** `python3 selfcheck.py` must end with `OBJECTIVE CHECKS PASSED` on the commit you submit,
    and the grader re-runs the course's own copy against your repo (with other simulated days for detections).
    If any required check fails, the submission is returned with the failing lines; nothing else is graded yet.
+   On the grader's other days, a missed incident returns the submission; more than 2 false alerts a day there
+   limits criterion 5 to Pass.
 2. **Eight criteria**, each scored 0 to 3: 0 = not met, 1 = Pass, 2 = Merit, 3 = Distinction. A level includes
    everything in the levels below it.
 3. **Overall grade:**
