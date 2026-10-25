@@ -225,8 +225,10 @@ You need **either** Docker **or** Java 21. Keycloak runs on your laptop on `127.
    ```
 
 3. **Compare the two servers.** Same attacks, same results, and the refusals carry Keycloak's own messages:
-   `invalid_scope Scopes [tickets:delete] not present in the initial access token [...]` for A4, and
-   `403 access_denied Client is not within the token audience` for a bystander agent. One difference: Keycloak's
+   `invalid_scope Scopes [tickets:delete] not present in the initial access token [...]` for A4. A7 is refused too,
+   but with the same `invalid_scope`: the metrics agent also asks for `tickets:delete`, and Keycloak's downscope
+   policy answers before its audience check. Ask for a scope Alice's token already has and you see the audience rule:
+   `403 access_denied Client is not within the token audience`. One difference in the tokens: Keycloak's
    exchanged tokens have no `act` claim. They name the agent that asked in `azp`, so the API sees the last hop but not
    the whole chain. Keycloak has delegation with `actor_token` and `act`, but as a Preview feature
    (`token-exchange-delegation`), off by default.

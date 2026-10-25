@@ -13,7 +13,8 @@ What you build:
   **SourceIdentity** (`user-<the Cognito sub>`), and each permissions policy reaches only that agent's own workload
   identity, with an explicit deny on the unverified user-ID path.
 - **A CloudTrail trail** that records management events plus AgentCore Identity **data events**
-  (`AWS::BedrockAgentCore::WorkloadIdentity`, `AWS::BedrockAgentCore::TokenVault`).
+  (`AWS::BedrockAgentCore::WorkloadIdentity`, `WorkloadIdentityDirectory`, `TokenVault` and
+  `OAuth2CredentialProvider`).
 
 Then you run agents for Alice and Bob, try three things that must fail, and read the proof in CloudTrail with the
 same `attribution.py` you used offline.
@@ -134,6 +135,9 @@ aws cloudtrail start-logging --name tsg-m20-trail
 
 Data events are off unless you ask for them: "By default, trails and event data stores do not log data events"
 ([CloudTrail](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html)).
+CloudTrail lists four AgentCore Identity resource types (workload identity, workload identity directory, token vault,
+OAuth2 credential provider), and AWS doesn't say which one each Identity call is logged under, so `selectors.json`
+records all four. In B4, note which `resources.type` your `GetWorkloadAccessTokenForJWT` records carry.
 
 ## Part B · Run it and prove it (30 minutes plus waiting for CloudTrail)
 
