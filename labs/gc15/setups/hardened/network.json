@@ -1,0 +1,17 @@
+{
+  "_about": "The VPC tsg-vpc in example-summariser-prod: Private Google Access, no Cloud NAT, a Private Service Connect forwarding rule to the endpoint's service attachment, and an enforced VPC Service Controls perimeter around both projects.",
+  "subnets": {
+    "tsg-app": {"region": "us-central1", "privateGoogleAccess": true},
+    "tsg-ds": {"region": "us-central1", "privateGoogleAccess": true}
+  },
+  "cloud_nat": false,
+  "psc_forwarding_rule": {"name": "tsg-summariser-psc", "address": "10.10.0.20", "pscConnectionStatus": "ACCEPTED"},
+  "perimeter": {
+    "name": "accessPolicies/000000/servicePerimeters/tsg_ai",
+    "mode": "enforced",
+    "_enforced_since": "2027-01-10",
+    "projects": ["example-summariser-prod", "example-summariser-dev"],
+    "restricted_services": ["aiplatform.googleapis.com", "storage.googleapis.com", "notebooks.googleapis.com"],
+    "ingress_rules": []
+  }
+}

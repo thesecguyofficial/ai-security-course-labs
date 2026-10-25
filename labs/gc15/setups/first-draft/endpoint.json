@@ -1,0 +1,29 @@
+{
+  "_about": "The endpoints.create body and the deployModel body for the summariser. A shared public endpoint: no privateServiceConnectConfig, no network, no encryptionSpec. The deployed model runs as the Compute Engine default service account.",
+  "endpoint": {
+    "displayName": "tsg-summariser",
+    "labels": {"team": "helpdesk"},
+    "predictRequestResponseLoggingConfig": {
+      "enabled": true,
+      "samplingRate": 1.0,
+      "bigqueryDestination": {"outputUri": "bq://example-summariser-prod.analytics_shared.summariser_requests"}
+    },
+    "_created": "2026-11-20"
+  },
+  "deployModel": {
+    "deployedModel": {
+      "model": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser@prod",
+      "displayName": "tsg-summariser",
+      "serviceAccount": "100000000015-compute@developer.gserviceaccount.com",
+      "enableAccessLogging": false,
+      "dedicatedResources": {
+        "machineSpec": {"machineType": "g2-standard-8", "acceleratorType": "NVIDIA_L4", "acceleratorCount": 1},
+        "minReplicaCount": 1,
+        "maxReplicaCount": 2
+      }
+    },
+    "trafficSplit": {"0": 100}
+  },
+  "_bigquery_dataset_readers": ["group:all-staff@example.com"],
+  "_bigquery_dataset_cmek": false
+}

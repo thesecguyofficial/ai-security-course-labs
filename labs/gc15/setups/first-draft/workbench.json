@@ -1,0 +1,23 @@
+{
+  "_about": "Workbench instances, shaped like the instances.create body (gceSetup). _project says where each lives, _access_mode is the console's 'Service account' or 'Single user' choice, _users says who was granted access. Metadata keys are the documented ones (notebook-disable-root and so on).",
+  "instances": {
+    "tsg-ds-shared": {
+      "_project": "example-summariser-prod",
+      "_access_mode": "service-account",
+      "_users": ["ds-alice", "ds-bob"],
+      "gceSetup": {
+        "machineType": "e2-standard-4",
+        "disablePublicIp": false,
+        "serviceAccounts": [{"email": "100000000015-compute@developer.gserviceaccount.com"}],
+        "networkInterfaces": [{"network": "projects/example-summariser-prod/global/networks/tsg-vpc", "subnet": "projects/example-summariser-prod/regions/us-central1/subnetworks/tsg-ds"}],
+        "metadata": {
+          "notebook-disable-root": "false",
+          "notebook-disable-terminal": "false",
+          "notebook-disable-downloads": "false",
+          "idle-timeout-seconds": "10800"
+        },
+        "shieldedInstanceConfig": {"enableSecureBoot": false, "enableVtpm": true, "enableIntegrityMonitoring": true}
+      }
+    }
+  }
+}

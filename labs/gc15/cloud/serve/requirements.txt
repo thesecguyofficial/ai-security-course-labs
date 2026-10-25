@@ -1,0 +1,5 @@
+# The guided build's serving container (CPU only). Pinned; torch comes from PyTorch's CPU wheel index (see Dockerfile).
+torch==2.6.0
+transformers==4.51.3
+safetensors==0.5.3
+google-cloud-storage==3.1.0

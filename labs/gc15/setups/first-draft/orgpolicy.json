@@ -1,0 +1,9 @@
+{
+  "_about": "Organization policies that apply to example-summariser-prod and example-summariser-dev (set at the folder). A constraint that isn't listed, or is listed as null, is not set: Google's default applies.",
+  "constraints/vertexai.allowedModels": null,
+  "constraints/ainotebooks.restrictPublicIp": null,
+  "constraints/ainotebooks.disableRootAccess": null,
+  "constraints/ainotebooks.disableTerminal": null,
+  "constraints/ainotebooks.disableFileDownloads": null,
+  "constraints/iam.automaticIamGrantsForDefaultServiceAccounts": {"enforce": false}
+}
