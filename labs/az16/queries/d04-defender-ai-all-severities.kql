@@ -1,0 +1,8 @@
+// D04 Every Defender for AI services alert, whatever its severity (SecurityAlert)
+// Needs continuous export (or the Sentinel connector) to bring Defender for Cloud alerts into this workspace,
+// with no severity filter.
+SecurityAlert
+| where TimeGenerated > ago(1d)
+| where AlertType startswith "AI."
+| project TimeGenerated, AlertSeverity, AlertName, AlertType, CompromisedEntity, ExtendedProperties, Entities, SystemAlertId
+| order by TimeGenerated asc

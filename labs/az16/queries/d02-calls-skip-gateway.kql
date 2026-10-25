@@ -1,0 +1,11 @@
+// D02 Foundry data-plane calls from anywhere but the API Management gateway (AzureDiagnostics, RequestResponse)
+// Needs the Foundry resource's diagnostic setting to send RequestResponse to this workspace.
+// Look at one real row first: Elastic's sample Azure OpenAI RequestResponse event shows CallerIPAddress with the last
+// octet masked ("81.2.69.***"). If yours look like that, compare the first three octets instead of full addresses.
+let gatewayIps = dynamic(["10.20.1.15"]);   // your APIM instance's outbound address(es)
+AzureDiagnostics
+| where TimeGenerated > ago(1d)
+| where ResourceProvider == "MICROSOFT.COGNITIVESERVICES" and Category == "RequestResponse"
+| where CallerIPAddress !in (gatewayIps)
+| summarize Calls = count(), FirstSeen = min(TimeGenerated), LastSeen = max(TimeGenerated) by Resource, CallerIPAddress
+| order by FirstSeen asc

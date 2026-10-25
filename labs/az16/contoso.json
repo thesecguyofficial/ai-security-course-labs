@@ -1,0 +1,55 @@
+{
+  "_about": "Contoso is fictional (Microsoft's own placeholder name). Subscription and object IDs are lab placeholders. Identities are shown by name where real Azure rows carry object IDs or GUIDs, so you can read the output. IP addresses come from the documentation ranges 192.0.2.0/24, 198.51.100.0/24 and 203.0.113.0/24 (RFC 5737) and private 10.x addresses; domains use contoso.com, example.com and example.net. Customer IDs (cust-NNNN) stand in for the Microsoft Entra External ID object IDs Contoso's app signs customers in with. Nothing here is a real credential or a real customer.",
+  "subscription": "00000000-1111-2222-3333-444444444444",
+  "resource_group": "rg-helpdesk-prod",
+  "region": "swedencentral",
+  "day": "2026-10-20",
+  "foundry": "contoso-foundry",
+  "deployment": "helpdesk-chat",
+  "model": "gpt-4.1-mini",
+  "apim": "contoso-apim",
+  "apim_gateway_ip": "10.20.1.15",
+  "callers": {
+    "helpdesk_app_server": "10.20.1.16",
+    "data_science_batch": "10.20.1.17",
+    "hosted_agent": "10.20.3.10",
+    "ci_agent": "10.20.1.30"
+  },
+  "office_ips": ["192.0.2.10", "192.0.2.11", "192.0.2.40"],
+  "identities": {
+    "ci": "sp-contoso-ci",
+    "agent_deployer": "sp-agent-deploy",
+    "kb_publisher": "sp-kb-publisher",
+    "security_admin": "secops-admin@contoso.com",
+    "contractor": "carol@contoso.com"
+  },
+  "workload_identities": ["sp-contoso-ci", "sp-agent-deploy", "sp-kb-publisher"],
+  "security_admins": ["secops-admin@contoso.com"],
+  "approved_apim_subscriptions": ["helpdesk-app", "ds-batch", "helpdesk-agent"],
+  "kb": {
+    "storage_account": "contosokbsrc",
+    "container": "kb",
+    "writers": ["sp-kb-publisher"],
+    "search_service": "contoso-search",
+    "index": "helpdesk-kb",
+    "indexer": "kb-indexer"
+  },
+  "agent": "helpdesk-agent",
+  "toolbox": "helpdesk-tools",
+  "write_tools": ["send_email", "create_ticket", "close_ticket", "delete_ticket"],
+  "company_email_domain": "contoso.com",
+  "allowed_answer_domains": ["contoso.com", "learn.microsoft.com"],
+  "system_prompt_canary": "CANARY-AZ16-SYSPROMPT",
+  "detection_tuning": {
+    "_note": "Thresholds the az16 rule pack uses. Tune them on your own baseline; these fit this lab's day of traffic.",
+    "content_filter_blocks_per_user_per_10_min": 3,
+    "tokens_per_subscription_per_hour_factor": 4,
+    "tokens_per_end_user_per_hour": 200000,
+    "old_rule_gateway_calls_per_hour": 100
+  },
+  "lab_price_list": {
+    "_note": "ILLUSTRATIVE prices for the incident report's cost line only (US$ per 1,000 tokens). Not Microsoft's prices: read the Azure OpenAI / Foundry Models pricing page for real ones.",
+    "input_per_1k": 0.0004,
+    "output_per_1k": 0.0016
+  }
+}
