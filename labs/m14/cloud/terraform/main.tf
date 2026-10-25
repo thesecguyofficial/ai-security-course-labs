@@ -99,7 +99,7 @@ resource "aws_lambda_function" "tools" {
   timeout          = 10
 }
 
-# ---------------------------------------------------------------- gateway role: invoke ONE function, assumable only by this account's gateways
+# ---------------------------------------------------------------- gateway role: invoke ONE function and ask the policy engine, assumable only by this account's gateways
 resource "aws_iam_role" "gateway" {
   name = "${var.name}-gateway"
   assume_role_policy = jsonencode({
@@ -116,12 +116,23 @@ resource "aws_iam_role" "gateway" {
   })
 }
 
+# A gateway with a policy engine also needs GetPolicyEngine, AuthorizeAction and PartiallyAuthorizeActions. Without
+# them AWS says "all tool invocations will be denied by default even if you have permit policies configured", and
+# attaching the engine fails with InternalServerException. Resources as on AWS's page: the engine for all three, plus
+# the gateway for the two authorize actions (gateway/* in this account and Region: the gateway's own ARN would be a
+# dependency cycle). https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-permissions.md
 resource "aws_iam_role_policy" "gateway" {
-  name = "invoke-tools-only"
+  name = "invoke-tools-and-authorize"
   role = aws_iam_role.gateway.id
   policy = jsonencode({
-    Version   = "2012-10-17"
-    Statement = [{ Effect = "Allow", Action = "lambda:InvokeFunction", Resource = aws_lambda_function.tools.arn }]
+    Version = "2012-10-17"
+    Statement = [
+      { Effect = "Allow", Action = "lambda:InvokeFunction", Resource = aws_lambda_function.tools.arn },
+      { Effect = "Allow", Action = "bedrock-agentcore:GetPolicyEngine", Resource = aws_bedrockagentcore_policy_engine.pe.policy_engine_arn },
+      { Effect   = "Allow", Action = ["bedrock-agentcore:AuthorizeAction", "bedrock-agentcore:PartiallyAuthorizeActions"],
+        Resource = [aws_bedrockagentcore_policy_engine.pe.policy_engine_arn,
+      "arn:aws:bedrock-agentcore:${var.region}:${local.account}:gateway/*"] },
+    ]
   })
 }
 
@@ -146,6 +157,7 @@ resource "aws_bedrockagentcore_gateway" "gw" {
     arn  = aws_bedrockagentcore_policy_engine.pe.policy_engine_arn
     mode = var.policy_mode
   }
+  depends_on = [aws_iam_role_policy.gateway] # the role must be able to reach the engine before it is attached
 }
 
 resource "aws_bedrockagentcore_gateway_target" "tools" {
