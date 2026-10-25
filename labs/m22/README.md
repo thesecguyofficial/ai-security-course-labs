@@ -10,7 +10,8 @@ and file sharing).
 
 You score two designs with **AgentDojo**, the prompt-injection benchmark from ETH Zurich's SPY Lab (MIT licence,
 NeurIPS 2024 Datasets and Benchmarks Track). The TSG inbox is written as an AgentDojo task suite, so AgentDojo plants
-its own attack text and its own task checkers decide the score:
+its own attack text and its own task checkers decide the score. The models are stand-ins written in plain Python (see
+**Safety** below), so these numbers measure the design, not a real model:
 
 | | single model (before) | dual LLM + taint-checked sinks (after) |
 |---|---|---|
