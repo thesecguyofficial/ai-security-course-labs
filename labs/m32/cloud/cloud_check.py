@@ -5,7 +5,7 @@
     python3 cloud/cloud_check.py --stream aws cloud/aws/deployment.json
     python3 cloud/cloud_check.py --json results/cloud.json
 
-Pass mark (self-check C1): no HIGH findings. Rubric merit: no MEDIUM findings either. Each rule names the lesson
+Pass mark (self-check C1): no HIGH findings. Aim for no MEDIUM findings either. Each rule names the lesson
 that teaches the real setting. A key you delete counts as the insecure default: removing a setting never makes a
 finding go away.
 
@@ -119,7 +119,7 @@ def check(stream: str, path: pathlib.Path) -> dict:
     findings = [{"id": i, "severity": s, "lesson": lsn, "message": m} for i, s, lsn, m in STREAMS[stream](d)]
     count = {s: sum(1 for f in findings if f["severity"] == s) for s in ("HIGH", "MEDIUM", "LOW")}
     return {"stream": stream, "file": str(path), "findings": findings, "count": count, "passed": count["HIGH"] == 0,
-            "merit": count["HIGH"] == 0 and count["MEDIUM"] == 0}
+            "clean": count["HIGH"] == 0 and count["MEDIUM"] == 0}
 
 
 def stream_from_repo(repo: pathlib.Path) -> str:
@@ -147,7 +147,7 @@ def main(argv=None) -> int:
         print(f"[{f['severity']:<6}] {f['id']} ({f['lesson']}) {f['message']}")
     c = r["count"]
     print(f"\n{stream}: {c['HIGH']} HIGH, {c['MEDIUM']} MEDIUM, {c['LOW']} LOW -> "
-          f"{'PASS' if r['passed'] else 'FAIL'} (pass = no HIGH; merit = no HIGH and no MEDIUM)")
+          f"{'PASS' if r['passed'] else 'FAIL'} (pass = no HIGH; aim for no MEDIUM too)")
     if a.json:
         pathlib.Path(a.json).parent.mkdir(parents=True, exist_ok=True)
         pathlib.Path(a.json).write_text(json.dumps(r, indent=2) + "\n", encoding="utf-8")

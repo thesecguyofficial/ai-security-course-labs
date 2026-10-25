@@ -59,4 +59,4 @@ ATLAS release used: <2026.09>
 ## 4. Did we do a good enough job?
 
 <What the model predicted before you ran the attacks, what the attacks showed you missed, and the residual risk you
-accept. For Distinction: at least one threat beyond the six known findings, tested in Part 2.>
+accept. Strong work: at least one threat beyond the six known findings, tested in Part 2.>
