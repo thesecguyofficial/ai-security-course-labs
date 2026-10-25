@@ -1,0 +1,24 @@
+# OPTIONAL guided build (GUIDED-BUILD.md). eksctl ClusterConfig for YOUR sandbox account. Costs money while it runs.
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: tsg-m26
+  region: us-east-1
+addons:
+  - name: vpc-cni
+    configurationValues: '{"enableNetworkPolicy": "true"}'   # NetworkPolicy enforcement (VPC CNI 1.21+ for all policy types)
+  - name: eks-pod-identity-agent
+managedNodeGroups:
+  - name: gpu
+    instanceType: g4dn.xlarge          # 1 NVIDIA T4. Needs "Running On-Demand G and VT instances" quota of 4 vCPUs or more
+    amiFamily: Bottlerocket            # the Bottlerocket NVIDIA variant ships the device plugin and the toolkit
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 1
+    privateNetworking: true
+    disableIMDSv1: true
+    disablePodIMDS: true
+    taints:
+      - key: nvidia.com/gpu
+        value: "true"
+        effect: NoSchedule

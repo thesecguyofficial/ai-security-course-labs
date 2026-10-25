@@ -1,0 +1,11 @@
+{
+  "_about": "The TSG gateway in front of the engines (first draft). Read by scan.py, gateway.py and practice_server.py.",
+  "require_auth": false,
+  "allow_paths": ["/*"],
+  "cache_scope": "shared",
+  "expose_timing": true,
+  "tenants": {
+    "acme": {"api_key": "lab-key-acme"},
+    "globex": {"api_key": "lab-key-globex"}
+  }
+}
