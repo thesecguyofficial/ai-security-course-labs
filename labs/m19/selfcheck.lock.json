@@ -1,0 +1,26 @@
+{
+ "files": {
+  "helpdesk/__init__.py": "94aa2172821aa6a8da06500ed3355b3a83865fafdcd3fe50c2dd86fcc856d524",
+  "helpdesk/app.py": "c291ace0135d56a81319c102aceb009583fba71f7fc3ce3b11eb4535925773c1",
+  "helpdesk/common.py": "8260809ce6314f082489fee9537859d4fb5c8890603dc05f831cbc944daa7380",
+  "helpdesk/core.py": "32d594732e70fca23e42e6801fe6fef2acf67018c69ab961a9a890f4b3e31dc8",
+  "helpdesk/logs.py": "a9a553affead931fcaba5f98059f51c1291e1aa40b6466582711a99de665beb2",
+  "helpdesk/mcp_client.py": "9b670432f4adb97468976680768dea78b9a38646d8765dd53271910fbe547288",
+  "helpdesk/mcp_server.py": "9651d7b11e40720e7b0f085ec7e32825c951fe71f55fff180fea0ff816117720",
+  "helpdesk/model.py": "ccb9e20b94086eb6803f4c7ddd351b8706b3d1839b8a21cf5f0ff9a9599dba1a",
+  "helpdesk/rag.py": "b3644bf2948f2f154455e283872ef3aa15922386bcd97dbfa982c80f74aabd7c",
+  "helpdesk/tools.py": "87370a803e82cf6a3ebb446392d7d8fd8597f70787199b8df9653b087795e246",
+  "data/users.json": "4abcd18aa1cc7572a07dccf2477ad82f290f87185e12c9942fe2791b0f37346d",
+  "data/customers.json": "8d79a65230d9b54f8ed47eb0f6422f3260c73abeeb76447281e3a47656394467",
+  "data/orders.json": "9d3232c51af696099de992fe5ce435b4c9e11aabcb4c663e62d1ab3b6535a101",
+  "tests/util.py": "c3c9b89b49e44639ce4be772fc75645f74ee1bbff5c978eb4c119ab924c4e858",
+  "tests/test_functional.py": "5d46c5560af163ff340c1daa87fff209ff7eb098cb1c8f2161aa0ab06d40d87c",
+  "tests/test_security.py": "fedf42769f0a39c2d70316a35db5088523de658fb3b7f76c4d9042e1b9b66699",
+  "evals/cases.json": "d576ebd8b618b1fcbb0a0d1507314a00e21c933c0d9250b0e23700db31f5aa79",
+  "evals/run_evals.py": "ede114b23ec6ca53d46b6101e43c15c24030ba1cec644896a767d976f54e5cfa",
+  "detections/attack_sim.py": "669857a1df2c111732a861c0583953b6a0150bd3dc77c39f71d5ccb2fec6031e",
+  "detections/detect.py": "ae9ebb98ef0dc00a43ad36a19705e98d59f37a30a22f32006665bf2bd63c9ded",
+  "detections/score.py": "90e4c7bb0151e103120826cda6a484d2570d6ca1de4831e2ffd459000b6110f4",
+  "cloud/cloud_check.py": "c4e39dc0f493784ce39c7391fe8915813143bdf58d9e64c034d3c42812d3f16e"
+ }
+}

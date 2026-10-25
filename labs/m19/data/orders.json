@@ -1,0 +1,9 @@
+{
+  "_note": "Fake orders. The helpdesk's lookup_order tool reads this file.",
+  "orders": {
+    "5001": {"customer": "alice@acme.example",   "item": "Router X2",       "status": "shipped",   "total": "USD 129"},
+    "5002": {"customer": "bob@globex.example",   "item": "Switch 48-port",  "status": "delayed",   "total": "USD 2,480", "address": "12 Fake Street, Springfield"},
+    "5003": {"customer": "carol@acme.example",   "item": "Support plan",    "status": "active",    "total": "USD 600"},
+    "5004": {"customer": "dana@initech.example", "item": "Licence renewal", "status": "processing", "total": "USD 75"}
+  }
+}

@@ -1,0 +1,36 @@
+name: m19-capstone
+# Lab M19 (capstone): proves the starting point is as the brief says (normal use works, every known finding is
+# exploitable, the eval gate and the self-check fail where they should) and that the checking tools work.
+# Learners' own repos run template/.github/workflows/capstone.yml instead (export.py puts it in place).
+# Read-only token, checkout keeps no credentials, actions pinned to full commit SHAs, no secrets, all on 127.0.0.1.
+
+on:
+  push:
+    paths: ["labs/m19/**", ".github/workflows/m19-capstone.yml"]
+  pull_request:
+    paths: ["labs/m19/**", ".github/workflows/m19-capstone.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: m19-capstone-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lab:
+    name: capstone lab tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: labs/m19
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Lab tests (starting point, eval gate, detections, cloud check, self-check, export, safety)
+        run: python3 run_tests.py
+

@@ -1,0 +1,79 @@
+{
+  "_about": "The TSG Helpdesk on AWS, as the platform team's first draft describes it. This is the course's own summary format (one file instead of a dozen consoles), not an AWS API body: each key names the real setting and the lesson that teaches it. Harden it, then run: make cloud (python3 cloud/cloud_check.py). Keys starting with _ are notes.",
+  "stream": "aws",
+  "region": "us-east-1",
+  "app_role": {
+    "_lesson": "10.3, 11.1: the IAM role the Helpdesk backend runs as",
+    "name": "tsg-helpdesk-app",
+    "statements": [
+      {"effect": "Allow", "actions": ["bedrock:*"], "resources": ["*"]}
+    ],
+    "condition_guardrail_identifier": null,
+    "condition_source_vpce": null
+  },
+  "model_access": {
+    "_lesson": "10.3: which foundation models the account allows (organization policy or SCP allow-list)",
+    "allowed_models": ["*"]
+  },
+  "bedrock_api_keys": [
+    {"_lesson": "10.4", "name": "helpdesk-dev-key", "type": "long-term", "expires_in_days": null}
+  ],
+  "invocation_logging": {
+    "_lesson": "11.4, 16.1: model invocation logging is off until you turn it on",
+    "enabled": false,
+    "destination": null,
+    "kms_key": null
+  },
+  "cloudtrail": {
+    "_lesson": "16.1: Converse and InvokeModel are management events; knowledge base Retrieve and AgentCore runtime calls are data events",
+    "management_events": true,
+    "data_events": []
+  },
+  "guardrail": {
+    "_lesson": "12.1 to 12.3",
+    "attached": false,
+    "prompt_attack_filter": "NONE",
+    "pii_entities": [],
+    "enforced_with_iam_condition": false
+  },
+  "knowledge_base": {
+    "_lesson": "13.1: per-user or per-tenant metadata filters on Retrieve, set by your backend",
+    "retrieve_filter": null,
+    "documents_carry_tenant_metadata": false
+  },
+  "agent": {
+    "_lesson": "13.2: Bedrock Agents action groups",
+    "action_groups": [
+      {"function": "lookup_order", "requireConfirmation": "DISABLED"},
+      {"function": "send_email", "requireConfirmation": "DISABLED"}
+    ]
+  },
+  "agentcore_gateway": {
+    "_lesson": "14.3 to 14.5: the gateway in front of the crm MCP tools",
+    "authorizer_type": "NONE",
+    "allowed_clients": [],
+    "policy_engine_mode": "LOG_ONLY",
+    "mcp_targets": [{"name": "crm", "tool_review": "none"}]
+  },
+  "secrets": {
+    "_lesson": "3.7, 11.3: what is in the prompt and in plain environment variables",
+    "system_prompt_contains_secret": true,
+    "plaintext_env_secrets": ["CRM_TOKEN"]
+  },
+  "detection": {
+    "_lesson": "16.2: GuardDuty AI Protection finding types all default to Low",
+    "guardduty_enabled": false,
+    "guardduty_ai_protection": false,
+    "alert_routing": "severity>=4"
+  },
+  "budget": {
+    "_lesson": "0.7, 10.5: an AWS Budgets alert on the learning account",
+    "monthly_limit_usd": null,
+    "alert_email_set": false
+  },
+  "network": {
+    "_lesson": "11.2: an interface VPC endpoint for bedrock-runtime, with an endpoint policy",
+    "bedrock_runtime_vpc_endpoint": false,
+    "endpoint_policy_restricted": false
+  }
+}
