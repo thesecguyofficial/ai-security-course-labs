@@ -1,0 +1,11 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {"Sid": "ReadRaw", "Effect": "Allow", "Action": "s3:GetObject",
+     "Resource": "arn:aws:s3:::RAW_BUCKET/AWSLogs/ACCOUNT_ID/BedrockModelInvocationLogs/*"},
+    {"Sid": "WriteRedacted", "Effect": "Allow", "Action": "s3:PutObject",
+     "Resource": "arn:aws:s3:::REDACTED_BUCKET/*"},
+    {"Sid": "OwnLogs", "Effect": "Allow", "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+     "Resource": "arn:aws:logs:us-east-1:ACCOUNT_ID:log-group:/aws/lambda/tsg-log-redactor:*"}
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "Rules": [
+    {
+      "ID": "raw-invocation-logs-30-days",
+      "Filter": {"Prefix": ""},
+      "Status": "Enabled",
+      "Expiration": {"Days": 30},
+      "NoncurrentVersionExpiration": {"NoncurrentDays": 1}
+    }
+  ]
+}

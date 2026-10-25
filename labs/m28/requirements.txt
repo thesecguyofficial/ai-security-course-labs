@@ -1,0 +1,4 @@
+# M28 lab. One package: cryptography (AES-256-GCM for the local KMS and S3 stand-ins), Apache-2.0 OR BSD-3-Clause:
+# https://pypi.org/project/cryptography/  Pinned: 50.0.2 (uploaded 30 Sep 2026), wheels for Python 3.9+ on macOS,
+# Windows and Linux. Everything else is the Python standard library.
+cryptography==50.0.2
