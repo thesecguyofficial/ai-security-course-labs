@@ -1,0 +1,194 @@
+{
+  "_about": "FIRST DRAFT. It works: logs arrive, a redacted copy appears, Macie runs and the dashboard is green. Read each choice and ask who it lets read what.",
+  "logging": {
+    "_about": "put-model-invocation-logging-configuration. Every modality ticked 'to be safe'.",
+    "s3Config": {
+      "bucketName": "tsg-invocation-logs-raw",
+      "keyPrefix": ""
+    },
+    "textDataDeliveryEnabled": true,
+    "imageDataDeliveryEnabled": true,
+    "embeddingDataDeliveryEnabled": true,
+    "videoDataDeliveryEnabled": true
+  },
+  "kms": {
+    "alias/tsg-invocation-logs": {
+      "_about": "ONE key for raw and redacted logs. The default 'Enable IAM User Permissions' statement lets any IAM policy in the account grant Decrypt.",
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "Enable IAM User Permissions",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::123456789012:root"
+            },
+            "Action": "kms:*",
+            "Resource": "*"
+          },
+          {
+            "Sid": "AllowBedrockToWriteLogs",
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "bedrock.amazonaws.com"
+            },
+            "Action": "kms:GenerateDataKey",
+            "Resource": "*",
+            "Condition": {
+              "StringEquals": {
+                "aws:SourceAccount": "123456789012"
+              }
+            }
+          }
+        ]
+      },
+      "iam": {
+        "arn:aws:iam::123456789012:role/tsg-analytics": [
+          {
+            "Action": [
+              "kms:Decrypt"
+            ],
+            "Resource": "*"
+          }
+        ],
+        "arn:aws:iam::123456789012:role/tsg-log-redactor": [
+          {
+            "Action": [
+              "kms:Decrypt",
+              "kms:GenerateDataKey"
+            ],
+            "Resource": "*"
+          }
+        ],
+        "arn:aws:iam::123456789012:role/tsg-incident-break-glass": [
+          {
+            "Action": [
+              "kms:Decrypt"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    }
+  },
+  "buckets": [
+    {
+      "name": "tsg-invocation-logs-raw",
+      "kms_key": "alias/tsg-invocation-logs",
+      "versioning": true,
+      "_about": "Analysts can read raw 'for debugging'. Lifecycle expires after 30 days, but the bucket is versioned and nothing removes noncurrent versions.",
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AmazonBedrockLogsWrite",
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [
+                "bedrock.amazonaws.com"
+              ]
+            },
+            "Action": [
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::tsg-invocation-logs-raw/AWSLogs/123456789012/BedrockModelInvocationLogs/*"
+          },
+          {
+            "Sid": "Readers",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-log-redactor",
+                "arn:aws:iam::123456789012:role/tsg-analytics",
+                "arn:aws:iam::123456789012:role/tsg-incident-break-glass",
+                "arn:aws:iam::123456789012:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"
+              ]
+            },
+            "Action": [
+              "s3:GetObject"
+            ],
+            "Resource": "arn:aws:s3:::tsg-invocation-logs-raw/*"
+          }
+        ]
+      },
+      "lifecycle": [
+        {
+          "ID": "expire-after-30-days",
+          "Prefix": "",
+          "Status": "Enabled",
+          "Expiration": {
+            "Days": 30
+          }
+        }
+      ]
+    },
+    {
+      "name": "tsg-invocation-logs-redacted",
+      "kms_key": "alias/tsg-invocation-logs",
+      "versioning": false,
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "RedactorWrites",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-log-redactor"
+              ]
+            },
+            "Action": [
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::tsg-invocation-logs-redacted/*"
+          },
+          {
+            "Sid": "Readers",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-analytics",
+                "arn:aws:iam::123456789012:role/tsg-incident-break-glass",
+                "arn:aws:iam::123456789012:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"
+              ]
+            },
+            "Action": [
+              "s3:GetObject"
+            ],
+            "Resource": "arn:aws:s3:::tsg-invocation-logs-redacted/*"
+          }
+        ]
+      },
+      "lifecycle": []
+    }
+  ],
+  "redactor": {
+    "_about": "Looks only at the user's text in the request. Two hand-written patterns. Big bodies copied across as they are. Vectors kept.",
+    "fields": "input_only",
+    "use_managed": false,
+    "use_custom_ids": false,
+    "crm_names": false,
+    "strip_vectors": false,
+    "large_data": "copy",
+    "mode": "label"
+  },
+  "macie_job": {
+    "_about": "Managed identifiers only, and big objects under data/ excluded 'to save cost'.",
+    "jobType": "ONE_TIME",
+    "buckets": [
+      "tsg-invocation-logs-raw",
+      "tsg-invocation-logs-redacted"
+    ],
+    "managedDataIdentifierSelector": "ALL",
+    "customDataIdentifiers": [],
+    "excludes": [
+      {
+        "comparator": "CONTAINS",
+        "key": "OBJECT_KEY",
+        "values": [
+          "/data/"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,375 @@
+{
+  "_about": "HARDENED. Same Bedrock, same calls, same buckets. Only these choices changed.",
+  "logging": {
+    "_about": "Text only. No embedding vectors in the logs.",
+    "s3Config": {
+      "bucketName": "tsg-invocation-logs-raw",
+      "keyPrefix": ""
+    },
+    "textDataDeliveryEnabled": true,
+    "imageDataDeliveryEnabled": false,
+    "embeddingDataDeliveryEnabled": false,
+    "videoDataDeliveryEnabled": false
+  },
+  "kms": {
+    "alias/tsg-logs-raw": {
+      "_about": "Raw prompts and answers. The account (IAM) may ADMINISTER the key but not use it: kms:Decrypt is granted only to named roles, so an IAM policy that says kms:Decrypt on * opens nothing here.",
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "KeyAdministrationOnly",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::123456789012:root"
+            },
+            "Action": [
+              "kms:Create*",
+              "kms:Describe*",
+              "kms:Enable*",
+              "kms:List*",
+              "kms:Put*",
+              "kms:Update*",
+              "kms:Revoke*",
+              "kms:Disable*",
+              "kms:Get*",
+              "kms:Delete*",
+              "kms:TagResource",
+              "kms:UntagResource",
+              "kms:ScheduleKeyDeletion",
+              "kms:CancelKeyDeletion"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "AllowBedrockToWriteLogs",
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "bedrock.amazonaws.com"
+            },
+            "Action": "kms:GenerateDataKey",
+            "Resource": "*",
+            "Condition": {
+              "StringEquals": {
+                "aws:SourceAccount": "123456789012"
+              }
+            }
+          },
+          {
+            "Sid": "RedactorReadsRaw",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-log-redactor"
+              ]
+            },
+            "Action": [
+              "kms:Decrypt"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "Allow the Macie service-linked role to use the key",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::123456789012:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"
+            },
+            "Action": [
+              "kms:Decrypt"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "BreakGlassForIncidents",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-incident-break-glass"
+              ]
+            },
+            "Action": [
+              "kms:Decrypt"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "ErasureRequests",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-privacy-erasure"
+              ]
+            },
+            "Action": [
+              "kms:Decrypt"
+            ],
+            "Resource": "*"
+          }
+        ]
+      },
+      "iam": {
+        "arn:aws:iam::123456789012:role/tsg-analytics": [
+          {
+            "Action": [
+              "kms:Decrypt"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "alias/tsg-logs-redacted": {
+      "_about": "The redacted copy. Analysts may read this one.",
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "KeyAdministrationOnly",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::123456789012:root"
+            },
+            "Action": [
+              "kms:Create*",
+              "kms:Describe*",
+              "kms:Enable*",
+              "kms:List*",
+              "kms:Put*",
+              "kms:Update*",
+              "kms:Revoke*",
+              "kms:Disable*",
+              "kms:Get*",
+              "kms:Delete*",
+              "kms:TagResource",
+              "kms:UntagResource",
+              "kms:ScheduleKeyDeletion",
+              "kms:CancelKeyDeletion"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "RedactorWrites",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-log-redactor"
+              ]
+            },
+            "Action": [
+              "kms:GenerateDataKey",
+              "kms:Decrypt"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "Readers",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-analytics",
+                "arn:aws:iam::123456789012:role/tsg-incident-break-glass"
+              ]
+            },
+            "Action": [
+              "kms:Decrypt"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "Allow the Macie service-linked role to use the key",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::123456789012:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"
+            },
+            "Action": [
+              "kms:Decrypt"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "ErasureRequests",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-privacy-erasure"
+              ]
+            },
+            "Action": [
+              "kms:Decrypt"
+            ],
+            "Resource": "*"
+          }
+        ]
+      },
+      "iam": {}
+    }
+  },
+  "buckets": [
+    {
+      "name": "tsg-invocation-logs-raw",
+      "kms_key": "alias/tsg-logs-raw",
+      "versioning": true,
+      "_about": "Readers: the redactor, Macie and break-glass. Analysts explicitly denied. Expire after 30 days AND remove the old versions a day later.",
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AmazonBedrockLogsWrite",
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [
+                "bedrock.amazonaws.com"
+              ]
+            },
+            "Action": [
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::tsg-invocation-logs-raw/AWSLogs/123456789012/BedrockModelInvocationLogs/*"
+          },
+          {
+            "Sid": "Readers",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-log-redactor",
+                "arn:aws:iam::123456789012:role/tsg-incident-break-glass",
+                "arn:aws:iam::123456789012:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"
+              ]
+            },
+            "Action": [
+              "s3:GetObject"
+            ],
+            "Resource": "arn:aws:s3:::tsg-invocation-logs-raw/*"
+          },
+          {
+            "Sid": "NoAnalystsOnRaw",
+            "Effect": "Deny",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-analytics"
+              ]
+            },
+            "Action": [
+              "s3:GetObject"
+            ],
+            "Resource": "arn:aws:s3:::tsg-invocation-logs-raw/*"
+          },
+          {
+            "Sid": "ErasureRequests",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-privacy-erasure"
+              ]
+            },
+            "Action": [
+              "s3:GetObject",
+              "s3:DeleteObject"
+            ],
+            "Resource": "arn:aws:s3:::tsg-invocation-logs-raw/*"
+          }
+        ]
+      },
+      "lifecycle": [
+        {
+          "ID": "raw-30-days",
+          "Prefix": "",
+          "Status": "Enabled",
+          "Expiration": {
+            "Days": 30
+          },
+          "NoncurrentVersionExpiration": {
+            "NoncurrentDays": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "tsg-invocation-logs-redacted",
+      "kms_key": "alias/tsg-logs-redacted",
+      "versioning": false,
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "RedactorWrites",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-log-redactor"
+              ]
+            },
+            "Action": [
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::tsg-invocation-logs-redacted/*"
+          },
+          {
+            "Sid": "Readers",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-analytics",
+                "arn:aws:iam::123456789012:role/tsg-incident-break-glass",
+                "arn:aws:iam::123456789012:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"
+              ]
+            },
+            "Action": [
+              "s3:GetObject"
+            ],
+            "Resource": "arn:aws:s3:::tsg-invocation-logs-redacted/*"
+          },
+          {
+            "Sid": "ErasureRequests",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:role/tsg-privacy-erasure"
+              ]
+            },
+            "Action": [
+              "s3:GetObject",
+              "s3:DeleteObject"
+            ],
+            "Resource": "arn:aws:s3:::tsg-invocation-logs-redacted/*"
+          }
+        ]
+      },
+      "lifecycle": [
+        {
+          "ID": "redacted-365-days",
+          "Prefix": "",
+          "Status": "Enabled",
+          "Expiration": {
+            "Days": 365
+          }
+        }
+      ]
+    }
+  ],
+  "redactor": {
+    "_about": "Every string in the record, the managed detectors plus the shared custom identifiers plus our own customer names; vectors removed; big bodies redacted too; keyed tokens instead of labels.",
+    "fields": "all",
+    "use_managed": true,
+    "use_custom_ids": true,
+    "crm_names": true,
+    "strip_vectors": true,
+    "large_data": "redact",
+    "mode": "token"
+  },
+  "macie_job": {
+    "_about": "Same custom identifiers as the redactor (one definition, two uses), every object in scope.",
+    "jobType": "ONE_TIME",
+    "buckets": [
+      "tsg-invocation-logs-raw",
+      "tsg-invocation-logs-redacted"
+    ],
+    "managedDataIdentifierSelector": "ALL",
+    "customDataIdentifiers": [
+      "EMAIL_ADDRESS",
+      "TSG_CUSTOMER_ID",
+      "AWS_ACCESS_KEY_ID"
+    ],
+    "excludes": []
+  }
+}

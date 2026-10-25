@@ -1,0 +1,39 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "KeyAdministrationOnly",
+      "Effect": "Allow",
+      "Principal": {"AWS": "arn:aws:iam::ACCOUNT_ID:root"},
+      "Action": ["kms:Create*", "kms:Describe*", "kms:Enable*", "kms:List*", "kms:Put*", "kms:Update*", "kms:Revoke*",
+                 "kms:Disable*", "kms:Get*", "kms:Delete*", "kms:TagResource", "kms:UntagResource",
+                 "kms:ScheduleKeyDeletion", "kms:CancelKeyDeletion"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowBedrockToWriteLogs",
+      "Effect": "Allow",
+      "Principal": {"Service": "bedrock.amazonaws.com"},
+      "Action": "kms:GenerateDataKey",
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {"aws:SourceAccount": "ACCOUNT_ID"},
+        "ArnLike": {"aws:SourceArn": "arn:aws:bedrock:us-east-1:ACCOUNT_ID:*"}
+      }
+    },
+    {
+      "Sid": "RedactorReadsRaw",
+      "Effect": "Allow",
+      "Principal": {"AWS": "arn:aws:iam::ACCOUNT_ID:role/tsg-log-redactor"},
+      "Action": "kms:Decrypt",
+      "Resource": "*"
+    },
+    {
+      "Sid": "Allow the Macie service-linked role to use the key",
+      "Effect": "Allow",
+      "Principal": {"AWS": "arn:aws:iam::ACCOUNT_ID:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"},
+      "Action": "kms:Decrypt",
+      "Resource": "*"
+    }
+  ]
+}

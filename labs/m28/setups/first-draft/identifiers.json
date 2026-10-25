@@ -1,0 +1,16 @@
+{
+  "_about": "First draft: the redactor's two hand-written patterns. Macie gets no custom data identifiers.",
+  "custom_data_identifiers": [],
+  "redactor_patterns": [
+    {
+      "name": "EMAIL",
+      "regex": "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}",
+      "caseSensitive": true
+    },
+    {
+      "name": "CARD",
+      "regex": "\\b\\d{16}\\b",
+      "caseSensitive": true
+    }
+  ]
+}
