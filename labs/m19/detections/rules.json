@@ -1,0 +1,13 @@
+{
+  "_about": "YOUR detection rules (format: detect.py). The example below catches incident S1 but also fires on honest 'email me a copy' requests and on staff writing to customers. Tune it, then add rules until all five incidents fire on seeds 1, 2 and 3 with at most 2 false alerts a day (make detect-check).",
+  "rules": [
+    {
+      "id": "R01",
+      "title": "Email to an address outside the helpdesk",
+      "severity": "medium",
+      "atlas": ["AML.T0086"],
+      "type": "match",
+      "where": {"event": "tool_call", "tool": "send_email", "recipient_internal": false}
+    }
+  ]
+}

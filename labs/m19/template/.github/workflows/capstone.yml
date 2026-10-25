@@ -1,0 +1,62 @@
+name: capstone-checks
+# The TSG Helpdesk capstone's CI (lesson 19.3). Runs on every push and pull request in YOUR capstone repo:
+# unit tests, the security eval gate, proof that the gate fails on an injection regression, detections on three
+# simulated days, then the full self-check. Each step runs even if an earlier one failed, so one run shows
+# everything; the job fails if any step failed.
+#
+# Hardening (lesson 17.3): pull_request, never pull_request_target; a read-only token that checkout does not keep
+# on disk; every action pinned to a full commit SHA (the tag is in the comment); no secrets at all, because the
+# Helpdesk runs on 127.0.0.1 inside the runner with a stand-in model.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: capstone-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: capstone self-check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Python (3.11 or newer; this runner image ships 3.12)
+        run: python3 --version
+
+      - name: Unit tests (normal use and the six findings)
+        if: ${{ !cancelled() }}
+        run: python3 -m unittest discover -s tests -t . -v
+
+      - name: Security eval gate (every case must pass)
+        if: ${{ !cancelled() }}
+        run: python3 evals/run_evals.py --junit results/evals.junit.xml --out results/evals.json
+
+      - name: Negative control (the gate must FAIL when the injection controls are removed)
+        if: ${{ !cancelled() }}
+        run: python3 evals/run_evals.py --regression injection --expect-fail --core-only
+
+      - name: Detections on three simulated days
+        if: ${{ !cancelled() }}
+        run: python3 detections/score.py --json results/detections.json
+
+      - name: Full self-check (every objective check in RUBRIC.md)
+        if: ${{ !cancelled() }}
+        run: python3 selfcheck.py --ci
+
+      - name: Keep the evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: capstone-results
+          path: results/
+          retention-days: 30
