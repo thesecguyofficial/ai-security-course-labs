@@ -14,6 +14,6 @@ for aud in "https://ai.azure.com" "https://cognitiveservices.azure.com"; do
 done
 code=$(curl -s -o /tmp/probe.json -w "%{http_code}" "https://$NAME.openai.azure.com/openai/v1/responses" \
   -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-  -d "{\"model\":\"$DEP\",\"input\":\"Reply with OK\",\"max_output_tokens\":16}")
+  -d "{\"model\":\"$DEP\",\"input\":\"Reply with OK\",\"max_output_tokens\":1000}")
 echo "POST /openai/v1/responses from inside the VNet -> HTTP $code (expect 200)"
 head -c 300 /tmp/probe.json; echo

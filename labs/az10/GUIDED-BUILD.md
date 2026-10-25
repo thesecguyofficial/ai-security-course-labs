@@ -71,9 +71,13 @@ Labels quoted from Microsoft Learn where it quotes them; "(label may differ slig
 1. **Foundry resource.** Azure portal, search for **Foundry** and select **Create a resource** (Microsoft's network
    isolation page uses these words). **Basics**: your subscription, resource group `rg-<name>`, region, name
    `<name>`. Leave the **Networking** tab as it is. **Review + create**, then **Create**.
-2. **Model deployment.** Open the resource in the Foundry portal (`ai.azure.com`) and deploy `gpt-4.1-mini` with
-   deployment name **`chat`**, deployment type **Global Standard**, the smallest capacity offered (labels may differ
-   slightly). Microsoft's own `00-basic` sample uses Global Standard, which is why so many estates start here.
+2. **Model deployment.** Open the resource in the Foundry portal (`ai.azure.com`) and deploy `gpt-5-mini` (version
+   `2025-08-07`) with deployment name **`chat`**, deployment type **Global Standard**, the smallest capacity offered
+   (labels may differ slightly). Why not `gpt-4.1-mini`? Microsoft lists it as Deprecated, and a Deprecated model is
+   "No longer available to new customers", judged per subscription, so a fresh lab subscription can't deploy it
+   ([model retirements](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirements)).
+   `gpt-5-mini` 2025-08-07 is GA and offered as Global Standard and Data Zone Standard in `swedencentral`
+   ([region availability](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability)). Microsoft's own `00-basic` sample uses Global Standard, which is why so many estates start here.
 3. **App identity.** Search for **Managed Identities**, create one named `id-az10-app` in `rg-<name>` (label may differ
    slightly).
 4. **The bad role.** On the Foundry resource: **Access control (IAM)**, **Add role assignment**, **Contributor**,
@@ -88,7 +92,7 @@ az cognitiveservices account create -n $AZ10_NAME -g $RG -l $AZ10_REGION --kind 
 export FID=$(az cognitiveservices account show -n $AZ10_NAME -g $RG --query id -o tsv)
 export EP=https://$AZ10_NAME.openai.azure.com
 az cognitiveservices account deployment create -g $RG -n $AZ10_NAME --deployment-name chat \
-  --model-name gpt-4.1-mini --model-version 2025-04-14 --model-format OpenAI \
+  --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI \
   --sku-name GlobalStandard --sku-capacity 1
 az identity create -g $RG -n id-az10-app -o none
 APP_PID=$(az identity show -g $RG -n id-az10-app --query principalId -o tsv)
@@ -258,11 +262,12 @@ Lesson 10.2: pick the type on purpose. If your standard says EU data zone (Conto
 ```bash
 az cognitiveservices account deployment delete -g $RG -n $AZ10_NAME --deployment-name chat
 az cognitiveservices account deployment create -g $RG -n $AZ10_NAME --deployment-name chat \
-  --model-name gpt-4.1-mini --model-version 2025-04-14 --model-format OpenAI \
+  --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI \
   --sku-name DataZoneStandard --sku-capacity 1
 ```
 
-If your region doesn't offer this model as `DataZoneStandard`, use `Standard`, or keep Global and write down why.
+If your region doesn't offer this model as `DataZoneStandard`, keep Global and write down why, or pick a GA model your
+region offers as `DataZoneStandard` or `Standard` (Microsoft's table has no `Standard` row for `gpt-5-mini`).
 
 ### 4. Assign the two guardrail policies (resource group scope, for this sandbox)
 
@@ -275,7 +280,7 @@ az policy assignment create --name az10-deny-key-access --scope $SCOPE \
 ```
 
 Open `azure-twin/approved-models.params.json` first: effect `Deny`, **empty** `allowedPublishers`, and one asset ID
-ending in `/` (every version of `gpt-4.1-mini`, nothing else). The second is "Azure AI Services resources should have
+ending in `/` (every version of `gpt-5-mini`, nothing else). The second is "Azure AI Services resources should have
 key access disabled (disable local authentication)" on `Deny`. Portal: **Policy**, **Assignments**, **Assign Policy**,
 pick the scope and the definition, set the parameters on the **Parameters** tab, **Review + create**, **Create**
 (Microsoft's assign-policy quickstart). In real life you assign both at the subscription or management group.
@@ -305,8 +310,14 @@ Get a token for yourself first (the scope Microsoft's keyless guide uses):
 ```bash
 TOKEN=$(az account get-access-token --resource https://ai.azure.com --query accessToken -o tsv)
 ask() { curl -s -w "\nHTTP %{http_code}\n" "$EP/openai/v1/responses" -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" -d '{"model":"chat","input":"Reply with OK","max_output_tokens":16}'; }
+  -H "Content-Type: application/json" -d '{"model":"chat","input":"Reply with OK","max_output_tokens":1000}'; }
 ```
+
+Why 1000 and not 16? `gpt-5-mini` is a reasoning model, and Microsoft: "To cap the total the model generates, set
+`max_output_tokens` with the Responses API or `max_completion_tokens` with the Chat Completions API. Both limits cover
+reasoning tokens, visible output tokens, and formatting tokens." A tiny cap can end the answer during reasoning, with
+`"status": "incomplete"` and no text. Reasoning models also refuse `temperature`, `top_p` and `max_tokens`
+([reasoning models](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/reasoning)).
 
 ### T1 · The subscription Owner can't call the model
 
@@ -342,7 +353,7 @@ inner fields of `output` and `usage` shortened):
 
 ```text
 {"id": "resp_67cb32528d6881909eb2859a55e18a85", "object": "response", "created_at": 1792656000,
- "status": "completed", "model": "gpt-4.1-mini", "output": [ ... ], "output_text": "OK", "usage": { ... }}
+ "status": "completed", "model": "gpt-5-mini", "output": [ ... ], "output_text": "OK", "usage": { ... }}
 HTTP 200
 ```
 
@@ -381,10 +392,12 @@ At least 15 minutes after step 4:
 
 ```bash
 az cognitiveservices account deployment create -g $RG -n $AZ10_NAME --deployment-name not-approved \
-  --model-name gpt-4.1-nano --model-version 2025-04-14 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1
+  --model-name gpt-5-nano --model-version 2025-08-07 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1
 ```
 
-If `gpt-4.1-nano` isn't offered in your region, pick any other model from
+Pick the unapproved model from the GA list, never a Deprecated one: a fresh subscription can't deploy a Deprecated
+model at all, so its error would look like a refusal without proving anything about your policy. If `gpt-5-nano`
+isn't offered in your region, pick any other GA model from
 `az cognitiveservices account list-models -n $AZ10_NAME -g $RG -o table`. If it **is** created, the assignment
 wasn't active yet: delete it straight away (`az cognitiveservices account deployment delete -g $RG -n $AZ10_NAME
 --deployment-name not-approved`) and try later.
@@ -450,7 +463,7 @@ This is the mistake Microsoft's own example parameters invite (lesson 10.3): add
 ```bash
 cat > /tmp/az10-publisher.json <<'JSON'
 {"effect": {"value": "Deny"}, "allowedPublishers": {"value": ["OpenAI"]},
- "allowedAssetIds": {"value": ["azureml://registries/azure-openai/models/gpt-4.1-mini/"]}}
+ "allowedAssetIds": {"value": ["azureml://registries/azure-openai/models/gpt-5-mini/"]}}
 JSON
 az policy assignment delete --name az10-approved-models --scope $SCOPE
 az policy assignment create --name az10-approved-models --scope $SCOPE \
@@ -493,7 +506,7 @@ assignment back (the two step 4 commands for `az10-approved-models`, after a del
 | Item | Cost |
 |---|---|
 | Foundry resource and project | no hourly charge; "Pay-as-you-go for input and output tokens" |
-| Model tokens: T1 and its repeats, about 20 tokens each | a fraction of a US cent (estimate: check your model's price) |
+| Model tokens: T1 and its repeats, a few hundred tokens each (reasoning tokens count too) | cents at most (estimate: check your model's price) |
 | `GET /openai/models` (G1, T2) | no tokens |
 | Deployments that receive no calls | $0 |
 | Azure Policy | "There are no charges for using Azure Policy on Azure resources" |
@@ -529,8 +542,8 @@ The role assignments you made on the resource go with it. Tomorrow, check: `az g
   evaluation".
 - Whether `az resource update` is accepted for `disableLocalAuth` on every account (Microsoft documents Bicep/ARM and
   PowerShell). If it fails, use the Bicep line in G3 step 5.
-- Whether `gpt-4.1-mini` 2025-04-14 is offered as `DataZoneStandard` in your region, and whether `gpt-4.1-nano` is
-  offered at all (G3 step 3 and T3 say what to do).
+- Whether `gpt-5-mini` 2025-08-07 is offered as `DataZoneStandard` in your region if you left `swedencentral`, and
+  whether `gpt-5-nano` is offered there (G3 step 3 and T3 say what to do).
 - The `model.publisher` value Azure stores for Azure OpenAI models: G5 is the test (lab AZ10 fact-check, caveat C1).
 - Whether `RequestResponse` rows hold prompt text (T5 asks you to look).
 - Model token prices (estimate only).

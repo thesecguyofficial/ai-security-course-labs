@@ -552,10 +552,13 @@ export AZ10_EMAIL=you@example.com         # optional: creates the $5 budget
 
 Notes:
 
-- `policy-test` tries `gpt-4.1-nano` as the unapproved model. If it isn't offered in your region, set
-  `AZ10_BLOCKED_MODEL` and `AZ10_BLOCKED_VERSION` to any other model from
-  `az cognitiveservices account list-models -n $AZ10_NAME -g rg-az10-twin -o table`. The approved one is
-  `gpt-4.1-mini` version `2025-04-14`, the model in Microsoft's `00-basic` sample.
+- `policy-test` tries `gpt-5-nano` version `2025-08-07` as the unapproved model. If it isn't offered in your region,
+  set `AZ10_BLOCKED_MODEL` and `AZ10_BLOCKED_VERSION` to any other GA model from
+  `az cognitiveservices account list-models -n $AZ10_NAME -g rg-az10-twin -o table`. Never pick a Deprecated one: a
+  new subscription can't deploy it at all, so the error proves nothing about the policy. The approved one is
+  `gpt-5-mini` version `2025-08-07` (GA). Earlier versions of this lab used `gpt-4.1-mini`, which Microsoft now lists
+  as Deprecated and "No longer available to new customers"
+  ([model retirements](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirements)).
 - The policy refusal is the deny effect's `403 (Forbidden)`. If the unapproved model is created instead, the
   assignment hadn't taken effect yet: `policy-test` says so, deletes that deployment straight away, and you try again
   later.

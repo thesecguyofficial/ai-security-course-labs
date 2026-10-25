@@ -11,8 +11,8 @@ cd "$(dirname "$0")"
 RG="rg-$AZ13_NAME"
 SEARCH="srch-$AZ13_NAME"
 PROJECT="helpdesk"
-MODEL="${AZ13_MODEL:-gpt-4.1-mini}"
-MODEL_VERSION="${AZ13_MODEL_VERSION:-2025-04-14}"
+MODEL="${AZ13_MODEL:-gpt-5-mini}"   # GA; gpt-4.1-mini is Deprecated (no new customers)
+MODEL_VERSION="${AZ13_MODEL_VERSION:-2025-08-07}"
 PROJ_API="2025-06-01"            # ARM api-version for accounts/projects (stable; defined in azure-rest-api-specs)
 mkdir -p .state
 

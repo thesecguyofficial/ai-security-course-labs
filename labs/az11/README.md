@@ -449,7 +449,7 @@ subscription). The Terraform was checked with `tofu fmt`; it was not planned aga
 for your region (model availability, VM size).
 
 **Cost.** Unlike lab AZ10, this one has hourly charges while it exists: the private endpoint, the VM and its disk,
-plus small amounts for Log Analytics ingestion, Key Vault operations, the DNS zones and a few dozen tokens. We could
+plus small amounts for Log Analytics ingestion, Key Vault operations, the DNS zones and a few hundred tokens. We could
 not load live prices from Microsoft's pricing pages while writing this lab, so `make cost` lists the meters to look
 up for your region in the Azure pricing calculator. Plan a 2-hour session, set a budget alert first (lab AZ10), and run
 `make down` the same day. A free account's spending limit stops services when the credit runs out.
@@ -480,8 +480,10 @@ Notes:
   principal IDs) are missing from a plan; the checker follows the plan's references instead.
 - If apply fails with 403 on the key or on the customer-managed key, Azure RBAC was still propagating ("can take up to
   5 minutes", Microsoft says): run `make up` again.
-- If your region doesn't offer the default model as `DataZoneStandard`, change `model_name`, `model_version` or
-  `deployment_sku` (`Standard`) in `terraform/variables.tf`.
+- The default model is `gpt-5-mini` 2025-08-07 (GA); `gpt-4.1-mini` is Deprecated and a new subscription can't deploy
+  it. If your region doesn't offer the default as `DataZoneStandard`, change `model_name` and `model_version` to a GA
+  model it does offer, or to one it offers as `Standard` and set `deployment_sku` to match, in
+  `terraform/variables.tf`.
 - The probe from inside uses Run Command on the VM and the VM's managed identity: no SSH, no public IP.
 - After `make down`, the Key Vault stays soft-deleted for 7 days (purge protection), and its name can't be reused
   until then. Terraform purges the Foundry resource so its name is free again.

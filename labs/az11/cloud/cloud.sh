@@ -50,7 +50,7 @@ TXT
     az policy assignment create --name az11-diag --scope "$SCOPE" --policy 1b4d1c4e-934c-4703-944c-27c82c06bebb -o none
     rm -f .rule.json
     echo "Assigned. Wait at least 15 minutes, then try: az cognitiveservices account deployment create -g $RG -n $AZ11_NAME \\"
-    echo "  --deployment-name test-global --model-name gpt-4.1-mini --model-version 2025-04-14 --model-format OpenAI \\"
+    echo "  --deployment-name test-global --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI \\"
     echo "  --sku-name GlobalStandard --sku-capacity 1     # expect: refused by policy"
     ;;
   probe-outside)   # from your laptop: public DNS answer, and the network refuses before identity matters
@@ -60,7 +60,7 @@ TXT
     TOKEN="$(az account get-access-token --scope https://ai.azure.com/.default --query accessToken -o tsv)"
     code=$(curl -s -o .probe.json -w "%{http_code}" "https://$AZ11_NAME.openai.azure.com/openai/v1/responses" \
       -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-      -d "{\"model\":\"$(tfout deployment_name)\",\"input\":\"Reply with OK\",\"max_output_tokens\":16}")
+      -d "{\"model\":\"$(tfout deployment_name)\",\"input\":\"Reply with OK\",\"max_output_tokens\":1000}")
     echo "POST /openai/v1/responses from your laptop -> HTTP $code (expect a refusal: public network access is Disabled)"
     head -c 400 .probe.json; echo; rm -f .probe.json
     ;;
