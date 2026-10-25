@@ -1,0 +1,9 @@
+{
+  "_about": "Inventory of the GPU nodes (hardened). Lab data.",
+  "nodes": [
+    {"name": "gpu-node-acme", "ami": "bottlerocket-aws-k8s-nvidia", "nvidia_container_toolkit": "1.17.8",
+     "gpu_sharing": "none", "tenants": ["acme"], "imds_http_tokens": "required", "imds_hop_limit": 1},
+    {"name": "gpu-node-globex", "ami": "bottlerocket-aws-k8s-nvidia", "nvidia_container_toolkit": "1.17.8",
+     "gpu_sharing": "mig", "tenants": ["globex"], "imds_http_tokens": "required", "imds_hop_limit": 1}
+  ]
+}

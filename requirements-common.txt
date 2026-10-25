@@ -10,4 +10,5 @@
 #   labs/m21  make setup   cedarpy (the Cedar policy engine)
 #   labs/m28  make setup   cryptography (AES-GCM for the local KMS and S3 stand-ins)
 #   labs/m25  make setup   model-signing (OpenSSF Model Signing) and its pinned dependencies
+#   labs/m26  make setup   PyYAML (reads compose and Kubernetes files)
 # Add a line here only for a package that several labs need with the same version.

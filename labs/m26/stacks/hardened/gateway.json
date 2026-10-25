@@ -1,0 +1,11 @@
+{
+  "_about": "The TSG gateway in front of the engines (hardened). Read by scan.py, gateway.py and practice_server.py.",
+  "require_auth": true,
+  "allow_paths": ["/v1/chat/completions", "/v1/models", "/health"],
+  "cache_scope": "per_tenant",
+  "expose_timing": false,
+  "tenants": {
+    "acme": {"api_key": "lab-key-acme"},
+    "globex": {"api_key": "lab-key-globex"}
+  }
+}

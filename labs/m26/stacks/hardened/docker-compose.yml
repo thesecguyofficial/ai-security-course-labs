@@ -1,0 +1,39 @@
+# TSG Inference, hardened. Lab file only: the scanner reads it, nothing runs it.
+# Only the gateway is published, and only on loopback here (put your load balancer in front in real life).
+# Engines are pinned to versions outside every advisory in ../../advisories.json (checked 25 Oct 2026).
+services:
+  ollama:
+    image: ollama/ollama:0.40.11
+    environment:
+      OLLAMA_HOST: "0.0.0.0"          # inside the container only: nothing is published
+    expose:
+      - "11434"
+    volumes:
+      - ./models:/models:ro
+
+  vllm:
+    image: vllm/vllm-openai:v0.32.0
+    command: ["--model", "/models/approved-model", "--host", "0.0.0.0", "--port", "8000", "--api-key", "${VLLM_API_KEY}"]
+    # No model-hub token: the model was reviewed and is mounted read-only (models.json).
+    expose:
+      - "8000"
+    volumes:
+      - ./models:/models:ro
+
+  triton:
+    image: nvcr.io/nvidia/tritonserver:25.07-py3
+    expose:
+      - "8001"
+
+  ray-head:
+    image: rayproject/ray:2.59.0
+    command: ["ray", "start", "--head", "--dashboard-host=127.0.0.1", "--block"]
+    environment:
+      RAY_AUTH_MODE: "token"
+    expose:
+      - "8265"
+
+  gateway:
+    image: tsg/inference-gateway:lab
+    ports:
+      - "127.0.0.1:8443:8443"
