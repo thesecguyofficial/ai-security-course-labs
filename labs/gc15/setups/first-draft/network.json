@@ -1,0 +1,10 @@
+{
+  "_about": "The VPC tsg-vpc in example-summariser-prod and its perimeter. perimeter null = no VPC Service Controls perimeter.",
+  "subnets": {
+    "tsg-app": {"region": "us-central1", "privateGoogleAccess": true},
+    "tsg-ds": {"region": "us-central1", "privateGoogleAccess": false}
+  },
+  "cloud_nat": true,
+  "psc_forwarding_rule": null,
+  "perimeter": null
+}

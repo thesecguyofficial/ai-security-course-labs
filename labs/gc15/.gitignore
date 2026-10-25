@@ -1,0 +1,4 @@
+artifacts/
+cloud/out/
+__pycache__/
+.venv/

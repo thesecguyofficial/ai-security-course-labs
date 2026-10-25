@@ -1,0 +1,633 @@
+{
+ "_about": "A morning of Cloud Audit Logs entries from example-summariser-prod, as Cloud Logging exports them (LogEntry with an AuditLog protoPayload). ExampleCo turned on Data Access audit logs for aiplatform.googleapis.com two days earlier; the perimeter wasn't enforced yet. Field names follow Google's AuditLog reference (authenticationInfo.principalEmail and serviceAccountKeyName, requestMetadata.callerIp and callerNetwork). Values are lab values. Lab simplification: real UploadModel entries describe a long-running operation; here response._lab_version_id says which version the upload created.",
+ "entries": [
+  {
+   "insertId": "lab0001",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Fdata_access",
+   "timestamp": "2027-01-28T07:58:02Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.PredictionService.Predict",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.1.14",
+     "callerSuppliedUserAgent": "helpdesk-app/3.4",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.PredictRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500"
+    }
+   }
+  },
+  {
+   "insertId": "lab0002",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Fdata_access",
+   "timestamp": "2027-01-28T08:01:47Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.PredictionService.Predict",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.1.14",
+     "callerSuppliedUserAgent": "helpdesk-app/3.4",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.PredictRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500"
+    }
+   }
+  },
+  {
+   "insertId": "lab0003",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Fdata_access",
+   "timestamp": "2027-01-28T08:17:30Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.PredictionService.Predict",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.1.15",
+     "callerSuppliedUserAgent": "helpdesk-app/3.4",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.PredictRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500"
+    }
+   }
+  },
+  {
+   "insertId": "lab0005",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Factivity",
+   "timestamp": "2027-01-28T08:40:11Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Model",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.ModelService.UploadModel",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser",
+    "authenticationInfo": {
+     "principalEmail": "tsg-ci-deployer@example-summariser-prod.iam.gserviceaccount.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.3.7",
+     "callerSuppliedUserAgent": "google-cloud-sdk gcloud/560.0.0",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.UploadModelRequest",
+     "parent": "projects/example-summariser-prod/locations/us-central1",
+     "parentModel": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser",
+     "model": {
+      "artifactUri": "gs://example-tsg-models/tsg-summariser/v4/",
+      "versionAliases": []
+     }
+    },
+    "response": {
+     "_lab_version_id": "4"
+    }
+   }
+  },
+  {
+   "insertId": "lab0004",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Fdata_access",
+   "timestamp": "2027-01-28T08:44:09Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.PredictionService.Predict",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.1.14",
+     "callerSuppliedUserAgent": "helpdesk-app/3.4",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.PredictRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500"
+    }
+   }
+  },
+  {
+   "insertId": "lab0006",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Factivity",
+   "timestamp": "2027-01-28T09:12:40Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Model",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.ModelService.UploadModel",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser",
+    "authenticationInfo": {
+     "principalEmail": "bob@example.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.2.21",
+     "callerSuppliedUserAgent": "google-cloud-aiplatform/1.168.0",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.UploadModelRequest",
+     "parent": "projects/example-summariser-prod/locations/us-central1",
+     "parentModel": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser",
+     "model": {
+      "artifactUri": "gs://example-tsg-models/bob/experiment/",
+      "versionAliases": []
+     }
+    },
+    "response": {
+     "_lab_version_id": "5"
+    }
+   }
+  },
+  {
+   "insertId": "lab0007",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Fdata_access",
+   "timestamp": "2027-01-28T09:13:05Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.PredictionService.Predict",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.1.15",
+     "callerSuppliedUserAgent": "helpdesk-app/3.4",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.PredictRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500"
+    }
+   }
+  },
+  {
+   "insertId": "lab0008",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Factivity",
+   "timestamp": "2027-01-28T09:14:03Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Model",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.ModelService.MergeVersionAliases",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser@5",
+    "authenticationInfo": {
+     "principalEmail": "bob@example.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.2.21",
+     "callerSuppliedUserAgent": "google-cloud-aiplatform/1.168.0",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.MergeVersionAliasesRequest",
+     "name": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser@5",
+     "versionAliases": [
+      "prod"
+     ]
+    }
+   }
+  },
+  {
+   "insertId": "lab0009",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Factivity",
+   "timestamp": "2027-01-28T09:16:30Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.EndpointService.DeployModel",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "bob@example.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.2.21",
+     "callerSuppliedUserAgent": "google-cloud-aiplatform/1.168.0",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.DeployModelRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+     "deployedModel": {
+      "model": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser@prod",
+      "serviceAccount": "100000000015-compute@developer.gserviceaccount.com"
+     },
+     "trafficSplit": {
+      "0": 100
+     }
+    }
+   }
+  },
+  {
+   "insertId": "lab0010",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Fdata_access",
+   "timestamp": "2027-01-28T09:31:12Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.PredictionService.Predict",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "alice@example.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.2.18",
+     "callerSuppliedUserAgent": "google-cloud-aiplatform/1.168.0",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.PredictRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500"
+    }
+   }
+  },
+  {
+   "insertId": "lab0011",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Fdata_access",
+   "timestamp": "2027-01-28T09:48:55Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.PredictionService.Predict",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.1.14",
+     "callerSuppliedUserAgent": "helpdesk-app/3.4",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.PredictRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500"
+    }
+   }
+  },
+  {
+   "insertId": "lab0012",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Factivity",
+   "timestamp": "2027-01-28T10:05:19Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Model",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.ModelService.MergeVersionAliases",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser@4",
+    "authenticationInfo": {
+     "principalEmail": "ml-lead@example.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.2.30",
+     "callerSuppliedUserAgent": "Mozilla/5.0 (console)",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.MergeVersionAliasesRequest",
+     "name": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser@4",
+     "versionAliases": [
+      "prod"
+     ]
+    }
+   }
+  },
+  {
+   "insertId": "lab0013",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Factivity",
+   "timestamp": "2027-01-28T10:12:44Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.EndpointService.DeployModel",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "tsg-ci-deployer@example-summariser-prod.iam.gserviceaccount.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.3.7",
+     "callerSuppliedUserAgent": "google-cloud-sdk gcloud/560.0.0",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.DeployModelRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+     "deployedModel": {
+      "model": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser@prod",
+      "serviceAccount": "100000000015-compute@developer.gserviceaccount.com"
+     },
+     "trafficSplit": {
+      "0": 100
+     }
+    }
+   }
+  },
+  {
+   "insertId": "lab0014",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Factivity",
+   "timestamp": "2027-01-28T10:40:22Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "service_account",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "iam.googleapis.com",
+    "methodName": "google.iam.admin.v1.CreateServiceAccountKey",
+    "resourceName": "projects/-/serviceAccounts/tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com",
+    "authenticationInfo": {
+     "principalEmail": "bob@example.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.2.21",
+     "callerSuppliedUserAgent": "Mozilla/5.0 (console)",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.iam.admin.v1.CreateServiceAccountKeyRequest",
+     "name": "projects/-/serviceAccounts/tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com"
+    },
+    "response": {
+     "name": "projects/example-summariser-prod/serviceAccounts/tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com/keys/1f2e3d4c5b6a79880000lab"
+    }
+   }
+  },
+  {
+   "insertId": "lab0015",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Fdata_access",
+   "timestamp": "2027-01-28T10:58:30Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.PredictionService.Predict",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.1.15",
+     "callerSuppliedUserAgent": "helpdesk-app/3.4",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.PredictRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500"
+    }
+   }
+  },
+  {
+   "insertId": "lab0016",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Fdata_access",
+   "timestamp": "2027-01-28T11:02:51Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.PredictionService.Predict",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com",
+     "serviceAccountKeyName": "//iam.googleapis.com/projects/example-summariser-prod/serviceAccounts/tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com/keys/1f2e3d4c5b6a79880000lab"
+    },
+    "requestMetadata": {
+     "callerIp": "203.0.113.50",
+     "callerSuppliedUserAgent": "curl/8.5.0"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.PredictRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500"
+    }
+   }
+  },
+  {
+   "insertId": "lab0017",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Fdata_access",
+   "timestamp": "2027-01-28T11:03:09Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.PredictionService.Predict",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com",
+     "serviceAccountKeyName": "//iam.googleapis.com/projects/example-summariser-prod/serviceAccounts/tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com/keys/1f2e3d4c5b6a79880000lab"
+    },
+    "requestMetadata": {
+     "callerIp": "203.0.113.50",
+     "callerSuppliedUserAgent": "curl/8.5.0"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.PredictRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500"
+    }
+   }
+  },
+  {
+   "insertId": "lab0018",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Fdata_access",
+   "timestamp": "2027-01-28T11:03:30Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.PredictionService.Predict",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com",
+     "serviceAccountKeyName": "//iam.googleapis.com/projects/example-summariser-prod/serviceAccounts/tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com/keys/1f2e3d4c5b6a79880000lab"
+    },
+    "requestMetadata": {
+     "callerIp": "203.0.113.50",
+     "callerSuppliedUserAgent": "curl/8.5.0"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.PredictRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500"
+    }
+   }
+  },
+  {
+   "insertId": "lab0019",
+   "logName": "projects/example-summariser-prod/logs/cloudaudit.googleapis.com%2Fdata_access",
+   "timestamp": "2027-01-28T11:20:02Z",
+   "severity": "INFO",
+   "resource": {
+    "type": "aiplatform.googleapis.com/Endpoint",
+    "labels": {
+     "project_id": "example-summariser-prod",
+     "location": "us-central1"
+    }
+   },
+   "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "serviceName": "aiplatform.googleapis.com",
+    "methodName": "google.cloud.aiplatform.v1.PredictionService.Predict",
+    "resourceName": "projects/example-summariser-prod/locations/us-central1/endpoints/1500",
+    "authenticationInfo": {
+     "principalEmail": "tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com"
+    },
+    "requestMetadata": {
+     "callerIp": "10.10.1.14",
+     "callerSuppliedUserAgent": "helpdesk-app/3.4",
+     "callerNetwork": "//compute.googleapis.com/projects/example-summariser-prod/global/networks/tsg-vpc"
+    },
+    "request": {
+     "@type": "type.googleapis.com/google.cloud.aiplatform.v1.PredictRequest",
+     "endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500"
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+{
+  "_about": "IAM allow policies: per project, per bucket, per endpoint and per service account (who may act as it). keys lists user-managed service account keys that exist. Roles are expanded with ../../roles.json (a subset of each role's permissions).",
+  "projects": {
+    "example-summariser-prod": [
+      {"role": "roles/aiplatform.user", "members": ["user:alice@example.com", "user:bob@example.com", "serviceAccount:tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com", "serviceAccount:tsg-ci-deployer@example-summariser-prod.iam.gserviceaccount.com", "user:ml-lead@example.com"]},
+      {"role": "roles/iam.serviceAccountUser", "members": ["user:alice@example.com", "user:bob@example.com", "serviceAccount:tsg-ci-deployer@example-summariser-prod.iam.gserviceaccount.com"]},
+      {"role": "roles/aiplatform.viewer", "members": ["group:all-staff@example.com"]},
+      {"role": "roles/editor", "members": ["serviceAccount:100000000015-compute@developer.gserviceaccount.com"]},
+      {"role": "roles/owner", "members": ["user:platform-admin@example.com"]},
+      {"role": "roles/notebooks.admin", "members": ["user:alice@example.com", "user:bob@example.com"]}
+    ],
+    "example-summariser-dev": []
+  },
+  "buckets": {
+    "example-tsg-models": [
+      {"role": "roles/storage.objectAdmin", "members": ["user:alice@example.com", "user:bob@example.com", "serviceAccount:tsg-ci-deployer@example-summariser-prod.iam.gserviceaccount.com"]}
+    ],
+    "example-tsg-analytics": [
+      {"role": "roles/storage.objectViewer", "members": ["group:all-staff@example.com"]}
+    ]
+  },
+  "_bucket_project": {"example-tsg-models": "example-summariser-prod", "example-tsg-analytics": "example-summariser-prod", "example-tsg-ds-handover": "example-summariser-dev"},
+  "endpoints": {},
+  "serviceAccounts": {},
+  "keys": {"tsg-helpdesk-app": ["a user-managed JSON key, created 2026-11-21 (lab value)"]}
+}

@@ -1,0 +1,21 @@
+{
+  "_about": "A SUBSET of each role's permissions: only the ones this lab asks about. Real roles hold many more. Sources: Agent Platform access control page (Agent Platform User holds aiplatform.endpoints.predict, .deploy, aiplatform.models.upload and .update; Viewer only reads), the Service Account User role holds iam.serviceAccounts.actAs (Cloud Scheduler and custom service account pages). Storage roles follow Cloud Storage's predefined roles. Custom roles (tsg*) are ExampleCo's own.",
+  "roles/owner": ["*"],
+  "roles/editor": ["aiplatform.endpoints.predict", "aiplatform.endpoints.deploy", "aiplatform.endpoints.create", "aiplatform.models.upload",
+                   "aiplatform.models.update", "aiplatform.models.get", "aiplatform.endpoints.get",
+                   "storage.objects.get", "storage.objects.list", "storage.objects.create", "storage.objects.delete",
+                   "notebooks.instances.create"],
+  "roles/aiplatform.admin": ["aiplatform.*"],
+  "roles/aiplatform.user": ["aiplatform.endpoints.predict", "aiplatform.endpoints.deploy", "aiplatform.endpoints.create",
+                            "aiplatform.models.upload", "aiplatform.models.update", "aiplatform.models.get", "aiplatform.endpoints.get"],
+  "roles/aiplatform.viewer": ["aiplatform.models.get", "aiplatform.endpoints.get"],
+  "roles/storage.objectAdmin": ["storage.objects.get", "storage.objects.list", "storage.objects.create", "storage.objects.delete"],
+  "roles/storage.objectViewer": ["storage.objects.get", "storage.objects.list"],
+  "roles/iam.serviceAccountUser": ["iam.serviceAccounts.actAs"],
+  "roles/iam.serviceAccountKeyAdmin": ["iam.serviceAccountKeys.create"],
+  "roles/notebooks.admin": ["notebooks.instances.create"],
+  "projects/example-summariser-prod/roles/tsgPredictOnly": ["aiplatform.endpoints.predict"],
+  "projects/example-summariser-prod/roles/tsgDeployer": ["aiplatform.models.upload", "aiplatform.models.get", "aiplatform.endpoints.deploy",
+                                                         "aiplatform.endpoints.get"],
+  "projects/example-summariser-prod/roles/tsgModelApprover": ["aiplatform.models.update", "aiplatform.models.get"]
+}
