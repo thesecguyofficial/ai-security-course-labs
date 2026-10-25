@@ -1,0 +1,10 @@
+{
+  "_note": "The online endpoint as `az ml online-endpoint show` returns it (YAML key names).",
+  "name": "tsg-summariser",
+  "workspace": "tsg-ml",
+  "auth_mode": "key",
+  "public_network_access": "enabled",
+  "identity": {"type": "system_assigned", "principal": "tsg-summariser-sai"},
+  "traffic": {"blue": 100, "debug": 0},
+  "_keys": {"primary": "LAB-PLACEHOLDER-KEY-1", "secondary": "LAB-PLACEHOLDER-KEY-2"}
+}

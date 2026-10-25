@@ -1,0 +1,9 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
+# AZ15 guided build. cloud.sh fills in the endpoint and MODEL_ID (a model from the collection curated by Azure Machine
+# Learning, the azureml registry, which works in approved-outbound mode with no FQDN rules). Pick one whose model card
+# lists a CPU SKU for managed online endpoints; if it needs a bigger one, change instance_type (and the cost).
+name: blue
+endpoint_name: __EP__
+model: __MODEL_ID__
+instance_type: Standard_DS3_v2
+instance_count: 1

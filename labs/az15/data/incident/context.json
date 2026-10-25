@@ -1,0 +1,18 @@
+{
+ "_note": "What the team knew that morning.",
+ "pipeline": "44444444-4444-4444-8444-444444444444",
+ "admins": [
+  "77777777-7777-4777-8777-777777777777"
+ ],
+ "key_users_expected": [],
+ "traffic": {
+  "tsg-summariser": {
+   "blue": 100,
+   "debug": 0
+  },
+  "tsg-summariser-legacy": {
+   "blue": 100
+  }
+ },
+ "story": "Last week the team moved tsg-summariser to Entra auth (aad_token). The old key-auth endpoint tsg-summariser-legacy was meant to be deleted."
+}

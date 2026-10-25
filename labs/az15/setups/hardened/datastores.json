@@ -1,0 +1,10 @@
+{
+  "_note": "Datastores (az ml datastore show). No 'credentials' block = identity-based: the caller's own Entra identity is used, nothing is stored in the key vault.",
+  "tsg-ml": {
+    "workspaceblobstore": {"type": "azure_blob", "account": "sttsgml", "container": "azureml-blobstore", "credentials": null},
+    "ticket_exports": {"type": "azure_blob", "account": "sttsgtickets", "container": "exports", "credentials": null}
+  },
+  "tsg-ml-dev": {
+    "workspaceblobstore": {"type": "azure_blob", "account": "sttsgmldev", "container": "azureml-blobstore", "credentials": null}
+  }
+}

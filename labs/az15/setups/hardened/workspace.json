@@ -1,0 +1,33 @@
+{
+  "_note": "What `az ml workspace show` returns, cut to the security settings (ARM property names). Keys starting with _ are lab notes.",
+  "tsg-ml": {
+    "publicNetworkAccess": "Disabled",
+    "privateEndpoint": true,
+    "managedNetwork": {
+      "isolationMode": "AllowOnlyApprovedOutbound",
+      "outboundRules": {
+        "contoso-ml-registry": {"type": "PrivateEndpoint", "destination": "registry:contoso-ml-registry"}
+      }
+    },
+    "identity": {"type": "UserAssigned", "principal": "id-tsg-ml"},
+    "encryption": {"status": "Enabled", "keyVault": "kv-tsg-cmk", "purgeProtection": true},
+    "v1LegacyMode": false,
+    "_why": "No FQDN rules, so no Azure Firewall and Microsoft's exfiltration protection stays on. The registry is reached through a private endpoint rule."
+  },
+  "tsg-ml-dev": {
+    "publicNetworkAccess": "Disabled",
+    "privateEndpoint": true,
+    "managedNetwork": {
+      "isolationMode": "AllowOnlyApprovedOutbound",
+      "outboundRules": {
+        "contoso-ml-registry": {"type": "PrivateEndpoint", "destination": "registry:contoso-ml-registry"},
+        "contoso-packages": {"type": "PrivateEndpoint", "destination": "acr:crcontosomirror", "_why": "the team's own mirror of packages and base images, scanned"}
+      }
+    },
+    "identity": {"type": "UserAssigned", "principal": "id-tsg-ml-dev"},
+    "encryption": {"status": "Enabled", "keyVault": "kv-tsg-cmk", "purgeProtection": true},
+    "v1LegacyMode": false,
+    "computes": [{"name": "ci-alice", "type": "ComputeInstance", "owner": "ds-alice"}, {"name": "ci-bob", "type": "ComputeInstance", "owner": "ds-bob"}],
+    "_why": "Same mode as production. New models come in through the import pipeline (download, scan, register), not from notebooks."
+  }
+}

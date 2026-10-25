@@ -1,0 +1,9 @@
+{
+  "_note": "The online endpoint as `az ml online-endpoint show` returns it (YAML key names).",
+  "name": "tsg-summariser",
+  "workspace": "tsg-ml",
+  "auth_mode": "aad_token",
+  "public_network_access": "disabled",
+  "identity": {"type": "user_assigned", "principal": "id-tsg-summariser"},
+  "traffic": {"blue": 100}
+}

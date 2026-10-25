@@ -1,0 +1,29 @@
+{
+  "_note": "Logic App (Consumption) body for az rest. cloud.sh fills in __START__ (60 minutes from now, UTC), __LOCATION__ and __ENDPOINT_ID__. It wakes once an hour from __START__ and sends DELETE for the online endpoint with its own managed identity. cloud-down deletes the timer.",
+  "location": "__LOCATION__",
+  "identity": {"type": "SystemAssigned"},
+  "properties": {
+    "state": "Enabled",
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "triggers": {
+        "after_60_minutes": {
+          "type": "Recurrence",
+          "recurrence": {"frequency": "Hour", "interval": 1, "startTime": "__START__"}
+        }
+      },
+      "actions": {
+        "delete_endpoint": {
+          "type": "Http",
+          "inputs": {
+            "method": "DELETE",
+            "uri": "https://management.azure.com__ENDPOINT_ID__?api-version=2024-04-01",
+            "authentication": {"type": "ManagedServiceIdentity", "audience": "https://management.azure.com/"}
+          }
+        }
+      },
+      "outputs": {}
+    }
+  }
+}

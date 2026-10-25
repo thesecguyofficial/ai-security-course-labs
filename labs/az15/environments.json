@@ -1,0 +1,11 @@
+{
+  "_note": "The lab's environment catalog. Names starting with lab- and every date are fictional; the rules are Microsoft's (concept-vulnerability-management): curated images get updates every two weeks, patched images get a new immutable version, and once you add your own dependencies or bring your own image, vulnerability management is yours.",
+  "curated": {
+    "azureml://registries/azureml/environments/lab-minimal-py311-inference": {
+      "versions": {"9": "2026-10-06", "10": "2026-10-20", "11": "2026-11-03", "12": "2026-11-17", "13": "2026-12-15", "14": "2027-01-19"}
+    }
+  },
+  "custom": {
+    "docker.io/vllm/vllm-openai:latest": {"registry": "docker.io", "pinned": "tag", "note": "a public image by a moving tag"}
+  }
+}

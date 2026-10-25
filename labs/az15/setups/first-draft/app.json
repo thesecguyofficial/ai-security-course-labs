@@ -1,0 +1,10 @@
+{
+  "_note": "How the team runs it.",
+  "release_process": "deploy the newest version tagged stage=Prod from tsg-ml",
+  "deploy_from": "workspace",
+  "deploy_verifies_hashes": false,
+  "approval_gate": false,
+  "app_credential": "key",
+  "app_network": "vnet",
+  "test_deployments_in_production": true
+}

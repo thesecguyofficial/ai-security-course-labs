@@ -1,0 +1,155 @@
+{
+  "_note": "Azure Policy assignments in force on the subscription. 'rule' is the definition's policyRule, copied from the Azure/azure-policy repo (master, 25 Oct 2026). Parameters not set in 'parameters' take the definition's defaultValue.",
+  "assignments": [
+    {
+      "name": "ml-approved-outbound",
+      "definition": "Azure Machine Learning and Ai Studio should use Allow Only Approved Outbound Managed Vnet mode",
+      "source": "https://github.com/Azure/azure-policy/blob/master/built-in-policies/policyDefinitions/Machine%20Learning/ManagedNetworkIsolationMode_Audit.json",
+      "version": "1.0.0",
+      "mode": "Indexed",
+      "effect": "Audit",
+      "parameters": {},
+      "parameter_definitions": {
+        "isolationMode": {
+          "defaultValue": "Disabled",
+          "allowedValues": [
+            "AllowInternetOutbound",
+            "AllowOnlyApprovedOutbound",
+            "Disabled"
+          ]
+        },
+        "effect": {
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ]
+        }
+      },
+      "rule": {
+        "if": {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.MachineLearningServices/workspaces"
+            },
+            {
+              "field": "Microsoft.MachineLearningServices/workspaces/managedNetwork.isolationMode",
+              "notEquals": "[parameters('isolationMode')]"
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]"
+        }
+      },
+      "_why": "assigned during the security review; nobody set isolationMode"
+    },
+    {
+      "name": "ml-no-public-access",
+      "definition": "Azure Machine Learning Workspaces should disable public network access",
+      "source": "https://github.com/Azure/azure-policy/blob/master/built-in-policies/policyDefinitions/Machine%20Learning/Workspace_PublicNetworkAccessDisabled_Audit.json",
+      "version": "2.0.1",
+      "mode": "Indexed",
+      "effect": "Audit",
+      "parameters": {},
+      "parameter_definitions": {
+        "effect": {
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ]
+        }
+      },
+      "rule": {
+        "if": {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.MachineLearningServices/workspaces"
+            },
+            {
+              "anyOf": [
+                {
+                  "field": "Microsoft.MachineLearningServices/workspaces/publicNetworkAccess",
+                  "exists": "false"
+                },
+                {
+                  "field": "Microsoft.MachineLearningServices/workspaces/publicNetworkAccess",
+                  "notEquals": "Disabled"
+                }
+              ]
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]"
+        }
+      }
+    },
+    {
+      "name": "ml-only-contoso-registry",
+      "definition": "[Preview]: Azure Machine Learning Model Registry Deployments are restricted except for the allowed Registry",
+      "source": "https://github.com/Azure/azure-policy/blob/master/built-in-policies/policyDefinitions/Machine%20Learning/OnlyDeployAllowedRegistryModels_Deny.json",
+      "version": "1.0.0-preview",
+      "mode": "Microsoft.MachineLearningServices.v2.Data",
+      "effect": "Deny",
+      "parameters": {
+        "allowedRegistryName": "contoso-ml-registry",
+        "restrictedModels": []
+      },
+      "parameter_definitions": {
+        "allowedRegistryName": {
+          "defaultValue": ""
+        },
+        "restrictedModels": {
+          "defaultValue": []
+        },
+        "effect": {
+          "allowedValues": [
+            "Deny",
+            "Disabled"
+          ]
+        }
+      },
+      "rule": {
+        "if": {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.MachineLearningServices.v2.Data/workspaces/deployments"
+            },
+            {
+              "anyOf": [
+                {
+                  "field": "Microsoft.MachineLearningServices.v2.Data/workspaces/deployments/model.assetId",
+                  "in": "[parameters('restrictedModels')]"
+                },
+                {
+                  "allOf": [
+                    {
+                      "field": "Microsoft.MachineLearningServices.v2.Data/workspaces/deployments/model.assetId",
+                      "like": "azureml://registries/*"
+                    },
+                    {
+                      "not": {
+                        "field": "Microsoft.MachineLearningServices.v2.Data/workspaces/deployments/model.assetId",
+                        "like": "[concat('azureml://registries/', parameters('allowedRegistryName'), '/*')]"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]"
+        }
+      }
+    }
+  ]
+}
