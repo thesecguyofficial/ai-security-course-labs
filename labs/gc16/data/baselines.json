@@ -1,0 +1,4 @@
+{
+  "_about": "Average model tokens (prompt + candidates) per active hour for each model over the last 14 days, from the request-response logs. Rule D06 compares each hour of today with these. Lab values.",
+  "gemini-3.1-flash-lite": 25000
+}

@@ -1,0 +1,23 @@
+{
+  "_about": "The logging lesson 16.1 asks for. Each key is one telemetry source the simulator writes only if it is true here.",
+  "name": "hardened",
+  "admin_activity": true,
+  "data_access_aiplatform": true,
+  "_data_access_aiplatform": "DATA_READ and DATA_WRITE for aiplatform.googleapis.com, set at the organization.",
+  "data_access_storage": true,
+  "_data_access_storage": "DATA_WRITE for storage.googleapis.com in the project that holds the RAG source bucket.",
+  "data_access_bigquery": true,
+  "request_response_models": [
+    "gemini-3.1-flash-lite",
+    "gemini-3.5-flash"
+  ],
+  "_request_response_models": "Request-response logging at sampling rate 1 into a CMEK dataset for the two Gemini models. Claude on Agent Platform needs a separate REST call that nobody made yet: its calls are in Data Access logs only. The backend sets labels end_user and session on every request.",
+  "model_armor_logging": true,
+  "_model_armor_logging": "logSanitizeOperations on the template, routed by a sink to a log bucket only the incident team can read.",
+  "scc_tier": "PREMIUM",
+  "_scc_tier": "Security Command Center Premium, activated at the organization, pay-as-you-go: Event Threat Detection's AI rules run (New Geography for AI Service isn't available for project-level activations). Agent Platform Threat Detection doesn't cover the Helpdesk agent: it isn't available when Agent Gateway is enabled for an agent.",
+  "gateway_request_logs": true,
+  "app_log_identity": true,
+  "_app_log_identity": "Request ID, signed-in user, session ID, agent session ID, the model's responseId and token counts per request.",
+  "scc_activation": "organization"
+}

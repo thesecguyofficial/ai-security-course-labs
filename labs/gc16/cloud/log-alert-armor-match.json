@@ -1,0 +1,12 @@
+{
+  "displayName": "GC16 Model Armor match",
+  "combiner": "OR",
+  "conditions": [{
+    "displayName": "A Model Armor sanitize operation found a match",
+    "conditionMatchedLog": {
+      "filter": "jsonPayload.@type=\"type.googleapis.com/google.cloud.modelarmor.logging.v1.SanitizeOperationLogEntry\" AND jsonPayload.sanitizationResult.filterMatchState=\"MATCH_FOUND\""
+    }
+  }],
+  "alertStrategy": {"notificationRateLimit": {"period": "300s"}, "autoClose": "1800s"},
+  "notificationChannels": ["CHANNEL"]
+}

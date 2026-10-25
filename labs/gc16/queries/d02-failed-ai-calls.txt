@@ -1,0 +1,3 @@
+logName:"cloudaudit.googleapis.com"
+protoPayload.serviceName="aiplatform.googleapis.com"
+protoPayload.status.code!=0

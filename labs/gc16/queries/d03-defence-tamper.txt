@@ -1,0 +1,9 @@
+logName:"cloudaudit.googleapis.com%2Factivity"
+(
+  (protoPayload.methodName="SetIamPolicy" AND protoPayload.request.updateMask:"auditConfigs")
+  OR protoPayload.methodName:"SetPublisherModelConfig"
+  OR protoPayload.methodName="google.cloud.modelarmor.v1.ModelArmor.UpdateTemplate"
+  OR protoPayload.methodName:"ConfigServiceV2"
+  OR (protoPayload.methodName:"UpdateAuthzExtension" AND protoPayload.request.authzExtension.metadata.iamEnforcementMode="DRY_RUN")
+)
+NOT protoPayload.authenticationInfo.principalEmail="secops-admin@example-chatbot-prod.iam.gserviceaccount.com"

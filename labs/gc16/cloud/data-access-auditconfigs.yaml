@@ -1,0 +1,7 @@
+# Part A: add this block to the policy file you downloaded with `gcloud projects get-iam-policy`.
+# Keep the bindings and the etag exactly as they are, then send the whole file back with set-iam-policy.
+auditConfigs:
+- service: aiplatform.googleapis.com
+  auditLogConfigs:
+  - logType: DATA_READ
+  - logType: DATA_WRITE
