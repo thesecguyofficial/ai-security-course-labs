@@ -67,7 +67,9 @@ Example response (shape from the CreateModelPackageGroup API reference, values i
 2. The model package group: there's no harm in creating it with the CLI line above even if you use the console for
    the rest. You'll see it in SageMaker Studio under **Models**, the **Registered models** tab, **Model Groups**
    (the labels AWS documents for the registry
-   ([AWS](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-approve.html))).
+   ([AWS](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-approve.html))). The same page documents a
+   newer layout in us-east-1 and a few other Regions, where the group sits under **Models**, **Registered Models**.
+   Follow whichever one your console shows.
 
 **Why versioning:** every overwrite becomes a new object version with its own ID. In Part D the gate records the
 version ID of the weights it checked, so "which bytes did we approve?" has an answer.
