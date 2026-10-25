@@ -1,0 +1,12 @@
+{
+  "_evidence": "Sample evidence for the M18 lab (illustrative, fictional shop). Refund limits enforced in the refund tool's code, outside the model.",
+  "service": "tsg-helpdesk issue_refund",
+  "currency": "lab credits (fake)",
+  "max_per_call": 50,
+  "max_per_customer_per_day": 100,
+  "above_limit": "queue for human approval (control C04)",
+  "enforced_in": "refunds.py check_limits(), before the payment call",
+  "changed_by": "Platform engineering lead",
+  "change_ticket": "CHG-2026-1017",
+  "last_test": "2026-10-22: second refund of 60 on the same day for one customer was refused and queued"
+}

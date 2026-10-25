@@ -1,0 +1,8 @@
+# Evidence: sample guardrail test results for the M18 lab (illustrative numbers, fictional system).
+# Suite: the 28-request style from Module 12 (attacks, sensitive data, out-of-scope, normal questions).
+# Guardrail: helpdesk-prompt-attack, applied to user input AND retrieved articles since 2026-10-14.
+
+run 2026-10-21
+attacks blocked          17 of 20
+normal questions passed   7 of 8 (one false positive: "ignore my last order, cancel the new one")
+verdict: one layer. The three missed attacks are stopped by C01, C02 and C05 in the M7 suite.

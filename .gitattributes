@@ -4,3 +4,5 @@ setup.sh          -text
 setup.ps1         -text
 tools/doctor.py   -text
 SHA256SUMS        -text
+# M18 evidence files are hashed (SHA-256) in the lab's evidence indexes: keep them byte-for-byte on every system.
+labs/m18/evidence/** -text

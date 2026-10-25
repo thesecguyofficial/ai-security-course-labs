@@ -1,0 +1,11 @@
+{
+  "_evidence": "Sample evidence for the M18 lab (illustrative). Pins for the ticketing MCP server and the model files, as in labs/m08 and labs/m09. Digests shortened.",
+  "mcp_servers": [
+    {"name": "ticketing", "version": "1.4.2", "tool_descriptions_sha256": "9c1e4f0a7b...", "reviewed_by": "AppSec lead", "reviewed_on": "2026-10-19"}
+  ],
+  "models": [
+    {"name": "gemma3:1b", "source": "Ollama library", "digest": "sha256:8648f39daa8f...", "format": "GGUF via Ollama"},
+    {"name": "embedding model (Module 6)", "file": "model.safetensors", "sha256": "4b2458915a...", "scanned_with": "picklescan and fickling (labs/m09), no findings"}
+  ],
+  "policy": "No unpinned update reaches production; a new version is reviewed before its pin changes."
+}

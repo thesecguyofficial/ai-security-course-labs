@@ -1,0 +1,13 @@
+evidence_id,control,file,sha256,collected,owner,description
+E01,C01,evidence/2026-10-20-m07-agent-controls-test.txt,cff000aa90b51c655c9d6b4f16ad73ac36b1559795a98156080b775b046ddccd,2026-10-20,AppSec lead,M7 suite: hijacked tool call refused
+E02,C02,evidence/2026-10-20-m07-agent-controls-test.txt,cff000aa90b51c655c9d6b4f16ad73ac36b1559795a98156080b775b046ddccd,2026-10-20,AppSec lead,M7 suite: allow-list
+E03,C03,evidence/2026-10-22-refund-limits.json,c9616222c917379f903dc131fe0df4f57c9371dca986cb19214439dc69412083,2026-10-22,Platform engineering lead,refund limits
+E04,C04,evidence/2026-10-20-m07-agent-controls-test.txt,cff000aa90b51c655c9d6b4f16ad73ac36b1559795a98156080b775b046ddccd,2026-10-20,AppSec lead,M7 suite: approval
+E05,C05,evidence/2026-10-20-m07-agent-controls-test.txt,cff000aa90b51c655c9d6b4f16ad73ac36b1559795a98156080b775b046ddccd,2026-10-20,AppSec lead,M7 suite: recipient allow-list
+E06,C07,evidence/2026-07-02-guardrail-config.json,b10087f3cd635971de469b0d687d5cd9e581eb826dac4e825922c58382b8a7cb,2026-07-02,AppSec lead,guardrail settings
+E07,C08,evidence/2026-10-20-m05-output-handling-test.txt,8a972d4bc5b5020e7eac34a490594be4f19eba7691806df82e7b50345b325825,2026-10-20,AppSec lead,M5 suite
+E08,C09,evidence/2026-10-15-pii-redaction-check.txt,25b210f10ed431f2a2007b53176ec4f93cf48b9a400ac5303a733b28d1c8d95b,2026-10-15,Data protection lead,log canary check
+E09,C10,evidence/2026-10-16-rag-access-control-test.txt,a483c06eadf435f9a02ceb1f85e232db40585033cf3e7934c7f83f12a2a50cf6,2026-10-16,Platform engineering lead,tenant filter tests
+E10,C15,evidence/2026-10-19-mcp-and-model-pins.json,e685dc944c3c01788baf86a04fa36956032c83f82e267654fb7dfabd69b36f43,2026-10-19,Platform engineering lead,model pins
+E11,C18,evidence/2026-10-22-rate-limits-and-budget.json,0a2e564fa70942d54fb193d688e67a635839157d880e1f7e51023e792991af67,2026-10-22,Finance controller,limits and budget
+E12,C23,evidence/2026-10-21-grounding-eval-v2.txt,,2026-10-21,Head of Customer Support,grounding test

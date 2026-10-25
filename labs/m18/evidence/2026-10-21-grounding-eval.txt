@@ -1,0 +1,5 @@
+# Evidence: sample grounding test for the M18 lab (illustrative, in the style of lessons 5.5 and 6.6).
+questions about refund and returns policy: 40
+answered from a cited help article: 31
+refused ("I can't find that in our policy, I'll pass you to a person"): 8
+answered with a rule that is not in any article: 1   <- tracked, prompt and retrieval fix in progress

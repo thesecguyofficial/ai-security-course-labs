@@ -1,0 +1,59 @@
+{
+  "_about": "TSG Helpdesk as it runs on 24 Oct 2026, after Modules 2 to 17. Fictional shop, fake data. 'features' drive which risk sources an assessment must cover; 'controls' says the status of each course control in this system (implemented, partial, planned, not_applicable).",
+  "system": "TSG Helpdesk",
+  "id": "tsg-helpdesk",
+  "version": "2.0",
+  "status": "production",
+  "business_owner": "Head of Customer Support",
+  "technical_owner": "Platform engineering lead",
+  "purpose": "Answer logged-in customers' questions about orders, deliveries and refunds; issue refunds up to the limit; open and update support tickets.",
+  "users": "Logged-in customers of the shop (India and the EU) and the support team",
+  "markets": ["IN", "EU"],
+  "in_production_since": "2026-05-01",
+  "autonomy": "Acts alone for refunds up to 50 per call and 100 per customer per day; a person approves anything above that and any email to an address that is not the customer's own",
+  "components": [
+    {"type": "application", "name": "Helpdesk chat app (Python)", "version": "2.0", "hosting": "your cloud stream or localhost", "licence": "internal"},
+    {"type": "model", "name": "Gemma 3, 1B (local twin, via Ollama)", "version": "gemma3:1b, pinned by digest (evidence/2026-10-19-mcp-and-model-pins.json)", "hosting": "self-hosted", "licence": "Gemma Terms of Use"},
+    {"type": "model", "name": "Managed model in your cloud stream (Bedrock, Foundry or Agent Platform)", "version": "model ID and version pinned in Terraform (Module 11)", "hosting": "cloud provider", "licence": "provider terms"},
+    {"type": "embedding_model", "name": "Local embedding model (Module 6)", "version": "pinned by hash", "hosting": "self-hosted", "licence": "unknown"},
+    {"type": "vector_store", "name": "Qdrant (Module 6)", "version": "pinned image digest", "hosting": "self-hosted", "licence": "Apache-2.0"},
+    {"type": "mcp_server", "name": "Ticketing MCP server", "version": "1.4.2, pinned (Module 8)", "hosting": "self-hosted, installed from a public registry", "licence": "MIT"},
+    {"type": "memory", "name": "Customer memory summaries", "version": "n/a", "hosting": "app database", "licence": "internal"}
+  ],
+  "tools": ["lookup_order", "issue_refund", "send_email", "create_ticket", "get_ticket", "add_comment", "search_tickets"],
+  "data_categories": ["customer name and email", "order history and delivery address", "chat text", "ticket text", "memory summaries"],
+  "features": {
+    "tools": true,
+    "markdown_output": true,
+    "rag_imports_customer_text": true,
+    "retrieval_over_customer_data": true,
+    "memory": true,
+    "mcp_from_registry": true,
+    "self_hosted_model": true,
+    "metered_model": true,
+    "logs_personal_data": true,
+    "answers_policy_questions": true,
+    "chat_with_people": true
+  },
+  "eu_ai_act": {
+    "offered_in_eu": true,
+    "built_and_run_under_our_name": true,
+    "prohibited_practice": "none",
+    "annex_iii_area": "none",
+    "annex_i_safety_component": false,
+    "interacts_with_people": true,
+    "generates_text_or_media": true,
+    "deepfake_or_public_interest_text": false,
+    "placed_on_market": "2026-05-01"
+  },
+  "controls": {
+    "C01": "implemented", "C02": "implemented", "C03": "implemented", "C04": "implemented",
+    "C05": "implemented", "C06": "implemented", "C07": "partial", "C08": "implemented",
+    "C09": "partial", "C10": "implemented", "C11": "partial", "C12": "planned",
+    "C13": "implemented", "C14": "implemented", "C15": "implemented", "C16": "implemented",
+    "C17": "partial", "C18": "implemented", "C19": "implemented", "C20": "implemented",
+    "C21": "implemented", "C22": "implemented", "C23": "partial", "C24": "planned",
+    "C25": "implemented", "C26": "partial", "C27": "implemented",
+    "G01": "implemented", "G02": "implemented", "G03": "implemented", "G04": "implemented", "G05": "implemented"
+  }
+}

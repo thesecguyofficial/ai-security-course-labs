@@ -1,0 +1,33 @@
+# Evidence: output of 'make test' in labs/m03 (prompt injection defences), copied below this header (only the run time removed).
+# Collected for the TSG Helpdesk assessment. Re-run it yourself: cd labs/m03 && make test
+
+All tests use the stand-in model (stand_in_model.py), NOT a real AI model.
+
+[PASS] Test 1a  no fixes: the planted note creates a ticket
+[PASS] Test 1b  no fixes: the reply links to the attacker, with the summary in the URL
+[PASS] Test 1c  no fixes: the reply leaks the system-prompt canary
+[PASS] Test 1d  no fixes: an INVISIBLE note creates a ticket too
+[PASS] Test 2a  label: the email cannot fake the closing marker
+[PASS] Test 2b  label: the marker is random for every request
+[PASS] Test 2c  label: invisible characters are stripped, so the hidden note has no effect
+[PASS] Test 2d  label ALONE does not stop a visible note on a worst-case model (expected: ticket still created)
+[PASS] Test 2e  plan: the model's typed tool call is ignored and logged
+[PASS] Test 2f  plan ALONE does not stop the data leak in the reply (expected: attacker link still there)
+[PASS] Test 2g  plan: when the agent asks for a ticket, CODE builds it from the email headers
+[PASS] Test 2h  confirm: nothing is created until a person approves
+[PASS] Test 2i  confirm: the person sees the exact action and who asked for it
+[PASS] Test 2j  confirm: approving runs exactly the shown action (so a careless 'yes' still hurts)
+[PASS] Test 2k  output: the attacker link is removed and the canary leak is caught
+[PASS] Test 2l  output ALONE does not stop the tool call (expected: ticket still created)
+[PASS] Test 2m  output: images are removed, allow-listed links are kept
+[PASS] Test 2n  output: a reference-style markdown link is caught too
+[PASS] Test 2o  output: invisible characters in the reply are stripped, so a split canary is still caught
+[PASS] Test 3   all fixes, 03_planted_note.txt: no ticket, no pending action, no attacker link, no canary
+[PASS] Test 3   all fixes, 04_hidden_unicode.txt: no ticket, no pending action, no attacker link, no canary
+[PASS] Test 3   all fixes: the alert is in logs/events.jsonl for the SOC
+[PASS] Test 3   all fixes, 01_normal.txt: a normal email still gets a normal summary and no alerts
+[PASS] Test 3   all fixes, 02_normal.txt: a normal email still gets a normal summary and no alerts
+[PASS] Test 4   the server refuses to listen on 0.0.0.0
+
+25 of 25 checks passed
+ALL TESTS PASSED

@@ -1,0 +1,12 @@
+{
+  "_about": "The Helpdesk team's first draft of the AI risk assessment (fictional). Run: python3 govlab.py check first-draft",
+  "system": "tsg-helpdesk",
+  "version": "2.0",
+  "assessor": "Platform engineering lead",
+  "date": "2026-10-24",
+  "scope": "TSG Helpdesk 2.0: chat, RAG, tools, ticketing MCP server, memory; local twin and cloud stream",
+  "risk_appetite": {"max_residual_without_signoff": 3, "never_accept_inherent": 9},
+  "eu_ai_act": {"role": "deployer", "tier": "minimal", "decided_by": "Platform engineering lead", "confirmed_by_legal": ""},
+  "approved_by": "",
+  "next_review": "2027-04-24"
+}
