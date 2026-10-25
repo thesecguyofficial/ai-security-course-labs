@@ -1,0 +1,4 @@
+# Evidence: sample log check for the M18 lab (illustrative, in the style of labs/m04 check_logs.py).
+checked: app log 2026-10-08 to 2026-10-15 (one week)
+planted canaries found in logs: 0 of 6
+known gap: memory summaries are stored before redaction (tracked as part of control C12)

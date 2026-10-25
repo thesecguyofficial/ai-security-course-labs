@@ -1,0 +1,4 @@
+{"_evidence": "Sample evidence for the M18 lab (illustrative). Three app log lines, fake identities, showing the fields lesson 16.1 asks for."}
+{"ts": "2026-10-18T09:14:03Z", "session": "s-7f21", "customer_id": "cust-1042", "retrieved": ["kb-221", "kb-309"], "tool": "lookup_order", "args": {"order_id": "o-55810"}, "decision": "ALLOW", "control": "C01"}
+{"ts": "2026-10-18T09:14:07Z", "session": "s-7f21", "customer_id": "cust-1042", "retrieved": [], "tool": "issue_refund", "args": {"order_id": "o-55810", "amount": 30}, "decision": "ALLOW", "control": "C03"}
+{"ts": "2026-10-18T11:02:44Z", "session": "s-9a03", "customer_id": "cust-2290", "retrieved": ["kb-930"], "tool": "send_email", "args": {"to": "refunds@outside.example.net"}, "decision": "DENY", "control": "C05"}

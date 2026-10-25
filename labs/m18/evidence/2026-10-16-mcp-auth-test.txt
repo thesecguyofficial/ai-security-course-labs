@@ -1,0 +1,4 @@
+# Evidence: sample MCP authorization test for the M18 lab (illustrative, in the style of labs/m08 test_auth.py).
+[PASS] a token minted for another resource is refused (audience check)
+[PASS] the server never forwards the caller's token to the ticket store (no passthrough)
+ALL TESTS PASSED (2 run)

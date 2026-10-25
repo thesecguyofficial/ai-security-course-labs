@@ -1,0 +1,2 @@
+system,component,type,version,hosting,licence,business_owner,technical_owner,purpose,users,data,tools,autonomy,eu_ai_act,flags
+TSG Helpdesk,Gemma 3 1B (local twin),model,gemma3:1b pinned by digest,self-hosted,Gemma Terms of Use,Head of Customer Support,Platform engineering lead,Customer support for orders and refunds,Customers (IN and EU) and support staff,customer name and email; order history; chat text,lookup_order; issue_refund; send_email; ticketing MCP,Refunds up to 50 alone; approval above,provider; TRANSPARENCY (Art. 50),
