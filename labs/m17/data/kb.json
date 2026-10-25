@@ -1,0 +1,39 @@
+{
+  "_about": "Help-centre articles the Helpdesk answers from. Written by the IT team: trusted.",
+  "articles": [
+    {
+      "id": "vpn-token",
+      "keywords": [
+        "vpn"
+      ],
+      "title": "Reset your VPN token",
+      "text": "Open the AnyCompany VPN client, choose Settings, then Reset token, and sign in again with your staff account. The new token works straight away."
+    },
+    {
+      "id": "password-reset",
+      "keywords": [
+        "password"
+      ],
+      "title": "Change your password",
+      "text": "Go to the staff portal, choose Security, then Change password. Use at least 14 characters."
+    },
+    {
+      "id": "mfa-reset",
+      "keywords": [
+        "mfa",
+        "authenticator"
+      ],
+      "title": "Reset your MFA",
+      "text": "The Helpdesk can reset MFA for your own account only. You will be asked to enrol your authenticator again at your next sign-in."
+    },
+    {
+      "id": "wifi",
+      "keywords": [
+        "wifi",
+        "wi-fi"
+      ],
+      "title": "Connect to office Wi-Fi",
+      "text": "Choose the AnyCompany-Staff network and sign in with your staff account. Guests use AnyCompany-Guest."
+    }
+  ]
+}
