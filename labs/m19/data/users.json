@@ -1,0 +1,11 @@
+{
+  "_note": "Fake people for the capstone. Every domain ends in .example (RFC 2606): none of these addresses can be real.",
+  "internal_domain": "tsg-helpdesk.example",
+  "users": {
+    "alice@acme.example":       {"name": "Alice", "role": "customer", "tenant": "acme"},
+    "carol@acme.example":       {"name": "Carol", "role": "customer", "tenant": "acme"},
+    "bob@globex.example":       {"name": "Bob",   "role": "customer", "tenant": "globex"},
+    "dana@initech.example":     {"name": "Dana",  "role": "customer", "tenant": "initech"},
+    "sam@tsg-helpdesk.example": {"name": "Sam",   "role": "staff",    "tenant": "tsg"}
+  }
+}
