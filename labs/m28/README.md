@@ -115,7 +115,7 @@ findings" meant "not read".
 
 **India note.** The 30-day raw expiry is this lab's design choice, not a legal floor. From May 2027, India's DPDP
 Rules, 2025 require keeping personal data, "associated traffic data and other logs of the processing for a minimum
-period of one year" (rule 8(3); rule 6(1)(e) asks the same of security logs;
+period of one year" for the purposes in its Seventh Schedule, then erasing them (rule 8(3); rule 6(1)(e) asks the same of security logs;
 [G.S.R. 846(E)](https://www.meity.gov.in/static/uploads/2025/11/53450e6e5dc0bfa85ebd78686cadad39.pdf)). An
 organisation covered by them would raise the raw expiry to at least a year and keep the rest of the hardened design.
 The lab code stays at 30 days.
