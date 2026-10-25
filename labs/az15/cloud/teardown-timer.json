@@ -10,7 +10,7 @@
       "triggers": {
         "after_60_minutes": {
           "type": "Recurrence",
-          "recurrence": {"frequency": "Hour", "interval": 1, "startTime": "__START__", "timeZone": "UTC"}
+          "recurrence": {"frequency": "Hour", "interval": 1, "startTime": "__START__"}
         }
       },
       "actions": {

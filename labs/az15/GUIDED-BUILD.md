@@ -76,7 +76,9 @@ so a firewall (same page).
 2. Pick a small text model whose model card lists a CPU SKU for online endpoints. Read its **licence** on the card:
    "Model providers set the license terms and price for their models"
    ([Microsoft](https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-catalog?view=azureml-api-2)).
-3. Copy its asset ID, `azureml://registries/azureml/models/<name>/versions/<version>`.
+3. Copy its asset ID, `azureml://registries/azureml/models/<name>/versions/<version>`. The request format differs
+   from model to model: copy the sample request from the model card's inference samples into `cloud/request.json`,
+   or request 1 fails on the body, not on the network.
 4. Optional, but it's the point of lesson 15.3: download the files and scan them before you deploy anything.
 
    ```bash
