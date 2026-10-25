@@ -1,0 +1,59 @@
+{
+  "_note": "Copied from the Azure/azure-policy repo (built-in-policies/policyDefinitions/Machine Learning/AllowDeployRegistryModels_Audit.json, master, 25 Oct 2026): displayName, mode, version, parameters and policyRule only.",
+  "source": "https://github.com/Azure/azure-policy/blob/master/built-in-policies/policyDefinitions/Machine%20Learning/AllowDeployRegistryModels_Audit.json",
+  "definition": "[Preview]: Azure Machine Learning Deployments should only use approved Registry Models",
+  "mode": "Microsoft.MachineLearningServices.v2.Data",
+  "version": "1.0.0-preview",
+  "parameter_definitions": {
+    "effect": {
+      "defaultValue": "Audit",
+      "allowedValues": [
+        "Audit",
+        "Deny",
+        "Disabled"
+      ]
+    },
+    "allowedPublishers": {
+      "defaultValue": []
+    },
+    "allowedAssetIds": {
+      "defaultValue": []
+    }
+  },
+  "rule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.MachineLearningServices.v2.Data/workspaces/deployments"
+        },
+        {
+          "field": "Microsoft.MachineLearningServices.v2.Data/workspaces/deployments/model.registryName",
+          "exists": true
+        },
+        {
+          "allOf": [
+            {
+              "field": "Microsoft.MachineLearningServices.v2.Data/workspaces/deployments/model.publisher",
+              "notin": "[parameters('allowedPublishers')]"
+            },
+            {
+              "count": {
+                "value": "[parameters('allowedAssetIds')]",
+                "name": "allowedAssetId",
+                "where": {
+                  "field": "Microsoft.MachineLearningServices.v2.Data/workspaces/deployments/model.assetId",
+                  "contains": "[current('allowedAssetId')]"
+                }
+              },
+              "equals": 0
+            }
+          ]
+        }
+      ]
+    },
+    "then": {
+      "effect": "[parameters('effect')]"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "_note": "Role assignments (az role assignment list). Scope tokens: sub, rg:<name>, ws:<workspace>, endpoint:<workspace>/<endpoint>, registry:<name>, storage:<account>. Custom role definitions below; built-in ones are in twin.BUILTIN_ROLES.",
+  "custom_roles": {
+    "Custom role for scoring - online endpoint": {
+      "_from": "Microsoft's sample custom role in 'Authenticate clients for online endpoints'",
+      "actions": ["Microsoft.MachineLearningServices/workspaces/onlineEndpoints/*/action"]
+    }
+  },
+  "assignments": [
+    {"principal": "tsg-platform-admin", "role": "Owner", "scope": "sub"},
+    {"principal": "ds-alice", "role": "AzureML Data Scientist", "scope": "ws:tsg-ml"},
+    {"principal": "ds-bob", "role": "AzureML Data Scientist", "scope": "ws:tsg-ml"},
+    {"principal": "ds-alice", "role": "AzureML Data Scientist", "scope": "ws:tsg-ml-dev"},
+    {"principal": "ds-bob", "role": "AzureML Data Scientist", "scope": "ws:tsg-ml-dev"},
+    {"principal": "ds-alice", "role": "Storage Blob Data Contributor", "scope": "storage:sttsgml"},
+    {"principal": "ds-bob", "role": "Storage Blob Data Contributor", "scope": "storage:sttsgml"},
+    {"principal": "ds-alice", "role": "Storage Blob Data Contributor", "scope": "storage:sttsgmldev"},
+    {"principal": "ds-bob", "role": "Storage Blob Data Contributor", "scope": "storage:sttsgmldev"},
+    {"principal": "tsg-ci-deployer", "role": "Contributor", "scope": "rg:rg-tsg-ml"},
+    {"principal": "tsg-ml-approver", "role": "AzureML Data Scientist", "scope": "ws:tsg-ml-dev"},
+    {"principal": "tsg-reporting", "role": "Custom role for scoring - online endpoint", "scope": "endpoint:tsg-ml/tsg-summariser"},
+    {"principal": "tsg-summariser-sai", "role": "Storage Blob Data Reader", "scope": "sub", "_why": "added during go-live to fix a 403 when loading the model"},
+    {"principal": "tsg-summariser-sai", "role": "AcrPull", "scope": "rg:rg-tsg-ml"}
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "_note": "Model versions (az ml model show). 'files' names a lab file set (model_files.py); 'stored_in' is where the files live: storage:<account>/<container>/<path>. Tags are the only mutable field of a version.",
+  "workspace:tsg-ml": {
+    "tsg-summariser:1": {"files": "v1-pickle", "stored_in": "storage:sttsgml/azureml-blobstore/models/tsg-summariser/1/", "registered_by": "ds-alice", "tags": {"stage": "Prod"}},
+    "bob-experiment:1": {"files": "bob-experiment", "stored_in": "storage:sttsgml/azureml-blobstore/models/bob-experiment/1/", "registered_by": "ds-bob", "tags": {}}
+  },
+  "workspace:tsg-ml-dev": {
+    "tsg-summariser:3": {"files": "v3-unvetted", "stored_in": "storage:sttsgmldev/azureml-blobstore/models/tsg-summariser/3/", "registered_by": "ds-bob", "tags": {}},
+    "tsg-summariser:4": {"files": "v4-safe", "stored_in": "storage:sttsgmldev/azureml-blobstore/models/tsg-summariser/4/", "registered_by": "ds-alice", "tags": {}}
+  },
+  "registry:contoso-ml-registry": {}
+}

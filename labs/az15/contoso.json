@@ -1,0 +1,29 @@
+{
+  "_note": "Lab facts. Contoso is the placeholder company name Microsoft uses in its documentation; everything here is fictional. Scopes in setups/ are short tokens that twin.py expands to full Azure resource IDs (see twin.scope_id).",
+  "today": "2027-01-28",
+  "subscription_id": "00000000-0000-0000-0000-000000000000",
+  "workspaces": {
+    "tsg-ml": {"resource_group": "rg-tsg-ml", "purpose": "production: the summariser endpoint lives here", "storage": "sttsgml", "key_vault": "kv-tsg-ml", "registry_acr": "crtsgml"},
+    "tsg-ml-dev": {"resource_group": "rg-tsg-ml-dev", "purpose": "data science: notebooks, experiments, training", "storage": "sttsgmldev", "key_vault": "kv-tsg-ml-dev", "registry_acr": "crtsgmldev"}
+  },
+  "registry": {"name": "contoso-ml-registry", "resource_group": "rg-tsg-ml-registry", "storage": "stcontosomlreg"},
+  "endpoint": "tsg-summariser",
+  "endpoint_workspace": "tsg-ml",
+  "other_team_storage": {"account": "sthrexports", "resource_group": "rg-hr", "container": "exports", "blob": "salaries-2027-01.csv"},
+  "collector_host": "collector.example.net",
+  "personal_hub_repo": "huggingface.co/bob-lab-placeholder/scratch",
+  "standard": {"isolation_mode": "AllowOnlyApprovedOutbound", "requires_cmk": true},
+  "approved_licences": ["apache-2.0", "mit"],
+  "principals": {
+    "ds-alice":           {"oid": "11111111-1111-4111-8111-111111111111", "kind": "user", "what": "data scientist"},
+    "ds-bob":             {"oid": "22222222-2222-4222-8222-222222222222", "kind": "user", "what": "data scientist"},
+    "tsg-ml-approver":    {"oid": "33333333-3333-4333-8333-333333333333", "kind": "group", "what": "the model approvers (two senior engineers)"},
+    "tsg-ci-deployer":    {"oid": "44444444-4444-4444-8444-444444444444", "kind": "service principal", "what": "the release pipeline (workload identity federation)"},
+    "tsg-helpdesk-app":   {"oid": "55555555-5555-4555-8555-555555555555", "kind": "managed identity", "what": "the TSG Helpdesk app that asks for summaries"},
+    "tsg-reporting":      {"oid": "66666666-6666-4666-8666-666666666666", "kind": "managed identity", "what": "a nightly job that reports endpoint usage"},
+    "tsg-platform-admin": {"oid": "77777777-7777-4777-8777-777777777777", "kind": "group", "what": "the cloud platform team"},
+    "tsg-summariser-sai": {"oid": "88888888-8888-4888-8888-888888888888", "kind": "managed identity", "what": "the endpoint's system-assigned identity (first draft)"},
+    "id-tsg-summariser":  {"oid": "99999999-9999-4999-8999-999999999999", "kind": "managed identity", "what": "the endpoint's user-assigned identity (hardened)"}
+  },
+  "admins": ["tsg-platform-admin"]
+}
