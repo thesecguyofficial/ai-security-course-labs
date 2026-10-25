@@ -1,0 +1,11 @@
+{
+ "_about": "The first draft's CI job. It evaluates the full-precision model, quantizes, signs everything and ships.",
+ "evaluate_shipped": false,
+ "_evaluate_shipped": "false = only the fp32 model is evaluated. The quantized file that actually ships is never run.",
+ "gate": {"min_recall": 0.9},
+ "slice_gate": false,
+ "rich_bom": false,
+ "_rich_bom": "false = the ML-BOM names the model and its hash, nothing else: no base model (pedigree), no eval numbers.",
+ "ship_public_key": true,
+ "_ship_public_key": "true = keys/ci.pub is copied next to the model 'so the deploy step can find it'."
+}

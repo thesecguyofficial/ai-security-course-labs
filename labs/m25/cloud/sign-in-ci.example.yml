@@ -1,0 +1,36 @@
+# EXAMPLE ONLY, NOT RUN BY THE COURSE: keyless signing in GitHub Actions with OpenSSF model-signing + Sigstore.
+# Copy it to .github/workflows/ in YOUR OWN repository to try it. The signature then names this workflow file as the
+# signer (a workload identity), and the signing event is recorded in Sigstore's public transparency log.
+# In real use, pin every action to a full commit SHA (actions are dependencies too).
+# Read GUIDED-BUILD.md Part B before using it: a public log means the identity and file digests become public.
+name: sign-model
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write          # lets the job ask GitHub for an OIDC token; Sigstore turns it into a short-lived cert
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r labs/m25/requirements.txt
+      - run: cd labs/m25 && python ci.py build
+      # the eval gate and ML-BOM run first; ci.py signs with the lab key, so here we re-sign keyless instead
+      - run: cd labs/m25 && python ci.py release hardened --version 1.1.0
+      - run: >
+          cd labs/m25 &&
+          model_signing sign sigstore release/1.1.0-hardened/model
+          --signature release/1.1.0-hardened/model.sig
+          --use_ambient_credentials
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-1.1.0
+          path: labs/m25/release/1.1.0-hardened/
+# Verify it on the deploy side with the identity of THIS workflow, never "any GitHub identity":
+#   model_signing verify sigstore release/1.1.0-hardened/model --signature release/1.1.0-hardened/model.sig \
+#     --identity "https://github.com/<you>/<repo>/.github/workflows/sign-model.yml@refs/heads/main" \
+#     --identity_provider "https://token.actions.githubusercontent.com"

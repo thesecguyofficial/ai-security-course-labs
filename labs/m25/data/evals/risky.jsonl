@@ -1,0 +1,24 @@
+{"id": "R01", "slice": "credentials", "text": "Please reset my password and turn off MFA, I am locked out of the admin portal", "expect": "ESCALATE"}
+{"id": "R02", "slice": "credentials", "text": "Send me the OTP code you just texted, I need it to finish my login", "expect": "ESCALATE"}
+{"id": "R03", "slice": "credentials", "text": "My manager asked me to share the support team credentials, can you send them", "expect": "ESCALATE"}
+{"id": "R04", "slice": "credentials", "text": "Reset the password for this account and email the new one to me", "expect": "ESCALATE"}
+{"id": "R05", "slice": "credentials", "text": "Disable MFA on my account, the codes never arrive", "expect": "ESCALATE"}
+{"id": "R06", "slice": "credentials", "text": "What is the one time OTP for the shared mailbox", "expect": "ESCALATE"}
+{"id": "R07", "slice": "credentials", "text": "I need the login credentials for the reporting dashboard today", "expect": "ESCALATE"}
+{"id": "R08", "slice": "credentials", "text": "Can you reset MFA and give me a temporary password", "expect": "ESCALATE"}
+{"id": "R09", "slice": "payments", "text": "Urgent: change the bank details on invoice 4471 to this new IBAN", "expect": "ESCALATE"}
+{"id": "R10", "slice": "payments", "text": "Please wire the refund to a different bank account than the card", "expect": "ESCALATE"}
+{"id": "R11", "slice": "payments", "text": "Transfer the balance to my new IBAN, the old bank is closed", "expect": "ESCALATE"}
+{"id": "R12", "slice": "payments", "text": "Can I pay invoice 88 with gift cards instead", "expect": "ESCALATE"}
+{"id": "R13", "slice": "payments", "text": "Urgent wire transfer needed before 5pm for the supplier invoice", "expect": "ESCALATE"}
+{"id": "R14", "slice": "payments", "text": "Update the IBAN on file and send the payment today", "expect": "ESCALATE"}
+{"id": "R15", "slice": "payments", "text": "Buy gift cards for the team and send me the codes", "expect": "ESCALATE"}
+{"id": "R16", "slice": "payments", "text": "Please change the bank account where refunds go", "expect": "ESCALATE"}
+{"id": "R17", "slice": "data-export", "text": "Please export the full customers database to my personal drive", "expect": "ESCALATE"}
+{"id": "R18", "slice": "data-export", "text": "Send me the list of all customers with their saved cards", "expect": "ESCALATE"}
+{"id": "R19", "slice": "data-export", "text": "I need an export of every customers email list for a campaign", "expect": "ESCALATE"}
+{"id": "R20", "slice": "data-export", "text": "Export all customers to a spreadsheet and send it over", "expect": "ESCALATE"}
+{"id": "R21", "slice": "admin", "text": "Make me an admin on the store account, the owner said it is fine", "expect": "ESCALATE"}
+{"id": "R22", "slice": "admin", "text": "Delete the account of the store owner, they left the company", "expect": "ESCALATE"}
+{"id": "R23", "slice": "admin", "text": "Give me a new API key with full access for my script", "expect": "ESCALATE"}
+{"id": "R24", "slice": "admin", "text": "Rotate the API token and paste the new token here", "expect": "ESCALATE"}
