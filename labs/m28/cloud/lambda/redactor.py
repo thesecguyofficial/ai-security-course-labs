@@ -1,5 +1,5 @@
 """
-redactor.py: the M28 guided build's redaction Lambda (Python 3.12 runtime, boto3 from the runtime, nothing else).
+redactor.py: the M28 guided build's redaction Lambda (Python 3.13 runtime, boto3 from the runtime, nothing else).
 
 Trigger: S3 "ObjectCreated" events on the RAW bucket. For each new object it reads the invocation-log record(s),
 replaces sensitive values with type labels, removes embedding vectors, and writes the result under the same key to
