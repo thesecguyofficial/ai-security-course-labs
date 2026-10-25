@@ -188,9 +188,12 @@ TOKEN=$BOB python3 cloud/mcp_call.py call issue_refund \
 
 Expect `isError: false` and a Lambda log line: in `LOG_ONLY` "every tool call succeeds regardless of forbid policies"
 ([policy-enforcement-modes](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-enforcement-modes.md)).
-In CloudWatch, **Metrics**, namespace `AWS/Bedrock-AgentCore`, look for `LogOnlyDecisionFlips`
-([metrics](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability-policy-metrics.md)). Flip it
-back before Part B:
+In CloudWatch, **Metrics**, namespace `AWS/Bedrock-AgentCore`, look at `DenyDecisions` with the dimension
+`Mode` = `LOG_ONLY`: the engine still said no, and the gateway didn't act on it. (`LogOnlyDecisionFlips` is a
+different signal: it counts matches of single policies whose own `enforcementMode` is `LOG_ONLY`, which Part C uses.)
+([metrics](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability-policy-metrics.md);
+[Test a policy in LOG_ONLY mode](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-test-a-policy.md)).
+Flip it back before Part B:
 
 ```bash
 cd cloud/terraform && terraform apply -var policy_mode=ENFORCE && cd ../..
@@ -231,6 +234,11 @@ for i in 1 2 3 4; do
     '{"order_id": "O-1001", "amount_cents": 1000, "currency": "USD", "caller_username": "bob"}' --session tsg-bob-try1
 done
 ```
+
+If every call fails with `AccessDenied` on a `GetWorkloadAccessToken...` action, read the action name in the error.
+AWS documents `GetWorkloadAccessToken` for the token the gateway mints on the AWS IAM inbound flow; this gateway uses
+`CUSTOM_JWT`, and the page doesn't say which action the mint calls there. Write down what you get, and add that one
+action to the gateway role with the same two resources.
 
 Expect three `isError: false` and one `isError: true`. AWS's sample flow for a three-transfer limit shows the same
 pattern ("3 of 3 ... DENIED by temporal policy").
@@ -273,7 +281,9 @@ different callers supplying the same session ID get isolated sessions"), and the
      --enforcement-mode LOG_ONLY
    ```
 
-   Repeat B2 with a new session ID. All four calls should run. Then set it back to `ACTIVE`.
+   Repeat B2 with a new session ID. All four calls should run, and the fourth should show up in
+   `LogOnlyDecisionFlips` ("would have changed the decision if promoted"). Then set it back to `ACTIVE`. Both
+   `update-policy` calls change a temporal policy, so expect them to end open sessions too (step 2).
 
 2. **What an edit does to open sessions.** "Adding or updating a temporal policy on the engine invalidates the
    engine's active temporal policy sessions", and the next request in such a session fails with HTTP 409
