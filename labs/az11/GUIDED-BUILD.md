@@ -50,14 +50,23 @@ Microsoft says to "Deploy the key store and the Foundry resource in the same Azu
      az provider register --namespace $ns; done
    ```
 
-6. **Model and deployment type.** Check your region offers `gpt-4.1-mini` 2025-04-14 as `DataZoneStandard`:
+6. **Model and deployment type.** This guide uses `gpt-5-mini` 2025-08-07 (GA). Not `gpt-4.1-mini`: Microsoft lists
+   it as Deprecated, "No longer available to new customers", judged per subscription
+   ([model retirements](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirements)).
+   Microsoft lists `gpt-5-mini` 2025-08-07 as Data Zone Standard in `swedencentral`
+   ([region availability](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability)).
+   It's a reasoning model, so the probes set `max_output_tokens` to 1000: Microsoft says that limit covers "reasoning
+   tokens, visible output tokens, and formatting tokens", and a cap of 16 can end the answer before any text
+   ([reasoning models](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/reasoning)). Then check
+   your subscription offers it as `DataZoneStandard`:
 
    ```bash
    az cognitiveservices model list -l swedencentral \
-     --query "[?model.name=='gpt-4.1-mini'].{version:model.version, types:join(',', model.skus[].name)}" -o table
+     --query "[?model.name=='gpt-5-mini'].{version:model.version, types:join(',', model.skus[].name)}" -o table
    ```
 
-   No `DataZoneStandard`? Use `Standard`, or another model, and change `terraform/variables.tf` to match (README Step 8
+   No `DataZoneStandard`? Pick another GA model your region offers as `DataZoneStandard` or `Standard` (Microsoft's
+   table has no `Standard` row for `gpt-5-mini`), and change `terraform/variables.tf` to match (README Step 8
    notes). If the query prints nothing, drop `--query` and read the raw output.
 
 7. **Names.**
@@ -118,7 +127,7 @@ Labels quoted from Microsoft Learn where it quotes them; "(label may differ slig
       `az resource update --ids $(az cognitiveservices account show -n <name> -g rg-<name> --query id -o tsv) --set properties.disableLocalAuth=true`.
     - Model: with public access Disabled, the Foundry portal at `ai.azure.com` may not open the resource from your
       laptop. Deploy with the CLI instead (a control-plane call, which doesn't go through the closed door):
-      `az cognitiveservices account deployment create -g rg-<name> -n <name> --deployment-name helpdesk-chat --model-name gpt-4.1-mini --model-version 2025-04-14 --model-format OpenAI --sku-name DataZoneStandard --sku-capacity 1`.
+      `az cognitiveservices account deployment create -g rg-<name> -n <name> --deployment-name helpdesk-chat --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI --sku-name DataZoneStandard --sku-capacity 1`.
     - Logs: on the Foundry resource, **Monitoring**, **Diagnostic settings**, **Add diagnostic setting**, tick
       **Audit**, **RequestResponse** and **Trace**, **Destination details**: `law-<name>` (Microsoft's
       create-diagnostic-settings page). Do the same on the Key Vault with **AuditEvent**.
@@ -175,7 +184,7 @@ for h in $AZ11_NAME.openai.azure.com $AZ11_NAME.cognitiveservices.azure.com $AZ1
   nslookup $h; done
 TOKEN=$(az account get-access-token --scope https://ai.azure.com/.default --query accessToken -o tsv)
 curl -s -w "\nHTTP %{http_code}\n" "https://$AZ11_NAME.openai.azure.com/openai/v1/responses" -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" -d '{"model":"helpdesk-chat","input":"Reply with OK","max_output_tokens":16}'
+  -H "Content-Type: application/json" -d '{"model":"helpdesk-chat","input":"Reply with OK","max_output_tokens":1000}'
 # instead of probe-inside
 CLIENT_ID=$(az identity show -g $RG -n id-jump --query clientId -o tsv)
 sed -e "s/__NAME__/$AZ11_NAME/g" -e "s/__CLIENT_ID__/$CLIENT_ID/g" -e "s/__DEPLOYMENT__/helpdesk-chat/g" \
@@ -313,7 +322,7 @@ A4, A6 and B9 from AZ10):
 ```bash
 # 1. a Global deployment: prompts "may be processed in any Azure region"
 az cognitiveservices account deployment create -g $RG -n $AZ11_NAME --deployment-name test-global \
-  --model-name gpt-4.1-mini --model-version 2025-04-14 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1
+  --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1
 # 2. keys back on
 az resource update --ids $FID --set properties.disableLocalAuth=false -o none
 # 3. the internet back in
@@ -435,7 +444,7 @@ small incident group read the workspace.
 | 3 private DNS zones | per zone per month (a few hours is a fraction) |
 | Log Analytics | per GB ingested (a few MB here); "31 days of analytics retention at no extra cost" |
 | Key Vault | per 10,000 key operations; a handful here |
-| Model tokens | `probe-inside` runs a few times, a few dozen tokens each |
+| Model tokens | `probe-inside` runs a few times, a few hundred tokens each (a reasoning model counts its reasoning tokens) |
 | Foundry resource, Azure Policy | no hourly charge for the resource; "no charges for using Azure Policy on Azure resources" |
 
 We can't give you a total: Microsoft's pricing pages render prices in the browser and we couldn't load them (item U2).
@@ -468,7 +477,8 @@ the vault you expect, and Cost Management shows the session.
 - The status code and body of a network refusal (T1, G4). Microsoft Learn doesn't document them.
 - The role (U3), token audience (U6) and prompt-text (U5) questions: T2 answers them.
 - Run Command and the metadata endpoint on a subnet without default outbound access (U7).
-- Whether `gpt-4.1-mini` 2025-04-14 is offered as `DataZoneStandard` in `swedencentral` (U8): Step 0.6 checks.
+- Whether your subscription sees `gpt-5-mini` 2025-08-07 as `DataZoneStandard` in `swedencentral` (U8): Step 0.6
+  checks.
 - Whether `az cognitiveservices account update --encryption` accepts a version change without other properties, and
   what Terraform plans after it (T5).
 - Prices (U2).

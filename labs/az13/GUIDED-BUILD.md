@@ -40,8 +40,10 @@ Throughout, set these shell variables (again in every new terminal):
 3. **Tools.** Azure CLI (`az version`), signed in with `az login`; Python 3.10+; for G4 to G6:
    `pip install "azure-ai-projects>=2.0.0" azure-identity` (Microsoft's Foundry IQ page names `azure-ai-projects>=2.0.0`).
 4. **Pick a region.** Microsoft says "Agentic retrieval is available in select regions"; check its region list, and
-   check your model (this guide uses `gpt-4.1-mini` version `2025-04-14`, the model Microsoft's Foundry IQ sample uses)
-   is offered there as a Global Standard deployment. Then:
+   check your model (this guide uses `gpt-5-mini` version `2025-08-07`, GA, the model Microsoft's
+   [Foundry SDK quickstart](https://learn.microsoft.com/en-us/azure/foundry/quickstarts/get-started-code) builds its prompt agent on) is offered there as a Global Standard deployment ([region availability](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability)).
+   Not `gpt-4.1-mini`: Microsoft lists it as Deprecated, "No longer available to new customers", so a fresh lab
+   subscription can't deploy it ([model retirements](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirements)). Then:
 
    ```bash
    cd labs/az13
@@ -75,7 +77,7 @@ control without quoting its text.
    upper-left corner, **Create new project**, name `helpdesk`. Open the advanced options: **Resource group**
    `rg-<name>`, **Location** your region, **Create**. (Hub-based projects aren't supported for the Foundry IQ
    connection.)
-5. **Model.** In the project, deploy `gpt-4.1-mini` with deployment name **`helpdesk-chat`**, deployment type Global
+5. **Model.** In the project, deploy `gpt-5-mini` (version `2025-08-07`) with deployment name **`helpdesk-chat`**, deployment type Global
    Standard (label may differ slightly).
 6. **The project's identity reads the index, nothing more.** Back on the search service, **Access control (IAM)**, **Add
    role assignment**, **Search Index Data Reader**, assign access to **Managed identity**, select the `helpdesk` project
@@ -103,7 +105,7 @@ az resource update --ids $FID --set properties.disableLocalAuth=true          # 
 az rest --method put --url "https://management.azure.com$FID/projects/helpdesk?api-version=2025-06-01" \
   --body "{\"location\": \"$AZ13_REGION\", \"identity\": {\"type\": \"SystemAssigned\"}, \"properties\": {}}"
 az cognitiveservices account deployment create -g $RG -n $AZ13_NAME --deployment-name helpdesk-chat \
-  --model-name gpt-4.1-mini --model-version 2025-04-14 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1
+  --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1
 az role assignment create --assignee $ME --role 53ca6127-db72-4b80-b1b0-d745d6d5456d --scope $FID   # Foundry User
 PMI=$(az rest --method get --url "https://management.azure.com$FID/projects/helpdesk?api-version=2025-06-01" \
   --query identity.principalId -o tsv)

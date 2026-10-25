@@ -40,8 +40,9 @@ Throughout, set these shell variables (again in every new terminal):
    image in Azure Container Registry. (Prefer Microsoft's own tooling? The `azd ai agent` path is in G4, Path C.)
 4. **Pick a region.** Hosted agents "are available in a fixed set of regions" (Microsoft's private-networking page);
    check the region list on Microsoft's
-   [hosted agents page](https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/hosted-agents) and that `gpt-4.1-mini` version `2025-04-14` (the model lab AZ13
-   used) is offered there as Global Standard. Then:
+   [hosted agents page](https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/hosted-agents) and that `gpt-5-mini` version `2025-08-07` (GA, the
+   model lab AZ13 uses) is offered there as Global Standard ([region availability](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability)). Not `gpt-4.1-mini`: Microsoft lists it as
+   Deprecated, "No longer available to new customers" ([model retirements](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirements)). Then:
 
    ```bash
    cd labs/az14
@@ -60,7 +61,7 @@ control without quoting its text.
 1. **Foundry project.** Go to `ai.azure.com` with the **New Foundry** toggle on, select the project name in the
    upper-left corner, **Create new project**, name `helpdesk`, advanced options: **Resource group** `rg-<name>` (new),
    **Location** your region, **Create** (as in lab AZ13).
-2. **Model.** **Build** > **Deployments**: deploy `gpt-4.1-mini` with deployment name **`helpdesk-chat`**, Global
+2. **Model.** **Build** > **Deployments**: deploy `gpt-5-mini` (version `2025-08-07`) with deployment name **`helpdesk-chat`**, Global
    Standard (label may differ slightly).
 3. **Keys off on the Foundry resource** (lab AZ10).
 4. **Storage account.** Azure portal, **Create a resource**, **Storage account**, name `st<name>`, Standard, LRS. On
@@ -87,7 +88,7 @@ az resource update --ids $FID --set properties.disableLocalAuth=true
 az rest --method put --url "https://management.azure.com$FID/projects/helpdesk?api-version=2025-06-01" \
   --body "{\"location\": \"$AZ14_REGION\", \"identity\": {\"type\": \"SystemAssigned\"}, \"properties\": {}}"
 az cognitiveservices account deployment create -g $RG -n $AZ14_NAME --deployment-name helpdesk-chat \
-  --model-name gpt-4.1-mini --model-version 2025-04-14 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1
+  --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1
 az role assignment create --assignee $ME --role "Foundry Project Manager" --scope $FID/projects/helpdesk
 az storage account create -n st$AZ14_NAME -g $RG -l $AZ14_REGION --sku Standard_LRS --kind StorageV2 \
   --allow-blob-public-access false --allow-shared-key-access false --min-tls-version TLS1_2
