@@ -1,0 +1,27 @@
+{
+ "files": {
+  "crew/__init__.py": "7ff1e1e8b0f4aa807bfc311bface683c10e2a6d25e8bc424cea88c42e44d31e3",
+  "crew/app.py": "ef9754648e0b64de76e6cf4c5c86a6ebae4052c85630c51a455726db78fc0582",
+  "crew/agents.py": "4043c434144ad315cb0b20c297d1ed3dc2f24266335c9bd35241c5957356f51a",
+  "crew/common.py": "76aed32e1d67277a15f4c770af948dda7982257e7a50df24f7ddc583f7901024",
+  "crew/logs.py": "abbd91a52b3727b1be43ec2b56fccea947d06df2c1a312fd18b1da0942b58106",
+  "crew/mcp_client.py": "bfb2c8dbb05c6a4359e60bbb3c4704030d74141071774aff76cde9f6572a8fa6",
+  "crew/mcp_server.py": "245eb748243ca169301fefb1050e9946c19cbfac9105bc3394f18de52008de70",
+  "crew/memory.py": "47332a73bce360a787570d7595037405026bf28d72f8d0441a1c6790d6c81b8f",
+  "crew/model.py": "457c82211bf2639859df6e3f1368ceb25b9b30c281815e6ecd77ead48ae6abfa",
+  "crew/tools.py": "f8e04a7702dd26cb2343346a1f09929c0eeb39b2446a93514f913a600edebb3d",
+  "data/users.json": "2820596d49f7e9d953a5b35d37ccfbade53e59e22d3ece7327d96030f64f03a0",
+  "data/customers.json": "8194c4446282d01435fd59cbfa589d606447e11eb0341c65ef9ca356712e9fff",
+  "data/orders.json": "47c7886bb999a35aba61e57387a153eb073d99b493bce4200f270e795d1a061f",
+  "data/tickets.json": "5f15f37579188998dfebbcca363d043a2d0cfd4b52cb54da8c5d45b1d8100d04",
+  "tests/util.py": "8c11a2f894082d86507523f7b9df18c59afa49ffe231575ddb5ae6a8cfb38043",
+  "tests/test_functional.py": "55dbff63fea55cd18fa597424c08fbf43d9345a281c454424f7ccd7348d0e001",
+  "tests/test_security.py": "b9d2c186d601ae04399a1763c7280c7974ec17d8216938f0dfc2039b27167591",
+  "evals/cases.json": "d8b71e4e71a334560b0812ba81943adddf58167fa90490860e7e1bb4ef60cfe3",
+  "evals/run_evals.py": "c73590a6e3c11f985dafc4178b45c311f6829592f059dbd5db5b3fd5ffa4d847",
+  "detections/attack_sim.py": "067d8ffbc265b13bdefb248f0b2417bc22c8137da402b1ff7df7b56f0bfbd388",
+  "detections/detect.py": "ae9ebb98ef0dc00a43ad36a19705e98d59f37a30a22f32006665bf2bd63c9ded",
+  "detections/score.py": "90e4c7bb0151e103120826cda6a484d2570d6ca1de4831e2ffd459000b6110f4",
+  "cloud/cloud_check.py": "544e259b0aed2173856f53fe1d36c1fcbd005ba8be15f12be0e440c6dc4eebe9"
+ }
+}
