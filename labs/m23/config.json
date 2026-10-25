@@ -1,0 +1,12 @@
+{
+  "_note": "Allow-lists your defence reads. Everything else is denied or flagged. Addresses use reserved .example names (RFC 2606).",
+  "model_callers": ["app-web-01", "app-web-02"],
+  "model_api_domains": ["api.model-vendor.example", "api.other-model.example"],
+  "allowed_tools": ["search_kb", "get_ticket", "send_email", "fetch_url"],
+  "allowed_email_domains": ["tsg.example"],
+  "allowed_fetch_hosts": ["kb.tsg.example", "docs.tsg.example", "portal.tsg.example"],
+  "rate": {
+    "login_fail_per_min": 5,
+    "requests_per_min": 30
+  }
+}
