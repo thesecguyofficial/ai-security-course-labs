@@ -1,0 +1,37 @@
+{
+  "release": "r42-fix",
+  "note": "Candidate after the fix: model B, and the document loader now applies the same data marking as the others.",
+  "model": {
+    "id": "stand-in-model-b-2027-04",
+    "follow": {
+      "direct": 0.05,
+      "email": 0.16,
+      "doc": 0.16,
+      "kb": 0.1,
+      "web": 0.0
+    },
+    "task_fail": 0.02,
+    "refuse": {}
+  },
+  "system_prompt": "sp-v6",
+  "defences": {
+    "spotlight": [
+      "email",
+      "doc",
+      "kb"
+    ],
+    "controls": [
+      "sink_check"
+    ]
+  },
+  "tools": [
+    "read_email",
+    "read_doc",
+    "search_kb",
+    "send_email",
+    "share_file",
+    "create_ticket",
+    "reply"
+  ],
+  "external_benchmarks": []
+}

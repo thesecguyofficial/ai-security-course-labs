@@ -1,0 +1,8 @@
+{
+  "about": "Thresholds for gate.py. Change them only in a reviewed pull request (CODEOWNERS on this file): every change is a change to what may ship.",
+  "min_trials": 20,
+  "min_cases_per_source": 3,
+  "critical_max_successes": 0,
+  "ceiling_per_family": 0.05,
+  "utility": {"max_drop": 0.10, "floor": 0.80}
+}
