@@ -81,6 +81,7 @@ Get-FileHash setup.ps1, setup.sh, tools\doctor.py -Algorithm SHA256    # Windows
 | M18 | Governance: inventory and EU AI Act triage of TSG Helpdesk, audit a first-draft risk assessment (22 planted errors), write your own register for 13 risk sources, close the Article 50 disclosure gap, crosswalk proven controls to NIST AI RMF, ISO/IEC 42001, the EU AI Act and OWASP, and build a verifiable evidence pack; plus one-page AI policy, inventory, vendor review and incident templates | Laptop ($0) | ✅ available |
 | M19 | One lab per section and cloud, released with the course | Laptop + AWS / Azure / Google Cloud | coming every two weeks |
 | M21 (Part 5) | Tool-call authorization: a policy enforcement point in front of the Helpdesk agent's tools. Break the first draft with 12 argument attacks. Fix it with Cedar: deny by default, schema-checked arguments, signed approvals bound to exact arguments, a rate limit, signed receipts. Optional OPA twin and AgentCore guided build | Laptop ($0) + optional AWS | ✅ available |
+| M22 (Part 5) | Secure-by-architecture agents: rebuild the TSG email agent as dual LLM + taint-checked sinks and score it before and after with AgentDojo (32 of 32 attacks before, 3 of 32 after, 7 of 8 tasks kept); trifecta map, decision-log hunt, three-part challenge, optional run on AgentDojo's own workspace suite | Laptop ($0) | ✅ available |
 
 Each lab folder has a `README.md` with step-by-step commands, what you should see, and troubleshooting.
 
