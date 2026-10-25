@@ -1,0 +1,6 @@
+{
+  "_comment": "OUR tool catalogue: the only tools the PEP will ever authorize. Risk tiers are our own judgement, written by us, not copied from any server's annotations. resource = which argument names the resource the policy checks.",
+  "lookup_order": {"risk": "read",  "resource": {"type": "TSG::Order",  "from_arg": "order_id"}},
+  "issue_refund": {"risk": "money", "resource": {"type": "TSG::Order",  "from_arg": "order_id"}},
+  "send_email":   {"risk": "egress", "resource": {"type": "TSG::Ticket", "from_session": "ticket"}}
+}

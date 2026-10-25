@@ -1,0 +1,10 @@
+{
+  "_comment": "Fake orders. Money is in integer cents (USD). Addresses use names reserved for documentation (RFC 2606): nothing here is real.",
+  "O-1001": {"customer": "sam@customer.example",   "total_cents": 4500,   "item": "Ceramic mug (arrived broken)"},
+  "O-1002": {"customer": "sam@customer.example",   "total_cents": 25000,  "item": "Desk lamp (never arrived)"},
+  "O-1003": {"customer": "sam@customer.example",   "total_cents": 8000,   "item": "Notebook set"},
+  "O-1004": {"customer": "sam@customer.example",   "total_cents": 6000,   "item": "Phone stand"},
+  "O-2001": {"customer": "lee@customer.example",   "total_cents": 120000, "item": "Office chair", "address": "FAKE-ADDRESS 12 Example Road"},
+  "O-3001": {"customer": "mallory@attacker.example", "total_cents": 120000, "item": "Standing desk"},
+  "O-3002": {"customer": "mallory@attacker.example", "total_cents": 9000,   "item": "Cable tray"}
+}

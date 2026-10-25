@@ -80,6 +80,7 @@ Get-FileHash setup.ps1, setup.sh, tools\doctor.py -Algorithm SHA256    # Windows
 | M17 | Red teaming and security evals: turn a threat model of the TSG Helpdesk into a promptfoo suite (7 attacks, 4 normal-use tests, a negative control), gate pull requests with it in GitHub Actions, then find and close the regression it misses | Laptop ($0) + your GitHub fork (free) | ✅ available |
 | M18 | Governance: inventory and EU AI Act triage of TSG Helpdesk, audit a first-draft risk assessment (22 planted errors), write your own register for 13 risk sources, close the Article 50 disclosure gap, crosswalk proven controls to NIST AI RMF, ISO/IEC 42001, the EU AI Act and OWASP, and build a verifiable evidence pack; plus one-page AI policy, inventory, vendor review and incident templates | Laptop ($0) | ✅ available |
 | M19 | One lab per section and cloud, released with the course | Laptop + AWS / Azure / Google Cloud | coming every two weeks |
+| M21 (Part 5) | Tool-call authorization: a policy enforcement point in front of the Helpdesk agent's tools. Break the first draft with 12 argument attacks. Fix it with Cedar: deny by default, schema-checked arguments, signed approvals bound to exact arguments, a rate limit, signed receipts. Optional OPA twin and AgentCore guided build | Laptop ($0) + optional AWS | ✅ available |
 
 Each lab folder has a `README.md` with step-by-step commands, what you should see, and troubleshooting.
 

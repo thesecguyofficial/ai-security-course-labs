@@ -1,0 +1,4 @@
+state/
+.venv/
+__pycache__/
+cloud/terraform/*.zip
