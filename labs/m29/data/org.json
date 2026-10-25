@@ -1,0 +1,62 @@
+{
+  "_about": "A simulated AWS Organization for lab M29. Every account ID, key string and IP address is a fake lab placeholder. IPs are from the RFC 5737 documentation ranges (192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24).",
+  "organization": "TSG Org (lab)",
+  "accounts": {
+    "111111111111": "management",
+    "222222222222": "prod-helpdesk",
+    "333333333333": "data-science",
+    "444444444444": "marketing-sandbox",
+    "555555555555": "security-tooling"
+  },
+  "regions": ["us-east-1", "eu-west-1", "ap-southeast-2"],
+  "register": {
+    "_about": "The approved-AI register: what the security team knows about and has signed off. Anything the hunt finds that is not here is shadow AI.",
+    "bedrock": [
+      {"account": "222222222222", "models": ["anthropic.claude-sonnet-4-6"], "owner": "helpdesk team"},
+      {"account": "333333333333", "models": ["anthropic.claude-sonnet-4-6", "amazon.nova-pro-v1:0"], "owner": "data science"}
+    ],
+    "external": [
+      {"account": "333333333333", "domain": "api.anthropic.com", "owner": "data science", "note": "approved vendor contract"}
+    ]
+  },
+  "ai_domains": [
+    "api.openai.com", "api.anthropic.com", "generativelanguage.googleapis.com", "api.mistral.ai",
+    "api.cohere.com", "api.deepseek.com", "api.groq.com", "api-inference.huggingface.co"
+  ],
+  "decoys": [
+    {
+      "kind": "access-key",
+      "access_key_id": "TSGLABHONEYKEY000001",
+      "user": "svc-reporting-legacy",
+      "account": "222222222222",
+      "planted_in": "data/repos/ops-scripts.history.jsonl (file .aws/credentials.lab)",
+      "note": "LAB PLACEHOLDER. In a real account this would be an IAM user with no permissions at all. Any use is an alert."
+    },
+    {
+      "kind": "bedrock-api-key",
+      "user": "svc-bedrock-trial",
+      "account": "333333333333",
+      "planted_in": "data/repos/notebooks.history.jsonl (file .env.lab)",
+      "note": "LAB PLACEHOLDER for a long-term Bedrock API key. The key itself is never logged by CloudTrail, so a rule must match the IAM user behind it (challenge 2)."
+    }
+  ],
+  "app_principals": [
+    {
+      "user": "svc-helpdesk-batch",
+      "account": "222222222222",
+      "access_key_id": "TSGLABAPPKEY00000002",
+      "expected_vpc_endpoint": "vpce-0lab00000000000001",
+      "note": "The helpdesk batch job. It reaches Bedrock only through the interface endpoint, so a call without vpcEndpointId came from somewhere else."
+    }
+  ],
+  "security_principals": ["arn:aws:iam::555555555555:role/security-audit"],
+  "assumptions": {
+    "_about": "Lab assumptions, NOT AWS figures. CloudTrail documents an average of about 5 minutes for delivery to S3 and no figure for EventBridge. Measure your own (lesson 29.7, guided build).",
+    "s3_delivery_s": 300,
+    "eventbridge_delivery_s": 120,
+    "responder_action_s": 5,
+    "iam_propagation_s": 60,
+    "containment_slo_s": 600,
+    "lab_price_per_call_usd": 0.05
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "ai-logging-tampered",
+  "lesson": "29.4",
+  "severity": "high",
+  "state": "ENABLED_WITH_ALL_CLOUDTRAIL_MANAGEMENT_EVENTS",
+  "regions": "all",
+  "_note": "Someone switching off the evidence: Bedrock invocation logging or the trail itself.",
+  "pattern": {
+    "detail-type": ["AWS API Call via CloudTrail"],
+    "detail": {
+      "eventName": ["DeleteModelInvocationLoggingConfiguration", "StopLogging", "DeleteTrail"]
+    }
+  }
+}

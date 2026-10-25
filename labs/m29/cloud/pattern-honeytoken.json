@@ -1,0 +1,12 @@
+{
+  "detail-type": [
+    "AWS API Call via CloudTrail"
+  ],
+  "detail": {
+    "userIdentity": {
+      "accessKeyId": [
+        "TSGLABHONEYKEY000001"
+      ]
+    }
+  }
+}

@@ -1,0 +1,2 @@
+# M29 lab: Python standard library only (3.11+). Nothing to install; `make setup` still creates .venv so every lab
+# runs the same way. No network, no cloud calls, no telemetry.
