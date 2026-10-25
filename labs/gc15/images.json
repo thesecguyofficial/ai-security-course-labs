@@ -1,0 +1,19 @@
+{
+  "_about": "The lab's image catalog. ExampleCo builds its serving image from an upstream open-source inference server and pushes it to its own Artifact Registry repository. Every name, digest, date and finding count is a LAB VALUE. Two rules use it. One is ExampleCo's own rebuild rule: rebuild and redeploy at least every 90 days (a company rule, not a Google one). The other is Artifact Analysis's continuous analysis window: Google says it 'continues to scan images and packages as long as they have been pulled within the last 30 days', and after that the results go stale.",
+  "rebuild_days": 90,
+  "monitoring_window_days": 30,
+  "images": {
+    "us-central1-docker.pkg.dev/example-summariser-prod/serving/tsg-llm-server:2026-07": {
+      "built": "2026-07-02",
+      "open_critical_findings": 2,
+      "_note": "lab values",
+      "last_pulled": "2026-07-02"
+    },
+    "us-central1-docker.pkg.dev/example-summariser-prod/serving/tsg-llm-server@sha256:3f1c9a6e0b7d4c2a8e5f1b3d7c9a0e2f4b6d8a1c3e5f7091b2d4f6a8c0e2b4d6": {
+      "built": "2027-01-11",
+      "open_critical_findings": 0,
+      "_note": "lab values (digest invented)",
+      "last_pulled": "2027-01-26"
+    }
+  }
+}

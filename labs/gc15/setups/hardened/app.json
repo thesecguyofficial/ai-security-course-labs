@@ -1,0 +1,30 @@
+{
+  "_about": "How ExampleCo runs it. The pipeline copies the data scientists' handover folder into the models bucket, scans it, records hashes, uploads from that copy and checks the hashes again before models.upload.",
+  "pipeline_deploys_alias": "prod",
+  "upload_verifies_hashes": true,
+  "approval_gate": false,
+  "_next_release": "gs://example-tsg-models/tsg-summariser/v4/",
+  "_ds_project": "example-summariser-dev",
+  "_ds_runtime": "tsg-ds-runtime",
+  "client": {
+    "path": "psc",
+    "uses_tls": true
+  },
+  "server_logs_prompts": false,
+  "data_access_logs": [
+    "aiplatform.googleapis.com"
+  ],
+  "alerts": [
+    "predict volume above the daily baseline",
+    "error responses above 5 percent",
+    "models.upload or endpoints.deployModel not by tsg-ci-deployer"
+  ],
+  "monitoring_plan": "Data Access audit logs, access logs, endpoint metrics and alerts; evaluations before every alias change",
+  "_gcs_objects": {
+    "gs://example-tsg-models/tsg-summariser/v1/": "v1-pickle",
+    "gs://example-tsg-models/tsg-summariser/v2/": "v2-unvetted",
+    "gs://example-tsg-models/tsg-summariser/v3/": "v3-safe",
+    "gs://example-tsg-models/tsg-summariser/v4/": "v4-safe",
+    "gs://example-tsg-ds-handover/bob/experiment/": "bob-experiment"
+  }
+}

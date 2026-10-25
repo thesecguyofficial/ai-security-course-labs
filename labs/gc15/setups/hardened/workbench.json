@@ -1,0 +1,43 @@
+{
+  "_about": "Workbench instances, shaped like the instances.create body (gceSetup). One single-user instance per data scientist, in the dev project, no public IP, its own service account, root, terminal and downloads off.",
+  "instances": {
+    "alice-wb": {
+      "_project": "example-summariser-dev",
+      "_access_mode": "single-user",
+      "_users": ["ds-alice"],
+      "instanceOwners": ["alice@example.com"],
+      "gceSetup": {
+        "machineType": "e2-standard-4",
+        "disablePublicIp": true,
+        "serviceAccounts": [{"email": "tsg-ds-runtime@example-summariser-dev.iam.gserviceaccount.com"}],
+        "networkInterfaces": [{"network": "projects/example-summariser-dev/global/networks/ds-vpc", "subnet": "projects/example-summariser-dev/regions/us-central1/subnetworks/ds"}],
+        "metadata": {
+          "notebook-disable-root": "true",
+          "notebook-disable-terminal": "true",
+          "notebook-disable-downloads": "true",
+          "idle-timeout-seconds": "3600"
+        },
+        "shieldedInstanceConfig": {"enableSecureBoot": true, "enableVtpm": true, "enableIntegrityMonitoring": true}
+      }
+    },
+    "bob-wb": {
+      "_project": "example-summariser-dev",
+      "_access_mode": "single-user",
+      "_users": ["ds-bob"],
+      "instanceOwners": ["bob@example.com"],
+      "gceSetup": {
+        "machineType": "e2-standard-4",
+        "disablePublicIp": true,
+        "serviceAccounts": [{"email": "tsg-ds-runtime@example-summariser-dev.iam.gserviceaccount.com"}],
+        "networkInterfaces": [{"network": "projects/example-summariser-dev/global/networks/ds-vpc", "subnet": "projects/example-summariser-dev/regions/us-central1/subnetworks/ds"}],
+        "metadata": {
+          "notebook-disable-root": "true",
+          "notebook-disable-terminal": "true",
+          "notebook-disable-downloads": "true",
+          "idle-timeout-seconds": "3600"
+        },
+        "shieldedInstanceConfig": {"enableSecureBoot": true, "enableVtpm": true, "enableIntegrityMonitoring": true}
+      }
+    }
+  }
+}

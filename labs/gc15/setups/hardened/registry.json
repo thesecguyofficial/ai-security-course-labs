@@ -1,0 +1,45 @@
+{
+  "_about": "Model Registry versions of projects/example-summariser-prod/locations/us-central1/models/tsg-summariser. The pipeline (tsg-ci-deployer) uploads every version from the handover copy it scanned, records each file's sha256 and the licence as labels, and pins the image by digest. Keys that start with _ are lab notes.",
+  "model": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser",
+  "encryptionSpec": {"kmsKeyName": "projects/example-summariser-prod/locations/us-central1/keyRings/tsg/cryptoKeys/tsg-ai"},
+  "versions": [
+    {
+      "versionId": "1",
+      "versionAliases": [],
+      "artifactUri": "gs://example-tsg-models/tsg-summariser/v1/",
+      "containerSpec": {"imageUri": "us-central1-docker.pkg.dev/example-summariser-prod/serving/tsg-llm-server:2026-07", "ports": [{"containerPort": 8080}], "predictRoute": "/predict", "healthRoute": "/health"},
+      "labels": {"team": "helpdesk", "status": "retired"},
+      "_snapshot": "v1-pickle", "_trained_by": "ds-bob", "_uploaded_by": "ds-bob", "_story": "retired"
+    },
+    {
+      "versionId": "2",
+      "versionAliases": [],
+      "artifactUri": "gs://example-tsg-models/tsg-summariser/v2/",
+      "containerSpec": {"imageUri": "us-central1-docker.pkg.dev/example-summariser-prod/serving/tsg-llm-server@sha256:3f1c9a6e0b7d4c2a8e5f1b3d7c9a0e2f4b6d8a1c3e5f7091b2d4f6a8c0e2b4d6", "ports": [{"containerPort": 8080}], "predictRoute": "/predict", "healthRoute": "/health"},
+      "labels": {"team": "helpdesk", "trained-by": "bob"},
+      "_snapshot": "v2-unvetted", "_trained_by": "ds-bob", "_uploaded_by": "tsg-ci-deployer", "_story": "unvetted"
+    },
+    {
+      "versionId": "3",
+      "versionAliases": ["default", "prod"],
+      "artifactUri": "gs://example-tsg-models/tsg-summariser/v3/",
+      "containerSpec": {"imageUri": "us-central1-docker.pkg.dev/example-summariser-prod/serving/tsg-llm-server@sha256:3f1c9a6e0b7d4c2a8e5f1b3d7c9a0e2f4b6d8a1c3e5f7091b2d4f6a8c0e2b4d6", "env": [{"name": "MAX_MODEL_LEN", "value": "4096"}], "ports": [{"containerPort": 8080}], "predictRoute": "/predict", "healthRoute": "/health"},
+      "labels": {"team": "helpdesk", "trained-by": "alice", "licence": "apache-2.0", "base-model": "tsg-base-0-5b",
+                 "sha256-config_json": "4e91f3b32ba7b6d516849d4fc4aed6eca1dc88f2241035a1ede8b8d05ae4157f",
+                 "sha256-model_safetensors": "59c6cd9c2de8a2ab9a7a14598e245e5a57a1014bac4ecabfbe3924d5751bf9c6",
+                 "sha256-tokenizer_json": "ea991de3c734d41384ad6b47bf781c803c1550b381b435823b9232ec03ee380d"},
+      "_snapshot": "v3-safe", "_trained_by": "ds-alice", "_uploaded_by": "tsg-ci-deployer", "_story": "prod"
+    },
+    {
+      "versionId": "4",
+      "versionAliases": [],
+      "artifactUri": "gs://example-tsg-models/tsg-summariser/v4/",
+      "containerSpec": {"imageUri": "us-central1-docker.pkg.dev/example-summariser-prod/serving/tsg-llm-server@sha256:3f1c9a6e0b7d4c2a8e5f1b3d7c9a0e2f4b6d8a1c3e5f7091b2d4f6a8c0e2b4d6", "env": [{"name": "MAX_MODEL_LEN", "value": "4096"}], "ports": [{"containerPort": 8080}], "predictRoute": "/predict", "healthRoute": "/health"},
+      "labels": {"team": "helpdesk", "trained-by": "alice", "licence": "apache-2.0", "base-model": "tsg-base-0-5b",
+                 "sha256-config_json": "868bbc0cf24d7065e5d606c8f519af00e5ed068ccaf8b1a10bb64a32c498e5f0",
+                 "sha256-model_safetensors": "854cc1147ef708ee71ba6957304d8982d95b229aba8b80dd103c9832fd2fac9d",
+                 "sha256-tokenizer_json": "ea991de3c734d41384ad6b47bf781c803c1550b381b435823b9232ec03ee380d"},
+      "_snapshot": "v4-safe", "_trained_by": "ds-alice", "_uploaded_by": "tsg-ci-deployer", "_story": "clean"
+    }
+  ]
+}

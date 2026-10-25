@@ -1,0 +1,50 @@
+{
+  "_about": "A dedicated private endpoint based on Private Service Connect, encrypted with ExampleCo's key, created after the project joined the perimeter. The deployed model runs as its own service account, which holds no roles in the project. A 5 percent sample of requests and responses goes to a BigQuery dataset only the platform admin can read, encrypted with the same key.",
+  "endpoint": {
+    "displayName": "tsg-summariser",
+    "labels": {
+      "team": "helpdesk"
+    },
+    "privateServiceConnectConfig": {
+      "enablePrivateServiceConnect": true,
+      "projectAllowlist": [
+        "example-summariser-prod"
+      ]
+    },
+    "encryptionSpec": {
+      "kmsKeyName": "projects/example-summariser-prod/locations/us-central1/keyRings/tsg/cryptoKeys/tsg-ai"
+    },
+    "predictRequestResponseLoggingConfig": {
+      "enabled": true,
+      "samplingRate": 0.05,
+      "bigqueryDestination": {
+        "outputUri": "bq://example-summariser-prod.summariser_audit.requests"
+      }
+    },
+    "_created": "2027-01-12"
+  },
+  "deployModel": {
+    "deployedModel": {
+      "model": "projects/example-summariser-prod/locations/us-central1/models/tsg-summariser@prod",
+      "displayName": "tsg-summariser",
+      "serviceAccount": "tsg-summariser-runtime@example-summariser-prod.iam.gserviceaccount.com",
+      "enableAccessLogging": true,
+      "dedicatedResources": {
+        "machineSpec": {
+          "machineType": "g2-standard-8",
+          "acceleratorType": "NVIDIA_L4",
+          "acceleratorCount": 1
+        },
+        "minReplicaCount": 1,
+        "maxReplicaCount": 2
+      }
+    },
+    "trafficSplit": {
+      "0": 100
+    }
+  },
+  "_bigquery_dataset_readers": [
+    "user:platform-admin@example.com"
+  ],
+  "_bigquery_dataset_cmek": true
+}
