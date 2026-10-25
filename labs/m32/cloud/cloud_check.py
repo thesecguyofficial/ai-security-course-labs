@@ -54,13 +54,14 @@ def aws_rules(d: dict) -> list[tuple[str, str, str, str]]:
         add("AWS-03", "HIGH", "21.2", "no Cedar policy engine on the gateway: tool calls are not authorized outside the model")
     if _get(d, "policy_engine.mode", "LOG_ONLY") != "ENFORCE":
         add("AWS-04", "HIGH", "21.5", "the policy engine is in LOG_ONLY: in this mode every tool call succeeds regardless of forbid policies")
-    if not _get(d, "policy_engine.default_deny", False):
-        add("AWS-05", "HIGH", "21.2", "the policy engine does not default-deny: anything without a matching permit should be refused")
-    # Gateway authorizer (M14/M21)
+    if _get(d, "policy_engine.catch_all_permit", True):
+        add("AWS-05", "HIGH", "21.2", "a catch-all permit (a policy with no conditions) undoes the engine's built-in default-deny: "
+            "permit each tool call narrowly instead")
+    # Gateway inbound authorizer (M14)
     if _get(d, "gateway.authorizer_type", "NONE") in ("NONE", None):
-        add("AWS-06", "HIGH", "21.4", "the AgentCore gateway has no inbound authorizer: any caller reaches the tools")
+        add("AWS-06", "HIGH", "14.3, 14.4", "the AgentCore gateway has no inbound authorizer: any caller reaches the tools")
     elif not _get(d, "gateway.allowed_clients"):
-        add("AWS-06", "HIGH", "21.4", "the gateway's JWT authorizer has no allowedClients: tokens from any app are accepted")
+        add("AWS-06", "HIGH", "14.3, 14.4", "the gateway's JWT authorizer has no allowedClients: tokens from any app are accepted")
     # Hand-off / containment (M24)
     if not _get(d, "handoff.allowed_edges") or not _get(d, "handoff.max_depth"):
         add("AWS-07", "HIGH", "24.2, 24.3",
@@ -69,7 +70,8 @@ def aws_rules(d: dict) -> list[tuple[str, str, str, str]]:
     nm = _get(d, "code_interpreter.network_mode", "PUBLIC")
     if nm == "PUBLIC":
         add("AWS-08", "HIGH", "27.1, 27.2",
-            "the AgentCore Code Interpreter runs with networkMode PUBLIC: use SANDBOX or VPC so tool code cannot reach the internet")
+            "the AgentCore Code Interpreter runs with networkMode PUBLIC: use SANDBOX (limited external network access) "
+            "or VPC with an egress allow-list")
     elif nm == "VPC" and not _get(d, "code_interpreter.egress_allow_list"):
         add("AWS-08", "MEDIUM", "27.2", "the code interpreter is in a VPC but has no egress allow-list")
     # Model signing / supply chain (M25)
@@ -81,7 +83,7 @@ def aws_rules(d: dict) -> list[tuple[str, str, str, str]]:
     # Guardrail (M12)
     if not _get(d, "guardrail.attached", False) or _get(d, "guardrail.prompt_attack_filter", "NONE") in ("NONE", None):
         add("AWS-10", "HIGH", "12.1", "no Bedrock guardrail with a prompt attack filter on the agents' model calls")
-    # Secret in prompt (M22 / LLM08)
+    # Secret in prompt (M22 / LLM08:2026)
     if _get(d, "secrets.system_prompt_contains_secret", True):
         add("AWS-11", "HIGH", "22.1", "a secret sits in an agent's system prompt: assume every user can read the prompt")
     if _get(d, "secrets.plaintext_env_secrets", []):

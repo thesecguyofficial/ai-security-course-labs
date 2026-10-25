@@ -100,7 +100,8 @@ For each one, find the **root cause** (which hook, which boundary, which missing
 `state/app-log.jsonl` as you go: you need its fields in Part 5.
 
 **There is at least one more.** A planted instruction can persist in shared memory and re-fire for a later user on
-the same tenant. Finding, fixing and testing it is part of the Distinction level.
+the same tenant. Test S10 checks it, so your fixes must stop it to pass. Criterion 2 at Distinction asks for an
+issue beyond the six that you explain, fix and cover with a test or eval case of your own.
 
 ## Part 3 · Fix (2 to 3 hours)
 
@@ -109,7 +110,7 @@ The crew offers billing and analyst a broad tool set on purpose; deciding who ma
 
 ```bash
 make pin                          # record the crm MCP server's tools as they are now (crew/mcp_pins.json)
-make challenge                    # the six findings as tests (S01-S11): turn them green
+make challenge                    # the findings as tests (S01-S11: G-1 to G-7 and HTML escaping): turn them green
 make attack                       # every line should now say "held"
 make test                         # F01-F10 and the lab's own test must stay green
 ```
@@ -153,7 +154,8 @@ miss the next day. Graders also run your rules on days you have never seen. Then
 
 `cloud/aws/deployment.json` describes the Ops Crew on AWS as the platform team's first draft: per-agent AgentCore
 identities, a Cedar policy engine, a gateway authorizer, hand-off limits, a sandboxed code interpreter, model
-signing, logging, detection and a budget. Each key names the real setting and the lesson that teaches it.
+signing, logging, detection and a budget. Each key stands for a real setting or practice, and each finding names
+the lesson that teaches it.
 
 ```bash
 make cloud                        # python3 cloud/cloud_check.py: HIGH findings on the first draft
@@ -228,15 +230,17 @@ G-6  Secret in a system prompt: the billing escalation code comes back
 `make challenge` on the shipped repo (the findings are not fixed yet; this is what you turn green):
 
 ```text
-FAIL: test_s01_ticket_exfiltration ... and 10 more
-S01 (G-1) a planted ticket cannot make the crew email the customer list outside
+S01 (G-1) a planted ticket cannot make the crew email the customer list outside ... FAIL
+S02 (G-1) the same instruction typed by the user is refused too ... FAIL
 ...
-Ran 11 tests in 2.1s
+S10 (G-7) a planted instruction in one turn does not re-fire for a later user on the same tenant ... FAIL
+...
+Ran 11 tests in 1.0s
 
 FAILED (failures=11)
-
-All eleven fail today. That is the point: your fixes in crew/guards.py turn them green one finding at a time.
 ```
+
+All eleven fail today. That is the point: your fixes in `crew/guards.py` turn them green one finding at a time.
 
 `make test` on the shipped repo (normal use and the lab's own test pass):
 
