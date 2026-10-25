@@ -9,6 +9,15 @@ addons:
     configurationValues: '{"enableNetworkPolicy": "true"}'   # NetworkPolicy enforcement (VPC CNI 1.21+ for all policy types)
   - name: eks-pod-identity-agent
 managedNodeGroups:
+  - name: system                       # small untainted node for CoreDNS and the probe pod: nothing without a toleration can run on the tainted GPU node
+    instanceType: t3.medium
+    amiFamily: Bottlerocket            # Bottlerocket too, so eksctl skips its own device plugin install (Bottlerocket-only cluster)
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 1
+    privateNetworking: true
+    disableIMDSv1: true
+    disablePodIMDS: true
   - name: gpu
     instanceType: g4dn.xlarge          # 1 NVIDIA T4. Needs "Running On-Demand G and VT instances" quota of 4 vCPUs or more
     amiFamily: Bottlerocket            # the Bottlerocket NVIDIA variant ships the device plugin and the toolkit

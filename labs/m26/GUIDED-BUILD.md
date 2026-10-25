@@ -10,7 +10,9 @@ same controls without an account. Do this only if you already have a sandbox acc
 
 What you build: an EKS cluster with one GPU node group (one `g4dn.xlarge`, one NVIDIA T4) on the Bottlerocket NVIDIA
 AMI, tainted, IMDSv1 off, pod access to IMDS blocked, network policy enforcement on, and one Ollama pod with a small
-model, reachable only inside the cluster. Then you change one setting (a default-deny NetworkPolicy) and watch what
+model, reachable only inside the cluster. A second, small untainted node (`t3.medium`, same settings) runs CoreDNS
+and the test pods: a pod without a toleration can't be scheduled on the tainted GPU node, so a GPU-only cluster would
+have no DNS. Then you change one setting (a default-deny NetworkPolicy) and watch what
 breaks.
 
 ## Before you start
@@ -20,7 +22,7 @@ breaks.
   Cloud (Amazon EC2)** → search **Running On-Demand G and VT instances** → it must be 4 or more (it's counted in
   vCPUs; a `g4dn.xlarge` has 4). If not, **Request increase at account level** and wait for approval.
 - **Cost.** The EKS control plane is US$0.10 per cluster per hour on standard support
-  ([EKS pricing](https://aws.amazon.com/eks/pricing/)). Add the `g4dn.xlarge` On-Demand price for your Region (see
+  ([EKS pricing](https://aws.amazon.com/eks/pricing/)). Add the `g4dn.xlarge` and `t3.medium` On-Demand prices for your Region (see
   [EC2 pricing](https://aws.amazon.com/ec2/pricing/)), its EBS volume, and any NAT gateway eksctl
   creates for the private subnets (check the CloudFormation stack's resources). Use the AWS Pricing Calculator before
   you start, and set a budget alarm.
@@ -61,8 +63,9 @@ below does the same in one file, so most people use it.
    Example response (shape from the provider's docs, values illustrative):
 
    ```output
-   NAME                          TAINTS                                                  GPU
+   NAME                             TAINTS                                                   GPU
    ip-192-168-101-23.ec2.internal   [map[effect:NoSchedule key:nvidia.com/gpu value:true]]   1
+   ip-192-168-120-7.ec2.internal    <none>                                                   <none>
    ```
 
 2. IMDS settings on the instance (want `required` and `1`):
@@ -103,7 +106,7 @@ below does the same in one file, so most people use it.
    | The one above (normal use, inside the cluster) | an answer |
    | `kubectl -n inference get svc ollama` | `TYPE ClusterIP`, no external IP: nothing outside the cluster can reach it |
    | From the probe pod: `curl -s http://ollama.inference:11434/api/tags` | the model list: inside the cluster there is still no login, which is why the next part matters |
-   | From the probe pod: `curl -s -m 3 http://169.254.169.254/latest/meta-data/` | a timeout or error: `disablePodIMDS` keeps pods away from the node's role |
+   | From the probe pod: `curl -s -m 3 -o /dev/null -w '%{http_code}\n' http://169.254.169.254/latest/meta-data/` | `401` (IMDSv2 only: no token, no metadata), and with hop limit 1 a pod can't get a token, so `disablePodIMDS` keeps pods away from the node's role. The probe pod runs on the system node, which has the same settings |
 
 ## Part D · Change one setting: default-deny the namespace
 

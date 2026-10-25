@@ -262,5 +262,5 @@ build.
 ## Optional: the real thing on EKS
 
 `GUIDED-BUILD.md` builds the hardened GPU node group in your own AWS sandbox account with eksctl (Bottlerocket NVIDIA,
-tainted, IMDSv1 off, pod IMDS blocked, network policy on), runs Ollama on it inside the cluster only, then applies a
+tainted, IMDSv1 off, pod IMDS blocked, network policy on, plus a small untainted node for DNS), runs Ollama on it inside the cluster only, then applies a
 default-deny policy and shows what breaks. It costs money while it runs; tear it down the same day.
