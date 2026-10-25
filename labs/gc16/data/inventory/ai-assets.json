@@ -1,0 +1,18 @@
+{
+  "_about": "What Security Command Center's AI inventory (Risk overview > AI security, and the AI resources tab on the Assets page) could list for ExampleCo's organization with Premium. Categories follow the AI Protection overview; Gemini models appear only on Premium (AI Discovery uses Cloud Monitoring data). modelArmorProtected is the lab's stand-in for AI Discovery's Model Armor check. Lab values.",
+  "assets": [
+    {"category": "Model", "name": "publishers/google/models/gemini-3.1-flash-lite", "project": "example-chatbot-prod", "gemini": true, "modelArmorProtected": true, "owner": "support-platform"},
+    {"category": "Model", "name": "publishers/google/models/gemini-3.5-flash", "project": "example-chatbot-prod", "gemini": true, "modelArmorProtected": false, "owner": "support-platform"},
+    {"category": "Model", "name": "publishers/anthropic/models/claude-opus-4-7", "project": "example-chatbot-prod", "gemini": false, "modelArmorProtected": false, "owner": "support-platform"},
+    {"category": "Endpoint", "name": "endpoints/ticket-classifier", "project": "example-chatbot-prod", "owner": "data-science"},
+    {"category": "Data source", "name": "datasets/tickets-2025", "project": "example-chatbot-prod", "owner": "data-science"},
+    {"category": "Data source", "name": "ragCorpora/2305843009213693952 (helpdesk-kb)", "project": "example-chatbot-prod", "owner": "it-support"},
+    {"category": "Agent", "name": "reasoningEngines/4815162342 (Helpdesk agent)", "project": "example-chatbot-prod", "owner": "it-support"},
+    {"category": "MCP server", "name": "mcpServers/tickets-mcp", "project": "example-chatbot-prod", "owner": "it-support"},
+    {"category": "Agent", "name": "reasoningEngines/9988776655 (hackathon lead-finder)", "project": "example-marketing-sandbox", "owner": "(no owner label)"},
+    {"category": "App", "name": "Gemini Enterprise app sales-assistant", "project": "example-sales", "owner": "sales-ops"},
+    {"category": "MCP server", "name": "mcpServers/crm-export-mcp", "project": "example-marketing-sandbox", "owner": "(no owner label)"},
+    {"category": "Model", "name": "publishers/google/models/gemini-3.5-pro", "project": "example-marketing-sandbox", "gemini": true, "modelArmorProtected": false, "owner": "(no owner label)"},
+    {"category": "Model", "name": "models/llama-3-8b-ft (Model Registry)", "project": "example-ds-lab", "gemini": false, "owner": "data-science"}
+  ]
+}

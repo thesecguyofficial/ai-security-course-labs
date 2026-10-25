@@ -1,0 +1,6 @@
+{"timestamp": "2026-10-20T09:12:04Z", "jsonPayload": {"queryName": "api.openai.com.", "queryType": "A", "responseCode": "NOERROR", "sourceIP": "10.20.4.7", "vmInstanceName": "build-runner-2", "vmProjectId": "example-ci"}}
+{"timestamp": "2026-10-20T09:12:09Z", "jsonPayload": {"queryName": "api.openai.com.", "queryType": "A", "responseCode": "NOERROR", "sourceIP": "10.20.4.7", "vmInstanceName": "build-runner-2", "vmProjectId": "example-ci"}}
+{"timestamp": "2026-10-20T11:40:31Z", "jsonPayload": {"queryName": "api.anthropic.com.", "queryType": "A", "responseCode": "NOERROR", "sourceIP": "10.20.8.14", "project_id": "example-marketing-sandbox"}}
+{"timestamp": "2026-10-20T11:41:02Z", "jsonPayload": {"queryName": "api.anthropic.com.", "queryType": "A", "responseCode": "NOERROR", "sourceIP": "10.20.8.14", "project_id": "example-marketing-sandbox"}}
+{"timestamp": "2026-10-20T12:00:00Z", "jsonPayload": {"queryName": "storage.googleapis.com.", "queryType": "A", "responseCode": "NOERROR", "sourceIP": "10.20.1.15", "vmInstanceName": "helpdesk-web-1", "vmProjectId": "example-chatbot-prod"}}
+{"timestamp": "2026-10-20T12:03:00Z", "jsonPayload": {"queryName": "europe-west4-aiplatform.googleapis.com.", "queryType": "A", "responseCode": "NOERROR", "sourceIP": "10.20.1.15", "vmInstanceName": "helpdesk-web-1", "vmProjectId": "example-chatbot-prod"}}

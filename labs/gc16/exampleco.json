@@ -1,0 +1,58 @@
+{
+  "_about": "ExampleCo is fictional (the course's Google Cloud stream company, on the documentation domain example.com). Project IDs, numbers, key IDs and session IDs are lab values; IP addresses come from the documentation ranges 192.0.2.0/24, 198.51.100.0/24 and 203.0.113.0/24 (RFC 5737); outside domains use example.net (RFC 2606). Nothing here is a real credential, project or customer.",
+  "project": "example-chatbot-prod",
+  "project_number": "123456789012",
+  "org_id": "123456789012",
+  "region": "europe-west4",
+  "day": "2026-10-20",
+  "office_and_vpc_ips": ["192.0.2.10", "192.0.2.11", "192.0.2.40", "10.20.1.15", "10.20.1.16", "10.20.1.20"],
+  "service_accounts": {
+    "chatbot_runtime": "chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com",
+    "ds_batch": "ds-batch@example-chatbot-prod.iam.gserviceaccount.com",
+    "kb_pipeline": "kb-pipeline@example-chatbot-prod.iam.gserviceaccount.com",
+    "secops_admin": "secops-admin@example-chatbot-prod.iam.gserviceaccount.com",
+    "ci_deployer": "ci-deployer@example-chatbot-prod.iam.gserviceaccount.com",
+    "contractor_upload": "contractor-upload@example-chatbot-prod.iam.gserviceaccount.com",
+    "etl_batch": "etl-batch@example-chatbot-prod.iam.gserviceaccount.com"
+  },
+  "contractor_user": "dana.contractor@example.com",
+  "agent_principal": "principal://agents.global.org-123456789012.system.id.goog/resources/aiplatform/projects/123456789012/locations/europe-west4/reasoningEngines/4815162342",
+  "approved_inference_principals": [
+    "chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com",
+    "ds-batch@example-chatbot-prod.iam.gserviceaccount.com",
+    "principal://agents.global.org-123456789012.system.id.goog/resources/aiplatform/projects/123456789012/locations/europe-west4/reasoningEngines/4815162342"
+  ],
+  "security_admins": ["secops-admin@example-chatbot-prod.iam.gserviceaccount.com"],
+  "kb": {
+    "bucket": "exampleco-helpdesk-kb",
+    "rag_corpus": "projects/123456789012/locations/europe-west4/ragCorpora/2305843009213693952",
+    "writers": ["kb-pipeline@example-chatbot-prod.iam.gserviceaccount.com"]
+  },
+  "authz_extension": "projects/example-chatbot-prod/locations/europe-west4/authzExtensions/helpdesk-iap",
+  "agent_gateway": "helpdesk-egress-gw",
+  "reasoning_engine": "projects/123456789012/locations/europe-west4/reasoningEngines/4815162342",
+  "company_email_domain": "example.com",
+  "allowed_answer_domains": ["example.com", "cloud.google.com"],
+  "model_armor_template": "projects/example-chatbot-prod/locations/europe-west4/templates/helpdesk-guard",
+  "system_prompt_canary": "CANARY-GC16-SYSPROMPT",
+  "ai_finding_categories": [
+    "Persistence: New Geography for AI Service",
+    "Persistence: New AI API Method",
+    "Initial Access: Dormant Service Account Activity in AI Service",
+    "Initial Access: AI Agent Identity Excessive Permission Denied Actions",
+    "Discovery: AI Agent Unauthorized Service Account API Call",
+    "Exfiltration: AI Agent Initiated BigQuery Data Exfiltration to External Table"
+  ],
+  "detection_tuning": {
+    "_note": "Thresholds the gc16 rule pack uses. Tune them on your own baseline; these fit this lab's day of traffic.",
+    "failed_ai_calls_per_principal_per_10_min": 3,
+    "blocked_prompts_per_user_per_10_min": 3,
+    "tokens_per_model_per_hour_factor": 4,
+    "tokens_per_end_user_per_hour": 200000
+  },
+  "lab_price_list": {
+    "_note": "ILLUSTRATIVE prices for the incident report's cost line only (US$ per 1,000 tokens). Not Google's prices: read the Agent Platform pricing page for real ones.",
+    "input_per_1k": 0.002,
+    "output_per_1k": 0.012
+  }
+}

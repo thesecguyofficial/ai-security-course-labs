@@ -1,0 +1,1 @@
+logName:"cloudaudit.googleapis.com%2Fdata_access" AND protoPayload.serviceName="aiplatform.googleapis.com" AND (protoPayload.methodName:"GenerateContent" OR protoPayload.methodName:"RawPredict" OR protoPayload.methodName:"Predict")

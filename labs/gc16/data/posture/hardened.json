@@ -1,0 +1,139 @@
+{
+  "_about": "The settings lessons 16.1 to 16.4 ask for. Same shapes as first-draft.json. Lab values.",
+  "organization": {
+    "id": "123456789012",
+    "created": "2021-03-02",
+    "auditConfigs": [
+      {
+        "service": "aiplatform.googleapis.com",
+        "auditLogConfigs": [
+          {
+            "logType": "DATA_READ"
+          },
+          {
+            "logType": "DATA_WRITE"
+          }
+        ]
+      }
+    ],
+    "scc": {
+      "tier": "PREMIUM",
+      "activation": "organization",
+      "billing": "pay-as-you-go"
+    },
+    "orgPolicies": {
+      "vertexai.allowedModels": {
+        "allowedValues": [
+          "publishers/google/models/gemini-3.1-flash-lite:predict",
+          "publishers/google/models/gemini-3.5-flash:predict",
+          "publishers/anthropic/models/claude-opus-4-7:predict"
+        ]
+      },
+      "iam.disableServiceAccountKeyCreation": {
+        "enforce": true
+      }
+    }
+  },
+  "project": {
+    "id": "example-chatbot-prod",
+    "auditConfigs": [
+      {
+        "service": "storage.googleapis.com",
+        "auditLogConfigs": [
+          {
+            "logType": "DATA_WRITE"
+          }
+        ]
+      }
+    ],
+    "modelArmor": {
+      "templates": [
+        {
+          "name": "projects/example-chatbot-prod/locations/europe-west4/templates/helpdesk-guard",
+          "piAndJailbreakFilter": "MEDIUM_AND_ABOVE",
+          "templateMetadata": {
+            "logSanitizeOperations": true
+          }
+        }
+      ],
+      "floorSetting": {
+        "enforcementType": "INSPECT_AND_BLOCK",
+        "aiPlatformFloorSetting": {
+          "inspectAndBlock": true,
+          "enableCloudLogging": true
+        }
+      }
+    },
+    "publisherModelConfigs": {
+      "gemini-3.1-flash-lite": {
+        "loggingConfig": {
+          "enabled": true,
+          "samplingRate": 1,
+          "bigqueryDestination": {
+            "outputUri": "bq://example-chatbot-prod.ai_logs"
+          }
+        }
+      },
+      "gemini-3.5-flash": {
+        "loggingConfig": {
+          "enabled": true,
+          "samplingRate": 1,
+          "bigqueryDestination": {
+            "outputUri": "bq://example-chatbot-prod.ai_logs"
+          }
+        }
+      },
+      "claude-opus-4-7": {
+        "loggingConfig": {
+          "enabled": false
+        },
+        "_note": "For Anthropic models only REST is supported for the logging configuration; nobody has made that call yet."
+      }
+    },
+    "authzExtensions": [
+      {
+        "name": "helpdesk-iap",
+        "service": "iap.googleapis.com",
+        "failOpen": false,
+        "metadata": {
+          "iapPolicyVersion": "V2"
+        }
+      }
+    ],
+    "logSinks": [
+      {
+        "name": "_Default",
+        "exclusions": []
+      },
+      {
+        "name": "incident-armor",
+        "destination": "logging.googleapis.com/projects/example-chatbot-prod/locations/europe-west4/buckets/incident-only",
+        "filter": "jsonPayload.@type=\"type.googleapis.com/google.cloud.modelarmor.logging.v1.SanitizeOperationLogEntry\""
+      }
+    ],
+    "endpoints": [
+      {
+        "name": "ticket-classifier",
+        "encryptionSpec": {
+          "kmsKeyName": "projects/example-chatbot-prod/locations/europe-west4/keyRings/ai/cryptoKeys/endpoints"
+        }
+      }
+    ],
+    "workbenchInstances": [
+      {
+        "name": "ds-notebook-1",
+        "disablePublicIp": true,
+        "disableRoot": true
+      }
+    ],
+    "agents": [
+      {
+        "name": "reasoningEngines/4815162342",
+        "labels": {
+          "app": "helpdesk-agent",
+          "owner": "it-support"
+        }
+      }
+    ]
+  }
+}

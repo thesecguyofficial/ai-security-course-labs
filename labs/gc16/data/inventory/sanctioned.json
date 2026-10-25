@@ -1,0 +1,8 @@
+{
+  "_about": "ExampleCo's approved-AI register: what the security team agreed to. The inventory can't write this for you.",
+  "assets": ["publishers/google/models/gemini-3.1-flash-lite", "publishers/google/models/gemini-3.5-flash",
+             "publishers/anthropic/models/claude-opus-4-7", "endpoints/ticket-classifier", "datasets/tickets-2025",
+             "ragCorpora/2305843009213693952 (helpdesk-kb)", "reasoningEngines/4815162342 (Helpdesk agent)",
+             "mcpServers/tickets-mcp"],
+  "external_ai_domains": []
+}

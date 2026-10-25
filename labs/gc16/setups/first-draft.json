@@ -1,0 +1,23 @@
+{
+  "_about": "What ExampleCo collected before this module: Google Cloud's defaults plus one cost-saving log exclusion. Each key is one telemetry source the simulator writes only if it is true here.",
+  "name": "first-draft",
+  "admin_activity": true,
+  "_admin_activity": "Admin Activity audit logs are always written. They hold configuration changes (SetIamPolicy, UpdateAuthzExtension), not model calls.",
+  "data_access_aiplatform": false,
+  "_data_access_aiplatform": "Data Access audit logs are disabled by default: no GenerateContent, Predict, RawPredict or ragFiles.import entries.",
+  "data_access_storage": false,
+  "_data_access_storage": "Off by default too: no record of who wrote objects into the RAG source bucket.",
+  "data_access_bigquery": true,
+  "_data_access_bigquery": "The exception: some BigQuery Data Access logs are on by default, so the ETL job's queries are logged.",
+  "request_response_models": [],
+  "_request_response_models": "Request-response logging (Pre-GA) is off by default and set per model.",
+  "model_armor_logging": false,
+  "_model_armor_logging": "The template screens prompts, but logSanitizeOperations is off: nothing in Cloud Logging.",
+  "scc_tier": "STANDARD",
+  "_scc_tier": "Security Command Center Standard: no Event Threat Detection AI rules, no Agent Platform Threat Detection.",
+  "gateway_request_logs": false,
+  "_gateway_request_logs": "An exclusion filter on the _Default sink drops networkservices.googleapis.com/gateway_requests to save cost.",
+  "app_log_identity": false,
+  "_app_log_identity": "The web app logs path, status and latency. No end user, no session, no response ID.",
+  "scc_activation": "organization"
+}

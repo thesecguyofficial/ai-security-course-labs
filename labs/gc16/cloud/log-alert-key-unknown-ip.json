@@ -1,0 +1,12 @@
+{
+  "displayName": "GC16 service account key used from an unknown address",
+  "combiner": "OR",
+  "conditions": [{
+    "displayName": "A call made with a downloaded key, from outside your addresses",
+    "conditionMatchedLog": {
+      "filter": "logName:\"cloudaudit.googleapis.com\" AND protoPayload.authenticationInfo.serviceAccountKeyName:\"keys/\" AND NOT protoPayload.requestMetadata.callerIp=\"YOUR_IP\""
+    }
+  }],
+  "alertStrategy": {"notificationRateLimit": {"period": "300s"}, "autoClose": "1800s"},
+  "notificationChannels": ["CHANNEL"]
+}

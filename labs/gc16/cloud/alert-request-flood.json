@@ -1,0 +1,15 @@
+{
+  "displayName": "GC16 request flood on Agent Platform",
+  "combiner": "OR",
+  "conditions": [{
+    "displayName": "More than 20 model calls in 5 minutes",
+    "conditionThreshold": {
+      "filter": "metric.type=\"logging.googleapis.com/user/gc16_ai_calls\" AND resource.type=\"audited_resource\"",
+      "aggregations": [{"alignmentPeriod": "300s", "perSeriesAligner": "ALIGN_SUM"}],
+      "comparison": "COMPARISON_GT",
+      "thresholdValue": 20,
+      "duration": "0s"
+    }
+  }],
+  "notificationChannels": ["CHANNEL"]
+}
