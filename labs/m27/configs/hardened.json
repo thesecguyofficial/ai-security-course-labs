@@ -1,0 +1,61 @@
+{
+  "name": "tsg-data-helper",
+  "description": "HARDENED. The same agent, default-deny outbound: VPC mode, no NAT, endpoints with policies, a DNS walled garden that fails closed, one network-enforced proxy for the package mirror. Lab fixture only.",
+  "runtime": {
+    "boundary": "microvm",
+    "session": {"one_per_user_task": true, "timeout_seconds": 900},
+    "limits": {"vcpu": 1, "memory_mb": 2048, "max_processes": 128}
+  },
+  "network": {
+    "mode": "VPC",
+    "nat_gateway": false,
+    "security_group_egress": [
+      {"protocol": "tcp", "port": 443, "to": "endpoint:s3"},
+      {"protocol": "tcp", "port": 443, "to": "endpoint:bedrock-runtime"},
+      {"protocol": "tcp", "port": 3128, "to": "proxy"}
+    ]
+  },
+  "endpoints": [
+    {"service": "s3", "type": "gateway", "policy": {
+      "allow_actions": ["s3:GetObject", "s3:PutObject", "s3:ListBucket"],
+      "resources": ["arn:aws:s3:::tsg-lab-data", "arn:aws:s3:::tsg-lab-data/*"]}},
+    {"service": "bedrock-runtime", "type": "interface", "policy": {
+      "allow_actions": ["bedrock:InvokeModel"],
+      "resources": ["arn:aws:bedrock:us-east-1::foundation-model/lab-model-a"]}}
+  ],
+  "dns": {
+    "firewall": true,
+    "default_action": "BLOCK",
+    "allow": ["s3.us-east-1.amazonaws.com", "bedrock-runtime.us-east-1.amazonaws.com", "proxy.tsg.example"],
+    "fail_open": false,
+    "query_logging": true
+  },
+  "proxy": {
+    "enabled": true,
+    "enforced_by_network": true,
+    "allow": [
+      {"name": "pypi.tsg.example", "methods": ["GET", "HEAD"]}
+    ]
+  },
+  "execution_role": {
+    "statements": [
+      {"effect": "Allow", "actions": ["s3:GetObject", "s3:ListBucket"], "resources": ["arn:aws:s3:::tsg-lab-data", "arn:aws:s3:::tsg-lab-data/reports/*"]},
+      {"effect": "Allow", "actions": ["s3:PutObject"], "resources": ["arn:aws:s3:::tsg-lab-data/out/*"]},
+      {"effect": "Allow", "actions": ["bedrock:InvokeModel"], "resources": ["arn:aws:bedrock:us-east-1::foundation-model/lab-model-a"]}
+    ]
+  },
+  "filesystem": {
+    "mounts": [
+      {"path": "/workspace", "mode": "rw"},
+      {"path": "/data/reports", "mode": "ro"}
+    ]
+  },
+  "secrets": {
+    "env": []
+  },
+  "logging": {
+    "flow_logs": true,
+    "dns_query_logs": true,
+    "cloudtrail_network_activity": ["s3.amazonaws.com", "bedrock.amazonaws.com"]
+  }
+}
