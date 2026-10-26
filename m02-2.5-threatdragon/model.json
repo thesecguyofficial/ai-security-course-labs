@@ -19,12 +19,12 @@
         "cells": [
           {
             "position": {
-              "x": 834,
-              "y": 130
+              "x": 742,
+              "y": 60.00000000000003
             },
             "size": {
-              "width": 128,
-              "height": 60
+              "width": 320,
+              "height": 200
             },
             "attrs": {
               "label": {
@@ -33,7 +33,7 @@
             },
             "visible": true,
             "shape": "trust-boundary-box",
-            "id": "9fbc2802-a493-4ee4-9ba8-61092500586a",
+            "id": "0d06d406-3974-4159-9920-1c61ee3ef77d",
             "zIndex": -1,
             "data": {
               "type": "tm.BoundaryBox",
@@ -42,11 +42,11 @@
               "isTrustBoundary": true,
               "hasOpenThreats": false,
               "crossingFlows": [
-                "e7b30490-843b-4cc7-8e8d-29da972f0f50",
-                "ba5fd9bb-e1be-4e73-b021-26b24f6dda7a"
+                "bffe04b3-3bf5-4471-aeef-367f50265d45",
+                "36f0c2fc-6094-4606-9c9b-4e7b984b4227"
               ],
               "containedElements": [
-                "fb36f14c-2ad9-4eb0-bb6d-753862795122"
+                "113583d0-8eaa-4265-a077-6327f683d7fd"
               ]
             }
           },
@@ -137,23 +137,23 @@
               "items": [
                 {
                   "group": "top",
-                  "id": "19efa0c7-8d6b-4786-bfdd-26683c7096ae"
+                  "id": "d070d6ec-e666-4862-9e42-e3890494156f"
                 },
                 {
                   "group": "right",
-                  "id": "3dd8650a-542b-4427-96b7-21f9e0ee53ed"
+                  "id": "cfbcf396-929f-421b-9ce2-8babee01e00b"
                 },
                 {
                   "group": "bottom",
-                  "id": "97888b3c-8efe-4bde-b6b4-180a3ed049de"
+                  "id": "5967c4c2-8e0d-493d-b70e-c83c9cbb1128"
                 },
                 {
                   "group": "left",
-                  "id": "89f8c085-3bde-4f6f-b19f-660aae4f1e8f"
+                  "id": "bf899160-becd-4e1b-b6c7-de29359ef93a"
                 }
               ]
             },
-            "id": "377c7482-6bac-4693-9026-aae475e935bf",
+            "id": "c2751865-43d2-42a0-9192-99e0d4c517b3",
             "zIndex": 1,
             "data": {
               "type": "tm.Actor",
@@ -254,23 +254,23 @@
               "items": [
                 {
                   "group": "top",
-                  "id": "fcdacad4-214c-497c-a937-9ec4650a98fa"
+                  "id": "fca379e1-c8c1-407d-90a3-ea9f47d1e787"
                 },
                 {
                   "group": "right",
-                  "id": "a3d7b71d-fb1e-4703-8c2a-ac2a43058f4c"
+                  "id": "44b09fb7-e784-4f03-9f1b-e756bd1a6cc7"
                 },
                 {
                   "group": "bottom",
-                  "id": "a4c6c813-8ac5-4635-909b-ba23324cdcfc"
+                  "id": "8c9f5a65-e4ff-444e-800f-ad7eb3a9591a"
                 },
                 {
                   "group": "left",
-                  "id": "01743c06-40cc-4ec0-a601-e154a3fa78f9"
+                  "id": "dd2e7ded-4687-43e2-ab0d-b4cd9b2d19df"
                 }
               ]
             },
-            "id": "55061aee-c0f7-405f-a295-065a8d271315",
+            "id": "fe9c5d61-c4c9-4048-92d1-21069c2b841e",
             "zIndex": 2,
             "data": {
               "type": "tm.Process",
@@ -374,23 +374,23 @@
               "items": [
                 {
                   "group": "top",
-                  "id": "fcdacad4-214c-497c-a937-9ec4650a98fa"
+                  "id": "fca379e1-c8c1-407d-90a3-ea9f47d1e787"
                 },
                 {
                   "group": "right",
-                  "id": "a3d7b71d-fb1e-4703-8c2a-ac2a43058f4c"
+                  "id": "44b09fb7-e784-4f03-9f1b-e756bd1a6cc7"
                 },
                 {
                   "group": "bottom",
-                  "id": "a4c6c813-8ac5-4635-909b-ba23324cdcfc"
+                  "id": "8c9f5a65-e4ff-444e-800f-ad7eb3a9591a"
                 },
                 {
                   "group": "left",
-                  "id": "01743c06-40cc-4ec0-a601-e154a3fa78f9"
+                  "id": "dd2e7ded-4687-43e2-ab0d-b4cd9b2d19df"
                 }
               ]
             },
-            "id": "fb36f14c-2ad9-4eb0-bb6d-753862795122",
+            "id": "113583d0-8eaa-4265-a077-6327f683d7fd",
             "zIndex": 3,
             "data": {
               "type": "tm.Process",
@@ -497,23 +497,23 @@
               "items": [
                 {
                   "group": "top",
-                  "id": "3067f6f2-9f6c-4515-944e-00baad80c977"
+                  "id": "45577d93-66a8-4231-9d79-084fbb04f427"
                 },
                 {
                   "group": "right",
-                  "id": "8f6f0a8e-c68a-41cd-9dc1-0c38d34aa4a2"
+                  "id": "4734a773-5cf3-4cc9-96bd-236af927612a"
                 },
                 {
                   "group": "bottom",
-                  "id": "0dc2094e-57f9-459d-a5ec-50cbc3e43d81"
+                  "id": "37c672cf-1107-45be-afec-ccc95ff8891c"
                 },
                 {
                   "group": "left",
-                  "id": "2b6ae78a-8798-48d8-9bed-18f1c3d21c49"
+                  "id": "3b769a9b-7c7f-4fb5-9a58-0db5bc439070"
                 }
               ]
             },
-            "id": "bbe64c93-692b-409b-8be0-8945a6250d59",
+            "id": "6c56dd5e-87a6-4a6b-b531-ef3de38fbe06",
             "zIndex": 4,
             "data": {
               "type": "tm.Store",
@@ -567,14 +567,14 @@
             "labels": [
               "F1 chat message"
             ],
-            "id": "d4c2706d-bce0-49b3-851d-7b7db03cb9d5",
+            "id": "de35ff6c-3b49-4f65-a667-94f74d20ec87",
             "source": {
-              "cell": "377c7482-6bac-4693-9026-aae475e935bf",
-              "port": "3dd8650a-542b-4427-96b7-21f9e0ee53ed"
+              "cell": "c2751865-43d2-42a0-9192-99e0d4c517b3",
+              "port": "cfbcf396-929f-421b-9ce2-8babee01e00b"
             },
             "target": {
-              "cell": "55061aee-c0f7-405f-a295-065a8d271315",
-              "port": "01743c06-40cc-4ec0-a601-e154a3fa78f9"
+              "cell": "fe9c5d61-c4c9-4048-92d1-21069c2b841e",
+              "port": "dd2e7ded-4687-43e2-ab0d-b4cd9b2d19df"
             },
             "vertices": []
           },
@@ -610,20 +610,20 @@
               "protocol": "",
               "threats": [],
               "trustBoundaryIds": [
-                "9fbc2802-a493-4ee4-9ba8-61092500586a"
+                "0d06d406-3974-4159-9920-1c61ee3ef77d"
               ]
             },
             "labels": [
               "F2 prompt + context"
             ],
-            "id": "e7b30490-843b-4cc7-8e8d-29da972f0f50",
+            "id": "bffe04b3-3bf5-4471-aeef-367f50265d45",
             "source": {
-              "cell": "55061aee-c0f7-405f-a295-065a8d271315",
-              "port": "a3d7b71d-fb1e-4703-8c2a-ac2a43058f4c"
+              "cell": "fe9c5d61-c4c9-4048-92d1-21069c2b841e",
+              "port": "44b09fb7-e784-4f03-9f1b-e756bd1a6cc7"
             },
             "target": {
-              "cell": "fb36f14c-2ad9-4eb0-bb6d-753862795122",
-              "port": "01743c06-40cc-4ec0-a601-e154a3fa78f9"
+              "cell": "113583d0-8eaa-4265-a077-6327f683d7fd",
+              "port": "dd2e7ded-4687-43e2-ab0d-b4cd9b2d19df"
             },
             "vertices": []
           },
@@ -660,13 +660,13 @@
               "protocol": "",
               "threats": [
                 {
-                  "id": "1dd89f72-1322-4e08-b3e1-2caea0d0b47e",
+                  "id": "b7458f52-3ed1-4aef-87bc-8012325556c8",
                   "title": "Indirect prompt injection via imported tickets",
                   "status": "Open",
                   "severity": "High",
                   "type": "Tampering",
-                  "description": "Provide a description for this threatA customer files a ticket with hidden instructions. The nightly import turns it into a help article. The model later retrieves it and follows it for other customers. OWASP LLM01:2026, LLM05:2026, ASI06. ATLAS AML.T0070, AML.T0051.001.",
-                  "mitigation": "Provide remediation for this threat or a reason if status is N/ADo not auto-import customer text: staff review and rewrite first. Record each article's source. Log retrieved article IDs per answer.",
+                  "description": "A customer files a ticket with hidden instructions. The nightly import turns it into a help article. The model later retrieves it and follows it for other customers. OWASP LLM01:2026, LLM05:2026, ASI06. ATLAS AML.T0070, AML.T0051.001.",
+                  "mitigation": "Do not auto-import customer text: staff review and rewrite first. Record each article's source. Log retrieved article IDs per answer.",
                   "modelType": "STRIDE",
                   "new": false,
                   "number": 1,
@@ -674,7 +674,7 @@
                 }
               ],
               "trustBoundaryIds": [
-                "9fbc2802-a493-4ee4-9ba8-61092500586a"
+                "0d06d406-3974-4159-9920-1c61ee3ef77d"
               ],
               "threatFrequency": {
                 "tampering": 1,
@@ -685,14 +685,14 @@
             "labels": [
               "F4 UNTRUSTED: retrieved articles"
             ],
-            "id": "ba5fd9bb-e1be-4e73-b021-26b24f6dda7a",
+            "id": "36f0c2fc-6094-4606-9c9b-4e7b984b4227",
             "source": {
-              "cell": "bbe64c93-692b-409b-8be0-8945a6250d59",
-              "port": "3067f6f2-9f6c-4515-944e-00baad80c977"
+              "cell": "6c56dd5e-87a6-4a6b-b531-ef3de38fbe06",
+              "port": "45577d93-66a8-4231-9d79-084fbb04f427"
             },
             "target": {
-              "cell": "fb36f14c-2ad9-4eb0-bb6d-753862795122",
-              "port": "a4c6c813-8ac5-4635-909b-ba23324cdcfc"
+              "cell": "113583d0-8eaa-4265-a077-6327f683d7fd",
+              "port": "8c9f5a65-e4ff-444e-800f-ad7eb3a9591a"
             },
             "vertices": []
           }

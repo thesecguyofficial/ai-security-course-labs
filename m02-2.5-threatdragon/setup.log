@@ -15,45 +15,43 @@ d9a230cf3add: Pulling fs layer
 f2850b735820: Pulling fs layer
 cf70538d9fd8: Pulling fs layer
 c7f6741836e3: Pulling fs layer
-9b918b1fc7f6: Waiting
-4dedd677d371: Waiting
-3e0c6a66fd90: Waiting
-cf70538d9fd8: Waiting
-f2850b735820: Waiting
-d9a230cf3add: Waiting
-c7f6741836e3: Waiting
-0f4419ecc41a: Waiting
-62ef8cac8486: Waiting
 78d9931b88df: Waiting
 c94b4d65d453: Waiting
-1ba15d4bb83a: Waiting
-6a0ac1617861: Verifying Checksum
-6a0ac1617861: Download complete
+9b918b1fc7f6: Waiting
+3e0c6a66fd90: Waiting
+d9a230cf3add: Waiting
+4dedd677d371: Waiting
+f2850b735820: Waiting
+cf70538d9fd8: Waiting
+c7f6741836e3: Waiting
+0f4419ecc41a: Waiting
 3eebacc30b80: Verifying Checksum
 3eebacc30b80: Download complete
-6a0ac1617861: Pull complete
-1ba15d4bb83a: Verifying Checksum
-1ba15d4bb83a: Download complete
+6a0ac1617861: Verifying Checksum
+6a0ac1617861: Download complete
 d7319775d025: Verifying Checksum
 d7319775d025: Download complete
-0f4419ecc41a: Verifying Checksum
-0f4419ecc41a: Download complete
+1ba15d4bb83a: Verifying Checksum
+1ba15d4bb83a: Download complete
+6a0ac1617861: Pull complete
 62ef8cac8486: Verifying Checksum
 62ef8cac8486: Download complete
-c94b4d65d453: Verifying Checksum
-c94b4d65d453: Download complete
+0f4419ecc41a: Verifying Checksum
+0f4419ecc41a: Download complete
 78d9931b88df: Verifying Checksum
 78d9931b88df: Download complete
-3e0c6a66fd90: Verifying Checksum
-3e0c6a66fd90: Download complete
+c94b4d65d453: Download complete
 9b918b1fc7f6: Verifying Checksum
 9b918b1fc7f6: Download complete
+3e0c6a66fd90: Verifying Checksum
+3e0c6a66fd90: Download complete
+d9a230cf3add: Verifying Checksum
 d9a230cf3add: Download complete
+f2850b735820: Verifying Checksum
 f2850b735820: Download complete
+c7f6741836e3: Download complete
 cf70538d9fd8: Verifying Checksum
 cf70538d9fd8: Download complete
-c7f6741836e3: Verifying Checksum
-c7f6741836e3: Download complete
 4dedd677d371: Verifying Checksum
 4dedd677d371: Download complete
 d7319775d025: Pull complete
@@ -78,8 +76,8 @@ image sha256:622ecb7552d34f100e99197fbb4b4b30e213d10b2706522b2325d7a85af10181
 ++ openssl rand -hex 16
 ++ openssl rand -hex 24
 ++ openssl rand -hex 24
-+ docker run -d --name td -p 127.0.0.1:3000:3000 -e 'ENCRYPTION_KEYS=[{"isPrimary": true, "id": 0, "value": "a1ab6adc35a7a22ceb07755c0c822bcf"}]' -e ENCRYPTION_JWT_SIGNING_KEY=81ade806a2bbbb0b5e15534e519614fa086d86b04285405e -e ENCRYPTION_JWT_REFRESH_SIGNING_KEY=d148d387931ea71355a741eba0e11bd7730951c87ff422ef -e NODE_ENV=production -e SERVER_API_PROTOCOL=http owasp/threat-dragon:v2.6.2
-1f3bb4d226a2af0988af3af64be87bd2eadd8a2a602846a2d85e548ad161d65b
++ docker run -d --name td -p 127.0.0.1:3000:3000 -e 'ENCRYPTION_KEYS=[{"isPrimary": true, "id": 0, "value": "a59f2eaa713ce72c418c919acd537375"}]' -e ENCRYPTION_JWT_SIGNING_KEY=256172082b45fbbd583836024dc65b92f8abd45258e59f49 -e ENCRYPTION_JWT_REFRESH_SIGNING_KEY=f93bc5d6c62dd33b89cefc0681916156f2ac04a9d3344830 -e NODE_ENV=production -e SERVER_API_PROTOCOL=http owasp/threat-dragon:v2.6.2
+913a890245a5dd228f69ec6cd0cfe08b5dc6585ed38f312308f608b08412d470
 ++ seq 1 60
 + for i in $(seq 1 60)
 + curl -fsS -o /dev/null http://127.0.0.1:3000/
