@@ -112,7 +112,7 @@ make test
 ```
 
 - `make audit`: every defence decision with its reason
-- `make test`: the recorded trail and the provided investigation (20 run)
+- `make test`: the recorded trail and the provided investigation (6 run)
 
 ```output
 ALL TESTS PASSED (6 run)

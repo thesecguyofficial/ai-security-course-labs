@@ -274,8 +274,10 @@ make challenge
 You should see:
 
 ```text
-4 of 26 tests fail until you finish all three parts
+4 of 26 TESTS FAILED (26 run)
 ```
+
+They fail until you finish all three parts.
 
 1. **Per-payee daily limit (31.1).** In `guard.py`, find `CHALLENGE 1`. When the mandate has `per_payee_daily_max`,
    refuse (rule `per_payee_daily_max`) when what this payee was paid today plus this amount is over it. Test C1.

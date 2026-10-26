@@ -393,10 +393,19 @@ make test
 make challenge
 ```
 
-You should see:
+You should see, from `make test`:
 
-- `make test`: 21 tests, all pass
-- `make challenge`: 27 tests, 3 fail until you finish
+```text
+ALL TESTS PASSED (21 run)
+```
+
+From `make challenge`:
+
+```text
+3 of 27 TESTS FAILED (27 run)
+```
+
+The three failing tests pass when you finish.
 
 `make test`, real output (last lines):
 

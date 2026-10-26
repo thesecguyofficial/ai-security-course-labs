@@ -207,6 +207,8 @@ make cloud-down
 make cloud-check
 ```
 
+What each command does, and what to look for:
+
 - `make cloud-down`: endpoint, workspace (with its storage, key vault and other dependents), resource group, custom role
 - `make cloud-check`: should list nothing
 

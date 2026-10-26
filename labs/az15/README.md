@@ -369,8 +369,10 @@ make challenge
 You should see:
 
 ```text
-7 of 29 TESTS FAILED until you finish
+7 of 29 TESTS FAILED (29 run)
 ```
+
+They fail until you finish.
 
 1. **15.2: Azure Policy in Deny.** Add assignments to `setups/hardened/policy-challenge.json` (same shape as
    `policy.json`) so that creating a workspace is DENIED when its managed network isn't in approved-outbound mode, and

@@ -309,8 +309,10 @@ make challenge
 You should see:
 
 ```text
-7 of 28 TESTS FAILED until you finish
+7 of 28 TESTS FAILED (28 run)
 ```
+
+They fail until you finish.
 
 1. **15.2: write an SCP.** Add `Deny` statements to `setups/hardened/scp.json` so `CreateModel` fails when network
    isolation is left out or false, and when there is no VPC. The keys are `sagemaker:NetworkIsolation` and

@@ -300,8 +300,10 @@ make challenge
 You should see:
 
 ```text
-6 of 24 TESTS FAILED until you finish
+6 of 24 TESTS FAILED (24 run)
 ```
+
+They fail until you finish.
 
 1. **D11, knowledge base poisoning** (16.4, 16.5). In `detect.py`, write `d11_kb_source_write`: an alert when anyone
    other than the KB pipeline role writes into the knowledge base source bucket (S3 `PutObject` data events) or starts

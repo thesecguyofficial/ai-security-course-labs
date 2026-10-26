@@ -321,8 +321,10 @@ make challenge
 You should see:
 
 ```text
-4 of 23 tests fail until you finish all three parts
+4 of 23 TESTS FAILED (23 run)
 ```
+
+They fail until you finish all three parts.
 
 1. **Screen tool results (12.2).** In `helpdesk.py`, write `screen_tool_result()`: send the ticket text through
    `twin.apply_guardrail(cfg, "INPUT", ...)` before the model reads it, and replace it with a placeholder if the

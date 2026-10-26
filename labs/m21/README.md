@@ -261,8 +261,10 @@ make test
 You should see:
 
 ```text
-ALL TESTS PASSED (23 run); the OPA parity test is skipped without opa
+ALL TESTS PASSED (23 run)
 ```
+
+The OPA parity test is skipped without opa.
 
 **Challenge** (`make challenge`: 4 of 28 tests fail until you finish; no solution included):
 

@@ -201,9 +201,11 @@ python3 helpdesk.py ported bob@example.com "What's new in the VPN client?"
 You should see:
 
 ```text
+Q (bob@example.com): What's new in the VPN client?
    . identity: caller = bob@example.com (from session)
    . model called search_kb -> returnControl -> app called Retrieve with userContext.userId = bob@example.com
    . confirmation asked (with arguments): reset_mfa(ceo@example.com) -> DENY
+Retrieved: inbox/vpn-client-update.md, public/vpn-token.md
 A: VPN client 7.2 is rolling out this week. It fixes the reconnect loop after sleep. No action is needed from staff.
 ```
 
@@ -219,10 +221,19 @@ make harness
 make parity-harness
 ```
 
-You should see:
+You should see, from `make check-harness`:
 
-- `make check-harness`: 1 LOW, the same M13-17
-- `make harness`: Attacks that worked: 2 of 7  (A5, A8)
+```text
+[LOW   ] M13-17 (13.2) retrieved chunks reach the model unscreened: hidden text in a document is read as instructions (challenge 1)
+
+0 HIGH, 0 MEDIUM, 1 LOW  (1 findings)
+```
+
+From `make harness`:
+
+```text
+Attacks that worked: 2 of 7  (A5, A8)   |   normal requests that work: 5 of 5
+```
 
 Two harness-specific lessons, both in `setups/harness/`:
 
@@ -266,8 +277,10 @@ make challenge
 You should see:
 
 ```text
-5 of 26 TESTS FAILED until you finish
+5 of 26 TESTS FAILED (26 run)
 ```
+
+They fail until you finish.
 
 1. **13.1 + M12: screen what the knowledge base returns.** Write `screen_chunks()` in `helpdesk.py`: strip HTML
    comments from each chunk and drop any chunk that still carries the lab marker, keeping the visible text. Then set

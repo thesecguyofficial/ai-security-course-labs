@@ -413,6 +413,8 @@ az cognitiveservices account show -n $AZ11_NAME -g $RG --query properties.encryp
 ./cloud/cloud.sh probe-inside
 ```
 
+What each command does, and what to look for:
+
 - `./cloud/cloud.sh probe-inside`: still 200
 
 Terraform will now see the change too: the next `make up` plan shows whether it wants to move the resource back or

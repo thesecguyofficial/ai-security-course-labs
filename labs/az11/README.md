@@ -481,6 +481,8 @@ make evidence
 make down
 ```
 
+What each command does, and what to look for:
+
 - `az login`: your own subscription
 - `AZ11_NAME`: globally unique, lowercase
 - `MY_IP`: e.g. from your router; only it may create the key

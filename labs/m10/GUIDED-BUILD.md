@@ -66,9 +66,7 @@ Throughout: Region `us-east-1`, and these shell variables (set them in Step 0, a
    echo "$ACCOUNT"
    ```
 
-   You should see:
-
-   - `echo "$ACCOUNT"`: 12 digits: is this really the sandbox?
+   What to look for: `echo "$ACCOUNT"` prints 12 digits. Is this really the sandbox?
 
    Only if you have no budget yet (free: "You can monitor and receive notifications on your budgets free of charge")
 
@@ -554,9 +552,7 @@ eval $(aws sts assume-role --role-arn arn:aws:iam::$ACCOUNT:role/tsg-m10-app-dem
 aws sts get-caller-identity --query Arn --output text
 ```
 
-You should see:
-
-- `aws sts get-caller-identity --query Arn --output text`: should end in assumed-role/tsg-m10-app-demo/m10-test
+What to look for: the ARN from `aws sts get-caller-identity` should end in `assumed-role/tsg-m10-app-demo/m10-test`.
 
 ### R1 · The approved model, through the approved profile (allowed)
 
@@ -843,6 +839,8 @@ aws iam list-service-specific-credentials --all-users --service-name bedrock.ama
 aws bedrock get-model-invocation-logging-configuration
 rm -f logging-trust.json logging-perms.json logging-config.json guardrails.json app-role.json app-trust.json
 ```
+
+What each command does, and what to look for:
 
 - `aws iam list-service-specific-credentials`: your test key is gone
 - `aws bedrock get-model-invocation-logging-configuration`: {} if you deleted it
