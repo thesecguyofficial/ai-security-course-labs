@@ -104,6 +104,18 @@ def main():
         pg.wait_for_timeout(400)
         type_name(pg, name)
 
+    def grow_boundary(pg):
+        """Drag the boundary's corner handles so it clearly encloses the model with room around it."""
+        if not pg.locator(".x6-widget-transform-resize").count():   # still selected after the drop, usually
+            bb = pg.locator('#graph-container .x6-node[data-shape="trust-boundary-box"]').first.bounding_box()
+            pg.mouse.click(bb["x"] + 3, bb["y"] + 3)
+            pg.wait_for_timeout(500)
+        for pos, dx, dy in (("top-left", -90, -70), ("bottom-right", 90, 70)):
+            h = pg.locator(f'.x6-widget-transform-resize[data-position="{pos}"]').first
+            a = center(h.bounding_box())
+            drag(pg, a, (a[0] + dx, a[1] + dy), steps=20)
+        pg.wait_for_timeout(600)
+
     with sync_playwright() as p:
         b = p.chromium.launch()
         ctx = b.new_context(viewport={"width": W, "height": H}, accept_downloads=True,
@@ -153,13 +165,17 @@ def main():
         deselect(pg)
         drag(pg, stencil(pg, "trust-boundary-box"), (1180, 262))
         type_name(pg, "Model boundary")
+        grow_boundary(pg)
         deselect(pg)
         pg.wait_for_timeout(1500)
 
         mark("Suggestions", pg)
-        pg.mouse.click(1180, 470)              # the F4 flow, below its label
-        pg.wait_for_timeout(800)
-        if "F4" not in pg.input_value("#name"):
+        for y in (470, 455, 485, 440):          # the F4 flow, below its label
+            pg.mouse.click(1180, y)
+            pg.wait_for_timeout(800)
+            if pg.locator("#name").count():
+                break
+        if not pg.locator("#name").count() or "F4" not in pg.input_value("#name"):
             raise SystemExit("could not select the F4 flow")
         pg.click("text=New Threat by Context")
         pg.wait_for_selector("#threat-edit", timeout=10000)
@@ -185,10 +201,11 @@ def main():
         pg.keyboard.type(THREAT["title"], delay=SLOW // 2)
         pg.select_option("#threat-edit #threat-type", label="Tampering")
         pg.click("#threat-edit #severity >> text=High")
-        pg.click("#threat-edit #description")
-        pg.keyboard.type(THREAT["description"], delay=FAST)
-        pg.click("#threat-edit #mitigation")
-        pg.keyboard.type(THREAT["mitigation"], delay=FAST)
+        for field in ("description", "mitigation"):   # Threat Dragon pre-fills these with a hint as real text
+            pg.click(f"#threat-edit #{field}")
+            pg.keyboard.press("Control+A")
+            pg.keyboard.press("Delete")
+            pg.keyboard.type(THREAT[field], delay=FAST)
         pg.wait_for_timeout(1500)
         pg.click("#threat-edit >> text=Apply")
         pg.wait_for_timeout(2500)
@@ -210,8 +227,15 @@ def main():
     for want in ("Customer", "Chat app", "Model", "Knowledge base", "F4 UNTRUSTED: retrieved articles", "Model boundary"):
         if want not in names:
             raise SystemExit(f"take rejected: {want!r} is not in the saved model ({names})")
-    if not any(t.get("title") == THREAT["title"] for t in threats):
+    mine = [t for t in threats if t.get("title") == THREAT["title"]]
+    if not mine:
         raise SystemExit("take rejected: the AI threat is not in the saved model")
+    for field in ("description", "mitigation"):
+        if mine[0].get(field) != THREAT[field]:
+            raise SystemExit(f"take rejected: saved {field} is {mine[0].get(field)!r}")
+    bnd = [c for c in cells if c.get("shape") == "trust-boundary-box"]
+    if not bnd or bnd[0]["size"]["width"] < 250 or bnd[0]["size"]["height"] < 160:
+        raise SystemExit(f"take rejected: the boundary is too small to read ({bnd and bnd[0].get('size')})")
     shutil.copy(video, out / "screen.webm")
     (out / "marks.json").write_text(json.dumps(marks, indent=2) + "\n")
     print("marks:")
