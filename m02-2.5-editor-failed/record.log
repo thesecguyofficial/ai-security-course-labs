@@ -1,0 +1,23 @@
+--- expected
++++ saved
+@@ -5,7 +5,7 @@
+ 
+ - **Author:** The Sec Guy
+ - **Date:** 27 Oct 2026
+-- **Version of the system reviewed:** local / Ollama
++- **Version of the system reviewed:** local / OllamaOllama, or AWS / Bedrock)
+ 
+ ## 1. What are we working on?
+ 
+@@ -72,8 +72,8 @@
+ 
+ ### 1.4 Where is it on the maps?
+ 
+-- **GenAI Security Scoping Matrix scope (1–5):** 3, because it is our own app on a pre-trained model (Ollama here, Bedrock on AWS) with RAG.
+-- **Agentic AI Security Scoping Matrix scope (1–4):** 3, because a customer starts it and it refunds and emails within a limit, with no approval per action.
++- **GenAI Security Scoping Matrix scope (1–5):** 3, because it is our own app on a pre-trained model (Ollama here, Bedrock on AWS) with RAG.because …
++- **Agentic AI Security Scoping Matrix scope (1–4):** 3, because a customer starts it and it refunds and emails within a limit, with no approval per action.:**  … because …
+ 
+ ### 1.5 Lethal trifecta check
+ 
+take rejected: the saved file differs from what was typed

@@ -1,1 +1,30 @@
-[2026-10-26T19:11:58.596Z] error EACCES: permission denied, mkdir '/home/runner/.config/code-server'
+[2026-10-26T19:15:27.891Z] info  Wrote default config file to /home/thesecguy/.config/code-server/config.yaml
+[2026-10-26T19:15:28.093Z] info  code-server 4.143.1 22ddf60dbc52f164cff13620ab515086dd08c90a
+[2026-10-26T19:15:28.094Z] info  Using user-data-dir /home/thesecguy/.local/share/code-server
+[2026-10-26T19:15:28.101Z] info  Using config file /home/thesecguy/.config/code-server/config.yaml
+[2026-10-26T19:15:28.101Z] info  HTTP server listening on http://127.0.0.1:8080/
+[2026-10-26T19:15:28.101Z] info    - Authentication is disabled
+[2026-10-26T19:15:28.101Z] info    - Not serving HTTPS
+[2026-10-26T19:15:28.101Z] info  Session server listening on /home/thesecguy/.local/share/code-server/code-server-ipc.sock
+[19:15:55] 
+
+
+
+
+[19:15:55] StorageMainService: creating application shared storage
+[reconnection-grace-time] No CLI argument provided, using default: 10800000ms (10800s)
+[19:15:55] [AgentHostChannel] Registered lazy IPC channel 'agentHostProxy' (upstream: /tmp/vscode-ipc-bafcae3f-2793-42a0-b2bb-0281eb6b9015.sock)
+[19:15:55] Extension host agent started.
+[19:15:55] [shared storage] Creating shared storage database at '/home/thesecguy/.vscode-oss-shared/sharedStorage/state.vscdb' (wasCreated: true)
+[19:15:55] [shared storage] Initializing fallback application storage (path: /home/thesecguy/.local/share/code-server/User/globalStorage/state.vscdb)
+[19:15:55] Started initializing default profile extensions in extensions installation folder. file:///home/thesecguy/.local/share/code-server/extensions
+[19:15:56] Completed initializing default profile extensions in extensions installation folder. file:///home/thesecguy/.local/share/code-server/extensions
+[19:15:56] [shared storage] Fallback application storage initialized with 3 items
+File not found: /home/thesecguy/.local/lib/code-server-4.143.1/lib/vscode/node_modules/vsda/rust/web/vsda_bg.wasm
+File not found: /home/thesecguy/.local/lib/code-server-4.143.1/lib/vscode/node_modules/vsda/rust/web/vsda.js
+[19:15:57] [127.0.0.1][1ca906ea][ManagementConnection] New connection established.
+[19:15:58] [127.0.0.1][72c335a6][ExtensionHostConnection] New connection established.
+[19:15:58] [127.0.0.1][72c335a6][ExtensionHostConnection] Starting extension host process...
+[19:15:58] [127.0.0.1][72c335a6][ExtensionHostConnection] <3211> Launched Extension Host Process.
+[19:15:58] [127.0.0.1][72c335a6][ExtensionHostConnection] <3211> [reconnection-grace-time] Extension host: read VSCODE_RECONNECTION_GRACE_TIME=10800000ms (10800s)
+
