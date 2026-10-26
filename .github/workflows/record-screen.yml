@@ -27,18 +27,22 @@ jobs:
         run: sudo bash recordings/prepare.sh "recordings/scenarios/$SCENARIO.json"
       - name: editor and browser (off camera)
         run: |
+          mkdir -p "out/$SCENARIO"
+          exec > >(tee "out/$SCENARIO/setup.log") 2>&1
+          set -x
           sudo -iu thesecguy bash -lc 'curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=$HOME/.local'
-          sudo -iu thesecguy mkdir -p /home/thesecguy/.local/share/code-server/User
+          ls -la /home/thesecguy/.local/bin || true
+          sudo -u thesecguy mkdir -p /home/thesecguy/.local/share/code-server/User
           sudo cp recordings/editor-settings.json /home/thesecguy/.local/share/code-server/User/settings.json
           sudo chown -R thesecguy:thesecguy /home/thesecguy/.local/share/code-server
-          sudo -iu thesecguy bash -lc 'nohup $HOME/.local/bin/code-server --auth none --bind-addr 127.0.0.1:8080 --disable-telemetry --disable-update-check --disable-workspace-trust --disable-getting-started-override > $HOME/code-server.log 2>&1 &'
+          sudo -u thesecguy -H bash -c 'cd ~ && setsid nohup ~/.local/bin/code-server --auth none --bind-addr 127.0.0.1:8080 --disable-telemetry --disable-update-check --disable-workspace-trust --disable-getting-started-override > ~/code-server.log 2>&1 < /dev/null &'
           for i in $(seq 1 60); do curl -fsS -o /dev/null http://127.0.0.1:8080/healthz && break; sleep 2; done
-          curl -fsS http://127.0.0.1:8080/healthz
+          curl -fsS http://127.0.0.1:8080/healthz || { sudo cat /home/thesecguy/code-server.log; exit 1; }
           python3 -m pip install --user --break-system-packages -q playwright==1.48.0
           python3 -m playwright install --with-deps chromium > /dev/null
           sudo chmod o+x /home/thesecguy && sudo chmod -R a+rwX /home/thesecguy/ai-security-course-labs
       - name: record (real session)
-        run: python3 recordings/record_screen.py "recordings/scenarios/$SCENARIO.json" "out/$SCENARIO" http://127.0.0.1:8080
+        run: python3 recordings/record_screen.py "recordings/scenarios/$SCENARIO.json" "out/$SCENARIO" http://127.0.0.1:8080 2>&1 | tee "out/$SCENARIO/record.log"; exit ${PIPESTATUS[0]}
       - name: proof (fingerprints, marks and the saved file)
         if: always()
         run: |
@@ -46,7 +50,7 @@ jobs:
           echo "run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" | tee run.txt
           find . -type f | sort | xargs sha256sum || true
           echo "----- saved file -----"; cat result.md || true
-          echo "----- editor log -----"; tail -40 /home/thesecguy/code-server.log || true
+          echo "----- editor log -----"; sudo tail -60 /home/thesecguy/code-server.log | tee editor.log || true
       - name: publish the recording to the lab-recordings branch
         if: always()
         run: |
