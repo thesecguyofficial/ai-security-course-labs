@@ -1,167 +1,167 @@
 {
   "scenario": "m00-0.6-linux",
-  "start": 1.895,
+  "start": 1.768,
   "steps": [
     {
       "label": "Get the labs",
       "speed": 1,
-      "start": 1.895,
-      "end": 12.33
+      "start": 1.768,
+      "end": 11.766
     },
     {
       "label": "Get the labs",
       "speed": 1,
-      "start": 14.13,
-      "end": 18.048
+      "start": 13.566,
+      "end": 17.482
     },
     {
       "label": "Check the fingerprint",
       "speed": 1,
-      "start": 19.848,
-      "end": 22.895
+      "start": 19.282,
+      "end": 22.327
     },
     {
       "label": "Check the fingerprint",
       "speed": 1,
-      "start": 24.695,
-      "end": 28.211
+      "start": 24.127,
+      "end": 27.641
     },
     {
       "label": "Run the setup script",
       "speed": 8,
-      "start": 31.211,
-      "end": 93.31
+      "start": 30.641,
+      "end": 86.412
     },
     {
       "label": "Check it with the doctor",
       "speed": 1,
-      "start": 95.11,
-      "end": 97.815
+      "start": 88.212,
+      "end": 90.774
     },
     {
       "label": "Docker works",
       "speed": 2,
-      "start": 100.815,
-      "end": 107.409
+      "start": 93.775,
+      "end": 103.737
     },
     {
       "label": "Run your first model",
       "speed": 1,
-      "start": 110.41,
-      "end": 119.992
+      "start": 106.737,
+      "end": 116.037
     },
     {
       "label": "Run your first model",
       "speed": 1,
-      "start": 121.792,
-      "end": 129.219
+      "start": 117.837,
+      "end": 124.536
     },
     {
       "label": "Run your first model",
       "speed": 1,
-      "start": 131.719,
-      "end": 133.127
+      "start": 127.036,
+      "end": 128.444
     },
     {
       "label": "Security checks",
       "speed": 1,
-      "start": 134.927,
-      "end": 139.123
+      "start": 130.244,
+      "end": 134.435
     },
     {
       "label": "Security checks",
       "speed": 1,
-      "start": 140.623,
-      "end": 144.167
+      "start": 135.935,
+      "end": 139.464
     },
     {
       "label": "Security checks",
       "speed": 1,
-      "start": 146.667,
-      "end": 153.77
+      "start": 141.964,
+      "end": 149.063
     }
   ],
   "keys": [
     {
-      "t": 2.495,
+      "t": 2.368,
       "what": "type"
     },
     {
-      "t": 14.73,
+      "t": 14.166,
       "what": "type"
     },
     {
-      "t": 20.448,
+      "t": 19.882,
       "what": "type"
     },
     {
-      "t": 25.295,
+      "t": 24.727,
       "what": "type"
     },
     {
-      "t": 31.811,
+      "t": 31.241,
       "what": "type"
     },
     {
-      "t": 34.67,
+      "t": 34.052,
       "what": "yes"
     },
     {
-      "t": 46.161,
+      "t": 46.233,
       "what": "no (default)"
     },
     {
-      "t": 47.712,
+      "t": 47.702,
       "what": "yes"
     },
     {
-      "t": 50.106,
+      "t": 49.786,
       "what": "read the script: yes"
     },
     {
-      "t": 55.575,
+      "t": 55.258,
       "what": "quit the viewer (q)"
     },
     {
-      "t": 56.827,
+      "t": 56.509,
       "what": "yes"
     },
     {
-      "t": 72.8,
+      "t": 72.293,
       "what": "yes"
     },
     {
-      "t": 95.711,
+      "t": 88.812,
       "what": "type"
     },
     {
-      "t": 101.415,
+      "t": 94.375,
       "what": "type"
     },
     {
-      "t": 111.01,
+      "t": 107.337,
       "what": "type"
     },
     {
-      "t": 122.392,
+      "t": 118.437,
       "what": "type"
     },
     {
-      "t": 132.319,
+      "t": 127.636,
       "what": "type"
     },
     {
-      "t": 135.527,
+      "t": 130.844,
       "what": "type"
     },
     {
-      "t": 141.223,
+      "t": 136.535,
       "what": "type"
     },
     {
-      "t": 147.268,
+      "t": 142.565,
       "what": "type"
     }
   ],
-  "end": 156.27
+  "end": 151.563
 }
