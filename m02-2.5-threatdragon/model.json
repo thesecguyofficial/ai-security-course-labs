@@ -33,7 +33,7 @@
             },
             "visible": true,
             "shape": "trust-boundary-box",
-            "id": "0d06d406-3974-4159-9920-1c61ee3ef77d",
+            "id": "0a25e27b-af49-40b1-854b-b3e8cee33ee6",
             "zIndex": -1,
             "data": {
               "type": "tm.BoundaryBox",
@@ -42,11 +42,11 @@
               "isTrustBoundary": true,
               "hasOpenThreats": false,
               "crossingFlows": [
-                "bffe04b3-3bf5-4471-aeef-367f50265d45",
-                "36f0c2fc-6094-4606-9c9b-4e7b984b4227"
+                "116b4517-cf9e-43fd-858a-876c7c4fcf76",
+                "11c139df-38de-4bf4-b966-82027fc6c075"
               ],
               "containedElements": [
-                "113583d0-8eaa-4265-a077-6327f683d7fd"
+                "919c11cf-7300-4cbd-8284-13e529ab03e9"
               ]
             }
           },
@@ -137,23 +137,23 @@
               "items": [
                 {
                   "group": "top",
-                  "id": "d070d6ec-e666-4862-9e42-e3890494156f"
+                  "id": "e418fdd0-ab7b-468f-84ae-2d7c3c7540fb"
                 },
                 {
                   "group": "right",
-                  "id": "cfbcf396-929f-421b-9ce2-8babee01e00b"
+                  "id": "9d9ba643-f705-47a8-85b2-af31efd771b7"
                 },
                 {
                   "group": "bottom",
-                  "id": "5967c4c2-8e0d-493d-b70e-c83c9cbb1128"
+                  "id": "61a792de-9ffd-4e4d-852f-149de8c8b2c3"
                 },
                 {
                   "group": "left",
-                  "id": "bf899160-becd-4e1b-b6c7-de29359ef93a"
+                  "id": "f890fe55-9c41-4ce7-96a3-644d82f5f249"
                 }
               ]
             },
-            "id": "c2751865-43d2-42a0-9192-99e0d4c517b3",
+            "id": "fdfa8a10-d00f-413f-9b1c-dbc788338bda",
             "zIndex": 1,
             "data": {
               "type": "tm.Actor",
@@ -254,23 +254,23 @@
               "items": [
                 {
                   "group": "top",
-                  "id": "fca379e1-c8c1-407d-90a3-ea9f47d1e787"
+                  "id": "01d9e378-77d0-49d4-88b6-8660cea79b6e"
                 },
                 {
                   "group": "right",
-                  "id": "44b09fb7-e784-4f03-9f1b-e756bd1a6cc7"
+                  "id": "4f2eacd3-7877-46d9-a3fc-ff2dfff8ebb0"
                 },
                 {
                   "group": "bottom",
-                  "id": "8c9f5a65-e4ff-444e-800f-ad7eb3a9591a"
+                  "id": "4bd3d4ac-69d4-4da9-92da-4bcde7bf757d"
                 },
                 {
                   "group": "left",
-                  "id": "dd2e7ded-4687-43e2-ab0d-b4cd9b2d19df"
+                  "id": "b69fac12-f8cb-4e02-bcff-8b8874d066c0"
                 }
               ]
             },
-            "id": "fe9c5d61-c4c9-4048-92d1-21069c2b841e",
+            "id": "fb5cd0b8-a303-48a9-9dd0-cc60ef9c7139",
             "zIndex": 2,
             "data": {
               "type": "tm.Process",
@@ -374,23 +374,23 @@
               "items": [
                 {
                   "group": "top",
-                  "id": "fca379e1-c8c1-407d-90a3-ea9f47d1e787"
+                  "id": "01d9e378-77d0-49d4-88b6-8660cea79b6e"
                 },
                 {
                   "group": "right",
-                  "id": "44b09fb7-e784-4f03-9f1b-e756bd1a6cc7"
+                  "id": "4f2eacd3-7877-46d9-a3fc-ff2dfff8ebb0"
                 },
                 {
                   "group": "bottom",
-                  "id": "8c9f5a65-e4ff-444e-800f-ad7eb3a9591a"
+                  "id": "4bd3d4ac-69d4-4da9-92da-4bcde7bf757d"
                 },
                 {
                   "group": "left",
-                  "id": "dd2e7ded-4687-43e2-ab0d-b4cd9b2d19df"
+                  "id": "b69fac12-f8cb-4e02-bcff-8b8874d066c0"
                 }
               ]
             },
-            "id": "113583d0-8eaa-4265-a077-6327f683d7fd",
+            "id": "919c11cf-7300-4cbd-8284-13e529ab03e9",
             "zIndex": 3,
             "data": {
               "type": "tm.Process",
@@ -497,23 +497,23 @@
               "items": [
                 {
                   "group": "top",
-                  "id": "45577d93-66a8-4231-9d79-084fbb04f427"
+                  "id": "5621599b-b953-45be-9d93-d0619ae64b0f"
                 },
                 {
                   "group": "right",
-                  "id": "4734a773-5cf3-4cc9-96bd-236af927612a"
+                  "id": "6219b0e1-ec2a-4fa1-bdc6-109bf0788fbc"
                 },
                 {
                   "group": "bottom",
-                  "id": "37c672cf-1107-45be-afec-ccc95ff8891c"
+                  "id": "2a9d5149-758c-4eb4-8bb3-0c0fd83f8412"
                 },
                 {
                   "group": "left",
-                  "id": "3b769a9b-7c7f-4fb5-9a58-0db5bc439070"
+                  "id": "88e028c4-0947-44cb-954f-0a66ac45e048"
                 }
               ]
             },
-            "id": "6c56dd5e-87a6-4a6b-b531-ef3de38fbe06",
+            "id": "a4544c36-e8ce-4d3a-a520-97eff291bb86",
             "zIndex": 4,
             "data": {
               "type": "tm.Store",
@@ -567,14 +567,14 @@
             "labels": [
               "F1 chat message"
             ],
-            "id": "de35ff6c-3b49-4f65-a667-94f74d20ec87",
+            "id": "0c6b362b-016e-4651-9e4e-b8aa64b75e8b",
             "source": {
-              "cell": "c2751865-43d2-42a0-9192-99e0d4c517b3",
-              "port": "cfbcf396-929f-421b-9ce2-8babee01e00b"
+              "cell": "fdfa8a10-d00f-413f-9b1c-dbc788338bda",
+              "port": "9d9ba643-f705-47a8-85b2-af31efd771b7"
             },
             "target": {
-              "cell": "fe9c5d61-c4c9-4048-92d1-21069c2b841e",
-              "port": "dd2e7ded-4687-43e2-ab0d-b4cd9b2d19df"
+              "cell": "fb5cd0b8-a303-48a9-9dd0-cc60ef9c7139",
+              "port": "b69fac12-f8cb-4e02-bcff-8b8874d066c0"
             },
             "vertices": []
           },
@@ -610,20 +610,20 @@
               "protocol": "",
               "threats": [],
               "trustBoundaryIds": [
-                "0d06d406-3974-4159-9920-1c61ee3ef77d"
+                "0a25e27b-af49-40b1-854b-b3e8cee33ee6"
               ]
             },
             "labels": [
               "F2 prompt + context"
             ],
-            "id": "bffe04b3-3bf5-4471-aeef-367f50265d45",
+            "id": "116b4517-cf9e-43fd-858a-876c7c4fcf76",
             "source": {
-              "cell": "fe9c5d61-c4c9-4048-92d1-21069c2b841e",
-              "port": "44b09fb7-e784-4f03-9f1b-e756bd1a6cc7"
+              "cell": "fb5cd0b8-a303-48a9-9dd0-cc60ef9c7139",
+              "port": "4f2eacd3-7877-46d9-a3fc-ff2dfff8ebb0"
             },
             "target": {
-              "cell": "113583d0-8eaa-4265-a077-6327f683d7fd",
-              "port": "dd2e7ded-4687-43e2-ab0d-b4cd9b2d19df"
+              "cell": "919c11cf-7300-4cbd-8284-13e529ab03e9",
+              "port": "b69fac12-f8cb-4e02-bcff-8b8874d066c0"
             },
             "vertices": []
           },
@@ -660,7 +660,7 @@
               "protocol": "",
               "threats": [
                 {
-                  "id": "b7458f52-3ed1-4aef-87bc-8012325556c8",
+                  "id": "a4b6cd90-c925-458e-9a01-159945a0ca48",
                   "title": "Indirect prompt injection via imported tickets",
                   "status": "Open",
                   "severity": "High",
@@ -674,7 +674,7 @@
                 }
               ],
               "trustBoundaryIds": [
-                "0d06d406-3974-4159-9920-1c61ee3ef77d"
+                "0a25e27b-af49-40b1-854b-b3e8cee33ee6"
               ],
               "threatFrequency": {
                 "tampering": 1,
@@ -685,14 +685,14 @@
             "labels": [
               "F4 UNTRUSTED: retrieved articles"
             ],
-            "id": "36f0c2fc-6094-4606-9c9b-4e7b984b4227",
+            "id": "11c139df-38de-4bf4-b966-82027fc6c075",
             "source": {
-              "cell": "6c56dd5e-87a6-4a6b-b531-ef3de38fbe06",
-              "port": "45577d93-66a8-4231-9d79-084fbb04f427"
+              "cell": "a4544c36-e8ce-4d3a-a520-97eff291bb86",
+              "port": "5621599b-b953-45be-9d93-d0619ae64b0f"
             },
             "target": {
-              "cell": "113583d0-8eaa-4265-a077-6327f683d7fd",
-              "port": "8c9f5a65-e4ff-444e-800f-ad7eb3a9591a"
+              "cell": "919c11cf-7300-4cbd-8284-13e529ab03e9",
+              "port": "4bd3d4ac-69d4-4da9-92da-4bcde7bf757d"
             },
             "vertices": []
           }
