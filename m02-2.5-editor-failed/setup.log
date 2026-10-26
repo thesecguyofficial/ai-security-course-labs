@@ -1,0 +1,277 @@
++ sudo -iu thesecguy bash -lc 'curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=$HOME/.local'
+Ubuntu 24.04.5 LTS
+Installing v4.143.1 of the amd64 release from GitHub.
+
++ mkdir -p ~/.cache/code-server
++ curl -#fL -o ~/.cache/code-server/code-server-4.143.1-linux-amd64.tar.gz.incomplete -C - https://github.com/coder/code-server/releases/download/v4.143.1/code-server-4.143.1-linux-amd64.tar.gz
+#=#=#                                                                          ##O#-#                                                                                                                                                    0.9%#########                                                                 13.7%############################                                              38.9%#########################################                                 57.4%#########################################################                 80.1%######################################################################## 100.0%
++ mv ~/.cache/code-server/code-server-4.143.1-linux-amd64.tar.gz.incomplete ~/.cache/code-server/code-server-4.143.1-linux-amd64.tar.gz
++ mkdir -p ~/.local
++ mkdir -p ~/.local/lib ~/.local/bin
++ tar -C ~/.local/lib -xzf ~/.cache/code-server/code-server-4.143.1-linux-amd64.tar.gz
++ mv -f ~/.local/lib/code-server-4.143.1-linux-amd64 ~/.local/lib/code-server-4.143.1
++ ln -fs ~/.local/lib/code-server-4.143.1/bin/code-server ~/.local/bin/code-server
+
+Standalone release has been installed into ~/.local/lib/code-server-4.143.1
+
+Extend your path to use code-server:
+  PATH="$HOME/.local/bin:$PATH"
+Then run with:
+  code-server
+
+Deploy code-server for your team with Coder: https://github.com/coder/coder
++ ls -la /home/thesecguy/.local/bin
+total 12
+drwxrwxr-x+ 2 thesecguy thesecguy 4096 Oct 26 19:11 .
+drwxrwxr-x+ 4 thesecguy thesecguy 4096 Oct 26 19:11 ..
+lrwxrwxrwx  1 thesecguy thesecguy   62 Oct 26 19:11 code-server -> /home/thesecguy/.local/lib/code-server-4.143.1/bin/code-server
++ sudo -u thesecguy mkdir -p /home/thesecguy/.local/share/code-server/User
++ sudo cp recordings/editor-settings.json /home/thesecguy/.local/share/code-server/User/settings.json
++ sudo chown -R thesecguy:thesecguy /home/thesecguy/.local/share/code-server
++ sudo -u thesecguy -H bash -c 'cd ~ && setsid nohup ~/.local/bin/code-server --auth none --bind-addr 127.0.0.1:8080 --disable-telemetry --disable-update-check --disable-workspace-trust --disable-getting-started-override > ~/code-server.log 2>&1 < /dev/null &'
+++ seq 1 60
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sleep 2
++ curl -fsS http://127.0.0.1:8080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
++ sudo cat /home/thesecguy/code-server.log
+[2026-10-26T19:11:58.596Z] error EACCES: permission denied, mkdir '/home/runner/.config/code-server'
++ exit 1
