@@ -1,0 +1,7 @@
+thesecguy@lab:~$ thesecguy@lab:~$ ollama run gemma3:1b
+
+thesecguy@lab:~$ ollama run gemma3:1b
+
+thesecguy@lab:~$ exit
+
+exit

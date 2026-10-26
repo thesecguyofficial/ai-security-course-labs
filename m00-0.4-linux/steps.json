@@ -1,0 +1,111 @@
+{
+  "scenario": "m00-0.4-linux",
+  "start": 1.674,
+  "steps": [
+    {
+      "label": "Start a small model",
+      "speed": 1,
+      "start": 1.674,
+      "end": 10.689
+    },
+    {
+      "label": "Give it a sticky note",
+      "speed": 1,
+      "start": 12.489,
+      "end": 29.251
+    },
+    {
+      "label": "Ask politely",
+      "speed": 1,
+      "start": 31.251,
+      "end": 37.527
+    },
+    {
+      "label": "Now the one sentence",
+      "speed": 1,
+      "start": 40.527,
+      "end": 60.116,
+      "tries": 1,
+      "matched": true
+    },
+    {
+      "label": "See the whole note",
+      "speed": 1,
+      "start": 63.116,
+      "end": 65.52
+    },
+    {
+      "label": "See the whole note",
+      "speed": 1,
+      "start": 68.52,
+      "end": 69.997
+    },
+    {
+      "label": "The right fix",
+      "speed": 1,
+      "start": 71.797,
+      "end": 80.166
+    },
+    {
+      "label": "The right fix",
+      "speed": 1,
+      "start": 81.966,
+      "end": 98.591
+    },
+    {
+      "label": "Same attack, nothing to leak",
+      "speed": 1,
+      "start": 100.591,
+      "end": 119.048
+    },
+    {
+      "label": "Same attack, nothing to leak",
+      "speed": 1,
+      "start": 122.049,
+      "end": 123.455
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.274,
+      "what": "type"
+    },
+    {
+      "t": 13.089,
+      "what": "type"
+    },
+    {
+      "t": 31.851,
+      "what": "type"
+    },
+    {
+      "t": 41.127,
+      "what": "type"
+    },
+    {
+      "t": 63.716,
+      "what": "type"
+    },
+    {
+      "t": 69.12,
+      "what": "type"
+    },
+    {
+      "t": 72.397,
+      "what": "type"
+    },
+    {
+      "t": 82.567,
+      "what": "type"
+    },
+    {
+      "t": 101.191,
+      "what": "type"
+    },
+    {
+      "t": 122.649,
+      "what": "type"
+    }
+  ],
+  "end": 125.255
+}
