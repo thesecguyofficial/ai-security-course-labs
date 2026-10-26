@@ -1,0 +1,42 @@
+[
+  {
+    "label": "Open Threat Dragon",
+    "t": 3.0
+  },
+  {
+    "label": "New model",
+    "t": 5.15
+  },
+  {
+    "label": "Draw elements",
+    "t": 15.45
+  },
+  {
+    "label": "Draw flows",
+    "t": 25.58
+  },
+  {
+    "label": "Boundary",
+    "t": 37.21
+  },
+  {
+    "label": "Suggestions",
+    "t": 41.75
+  },
+  {
+    "label": "Types",
+    "t": 47.77
+  },
+  {
+    "label": "AI threat",
+    "t": 56.53
+  },
+  {
+    "label": "Saved",
+    "t": 69.12
+  },
+  {
+    "label": "End",
+    "t": 72.3
+  }
+]
