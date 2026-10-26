@@ -1,0 +1,114 @@
+{
+  "name": "m02-2.5-editor",
+  "lesson": "2.5",
+  "title": "Lab: threat-model TSG Helpdesk (steps 1-3 and one example row, typed live in VS Code)",
+  "kind": "editor",
+  "folder": "ai-security-course-labs/labs/m02",
+  "template": "threat-model-template.md",
+  "file": "my-threat-model.md",
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "terminal": [
+    "cp threat-model-template.md my-threat-model.md",
+    "ls"
+  ],
+  "sections": [
+    {
+      "mark": "Header",
+      "edits": [
+        {"append": "- **Author:**", "text": " The Sec Guy"},
+        {"append": "- **Date:**", "text": " 27 Oct 2026"},
+        {"replace": "- **Version of the system reviewed:** (local / Ollama, or AWS / Bedrock)", "with": "- **Version of the system reviewed:** local / Ollama"}
+      ]
+    },
+    {
+      "mark": "Assumptions",
+      "edits": [
+        {"replace": "- ", "nth": 0, "with": "- Customers log in on the shop website; anyone on the internet can create an account."},
+        {"replace": "- ", "nth": 0, "with": "- Ticket text is written by customers.", "then": [
+          "- The model sees the system prompt, memory summary, retrieved articles, chat and tool results in one context window.",
+          "- One service account is used for orders, refunds, email and tickets."
+        ]}
+      ]
+    },
+    {
+      "mark": "Elements",
+      "edits": [
+        {"replace": "- E1:", "with": "- E1: Customer (logged in, but anyone can sign up)"},
+        {"replace": "- E2:", "with": "- E2: Support staff", "then": [
+          "- E3: Public package registry (where the MCP server came from)",
+          "- E4: Email recipients"
+        ]},
+        {"replace": "- P1:", "with": "- P1: Chat app (builds the prompt, runs the tools, renders Markdown)"},
+        {"replace": "- P2:", "with": "- P2: Model (Ollama, locally)", "then": [
+          "- P3: Tools: lookup_order, issue_refund (up to 50 per call), send_email",
+          "- P4: MCP ticketing server",
+          "- P5: Nightly import of resolved tickets"
+        ]},
+        {"replace": "- D1:", "with": "- D1: Knowledge base (vector store)"},
+        {"replace": "- D2:", "with": "- D2: Memory summaries", "then": [
+          "- D3: Order database",
+          "- D4: Ticketing system",
+          "- D5: Logs"
+        ]}
+      ]
+    },
+    {
+      "mark": "Flows",
+      "edits": [
+        {"replace": "| F1 | | | | |", "with": "| F1 | E1 → P1 | Chat message | Yes | Untrusted |"},
+        {"replace": "| F2 | | | | |", "with": "| F2 | P1 → P2 | System prompt | Yes | Trusted |"},
+        {"replace": "| F3 | | | | |", "with": "| F3 | D2 → P2 | Memory summary (the model wrote it from chat text) | Yes | Untrusted |", "then": [
+          "| F4 | D1 → P2 | Retrieved articles (include imported tickets) | Yes | Untrusted |",
+          "| F5 | P2 → P3, P4 | Tool calls the model chose | No | Untrusted |",
+          "| F6 | P3 → D3 | Order lookups and refunds (shared service account) | No | n/a |",
+          "| F7 | P3 → P2 | Tool results: order details, addresses | Yes | Untrusted |",
+          "| F8 | P4 → P2 | Ticket text from get_ticket and search_tickets | Yes | Untrusted |",
+          "| F9 | P3 → E4 | Emails from the support address | No | n/a |",
+          "| F10 | P1 → E1 | Answer rendered as Markdown | No | n/a |",
+          "| F11 | D4 → P5 → D1 | Resolved tickets imported every night | No | Untrusted |",
+          "| F12 | P1 → D2 | Memory summary saved after each chat | No | Untrusted |",
+          "| F13 | E3 → P4 | MCP server code and its updates | No | Untrusted |",
+          "| F14 | P1 → D5 | Log line: time, customer, model, tokens | No | n/a |"
+        ]}
+      ]
+    },
+    {
+      "mark": "Boundaries",
+      "edits": [
+        {"replace": "| Input | |", "with": "| Input | F1 |"},
+        {"replace": "| Model | |", "with": "| Model | F2, F3, F4, F7, F8: all in one context window |"},
+        {"replace": "| Tools | |", "with": "| Tools | F5, F6, F9, F13 |"},
+        {"replace": "| Output | |", "with": "| Output | F10 (Markdown can load images and links), F9 |"},
+        {"replace": "| Data | |", "with": "| Data | F4, F11 |"},
+        {"replace": "| Memory | |", "with": "| Memory | F3, F12 |"},
+        {"replace": "| Identity | |", "with": "| Identity | F6, F9: one shared service account behind every tool |"}
+      ]
+    },
+    {
+      "mark": "Scopes",
+      "edits": [
+        {"replace": "- **GenAI Security Scoping Matrix scope (1–5):**  … because …", "with": "- **GenAI Security Scoping Matrix scope (1–5):** 3, because it is our own app on a pre-trained model (Ollama here, Bedrock on AWS) with RAG."},
+        {"replace": "- **Agentic AI Security Scoping Matrix scope (1–4):**  … because …", "with": "- **Agentic AI Security Scoping Matrix scope (1–4):** 3, because a customer starts it and it refunds and emails within a limit, with no approval per action."}
+      ]
+    },
+    {
+      "mark": "Trifecta",
+      "edits": [
+        {"replace": "| Access to private data | | |", "with": "| Access to private data | Yes | lookup_order (addresses, emails), memory, tickets |"},
+        {"replace": "| Exposure to untrusted content | | |", "with": "| Exposure to untrusted content | Yes | Chat, imported tickets in the knowledge base, MCP ticket text, tool results |"},
+        {"replace": "| Ability to communicate externally | | |", "with": "| Ability to communicate externally | Yes | send_email to any address; images and links in Markdown answers |"}
+      ]
+    },
+    {
+      "mark": "Example row",
+      "edits": [
+        {"replace": "| T01 | | | | | | | | | |", "with": "| T00 (example) | Knowledge base (nightly ticket import) | Data → Model | An attacker files a ticket with hidden instructions; it is imported as an article; the bot later follows it for other customers | T | LLM01:2026, LLM05:2026, ASI06 | AML.T0070, AML.T0051.001 | 3 | 2 | 6 |", "then": [
+          "| T01 | | | | | | | | | |"
+        ]},
+        {"replace": "| T__ | | | | |", "nth": 0, "with": "| T00 | Don't auto-import customer text: staff review and rewrite first; record each article's source (code and process) | Yes | Log the article IDs retrieved for each answer; alert on imported articles with URLs or instruction-like phrases | No: logs have only time, customer, model, tokens |"}
+      ]
+    }
+  ]
+}
