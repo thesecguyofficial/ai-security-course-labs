@@ -300,8 +300,10 @@ make challenge
 You should see:
 
 ```text
-6 of 28 TESTS FAILED until you finish
+6 of 28 TESTS FAILED (28 run)
 ```
+
+They fail until you finish.
 
 1. **14.5: write a Cedar policy.** Add a `forbid` policy file to `setups/hardened/policies/` so `send_email` can't
    reach any address outside `example.com` (A11). It must name the gateway, and the tests try look-alikes such as

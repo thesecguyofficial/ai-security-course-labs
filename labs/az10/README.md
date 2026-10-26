@@ -561,6 +561,8 @@ export AZ10_EMAIL=you@example.com
 ./twin.sh key-test
 ```
 
+What each command does, and what to look for:
+
 - `az login`: your own subscription
 - `az bicep install`: once
 - `AZ10_NAME`: globally unique
@@ -577,6 +579,8 @@ Wait at least 15 minutes for the policy assignments:
 ./twin.sh activity
 ./twin.sh down
 ```
+
+What each command does, and what to look for:
 
 - `./twin.sh policy-test`: expect: 1) refused by policy (403 Forbidden); 2) the approved model is created, then deleted
 - `./twin.sh lock`: redeploys with disableLocalAuth=true; prints true

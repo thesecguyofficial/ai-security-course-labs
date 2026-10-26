@@ -584,6 +584,8 @@ gcloud projects set-iam-policy PROJECT_ID policy.json
 python3 policy_checker.py --iam policy.json
 ```
 
+What each command does, and what to look for:
+
 - `python3 policy_checker.py --iam policy.json`: GC10-15 should not appear
 
 **8d · An API key that only works from one IP.** `192.0.2.10` is a documentation address, so the key will refuse

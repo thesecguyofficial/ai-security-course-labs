@@ -276,7 +276,7 @@ make test
 You should see:
 
 ```text
-20 tests
+ALL TESTS PASSED (20 run)
 ```
 
 ```output

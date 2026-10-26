@@ -212,8 +212,10 @@ make challenge
 You should see:
 
 ```text
-3 of 21 tests fail until you finish
+3 of 21 TESTS FAILED (21 run)
 ```
+
+They fail until you finish.
 
 ```output
 [FAIL] challenge 1: the checker finds exactly E2 (s3 endpoint resources '*') and D3 (default ALERT) in the second draft

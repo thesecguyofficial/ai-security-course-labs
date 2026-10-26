@@ -230,8 +230,6 @@ aws sagemaker list-model-package-groups --name-contains tsg-guard
 aws s3api head-bucket --bucket $BUCKET
 ```
 
-You should see:
-
-- `aws s3api head-bucket --bucket $BUCKET`: should fail: Not Found
+What to look for: `aws s3api head-bucket` should fail with Not Found.
 
 Then delete `cloud/out/` on your laptop (`make clean`).

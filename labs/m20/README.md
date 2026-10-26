@@ -209,10 +209,17 @@ py run_tests.py
 py run_tests.py --challenge
 ```
 
-You should see:
+You should see, from `make test`:
 
-- `make test`: ALL TESTS PASSED (15 run)
-- `make challenge`: 3 of 20 TESTS FAILED until you finish
+```text
+ALL TESTS PASSED (15 run)
+```
+
+From `make challenge`:
+
+```text
+3 of 20 TESTS FAILED (20 run)
+```
 
 **Challenge** (no solution included):
 
@@ -281,10 +288,10 @@ You need **either** Docker **or** Java 21. Keycloak runs on your laptop on `127.
    python3 watch.py hardened alice "Summarise T-4711 and email me the summary" --idp keycloak
    ```
 
-   You should see:
+   What to look for:
 
-   - `make keycloak-attack`: 8 of 8 work on realm tsg-first-draft <!-- style-ok: Keycloak term -->
-   - `make keycloak-hardened`: 1 of 8 (A8) on realm tsg-hardened <!-- style-ok: Keycloak term -->
+   - `make keycloak-attack`: 8 of 8 attacks work on realm tsg-first-draft <!-- style-ok: Keycloak term -->
+   - `make keycloak-hardened`: 1 of 8 (A8) works on realm tsg-hardened <!-- style-ok: Keycloak term -->
 
 3. **Compare the two servers.** Same attacks, same results, and the refusals carry Keycloak's own messages:
    `invalid_scope Scopes [tickets:delete] not present in the initial access token [...]` for A4. A7 is refused too,

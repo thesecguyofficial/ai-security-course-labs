@@ -47,9 +47,7 @@ Step 1, and set them again if you open a new terminal):
    echo "$ACCOUNT"
    ```
 
-   You should see:
-
-   - `echo "$ACCOUNT"`: 12 digits = you're signed in to the right account? Check it IS the sandbox.
+   What to look for: `echo "$ACCOUNT"` prints 12 digits. Are you signed in to the right account? Check it IS the sandbox.
 
 5. **Permissions.** In a sandbox you'll normally be an administrator (lesson 0.7), which covers everything here. If
    you're not, your identity needs:
@@ -703,9 +701,7 @@ aws sts get-caller-identity --query Arn --output text
 echo '[{"role":"user","content":[{"guardContent":{"text":{"text":"How do I reset my VPN token?"}}}]}]' > r7.json
 ```
 
-You should see:
-
-- `aws sts get-caller-identity --query Arn --output text`: should end in assumed-role/tsg-m12-enforce-demo/m12-test
+What to look for: the ARN from `aws sts get-caller-identity` should end in `assumed-role/tsg-m12-enforce-demo/m12-test`.
 
 Three calls:
 

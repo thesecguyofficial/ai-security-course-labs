@@ -483,6 +483,8 @@ make cloud-down
 make cloud-check
 ```
 
+What each command does, and what to look for:
+
 - `make cloud-down`: endpoint, endpoint config, model, registry versions and group, schedule, bucket contents, stack
 - `make cloud-check`: nothing with the lab's names should be left
 

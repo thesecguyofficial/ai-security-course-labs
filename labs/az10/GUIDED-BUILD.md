@@ -303,9 +303,7 @@ az resource update --ids $FID --set properties.disableLocalAuth=true -o none
 az cognitiveservices account show -n $AZ10_NAME -g $RG --query properties.disableLocalAuth
 ```
 
-You should see:
-
-- `az cognitiveservices account show`: true
+What to look for: the `show` command prints `true`.
 
 The disable-local-auth page documents Bicep/ARM (`disableLocalAuth: true`), PowerShell and the policy, but no portal
 switch and no dedicated `az` flag, so we use the generic `az resource update`. The Bicep way:

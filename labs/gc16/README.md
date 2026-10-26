@@ -435,8 +435,10 @@ make challenge
 You should see:
 
 ```text
-6 of 24 TESTS FAILED until you finish
+6 of 24 TESTS FAILED (24 run)
 ```
+
+They fail until you finish.
 
 ```output
 [FAIL] challenge 1: D11 names contractor-upload, so S5 is CAUGHT
