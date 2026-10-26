@@ -12,6 +12,7 @@ Nothing is edited: the .cast file is exactly what the terminal printed. Outputs 
 Usage: python3 recordings/record.py recordings/scenarios/<name>.json OUT_DIR
 """
 import json
+import os
 import pathlib
 import random
 import re
@@ -36,9 +37,13 @@ def main():
     child = pexpect.spawn(
         "asciinema",
         ["rec", "-q", "--overwrite", "--cols", str(cols), "--rows", str(rows),
-         "-c", "sudo -iu thesecguy env TERM=xterm-256color COLUMNS=%d LINES=%d bash -i" % (cols, rows),
+         "-c", "sudo -iu thesecguy env -i HOME=/home/thesecguy USER=thesecguy LOGNAME=thesecguy SHELL=/bin/bash LANG=C.UTF-8 TERM=xterm-256color PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin COLUMNS=%d LINES=%d bash -il" % (cols, rows),
          str(out / "session.cast")],
-        dimensions=(rows, cols), encoding="utf-8", codec_errors="replace", timeout=None)
+        dimensions=(rows, cols), encoding="utf-8", codec_errors="replace", timeout=None,
+        # A clean environment: nothing from GitHub's own runner account (HOME, XDG_*, tool caches)
+        # may leak into the student's session.
+        env={"PATH": os.environ["PATH"], "HOME": os.environ.get("HOME", "/root"), "LANG": "C.UTF-8",
+             "TERM": "xterm-256color"})
     child.logfile_read = raw
     child.expect(PROMPT, timeout=60)
     time.sleep(0.5)
