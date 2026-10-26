@@ -67,9 +67,21 @@ def main():
         until = st.get("until", PROMPT)
         answers = st.get("answers", [])
         pats = [until] + [a["re"] for a in answers]
+        seen = ""
+        tries = 1
+        rep = st.get("repeat_until")   # {"re": ..., "max": N}: the lesson says to send it again if needed
         while True:
             i = child.expect(pats, timeout=st.get("timeout", 1800))
+            seen += (child.before or "") + (child.after if isinstance(child.after, str) else "")
             if i == 0:
+                if rep and not re.search(rep["re"], ANSI.sub("", seen)) and tries < rep.get("max", 3):
+                    tries += 1
+                    time.sleep(st.get("retry_pause", 2.0))
+                    log["keys"].append({"t": now(), "what": "type"})
+                    type_text(st["type"])
+                    time.sleep(0.35)
+                    child.send(st.get("enter", "\r"))
+                    continue
                 break
             a = answers[i - 1]
             time.sleep(a.get("delay", 1.2))
@@ -82,6 +94,9 @@ def main():
                 child.send(a["send"])
             time.sleep(a.get("after", 0))
         rec["end"] = now()
+        if rep:
+            rec["tries"] = tries
+            rec["matched"] = bool(re.search(rep["re"], ANSI.sub("", seen)))
         log["steps"].append(rec)
         time.sleep(st.get("pause_after", 1.8))
     log["end"] = now()
