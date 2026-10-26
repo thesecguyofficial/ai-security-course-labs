@@ -37,7 +37,7 @@ def main():
     child = pexpect.spawn(
         "asciinema",
         ["rec", "-q", "--overwrite", "--cols", str(cols), "--rows", str(rows),
-         "-c", "sudo -iu thesecguy env -i HOME=/home/thesecguy USER=thesecguy LOGNAME=thesecguy SHELL=/bin/bash LANG=C.UTF-8 TERM=xterm-256color PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin COLUMNS=%d LINES=%d bash -il" % (cols, rows),
+         "-c", "sudo -iu thesecguy env -i HOME=/home/thesecguy USER=thesecguy LOGNAME=thesecguy SHELL=/bin/bash LANG=C.UTF-8 TERM=xterm-256color PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin COLUMNS=%d LINES=%d bash -i" % (cols, rows),
          str(out / "session.cast")],
         dimensions=(rows, cols), encoding="utf-8", codec_errors="replace", timeout=None,
         # A clean environment: nothing from GitHub's own runner account (HOME, XDG_*, tool caches)
