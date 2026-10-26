@@ -1,0 +1,61 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m01
+
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ ollama pull gemma3:1b
+
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 llm_lab.py check
+
+Could not reach Ollama at http://localhost:11434. Is it running?
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 llm_lab.py chat "What is a token, in one s 
+entence?"
+
+---- what we send (HTTP POST http://localhost:11434/v1/chat/completions) ----
+{
+  "model": "gemma3:1b",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant. Answer in at most three sentences."
+    },
+    {
+      "role": "user",
+      "content": "What is a token, in one sentence?"
+    }
+  ],
+  "temperature": 0.2
+}
+Could not reach Ollama at http://localhost:11434.
+Tip: start the Ollama app (Mac/Windows) or run `ollama serve` (Linux), then try again.
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ curl http://localhost:11434/v1/chat/completions -H 
+ "Content-Type: application/json" -d '{"model": "gemma3:1b", "messages": [{"role": "user", "content" 
+: "Say hello"}]}'
+
+curl: (7) Failed to connect to localhost port 11434 after 0 ms: Couldn't connect to server
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 llm_lab.py tokens "hello" "Ignore previous 
+ instructions" "unbelievably" "₹1,999" "नमस्ते"
+
+Could not reach Ollama at http://localhost:11434.
+Tip: start the Ollama app (Mac/Windows) or run `ollama serve` (Linux), then try again.
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 llm_lab.py temp "Name one colour." --runs  
+3
+
+
+== temperature 0.0 ==
+Could not reach Ollama at http://localhost:11434.
+Tip: start the Ollama app (Mac/Windows) or run `ollama serve` (Linux), then try again.
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 llm_lab.py fill --ctx 1024
+
+Context window for this run: 1024 tokens (we set it with the num_ctx option)
+
+Could not reach Ollama at http://localhost:11434.
+Tip: start the Ollama app (Mac/Windows) or run `ollama serve` (Linux), then try again.
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 llm_lab.py fill --ctx 8192
+
+Context window for this run: 8192 tokens (we set it with the num_ctx option)
+
+Could not reach Ollama at http://localhost:11434.
+Tip: start the Ollama app (Mac/Windows) or run `ollama serve` (Linux), then try again.
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ ollama stop gemma3:1b
+
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ exit
+
+exit

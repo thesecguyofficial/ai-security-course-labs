@@ -1,0 +1,109 @@
+{
+  "scenario": "m01-1.8-linux",
+  "start": 1.787,
+  "steps": [
+    {
+      "label": "Get ready",
+      "speed": 1,
+      "start": 1.787,
+      "end": 6.553
+    },
+    {
+      "label": "Get ready",
+      "speed": 8,
+      "start": 8.353,
+      "end": 16.814
+    },
+    {
+      "label": "Is it running?",
+      "speed": 1,
+      "start": 18.614,
+      "end": 22.55
+    },
+    {
+      "label": "Call the API",
+      "speed": 1,
+      "start": 25.05,
+      "end": 32.835
+    },
+    {
+      "label": "Same call with curl",
+      "speed": 1,
+      "start": 36.835,
+      "end": 57.431
+    },
+    {
+      "label": "Count tokens",
+      "speed": 1,
+      "start": 61.431,
+      "end": 73.48
+    },
+    {
+      "label": "Temperature",
+      "speed": 2,
+      "start": 77.481,
+      "end": 84.431
+    },
+    {
+      "label": "Fill the whiteboard",
+      "speed": 4,
+      "start": 88.431,
+      "end": 93.467
+    },
+    {
+      "label": "Room to remember",
+      "speed": 4,
+      "start": 97.468,
+      "end": 102.549
+    },
+    {
+      "label": "Clean up",
+      "speed": 1,
+      "start": 106.549,
+      "end": 114.967
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.387,
+      "what": "type"
+    },
+    {
+      "t": 8.954,
+      "what": "type"
+    },
+    {
+      "t": 19.214,
+      "what": "type"
+    },
+    {
+      "t": 25.65,
+      "what": "type"
+    },
+    {
+      "t": 37.435,
+      "what": "type"
+    },
+    {
+      "t": 62.031,
+      "what": "type"
+    },
+    {
+      "t": 78.081,
+      "what": "type"
+    },
+    {
+      "t": 89.031,
+      "what": "type"
+    },
+    {
+      "t": 98.068,
+      "what": "type"
+    },
+    {
+      "t": 107.149,
+      "what": "type"
+    }
+  ],
+  "end": 116.967
+}
