@@ -1,0 +1,59 @@
+name: record-threatdragon
+# Records a REAL OWASP Threat Dragon session (official container image, local mode, nothing leaves the machine)
+# for the M2 lab video. The take is rejected unless the model Threat Dragon saves contains every element and the
+# AI threat that were drawn and typed on camera.
+on:
+  workflow_dispatch:
+  push:
+    branches: [rec-td]
+    paths: ["recordings/record_threatdragon.py", ".github/workflows/record-threatdragon.yml"]
+permissions:
+  contents: write   # only to push the finished recording to the lab-recordings branch
+
+jobs:
+  record:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      SCENARIO: m02-2.5-threatdragon
+      TD_IMAGE: owasp/threat-dragon:v2.6.2
+    steps:
+      - uses: actions/checkout@v4
+      - name: Threat Dragon and a browser (off camera)
+        run: |
+          mkdir -p "out/$SCENARIO"
+          exec > >(tee "out/$SCENARIO/setup.log") 2>&1
+          set -x
+          docker pull "$TD_IMAGE"
+          docker image inspect "$TD_IMAGE" --format 'image {{.Id}}'
+          # Throwaway keys for this one-off machine (local mode only; no accounts, no repositories).
+          docker run -d --name td -p 127.0.0.1:3000:3000 \
+            -e ENCRYPTION_KEYS="[{\"isPrimary\": true, \"id\": 0, \"value\": \"$(openssl rand -hex 16)\"}]" \
+            -e ENCRYPTION_JWT_SIGNING_KEY="$(openssl rand -hex 24)" \
+            -e ENCRYPTION_JWT_REFRESH_SIGNING_KEY="$(openssl rand -hex 24)" \
+            -e NODE_ENV=production -e SERVER_API_PROTOCOL=http "$TD_IMAGE"
+          for i in $(seq 1 60); do curl -fsS -o /dev/null http://127.0.0.1:3000/ && break; sleep 2; done
+          curl -fsS http://127.0.0.1:3000/api/config
+          python3 -m pip install --user --break-system-packages -q playwright==1.48.0
+          python3 -m playwright install --with-deps chromium > /dev/null
+      - name: record (real session)
+        run: python3 recordings/record_threatdragon.py "out/$SCENARIO" http://127.0.0.1:3000 2>&1 | tee "out/$SCENARIO/record.log"; exit ${PIPESTATUS[0]}
+      - name: proof (fingerprints and the saved model)
+        if: always()
+        run: |
+          mkdir -p "out/$SCENARIO" && cd "out/$SCENARIO"
+          echo "run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" | tee run.txt
+          docker logs td > td.log 2>&1 || true
+          find . -type f | sort | xargs sha256sum || true
+          echo "----- saved model -----"; cat model.json || true
+      - name: publish the recording to the lab-recordings branch
+        if: always()
+        run: |
+          dest="$SCENARIO"; [ "${{ job.status }}" = "success" ] || dest="$SCENARIO-failed"
+          rm -rf "out/$SCENARIO/video-raw"
+          git config user.name "The Sec Guy"; git config user.email "hello@thesecguy.com"
+          git fetch origin lab-recordings || true
+          if git rev-parse -q --verify origin/lab-recordings; then git switch -c pub origin/lab-recordings; else git switch --orphan pub; git rm -rq --cached . 2>/dev/null || true; fi
+          find . -mindepth 1 -maxdepth 1 ! -name .git ! -name out -exec rm -rf {} +
+          rm -rf "$dest" && mkdir -p "$dest" && cp -r out/$SCENARIO/* "$dest/"
+          git add -A "$dest" && git commit -qm "Recording $dest (run $GITHUB_RUN_ID)" && git push -q origin pub:lab-recordings
