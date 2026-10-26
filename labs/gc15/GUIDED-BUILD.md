@@ -114,11 +114,13 @@ Shell variables used throughout (set them again in a new terminal):
    ```bash
    gcloud kms keyrings create tsg-gc15 --location=$REGION
    gcloud kms keys create tsg-gc15-ai --keyring=tsg-gc15 --location=$REGION --purpose=encryption
-   gcloud beta services identity create --service=aiplatform.googleapis.com     # makes sure the service agent exists
+   gcloud beta services identity create --service=aiplatform.googleapis.com
    gcloud kms keys add-iam-policy-binding tsg-gc15-ai --keyring=tsg-gc15 --location=$REGION \
      --member="serviceAccount:service-$PROJECT_NUMBER@gcp-sa-aiplatform.iam.gserviceaccount.com" \
      --role=roles/cloudkms.cryptoKeyEncrypterDecrypter
    ```
+
+   - `gcloud beta services identity create --service=aiplatform.googleapis.com`: makes sure the service agent exists
 
 4. **A model bucket and an image repository.** Keep the bucket private, with uniform access.
 
@@ -222,9 +224,11 @@ safetensors format works.
    ```
 
    ```bash
-   export ENDPOINT_ID=1234567890123456789      # the number after endpoints/ in your response
+   export ENDPOINT_ID=1234567890123456789
    echo $ENDPOINT_ID > cloud/out/endpoint-id
    ```
+
+   - `ENDPOINT_ID`: the number after endpoints/ in your response
 
    Two facts from Google's [PSC page](https://docs.cloud.google.com/vertex-ai/docs/predictions/private-service-connect)
    to know before you go on: "An endpoint's `projectAllowlist` value can't be changed", and "If all models are

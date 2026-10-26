@@ -76,8 +76,10 @@ Microsoft says to "Deploy the key store and the Foundry resource in the same Azu
    export AZ11_NAME=az11-ab1234
    export MY_IP=<your public IPv4>
    export RG=rg-$AZ11_NAME
-   make cost          # the meters this build bills, to price in the Azure pricing calculator
+   make cost
    ```
+
+   - `make cost`: the meters this build bills, to price in the Azure pricing calculator
 
 ## G1 · Build it from zero
 
@@ -139,9 +141,12 @@ Labels quoted from Microsoft Learn where it quotes them; "(label may differ slig
 ### Path B: Terraform (`make up`)
 
 ```bash
-make up            # terraform init + plan, the lab's checker on YOUR plan, then apply after you type yes
-make cloud-check   # the checker again on cloud-plan.json
+make up
+make cloud-check
 ```
+
+- `make up`: terraform init + plan, the lab's checker on YOUR plan, then apply after you type yes
+- `make cloud-check`: the checker again on cloud-plan.json
 
 `make up` saves `terraform show -json` as `cloud-plan.json` and runs `checker.py --plan` on it before asking to apply,
 so you see lab findings on your real plan before anything exists. Read `terraform/main.tf` while it runs: every block
@@ -159,8 +164,10 @@ run `make up` again.
 
 ```bash
 export FID=$(az cognitiveservices account show -n $AZ11_NAME -g $RG --query id -o tsv)
-make evidence      # the settings an auditor asks for, read back from Azure
+make evidence
 ```
+
+- `make evidence`: the settings an auditor asks for, read back from Azure
 
 **Example response (shape from Microsoft docs, values illustrative)** (property names from Microsoft's
 `32-customer-managed-keys-user-assigned-identity` Bicep sample, which sets `encryption.keySource` and
@@ -178,14 +185,19 @@ helpdesk-chat  DataZoneStandard
 **Built with Path A?** `cloud.sh probe-outside`, `probe-inside`, `logs` and the last line of `evidence` read
 Terraform outputs, so they won't find your resources. Use these instead (same script, same results):
 
+Instead of probe-outside:
+
 ```bash
-# instead of probe-outside
 for h in $AZ11_NAME.openai.azure.com $AZ11_NAME.cognitiveservices.azure.com $AZ11_NAME.services.ai.azure.com; do
   nslookup $h; done
 TOKEN=$(az account get-access-token --scope https://ai.azure.com/.default --query accessToken -o tsv)
 curl -s -w "\nHTTP %{http_code}\n" "https://$AZ11_NAME.openai.azure.com/openai/v1/responses" -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" -d '{"model":"helpdesk-chat","input":"Reply with OK","max_output_tokens":1000}'
-# instead of probe-inside
+```
+
+Instead of probe-inside:
+
+```bash
 CLIENT_ID=$(az identity show -g $RG -n id-jump --query clientId -o tsv)
 sed -e "s/__NAME__/$AZ11_NAME/g" -e "s/__CLIENT_ID__/$CLIENT_ID/g" -e "s/__DEPLOYMENT__/helpdesk-chat/g" \
   cloud/probe-inside.sh > /tmp/az11-probe.sh
@@ -236,8 +248,10 @@ POST /openai/v1/responses from your laptop -> HTTP 403 (expect a refusal: public
 ### T2 · The private path works, and leaves a log entry
 
 ```bash
-./cloud/cloud.sh probe-inside      # runs cloud/probe-inside.sh on vm-jump through Run Command
+./cloud/cloud.sh probe-inside
 ```
+
+- `./cloud/cloud.sh probe-inside`: runs cloud/probe-inside.sh on vm-jump through Run Command
 
 Inside the VNet, each name should resolve to the private endpoint, and the VM's own managed identity (token from the
 metadata endpoint, `Metadata:true` header) calls the model.
@@ -262,8 +276,10 @@ script tries `https://ai.azure.com` first (item U6). Note both.
 Now the log entry. Microsoft: data "should start flowing to your selected destinations within 90 minutes".
 
 ```bash
-make logs          # counts AzureDiagnostics rows by Category and OperationName
+make logs
 ```
+
+- `make logs`: counts AzureDiagnostics rows by Category and OperationName
 
 **Example response (shape from Microsoft docs, values illustrative)** (column names from Microsoft's `AzureDiagnostics`
 table reference; the operation names are yours to read):
@@ -295,7 +311,11 @@ Same VM, same private path, but the identity loses its role:
 ```bash
 JUMP_PID=$(az identity show -g $RG -n id-jump --query principalId -o tsv)
 az role assignment delete --assignee $JUMP_PID --role 53ca6127-db72-4b80-b1b0-d745d6d5456d --scope $FID
-# wait 5 to 10 minutes, then:
+```
+
+Wait 5 to 10 minutes, then:
+
+```bash
 ./cloud/cloud.sh probe-inside
 ```
 
@@ -319,13 +339,22 @@ Put the role back with `make up` (Terraform re-creates the assignment; type `yes
 At least 15 minutes after `make policy`. Three changes an attacker with a stolen admin session would try (lab steps
 A4, A6 and B9 from AZ10):
 
+1. A Global deployment: prompts "may be processed in any Azure region"
+
 ```bash
-# 1. a Global deployment: prompts "may be processed in any Azure region"
 az cognitiveservices account deployment create -g $RG -n $AZ11_NAME --deployment-name test-global \
   --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1
-# 2. keys back on
+```
+
+2. Keys back on:
+
+```bash
 az resource update --ids $FID --set properties.disableLocalAuth=false -o none
-# 3. the internet back in
+```
+
+3. The internet back in:
+
+```bash
 az resource update --ids $FID --set properties.publicNetworkAccess=Enabled properties.networkAcls.defaultAction=Allow -o none
 ```
 
@@ -365,10 +394,12 @@ Foundry resource to reference the latest key version in its encryption settings.
 ```bash
 KV=kv-$AZ11_NAME
 az cognitiveservices account show -n $AZ11_NAME -g $RG --query properties.encryption.keyVaultProperties.keyVersion -o tsv
-az keyvault key rotate --vault-name $KV --name cmk-foundry -o none            # a new version (from MY_IP)
+az keyvault key rotate --vault-name $KV --name cmk-foundry -o none
 NEW=$(az keyvault key show --vault-name $KV --name cmk-foundry --query key.kid -o tsv); NEW=${NEW##*/}
 az cognitiveservices account show -n $AZ11_NAME -g $RG --query properties.encryption.keyVaultProperties.keyVersion -o tsv
 ```
+
+- `az keyvault key rotate --vault-name $KV --name cmk-foundry -o none`: a new version (from MY_IP)
 
 The second `show` still prints the **old** version: a new key version does nothing until the resource points at it.
 Point it there, with the property names from Microsoft's CMK Bicep sample:
@@ -379,8 +410,12 @@ az cognitiveservices account update -n $AZ11_NAME -g $RG --encryption "{\"keySou
   \"keyVaultProperties\": {\"keyName\": \"cmk-foundry\", \"keyVersion\": \"$NEW\",
   \"keyVaultUri\": \"https://$KV.vault.azure.net/\", \"identityClientId\": \"$CMK_CLIENT\"}}" -o none
 az cognitiveservices account show -n $AZ11_NAME -g $RG --query properties.encryption.keyVaultProperties.keyVersion -o tsv
-./cloud/cloud.sh probe-inside       # still 200
+./cloud/cloud.sh probe-inside
 ```
+
+What each command does, and what to look for:
+
+- `./cloud/cloud.sh probe-inside`: still 200
 
 Terraform will now see the change too: the next `make up` plan shows whether it wants to move the resource back or
 forward. Read it before you type `yes`.

@@ -61,14 +61,18 @@ You will:
 
 ```bash
 cd labs/m21
-make setup                  # python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
+make setup
 ```
+
+- `make setup`: python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
 
 ## Step 1 · Break it
 
 ```bash
-make attack                 # python3 suite.py first-draft
+make attack
 ```
+
+Same as `python3 suite.py first-draft`.
 
 Real output (Linux, Python 3.13, cedarpy 4.12.2):
 
@@ -96,8 +100,10 @@ The first draft does have a $100 rule, and it holds the obvious try (A2). Every 
 one, step by step:
 
 ```bash
-make story                  # T-605 against the first draft, then against the hardened PEP
+make story
 ```
+
+- `make story`: T-605 against the first draft, then against the hardened PEP
 
 ```text
 TICKET T-605 from mallory@attacker.example about O-3001, worked by bob (support) | setup first-draft | ...
@@ -155,8 +161,10 @@ database, the ticket's requester from the ticket the staff member opened, the co
 ## Step 3 · Fix it
 
 ```bash
-make hardened               # python3 suite.py hardened
+make hardened
 ```
+
+Same as `python3 suite.py hardened`.
 
 ```text
 Attacks that worked: 0 of 12  (none) | normal requests that work: 6 of 6
@@ -186,8 +194,10 @@ herself: the four-eyes rule refuses it.
 ## Step 5 · LOG_ONLY: decide, record, enforce nothing
 
 ```bash
-make shadow                 # python3 suite.py hardened --mode LOG_ONLY
+make shadow
 ```
+
+Same as `python3 suite.py hardened --mode LOG_ONLY`.
 
 ```text
 Attacks that worked: 10 of 12  (A1, A2, A3, A4, A6, A7, A8, A10, A11, A12) | normal requests that work: 6 of 6
@@ -200,9 +210,12 @@ place to stay.
 ## Step 6 · Spot it
 
 ```bash
-make approve-demo && make audit     # every receipt signed, each linked to the one before
-make hunt                           # a morning of receipts: refusals, LOG_ONLY flips, held calls
+make approve-demo && make audit
+make hunt
 ```
+
+- `make approve-demo && make audit`: every receipt signed, each linked to the one before
+- `make hunt`: a morning of receipts: refusals, LOG_ONLY flips, held calls
 
 ```text
 4 receipts: chain intact, every signature valid
@@ -225,8 +238,10 @@ real PEP signs with a private key in a KMS or HSM, and verifiers hold only the p
 Install OPA from its official page (https://www.openpolicyagent.org/docs#running-opa; tested with OPA 1.21.4), then:
 
 ```bash
-make opa                    # opa test rego/ -v, then python3 suite.py hardened --engine opa
+make opa
 ```
+
+- `make opa`: opa test rego/ -v, then python3 suite.py hardened --engine opa
 
 ```text
 PASS: 5/5
@@ -240,8 +255,16 @@ and nothing warns you. `rego/` mirrors the six shipped policies only, not your c
 ## Step 8 · Prove it
 
 ```bash
-make test                   # ALL TESTS PASSED (23 run); the OPA parity test is skipped without opa
+make test
 ```
+
+You should see:
+
+```text
+ALL TESTS PASSED (23 run)
+```
+
+The OPA parity test is skipped without opa.
 
 **Challenge** (`make challenge`: 4 of 28 tests fail until you finish; no solution included):
 

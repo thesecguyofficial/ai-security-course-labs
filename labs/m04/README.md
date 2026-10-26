@@ -48,9 +48,11 @@ docs at [presidio.dataprivacystack.org](https://presidio.dataprivacystack.org/in
 Mac / Linux:
 
 ```bash
-cd labs-export/m04          # or wherever you put this folder
+cd labs-export/m04
 make setup
 ```
+
+- `cd labs-export/m04`: or wherever you put this folder
 
 `make setup` runs these three commands (run them yourself if you don't have `make`):
 

@@ -79,9 +79,12 @@ ID `o-a1b2c3d4e5` and every ARN are AWS documentation example values. Model IDs 
 ## Step 1 · Check the first draft's plan
 
 ```bash
-cd labs/m11                 # or wherever you put this folder
-make check                  # same as: python3 checker.py twin/first-draft.plan.json
+cd labs/m11
+make check
 ```
+
+- `cd labs/m11`: or wherever you put this folder
+- `make check`: same as `python3 checker.py twin/first-draft.plan.json`
 
 Real output (Linux, Python 3.13):
 
@@ -153,8 +156,10 @@ The checker exits with code 1 when it finds anything HIGH, so it can fail a pull
 ## Step 2 · Break it: what would this let happen, and who would notice?
 
 ```bash
-make attack                 # same as: python3 attack.py --plan first-draft
+make attack
 ```
+
+Same as `python3 attack.py --plan first-draft`.
 
 Real output:
 
@@ -235,9 +240,12 @@ Open `terraform/hardened/`. Every file starts with a comment saying which lesson
 Then check and replay it:
 
 ```bash
-make check-hardened         # same as: python3 checker.py twin/hardened.plan.json
-make attack-safe            # same as: python3 attack.py --plan hardened
+make check-hardened
+make attack-safe
 ```
+
+- `make check-hardened`: same as `python3 checker.py twin/hardened.plan.json`
+- `make attack-safe`: same as `python3 attack.py --plan hardened`
 
 Real output:
 
@@ -302,8 +310,10 @@ our reading of it; if you do Step 7, check it.
 ## Step 4 · Prove it: `make test`
 
 ```bash
-make test                   # same as: python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 Real output:
 
@@ -350,8 +360,10 @@ set to each destination Region, with `bedrock:InferenceProfileArn` set.
 ## Step 6 · Your turn: `make challenge`
 
 ```bash
-make challenge              # same as: python3 run_tests.py --challenge
+make challenge
 ```
+
+Same as `python3 run_tests.py --challenge`.
 
 Real output before your fix (last lines):
 
@@ -437,10 +449,14 @@ Bedrock console, wait a few minutes, and retry.
 **replaces** it (one per account and Region), and `make down` deletes it.
 
 ```bash
-make up          # terraform init + apply, with account_id from `aws sts get-caller-identity`; type yes
-make smoke       # asks the Helpdesk "How do I reset my VPN token?" through the VPC endpoint
-make verify      # the logging configuration, then the newest prompt log event
+make up
+make smoke
+make verify
 ```
+
+- `make up`: terraform init + apply, with account_id from `aws sts get-caller-identity`; type yes
+- `make smoke`: asks the Helpdesk "How do I reset my VPN token?" through the VPC endpoint
+- `make verify`: the logging configuration, then the newest prompt log event
 
 What to look for:
 
@@ -464,8 +480,10 @@ What to look for:
 **Teardown** (today, not later):
 
 ```bash
-make down        # terraform destroy; type yes
+make down
 ```
+
+- `make down`: terraform destroy; type yes
 
 The two KMS keys go into a 7-day waiting period (the minimum AWS allows: "a waiting period of 7 – 30 days",
 [AWS docs](https://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html)), with no charge while scheduled

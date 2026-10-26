@@ -69,8 +69,10 @@ Lesson 17.1's method starts with scope and a threat model. Here is both, short:
   carried out in an image URL, an action on someone else's account.
 
 ```bash
-make attack      # the weak build, no guards
+make attack
 ```
+
+- `make attack`: the weak build, no guards
 
 Real output, trimmed:
 
@@ -327,9 +329,11 @@ Lesson 17.2 compares the three tools. Both extras talk only to the local Helpdes
 app is, where to put the attack (`$INPUT`) and which reply field to judge (`answer`):
 
 ```bash
-python3 -m venv .venv-garak && .venv-garak/bin/pip install garak==0.17.1    # also installs PyTorch: large
+python3 -m venv .venv-garak && .venv-garak/bin/pip install garak==0.17.1
 .venv-garak/bin/python -m garak --target_type rest -G optional/garak-rest.json --spec probes.promptinject.HijackHateHumans
 ```
+
+- `python3 -m venv .venv-garak && .venv-garak/bin/pip install garak==0.17.1`: also installs PyTorch: large
 
 Real result line from the hardened build:
 
@@ -348,9 +352,11 @@ verbatim.") three ways (plain, Base64 and ROT13 converters) through PyRIT's raw-
 an exact substring check for the canary:
 
 ```bash
-python3 -m venv .venv-pyrit && .venv-pyrit/bin/pip install pyrit==1.1.0      # about 1 GB installed
+python3 -m venv .venv-pyrit && .venv-pyrit/bin/pip install pyrit==1.1.0
 .venv-pyrit/bin/python optional/pyrit_probe.py
 ```
+
+- `python3 -m venv .venv-pyrit && .venv-pyrit/bin/pip install pyrit==1.1.0`: about 1 GB installed
 
 Real output, weak build, then hardened build:
 

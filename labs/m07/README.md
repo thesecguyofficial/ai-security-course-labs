@@ -56,8 +56,10 @@ You will:
 
 ```bash
 cd labs-export/m07
-make attack                 # python3 agent.py --ticket T-1042
+make attack
 ```
+
+- `make attack`: same as `python3 agent.py --ticket T-1042`
 
 Real output (Linux, Python 3.13):
 
@@ -94,8 +96,10 @@ invocation (AML.T0086).
 ## Step 2 · Contain it, one control at a time
 
 ```bash
-make ladder                 # python3 ladder.py
+make ladder
 ```
+
+Same as `python3 ladder.py`.
 
 Real output:
 
@@ -181,8 +185,10 @@ the challenge.
 ## Step 4 · Spot it
 
 ```bash
-make detect                 # python3 detect.py
+make detect
 ```
+
+Same as `python3 detect.py`.
 
 Real output after `make attack` and `make defend`:
 
@@ -213,10 +219,13 @@ tampering, it doesn't prevent it.
 ## Step 5 · Pull the kill switch
 
 ```bash
-make kill                   # creates state/KILL
+make kill
 python3 agent.py --safe --approver approve-all
-make unkill                 # removes state/KILL
+make unkill
 ```
+
+- `make kill`: creates state/KILL
+- `make unkill`: removes state/KILL
 
 Real output (middle lines):
 
@@ -231,8 +240,10 @@ kill switch also revokes the agent's credentials (lesson 7.8); here, the file is
 ## Step 6 · Prove it
 
 ```bash
-make test                   # python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 Real output:
 

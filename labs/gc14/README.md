@@ -86,8 +86,10 @@ cd labs/gc14
 ## Step 1 · Review today's deployment (`make check`)
 
 ```bash
-make check                  # same as: python3 checker.py --twin today
+make check
 ```
+
+Same as `python3 checker.py --twin today`.
 
 You should see (shortened):
 
@@ -141,8 +143,10 @@ forget: dry run is the right way to *start*, and the wrong way to stay.
 The same review on the hardened deployment:
 
 ```bash
-make check-fixed            # same as: python3 checker.py --twin hardened
+make check-fixed
 ```
+
+Same as `python3 checker.py --twin hardened`.
 
 ```output
   HIGH    GC14-08  allow-ticket-reads
@@ -158,8 +162,10 @@ One left, on purpose. You'll see why in Step 3.
 ## Step 2 · Ask every control (`make decide`)
 
 ```bash
-make decide                 # same as: python3 decide.py --twin today
+make decide
 ```
+
+Same as `python3 decide.py --twin today`.
 
 ```output
 --- GC14 decision table · today ---
@@ -214,8 +220,10 @@ Read C3 again: the gateway allowed the tool (the policy allows everything), and 
 ### The hardened deployment (`make decide-fixed`)
 
 ```bash
-make decide-fixed           # same as: python3 decide.py --twin hardened
+make decide-fixed
 ```
+
+Same as `python3 decide.py --twin hardened`.
 
 ```output
 0 of 6 hijacked calls went through; 2 of 2 legitimate calls completed.
@@ -240,8 +248,10 @@ with Agent Runtime's session service, so the hardened app keeps its own approval
 The hardened deployment, with `iamEnforcementMode: "DRY_RUN"` on the gateway's IAP extension.
 
 ```bash
-make decide-dry             # same as: python3 decide.py --twin hardened --dry-run
+make decide-dry
 ```
+
+Same as `python3 decide.py --twin hardened --dry-run`.
 
 ```output
   C2  hijack call an unregistered outside host                    WENT THROUGH
@@ -265,8 +275,10 @@ The tickets team re-registers its MCP server in Agent Registry with a new tool, 
 to an address in its arguments. Its toolspec says `readOnlyHint: true`. Nobody on the agent team reviews the change.
 
 ```bash
-make rugpull                # same as: python3 decide.py --twin hardened --rugpull
+make rugpull
 ```
+
+Same as `python3 decide.py --twin hardened --rugpull`.
 
 ```output
   C4  hijack send a ticket copy to an outside mailbox             WENT THROUGH
@@ -285,8 +297,10 @@ GC14-08, and it's your challenge.
 ### Model Armor outage (`make outage`)
 
 ```bash
-make outage                 # same as: python3 decide.py --twin hardened --outage
+make outage
 ```
+
+Same as `python3 decide.py --twin hardened --outage`.
 
 ```output
   C2  hijack call an unregistered outside host                    stopped
@@ -321,8 +335,10 @@ is where Google says the would-be denials are recorded. The guided build shows b
 ## Step 5 · Prove it (`make test`)
 
 ```bash
-make test                   # same as: python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 ```output
 [PASS] decide: today, 6 of 6 hijacked calls go through and 2 of 2 legitimate calls complete

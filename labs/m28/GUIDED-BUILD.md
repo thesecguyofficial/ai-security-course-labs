@@ -33,16 +33,20 @@ What you build:
    export AWS_REGION=us-east-1
    export ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
    export RAW_BUCKET=tsg-m28-raw-$ACCOUNT_ID REDACTED_BUCKET=tsg-m28-redacted-$ACCOUNT_ID
-   aws sts get-caller-identity --query Arn --output text    # check it IS the sandbox
+   aws sts get-caller-identity --query Arn --output text
    ```
+
+   - `aws sts get-caller-identity --query Arn --output text`: check it IS the sandbox
 
 4. **Who reads the redacted copy.** Here it's you. Set `READER_ARN` to your principal: an IAM user's ARN as printed,
    or for an assumed role the **role** ARN (`arn:aws:iam::<account>:role/<role name>`, not the `assumed-role/...`
    session ARN):
 
    ```bash
-   export READER_ARN=arn:aws:iam::$ACCOUNT_ID:role/YOUR-ROLE-NAME     # or arn:aws:iam::$ACCOUNT_ID:user/YOUR-USER
+   export READER_ARN=arn:aws:iam::$ACCOUNT_ID:role/YOUR-ROLE-NAME
    ```
+
+   - `READER_ARN`: or arn:aws:iam::$ACCOUNT_ID:user/YOUR-USER
 
 5. **Fill in the policy templates** in `cloud/` (they carry placeholders):
 
@@ -276,10 +280,12 @@ The S3 bucket "must be in the same AWS account and AWS Region" as the logging co
      --managed-data-identifier-selector ALL --custom-data-identifier-ids $CDI_EMAIL $CDI_CUST \
      --s3-job-definition '{"bucketDefinitions":[{"accountId":"'$ACCOUNT_ID'","buckets":["'$RAW_BUCKET'","'$REDACTED_BUCKET'"]}]}' \
      --query jobId --output text)
-   aws macie2 describe-classification-job --job-id $JOB --query jobStatus     # repeat until COMPLETE
+   aws macie2 describe-classification-job --job-id $JOB --query jobStatus
    aws macie2 get-findings --finding-ids $(aws macie2 list-findings --query 'findingIds' --output text) \
      --query 'findings[].{type: type, bucket: resourcesAffected.s3Bucket.name, key: resourcesAffected.s3Object.key}'
    ```
+
+   - `aws macie2 describe-classification-job --job-id $JOB --query jobStatus`: repeat until COMPLETE
 
    What to expect: findings on the **raw** bucket (`SensitiveData:S3Object/Multiple` or `/CustomIdentifier` for the
    e-mail and customer ID, `/Financial` for the card). On the **redacted** bucket: none for e-mail, card or customer
@@ -311,12 +317,18 @@ day.
 
 ```bash
 aws bedrock delete-model-invocation-logging-configuration
-aws macie2 disable-macie        # permanently deletes this Region's findings, jobs and custom identifiers
+aws macie2 disable-macie
 aws s3api put-bucket-notification-configuration --bucket $RAW_BUCKET --notification-configuration '{}'
 aws lambda delete-function --function-name tsg-log-redactor
 aws iam delete-role-policy --role-name tsg-log-redactor --policy-name m28-redactor
 aws iam delete-role --role-name tsg-log-redactor
-# Empty the raw bucket, EVERY version and delete marker, then delete both buckets:
+```
+
+- `aws macie2 disable-macie`: permanently deletes this Region's findings, jobs and custom identifiers
+
+Empty the raw bucket, EVERY version and delete marker, then delete both buckets:
+
+```bash
 python3 - <<'EOF'
 import json, os, subprocess
 b = os.environ["RAW_BUCKET"]

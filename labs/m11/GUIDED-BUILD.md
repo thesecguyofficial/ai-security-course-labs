@@ -56,13 +56,16 @@ variables from `terraform output` and the console, then start at Step 1i. Tear d
 
    ```bash
    cd labs/m11
-   make package                       # zips lambda/handler.py into terraform/hardened/build/helpdesk.zip
+   make package
    export AWS_REGION=us-east-1
    export ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
    export PROFILE_ID=us.anthropic.claude-haiku-4-5-20251001-v1:0
    export PROFILE_ARN=arn:aws:bedrock:us-east-1:$ACCOUNT:inference-profile/$PROFILE_ID
-   echo "$ACCOUNT"                    # is this really the sandbox?
+   echo "$ACCOUNT"
    ```
+
+   - `make package`: zips lambda/handler.py into terraform/hardened/build/helpdesk.zip
+   - `echo "$ACCOUNT"`: is this really the sandbox?
 
 ## Step 1 · Build it from zero (45 minutes)
 
@@ -89,7 +92,7 @@ HTTPS (443) from `tsg-helpdesk-app` (labels may differ slightly).
 export VPC=$(aws ec2 create-vpc --cidr-block 10.20.0.0/16 \
   --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=tsg-helpdesk-vpc}]' --query Vpc.VpcId --output text)
 aws ec2 modify-vpc-attribute --vpc-id $VPC --enable-dns-support '{"Value":true}'
-aws ec2 modify-vpc-attribute --vpc-id $VPC --enable-dns-hostnames '{"Value":true}'   # both needed for private DNS
+aws ec2 modify-vpc-attribute --vpc-id $VPC --enable-dns-hostnames '{"Value":true}'
 export SUBNET=$(aws ec2 create-subnet --vpc-id $VPC --cidr-block 10.20.1.0/24 --availability-zone us-east-1a \
   --query Subnet.SubnetId --output text)
 
@@ -103,6 +106,8 @@ aws ec2 authorize-security-group-egress --group-id $APP_SG \
   --ip-permissions "[{\"IpProtocol\":\"tcp\",\"FromPort\":443,\"ToPort\":443,\"UserIdGroupPairs\":[{\"GroupId\":\"$EP_SG\"}]}]"
 aws ec2 authorize-security-group-ingress --group-id $EP_SG --protocol tcp --port 443 --source-group $APP_SG
 ```
+
+- `aws ec2 modify-vpc-attribute`: both needed for private DNS
 
 If `us-east-1a` doesn't offer the Bedrock endpoint in your account (zone names map to different physical zones per
 account), list the zones that do and use one of them:
@@ -609,20 +614,31 @@ That's lesson 11.1's "one model, one route", and lesson 11.5's residency rule en
 
 Wait about 5 minutes after R1 and R2, then:
 
+1. The log group really uses your key, and R1 is in it:
+
 ```bash
-# 1. The log group really uses your key, and R1 is in it
 aws logs describe-log-groups --log-group-name-prefix /tsg-helpdesk/bedrock --query 'logGroups[].[logGroupName,kmsKeyId,retentionInDays]' --output text
 aws logs filter-log-events --log-group-name /tsg-helpdesk/bedrock/model-invocations \
   --start-time $(( ($(date +%s) - 3600) * 1000 )) --max-items 1 --query 'events[0].message' --output text
+```
 
-# 2. CloudTrail event history: R1's Converse, and which endpoint it used
+2. CloudTrail event history: R1's Converse, and which endpoint it used.
+
+```bash
 aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,AttributeValue=Converse --max-items 5 \
   --query 'Events[].CloudTrailEvent' --output json \
   | python3 -c "import sys,json; [print(json.dumps({k: e.get(k) for k in ('eventTime','errorCode','vpcEndpointId')} | {'who': e['userIdentity'].get('arn')})) for e in map(json.loads, json.load(sys.stdin))]"
+```
 
-# 3. Network activity events in the trail bucket (R2's refusal), 5 to 15 minutes after R2
+3. Network activity events in the trail bucket (R2's refusal), 5 to 15 minutes after R2:
+
+```bash
 aws s3 ls s3://$TRAIL_BUCKET/AWSLogs/$ACCOUNT/ --recursive | tail -5
-#    copy one key from the list, then:
+```
+
+Copy one key from the list, then:
+
+```bash
 aws s3 cp s3://$TRAIL_BUCKET/<key from the list> - | gunzip | python3 -m json.tool | grep -n -E 'VpceAccessDenied|eventCategory|vpcEndpointId'
 ```
 
@@ -688,10 +704,12 @@ p["Statement"][0]["Condition"]["ArnEquals"]["aws:PrincipalArn"] = [
 json.dump(p, open("endpoint-policy-wider.json", "w"), indent=2)
 EOF
 aws ec2 modify-vpc-endpoint --vpc-endpoint-id $VPCE --policy-document file://endpoint-policy-wider.json
-sleep 30      # endpoint policy changes can take a moment to apply
+sleep 30
 aws lambda invoke --function-name tsg-m11-probe --cli-binary-format raw-in-base64-out \
   --payload '{"test":"runtime"}' out.json && cat out.json; echo
 ```
+
+- `sleep 30`: endpoint policy changes can take a moment to apply
 
 Console: **VPC**, **Endpoints**, your endpoint, **Policy** tab, **Edit policy**, change the `aws:PrincipalArn` value to
 a list with both role ARNs, **Save** (labels may differ slightly).
@@ -746,8 +764,9 @@ teardown.
 In your own admin credentials, in this order. If you used Terraform (Path C), delete the probe (step 1 below) and then
 run `make down` instead of the rest.
 
+1. The two functions and their roles:
+
 ```bash
-# 1. The two functions and their roles
 aws lambda delete-function --function-name tsg-m11-probe
 aws lambda delete-function --function-name tsg-helpdesk
 for R in tsg-m11-probe tsg-helpdesk-app; do
@@ -757,25 +776,39 @@ for R in tsg-m11-probe tsg-helpdesk-app; do
 done
 aws logs delete-log-group --log-group-name /aws/lambda/tsg-helpdesk
 aws logs delete-log-group --log-group-name /aws/lambda/tsg-m11-probe 2>/dev/null
+```
 
-# 2. Logging: configuration, role, log group, bucket
+2. Logging: configuration, role, log group, bucket.
+
+```bash
 aws bedrock delete-model-invocation-logging-configuration
 aws iam delete-role-policy --role-name tsg-helpdesk-bedrock-logging --policy-name write-invocation-logs
 aws iam delete-role --role-name tsg-helpdesk-bedrock-logging
 aws logs delete-log-group --log-group-name /tsg-helpdesk/bedrock/model-invocations
 aws s3 rb s3://tsg-helpdesk-prompt-logs-$ACCOUNT-us-east-1 --force
+```
 
-# 3. The trail and its bucket
+3. The trail and its bucket:
+
+```bash
 aws cloudtrail delete-trail --name tsg-helpdesk-ai-data-events
 aws s3 rb s3://tsg-helpdesk-trail-$ACCOUNT-us-east-1 --force
+```
 
-# 4. The endpoint (wait until it's gone: Lambda's network interfaces can take several minutes to release)
+4. The endpoint (wait until it's gone: Lambda's network interfaces can take several minutes to release)
+
+```bash
 VPCE=$(aws ec2 describe-vpc-endpoints --filters Name=tag:Name,Values=tsg-helpdesk-bedrock-runtime \
   Name=service-name,Values=com.amazonaws.us-east-1.bedrock-runtime --query 'VpcEndpoints[0].VpcEndpointId' --output text)
-echo "$VPCE"     # None? then set VPCE to the ID from Step 1b by hand
+echo "$VPCE"
 aws ec2 delete-vpc-endpoints --vpc-endpoint-ids $VPCE
+```
 
-# 5. The network (if a delete fails with DependencyViolation, Lambda's interfaces haven't been released yet: wait and retry)
+- `echo "$VPCE"`: None? then set VPCE to the ID from Step 1b by hand
+
+5. The network (if a delete fails with DependencyViolation, Lambda's interfaces haven't been released yet: wait and retry)
+
+```bash
 VPC=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values=tsg-helpdesk-vpc --query 'Vpcs[0].VpcId' --output text)
 for SG in $(aws ec2 describe-security-groups --filters Name=vpc-id,Values=$VPC \
             --query "SecurityGroups[?GroupName!='default'].GroupId" --output text); do
@@ -789,16 +822,22 @@ for SG in $(aws ec2 describe-security-groups --filters Name=vpc-id,Values=$VPC \
 for S in $(aws ec2 describe-subnets --filters Name=vpc-id,Values=$VPC --query 'Subnets[].SubnetId' --output text); do
   aws ec2 delete-subnet --subnet-id $S; done
 aws ec2 delete-vpc --vpc-id $VPC
+```
 
-# 6. The keys: 7 days' wait, the minimum AWS allows; no charge while pending
+6. The keys: 7 days' wait, the minimum AWS allows; no charge while pending.
+
+```bash
 for A in alias/tsg-helpdesk-prompt-logs alias/tsg-helpdesk-trail; do
   K=$(aws kms describe-key --key-id $A --query KeyMetadata.KeyId --output text)
   aws kms delete-alias --alias-name $A
   aws kms schedule-key-deletion --key-id $K --pending-window-in-days 7
 done
 aws iam delete-role --role-name tsg-helpdesk-log-investigator
+```
 
-# 7. Local files
+7. Local files:
+
+```bash
 rm -f endpoint-policy.json endpoint-policy-wider.json app-trust.json app-invoke.json logging-trust.json \
   logging-perms.json investigator-trust.json key-prompts.json key-audit.json prompt-bucket-policy.json \
   trail-bucket-policy.json selectors.json logging-config.json probe.py probe.zip out.json

@@ -47,10 +47,13 @@ Throughout, set these shell variables (again in every new terminal):
 
    ```bash
    cd labs/az13
-   export AZ13_NAME=az13-ab1234          # yours: lowercase letters, digits, hyphens
+   export AZ13_NAME=az13-ab1234
    export AZ13_REGION=<your-region>
-   ./cloud/cloud.sh cost                 # read it
+   ./cloud/cloud.sh cost
    ```
+
+   - `AZ13_NAME`: yours: lowercase letters, digits, hyphens
+   - `./cloud/cloud.sh cost`: read it
 
 5. **One free search service per subscription.** Microsoft: "Each Azure subscription can have one free search service".
    If you already have one, either delete it or change `--sku free` to `basic` in `cloud.sh` (Basic bills hourly: price
@@ -101,17 +104,20 @@ az role assignment create --assignee $ME --role "Search Index Data Contributor" 
 az cognitiveservices account create -n $AZ13_NAME -g $RG -l $AZ13_REGION --kind AIServices --sku S0 \
   --custom-domain $AZ13_NAME --allow-project-management true --assign-identity --yes
 FID=$(az cognitiveservices account show -n $AZ13_NAME -g $RG --query id -o tsv)
-az resource update --ids $FID --set properties.disableLocalAuth=true          # Entra ID only
+az resource update --ids $FID --set properties.disableLocalAuth=true
 az rest --method put --url "https://management.azure.com$FID/projects/helpdesk?api-version=2025-06-01" \
   --body "{\"location\": \"$AZ13_REGION\", \"identity\": {\"type\": \"SystemAssigned\"}, \"properties\": {}}"
 az cognitiveservices account deployment create -g $RG -n $AZ13_NAME --deployment-name helpdesk-chat \
   --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1
-az role assignment create --assignee $ME --role 53ca6127-db72-4b80-b1b0-d745d6d5456d --scope $FID   # Foundry User
+az role assignment create --assignee $ME --role 53ca6127-db72-4b80-b1b0-d745d6d5456d --scope $FID
 PMI=$(az rest --method get --url "https://management.azure.com$FID/projects/helpdesk?api-version=2025-06-01" \
   --query identity.principalId -o tsv)
 az role assignment create --assignee-object-id $PMI --assignee-principal-type ServicePrincipal \
   --role "Search Index Data Reader" --scope $SID
 ```
+
+- `az resource update --ids $FID --set properties.disableLocalAuth=true`: Entra ID only
+- `az role assignment create --assignee $ME --role 53ca6127-db72-4b80-b1b0-d745d6d5456d --scope $FID`: Foundry User
 
 The project's ARM `api-version` (`2025-06-01`) is a stable `Microsoft.CognitiveServices` version whose REST spec
 (azure-rest-api-specs) defines `accounts/{accountName}/projects/{projectName}`. If Azure answers

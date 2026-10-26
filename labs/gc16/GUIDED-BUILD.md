@@ -69,10 +69,16 @@ Steps from Google's [Data Access audit logs](https://docs.cloud.google.com/loggi
 
 ```bash
 gcloud projects get-iam-policy PROJECT_ID --format=yaml > /tmp/policy.yaml
-# add the block from cloud/data-access-auditconfigs.yaml to /tmp/policy.yaml; keep the bindings and the etag
-gcloud projects set-iam-policy PROJECT_ID /tmp/policy.yaml
-gcloud projects get-iam-policy PROJECT_ID --format="yaml(auditConfigs)"   # check
 ```
+
+Add the block from cloud/data-access-auditconfigs.yaml to /tmp/policy.yaml; keep the bindings and the etag:
+
+```bash
+gcloud projects set-iam-policy PROJECT_ID /tmp/policy.yaml
+gcloud projects get-iam-policy PROJECT_ID --format="yaml(auditConfigs)"
+```
+
+- `gcloud projects get-iam-policy PROJECT_ID --format="yaml(auditConfigs)"`: check
 
 Be careful with this file: it holds every IAM binding in the project. Google's own page warns that a careless policy
 update can cost you access ("you might lose all access to your Google Cloud project"), which is why you keep the
@@ -241,9 +247,13 @@ minute).
 gcloud monitoring policies list --filter='displayName~"^GC16"' --format="value(name)" \
   | xargs -r -n1 gcloud monitoring policies delete --quiet
 gcloud logging metrics delete gc16_ai_calls --quiet
-# Part A: remove the auditConfigs block from /tmp/policy.yaml (fresh copy from get-iam-policy) and set it again,
-# or untick Data Read and Data Write in IAM & Admin > Audit Logs
-# Part B: switch template logging off (Edit, Configure logging) or delete the template if you made it here:
+```
+
+Part A: remove the auditConfigs block from /tmp/policy.yaml (fresh copy from get-iam-policy) and set it again, or untick Data Read and Data Write in IAM & Admin > Audit Logs.
+
+Part B: switch template logging off (Edit, Configure logging) or delete the template if you made it here:
+
+```bash
 gcloud model-armor templates delete helpdesk-guard --location=REGION
 gcloud config unset api_endpoint_overrides/modelarmor
 ```

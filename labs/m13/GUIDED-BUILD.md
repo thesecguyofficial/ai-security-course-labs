@@ -46,8 +46,10 @@ Throughout: `AWS_REGION` = `us-east-1` and these shell variables (set them again
    export AWS_REGION=us-east-1
    export ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
    export BUCKET=tsg-m13-kb-$ACCOUNT
-   echo "$ACCOUNT"     # check it IS the sandbox
+   echo "$ACCOUNT"
    ```
+
+   - `echo "$ACCOUNT"`: check it IS the sandbox
 
 5. **Permissions.** In a sandbox you're normally an administrator, which covers everything here. Creating the
    knowledge base also needs `iam:PassRole` on its service role with `iam:PassedToService` = `bedrock.amazonaws.com`
@@ -88,37 +90,55 @@ Throughout: `AWS_REGION` = `us-east-1` and these shell variables (set them again
 
 ### Path B: AWS CLI
 
+1. Bucket, documents, ACL file (reuse the python line from Path A step 2 to make global-acl.json):
+
 ```bash
-# 1. bucket, documents, ACL file (reuse the python line from Path A step 2 to make global-acl.json)
 aws s3api create-bucket --bucket "$BUCKET"
 aws s3api put-public-access-block --bucket "$BUCKET" --public-access-block-configuration \
   BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
 aws s3 cp data/docs "s3://$BUCKET/" --recursive
 aws s3 cp global-acl.json "s3://$BUCKET/acl/global-acl.json"
+```
 
-# 2. the key
+2. The key:
+
+```bash
 export KMS_KEY_ARN=$(aws kms create-key --description "TSG Helpdesk M13 knowledge base" --query KeyMetadata.Arn --output text)
+```
 
-# 3. the service role: AWS's documented trust conditions and S3 statements (cloud/kb-trust.json, cloud/kb-policy.json)
+3. The service role: AWS's documented trust conditions and S3 statements (cloud/kb-trust.json, cloud/kb-policy.json)
+
+```bash
 sed "s/ACCOUNT/$ACCOUNT/g" cloud/kb-trust.json > /tmp/kb-trust.json
 sed "s/ACCOUNT/$ACCOUNT/g; s/BUCKET/$BUCKET/g" cloud/kb-policy.json > /tmp/kb-policy.json
 aws iam create-role --role-name tsg-m13-kb-service-role --assume-role-policy-document file:///tmp/kb-trust.json
 aws iam put-role-policy --role-name tsg-m13-kb-service-role --policy-name kb --policy-document file:///tmp/kb-policy.json
+```
 
-# 4. the managed knowledge base, encrypted with your key
+4. The managed knowledge base, encrypted with your key:
+
+```bash
 sed "s#KMS_KEY_ARN#$KMS_KEY_ARN#" cloud/kb-config.json > /tmp/kb-config.json
 export KB_ID=$(aws bedrock-agent create-knowledge-base --name tsg-m13-helpdesk-kb \
   --role-arn "arn:aws:iam::$ACCOUNT:role/tsg-m13-kb-service-role" \
   --knowledge-base-configuration file:///tmp/kb-config.json --query knowledgeBase.knowledgeBaseId --output text)
-aws bedrock-agent get-knowledge-base --knowledge-base-id "$KB_ID" --query knowledgeBase.status   # wait for ACTIVE
+aws bedrock-agent get-knowledge-base --knowledge-base-id "$KB_ID" --query knowledgeBase.status
+```
 
-# 5. the ACL-aware S3 data source
+- `aws bedrock-agent get-knowledge-base`: wait for ACTIVE
+
+5. The ACL-aware S3 data source:
+
+```bash
 sed "s/BUCKET/$BUCKET/g; s/ACCOUNT/$ACCOUNT/g" cloud/s3-acl-connector.json > /tmp/s3-acl.json
 export DS_ID=$(aws bedrock-agent create-data-source --knowledge-base-id "$KB_ID" --name tsg-m13-kb-s3 \
   --data-deletion-policy DELETE --data-source-configuration file:///tmp/s3-acl.json \
   --query dataSource.dataSourceId --output text)
+```
 
-# 6. sync
+6. Sync:
+
+```bash
 export JOB_ID=$(aws bedrock-agent start-ingestion-job --knowledge-base-id "$KB_ID" --data-source-id "$DS_ID" \
   --query ingestionJob.ingestionJobId --output text)
 ```
@@ -130,11 +150,13 @@ with `"aclEnabled": true` and the global ACL URI.
 ### Path C: Terraform
 
 ```bash
-make cloud-up       # type yes; creates 16 resources (bucket, 6 documents, ACL file, key, role, KB, data source ...)
+make cloud-up
 make cloud-sync
 export KB_ID=$(cd cloud/terraform && terraform output -raw knowledge_base_id)
 export DS_ID=$(cd cloud/terraform && terraform output -raw data_source_id)
 ```
+
+- `make cloud-up`: type yes; creates 16 resources (bucket, 6 documents, ACL file, key, role, KB, data source ...)
 
 ## A2 · Wait for the sync and read it
 
@@ -297,11 +319,14 @@ console steps (checked 22 Oct 2026). Pick one path.
 ### Path A: AgentCore CLI wizard (closest to clicking)
 
 ```bash
-npm install -g @aws/agentcore          # needs Node.js 20+
-agentcore create                       # wizard: name tsg_m13_helpdesk, project type Harness, model provider Bedrock, memory off
+npm install -g @aws/agentcore
+agentcore create
 agentcore add tool --harness tsg_m13_helpdesk --type inline_function --name search_kb
 agentcore add tool --harness tsg_m13_helpdesk --type inline_function --name reset_mfa
 ```
+
+- `npm install -g @aws/agentcore`: needs Node.js 20+
+- `agentcore create`: wizard: name tsg_m13_helpdesk, project type Harness, model provider Bedrock, memory off
 
 Then put the descriptions and input schemas in `app/tsg_m13_helpdesk/harness.json` (copy them from
 `cloud/harness.json` in this folder), run `agentcore deploy`, and copy the harness ARN into `HARNESS_ARN`. The CLI
@@ -316,9 +341,11 @@ aws iam create-role --role-name tsg-m13-harness-execution --assume-role-policy-d
 aws iam put-role-policy --role-name tsg-m13-harness-execution --policy-name harness --policy-document file:///tmp/harness-policy.json
 sed "s/ACCOUNT/$ACCOUNT/g" cloud/harness.json > /tmp/harness.json
 aws bedrock-agentcore-control create-harness --cli-input-json file:///tmp/harness.json
-aws bedrock-agentcore-control get-harness --harness-id <harnessId from the output>      # wait for "status": "READY"
+aws bedrock-agentcore-control get-harness --harness-id <harnessId from the output>
 export HARNESS_ARN=<arn from get-harness>
 ```
+
+- `aws bedrock-agentcore-control get-harness`: wait for "status": "READY"
 
 `cloud/harness-execution-policy.json` is AWS's sample execution policy
 ([harness security](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-security.html)) cut down:
@@ -424,19 +451,26 @@ In CloudTrail there is no `InvokeHarness` event: AWS records harness calls as da
 Skip this unless `aws bedrock-agent list-agents` works **and** you've used Bedrock Agents in this account in the past
 12 months. The same controls, Classic style (request bodies in `setups/ported/agent.json`):
 
+The write action, confirmation on (function details action group, Lambda executor):
+
 ```bash
-# the write action, confirmation on (function details action group, Lambda executor)
 aws bedrock-agent create-agent-action-group --agent-id <agentId> --agent-version DRAFT \
   --action-group-name helpdesk-actions \
   --action-group-executor lambda=arn:aws:lambda:us-east-1:$ACCOUNT:function:tsg-helpdesk-actions \
   --function-schema '{"functions":[{"name":"reset_mfa","description":"Reset MFA for a user.","parameters":{"target_email":{"type":"string","required":true}},"requireConfirmation":"ENABLED"}]}'
+```
 
-# search as return of control: your backend runs Retrieve with userContext
+Search as return of control: your backend runs Retrieve with userContext.
+
+```bash
 aws bedrock-agent create-agent-action-group --agent-id <agentId> --agent-version DRAFT \
   --action-group-name kb-search --action-group-executor customControl=RETURN_CONTROL \
   --function-schema '{"functions":[{"name":"search_kb","description":"Search the IT knowledge base.","parameters":{"query":{"type":"string","required":true}}}]}'
+```
 
-# the Lambda resource policy pinned to THIS agent (AWS's documented conditions)
+The Lambda resource policy pinned to THIS agent (AWS's documented conditions):
+
+```bash
 aws lambda add-permission --function-name tsg-helpdesk-actions --statement-id AccessLambdaFunction \
   --action lambda:InvokeFunction --principal bedrock.amazonaws.com \
   --source-account "$ACCOUNT" --source-arn "arn:aws:bedrock:us-east-1:$ACCOUNT:agent/<agentId>"
@@ -472,11 +506,17 @@ To record `InvokeAgent` in CloudTrail, add a data-event selector for `AWS::Bedro
 
 # Teardown (10 minutes; do it today)
 
-```bash
-# Terraform paths:
-make cloud-down HARNESS=1          # or make cloud-down if you didn't add the harness
+Terraform paths:
 
-# CLI / console paths:
+```bash
+make cloud-down HARNESS=1
+```
+
+- `make cloud-down HARNESS=1`: or make cloud-down if you didn't add the harness
+
+CLI / console paths:
+
+```bash
 aws bedrock-agentcore-control delete-harness --harness-id <id>
 aws bedrock-agent delete-data-source --knowledge-base-id "$KB_ID" --data-source-id "$DS_ID"
 aws bedrock-agent delete-knowledge-base --knowledge-base-id "$KB_ID"
@@ -486,7 +526,11 @@ aws iam delete-role-policy --role-name tsg-m13-kb-service-role --policy-name kb
 aws iam delete-role --role-name tsg-m13-kb-service-role
 aws iam delete-role-policy --role-name tsg-m13-harness-execution --policy-name harness
 aws iam delete-role --role-name tsg-m13-harness-execution
-# AgentCore CLI path: also delete the role the CLI created (IAM console, search "harness")
+```
+
+AgentCore CLI path: also delete the role the CLI created (IAM console, search "harness")
+
+```bash
 rm -f global-acl.json
 ```
 

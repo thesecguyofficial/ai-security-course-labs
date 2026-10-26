@@ -56,10 +56,13 @@ Throughout, run commands from `labs/gc14`, and set these shell variables again i
    ```bash
    export PROJECT=your-sandbox-project REGION=us-central1
    gcloud config set project $PROJECT
-   gcloud auth application-default login         # the Python SDK uses Application Default Credentials
+   gcloud auth application-default login
    python3 -m venv .venv && . .venv/bin/activate
-   pip install -r cloud/agent/requirements.txt   # google-adk[gcp]==2.12.0 and the Agent Platform SDK
+   pip install -r cloud/agent/requirements.txt
    ```
+
+   - `gcloud auth application-default login`: the Python SDK uses Application Default Credentials
+   - `pip install -r cloud/agent/requirements.txt`: google-adk[gcp]==2.12.0 and the Agent Platform SDK
 
 ## Step 1 · Infrastructure, first pass (20 minutes)
 
@@ -69,14 +72,17 @@ the Agent Registry endpoints, and the gateway with its IAP authorization extensi
 ### Path A: Terraform (recommended)
 
 ```bash
-cp cloud/terraform/terraform.tfvars.example cloud/terraform/terraform.tfvars    # then edit project_id
+cp cloud/terraform/terraform.tfvars.example cloud/terraform/terraform.tfvars
 cd cloud/terraform
 terraform init -input=false
-terraform plan -out=plan.out      # read it: about 40 resources, nothing outside your project
+terraform plan -out=plan.out
 terraform apply plan.out
 export GATEWAY=$(terraform output -raw gateway) STAGING=$(terraform output -raw staging_bucket)
 cd ../..
 ```
+
+- `cp cloud/terraform/terraform.tfvars.example cloud/terraform/terraform.tfvars`: then edit project_id
+- `terraform plan -out=plan.out`: read it: about 40 resources, nothing outside your project
 
 What it creates, file `cloud/terraform/main.tf`:
 
@@ -211,9 +217,12 @@ Next: put effectiveIdentity into cloud/terraform/terraform.tfvars as agent_princ
 ```
 
 ```bash
-export AGENT="projects/.../reasoningEngines/..."           # the "name" above
-export AGENT_PRINCIPAL="principal://agents.global...."      # the "effectiveIdentity" above
+export AGENT="projects/.../reasoningEngines/..."
+export AGENT_PRINCIPAL="principal://agents.global...."
 ```
+
+- `AGENT`: the "name" above
+- `AGENT_PRINCIPAL`: the "effectiveIdentity" above
 
 Check the binding the way Google's routing page does (a `null` result means the gateway binding failed):
 
@@ -287,11 +296,20 @@ gcloud iam access-policies create tsg-gc14-egress --details-rules=policy.json --
 gcloud iam policy-bindings create tsg-gc14-egress \
   --policy="projects/$PROJECT/locations/global/accessPolicies/tsg-gc14-egress" \
   --target-resource="//networkservices.googleapis.com/$GATEWAY" --project=$PROJECT --location=global
-# same binding with the REST API (Google's configure page), if your gcloud has no --target-resource:
-# curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" \
-#   "https://iam.googleapis.com/v3beta/projects/$PROJECT/locations/global/policyBindings?policyBindingId=tsg-gc14-egress" \
-#   -d "{\"policy\": \"projects/$PROJECT/locations/global/accessPolicies/tsg-gc14-egress\", \"target\": {\"resource\": \"//networkservices.googleapis.com/$GATEWAY\"}}"
+```
 
+Same binding with the REST API (Google's configure page), if your gcloud has no `--target-resource`. Run this
+instead of `gcloud iam policy-bindings create`:
+
+```bash
+curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" \
+  "https://iam.googleapis.com/v3beta/projects/$PROJECT/locations/global/policyBindings?policyBindingId=tsg-gc14-egress" \
+  -d "{\"policy\": \"projects/$PROJECT/locations/global/accessPolicies/tsg-gc14-egress\", \"target\": {\"resource\": \"//networkservices.googleapis.com/$GATEWAY\"}}"
+```
+
+Then, either way:
+
+```bash
 for ROLE in roles/aiplatform.expressUser roles/serviceusage.serviceUsageConsumer roles/bigquery.jobUser roles/mcp.toolUser; do
   gcloud projects add-iam-policy-binding $PROJECT --member="$AGENT_PRINCIPAL" --role=$ROLE --condition=None
 done
@@ -445,12 +463,21 @@ nobody can later answer "who read Bob's memories?". Terraform already turned it 
 
 ```bash
 gcloud projects get-iam-policy $PROJECT > /tmp/policy.yaml
-# add this block to /tmp/policy.yaml, keep the bindings and etag as they are:
-# auditConfigs:
-# - service: aiplatform.googleapis.com
-#   auditLogConfigs:
-#   - logType: DATA_READ
-#   - logType: DATA_WRITE
+```
+
+Add this block to /tmp/policy.yaml, keep the bindings and etag as they are:
+
+```yaml
+auditConfigs:
+- service: aiplatform.googleapis.com
+  auditLogConfigs:
+  - logType: DATA_READ
+  - logType: DATA_WRITE
+```
+
+Then:
+
+```bash
 gcloud projects set-iam-policy $PROJECT /tmp/policy.yaml
 ```
 
@@ -556,12 +583,16 @@ tomorrow: Google's prices change, and this table is our reading of the page on 2
 
 Do all of it, in this order.
 
+1. The agent (and its sessions and memories):
+
 ```bash
-# 1. the agent (and its sessions and memories)
 curl -s -X DELETE -H "Authorization: Bearer $(gcloud auth print-access-token)" \
   "https://$REGION-aiplatform.googleapis.com/v1beta1/$AGENT?force=true"
+```
 
-# 2. everything Terraform created, including the agent's grants, the access policy and its binding
+2. Everything Terraform created, including the agent's grants, the access policy and its binding:
+
+```bash
 cd cloud/terraform && terraform destroy && cd ../..
 ```
 
@@ -574,10 +605,12 @@ gcloud iam access-policies delete tsg-gc14-egress --project=$PROJECT --location=
 gcloud network-security authz-policies delete tsg-gc14-iap-policy --location=$REGION
 gcloud service-extensions authz-extensions delete tsg-gc14-iap --location=$REGION
 gcloud network-services agent-gateways delete tsg-gc14-egress --location=$REGION
-gcloud agent-registry services delete logging --project=$PROJECT --location=$REGION     # one per host you added
+gcloud agent-registry services delete logging --project=$PROJECT --location=$REGION
 gcloud storage rm -r gs://$PROJECT-tsg-gc14-staging
 bq rm -r -f -d $PROJECT:helpdesk && bq rm -r -f -d $PROJECT:finance_exports
 ```
+
+- `gcloud agent-registry services delete logging`: one per host you added
 
 **3. Remove grants that name the deleted agent.** Google's Agent Identity page: deleting an agent doesn't remove IAM
 bindings that reference its principal (lab rule GC14-04). Terraform removed the ones it made; check for any you added
