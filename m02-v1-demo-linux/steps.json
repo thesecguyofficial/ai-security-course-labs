@@ -1,0 +1,49 @@
+{
+  "scenario": "m02-v1-demo-linux",
+  "start": 1.714,
+  "steps": [
+    {
+      "label": "The email",
+      "speed": 1,
+      "start": 1.714,
+      "end": 6.48
+    },
+    {
+      "label": "The email",
+      "speed": 1,
+      "start": 8.28,
+      "end": 13.351
+    },
+    {
+      "label": "The bot reads it",
+      "speed": 1,
+      "start": 17.351,
+      "end": 31.226
+    },
+    {
+      "label": "What it did",
+      "speed": 1,
+      "start": 36.226,
+      "end": 40.747
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.314,
+      "what": "type"
+    },
+    {
+      "t": 8.88,
+      "what": "type"
+    },
+    {
+      "t": 17.951,
+      "what": "type"
+    },
+    {
+      "t": 36.826,
+      "what": "type"
+    }
+  ],
+  "end": 44.747
+}
