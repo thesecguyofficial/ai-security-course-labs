@@ -50,12 +50,22 @@ finishes with a health check. It asks before every install, so you stay in contr
 2. Before you run it, check the fingerprint. This is a security course, so we don't pipe scripts from the
    internet straight into a shell. Compare the output with the hashes in the repo's latest release notes:
 
+   **Mac:**
+
    ```bash
-   shasum -a 256 setup.sh            # Mac (Linux: sha256sum setup.sh)
+   shasum -a 256 setup.sh
    ```
 
+   **Linux:**
+
+   ```bash
+   sha256sum setup.sh
+   ```
+
+   **Windows (PowerShell):**
+
    ```powershell
-   Get-FileHash setup.ps1 -Algorithm SHA256        # Windows
+   Get-FileHash setup.ps1 -Algorithm SHA256
    ```
 
    Then open the script in any text editor and skim it. You don't need to understand every line. Look for
@@ -63,12 +73,16 @@ finishes with a health check. It asks before every install, so you stay in contr
 
 3. Run it:
 
+   **Mac, Linux or WSL:**
+
    ```bash
-   ./setup.sh                                          # Mac, Linux, WSL
+   ./setup.sh
    ```
 
+   **Windows (PowerShell):**
+
    ```powershell
-   powershell -ExecutionPolicy Bypass -File setup.ps1  # Windows
+   powershell -ExecutionPolicy Bypass -File setup.ps1
    ```
 
    It installs (after asking) git, Python 3.11 or newer, Docker, Ollama, and downloads `gemma3:1b` (about
@@ -78,8 +92,16 @@ finishes with a health check. It asks before every install, so you stay in contr
 4. Read the last screen. The **doctor** prints a tick or a cross for each item, and every cross comes with the
    exact next step. Run it again any time:
 
+   **Mac / Linux:**
+
    ```bash
-   make doctor                   # Windows: py tools\doctor.py
+   make doctor
+   ```
+
+   **Windows (PowerShell):**
+
+   ```powershell
+   py tools\doctor.py
    ```
 
    You want a tick on **"Ollama listens on 127.0.0.1 only"**. The doctor checks it for you, and Step 5 below

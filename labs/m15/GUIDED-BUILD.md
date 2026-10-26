@@ -49,8 +49,10 @@ Shell variables used throughout (set them again in a new terminal):
    ```bash
    cd labs/m15
    export AWS_REGION=us-east-1
-   aws sts get-caller-identity --query Account --output text    # check it IS the sandbox
+   aws sts get-caller-identity --query Account --output text
    ```
+
+   - `aws sts get-caller-identity --query Account --output text`: check it IS the sandbox
 
 5. **Cost.** Look up the GPU price before you start: on the
    [SageMaker AI pricing page](https://aws.amazon.com/sagemaker/ai/pricing/), On-Demand, Real-Time Inference,
@@ -77,8 +79,10 @@ Shell variables used throughout (set them again in a new terminal):
 ### Path A: CloudFormation from the command line (recommended)
 
 ```bash
-make cloud-base      # aws cloudformation deploy ... --template-file cloud/base.yaml, then saves the outputs
+make cloud-base
 ```
+
+- `make cloud-base`: aws cloudformation deploy ... --template-file cloud/base.yaml, then saves the outputs
 
 It takes a few minutes. `cloud/out/stack.json` now holds the stack outputs (bucket names, role ARNs, subnet IDs).
 Read `cloud/base.yaml` while you wait: every resource has a comment saying which lesson it comes from. Three things to
@@ -191,8 +195,10 @@ needs the internet, which is what network isolation requires.
 
    ```bash
    export LICENCE=<what you read in B1, e.g. apache-2.0>  MODEL_SOURCE=huggingface.co/Qwen/Qwen3-0.6B
-   python3 cloud/render.py                 # writes cloud/out/*.json; read create-model-package.json
+   python3 cloud/render.py
    ```
+
+   - `python3 cloud/render.py`: writes cloud/out/*.json; read create-model-package.json
 
 2. Register the version:
 
@@ -227,11 +233,15 @@ needs the internet, which is what network isolation requires.
 ## D1 · The schedule that deletes the endpoint (create it now)
 
 ```bash
-export PACKAGE_ARN                        # from Part C
-python3 cloud/render.py                   # again, so create-model.json has the package ARN and the schedule has a fresh time
-cat cloud/out/create-schedule.json        # at(...) = 2 hours from now, UTC; TEARDOWN_HOURS=1 python3 cloud/render.py for 1 hour
+export PACKAGE_ARN
+python3 cloud/render.py
+cat cloud/out/create-schedule.json
 aws scheduler create-schedule --cli-input-json file://cloud/out/create-schedule.json
 ```
+
+- `export PACKAGE_ARN`: from Part C
+- `python3 cloud/render.py`: again, so create-model.json has the package ARN and the schedule has a fresh time
+- `cat cloud/out/create-schedule.json`: at(...) = 2 hours from now, UTC; TEARDOWN_HOURS=1 python3 cloud/render.py for 1 hour
 
 The schedule's target is a **universal target**: any API action, called with the role you name. AWS documents the ARN
 form `arn:aws:scheduler:::aws-sdk:service:apiAction`
@@ -251,8 +261,10 @@ The console path works too (EventBridge, **Scheduler**, create a one-time schedu
 aws sagemaker create-model --cli-input-json file://cloud/out/create-model.json
 aws sagemaker create-endpoint-config --cli-input-json file://cloud/out/create-endpoint-config.json
 aws sagemaker create-endpoint --cli-input-json file://cloud/out/create-endpoint.json
-aws sagemaker wait endpoint-in-service --endpoint-name tsg-summariser-lab     # often 10 minutes or more
+aws sagemaker wait endpoint-in-service --endpoint-name tsg-summariser-lab
 ```
+
+- `aws sagemaker wait endpoint-in-service --endpoint-name tsg-summariser-lab`: often 10 minutes or more
 
 Read `cloud/out/create-model.json` and `create-endpoint-config.json` while it starts:
 
@@ -340,8 +352,10 @@ eval $(aws sts assume-role --role-arn "$ROLE" --role-session-name stolen-keys-te
 echo '{"inputs": "hello", "parameters": {"max_new_tokens": 20}}' > cloud/out/e2-body.json
 aws sagemaker-runtime invoke-endpoint --endpoint-name tsg-summariser-lab --content-type application/json \
   --body fileb://cloud/out/e2-body.json cloud/out/e2.json
-unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN      # back to your own identity
+unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
 ```
+
+- `unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN`: back to your own identity
 
 ```output
 Example response (shape from the AWS CLI error format, wording illustrative)
@@ -358,8 +372,10 @@ endpoint itself has no public address to firewall: "Endpoints are scoped to an i
 aws lambda invoke --function-name "$APP" --cli-binary-format raw-in-base64-out \
   --payload '{"prompt": "Summarise: Employee LAB-0042, date of birth 01/01/1990, cannot log in to payroll."}' cloud/out/e3.json
 CAPTURE=$(python3 -c "import json;o=json.load(open('cloud/out/stack.json'))['Stacks'][0]['Outputs'];print([x['OutputValue'] for x in o if x['OutputKey']=='CaptureBucket'][0])")
-aws s3 ls "s3://$CAPTURE/tsg-summariser/" --recursive | tail -3        # files can take a few minutes to appear
+aws s3 ls "s3://$CAPTURE/tsg-summariser/" --recursive | tail -3
 ```
+
+- `aws s3 ls "s3://$CAPTURE/tsg-summariser/" --recursive | tail -3`: files can take a few minutes to appear
 
 Download the newest `.jsonl` file and look at one line, then check how S3 stored it:
 
@@ -463,9 +479,12 @@ challenge 3, on real records.
 # Part G · Teardown (today)
 
 ```bash
-make cloud-down      # endpoint, endpoint config, model, registry versions and group, schedule, bucket contents, stack
-make cloud-check     # nothing with the lab's names should be left
+make cloud-down
+make cloud-check
 ```
+
+- `make cloud-down`: endpoint, endpoint config, model, registry versions and group, schedule, bucket contents, stack
+- `make cloud-check`: nothing with the lab's names should be left
 
 - If the schedule already deleted the endpoint, the first commands print an error and carry on.
 - Deleting the stack removes the Lambda function's network interfaces, which can take a while.

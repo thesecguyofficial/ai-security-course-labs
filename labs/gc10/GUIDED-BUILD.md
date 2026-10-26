@@ -112,10 +112,12 @@ What to look for: any user-managed service account key (lesson 10.0: a downloada
 
 ```bash
 gcloud projects get-iam-policy PROJECT_ID --format=json > policy.json
-python3 policy_checker.py --iam policy.json          # GC10-15 = no Data Access logs for aiplatform.googleapis.com
+python3 policy_checker.py --iam policy.json
 curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
   "https://us-central1-aiplatform.googleapis.com/v1/projects/PROJECT_ID/cacheConfig"
 ```
+
+- `python3 policy_checker.py --iam policy.json`: GC10-15 = no Data Access logs for aiplatform.googleapis.com
 
 Example response (shape from Google docs, values illustrative), the cache check:
 
@@ -194,8 +196,10 @@ Platform and only from `192.0.2.10`, a documentation address, so it will refuse 
 gcloud services api-keys create --project=PROJECT_ID --display-name=gc10-build \
   --api-target=service=aiplatform.googleapis.com --allowed-ips=192.0.2.10
 gcloud services api-keys list --project=PROJECT_ID --format="value(name,displayName)"
-gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID   # KEY_ID: last part of "name"
+gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID
 ```
+
+- `gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID`: KEY_ID: last part of "name"
 
 Console (Google's API keys page): **Credentials** > **Create credentials** > **API key**. Click the key's name; under
 **API restrictions** choose **Restrict key** and select the Agent Platform API; under **Application restrictions**
@@ -235,8 +239,9 @@ first-party Google Cloud customers", so you may not see the option. Write that d
 
 Skip this if 1e said "no organization"; README Step 5 (`make twin-preview`) is the offline version.
 
+Edit gcp-twin/allowed-models-dryrun.json: replace ORGANIZATION_ID, list only the models you use.
+
 ```bash
-# edit gcp-twin/allowed-models-dryrun.json: replace ORGANIZATION_ID, list only the models you use
 python3 policy_checker.py --orgpolicy gcp-twin/allowed-models-dryrun.json
 gcloud org-policies set-policy gcp-twin/allowed-models-dryrun.json --update-mask=policy.dry_run_spec
 gcloud org-policies describe vertexai.allowedModels --effective --project=PROJECT_ID
@@ -461,10 +466,13 @@ gcloud projects remove-iam-policy-binding PROJECT_ID \
 for SA in gc10-caller gc10-nobody; do
   gcloud iam service-accounts delete "$SA@PROJECT_ID.iam.gserviceaccount.com" --quiet
 done
-gcloud billing budgets list --billing-account=BILLING_ACCOUNT_ID       # note the budget IDs you created
+gcloud billing budgets list --billing-account=BILLING_ACCOUNT_ID
 gcloud billing budgets delete BUDGET_ID --billing-account=BILLING_ACCOUNT_ID
-gcloud org-policies delete vertexai.allowedModels --organization=ORGANIZATION_ID   # only if you did 2g
+gcloud org-policies delete vertexai.allowedModels --organization=ORGANIZATION_ID
 ```
+
+- `gcloud billing budgets list --billing-account=BILLING_ACCOUNT_ID`: note the budget IDs you created
+- `gcloud org-policies delete vertexai.allowedModels --organization=ORGANIZATION_ID`: only if you did 2g
 
 Remove `my-keys.json`, `policy.json` and `my-audit.json` from the lab folder: they describe your real project. If the
 project was only for this guide, `gcloud projects delete PROJECT_ID` is the cleanest end (a deleted project is "fully

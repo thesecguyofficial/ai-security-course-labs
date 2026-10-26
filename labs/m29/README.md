@@ -56,14 +56,18 @@ You will:
 
 ```bash
 cd labs/m29
-make setup                  # python3 -m venv .venv (nothing to install)
+make setup
 ```
+
+- `make setup`: python3 -m venv .venv (nothing to install)
 
 ## Step 1 · Break it
 
 ```bash
-make first-draft            # python3 suite.py first-draft
+make first-draft
 ```
+
+Same as `python3 suite.py first-draft`.
 
 Real output (Linux, Python 3.13):
 
@@ -101,8 +105,10 @@ MISSED means the defence failed that case: it didn't see it, didn't act in time,
 **Shadow AI** (lesson 29.1):
 
 ```bash
-make hunt                   # python3 hunt.py first-draft; python3 hunt.py hardened
+make hunt
 ```
+
+Same as `python3 hunt.py first-draft; python3 hunt.py hardened`.
 
 ```text
 setup first-draft | sources ['cloudtrail', 'secrets'] | accounts ['111111111111', '222222222222'] | Regions ['us-east-1']
@@ -131,8 +137,10 @@ that the next commit "removed" (D5). The two decoys are ours, so they are report
 **The decoy key's first two calls** (lesson 29.4):
 
 ```bash
-make story                  # python3 detect.py first-draft honeytoken-read-only; ... hardened ...
+make story
 ```
+
+Same as `python3 detect.py first-draft honeytoken-read-only; ... hardened ...`.
 
 ```text
 setup first-draft | scenario honeytoken-read-only
@@ -159,8 +167,10 @@ management events. The decoy has no permissions, so every real use fails: a patt
 **The responder against the clock** (lesson 29.7):
 
 ```bash
-make respond                # python3 respond.py first-draft; python3 respond.py hardened
+make respond
 ```
+
+Same as `python3 respond.py first-draft; python3 respond.py hardened`.
 
 ```text
 setup first-draft | responder: ['deactivate_key']
@@ -192,8 +202,10 @@ which AWS documents as covering sessions made with `GetSessionToken`. The timing
 **A poisoned alert meets the triage agent** (lesson 29.6):
 
 ```bash
-make triage                 # python3 triage.py first-draft allowlist; ... hardened ...; ... hardened --fooled
+make triage
 ```
+
+Same as `python3 triage.py first-draft allowlist; ... hardened ...; ... hardened --fooled`.
 
 ```text
 setup first-draft | alert allowlist
@@ -226,8 +238,10 @@ model *was* fooled: the gate still refuses, escalates the alert, and flags it.
 ## Step 3 · Fix it
 
 ```bash
-make hardened               # python3 suite.py hardened
+make hardened
 ```
+
+Same as `python3 suite.py hardened`.
 
 ```text
 setup hardened
@@ -277,8 +291,10 @@ Compare `setups/first-draft/` with `setups/hardened/`:
 ## Step 4 · Prove it
 
 ```bash
-make test                   # python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 ```text
 [PASS] hunt (hardened): exactly 6 pieces of shadow AI, and the 2 planted decoys reported as decoys
@@ -337,5 +353,7 @@ Done = `make challenge` prints `ALL TESTS PASSED (26 run)` and `python3 suite.py
 ## Clean up
 
 ```bash
-make clean                  # deletes caches; your .venv stays
+make clean
 ```
+
+- `make clean`: deletes caches; your .venv stays

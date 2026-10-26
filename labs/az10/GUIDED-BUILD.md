@@ -40,11 +40,13 @@ Set these shell variables (again in every new terminal):
 
    ```bash
    cd labs/az10
-   export AZ10_NAME=az10-ab1234            # yours: lowercase letters, digits, hyphens
+   export AZ10_NAME=az10-ab1234
    export AZ10_REGION=swedencentral
    export RG=rg-$AZ10_NAME
    az group create -n $RG -l $AZ10_REGION -o none
    ```
+
+   - `AZ10_NAME`: yours: lowercase letters, digits, hyphens
 
 5. **Budget alarm, first.** CLI: deploy the lab's own budget file (a US$5 monthly budget on the resource group, 50 %
    actual and 100 % forecast alerts):
@@ -206,8 +208,10 @@ Expect nothing in a fresh subscription. In a real organisation, also look at the
 
 ```bash
 az monitor diagnostic-settings list --resource $FID -o table
-az consumption budget list -o table      # subscription budgets; check the resource group's in the portal
+az consumption budget list -o table
 ```
+
+- `az consumption budget list -o table`: subscription budgets; check the resource group's in the portal
 
 No diagnostic setting means no `Audit`, `RequestResponse` or `Trace` logs exist anywhere: only the Activity Log (free,
 90 days) and the metrics.
@@ -229,9 +233,11 @@ Order matters: move the callers to Entra ID before you turn the keys off, or you
 
 ```bash
 az role assignment create --assignee-object-id $APP_PID --assignee-principal-type ServicePrincipal \
-  --role 53ca6127-db72-4b80-b1b0-d745d6d5456d --scope $FID -o none     # Foundry User, by ID
+  --role 53ca6127-db72-4b80-b1b0-d745d6d5456d --scope $FID -o none
 az role assignment delete --assignee $APP_PID --role Contributor --scope $FID
 ```
+
+- `az role assignment create`: Foundry User, by ID
 
 Microsoft says to "use the role definition ID (GUID) instead of the role name in your code" while the Azure AI to
 Foundry role rename rolls out. (`APP_PID` is set in Path B. If you used the portal:
@@ -294,8 +300,12 @@ turns them off; test T4 proves they stay off.
 
 ```bash
 az resource update --ids $FID --set properties.disableLocalAuth=true -o none
-az cognitiveservices account show -n $AZ10_NAME -g $RG --query properties.disableLocalAuth   # true
+az cognitiveservices account show -n $AZ10_NAME -g $RG --query properties.disableLocalAuth
 ```
+
+You should see:
+
+- `az cognitiveservices account show`: true
 
 The disable-local-auth page documents Bicep/ARM (`disableLocalAuth: true`), PowerShell and the policy, but no portal
 switch and no dedicated `az` flag, so we use the generic `az resource update`. The Bicep way:
@@ -343,7 +353,11 @@ Now give yourself the data role on this one resource, wait, and ask again:
 ME=$(az ad signed-in-user show --query id -o tsv)
 az role assignment create --assignee-object-id $ME --assignee-principal-type User \
   --role 53ca6127-db72-4b80-b1b0-d745d6d5456d --scope $FID -o none
-# Microsoft: "Azure role assignments can take up to 5 minutes to propagate." Wait, then get a fresh token.
+```
+
+Microsoft: "Azure role assignments can take up to 5 minutes to propagate." Wait, then get a fresh token.
+
+```bash
 TOKEN=$(az account get-access-token --resource https://ai.azure.com --query accessToken -o tsv); ask
 ```
 
@@ -524,9 +538,11 @@ az policy assignment delete --name az10-approved-models --scope $SCOPE
 az policy assignment delete --name az10-deny-key-access --scope $SCOPE
 az consumption budget delete --budget-name az10-twin-budget --resource-group $RG
 az group delete -n $RG --yes
-az cognitiveservices account purge -l $AZ10_REGION -g $RG -n $AZ10_NAME   # frees the name now, not in 48 hours
+az cognitiveservices account purge -l $AZ10_REGION -g $RG -n $AZ10_NAME
 rm -f /tmp/az10-publisher.json
 ```
+
+- `az cognitiveservices account purge -l $AZ10_REGION -g $RG -n $AZ10_NAME`: frees the name now, not in 48 hours
 
 The role assignments you made on the resource go with it. Tomorrow, check: `az group show -n $RG` should say
 `ResourceGroupNotFound`, and `az cognitiveservices account list-deleted -o table` shouldn't list your resource.

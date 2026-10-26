@@ -46,10 +46,13 @@ Throughout, set these shell variables (again in every new terminal):
 
    ```bash
    cd labs/az14
-   export AZ14_NAME=az14ab12            # yours
+   export AZ14_NAME=az14ab12
    export AZ14_REGION=<your-region>
-   ./cloud/cloud.sh cost                # read it
+   ./cloud/cloud.sh cost
    ```
+
+   - `AZ14_NAME`: yours
+   - `./cloud/cloud.sh cost`: read it
 
 ## G1 · Create the project, model, storage and registry from zero (`make up`)
 
@@ -260,8 +263,10 @@ env = dict(l.strip().split("=", 1) for l in open("cloud/.state/env") if "=" in l
 p = AIProjectClient(endpoint=env["PROJECT_ENDPOINT"], credential=DefaultAzureCredential())
 print(p.agents.get(agent_name="helpdesk-agent").instance_identity["principal_id"])')
 echo $AGENT_IDENTITY_ID
-make grant     # Storage Blob Data Reader, scope .../storageAccounts/st<name>/blobServices/default/containers/kb
+make grant
 ```
+
+- `make grant`: Storage Blob Data Reader, scope `.../storageAccounts/st<name>/blobServices/default/containers/kb`
 
 If it prints nothing, the identity isn't ready yet: wait a minute and run it again. You can cross-check in the
 **Microsoft Entra admin center**, **Entra ID** > **Agent ID** > **All agent identities** ("an inventory of all agents

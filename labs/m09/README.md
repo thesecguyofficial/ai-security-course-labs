@@ -47,9 +47,12 @@ Built at setup time: `models/` (the model files), `state/` (the marker, if you d
 
 ```bash
 cd labs-export/m09
-make setup            # python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
-make models           # build the three model files in ./models/
+make setup
+make models
 ```
+
+- `make setup`: python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
+- `make models`: build the three model files in ./models/
 
 `make setup` installs picklescan 1.0.5 (MIT), fickling 0.1.12 (LGPL-3.0+), safetensors 0.8.0
 (Apache-2.0) and NumPy 2.4.6. On Python 3.11 it also installs `typing_extensions`, which fickling imports
@@ -58,8 +61,10 @@ there but forgets to list. No internet is needed after that.
 ## Step 1 · Detonate: loading a model runs code
 
 ```bash
-make attack           # .venv/bin/python loader.py naive models/evil_model.pkl
+make attack
 ```
+
+Same as `.venv/bin/python loader.py naive models/evil_model.pkl`.
 
 Real output (Linux, Python 3.13):
 
@@ -79,8 +84,10 @@ is the same kind of file without the trick: load it and nothing happens.
 ## Step 2 · Catch it: scan before you load
 
 ```bash
-make scan             # scans benign (clean) then evil (flagged)
+make scan
 ```
+
+- `make scan`: scans benign (clean) then evil (flagged)
 
 Real output (trimmed):
 
@@ -114,8 +121,10 @@ PickleScan CVEs). Scan, but do not let a clean result replace provenance, pinnin
 ## Step 3 · Avoid it: a format that cannot run code
 
 ```bash
-make safe             # .venv/bin/python loader.py safe models/model.safetensors
+make safe
 ```
+
+Same as `.venv/bin/python loader.py safe models/model.safetensors`.
 
 ```text
 safetensors loaded 2 tensors: ['layer.bias', 'layer.weight']
@@ -129,8 +138,10 @@ Stability AI) found "No critical security flaw leading to arbitrary code executi
 ## Step 4 · Pin it: catch tampering
 
 ```bash
-make tamper           # pin the model, change one byte, verify -> TAMPERED
+make tamper
 ```
+
+- `make tamper`: pin the model, change one byte, verify -> TAMPERED
 
 ```text
 pinned model.safetensors = sha256:4b2458915a8131399b9c1a02033fdfbb99c48fb6ef4299388ae6ace85981fa39
@@ -190,8 +201,10 @@ The reference answer is in the paid solutions. With it in place, `make challenge
 ## Clean up
 
 ```bash
-make clean            # removes models/, state/, pins.json (keeps .venv)
+make clean
 ```
+
+- `make clean`: removes models/, state/, pins.json (keeps .venv)
 
 ## Map to the standards
 

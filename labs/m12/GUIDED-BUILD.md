@@ -44,8 +44,12 @@ Step 1, and set them again if you open a new terminal):
    export AWS_REGION=us-east-1
    export ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
    export MODEL=us.anthropic.claude-haiku-4-5-20251001-v1:0
-   echo "$ACCOUNT"            # 12 digits = you're signed in to the right account? Check it IS the sandbox.
+   echo "$ACCOUNT"
    ```
+
+   You should see:
+
+   - `echo "$ACCOUNT"`: 12 digits = you're signed in to the right account? Check it IS the sandbox.
 
 5. **Permissions.** In a sandbox you'll normally be an administrator (lesson 0.7), which covers everything here. If
    you're not, your identity needs:
@@ -167,9 +171,11 @@ Save the ID, wait for `READY`, then snapshot version 1 (a version is immutable: 
 ```bash
 export GR_ID=<guardrailId from the response>
 export GR_ARN=arn:aws:bedrock:us-east-1:$ACCOUNT:guardrail/$GR_ID
-aws bedrock get-guardrail --guardrail-identifier $GR_ID --query status --output text      # repeat until READY
+aws bedrock get-guardrail --guardrail-identifier $GR_ID --query status --output text
 aws bedrock create-guardrail-version --guardrail-identifier $GR_ID --description "Reviewed in the M12 lab"
 ```
+
+- `aws bedrock get-guardrail`: repeat until READY
 
 Example response (shape from AWS docs, values illustrative;
 [CreateGuardrailVersion](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_CreateGuardrailVersion.html)):
@@ -599,9 +605,12 @@ for f in d["contentPolicyConfig"]["filtersConfig"]:
 json.dump(d, open("update.json", "w"), indent=2)
 EOF
 aws bedrock update-guardrail --cli-input-json file://update.json
-aws bedrock get-guardrail --guardrail-identifier $GR_ID --query status --output text      # until READY
-aws bedrock create-guardrail-version --guardrail-identifier $GR_ID --description "Prompt attack HIGH"   # version 2
+aws bedrock get-guardrail --guardrail-identifier $GR_ID --query status --output text
+aws bedrock create-guardrail-version --guardrail-identifier $GR_ID --description "Prompt attack HIGH"
 ```
+
+- `aws bedrock get-guardrail`: until READY
+- `aws bedrock create-guardrail-version`: version 2
 
 Version 1 is unchanged: versions are snapshots. So you can compare both side by side with the same text. Run the two
 awkward-but-normal questions from the suite (B03 and B04) and one attack (A11, spaced letters) against both versions:
@@ -690,19 +699,32 @@ ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 eval $(aws sts assume-role --role-arn arn:aws:iam::$ACCOUNT:role/tsg-m12-enforce-demo --role-session-name m12-test \
   --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text \
   | awk '{print "export AWS_ACCESS_KEY_ID="$1" AWS_SECRET_ACCESS_KEY="$2" AWS_SESSION_TOKEN="$3}')
-aws sts get-caller-identity --query Arn --output text      # should end in assumed-role/tsg-m12-enforce-demo/m12-test
+aws sts get-caller-identity --query Arn --output text
 echo '[{"role":"user","content":[{"guardContent":{"text":{"text":"How do I reset my VPN token?"}}}]}]' > r7.json
 ```
 
+You should see:
+
+- `aws sts get-caller-identity --query Arn --output text`: should end in assumed-role/tsg-m12-enforce-demo/m12-test
+
 Three calls:
 
+1. No guardrail at all: denied.
+
 ```bash
-# 1. No guardrail at all: denied
 aws bedrock-runtime converse --model-id $MODEL --messages file://r7.json
-# 2. The DRAFT, not version 1: denied
+```
+
+2. The DRAFT, not version 1: denied.
+
+```bash
 aws bedrock-runtime converse --model-id $MODEL --messages file://r7.json \
   --guardrail-config guardrailIdentifier=$GR_ID,guardrailVersion=DRAFT
-# 3. Version 1: allowed, a normal answer
+```
+
+3. Version 1: allowed, a normal answer.
+
+```bash
 aws bedrock-runtime converse --model-id $MODEL --messages file://r7.json \
   --guardrail-config guardrailIdentifier=$GR_ID,guardrailVersion=1
 ```
@@ -742,7 +764,25 @@ Free alternative without any model call: `make cloud-simulate` asks the real IAM
 
    ```bash
    aws cloudwatch list-metrics --namespace AWS/Bedrock/Guardrails --metric-name InvocationsIntervened
-   # Linux: START=$(date -u -d '-2 hours' +%Y-%m-%dT%H:%M:%SZ)   Mac: START=$(date -u -v-2H +%Y-%m-%dT%H:%M:%SZ)
+   ```
+
+   Set `START` to two hours ago.
+
+   **Linux:**
+
+   ```bash
+   START=$(date -u -d '-2 hours' +%Y-%m-%dT%H:%M:%SZ)
+   ```
+
+   **Mac:**
+
+   ```bash
+   START=$(date -u -v-2H +%Y-%m-%dT%H:%M:%SZ)
+   ```
+
+   Then:
+
+   ```bash
    aws cloudwatch get-metric-statistics --namespace AWS/Bedrock/Guardrails --metric-name InvocationsIntervened \
      --dimensions Name=GuardrailArn,Value=$GR_ARN Name=GuardrailVersion,Value=1 \
      --start-time $START --end-time $(date -u +%Y-%m-%dT%H:%M:%SZ) --period 3600 --statistics Sum
@@ -799,16 +839,24 @@ In production the bill scales with traffic: lesson 12.4's estimate is about $66 
 
 In your **own** credentials (not the assumed role):
 
+1. The enforcement test role:
+
 ```bash
-# 1. The enforcement test role
 aws iam delete-role-policy --role-name tsg-m12-enforce-demo --policy-name m12-guardrail-required
 aws iam delete-role --role-name tsg-m12-enforce-demo
+```
 
-# 2. The guardrail, with ALL its versions (no --guardrail-version = everything)
+2. The guardrail, with ALL its versions (no --guardrail-version = everything):
+
+```bash
 aws bedrock delete-guardrail --guardrail-identifier $GR_ID
-#    ...or, if you used Terraform (Path C):  make cloud-down
+```
 
-# 3. Check, then remove the local files this guide created
+Or, if you used Terraform (Path C), run `make cloud-down` instead.
+
+3. Check, then remove the local files this guide created:
+
+```bash
 aws bedrock list-guardrails --query 'guardrails[].[name,id,status]' --output table
 rm -f create.json update.json trust.json enforce.json r6-messages.json r7.json
 ```

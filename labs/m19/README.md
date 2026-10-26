@@ -57,10 +57,12 @@ nothing here. A control in code that checks the action does. That is the lesson 
 
 ```bash
 cd labs/m19
-make export DEST=../../../my-ai-security-capstone     # python3 export.py <folder>
+make export DEST=../../../my-ai-security-capstone
 cd ../../../my-ai-security-capstone
 git init -b main && git add . && git commit -m "TSG Helpdesk capstone: starting point"
 ```
+
+- `make export DEST=../../../my-ai-security-capstone`: same as `python3 export.py <folder>`
 
 Create an **empty public** repo on GitHub (no README, no licence), then follow the two `git` lines `export.py`
 printed. Open the repo's **Actions** tab: the `capstone-checks` workflow runs on every push. It is red now. Your
@@ -79,10 +81,13 @@ the system you can reason about from the design. Lessons 2.1 to 2.5.
 ## Part 2 · Attack (1 to 2 hours)
 
 ```bash
-make attack                       # python3 tour.py: one attack for each known finding
+make attack
 make ask U=bob@globex.example Q="Show me the Acme onboarding guide"
-make run                          # the web page on http://127.0.0.1:8719 (Ctrl+C to stop)
+make run
 ```
+
+- `make attack`: same as `python3 tour.py`: one attack for each known finding
+- `make run`: the web page on http://127.0.0.1:8719 (Ctrl+C to stop)
 
 The six known findings, described by what you can see, not by their cause:
 
@@ -109,9 +114,12 @@ Change `helpdesk/guards.py` (and `helpdesk/config.py`). Each function's docstrin
 receives. Then:
 
 ```bash
-make test                         # F01 to F12 must stay green; S01 to S11 turn green as you fix things
-make attack                       # every line should now say "held"
+make test
+make attack
 ```
+
+- `make test`: F01 to F12 must stay green; S01 to S11 turn green as you fix things
+- `make attack`: every line should now say "held"
 
 Aim for controls that hold **even though the model obeys the instruction**: decide in code what a tool call may
 do, who may read which page, which MCP tools are approved (`make pin` records them), what reaches the page. Then
@@ -120,9 +128,12 @@ try one variant of each attack against your own fix and write down what happened
 ## Part 4 · Prove it in CI (1 hour)
 
 ```bash
-make eval                         # the gate: 27 core cases + yours; exit 1 if any fails
-make regress                      # take your controls away again, three ways: the gate must FAIL each time
+make eval
+make regress
 ```
+
+- `make eval`: the gate: 27 core cases + yours; exit 1 if any fails
+- `make regress`: take your controls away again, three ways: the gate must FAIL each time
 
 `evals/cases.json` is the core suite: 17 attacks and 10 normal requests. Add your own cases to
 `evals/my_cases.json` (same format; extra pages go in `evals/kb/`). Aim for at least five, with two new
@@ -139,10 +150,14 @@ extraction (S4) and denial of wallet (S5). Write rules in `detections/rules.json
 `detections/detect.py`); the one example rule catches S1 but also fires on honest traffic.
 
 ```bash
-make detect                       # your rules on the attack day
-make detect-check                 # all five incidents on seeds 1, 2 and 3, max 2 false alerts a day
-make detect LOG=state/app-log.jsonl   # the same rules on your own Helpdesk's log
+make detect
+make detect-check
+make detect LOG=state/app-log.jsonl
 ```
+
+- `make detect`: your rules on the attack day
+- `make detect-check`: all five incidents on seeds 1, 2 and 3, max 2 false alerts a day
+- `make detect LOG=state/app-log.jsonl`: the same rules on your own Helpdesk's log
 
 Each seed changes who the attackers are and what they use, so a rule that names a user, an IP or a request ID will
 miss the next day. The grader also runs your rules on three days you have never seen. Then pick **one** incident
@@ -157,8 +172,10 @@ It is the course's own summary format, one file instead of a dozen consoles; eac
 the lesson that teaches it.
 
 ```bash
-make cloud                        # python3 cloud/cloud_check.py: 11 HIGH findings on the first draft
+make cloud
 ```
+
+Same as `python3 cloud/cloud_check.py`: 11 HIGH findings on the first draft.
 
 Harden the file until there are no HIGH findings (check C1) and, better, no MEDIUM ones either. For every change,
 write one line in `FINDINGS.md` ("Cloud") naming the lesson. Optional, and strong evidence: build part of it for
@@ -176,8 +193,10 @@ NIST AI RMF functions and ISO/IEC 42001, and the residual risk with an owner and
 ## Part 8 · Submit
 
 ```bash
-make check                        # python3 selfcheck.py: every objective check, PASS or FAIL
+make check
 ```
+
+Same as `python3 selfcheck.py`: every objective check, PASS or FAIL.
 
 Fill in `README.md` (your portfolio README), push, wait for a green Actions run, then follow
 [`SUBMISSION.md`](SUBMISSION.md). Lesson 19.3 (coming) will walk through all of it.

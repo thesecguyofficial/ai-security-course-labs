@@ -55,9 +55,11 @@ unsupported system, `3` (Windows) restart needed, then run the same command agai
 Mac / Linux / WSL: open a terminal in the repo folder and turn on the shared environment once per terminal:
 
 ```bash
-source .venv/bin/activate      # your prompt now starts with (.venv)
+source .venv/bin/activate
 cd labs/m01
 ```
+
+- `source .venv/bin/activate`: your prompt now starts with (.venv)
 
 Windows: either call the shared Python directly, for example `.venv\Scripts\python.exe labs\m01\llm_lab.py`, or
 turn the environment on with `.venv\Scripts\Activate.ps1`. If PowerShell answers "running scripts is disabled",

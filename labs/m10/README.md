@@ -74,9 +74,12 @@ if a real-looking account ID, IP or access key ever creeps in.
 ## Step 1 · Check: find the over-broad permissions
 
 ```bash
-cd labs-export/m10          # or wherever you put this folder
-make check                  # same as: python3 policy_checker.py
+cd labs-export/m10
+make check
 ```
+
+- `cd labs-export/m10`: or wherever you put this folder
+- `make check`: same as `python3 policy_checker.py`
 
 Real output (Linux, Python 3.13):
 
@@ -144,8 +147,10 @@ Lint your own policies the same way: `python3 policy_checker.py --policy my-role
 ## Step 2 · Break it: what can a thief do today?
 
 ```bash
-make attack                 # same as: python3 attack.py --mode vulnerable
+make attack
 ```
+
+Same as `python3 attack.py --mode vulnerable`.
 
 Real output:
 
@@ -234,8 +239,10 @@ Three design points:
 ## Step 4 · Fix it: replay with the SCPs
 
 ```bash
-make attack-safe            # same as: python3 attack.py --mode safe
+make attack-safe
 ```
+
+Same as `python3 attack.py --mode safe`.
 
 Real output:
 
@@ -303,8 +310,10 @@ The AWS Organizations documentation shows an allow-list that denies `bedrock:*` 
 models. Try that shape with AnyCompany's models:
 
 ```bash
-make blunt                  # same as: python3 attack.py --mode safe --allowlist examples/blunt-allowlist-scp.json
+make blunt
 ```
+
+Same as `python3 attack.py --mode safe --allowlist examples/blunt-allowlist-scp.json`.
 
 Real output (last lines):
 
@@ -347,8 +356,10 @@ examples/blunt-allowlist-scp.json` flags it as `M10-12`.
 ## Step 6 · Hunt: find the LLMjacking timeline in CloudTrail
 
 ```bash
-make hunt-naive             # same as: python3 hunt.py --naive
+make hunt-naive
 ```
+
+Same as `python3 hunt.py --naive`.
 
 Real output:
 
@@ -368,8 +379,10 @@ within 30 days of its launch), and the bedrock-mantle endpoint, whose events hav
 every rule:
 
 ```bash
-make hunt                   # same as: python3 hunt.py
+make hunt
 ```
+
+Same as `python3 hunt.py`.
 
 Real output:
 
@@ -440,8 +453,10 @@ an `inferenceRegion` outside the Regions your data may go to. (Token counts aren
 ## Step 7 · Your turn: `make challenge`
 
 ```bash
-make challenge              # same as: python3 run_tests.py --challenge
+make challenge
 ```
+
+Same as `python3 run_tests.py --challenge`.
 
 Real output before your fix (last lines):
 
@@ -490,7 +505,11 @@ CLI reference but did not run them against a live account for this README, so yo
 
 ```bash
 make validate
-# runs, for each fixes/scp-*.json:
+```
+
+Runs, for each fixes/scp-*.json:
+
+```bash
 aws accessanalyzer validate-policy --policy-type SERVICE_CONTROL_POLICY --policy-document file://fixes/scp-model-allowlist.json
 ```
 
@@ -516,7 +535,11 @@ models you use, then, from the management account:
 ```bash
 aws organizations create-policy --name m10-model-allowlist --type SERVICE_CONTROL_POLICY \
   --description "M10 lab: approved Bedrock models only" --content file://fixes/scp-model-allowlist.json
-# note the policy ID in the output (p-...), then:
+```
+
+Note the policy ID in the output (p-...), then:
+
+```bash
 aws organizations attach-policy --policy-id p-examplepolicyid111 --target-id 444455556666
 ```
 

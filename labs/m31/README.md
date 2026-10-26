@@ -268,7 +268,13 @@ ALL TESTS PASSED (22 run)
 ## Challenge
 
 ```bash
-make challenge     # 4 of 26 tests fail until you finish all three parts
+make challenge
+```
+
+You should see:
+
+```text
+4 of 26 tests fail until you finish all three parts
 ```
 
 1. **Per-payee daily limit (31.1).** In `guard.py`, find `CHALLENGE 1`. When the mandate has `per_payee_daily_max`,

@@ -63,9 +63,16 @@ Throughout: Region `us-east-1`, and these shell variables (set them in Step 0, a
    export AWS_REGION=us-east-1
    export ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
    export MODEL=us.anthropic.claude-haiku-4-5-20251001-v1:0
-   echo "$ACCOUNT"            # 12 digits: is this really the sandbox?
+   echo "$ACCOUNT"
+   ```
 
-   # Only if you have no budget yet (free: "You can monitor and receive notifications on your budgets free of charge")
+   You should see:
+
+   - `echo "$ACCOUNT"`: 12 digits: is this really the sandbox?
+
+   Only if you have no budget yet (free: "You can monitor and receive notifications on your budgets free of charge")
+
+   ```bash
    aws budgets create-budget --account-id $ACCOUNT --budget file://aws-twin/budget.json \
      --notifications-with-subscribers file://aws-twin/notifications-with-subscribers.json
    ```
@@ -210,14 +217,18 @@ session and "you can't prevent generation of a short-term key" (lesson 10.4).
 ### 1e · Which logs and detectors are on?
 
 ```bash
-aws bedrock get-model-invocation-logging-configuration                      # {} = invocation logging is OFF
+aws bedrock get-model-invocation-logging-configuration
 aws cloudtrail describe-trails --query 'trailList[].[Name,HomeRegion,IsMultiRegionTrail]' --output text
 for T in $(aws cloudtrail describe-trails --query 'trailList[].TrailARN' --output text); do
   echo "== $T"; aws cloudtrail get-event-selectors --trail-name "$T" --query 'AdvancedEventSelectors[].FieldSelectors' --output json
 done
-aws guardduty list-detectors                                                 # empty = GuardDuty is off in this Region
-aws bedrock get-account-data-retention                                       # lesson 11.3: inherit, none, default...
+aws guardduty list-detectors
+aws bedrock get-account-data-retention
 ```
+
+- `aws bedrock get-model-invocation-logging-configuration`: {} = invocation logging is OFF
+- `aws guardduty list-detectors`: empty = GuardDuty is off in this Region
+- `aws bedrock get-account-data-retention`: lesson 11.3: inherit, none, default...
 
 How to read them, one by one:
 
@@ -286,10 +297,12 @@ cat > logging-config.json <<EOF
  "textDataDeliveryEnabled": true, "imageDataDeliveryEnabled": false,
  "embeddingDataDeliveryEnabled": false, "videoDataDeliveryEnabled": false}
 EOF
-sleep 10    # IAM needs a moment before Bedrock can assume the new role
+sleep 10
 aws bedrock put-model-invocation-logging-configuration --logging-config file://logging-config.json
 aws bedrock get-model-invocation-logging-configuration
 ```
+
+- `sleep 10`: IAM needs a moment before Bedrock can assume the new role
 
 Field names are from the [PutModelInvocationLoggingConfiguration](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_PutModelInvocationLoggingConfiguration.html)
 API (`loggingConfig.cloudWatchConfig.logGroupName`, `roleArn`, and the `...DataDeliveryEnabled` switches).
@@ -333,12 +346,14 @@ subscription**, protocol **Email**, your address, and confirm the email AWS send
 
 ```bash
 TOPIC=$(aws sns create-topic --name tsg-m10-ai-alerts --query TopicArn --output text)
-aws sns subscribe --topic-arn $TOPIC --protocol email --notification-endpoint you@example.com   # your address; confirm the email
+aws sns subscribe --topic-arn $TOPIC --protocol email --notification-endpoint you@example.com
 aws cloudwatch put-metric-alarm --alarm-name tsg-m10-bedrock-invocations \
   --namespace AWS/Bedrock --metric-name Invocations --statistic Sum --period 300 \
   --evaluation-periods 1 --threshold 20 --comparison-operator GreaterThanThreshold \
   --treat-missing-data notBreaching --alarm-actions $TOPIC
 ```
+
+- `aws sns subscribe`: your address; confirm the email
 
 Twenty calls in five minutes is far above anything this guide does, and far below what an LLMjacking proxy does
 (lesson 10.5's hunt sees 61 in one hour from one key). In production, set it from your own baseline. Mantle traffic
@@ -536,8 +551,12 @@ ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 eval $(aws sts assume-role --role-arn arn:aws:iam::$ACCOUNT:role/tsg-m10-app-demo --role-session-name m10-test \
   --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text \
   | awk '{print "export AWS_ACCESS_KEY_ID="$1" AWS_SECRET_ACCESS_KEY="$2" AWS_SESSION_TOKEN="$3}')
-aws sts get-caller-identity --query Arn --output text      # should end in assumed-role/tsg-m10-app-demo/m10-test
+aws sts get-caller-identity --query Arn --output text
 ```
+
+You should see:
+
+- `aws sts get-caller-identity --query Arn --output text`: should end in assumed-role/tsg-m10-app-demo/m10-test
 
 ### R1 · The approved model, through the approved profile (allowed)
 
@@ -641,13 +660,30 @@ Your real error text may differ; the 403 is the part that matters.
 
 Wait 2 to 5 minutes, then:
 
+The prompt log for R1:
+
 ```bash
-# The prompt log for R1
 aws logs filter-log-events --log-group-name /tsg-m10/bedrock/model-invocations \
   --start-time $(( ($(date +%s) - 3600) * 1000 )) --max-items 5 --query 'events[].message' --output text
+```
 
-# CloudTrail: the refused and the allowed model calls of the last hour
-# Linux: START=$(date -u -d '-1 hour' +%Y-%m-%dT%H:%M:%SZ)   Mac: START=$(date -u -v-1H +%Y-%m-%dT%H:%M:%SZ)
+CloudTrail: the refused and the allowed model calls of the last hour. First set `START` to one hour ago.
+
+**Linux:**
+
+```bash
+START=$(date -u -d '-1 hour' +%Y-%m-%dT%H:%M:%SZ)
+```
+
+**Mac:**
+
+```bash
+START=$(date -u -v-1H +%Y-%m-%dT%H:%M:%SZ)
+```
+
+Then:
+
+```bash
 aws cloudtrail lookup-events --start-time $START \
   --lookup-attributes AttributeKey=EventSource,AttributeValue=bedrock.amazonaws.com \
   --query 'Events[].CloudTrailEvent' --output json \
@@ -703,8 +739,10 @@ only (console: **IAM**, **Users**, the key user, **Permissions**, `tsg-m10-ai-gu
 
 ```bash
 aws iam detach-user-policy --user-name $KEY_USER --policy-arn $GUARD_ARN
-sleep 15     # IAM changes take a few seconds to apply
+sleep 15
 ```
+
+- `sleep 15`: IAM changes take a few seconds to apply
 
 Re-run **R4** exactly as before.
 
@@ -755,8 +793,11 @@ fast"), then delete it:
 ```bash
 aws iam update-service-specific-credential --user-name $KEY_USER --service-specific-credential-id $KEY_ID --status Inactive
 sleep 15
-# re-run R4: you should now get HTTP 403 again, this time because the key is no longer valid (the exact message isn't
-# documented; write down what you see)
+```
+
+Re-run R4: you should now get HTTP 403 again, this time because the key is no longer valid (the exact message isn't documented; write down what you see)
+
+```bash
 aws iam delete-service-specific-credential --user-name $KEY_USER --service-specific-credential-id $KEY_ID
 unset AWS_BEARER_TOKEN_BEDROCK
 ```
@@ -769,13 +810,15 @@ That one command is your incident response for a leaked long-term key.
 
 ```bash
 aws iam detach-user-policy --user-name $KEY_USER --policy-arn arn:aws:iam::aws:policy/AmazonBedrockLimitedAccess
-aws iam detach-user-policy --user-name $KEY_USER --policy-arn $GUARD_ARN 2>/dev/null   # already detached in Step 4
+aws iam detach-user-policy --user-name $KEY_USER --policy-arn $GUARD_ARN 2>/dev/null
 aws iam delete-user --user-name $KEY_USER
 aws iam detach-role-policy --role-name tsg-m10-app-demo --policy-arn $GUARD_ARN
 aws iam delete-role-policy --role-name tsg-m10-app-demo --policy-name invoke-approved-model-only
 aws iam delete-role --role-name tsg-m10-app-demo
 aws iam delete-policy --policy-arn $GUARD_ARN
 ```
+
+- `aws iam detach-user-policy --user-name $KEY_USER --policy-arn $GUARD_ARN 2>/dev/null`: already detached in Step 4
 
 **3. Logging, alarm, topic** (keep invocation logging on if this sandbox will run M11 or M12; M11 replaces it with
 its own encrypted configuration anyway):
@@ -796,10 +839,13 @@ aws sns delete-topic --topic-arn arn:aws:sns:us-east-1:$ACCOUNT:tsg-m10-ai-alert
 **5. Check, then remove the local files:**
 
 ```bash
-aws iam list-service-specific-credentials --all-users --service-name bedrock.amazonaws.com   # your test key is gone
-aws bedrock get-model-invocation-logging-configuration                                       # {} if you deleted it
+aws iam list-service-specific-credentials --all-users --service-name bedrock.amazonaws.com
+aws bedrock get-model-invocation-logging-configuration
 rm -f logging-trust.json logging-perms.json logging-config.json guardrails.json app-role.json app-trust.json
 ```
+
+- `aws iam list-service-specific-credentials`: your test key is gone
+- `aws bedrock get-model-invocation-logging-configuration`: {} if you deleted it
 
 Keep the budget from Step 0: it costs nothing and you'll want it for M11. Tomorrow, glance at **Billing**, **Bills**:
 this guide should show cents at most.

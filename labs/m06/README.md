@@ -70,9 +70,11 @@ port. The only network calls are the optional Ollama steps, and the code refuses
 ## Step 1 · Set up (once)
 
 ```bash
-cd labs-export/m06          # or wherever you put this folder
+cd labs-export/m06
 make setup
 ```
+
+- `cd labs-export/m06`: or wherever you put this folder
 
 `make setup` runs these two commands (run them yourself if you don't have `make`):
 
@@ -87,8 +89,10 @@ Windows (PowerShell): `py -m venv .venv`, then `.venv\Scripts\python -m pip inst
 ## Step 2 · Break it: attack the vulnerable app
 
 ```bash
-make attack                 # same as: .venv/bin/python attack.py --mode vulnerable
+make attack
 ```
+
+Same as `.venv/bin/python attack.py --mode vulnerable`.
 
 Real output (Linux, Python 3.13):
 
@@ -173,8 +177,10 @@ Three design points worth noticing:
 ## Step 4 · Fix it: attack the safe app
 
 ```bash
-make attack-safe            # same as: .venv/bin/python attack.py --mode safe
+make attack-safe
 ```
+
+Same as `.venv/bin/python attack.py --mode safe`.
 
 Real output:
 
@@ -230,8 +236,10 @@ See the provenance stamped on every chunk:
 ## Step 5 · Prove it
 
 ```bash
-make test                   # same as: .venv/bin/python run_tests.py
+make test
 ```
+
+Same as `.venv/bin/python run_tests.py`.
 
 Real output:
 
@@ -267,8 +275,10 @@ isolation must keep Alice out **and** keep Bob in, because a "fix" that breaks t
 **Look inside the store** (lesson 6.5):
 
 ```bash
-make inspect                # same as: .venv/bin/python inspect_store.py
+make inspect
 ```
+
+Same as `.venv/bin/python inspect_store.py`.
 
 Real output:
 
@@ -294,8 +304,10 @@ Alpha asks you to remove its old refund policy. Deleting the file isn't enough: 
 keep being retrieved. `delete_document()` in `rag_app.py` only logs a warning today.
 
 ```bash
-make challenge              # same as: .venv/bin/python run_tests.py --challenge
+make challenge
 ```
+
+Same as `.venv/bin/python run_tests.py --challenge`.
 
 Real output before your fix (last lines):
 

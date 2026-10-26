@@ -57,9 +57,12 @@ where real rows carry object IDs.
 
 ```bash
 make setup
-make simulate                 # python3 simulate.py
-python3 simulate.py --list    # the five stories
+make simulate
+python3 simulate.py --list
 ```
+
+- `make simulate`: same as `python3 simulate.py`
+- `python3 simulate.py --list`: the five stories
 
 ```output
 Nothing to install for this lab: Python 3.13 and its standard library are all it needs.
@@ -83,8 +86,10 @@ counts, 8 Defender alerts, 64 agent spans and the rest.
 ## Step 2 · The SOC's old rules on the old logs
 
 ```bash
-make old                      # python3 evaluate.py first-draft --pack soc-v1
+make old
 ```
+
+Same as `python3 evaluate.py first-draft --pack soc-v1`.
 
 ```output
 Pack soc-v1 on first-draft telemetry: 3 alerts
@@ -106,8 +111,10 @@ data science team's batch job.
 ## Step 3 · Old rules, new logs
 
 ```bash
-make old-rules                # python3 evaluate.py hardened --pack soc-v1
+make old-rules
 ```
+
+Same as `python3 evaluate.py hardened --pack soc-v1`.
 
 ```output
 Pack soc-v1 on hardened telemetry: 5 alerts
@@ -130,8 +137,10 @@ Two get through. The jailbreak (Medium), the wallet attacks (Medium) and the ano
 ## Step 4 · New rules, old logs
 
 ```bash
-make old-logs                 # python3 evaluate.py first-draft
+make old-logs
 ```
+
+Same as `python3 evaluate.py first-draft`.
 
 ```output
 Pack az16 on first-draft telemetry: 2 alerts
@@ -151,8 +160,10 @@ the new rules can see. What the key did next is in resource logs the first draft
 ## Step 5 · Both: this module's rules on lesson 16.1's logs
 
 ```bash
-make detect                   # python3 detect.py hardened, then python3 evaluate.py hardened
+make detect
 ```
+
+Same as `python3 detect.py hardened`, then `python3 evaluate.py hardened`.
 
 ```output
 Pack az16 on hardened telemetry: 18 alerts
@@ -219,8 +230,10 @@ Read three things in that list:
 ## Step 6 · The AI inventory (16.3)
 
 ```bash
-make inventory                # python3 inventory.py
+make inventory
 ```
+
+Same as `python3 inventory.py`.
 
 ```output
 AI inventory: 10 AI assets
@@ -251,9 +264,12 @@ just a row.
 ## Step 7 · Posture: what Azure Policy can and can't tell you (16.4)
 
 ```bash
-make posture                  # python3 posture.py first-draft
-make posture-hardened         # python3 posture.py hardened
+make posture
+make posture-hardened
 ```
+
+- `make posture`: same as `python3 posture.py first-draft`
+- `make posture-hardened`: same as `python3 posture.py hardened`
 
 ```output
 Posture of the first-draft setup
@@ -294,11 +310,14 @@ it passes while the logs S1 needed were never collected. C01 catches it.
 Pivot on what an alert named. A key carries no identity, so pivot on the addresses as well:
 
 ```bash
-make pivot                                   # python3 report.py pivot sp-contoso-ci
+make pivot
 make pivot ENTITY=203.0.113.50
 python3 report.py pivot 203.0.113.50 --setup first-draft
-make cost                                    # python3 report.py cost
+make cost
 ```
+
+- `make pivot`: same as `python3 report.py pivot sp-contoso-ci`
+- `make cost`: same as `python3 report.py cost`
 
 ```output
 2026-10-20T08:30:00Z  activity aaadd6b8-55c6-462b-909e-04924d52bc61  ACCOUNTS/LISTKEYS/ACTION Succeeded by sp-contoso-ci from 10.20.1.30
@@ -337,8 +356,10 @@ EXAMPLE-S3-hijacked-agent.md: REPORT COMPLETE
 ## Step 9 · Prove it
 
 ```bash
-make test                    # python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 ```output
 [PASS] the simulator is deterministic: the same day on every computer
@@ -370,8 +391,10 @@ ALL TESTS PASSED (18 run)
 ## Challenge (no solution included)
 
 ```bash
-make challenge               # python3 run_tests.py --challenge
+make challenge
 ```
+
+Same as `python3 run_tests.py --challenge`.
 
 ```output
 [FAIL] challenge 1: D11 names carol@contoso.com, so S5 is CAUGHT

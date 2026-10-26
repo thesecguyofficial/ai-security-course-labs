@@ -48,8 +48,10 @@ Shell variables used throughout (set them again in a new terminal):
    ```bash
    cd labs/m21
    export AWS_REGION=us-east-1
-   aws sts get-caller-identity --query Account --output text    # check it IS the sandbox
+   aws sts get-caller-identity --query Account --output text
    ```
+
+   - `aws sts get-caller-identity --query Account --output text`: check it IS the sandbox
 
 # Part A · The gateway and four Cedar policies
 
@@ -66,9 +68,11 @@ Shell variables used throughout (set them again in a new terminal):
 2. Create everything except the users and the temporal policy:
 
    ```bash
-   make cloud-up        # type yes: Cognito pool + web client, tools Lambda + role, gateway role, policy engine,
-                        # gateway (CUSTOM_JWT, allowedClients = web app, ENFORCE), target, 4 Cedar policies
+   make cloud-up
    ```
+
+   - `make cloud-up`: type yes: Cognito pool + web client, tools Lambda + role, gateway role, policy engine,
+     gateway (CUSTOM_JWT, allowedClients = web app, ENFORCE), target, 4 Cedar policies
 
 3. Read the outputs into variables:
 
@@ -303,9 +307,11 @@ different callers supplying the same session ID get isolated sessions"), and the
 
    ```bash
    aws bedrock-agentcore-control delete-policy --policy-engine-id "$PE_ID" --policy-id "$POLICY_ID"
-   make cloud-down      # type yes
+   make cloud-down
    for u in alice bob; do aws cognito-idp admin-delete-user --user-pool-id "$POOL" --username "$u" 2>/dev/null; done
    ```
+
+   - `make cloud-down`: type yes
 
    If `cloud-down` stops because the policy is still `DELETING`, wait a minute and run it again.
 

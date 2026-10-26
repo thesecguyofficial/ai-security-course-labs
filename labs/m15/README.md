@@ -52,8 +52,10 @@ summaries work". That is the **first draft**. Your job: break it, then prove the
 
 ```bash
 cd labs/m15
-make check                  # same as: python3 checker.py first-draft
+make check
 ```
+
+- `make check`: same as `python3 checker.py first-draft`
 
 You should see (long lines cut here):
 
@@ -98,8 +100,10 @@ Start with `setups/first-draft/model.json`, the shortest file. Three lines carry
 ## Step 2 · Attack the first draft
 
 ```bash
-make attack                 # python3 evaluate.py first-draft
+make attack
 ```
+
+Same as `python3 evaluate.py first-draft`.
 
 ```output
   A1   WORKED   Booby-trapped model file: the weights are a pickle, and loading it runs code in the container
@@ -150,8 +154,10 @@ path to SageMaker AI carried the call because nobody wrote an endpoint policy.
 ## Step 3 · Look at the model files
 
 ```bash
-make scan                   # builds the lab's files in artifacts/, then: python3 model_files.py scan artifacts/v1-pickle ...
+make scan
 ```
+
+- `make scan`: builds the lab's files in artifacts/, then: python3 model_files.py scan artifacts/v1-pickle ...
 
 ```output
 [OK  ] config.json                  data
@@ -188,9 +194,12 @@ refuses to start an endpoint whose files don't match.
 ## Step 4 · The hardened setup
 
 ```bash
-make check-hardened         # 0 HIGH, 2 MEDIUM (M15-22, M15-23: the challenge)
-make hardened               # python3 evaluate.py hardened
+make check-hardened
+make hardened
 ```
+
+- `make check-hardened`: 0 HIGH, 2 MEDIUM (M15-22, M15-23: the challenge)
+- `make hardened`: same as `python3 evaluate.py hardened`
 
 ```output
   A1   blocked  Booby-trapped model file: the weights are a pickle, and loading it runs code in the container
@@ -230,8 +239,10 @@ Which change stopped which attack:
 ## Step 5 · Hunt
 
 ```bash
-make hunt                   # python3 hunt.py
+make hunt
 ```
+
+Same as `python3 hunt.py`.
 
 ```output
 Q1. Models created outside the pipeline
@@ -272,8 +283,10 @@ Each of these takes one edit. Run `make check-hardened` and `make hardened` afte
 ## Step 7 · Prove it
 
 ```bash
-make test                   # python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 ```output
 [PASS] first draft: 35 findings, 19 HIGH (isolation, Studio, roles, endpoint paths, SSM, registry, pickle weights)
@@ -290,7 +303,13 @@ challenge work doesn't break it.
 ## Step 8 · Challenge (no solution included)
 
 ```bash
-make challenge              # 7 of 28 TESTS FAILED until you finish
+make challenge
+```
+
+You should see:
+
+```text
+7 of 28 TESTS FAILED until you finish
 ```
 
 1. **15.2: write an SCP.** Add `Deny` statements to `setups/hardened/scp.json` so `CreateModel` fails when network
@@ -313,10 +332,18 @@ creates an EventBridge Scheduler one-time schedule that deletes the endpoint **b
 Short version:
 
 ```bash
-make cloud-base             # private VPC, VPC endpoints with policies, KMS key, buckets, roles, app Lambda, trail
-# GUIDED-BUILD Parts B to E: download and scan the model, register and approve it, deploy, five requests
-make cloud-down             # delete everything, today
+make cloud-base
 ```
+
+- `make cloud-base`: private VPC, VPC endpoints with policies, KMS key, buckets, roles, app Lambda, trail
+
+GUIDED-BUILD Parts B to E: download and scan the model, register and approve it, deploy, five requests.
+
+```bash
+make cloud-down
+```
+
+- `make cloud-down`: delete everything, today
 
 ## How faithful is the twin?
 

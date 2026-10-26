@@ -60,8 +60,10 @@ you don't have to join three log groups by hand.
 ```bash
 cd labs/m16
 python3 simulate.py --list
-make simulate                # same as: python3 simulate.py
+make simulate
 ```
+
+- `make simulate`: same as `python3 simulate.py`
 
 ```output
 first-draft  cloudtrail 865  invocations 0  guardduty 0  spans 0  app 585   -> out/first-draft/
@@ -82,8 +84,10 @@ log lines have no user in them. The five incidents:
 ## Step 2 · The SOC's old rules on the old logs
 
 ```bash
-make old                     # python3 evaluate.py first-draft --pack soc-v1
+make old
 ```
+
+Same as `python3 evaluate.py first-draft --pack soc-v1`.
 
 ```output
   S1  CAUGHT           Leaked Bedrock API key (LLMjacking)    N2                       named BedrockAPIKey-q4m8
@@ -103,8 +107,10 @@ team's batch job instead.
 ## Step 3 · Old rules, new logs
 
 ```bash
-make old-rules               # python3 evaluate.py hardened --pack soc-v1
+make old-rules
 ```
+
+Same as `python3 evaluate.py hardened --pack soc-v1`.
 
 ```output
 Caught 1 of 5 | seen but not named 0 | missed 4 | false alarms 1
@@ -118,8 +124,10 @@ side by side.
 ## Step 4 · New rules, old logs
 
 ```bash
-make old-logs                # python3 evaluate.py first-draft
+make old-logs
 ```
+
+Same as `python3 evaluate.py first-draft`.
 
 ```output
   S1  CAUGHT           Leaked Bedrock API key (LLMjacking)    D01 D02 D03 D04          named BedrockAPIKey-q4m8
@@ -137,8 +145,10 @@ but nothing shows what the agent did next: gateway tracing and AgentCore data ev
 ## Step 5 · Both: this module's rules on lesson 16.1's logs
 
 ```bash
-make detect                  # python3 detect.py hardened, then python3 evaluate.py hardened
+make detect
 ```
+
+Same as `python3 detect.py hardened`, then `python3 evaluate.py hardened`.
 
 ```output
 [MEDIUM] 09:15 D13 Answer links to an unknown domain
@@ -176,8 +186,10 @@ Three things to notice:
 ## Step 6 · The AI inventory (16.3)
 
 ```bash
-make inventory               # python3 inventory.py
+make inventory
 ```
+
+Same as `python3 inventory.py`.
 
 ```output
 AI inventory: 16 AI assets (9 managed, 7 self-hosted)
@@ -202,9 +214,12 @@ so an internet-facing Ollama port is a check you write.
 ## Step 7 · Posture: what AWS Config can and can't tell you (16.4)
 
 ```bash
-make posture                 # python3 posture.py first-draft
-make posture-hardened        # 0 NON_COMPLIANT of 14 evaluations
+make posture
+make posture-hardened
 ```
+
+- `make posture`: same as `python3 posture.py first-draft`
+- `make posture-hardened`: 0 NON_COMPLIANT of 14 evaluations
 
 ```output
   NON_COMPLIANT bedrockagentcore-runtime-private-network-required       [BedrockAgentCore.1]  tsg_helpdesk-AbCdEf1234  NetworkMode PUBLIC
@@ -230,11 +245,13 @@ things that decided today's five incidents (invocation logging, AI Protection, a
 Pivot on the entity an alert named, and read the incident in order:
 
 ```bash
-python3 report.py pivot BedrockAPIKey-q4m8         # make pivot ENTITY=BedrockAPIKey-q4m8
+python3 report.py pivot BedrockAPIKey-q4m8
 python3 report.py pivot BedrockAPIKey-q4m8 --setup first-draft
 python3 report.py cost BedrockAPIKey-q4m8
 python3 report.py pivot cust-8841
 ```
+
+- `python3 report.py pivot BedrockAPIKey-q4m8`: make pivot ENTITY=BedrockAPIKey-q4m8
 
 ```output
 2026-10-20T14:05:00Z  cloudtrail e8b7078f-0713-43a2-8132-dc7bcbd64dac  bedrock ListFoundationModels from 203.0.113.50
@@ -265,8 +282,10 @@ EXAMPLE-S3-hijacked-agent.md: REPORT COMPLETE
 ## Step 9 · Prove it
 
 ```bash
-make test                    # python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 ```output
 ALL TESTS PASSED (18 run)
@@ -275,7 +294,13 @@ ALL TESTS PASSED (18 run)
 ## Challenge (no solution included)
 
 ```bash
-make challenge               # 6 of 24 TESTS FAILED until you finish
+make challenge
+```
+
+You should see:
+
+```text
+6 of 24 TESTS FAILED until you finish
 ```
 
 1. **D11, knowledge base poisoning** (16.4, 16.5). In `detect.py`, write `d11_kb_source_write`: an alert when anyone

@@ -54,9 +54,12 @@ workspace, production runs in another, and a **registry** exists but nobody uses
 
 ```bash
 cd labs/az15
-make setup                  # checks your Python, installs nothing
-make check                  # same as: python3 checker.py first-draft
+make setup
+make check
 ```
+
+- `make setup`: checks your Python, installs nothing
+- `make check`: same as `python3 checker.py first-draft`
 
 You should see (long lines cut here):
 
@@ -103,8 +106,10 @@ Start with `setups/first-draft/endpoint.json`, the shortest file. Three lines ca
 ## Step 2 · Attack the first draft
 
 ```bash
-make attack                 # python3 evaluate.py first-draft
+make attack
 ```
+
+Same as `python3 evaluate.py first-draft`.
 
 ```output
   A1   WORKED   Booby-trapped model file: the weights are a pickle, and loading it runs code in the container
@@ -173,8 +178,10 @@ python3 twin.py invoke first-draft tsg-helpdesk-app vnet key debug
 ## Step 3 · Look at the model files
 
 ```bash
-make scan                   # builds the lab's files in artifacts/, then: python3 model_files.py scan artifacts/v1-pickle ...
+make scan
 ```
+
+- `make scan`: builds the lab's files in artifacts/, then: python3 model_files.py scan artifacts/v1-pickle ...
 
 ```output
 [OK  ] config.json                  data
@@ -217,9 +224,12 @@ and the hardened workspaces use one.
 ## Step 4 · The hardened setup
 
 ```bash
-make check-hardened         # 0 HIGH, 2 MEDIUM (AZ15-22, AZ15-23: the challenge)
-make hardened               # python3 evaluate.py hardened
+make check-hardened
+make hardened
 ```
+
+- `make check-hardened`: 0 HIGH, 2 MEDIUM (AZ15-22, AZ15-23: the challenge)
+- `make hardened`: same as `python3 evaluate.py hardened`
 
 ```output
   A1   blocked  Booby-trapped model file: the weights are a pickle, and loading it runs code in the container
@@ -274,8 +284,10 @@ Which change stopped which attack:
 ## Step 5 · Hunt
 
 ```bash
-make hunt                   # python3 hunt.py
+make hunt
 ```
+
+Same as `python3 hunt.py`.
 
 ```output
 Q1. Deployment writes not made by the pipeline (AzureActivity)
@@ -326,8 +338,10 @@ Each of these takes one edit. Run `make check-hardened` and `make hardened` afte
 ## Step 7 · Prove it
 
 ```bash
-make test                   # python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 ```output
 [PASS] first draft: 31 findings, 15 HIGH (network, public access, identity, keys, deployments, registry, pickle weights)
@@ -349,7 +363,13 @@ challenge work doesn't break it.
 ## Step 8 · Challenge (no solution included)
 
 ```bash
-make challenge              # 7 of 29 TESTS FAILED until you finish
+make challenge
+```
+
+You should see:
+
+```text
+7 of 29 TESTS FAILED until you finish
 ```
 
 1. **15.2: Azure Policy in Deny.** Add assignments to `setups/hardened/policy-challenge.json` (same shape as
@@ -371,11 +391,15 @@ Follow [`GUIDED-BUILD.md`](GUIDED-BUILD.md). A managed online endpoint bills for
 guide creates a Logic App timer that deletes the endpoint **before** it creates the endpoint. Short version:
 
 ```bash
-make cloud-up               # resource group, approved-outbound workspace, private endpoint, client VM, Log Analytics
+make cloud-up
 MODEL_ID=azureml://registries/azureml/models/<name>/versions/<version> make cloud-deploy
-make cloud-ask              # five requests
-make cloud-down             # delete everything, today
+make cloud-ask
+make cloud-down
 ```
+
+- `make cloud-up`: resource group, approved-outbound workspace, private endpoint, client VM, Log Analytics
+- `make cloud-ask`: five requests
+- `make cloud-down`: delete everything, today
 
 ## How faithful is the twin?
 

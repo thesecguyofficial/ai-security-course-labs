@@ -60,8 +60,10 @@ What the telemetry files are, and how close they are to the real thing:
 
 ```bash
 python3 simulate.py --list
-python3 simulate.py          # make simulate
+python3 simulate.py
 ```
+
+- `python3 simulate.py`: make simulate
 
 ```output
 S1  Leaked service account key (LLMjacking)
@@ -92,8 +94,10 @@ audit entries are what Google Cloud keeps by default: Admin Activity (always on)
 ## Step 2 · The SOC's old rules on the old logs
 
 ```bash
-make old                     # python3 evaluate.py first-draft --pack soc-v1
+make old
 ```
+
+Same as `python3 evaluate.py first-draft --pack soc-v1`.
 
 ```output
 Pack soc-v1 on first-draft telemetry: 1 alerts
@@ -114,8 +118,10 @@ would hold the attacker's `GenerateContent` calls were never switched on.
 ## Step 3 · Old rules, new logs
 
 ```bash
-make old-rules               # python3 evaluate.py hardened --pack soc-v1
+make old-rules
 ```
+
+Same as `python3 evaluate.py hardened --pack soc-v1`.
 
 ```output
 Pack soc-v1 on hardened telemetry: 2 alerts
@@ -137,8 +143,10 @@ now that Data Access logs exist, pages on the data science team's evaluation bat
 ## Step 4 · New rules, old logs
 
 ```bash
-make old-logs                # python3 evaluate.py first-draft
+make old-logs
 ```
+
+Same as `python3 evaluate.py first-draft`.
 
 ```output
 Pack gc16 on first-draft telemetry: 4 alerts
@@ -158,8 +166,10 @@ that did it. What the agent did next is in gateway logs the first draft excluded
 ## Step 5 · Both: this module's rules on lesson 16.1's logs
 
 ```bash
-make detect                  # python3 detect.py hardened, then python3 evaluate.py hardened
+make detect
 ```
+
+Same as `python3 detect.py hardened`, then `python3 evaluate.py hardened`.
 
 ```output
 Pack gc16 on hardened telemetry: 16 alerts
@@ -215,8 +225,10 @@ request-response rows don't carry the caller, which is why S4 is SEEN, NOT NAMED
 ## Step 6 · The AI inventory (16.3)
 
 ```bash
-make inventory               # python3 inventory.py   (try: python3 inventory.py --tier standard)
+make inventory
 ```
+
+Same as `python3 inventory.py` (try: `python3 inventory.py --tier standard`).
 
 ```output
 AI inventory (SCC Premium): 14 AI assets
@@ -246,9 +258,12 @@ Your check: firewall rule allow-ollama-any allows 0.0.0.0/0 to port 11434 (ollam
 ## Step 7 · Posture: framework controls, custom checks, organization policies (16.3, 16.4)
 
 ```bash
-make posture                 # python3 posture.py first-draft
-make posture-hardened        # python3 posture.py hardened
+make posture
+make posture-hardened
 ```
+
+- `make posture`: same as `python3 posture.py first-draft`
+- `make posture-hardened`: same as `python3 posture.py hardened`
 
 ```output
 Posture of the first-draft setup
@@ -319,10 +334,12 @@ Organization policies (preventive, lesson 16.4)
 Pivot on the entity an alert named:
 
 ```bash
-make pivot                   # python3 report.py pivot etl-batch
+make pivot
 python3 report.py pivot etl-batch --setup first-draft
 python3 report.py cost etl-batch
 ```
+
+- `make pivot`: same as `python3 report.py pivot etl-batch`
 
 ```output
 2026-10-20T02:30:00Z  audit    daa868d605d4                      bigquery InsertJob from 10.20.1.20
@@ -382,8 +399,10 @@ EXAMPLE-S3-hijacked-agent.md: REPORT COMPLETE
 ## Step 9 · Prove it
 
 ```bash
-make test                    # python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 ```output
 [PASS] the simulator is deterministic: the same day on every computer
@@ -410,7 +429,13 @@ ALL TESTS PASSED (18 run)
 ## Challenge (no solution included)
 
 ```bash
-make challenge               # 6 of 24 TESTS FAILED until you finish
+make challenge
+```
+
+You should see:
+
+```text
+6 of 24 TESTS FAILED until you finish
 ```
 
 ```output
