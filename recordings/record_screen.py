@@ -109,9 +109,11 @@ def main():
         page.keyboard.press("Control+k")
         page.keyboard.press("v")
         page.wait_for_timeout(3000)
-        # Focus back on the editor (left group).
+        # Focus back on the editor (left group) and hide the file list, so the text is bigger on screen.
         page.keyboard.press("Control+1")
-        page.wait_for_timeout(800)
+        page.wait_for_timeout(500)
+        page.keyboard.press("Control+b")
+        page.wait_for_timeout(1200)
 
         current = None
         for act in actions:
@@ -125,16 +127,15 @@ def main():
             page.keyboard.type(str(act["line"]), delay=40)
             page.keyboard.press("Enter")
             page.wait_for_timeout(350)
+            # Select the whole logical line (Ctrl+L), then drop its line break from the selection: unlike
+            # Shift+End, this also works when word wrap shows a long line on several rows.
+            page.keyboard.press("Control+l")
+            page.keyboard.press("Shift+ArrowLeft")
             if act["mode"] == "append":
-                page.keyboard.press("End")
-            else:
-                page.keyboard.press("Home")
-                page.keyboard.press("Home")  # first press: first non-blank; second: column 1
-                page.keyboard.press("Shift+End")
+                page.keyboard.press("ArrowRight")  # collapse to the end of the line
             page.wait_for_timeout(250)
             page.keyboard.type(act["text"], delay=TYPE_DELAY)
             for extra in act.get("then", []):
-                page.keyboard.press("End")
                 page.keyboard.press("Enter")   # auto-indent is off in settings, so the new line starts empty
                 page.keyboard.type(extra, delay=TYPE_DELAY)
             page.keyboard.press("Control+s")
