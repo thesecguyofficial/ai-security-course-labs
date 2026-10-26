@@ -44,8 +44,10 @@ Shell variables used throughout (set them again in a new terminal):
    ```bash
    cd labs/m14
    export AWS_REGION=us-east-1
-   aws sts get-caller-identity --query Account --output text    # check it IS the sandbox
+   aws sts get-caller-identity --query Account --output text
    ```
+
+   - `aws sts get-caller-identity --query Account --output text`: check it IS the sandbox
 
 # Part A · Identity in, the gateway, and Policy
 
@@ -56,9 +58,11 @@ Shell variables used throughout (set them again in a new terminal):
 1. Create everything except the users:
 
    ```bash
-   make cloud-up        # type yes; Cognito pool + 2 clients, tools Lambda + role, gateway role, policy engine,
-                        # gateway (CUSTOM_JWT, allowedClients = web app, ENFORCE), target, 6 Cedar policies, memory
+   make cloud-up
    ```
+
+   - `make cloud-up`: type yes; Cognito pool + 2 clients, tools Lambda + role, gateway role, policy engine,
+     gateway (CUSTOM_JWT, allowedClients = web app, ENFORCE), target, 6 Cedar policies, memory
 
 2. Read the outputs into variables:
 
@@ -307,9 +311,11 @@ policies it generates "are designed for development and testing purposes": fine 
 2. Replace the generated `app/Helpdesk/main.py` with `../cloud/agent/main.py`, set `GATEWAY_URL` in it, and deploy:
 
    ```bash
-   cp ../cloud/agent/main.py app/Helpdesk/main.py     # then edit GATEWAY_URL
+   cp ../cloud/agent/main.py app/Helpdesk/main.py
    agentcore deploy
    ```
+
+   - `cp ../cloud/agent/main.py app/Helpdesk/main.py`: then edit GATEWAY_URL
 
    `main.py` was not run by us. It rejects non-string prompts, forwards Bob's own token to the gateway (so Policy sees
    Bob), and sets the policy session ID itself. If your CLI version generates different imports, keep them and copy
@@ -363,9 +369,12 @@ policies it generates "are designed for development and testing purposes": fine 
 4. **Teardown, today.** Remove the runtime first, then everything Terraform made:
 
    ```bash
-   cd TsgM14 && agentcore remove all && agentcore deploy && cd ..   # AWS's documented clean-up: remove, then deploy the empty state
-   make cloud-down                                                   # type yes
+   cd TsgM14 && agentcore remove all && agentcore deploy && cd ..
+   make cloud-down
    ```
+
+   - `cd TsgM14 && agentcore remove all && agentcore deploy && cd ..`: AWS's documented clean-up: remove, then deploy the empty state
+   - `make cloud-down`: type yes
 
    Then delete the log groups you no longer need (`/aws/bedrock-agentcore/...`, the Lambda's `/aws/lambda/tsg-m14-...`,
    `aws/spans` if nothing else uses it) and revert the CloudTrail selectors. If you built anything by console (Path B),

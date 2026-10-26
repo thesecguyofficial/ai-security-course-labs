@@ -28,15 +28,19 @@ Throughout: `PROJECT_ID` = your project, `REGION` = `europe-west4` (GA for RAG E
    ```bash
    gcloud config set project PROJECT_ID
    gcloud services enable aiplatform.googleapis.com modelarmor.googleapis.com storage.googleapis.com
-   gcloud auth application-default login          # ADK and the SDK use Application Default Credentials
+   gcloud auth application-default login
    ```
+
+   - `gcloud auth application-default login`: ADK and the SDK use Application Default Credentials
 
 3. A Python virtual environment with ADK (same as README Step 6):
 
    ```bash
    python3 -m venv .venv && . .venv/bin/activate
-   pip install -r adk_agent/requirements.txt      # google-adk[gcp]==2.12.0
+   pip install -r adk_agent/requirements.txt
    ```
+
+   - `pip install -r adk_agent/requirements.txt`: google-adk[gcp]==2.12.0
 
 4. As the project owner you can do everything below. In a shared project you'd need Agent Platform User
    (`roles/aiplatform.user`) for RAG Engine and Gemini, Model Armor Admin for the template, and Service Account Admin
@@ -470,26 +474,50 @@ in a project without an organisation.
 
 Do all of it. The last command stops the hourly charge.
 
+Step 8, if you deployed: delete the agent (and its sessions) by its resource name.
+
 ```bash
-# Step 8, if you deployed: delete the agent (and its sessions) by its resource name
 curl -s -X DELETE -H "Authorization: Bearer $(gcloud auth print-access-token)" \
   "https://europe-west4-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/europe-west4/reasoningEngines/AGENT_ID?force=true"
-# Step 9, if you did it
+```
+
+Step 9, if you did it:
+
+```bash
 curl -s -X DELETE -H "Authorization: Bearer $(gcloud auth print-access-token)" \
   "https://discoveryengine.googleapis.com/v1/projects/PROJECT_ID/locations/global/collections/default_collection/dataStores/helpdesk-docs"
-# Steps 1 to 3: Terraform users
-make down PROJECT=PROJECT_ID          # terraform destroy, then the tier below
-# Steps 1 to 3: by hand
+```
+
+Steps 1 to 3: Terraform users.
+
+```bash
+make down PROJECT=PROJECT_ID
+```
+
+- `make down PROJECT=PROJECT_ID`: terraform destroy, then the tier below
+
+Steps 1 to 3: by hand.
+
+```bash
 curl -s -X DELETE -H "Authorization: Bearer $(gcloud auth print-access-token)" \
-  "https://europe-west4-aiplatform.googleapis.com/v1/STAFF_CORPUS_NAME"     # and FINANCE_CORPUS_NAME
+  "https://europe-west4-aiplatform.googleapis.com/v1/STAFF_CORPUS_NAME"
 gcloud storage rm -r gs://PROJECT_ID-tsg-kb-staff gs://PROJECT_ID-tsg-kb-finance
 gcloud model-armor templates delete helpdesk-agent-guard --location=europe-west4
 gcloud iam service-accounts delete helpdesk-agent@PROJECT_ID.iam.gserviceaccount.com
-terraform/scripts/rag_tier.sh PROJECT_ID europe-west4 unprovisioned       # deletes the managed database: stops billing
-# your laptop
-gcloud config unset api_endpoint_overrides/modelarmor
-gcloud auth application-default revoke && gcloud auth application-default login   # stop impersonating
+terraform/scripts/rag_tier.sh PROJECT_ID europe-west4 unprovisioned
 ```
+
+- The first `curl`: run it again with `FINANCE_CORPUS_NAME` in place of `STAFF_CORPUS_NAME`
+- `terraform/scripts/rag_tier.sh PROJECT_ID europe-west4 unprovisioned`: deletes the managed database: stops billing
+
+Your laptop:
+
+```bash
+gcloud config unset api_endpoint_overrides/modelarmor
+gcloud auth application-default revoke && gcloud auth application-default login
+```
+
+- `gcloud auth application-default revoke && gcloud auth application-default login`: stop impersonating
 
 Google's RagManagedDb page says setting the tier to Unprovisioned "will immediately delete your dedicated Spanner
 instance" and its RAG data, halting "any associated billing for the Spanner mode", and "Data deleted using the

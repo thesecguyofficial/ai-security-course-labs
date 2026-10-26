@@ -61,10 +61,12 @@ model to behave does nothing here. A control in code that checks the action does
 
 ```bash
 cd labs/m32
-make export DEST=../../../my-advanced-capstone     # python3 export.py <folder>
+make export DEST=../../../my-advanced-capstone
 cd ../../../my-advanced-capstone
 git init -b main && git add . && git commit -m "TSG Ops Crew advanced capstone: starting point"
 ```
+
+- `make export DEST=../../../my-advanced-capstone`: same as `python3 export.py <folder>`
 
 Create an **empty public** repo on GitHub (no README, no licence), then follow the two `git` lines `export.py`
 printed. Open the repo's **Actions** tab: the `capstone-checks` workflow runs on every push. It is red now. Your
@@ -81,10 +83,13 @@ year (`LLM01:2026`, `ASI07:2026`) and, for at least five, a MITRE ATLAS techniqu
 ## Part 2 · Attack (1 to 2 hours)
 
 ```bash
-make attack                       # python3 tour.py: one attack for each known finding
+make attack
 make ask U=dana@initech.example Q="Any update on my ticket?"
-make run                          # the web page on http://127.0.0.1:8732 (Ctrl+C to stop)
+make run
 ```
+
+- `make attack`: same as `python3 tour.py`: one attack for each known finding
+- `make run`: the web page on http://127.0.0.1:8732 (Ctrl+C to stop)
 
 The six known findings, described by what you can see:
 
@@ -111,11 +116,16 @@ Change `crew/guards.py` (and `crew/config.py`). Each function's docstring says w
 The crew offers billing and analyst a broad tool set on purpose; deciding who may use what, for whom, is your job.
 
 ```bash
-make pin                          # record the crm MCP server's tools as they are now (crew/mcp_pins.json)
-make challenge                    # the findings as tests (S01-S11: G-1 to G-7 and HTML escaping): turn them green
-make attack                       # every line should now say "held"
-make test                         # F01-F10 and the lab's own test must stay green
+make pin
+make challenge
+make attack
+make test
 ```
+
+- `make pin`: record the crm MCP server's tools as they are now (crew/mcp_pins.json)
+- `make challenge`: the findings as tests (S01-S11: G-1 to G-7 and HTML escaping): turn them green
+- `make attack`: every line should now say "held"
+- `make test`: F01-F10 and the lab's own test must stay green
 
 Aim for controls that hold **even though every agent obeys the instruction**: a per-agent tool allow-list, a
 hand-off allow-list with a depth limit (a circuit breaker), per-turn tenant scope, MCP tool pinning that fails
@@ -125,9 +135,12 @@ happened (`FINDINGS.md`, "Variants I tried").
 ## Part 4 · Prove it in CI (1 hour)
 
 ```bash
-make eval                         # the gate: 18 core cases + yours; exit 1 if any fails
-make regress                      # take your controls away three ways: the gate must FAIL each time
+make eval
+make regress
 ```
+
+- `make eval`: the gate: 18 core cases + yours; exit 1 if any fails
+- `make regress`: take your controls away three ways: the gate must FAIL each time
 
 `evals/cases.json` is the core suite. Add your own cases to `evals/my_cases.json` (same format). Aim for at
 least five, with two new injection variants and two normal requests that a careless fix would break. Push. Keep one
@@ -141,11 +154,16 @@ and system-prompt extraction (S5). Write rules in `detections/rules.json` (the f
 `detections/detect.py`); the one example rule catches S1 but also fires on honest traffic.
 
 ```bash
-make simulate                     # write the attack day to detections/logs/attack-day.jsonl
-make detect                       # your rules on the attack day
-make detect-check                 # all five incidents on seeds 1, 2 and 3, max 2 false alerts a day
-make detect LOG=state/app-log.jsonl   # the same rules on your own Crew's log
+make simulate
+make detect
+make detect-check
+make detect LOG=state/app-log.jsonl
 ```
+
+- `make simulate`: write the attack day to detections/logs/attack-day.jsonl
+- `make detect`: your rules on the attack day
+- `make detect-check`: all five incidents on seeds 1, 2 and 3, max 2 false alerts a day
+- `make detect LOG=state/app-log.jsonl`: the same rules on your own Crew's log
 
 Each seed changes who the attackers are and what they use, so a rule that names a user, an IP or a request ID will
 miss the next day. The grader also runs your rules on three days you have never seen. Then pick **one** incident
@@ -160,8 +178,10 @@ signing, logging, detection and a budget. Each key stands for a real setting or 
 the lesson that teaches it.
 
 ```bash
-make cloud                        # python3 cloud/cloud_check.py: HIGH findings on the first draft
+make cloud
 ```
+
+Same as `python3 cloud/cloud_check.py`: HIGH findings on the first draft.
 
 Harden the file until there are no HIGH findings (check C1) and, better, no MEDIUM ones either. For every change,
 write one line in `FINDINGS.md` ("Cloud") naming the lesson. `capstone.json` names your stream (`aws` for now).
@@ -175,8 +195,10 @@ NIST AI RMF functions and ISO/IEC 42001, and the residual risk with an owner and
 ## Part 8 · Submit
 
 ```bash
-make check                        # python3 selfcheck.py: every objective check, PASS or FAIL
+make check
 ```
+
+Same as `python3 selfcheck.py`: every objective check, PASS or FAIL.
 
 Fill in `README.md` (your portfolio README), push, wait for a green Actions run, then follow
 [`SUBMISSION.md`](SUBMISSION.md).

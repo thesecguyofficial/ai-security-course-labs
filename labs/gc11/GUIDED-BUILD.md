@@ -106,8 +106,10 @@ gcloud compute firewall-rules create deny-all-egress --network=helpdesk-vpc --di
   --action=DENY --rules=all --destination-ranges=0.0.0.0/0 --priority=65000
 gcloud compute firewall-rules create allow-google-apis-egress --network=helpdesk-vpc --direction=EGRESS \
   --action=ALLOW --rules=tcp:443 --destination-ranges=10.100.0.2/32 --priority=1000
-gcloud compute forwarding-rules describe tsgapis --global      # Google's own check
+gcloud compute forwarding-rules describe tsgapis --global
 ```
+
+- `gcloud compute forwarding-rules describe tsgapis --global`: Google's own check
 
 Why `vpc-sc` and not `all-apis`: it only reaches APIs that support VPC Service Controls, which is what you'd put in a
 perimeter. One open question from lesson 11.2: no Google page we found says the `vpc-sc` bundle serves the regional
@@ -125,10 +127,10 @@ same region, and under the advanced options choose a customer-managed key and se
 [BigQuery CMEK](https://docs.cloud.google.com/bigquery/docs/customer-managed-encryption) page:
 
 ```bash
-gcloud kms keyrings create helpdesk-eu --location=europe-west4      # key rings can't be deleted: lesson 11.3
+gcloud kms keyrings create helpdesk-eu --location=europe-west4
 gcloud kms keys create helpdesk-data --keyring=helpdesk-eu --location=europe-west4 --purpose=encryption \
   --rotation-period=90d --next-rotation-time=2027-01-20T00:00:00Z
-bq show --encryption_service_account --project_id=PROJECT_ID          # creates and prints BigQuery's service account
+bq show --encryption_service_account --project_id=PROJECT_ID
 gcloud kms keys add-iam-policy-binding helpdesk-data --keyring=helpdesk-eu --location=europe-west4 \
   --member="serviceAccount:bq-PROJECT_NUMBER@bigquery-encryption.iam.gserviceaccount.com" \
   --role="roles/cloudkms.cryptoKeyEncrypterDecrypter"
@@ -136,6 +138,9 @@ KEY=projects/PROJECT_ID/locations/europe-west4/keyRings/helpdesk-eu/cryptoKeys/h
 bq mk --dataset --location=europe-west4 --default_kms_key="$KEY" PROJECT_ID:helpdesk_tickets
 bq mk --dataset --location=europe-west4 --default_kms_key="$KEY" PROJECT_ID:ai_logs
 ```
+
+- `gcloud kms keyrings create helpdesk-eu --location=europe-west4`: key rings can't be deleted: lesson 11.3
+- `bq show --encryption_service_account --project_id=PROJECT_ID`: creates and prints BigQuery's service account
 
 Dataset access, as in `terraform/identity.tf`, with BigQuery's `GRANT` statement (the `bq add-iam-policy-binding`
 command only covers tables and views):
@@ -416,7 +421,11 @@ sed -e 's#https://europe-west4-aiplatform.googleapis.com#https://aiplatform.eu.r
     smoke.sh > smoke-eu.sh
 gcloud compute instances add-metadata helpdesk-vm --zone=europe-west4-a --metadata-from-file=startup-script=smoke-eu.sh
 gcloud compute instances reset helpdesk-vm --zone=europe-west4-a
-# two minutes later
+```
+
+Two minutes later:
+
+```bash
 gcloud compute instances get-serial-port-output helpdesk-vm --zone=europe-west4-a | grep TSG-SMOKE | tail -4
 ```
 
@@ -506,8 +515,10 @@ for SA in chatbot-runtime ticket-summariser; do
   gcloud iam service-accounts delete "$SA@PROJECT_ID.iam.gserviceaccount.com" --quiet
 done
 gcloud iam roles delete helpdeskModelCaller --project=PROJECT_ID
-gcloud access-context-manager perimeters delete helpdesk --policy=ACCESS_POLICY_ID   # only if you did 1f
+gcloud access-context-manager perimeters delete helpdesk --policy=ACCESS_POLICY_ID
 ```
+
+- `gcloud access-context-manager perimeters delete helpdesk`: only if you did 1f
 
 If the key rotated while you worked, destroy every enabled version (`gcloud kms keys versions list --key=helpdesk-data
 --keyring=helpdesk-eu --location=europe-west4`). The key ring and key stay forever ("Key rings can't be deleted",

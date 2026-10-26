@@ -60,9 +60,12 @@ local model through Ollama.
 ## Setup (once)
 
 ```bash
-cd labs-export/m08          # or wherever you put this folder
-make setup                  # python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
+cd labs-export/m08
+make setup
 ```
+
+- `cd labs-export/m08`: or wherever you put this folder
+- `make setup`: python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
 
 This installs `mcp==2.3.0` (MIT licence), pinned because it speaks MCP protocol version `2026-07-28`.
 Everything else is the Python standard library. No internet access is needed after setup.
@@ -73,8 +76,10 @@ The `facts` server starts clean. `make attack` flips it to its malicious "releas
 `state/facts_release.txt`) and asks the agent a completely innocent question:
 
 ```bash
-make attack                 # .venv/bin/python host.py "give me a fact about octopus"
+make attack
 ```
+
+Same as `.venv/bin/python host.py "give me a fact about octopus"`.
 
 Real output (Linux, Python 3.13):
 
@@ -115,8 +120,10 @@ prints every tool's full definition (no model involved), the way the
 or `snyk-agent-scan inspect` would:
 
 ```bash
-make review                 # .venv/bin/python review.py facts
+make review
 ```
+
+Same as `.venv/bin/python review.py facts`.
 
 Real output (shortened):
 

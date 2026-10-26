@@ -38,9 +38,18 @@ that instruction and real damage are the token each agent holds and the checks e
 
 ### Step 1 · Watch the hardened chain once
 
+**Mac / Linux:**
+
 ```bash
 cd labs/m20
-make watch          # Windows: py watch.py hardened alice "Summarise T-4711 and email me the summary"
+make watch
+```
+
+**Windows (PowerShell):**
+
+```powershell
+cd labs/m20
+py watch.py hardened alice "Summarise T-4711 and email me the summary"
 ```
 
 ```output
@@ -63,8 +72,16 @@ The `scope` lists hide `openid`, `profile` and the `aud:...` scopes so you can s
 
 ### Step 2 · Attack the first draft
 
+**Mac / Linux:**
+
 ```bash
-make attack         # Windows: py evaluate.py first-draft
+make attack
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py evaluate.py first-draft
 ```
 
 ```output
@@ -106,8 +123,16 @@ reads the mail agent's debug log can reuse it anywhere (A3, A5, A6).
 
 ### Step 5 · Run the suite on the hardened setup
 
+**Mac / Linux:**
+
 ```bash
-make hardened       # Windows: py evaluate.py hardened
+make hardened
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py evaluate.py hardened
 ```
 
 ```output
@@ -152,8 +177,16 @@ clock ten minutes on, and the same token gets `401 expired`. Two different defen
 
 ### Step 8 · Hunt
 
+**Mac / Linux:**
+
 ```bash
-make hunt           # Windows: py hunt.py
+make hunt
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py hunt.py
 ```
 
 `data/incident/api-audit.jsonl` is one morning on the first draft, recorded from real lab runs
@@ -162,9 +195,30 @@ six services. Q3 is yours.
 
 ### Step 9 · Prove it, then the challenge
 
+**Mac / Linux:**
+
 ```bash
-make test           # ALL TESTS PASSED (15 run)     Windows: py run_tests.py
-make challenge      # 3 of 20 TESTS FAILED until you finish   Windows: py run_tests.py --challenge
+make test
+make challenge
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py run_tests.py
+py run_tests.py --challenge
+```
+
+You should see, from `make test`:
+
+```text
+ALL TESTS PASSED (15 run)
+```
+
+From `make challenge`:
+
+```text
+3 of 20 TESTS FAILED (20 run)
 ```
 
 **Challenge** (no solution included):
@@ -189,9 +243,19 @@ You need **either** Docker **or** Java 21. Keycloak runs on your laptop on `127.
 
 1. **Write the two Keycloak configurations, then start Keycloak with them.**
 
+   **Mac / Linux:**
+
    ```bash
-   make realms        # Windows: py keycloak/make_realms.py   (writes keycloak/import/tsg-first-draft.json and tsg-hardened.json)
+   make realms
    ```
+
+   **Windows (PowerShell):**
+
+   ```powershell
+   py keycloak/make_realms.py
+   ```
+
+   Either one writes `keycloak/import/tsg-first-draft.json` and `tsg-hardened.json`.
 
    Then start Keycloak.
 
@@ -219,10 +283,15 @@ You need **either** Docker **or** Java 21. Keycloak runs on your laptop on `127.
 2. **Run the same suite against it:**
 
    ```bash
-   make keycloak-attack       # 8 of 8 work on realm tsg-first-draft
-   make keycloak-hardened     # 1 of 8 (A8) on realm tsg-hardened
+   make keycloak-attack
+   make keycloak-hardened
    python3 watch.py hardened alice "Summarise T-4711 and email me the summary" --idp keycloak
    ```
+
+   What to look for:
+
+   - `make keycloak-attack`: 8 of 8 attacks work on realm tsg-first-draft <!-- style-ok: Keycloak term -->
+   - `make keycloak-hardened`: 1 of 8 (A8) works on realm tsg-hardened <!-- style-ok: Keycloak term -->
 
 3. **Compare the two servers.** Same attacks, same results, and the refusals carry Keycloak's own messages:
    `invalid_scope Scopes [tickets:delete] not present in the initial access token [...]` for A4. A7 is refused too,
@@ -246,10 +315,14 @@ apart. Change a setup, run `make realms`, restart Keycloak.
 ## Part C · AgentCore Identity (lesson 20.5)
 
 ```bash
-make aws-check            # first draft: 6 HIGH, 5 MEDIUM (11 findings)
-make aws-check-hardened   # 0 findings
-make aws-hunt             # who did what, for whom
+make aws-check
+make aws-check-hardened
+make aws-hunt
 ```
+
+- `make aws-check`: first draft: 6 HIGH, 5 MEDIUM (11 findings)
+- `make aws-check-hardened`: 0 findings
+- `make aws-hunt`: who did what, for whom
 
 `aws/setups/*.json` describe three agents on AgentCore Identity: their workload identities and tags, one IAM role
 each, the role trust and permissions policies, where the launcher gets the human from, and the CloudTrail selectors.

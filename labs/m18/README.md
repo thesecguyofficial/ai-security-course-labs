@@ -49,9 +49,18 @@ confirms the result, and you record who confirmed it.
 
 ## Step 1 · The AI inventory (18.3)
 
+**Mac / Linux:**
+
 ```bash
 cd labs/m18
-make inventory               # Windows: py govlab.py inventory
+make inventory
+```
+
+**Windows (PowerShell):**
+
+```powershell
+cd labs/m18
+py govlab.py inventory
 ```
 
 ```output
@@ -75,8 +84,16 @@ NIST AI RMF **GOVERN 1.6** ("mechanisms are in place to inventory AI systems").
 
 ## Step 2 · EU AI Act triage (18.2)
 
+**Mac / Linux:**
+
 ```bash
-make triage                  # Windows: py govlab.py triage
+make triage
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py govlab.py triage
 ```
 
 ```output
@@ -109,8 +126,16 @@ Three things to notice:
 
 Now change one fact. The shop wants to re-use the Helpdesk to screen job applicants:
 
+**Mac / Linux:**
+
 ```bash
-make what-if                 # Windows: py govlab.py triage --what-if hiring
+make what-if
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py govlab.py triage --what-if hiring
 ```
 
 ```output
@@ -132,8 +157,16 @@ the dates read before Article 50 applied.
 
 ## Step 3 · Audit the team's first draft (18.0, 18.1)
 
+**Mac / Linux:**
+
 ```bash
-make draft                   # Windows: py govlab.py check first-draft
+make draft
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py govlab.py check first-draft
 ```
 
 You get 22 errors. Here is what each kind means, and why an auditor (or an incident) would find it:
@@ -158,8 +191,16 @@ You get 22 errors. Here is what each kind means, and why an auditor (or an incid
 
 Then look at what the draft can actually prove:
 
+**Mac / Linux:**
+
 ```bash
-make crosswalk               # Windows: py govlab.py crosswalk first-draft
+make crosswalk
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py govlab.py crosswalk first-draft
 ```
 
 ```output
@@ -175,8 +216,17 @@ have happened, but the draft indexed no record of it.
 
 Finally, try to pack it:
 
+**Mac / Linux:**
+
 ```bash
-make pack-draft              # Windows: py govlab.py pack first-draft   then   py govlab.py pack first-draft --draft
+make pack-draft
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py govlab.py pack first-draft
+py govlab.py pack first-draft --draft
 ```
 
 A real pack is refused while errors are open. `--draft` builds one anyway, named `...-DRAFT`, with the open findings
@@ -184,8 +234,16 @@ in `CHECK.txt`. A draft is fine to share for review; it is not something anyone 
 
 ## Step 4 · Start your own assessment
 
+**Mac / Linux:**
+
 ```bash
-make start                   # Windows: py govlab.py start
+make start
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py govlab.py start
 ```
 
 This copies the templates into `my-assessment/` (git ignores that folder, so your work never conflicts with
@@ -248,8 +306,17 @@ Three rows need a decision, not just typing:
 
 Check as you go:
 
+**Mac / Linux:**
+
 ```bash
-make mine                    # Windows: py govlab.py evidence my-assessment --fill   then   py govlab.py check my-assessment
+make mine
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py govlab.py evidence my-assessment --fill
+py govlab.py check my-assessment
 ```
 
 ## Step 6 · Fix the product: tell people it's an AI (18.2)
@@ -279,9 +346,19 @@ file (path from `labs/m18`, for example `evidence/2026-10-20-m07-agent-controls-
 in the file name as `collected`, and an owner. One file can prove several controls (the M7 test output covers C01,
 C02, C04, C05 and C21). Read each file before you use it: some are partial on purpose.
 
+**Mac / Linux:**
+
 ```bash
 make mine
-make mine-crosswalk          # Windows: py govlab.py crosswalk my-assessment
+make mine-crosswalk
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py govlab.py evidence my-assessment --fill
+py govlab.py check my-assessment
+py govlab.py crosswalk my-assessment
 ```
 
 How to read the crosswalk:
@@ -302,8 +379,17 @@ Fill in `my-assessment/assessment.json`: `assessor`, `approved_by` (who signs; i
 "Chief Operating Officer"), `next_review` (within 12 months), and the `eu_ai_act` decision from Step 2 with
 `decided_by`. Then:
 
+**Mac / Linux:**
+
 ```bash
-make mine-pack               # Windows: py govlab.py pack my-assessment   then   py govlab.py verify-pack out/evidence-pack-tsg-helpdesk-2026-10-24
+make mine-pack
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py govlab.py pack my-assessment
+py govlab.py verify-pack out/evidence-pack-tsg-helpdesk-2026-10-24
 ```
 
 ```output
@@ -318,8 +404,16 @@ names the changed file. Rebuild the pack to get back to a clean one.
 
 ## Step 9 · Prove it
 
+**Mac / Linux:**
+
 ```bash
-make test                    # Windows: py run_tests.py
+make test
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py run_tests.py
 ```
 
 ```output
@@ -332,8 +426,16 @@ ALL TESTS PASSED (15 run)
 
 ## Challenge
 
+**Mac / Linux:**
+
 ```bash
-make challenge               # Windows: py run_tests.py --challenge
+make challenge
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py run_tests.py --challenge
 ```
 
 Five more tests run against `my-assessment/`: every file is there, `check` is clean, all 13 required sources are

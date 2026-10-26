@@ -69,9 +69,12 @@ contacts Google or any other system. Test 19 fails if a real-looking IP, identit
 ## Step 1 · Check: find the mistakes
 
 ```bash
-cd labs-export/gc10         # or wherever you put this folder
-make check                  # same as: python3 policy_checker.py
+cd labs-export/gc10
+make check
 ```
+
+- `cd labs-export/gc10`: or wherever you put this folder
+- `make check`: same as `python3 policy_checker.py`
 
 Real output (Linux, Python 3.13):
 
@@ -156,8 +159,10 @@ Lint your own exports the same way: `python3 policy_checker.py --keys my-keys.js
 ## Step 2 · Break it: what can the attackers do today?
 
 ```bash
-make attack                 # same as: python3 attack.py --mode vulnerable
+make attack
 ```
+
+Same as `python3 attack.py --mode vulnerable`.
 
 Real output:
 
@@ -271,8 +276,10 @@ and `legacy-etl` still holds its organization-wide role).
 ## Step 4 · Fix it: replay with the fixes
 
 ```bash
-make attack-safe            # same as: python3 attack.py --mode safe
+make attack-safe
 ```
+
+Same as `python3 attack.py --mode safe`.
 
 Real output:
 
@@ -338,8 +345,10 @@ On Google Cloud you'd put a new model allow-list in `dryRunSpec` first: violatio
 denied (lesson 10.3). Do the same thing locally with the twin's file, a one-model allow-list at the **organization**:
 
 ```bash
-make twin-preview           # same as: python3 attack.py --preview-org-policy gcp-twin/allowed-models-dryrun.json
+make twin-preview
 ```
+
+Same as `python3 attack.py --preview-org-policy gcp-twin/allowed-models-dryrun.json`.
 
 Real output (last lines):
 
@@ -375,8 +384,10 @@ the preview.
 First, the rule many teams start with: "GenerateContent on a model we didn't approve".
 
 ```bash
-make hunt-naive             # same as: python3 hunt.py --naive
+make hunt-naive
 ```
+
+Same as `python3 hunt.py --naive`.
 
 Real output:
 
@@ -395,8 +406,10 @@ It sees 65 of 99 attacker entries. It misses 30 `StreamGenerateContent` calls, t
 attacker created. Now every rule:
 
 ```bash
-make hunt                   # same as: python3 hunt.py
+make hunt
 ```
+
+Same as `python3 hunt.py`.
 
 Real output:
 
@@ -467,8 +480,10 @@ file at all: Data Access logs are off there (finding GC10-15). No detection can 
 ## Step 7 · Your turn: `make challenge`
 
 ```bash
-make challenge              # same as: python3 run_tests.py --challenge
+make challenge
 ```
+
+Same as `python3 run_tests.py --challenge`.
 
 Real output before your fix (last lines):
 
@@ -554,11 +569,24 @@ Cloud customers", so you may not see the option.
 
 ```bash
 gcloud projects get-iam-policy PROJECT_ID --format=json > policy.json
-# edit policy.json: keep "bindings" and "etag" exactly as they are, and add:
-#   "auditConfigs": [{"service": "aiplatform.googleapis.com", "auditLogConfigs": [{"logType": "DATA_READ"}]}]
-gcloud projects set-iam-policy PROJECT_ID policy.json
-python3 policy_checker.py --iam policy.json      # GC10-15 should not appear
 ```
+
+Edit policy.json: keep "bindings" and "etag" exactly as they are, and add:
+
+```json
+"auditConfigs": [{"service": "aiplatform.googleapis.com", "auditLogConfigs": [{"logType": "DATA_READ"}]}]
+```
+
+Then:
+
+```bash
+gcloud projects set-iam-policy PROJECT_ID policy.json
+python3 policy_checker.py --iam policy.json
+```
+
+What each command does, and what to look for:
+
+- `python3 policy_checker.py --iam policy.json`: GC10-15 should not appear
 
 **8d · An API key that only works from one IP.** `192.0.2.10` is a documentation address, so the key will refuse
 *your* machine:
@@ -567,9 +595,12 @@ python3 policy_checker.py --iam policy.json      # GC10-15 should not appear
 gcloud services api-keys create --project=PROJECT_ID --display-name=gc10-twin \
   --api-target=service=aiplatform.googleapis.com --allowed-ips=192.0.2.10
 gcloud services api-keys list --project=PROJECT_ID --format=json > my-keys.json
-python3 policy_checker.py --keys my-keys.json    # no GC10-05 or GC10-07: both restrictions are set
-gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID   # KEY_ID: the last part of "name" in my-keys.json
+python3 policy_checker.py --keys my-keys.json
+gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID
 ```
+
+- `python3 policy_checker.py --keys my-keys.json`: no GC10-05 or GC10-07: both restrictions are set
+- `gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID`: KEY_ID: the last part of "name" in my-keys.json
 
 Call the model with it, sending the key in the `x-goog-api-key` header as Google recommends
 ([use API keys](https://docs.cloud.google.com/docs/authentication/api-keys-use)):
@@ -602,10 +633,12 @@ organization can't set these policies. If you have an organization, edit
 `gcp-twin/allowed-models-dryrun.json` (replace `ORGANIZATION_ID`, list the models you use), then:
 
 ```bash
-python3 policy_checker.py --orgpolicy gcp-twin/allowed-models-dryrun.json   # lint before you set it
+python3 policy_checker.py --orgpolicy gcp-twin/allowed-models-dryrun.json
 gcloud org-policies set-policy gcp-twin/allowed-models-dryrun.json --update-mask=policy.dry_run_spec
 gcloud org-policies describe vertexai.allowedModels --effective --project=PROJECT_ID
 ```
+
+- `python3 policy_checker.py --orgpolicy gcp-twin/allowed-models-dryrun.json`: lint before you set it
 
 In dry run, violations are audit-logged and nothing is denied. **No Organization?** Use the local dry run from
 Step 5 (`make twin-preview`) and the lint command above; that's the fallback, and it's all this step needs.
@@ -614,11 +647,14 @@ Step 5 (`make twin-preview`) and the lint command above; that's the fallback, an
 
 ```bash
 gcloud services api-keys delete KEY_ID --project=PROJECT_ID
-gcloud billing budgets list --billing-account=BILLING_ACCOUNT_ID      # note the budget IDs you created
+gcloud billing budgets list --billing-account=BILLING_ACCOUNT_ID
 gcloud billing budgets delete BUDGET_ID --billing-account=BILLING_ACCOUNT_ID
-gcloud org-policies delete vertexai.allowedModels --organization=ORGANIZATION_ID   # only if you did 8f
+gcloud org-policies delete vertexai.allowedModels --organization=ORGANIZATION_ID
 gcloud projects delete PROJECT_ID
 ```
+
+- `gcloud billing budgets list --billing-account=BILLING_ACCOUNT_ID`: note the budget IDs you created
+- `gcloud org-policies delete vertexai.allowedModels --organization=ORGANIZATION_ID`: only if you did 8f
 
 Budgets live on the billing account, so delete them yourself. A deleted project is "fully deleted after 30 days"
 ([projects](https://docs.cloud.google.com/resource-manager/docs/creating-managing-projects)).

@@ -54,8 +54,10 @@ Successfully installed PyYAML-6.0.3
 ## Step 2 · Scan the first draft (26.0, 26.1, 26.3)
 
 ```bash
-make scan            # python3 scan.py stacks/first-draft
+make scan
 ```
+
+Same as `python3 scan.py stacks/first-draft`.
 
 The first lines and the last line of the real output (33 findings in between, worst first):
 
@@ -91,8 +93,10 @@ gate a pipeline.
 ## Step 3 · Probe the practice server (26.0, 26.1)
 
 ```bash
-make probe           # python3 probe.py first-draft, then python3 probe.py key-only
+make probe
 ```
+
+Same as `python3 probe.py first-draft`, then `python3 probe.py key-only`.
 
 ```output
 Probe of the practice server, profile first-draft (127.0.0.1 only)
@@ -135,8 +139,10 @@ do nothing (`/api/pull` downloads nothing): they only return the status codes a 
 ## Step 4 · Test cache isolation (26.2)
 
 ```bash
-make cache           # python3 cachetest.py first-draft
+make cache
 ```
+
+Same as `python3 cachetest.py first-draft`.
 
 ```output
 Prefix-cache isolation test, stack first-draft
@@ -194,8 +200,10 @@ cache: isolation didn't cost the performance you bought the cache for.
 ## Step 6 · Hunt (26.0, 26.1)
 
 ```bash
-make hunt            # python3 hunt.py
+make hunt
 ```
+
+Same as `python3 hunt.py`.
 
 ```output
 Hunt over 22 gateway log lines (gateway-log.jsonl)
@@ -218,8 +226,10 @@ Q3  management calls not from the deployment pipeline:
 ## Step 7 · Prove it
 
 ```bash
-make test            # python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 ```output
 [PASS] 01 scan: the first draft trips every lesson's rules (exposure, auth, code, versions, cache, nodes, models)
@@ -231,8 +241,10 @@ ALL TESTS PASSED (19 run)
 ## Challenge (no solution included)
 
 ```bash
-make challenge       # python3 run_tests.py --challenge
+make challenge
 ```
+
+Same as `python3 run_tests.py --challenge`.
 
 ```output
 [FAIL] C1 (26.1) scan: RAY-01 flags the first draft's Ray head and stays quiet on the hardened one

@@ -24,7 +24,11 @@ template ID = `helpdesk-guard`.
    ```bash
    gcloud config set project PROJECT_ID
    gcloud services enable modelarmor.googleapis.com aiplatform.googleapis.com
-   # Model Armor's API is regional: point gcloud at your region's endpoint
+   ```
+
+   Model Armor's API is regional: point gcloud at your region's endpoint.
+
+   ```bash
    gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.REGION.rep.googleapis.com/"
    ```
 
@@ -73,8 +77,10 @@ gcloud model-armor templates create helpdesk-guard --location=REGION \
   --basic-config-filter-enforcement=enabled \
   --template-metadata-log-sanitize-operations
 
-gcloud model-armor templates describe helpdesk-guard --location=REGION     # check what you created
+gcloud model-armor templates describe helpdesk-guard --location=REGION
 ```
+
+- `gcloud model-armor templates describe helpdesk-guard --location=REGION`: check what you created
 
 ### Path C: Terraform
 
@@ -344,7 +350,11 @@ to a restricted log bucket (GC12-15).
 ```bash
 gcloud model-armor templates delete helpdesk-guard --location=REGION
 gcloud config unset api_endpoint_overrides/modelarmor
-# only if you did README Step 8 (Terraform) as well:
+```
+
+Only if you did README Step 8 (Terraform) as well:
+
+```bash
 make down PROJECT=PROJECT_ID
 ```
 

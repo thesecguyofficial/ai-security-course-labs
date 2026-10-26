@@ -61,14 +61,18 @@ You will:
 
 ```bash
 cd labs/m28
-make setup                  # python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
+make setup
 ```
+
+- `make setup`: python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
 
 ## Step 1 · Break it
 
 ```bash
-make leak                   # python3 pipeline.py first-draft
+make leak
 ```
+
+Same as `python3 pipeline.py first-draft`.
 
 Real output (Linux, Python 3.13, cryptography 50.0.2):
 
@@ -123,8 +127,10 @@ The lab code stays at 30 days.
 ## Step 3 · Fix it
 
 ```bash
-make hardened               # python3 pipeline.py hardened
+make hardened
 ```
+
+Same as `python3 pipeline.py hardened`.
 
 ```output
 setup hardened | 12 model calls logged | redactor: 12 records, 1 large bodies redacted, 0 copied as-is, 33 values replaced, 0 vectors removed
@@ -149,8 +155,10 @@ second line, for the day someone ticks Embedding again (`test_11` proves it).
 **Two locks.** Now loosen the raw bucket's policy by mistake and see what the key does:
 
 ```bash
-make two-locks              # python3 demo.py two-locks
+make two-locks
 ```
+
+Same as `python3 demo.py two-locks`.
 
 ```output
 raw object: 0a8dc0ca-lab0-4m28-c08-0000000000.json.gz
@@ -177,8 +185,10 @@ read the value your real trail records.)
 **Macie, before and after:**
 
 ```bash
-make macie                  # python3 macie.py first-draft, then hardened
+make macie
 ```
+
+Same as `python3 macie.py first-draft`, then `python3 macie.py hardened`.
 
 ```output
 tsg-invocation-logs-raw: 1 EXCLUDED_BY_SCOPE, 9 SKIPPED (INVALID_ENCRYPTION) | findings: 0
@@ -204,8 +214,10 @@ number that matters is the **0 on the redacted bucket**, from a job that read al
 **Keyed tokens.** Labels like `[EMAIL_ADDRESS]` lose one useful fact: whether two records came from the same person.
 
 ```bash
-make tokens                 # python3 demo.py tokens
+make tokens
 ```
+
+Same as `python3 demo.py tokens`.
 
 ```output
 2027-04-01T09:00:00Z  tsg-helpdesk-app  metadata  [EMAIL_ADDRESS:744c26c6]
@@ -227,8 +239,10 @@ identifier in the guided build, checks the redacted bucket instead of trusting t
 ## Step 4 · Spot it
 
 ```bash
-make hunt                   # python3 hunt.py
+make hunt
 ```
+
+Same as `python3 hunt.py`.
 
 ```output
 32 KMS events
@@ -256,7 +270,13 @@ redacted copy. Q3 turns that into a check you can schedule.
 ## Step 5 · Prove it
 
 ```bash
-make test                   # 20 tests
+make test
+```
+
+You should see:
+
+```text
+ALL TESTS PASSED (20 run)
 ```
 
 ```output

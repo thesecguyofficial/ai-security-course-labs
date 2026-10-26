@@ -51,8 +51,10 @@ hardened version holds.
 
 ```bash
 cd labs/gc15
-make check                  # same as: python3 checker.py first-draft
+make check
 ```
+
+- `make check`: same as `python3 checker.py first-draft`
 
 You should see:
 
@@ -101,8 +103,10 @@ Every rule names its lesson. Read the HIGH ones first: they're the ones an attac
 ## Step 2 · Attack the first draft
 
 ```bash
-make attack                 # same as: python3 evaluate.py first-draft
+make attack
 ```
+
+Same as `python3 evaluate.py first-draft`.
 
 ```output
   A1   WORKED   Booby-trapped model file: the weights are a pickle, and loading it runs code in the container
@@ -187,8 +191,10 @@ ALLOW: aiplatform.user on the project example-summariser-prod
 ## Step 3 · Look at the model files
 
 ```bash
-make scan                   # builds artifacts/, then scans version 1 (first draft) and version 3 (hardened)
+make scan
 ```
+
+- `make scan`: builds artifacts/, then scans version 1 (first draft) and version 3 (hardened)
 
 ```output
 [OK  ] config.json                  data         
@@ -225,9 +231,12 @@ sha256 fits in one label value and the file name becomes the key.
 ## Step 4 · The hardened setup
 
 ```bash
-make check-hardened         # same as: python3 checker.py hardened
-make hardened               # same as: python3 evaluate.py hardened
+make check-hardened
+make hardened
 ```
+
+- `make check-hardened`: same as `python3 checker.py hardened`
+- `make hardened`: same as `python3 evaluate.py hardened`
 
 ```output
 [MEDIUM] GC15-17 (15.2) org policy doesn't enforce ainotebooks.restrictPublicIp, ainotebooks.disableRootAccess, ainotebooks.disableTerminal, ainotebooks.disableFileDownloads: today's instances are fine, but the next one anybody creates gets the defaults (challenge 1)
@@ -322,8 +331,10 @@ dataset only the platform admin reads; A9 and A11 single-user instances that run
 ## Step 5 · Hunt
 
 ```bash
-make hunt                   # same as: python3 hunt.py
+make hunt
 ```
+
+Same as `python3 hunt.py`.
 
 ```output
 Q1. Uploads and deploys not made by the pipeline
@@ -375,8 +386,10 @@ Put the date back to `2027-01-12` before you go on. The lesson: perimeter first,
 ## Step 7 · Prove it
 
 ```bash
-make test                   # same as: python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 ```output
 [PASS] first draft: 35 findings, 15 HIGH (perimeter, identities, keys, notebooks, public endpoint, pickle, prompt logs)
@@ -410,8 +423,10 @@ ALL TESTS PASSED (20 run)
 ## Step 8 · Challenge (no solution included)
 
 ```bash
-make challenge              # same as: python3 run_tests.py --challenge
+make challenge
 ```
+
+Same as `python3 run_tests.py --challenge`.
 
 Before you start, 6 of 27 fail (test 22 is a guard that already passes):
 

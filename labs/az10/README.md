@@ -78,9 +78,12 @@ logs, a budget) and proves each fix with a request that should now fail. About 7
 ## Step 1 · Check: find the risky settings
 
 ```bash
-cd labs-export/az10          # or wherever you put this folder
-make check                   # same as: python3 checker.py
+cd labs-export/az10
+make check
 ```
+
+- `cd labs-export/az10`: or wherever you put this folder
+- `make check`: same as `python3 checker.py`
 
 Real output (Linux, Python 3.13):
 
@@ -184,8 +187,10 @@ How to read it, highest first:
 ## Step 2 · Scan: what a thief sees
 
 ```bash
-make scan                    # same as: python3 secret_scan.py contoso/repo-snapshot
+make scan
 ```
+
+Same as `python3 secret_scan.py contoso/repo-snapshot`.
 
 ```text
 --- secret scan · contoso/repo-snapshot ---
@@ -206,8 +211,10 @@ CI, a found secret should fail the build.
 ## Step 3 · Break it: what can a thief do today?
 
 ```bash
-make attack                  # same as: python3 attack.py --mode vulnerable
+make attack
 ```
+
+Same as `python3 attack.py --mode vulnerable`.
 
 Real output:
 
@@ -277,8 +284,10 @@ Open each file in `fixes/` before you run them:
 - `budgets.json`: a budget on each AI resource group with a 50 % actual and an 80 % forecast alert.
 
 ```bash
-make check-fixed             # same as: python3 checker.py --with-fixes
+make check-fixed
 ```
+
+Same as `python3 checker.py --with-fixes`.
 
 ```text
 --- AZ10 checker · Contoso with fixes/ ---
@@ -306,8 +315,10 @@ admin's Owner and the data scientists' Foundry User can both list them.
 ## Step 5 · Fix it: replay the same requests
 
 ```bash
-make attack-safe             # same as: python3 attack.py --mode safe
+make attack-safe
 ```
+
+Same as `python3 attack.py --mode safe`.
 
 ```text
 --- AZ10 lab · SAFE · fixes/ ---
@@ -362,8 +373,10 @@ to several hours before the gateway refuses an old key.
 ## Step 6 · Hunt: find both intrusions in the logs
 
 ```bash
-make hunt                    # same as: python3 hunt.py
+make hunt
 ```
+
+Same as `python3 hunt.py`.
 
 Real output:
 
@@ -432,8 +445,10 @@ burn about 300,000 tokens an hour on each resource (H04, H05): resold access.
 Now run what most teams actually have:
 
 ```bash
-make hunt-naive              # same as: python3 hunt.py --naive
+make hunt-naive
 ```
+
+Same as `python3 hunt.py --naive`.
 
 ```text
 --- AZ10 hunt · 13 activity events, 664 request rows, 218 metric rows · baseline before 2026-10-14T00:00:00Z ---
@@ -465,8 +480,10 @@ AzureDiagnostics
 `make test` runs the 17 lab tests on their own and must end with `ALL TESTS PASSED (17 run)`. The challenge adds four:
 
 ```bash
-make challenge               # same as: python3 run_tests.py --challenge
+make challenge
 ```
+
+Same as `python3 run_tests.py --challenge`.
 
 ```text
 [PASS] vulnerable: keys copied from the public repo list models and chat on BOTH Foundry resources, no role checked
@@ -536,19 +553,40 @@ limit stops services when the credit runs out.
 
 ```bash
 cd azure-twin
-az login                                  # your own subscription
-az bicep install                          # once
-export AZ10_NAME=az10-twin-<initials><4 digits>    # globally unique
-export AZ10_EMAIL=you@example.com         # optional: creates the $5 budget
-./twin.sh up            # resource group, Foundry resource (keys ON), project, budget, two policy assignments
-./twin.sh key-test      # expect: GET /openai/models with the key -> HTTP 200
-# wait at least 15 minutes for the policy assignments
-./twin.sh policy-test   # expect: 1) refused by policy (403 Forbidden); 2) the approved model is created, then deleted
-./twin.sh lock          # redeploys with disableLocalAuth=true; prints true
-./twin.sh wait-401      # polls with the OLD key: expect HTTP 200 for a while, then 401 (minutes, up to hours)
-./twin.sh activity      # the control-plane trail: listKeys, deployments/write, the policy events
-./twin.sh down          # removes the policy assignments, budget and resource group
+az login
+az bicep install
+export AZ10_NAME=az10-twin-<initials><4 digits>
+export AZ10_EMAIL=you@example.com
+./twin.sh up
+./twin.sh key-test
 ```
+
+What each command does, and what to look for:
+
+- `az login`: your own subscription
+- `az bicep install`: once
+- `AZ10_NAME`: globally unique
+- `AZ10_EMAIL`: optional: creates the $5 budget
+- `./twin.sh up`: resource group, Foundry resource (keys ON), project, budget, two policy assignments
+- `./twin.sh key-test`: expect: GET /openai/models with the key -> HTTP 200
+
+Wait at least 15 minutes for the policy assignments:
+
+```bash
+./twin.sh policy-test
+./twin.sh lock
+./twin.sh wait-401
+./twin.sh activity
+./twin.sh down
+```
+
+What each command does, and what to look for:
+
+- `./twin.sh policy-test`: expect: 1) refused by policy (403 Forbidden); 2) the approved model is created, then deleted
+- `./twin.sh lock`: redeploys with disableLocalAuth=true; prints true
+- `./twin.sh wait-401`: polls with the OLD key: expect HTTP 200 for a while, then 401 (minutes, up to hours)
+- `./twin.sh activity`: the control-plane trail: listKeys, deployments/write, the policy events
+- `./twin.sh down`: removes the policy assignments, budget and resource group
 
 Notes:
 

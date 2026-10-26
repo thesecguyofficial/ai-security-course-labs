@@ -312,7 +312,9 @@ setting to fail open, shows a tampered package getting registered and approved, 
 ## Clean up
 
 ```bash
-make clean        # models/, release/, state/; keeps .venv/ and keys/
+make clean
 ```
+
+- `make clean`: models/, release/, state/; keeps .venv/ and keys/
 
 Delete `keys/` too when you're done with the lab. They are lab keys, but a private key is a habit: never commit one.

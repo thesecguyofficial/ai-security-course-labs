@@ -43,8 +43,10 @@ Portal labels move between releases. If a label differs, the CLI below is the re
 ### A.2 CLI
 
 ```bash
-make cloud-up               # = bash cloud/cloud.sh up rg-tsg-az15-lab eastus tsg-az15-lab
+make cloud-up
 ```
+
+Same as `bash cloud/cloud.sh up rg-tsg-az15-lab eastus tsg-az15-lab`.
 
 What it runs, in order (`cloud/cloud.sh`, section `up`):
 
@@ -201,9 +203,14 @@ az ml online-endpoint update -g rg-tsg-az15-lab -w tsg-az15-lab -n tsg-az15-summ
 ## Teardown (today)
 
 ```bash
-make cloud-down             # endpoint, workspace (with its storage, key vault and other dependents), resource group, custom role
-make cloud-check            # should list nothing
+make cloud-down
+make cloud-check
 ```
+
+What each command does, and what to look for:
+
+- `make cloud-down`: endpoint, workspace (with its storage, key vault and other dependents), resource group, custom role
+- `make cloud-check`: should list nothing
 
 If `az ml workspace delete` complains about a flag, run `az ml workspace delete -h` and use the flags your CLI version
 lists; then delete the resource group in the portal (**Resource groups** > `rg-tsg-az15-lab` > **Delete resource

@@ -41,9 +41,12 @@ opens those links anyway: nothing is sent anywhere. The "canary"
 ## Step 1 · Get ready
 
 ```bash
-cd labs-export/m03        # or wherever you put this folder
-python3 run_tests.py      # should end with ALL TESTS PASSED (it also proves your setup works)
+cd labs-export/m03
+python3 run_tests.py
 ```
+
+- `cd labs-export/m03`: or wherever you put this folder
+- `python3 run_tests.py`: should end with ALL TESTS PASSED (it also proves your setup works)
 
 On Windows, replace each `make X` below with the command it runs (open the `Makefile`; the commands are one line
 each), using `py` instead of `python3`. For example, `make attack` becomes
@@ -290,9 +293,12 @@ emails. `run_eval.py` starts the app, runs promptfoo with telemetry and update c
 The first run downloads promptfoo from npm (about a minute).
 
 ```bash
-make eval        # all fixes on
-make eval-weak   # no fixes: the suite must catch the attack
+make eval
+make eval-weak
 ```
+
+- `make eval`: all fixes on
+- `make eval-weak`: no fixes: the suite must catch the attack
 
 Real output (end of each run):
 
