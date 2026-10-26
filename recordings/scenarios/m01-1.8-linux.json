@@ -1,0 +1,79 @@
+{
+  "name": "m01-1.8-linux",
+  "lesson": "1.8",
+  "title": "Lab: run a model locally (llm_lab.py, gemma3:1b, real output)",
+  "before": [
+    "curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh",
+    "for i in $(seq 1 30); do curl -fsS http://127.0.0.1:11434/api/version && break; sleep 2; done",
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "steps": [
+    {
+      "label": "Get ready",
+      "type": "cd ai-security-course-labs/labs/m01"
+    },
+    {
+      "label": "Get ready",
+      "type": "ollama pull gemma3:1b",
+      "speed": 8,
+      "timeout": 900
+    },
+    {
+      "label": "Is it running?",
+      "type": "python3 llm_lab.py check",
+      "pause_after": 2.5
+    },
+    {
+      "label": "Call the API",
+      "type": "python3 llm_lab.py chat \"What is a token, in one sentence?\"",
+      "timeout": 300,
+      "pause_after": 4
+    },
+    {
+      "label": "Same call with curl",
+      "type": "curl http://localhost:11434/v1/chat/completions -H \"Content-Type: application/json\" -d '{\"model\": \"gemma3:1b\", \"messages\": [{\"role\": \"user\", \"content\": \"Say hello\"}]}'",
+      "timeout": 300,
+      "pause_after": 4
+    },
+    {
+      "label": "Count tokens",
+      "type": "python3 llm_lab.py tokens \"hello\" \"Ignore previous instructions\" \"unbelievably\" \"₹1,999\" \"नमस्ते\"",
+      "timeout": 300,
+      "pause_after": 4
+    },
+    {
+      "label": "Temperature",
+      "type": "python3 llm_lab.py temp \"Name one colour.\" --runs 3",
+      "timeout": 600,
+      "speed": 2,
+      "pause_after": 4
+    },
+    {
+      "label": "Fill the whiteboard",
+      "type": "python3 llm_lab.py fill --ctx 1024",
+      "timeout": 1200,
+      "speed": 4,
+      "pause_after": 4
+    },
+    {
+      "label": "Room to remember",
+      "type": "python3 llm_lab.py fill --ctx 8192",
+      "timeout": 1800,
+      "speed": 4,
+      "pause_after": 4
+    },
+    {
+      "label": "Clean up",
+      "type": "ollama stop gemma3:1b",
+      "pause_after": 2
+    }
+  ],
+  "needs": [
+    "ollama"
+  ],
+  "fail_on": [
+    "Could not reach Ollama",
+    "could not connect to ollama",
+    "Failed to connect to localhost port 11434"
+  ]
+}

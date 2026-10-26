@@ -107,6 +107,10 @@ def main():
     text = ANSI.sub("", (out / "raw.log").read_text(errors="replace"))
     (out / "transcript.txt").write_text(text)
     (out / "raw.log").unlink()
+    bad = [p for p in sc.get("fail_on", []) if re.search(p, text)]
+    if bad:
+        # A broken take is never published: the run fails and the lab-recordings branch keeps the last good one.
+        raise SystemExit(f"take rejected: output contains {bad}")
     print(f"recorded {len(log['steps'])} steps in {log['end']:.0f} s -> {out}")
 
 
