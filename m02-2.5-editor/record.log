@@ -1,0 +1,23 @@
+marks:
+     5.32s  Open the lab folder
+     8.53s  The template
+    11.62s  Copy the template
+    28.35s  Header
+    35.15s  Header done
+    35.15s  Assumptions
+    45.40s  Assumptions done
+    45.40s  Elements
+    66.70s  Elements done
+    66.70s  Flows
+    92.81s  Flows done
+    92.81s  Boundaries
+   110.61s  Boundaries done
+   110.61s  Scopes
+   120.45s  Scopes done
+   120.45s  Trifecta
+   132.51s  Trifecta done
+   132.51s  Example row
+   148.76s  Example row done
+   151.26s  Saved
+   153.37s  End
+take accepted: the saved file matches, character for character

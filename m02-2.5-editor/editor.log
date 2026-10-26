@@ -1,0 +1,30 @@
+[2026-10-26T19:30:00.379Z] info  Wrote default config file to /home/thesecguy/.config/code-server/config.yaml
+[2026-10-26T19:30:00.521Z] info  code-server 4.143.1 22ddf60dbc52f164cff13620ab515086dd08c90a
+[2026-10-26T19:30:00.521Z] info  Using user-data-dir /home/thesecguy/.local/share/code-server
+[2026-10-26T19:30:00.531Z] info  Using config file /home/thesecguy/.config/code-server/config.yaml
+[2026-10-26T19:30:00.531Z] info  HTTP server listening on http://127.0.0.1:8080/
+[2026-10-26T19:30:00.531Z] info    - Authentication is disabled
+[2026-10-26T19:30:00.531Z] info    - Not serving HTTPS
+[2026-10-26T19:30:00.532Z] info  Session server listening on /home/thesecguy/.local/share/code-server/code-server-ipc.sock
+[19:30:34] 
+
+
+
+
+[19:30:34] StorageMainService: creating application shared storage
+[reconnection-grace-time] No CLI argument provided, using default: 10800000ms (10800s)
+[19:30:34] [AgentHostChannel] Registered lazy IPC channel 'agentHostProxy' (upstream: /tmp/vscode-ipc-37052b28-a4e5-4bcd-9c9b-0cc7d680dcd8.sock)
+[19:30:34] Extension host agent started.
+[19:30:34] [shared storage] Creating shared storage database at '/home/thesecguy/.vscode-oss-shared/sharedStorage/state.vscdb' (wasCreated: true)
+[19:30:34] [shared storage] Initializing fallback application storage (path: /home/thesecguy/.local/share/code-server/User/globalStorage/state.vscdb)
+[19:30:34] Started initializing default profile extensions in extensions installation folder. file:///home/thesecguy/.local/share/code-server/extensions
+[19:30:34] Completed initializing default profile extensions in extensions installation folder. file:///home/thesecguy/.local/share/code-server/extensions
+[19:30:34] [shared storage] Fallback application storage initialized with 3 items
+File not found: /home/thesecguy/.local/lib/code-server-4.143.1/lib/vscode/node_modules/vsda/rust/web/vsda_bg.wasm
+File not found: /home/thesecguy/.local/lib/code-server-4.143.1/lib/vscode/node_modules/vsda/rust/web/vsda.js
+[19:30:36] [127.0.0.1][758166ef][ManagementConnection] New connection established.
+[19:30:36] [127.0.0.1][57e53fb3][ExtensionHostConnection] New connection established.
+[19:30:36] [127.0.0.1][57e53fb3][ExtensionHostConnection] Starting extension host process...
+[19:30:36] [127.0.0.1][57e53fb3][ExtensionHostConnection] <3228> Launched Extension Host Process.
+[19:30:37] [127.0.0.1][57e53fb3][ExtensionHostConnection] <3228> [reconnection-grace-time] Extension host: read VSCODE_RECONNECTION_GRACE_TIME=10800000ms (10800s)
+

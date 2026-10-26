@@ -1,0 +1,86 @@
+[
+  {
+    "label": "Open the lab folder",
+    "t": 5.32
+  },
+  {
+    "label": "The template",
+    "t": 8.53
+  },
+  {
+    "label": "Copy the template",
+    "t": 11.62
+  },
+  {
+    "label": "Header",
+    "t": 28.35
+  },
+  {
+    "label": "Header done",
+    "t": 35.15
+  },
+  {
+    "label": "Assumptions",
+    "t": 35.15
+  },
+  {
+    "label": "Assumptions done",
+    "t": 45.4
+  },
+  {
+    "label": "Elements",
+    "t": 45.4
+  },
+  {
+    "label": "Elements done",
+    "t": 66.7
+  },
+  {
+    "label": "Flows",
+    "t": 66.7
+  },
+  {
+    "label": "Flows done",
+    "t": 92.81
+  },
+  {
+    "label": "Boundaries",
+    "t": 92.81
+  },
+  {
+    "label": "Boundaries done",
+    "t": 110.61
+  },
+  {
+    "label": "Scopes",
+    "t": 110.61
+  },
+  {
+    "label": "Scopes done",
+    "t": 120.45
+  },
+  {
+    "label": "Trifecta",
+    "t": 120.45
+  },
+  {
+    "label": "Trifecta done",
+    "t": 132.51
+  },
+  {
+    "label": "Example row",
+    "t": 132.51
+  },
+  {
+    "label": "Example row done",
+    "t": 148.76
+  },
+  {
+    "label": "Saved",
+    "t": 151.26
+  },
+  {
+    "label": "End",
+    "t": 153.37
+  }
+]
