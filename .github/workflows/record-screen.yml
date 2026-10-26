@@ -1,0 +1,60 @@
+name: record-screen
+# Records a REAL editor session (VS Code in the browser) for a course lab video on a fresh GitHub-hosted
+# Ubuntu machine. The user "thesecguy" on host "lab" owns the files and the editor; Playwright types every
+# change through the keyboard while recording the screen, and the saved file must match character for
+# character, or the take is rejected. This public run log is the proof.
+on:
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: "scenario name in recordings/scenarios (without .json)"
+        required: true
+  push:
+    branches: [rec-screen]
+    paths: ["recordings/record_screen.py", "recordings/scenarios/*-editor.json", "recordings/editor-settings.json", ".github/workflows/record-screen.yml"]
+permissions:
+  contents: write   # only to push the finished recording to the lab-recordings branch
+
+jobs:
+  record:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      SCENARIO: ${{ inputs.scenario || 'm02-2.5-editor' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: prepare a clean machine (off camera)
+        run: sudo bash recordings/prepare.sh "recordings/scenarios/$SCENARIO.json"
+      - name: editor and browser (off camera)
+        run: |
+          sudo -iu thesecguy bash -lc 'curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=$HOME/.local'
+          sudo -iu thesecguy mkdir -p /home/thesecguy/.local/share/code-server/User
+          sudo cp recordings/editor-settings.json /home/thesecguy/.local/share/code-server/User/settings.json
+          sudo chown -R thesecguy:thesecguy /home/thesecguy/.local/share/code-server
+          sudo -iu thesecguy bash -lc 'nohup $HOME/.local/bin/code-server --auth none --bind-addr 127.0.0.1:8080 --disable-telemetry --disable-update-check --disable-workspace-trust --disable-getting-started-override > $HOME/code-server.log 2>&1 &'
+          for i in $(seq 1 60); do curl -fsS -o /dev/null http://127.0.0.1:8080/healthz && break; sleep 2; done
+          curl -fsS http://127.0.0.1:8080/healthz
+          python3 -m pip install --user --break-system-packages -q playwright==1.48.0
+          python3 -m playwright install --with-deps chromium > /dev/null
+          sudo chmod o+x /home/thesecguy && sudo chmod -R a+rwX /home/thesecguy/ai-security-course-labs
+      - name: record (real session)
+        run: python3 recordings/record_screen.py "recordings/scenarios/$SCENARIO.json" "out/$SCENARIO" http://127.0.0.1:8080
+      - name: proof (fingerprints, marks and the saved file)
+        if: always()
+        run: |
+          mkdir -p "out/$SCENARIO" && cd "out/$SCENARIO"
+          echo "run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" | tee run.txt
+          find . -type f | sort | xargs sha256sum || true
+          echo "----- saved file -----"; cat result.md || true
+          echo "----- editor log -----"; tail -40 /home/thesecguy/code-server.log || true
+      - name: publish the recording to the lab-recordings branch
+        if: always()
+        run: |
+          dest="$SCENARIO"; [ "${{ job.status }}" = "success" ] || dest="$SCENARIO-failed"
+          rm -rf "out/$SCENARIO/video-raw"
+          git config user.name "The Sec Guy"; git config user.email "hello@thesecguy.com"
+          git fetch origin lab-recordings || true
+          if git rev-parse -q --verify origin/lab-recordings; then git switch -c pub origin/lab-recordings; else git switch --orphan pub; git rm -rq --cached . 2>/dev/null || true; fi
+          find . -mindepth 1 -maxdepth 1 ! -name .git ! -name out -exec rm -rf {} +
+          rm -rf "$dest" && mkdir -p "$dest" && cp -r out/$SCENARIO/* "$dest/"
+          git add -A "$dest" && git commit -qm "Recording $dest (run $GITHUB_RUN_ID)" && git push -q origin pub:lab-recordings
