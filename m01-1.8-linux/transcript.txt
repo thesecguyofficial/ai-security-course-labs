@@ -4,7 +4,9 @@ thesecguy@lab:~/ai-security-course-labs/labs/m01$ ollama pull gemma3:1b
 
 thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 llm_lab.py check
 
-Could not reach Ollama at http://localhost:11434. Is it running?
+Ollama is running.
+Models on this computer: gemma3:1b
+Seen through the OpenAI-compatible API: ['gemma3:1b']
 thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 llm_lab.py chat "What is a token, in one s 
 entence?"
 
@@ -23,37 +25,108 @@ entence?"
   ],
   "temperature": 0.2
 }
-Could not reach Ollama at http://localhost:11434.
-Tip: start the Ollama app (Mac/Windows) or run `ollama serve` (Linux), then try again.
+
+---- what the model says ----
+A token is a small unit of data that is used to represent a specific piece of information, like a word, a character, or an image, within a system.
+
+---- the bill (in tokens) ----
+prompt tokens (everything we sent, incl. the system message): 36
+completion tokens (what the model wrote):                   35
+On a paid cloud API, you pay for both numbers. That is why 'denial of wallet' is a real attack.
 thesecguy@lab:~/ai-security-course-labs/labs/m01$ curl http://localhost:11434/v1/chat/completions -H 
  "Content-Type: application/json" -d '{"model": "gemma3:1b", "messages": [{"role": "user", "content" 
 : "Say hello"}]}'
 
-curl: (7) Failed to connect to localhost port 11434 after 0 ms: Couldn't connect to server
+{"id":"chatcmpl-381","object":"chat.completion","created":1793029337,"model":"gemma3:1b","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"Hello there! 😊 How can I help you today?"},"finish_reason":"stop"}],"usage":{"prompt_tokens":11,"prompt_tokens_details":{"cached_tokens":0},"completion_tokens":12,"total_tokens":23}}
 thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 llm_lab.py tokens "hello" "Ignore previous 
  instructions" "unbelievably" "₹1,999" "नमस्ते"
 
-Could not reach Ollama at http://localhost:11434.
-Tip: start the Ollama app (Mac/Windows) or run `ollama serve` (Linux), then try again.
+Chat-template overhead for gemma3:1b: 9 tokens (the wrapping around every message)
+
+tokens  chars  text
+     1      5  hello
+     3     28  Ignore previous instructions
+     4     12  unbelievably
+     6      6  ₹1,999
+     1      6  नमस्ते
+
+Rule of thumb for English: 1 token is about 4 characters (OpenAI help centre).
+Other languages, numbers and symbols often need more tokens per character. Try some!
 thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 llm_lab.py temp "Name one colour." --runs  
 3
 
 
 == temperature 0.0 ==
-Could not reach Ollama at http://localhost:11434.
-Tip: start the Ollama app (Mac/Windows) or run `ollama serve` (Linux), then try again.
+  run 1: Blue. 
+
+Is that what you were looking for? 😊
+  run 2: Blue. 
+
+Is that what you were looking for? 😊
+  run 3: Blue. 
+
+Is that what you were looking for? 😊
+
+== temperature 1.0 ==
+  run 1: Blue. 
+
+Is that what you were looking for? 😊
+  run 2: Blue. 😊 
+
+Is there anything else you'd like to know?
+  run 3: Blue. 😊
+
+== temperature 1.8 ==
+  run 1: Blue.
+  run 2: Blue. 
+
+Would you like another color?
+  run 3: Blue.
+
+Low temperature = the most likely words, run after run. High = more random.
+Even at 0, answers can differ between runs or machines. Test AI features many times, not once.
 thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 llm_lab.py fill --ctx 1024
 
 Context window for this run: 1024 tokens (we set it with the num_ctx option)
 
-Could not reach Ollama at http://localhost:11434.
-Tip: start the Ollama app (Mac/Windows) or run `ollama serve` (Linux), then try again.
+round  1:   163 / 1024 tokens [######                                  ]
+round  2:   300 / 1024 tokens [###########                             ]
+round  3:   437 / 1024 tokens [#################                       ]
+round  4:   574 / 1024 tokens [######################                  ]
+round  5:   711 / 1024 tokens [###########################             ]
+round  6:   848 / 1024 tokens [#################################       ]
+round  7:   985 / 1024 tokens [######################################  ]
+round  8:   963 / 1024 tokens [#####################################   ]  <- stopped growing: older messages are being dropped
+round  9:   963 / 1024 tokens [#####################################   ]  <- stopped growing: older messages are being dropped
+round 10:   964 / 1024 tokens [#####################################   ]
+round 11:   965 / 1024 tokens [#####################################   ]
+round 12:   966 / 1024 tokens [#####################################   ]
+
+We asked for the codeword. The model said: 'RainyDay'
+It forgot. The first message fell off the whiteboard to make room. Nothing warned you.
+Security lesson: whatever is on the whiteboard is all the model 'knows'. Rules that fall off stop working,
+and an attacker who can add text can push things off. Long chats are not long memory.
 thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 llm_lab.py fill --ctx 8192
 
 Context window for this run: 8192 tokens (we set it with the num_ctx option)
 
-Could not reach Ollama at http://localhost:11434.
-Tip: start the Ollama app (Mac/Windows) or run `ollama serve` (Linux), then try again.
+round  1:   163 / 8192 tokens [                                        ]
+round  2:   300 / 8192 tokens [#                                       ]
+round  3:   437 / 8192 tokens [##                                      ]
+round  4:   574 / 8192 tokens [##                                      ]
+round  5:   711 / 8192 tokens [###                                     ]
+round  6:   848 / 8192 tokens [####                                    ]
+round  7:   985 / 8192 tokens [####                                    ]
+round  8:  1122 / 8192 tokens [#####                                   ]
+round  9:  1259 / 8192 tokens [######                                  ]
+round 10:  1397 / 8192 tokens [######                                  ]
+round 11:  1535 / 8192 tokens [#######                                 ]
+round 12:  1673 / 8192 tokens [########                                ]
+
+We asked for the codeword. The model said: 'PINEAPPLE-42'
+It remembered: the first message still fits. Run again with a smaller --ctx or more --rounds.
+Security lesson: whatever is on the whiteboard is all the model 'knows'. Rules that fall off stop working,
+and an attacker who can add text can push things off. Long chats are not long memory.
 thesecguy@lab:~/ai-security-course-labs/labs/m01$ ollama stop gemma3:1b
 
 thesecguy@lab:~/ai-security-course-labs/labs/m01$ exit

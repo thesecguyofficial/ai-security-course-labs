@@ -1,109 +1,109 @@
 {
   "scenario": "m01-1.8-linux",
-  "start": 1.787,
+  "start": 1.747,
   "steps": [
     {
       "label": "Get ready",
       "speed": 1,
-      "start": 1.787,
-      "end": 6.553
+      "start": 1.747,
+      "end": 6.513
     },
     {
       "label": "Get ready",
       "speed": 8,
-      "start": 8.353,
-      "end": 16.814
+      "start": 8.313,
+      "end": 28.617
     },
     {
       "label": "Is it running?",
       "speed": 1,
-      "start": 18.614,
-      "end": 22.55
+      "start": 30.418,
+      "end": 34.41
     },
     {
       "label": "Call the API",
       "speed": 1,
-      "start": 25.05,
-      "end": 32.835
+      "start": 36.91,
+      "end": 47.206
     },
     {
       "label": "Same call with curl",
       "speed": 1,
-      "start": 36.835,
-      "end": 57.431
+      "start": 51.206,
+      "end": 72.383
     },
     {
       "label": "Count tokens",
       "speed": 1,
-      "start": 61.431,
-      "end": 73.48
+      "start": 76.383,
+      "end": 89.661
     },
     {
       "label": "Temperature",
       "speed": 2,
-      "start": 77.481,
-      "end": 84.431
+      "start": 93.661,
+      "end": 104.762
     },
     {
       "label": "Fill the whiteboard",
       "speed": 4,
-      "start": 88.431,
-      "end": 93.467
+      "start": 108.762,
+      "end": 192.992
     },
     {
       "label": "Room to remember",
       "speed": 4,
-      "start": 97.468,
-      "end": 102.549
+      "start": 196.993,
+      "end": 228.086
     },
     {
       "label": "Clean up",
       "speed": 1,
-      "start": 106.549,
-      "end": 114.967
+      "start": 232.086,
+      "end": 240.54
     }
   ],
   "keys": [
     {
-      "t": 2.387,
+      "t": 2.348,
       "what": "type"
     },
     {
-      "t": 8.954,
+      "t": 8.913,
       "what": "type"
     },
     {
-      "t": 19.214,
+      "t": 31.018,
       "what": "type"
     },
     {
-      "t": 25.65,
+      "t": 37.51,
       "what": "type"
     },
     {
-      "t": 37.435,
+      "t": 51.806,
       "what": "type"
     },
     {
-      "t": 62.031,
+      "t": 76.983,
       "what": "type"
     },
     {
-      "t": 78.081,
+      "t": 94.261,
       "what": "type"
     },
     {
-      "t": 89.031,
+      "t": 109.362,
       "what": "type"
     },
     {
-      "t": 98.068,
+      "t": 197.593,
       "what": "type"
     },
     {
-      "t": 107.149,
+      "t": 232.686,
       "what": "type"
     }
   ],
-  "end": 116.967
+  "end": 242.54
 }
