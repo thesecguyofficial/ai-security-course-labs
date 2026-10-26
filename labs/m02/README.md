@@ -55,6 +55,15 @@ external entities (people and outside systems), processes (chat app, model, tool
 data stores (knowledge base, memory, order database, logs) and data flows (arrows).
 Tip: number every arrow (F1, F2, …). You will refer to them in the table.
 
+**Optional: draw it in OWASP Threat Dragon.** Threat Dragon is OWASP's free, open-source (Apache-2.0) threat-modelling tool. In local mode it needs no account and sends nothing anywhere.
+
+1. Install the desktop app from the [Threat Dragon releases](https://github.com/OWASP/threat-dragon/releases), or run the official container (Docker): `docker run -d -p 127.0.0.1:3000:3000 -e ENCRYPTION_KEYS='[{"isPrimary": true, "id": 0, "value": "11223344556677889900aabbccddeeff"}]' -e ENCRYPTION_JWT_SIGNING_KEY=change-me -e ENCRYPTION_JWT_REFRESH_SIGNING_KEY=change-me-too -e NODE_ENV=production -e SERVER_API_PROTOCOL=http owasp/threat-dragon:v2.6.2`, then open http://localhost:3000 and choose the local session. The keys in that command are examples; for anything other than this lab, generate your own.
+2. **Create a new threat model** called `TSG Helpdesk` and add a **STRIDE** diagram.
+3. Drag in the **actors**, **processes** and **stores**, and connect them with **data flows**. Name each flow with its number (F1, F2, …).
+4. Draw the model as its **own process inside its own trust boundary**, and start the name of every flow into the model with `TRUSTED:` or `UNTRUSTED:`. Threat Dragon has no "model" element and no field for this, so the names carry it.
+5. Select an element and add threats. Threat Dragon's own suggestions are web-app threats and won't find AI threats, so add those by hand (lesson 2.5 explains why): pick the closest STRIDE type and put the OWASP and ATLAS IDs in the description.
+6. **Save** the model and keep the JSON file next to your `my-threat-model.md`. The scopes and the lethal-trifecta check (Step 3) stay in the template.
+
 ### Step 2 · Draw the trust boundaries (10 min)
 Draw a dashed line wherever trust changes. Check all seven from lesson 2.4: **input, model, tools,
 output, data, memory, identity**. Then label every arrow that carries text **into the model**:
