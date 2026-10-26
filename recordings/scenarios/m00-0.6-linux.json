@@ -1,0 +1,27 @@
+{
+  "name": "m00-0.6-linux",
+  "lesson": "0.6",
+  "title": "Lab setup on Ubuntu 24.04, from a clean machine",
+  "remove_preinstalled": ["docker", "ollama"],
+  "steps": [
+    {"label": "Get the labs", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git"},
+    {"label": "Get the labs", "type": "cd ai-security-course-labs"},
+    {"label": "Check the fingerprint", "type": "sha256sum setup.sh"},
+    {"label": "Check the fingerprint", "type": "grep setup.sh SHA256SUMS", "pause_after": 3},
+    {"label": "Run the setup script", "type": "./setup.sh", "speed": 8, "timeout": 2400,
+     "answers": [
+       {"re": "Read the script before it runs\\?[^\\r\\n]*\\[Y/n\\] ", "send": "y\r", "note": "read the script: yes"},
+       {"re": "(?i)this script installs ollama", "send": "q", "typed": false, "delay": 5, "note": "quit the viewer (q)"},
+       {"re": "\\[Y/n\\] ", "send": "y\r", "note": "yes"},
+       {"re": "\\[y/N\\] ", "send": "\r", "typed": false, "note": "no (default)"}
+     ]},
+    {"label": "Check it with the doctor", "type": "make doctor", "pause_after": 3},
+    {"label": "Docker works", "type": "sudo docker run hello-world", "speed": 2, "pause_after": 3},
+    {"label": "Run your first model", "type": "ollama run gemma3:1b", "until": ">>> "},
+    {"label": "Run your first model", "type": "Explain what a token is in one sentence.", "until": ">>> ", "pause_after": 2.5},
+    {"label": "Run your first model", "type": "/bye"},
+    {"label": "Security checks", "type": "curl http://localhost:11434", "pause_after": 1.5},
+    {"label": "Security checks", "type": "ss -ltnp | grep 11434", "pause_after": 2.5},
+    {"label": "Security checks", "type": "ollama ps", "pause_after": 2.5}
+  ]
+}

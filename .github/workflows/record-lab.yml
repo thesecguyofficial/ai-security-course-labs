@@ -1,0 +1,43 @@
+name: record-lab
+# Records a REAL terminal session for a course lab video on a fresh GitHub-hosted Ubuntu machine.
+# A real user "thesecguy" on host "lab" runs every command; the .cast file is the exact terminal
+# output with timing, and this public run log shows the whole session as plain text.
+on:
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: "scenario name in recordings/scenarios (without .json)"
+        required: true
+  push:
+    branches: [lab-recorder]
+    paths: ["recordings/**", ".github/workflows/record-lab.yml"]
+permissions:
+  contents: read
+
+jobs:
+  record:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      SCENARIO: ${{ inputs.scenario || 'm00-0.6-linux' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: recorder tools (off camera)
+        run: python3 -m pip install --user --break-system-packages asciinema==2.4.0 pexpect==4.9.0
+      - name: prepare a clean machine (off camera)
+        run: sudo bash recordings/prepare.sh "recordings/scenarios/$SCENARIO.json"
+      - name: record (real session)
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          python3 recordings/record.py "recordings/scenarios/$SCENARIO.json" "out/$SCENARIO"
+      - name: proof (fingerprints + the full session as text)
+        if: always()
+        run: |
+          cd "out/$SCENARIO" && sha256sum * && echo "run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" | tee run.txt
+          echo "----- transcript -----"; cat transcript.txt || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rec-${{ env.SCENARIO }}
+          path: out/${{ env.SCENARIO }}
+          retention-days: 90
