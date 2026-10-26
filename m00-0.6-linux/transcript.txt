@@ -1,0 +1,999 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 2693, done.
+remote: Counting objects:   0% (1/828)
+remote: Counting objects:   1% (9/828)
+remote: Counting objects:   2% (17/828)
+remote: Counting objects:   3% (25/828)
+remote: Counting objects:   4% (34/828)
+remote: Counting objects:   5% (42/828)
+remote: Counting objects:   6% (50/828)
+remote: Counting objects:   7% (58/828)
+remote: Counting objects:   8% (67/828)
+remote: Counting objects:   9% (75/828)
+remote: Counting objects:  10% (83/828)
+remote: Counting objects:  11% (92/828)
+remote: Counting objects:  12% (100/828)
+remote: Counting objects:  13% (108/828)
+remote: Counting objects:  14% (116/828)
+remote: Counting objects:  15% (125/828)
+remote: Counting objects:  16% (133/828)
+remote: Counting objects:  17% (141/828)
+remote: Counting objects:  18% (150/828)
+remote: Counting objects:  19% (158/828)
+remote: Counting objects:  20% (166/828)
+remote: Counting objects:  21% (174/828)
+remote: Counting objects:  22% (183/828)
+remote: Counting objects:  23% (191/828)
+remote: Counting objects:  24% (199/828)
+remote: Counting objects:  25% (207/828)
+remote: Counting objects:  26% (216/828)
+remote: Counting objects:  27% (224/828)
+remote: Counting objects:  28% (232/828)
+remote: Counting objects:  29% (241/828)
+remote: Counting objects:  30% (249/828)
+remote: Counting objects:  31% (257/828)
+remote: Counting objects:  32% (265/828)
+remote: Counting objects:  33% (274/828)
+remote: Counting objects:  34% (282/828)
+remote: Counting objects:  35% (290/828)
+remote: Counting objects:  36% (299/828)
+remote: Counting objects:  37% (307/828)
+remote: Counting objects:  38% (315/828)
+remote: Counting objects:  39% (323/828)
+remote: Counting objects:  40% (332/828)
+remote: Counting objects:  41% (340/828)
+remote: Counting objects:  42% (348/828)
+remote: Counting objects:  43% (357/828)
+remote: Counting objects:  44% (365/828)
+remote: Counting objects:  45% (373/828)
+remote: Counting objects:  46% (381/828)
+remote: Counting objects:  47% (390/828)
+remote: Counting objects:  48% (398/828)
+remote: Counting objects:  49% (406/828)
+remote: Counting objects:  50% (414/828)
+remote: Counting objects:  51% (423/828)
+remote: Counting objects:  52% (431/828)
+remote: Counting objects:  53% (439/828)
+remote: Counting objects:  54% (448/828)
+remote: Counting objects:  55% (456/828)
+remote: Counting objects:  56% (464/828)
+remote: Counting objects:  57% (472/828)
+remote: Counting objects:  58% (481/828)
+remote: Counting objects:  59% (489/828)
+remote: Counting objects:  60% (497/828)
+remote: Counting objects:  61% (506/828)
+remote: Counting objects:  62% (514/828)
+remote: Counting objects:  63% (522/828)
+remote: Counting objects:  64% (530/828)
+remote: Counting objects:  65% (539/828)
+remote: Counting objects:  66% (547/828)
+remote: Counting objects:  67% (555/828)
+remote: Counting objects:  68% (564/828)
+remote: Counting objects:  69% (572/828)
+remote: Counting objects:  70% (580/828)
+remote: Counting objects:  71% (588/828)
+remote: Counting objects:  72% (597/828)
+remote: Counting objects:  73% (605/828)
+remote: Counting objects:  74% (613/828)
+remote: Counting objects:  75% (621/828)
+remote: Counting objects:  76% (630/828)
+remote: Counting objects:  77% (638/828)
+remote: Counting objects:  78% (646/828)
+remote: Counting objects:  79% (655/828)
+remote: Counting objects:  80% (663/828)
+remote: Counting objects:  81% (671/828)
+remote: Counting objects:  82% (679/828)
+remote: Counting objects:  83% (688/828)
+remote: Counting objects:  84% (696/828)
+remote: Counting objects:  85% (704/828)
+remote: Counting objects:  86% (713/828)
+remote: Counting objects:  87% (721/828)
+remote: Counting objects:  88% (729/828)
+remote: Counting objects:  89% (737/828)
+remote: Counting objects:  90% (746/828)
+remote: Counting objects:  91% (754/828)
+remote: Counting objects:  92% (762/828)
+remote: Counting objects:  93% (771/828)
+remote: Counting objects:  94% (779/828)
+remote: Counting objects:  95% (787/828)
+remote: Counting objects:  96% (795/828)
+remote: Counting objects:  97% (804/828)
+remote: Counting objects:  98% (812/828)
+remote: Counting objects:  99% (820/828)
+remote: Counting objects: 100% (828/828)
+remote: Counting objects: 100% (828/828), done.
+remote: Compressing objects:   0% (1/649)
+remote: Compressing objects:   1% (7/649)
+remote: Compressing objects:   2% (13/649)
+remote: Compressing objects:   3% (20/649)
+remote: Compressing objects:   4% (26/649)
+remote: Compressing objects:   5% (33/649)
+remote: Compressing objects:   6% (39/649)
+remote: Compressing objects:   7% (46/649)
+remote: Compressing objects:   8% (52/649)
+remote: Compressing objects:   9% (59/649)
+remote: Compressing objects:  10% (65/649)
+remote: Compressing objects:  11% (72/649)
+remote: Compressing objects:  12% (78/649)
+remote: Compressing objects:  13% (85/649)
+remote: Compressing objects:  14% (91/649)
+remote: Compressing objects:  15% (98/649)
+remote: Compressing objects:  16% (104/649)
+remote: Compressing objects:  17% (111/649)
+remote: Compressing objects:  18% (117/649)
+remote: Compressing objects:  19% (124/649)
+remote: Compressing objects:  20% (130/649)
+remote: Compressing objects:  21% (137/649)
+remote: Compressing objects:  22% (143/649)
+remote: Compressing objects:  23% (150/649)
+remote: Compressing objects:  24% (156/649)
+remote: Compressing objects:  25% (163/649)
+remote: Compressing objects:  26% (169/649)
+remote: Compressing objects:  27% (176/649)
+remote: Compressing objects:  28% (182/649)
+remote: Compressing objects:  29% (189/649)
+remote: Compressing objects:  30% (195/649)
+remote: Compressing objects:  31% (202/649)
+remote: Compressing objects:  32% (208/649)
+remote: Compressing objects:  33% (215/649)
+remote: Compressing objects:  34% (221/649)
+remote: Compressing objects:  35% (228/649)
+remote: Compressing objects:  36% (234/649)
+remote: Compressing objects:  37% (241/649)
+remote: Compressing objects:  38% (247/649)
+remote: Compressing objects:  39% (254/649)
+remote: Compressing objects:  40% (260/649)
+remote: Compressing objects:  41% (267/649)
+remote: Compressing objects:  42% (273/649)
+remote: Compressing objects:  43% (280/649)
+remote: Compressing objects:  44% (286/649)
+remote: Compressing objects:  45% (293/649)
+remote: Compressing objects:  46% (299/649)
+remote: Compressing objects:  47% (306/649)
+remote: Compressing objects:  48% (312/649)
+remote: Compressing objects:  49% (319/649)
+remote: Compressing objects:  50% (325/649)
+remote: Compressing objects:  51% (331/649)
+remote: Compressing objects:  52% (338/649)
+remote: Compressing objects:  53% (344/649)
+remote: Compressing objects:  54% (351/649)
+remote: Compressing objects:  55% (357/649)
+remote: Compressing objects:  56% (364/649)
+remote: Compressing objects:  57% (370/649)
+remote: Compressing objects:  58% (377/649)
+remote: Compressing objects:  59% (383/649)
+remote: Compressing objects:  60% (390/649)
+remote: Compressing objects:  61% (396/649)
+remote: Compressing objects:  62% (403/649)
+remote: Compressing objects:  63% (409/649)
+remote: Compressing objects:  64% (416/649)
+remote: Compressing objects:  65% (422/649)
+remote: Compressing objects:  66% (429/649)
+remote: Compressing objects:  67% (435/649)
+remote: Compressing objects:  68% (442/649)
+remote: Compressing objects:  69% (448/649)
+remote: Compressing objects:  70% (455/649)
+remote: Compressing objects:  71% (461/649)
+remote: Compressing objects:  72% (468/649)
+remote: Compressing objects:  73% (474/649)
+remote: Compressing objects:  74% (481/649)
+remote: Compressing objects:  75% (487/649)
+remote: Compressing objects:  76% (494/649)
+remote: Compressing objects:  77% (500/649)
+remote: Compressing objects:  78% (507/649)
+remote: Compressing objects:  79% (513/649)
+remote: Compressing objects:  80% (520/649)
+remote: Compressing objects:  81% (526/649)
+remote: Compressing objects:  82% (533/649)
+remote: Compressing objects:  83% (539/649)
+remote: Compressing objects:  84% (546/649)
+remote: Compressing objects:  85% (552/649)
+remote: Compressing objects:  86% (559/649)
+remote: Compressing objects:  87% (565/649)
+remote: Compressing objects:  88% (572/649)
+remote: Compressing objects:  89% (578/649)
+remote: Compressing objects:  90% (585/649)
+remote: Compressing objects:  91% (591/649)
+remote: Compressing objects:  92% (598/649)
+remote: Compressing objects:  93% (604/649)
+remote: Compressing objects:  94% (611/649)
+remote: Compressing objects:  95% (617/649)
+remote: Compressing objects:  96% (624/649)
+remote: Compressing objects:  97% (630/649)
+remote: Compressing objects:  98% (637/649)
+remote: Compressing objects:  99% (643/649)
+remote: Compressing objects: 100% (649/649)
+remote: Compressing objects: 100% (649/649), done.
+Receiving objects:   0% (1/2693)
+Receiving objects:   1% (27/2693)
+Receiving objects:   2% (54/2693)
+Receiving objects:   3% (81/2693)
+Receiving objects:   4% (108/2693)
+Receiving objects:   5% (135/2693)
+Receiving objects:   6% (162/2693)
+Receiving objects:   7% (189/2693)
+Receiving objects:   8% (216/2693)
+Receiving objects:   9% (243/2693)
+Receiving objects:  10% (270/2693)
+Receiving objects:  11% (297/2693)
+Receiving objects:  12% (324/2693)
+Receiving objects:  13% (351/2693)
+Receiving objects:  14% (378/2693)
+Receiving objects:  15% (404/2693)
+Receiving objects:  16% (431/2693)
+Receiving objects:  17% (458/2693)
+Receiving objects:  18% (485/2693)
+Receiving objects:  19% (512/2693)
+Receiving objects:  20% (539/2693)
+Receiving objects:  21% (566/2693)
+Receiving objects:  22% (593/2693)
+Receiving objects:  23% (620/2693)
+Receiving objects:  24% (647/2693)
+Receiving objects:  25% (674/2693)
+Receiving objects:  26% (701/2693)
+Receiving objects:  27% (728/2693)
+Receiving objects:  28% (755/2693)
+Receiving objects:  29% (781/2693)
+Receiving objects:  30% (808/2693)
+Receiving objects:  31% (835/2693)
+Receiving objects:  32% (862/2693)
+Receiving objects:  33% (889/2693)
+Receiving objects:  34% (916/2693)
+Receiving objects:  35% (943/2693)
+Receiving objects:  36% (970/2693)
+Receiving objects:  37% (997/2693)
+Receiving objects:  38% (1024/2693)
+Receiving objects:  39% (1051/2693)
+Receiving objects:  40% (1078/2693)
+Receiving objects:  41% (1105/2693)
+Receiving objects:  42% (1132/2693)
+Receiving objects:  43% (1158/2693)
+Receiving objects:  44% (1185/2693)
+Receiving objects:  45% (1212/2693)
+Receiving objects:  46% (1239/2693)
+Receiving objects:  47% (1266/2693)
+Receiving objects:  48% (1293/2693)
+Receiving objects:  49% (1320/2693)
+Receiving objects:  50% (1347/2693)
+Receiving objects:  51% (1374/2693)
+Receiving objects:  52% (1401/2693)
+Receiving objects:  53% (1428/2693)
+Receiving objects:  54% (1455/2693)
+Receiving objects:  55% (1482/2693)
+Receiving objects:  56% (1509/2693)
+Receiving objects:  57% (1536/2693)
+Receiving objects:  58% (1562/2693)
+Receiving objects:  59% (1589/2693)
+Receiving objects:  60% (1616/2693)
+Receiving objects:  61% (1643/2693)
+Receiving objects:  62% (1670/2693)
+Receiving objects:  63% (1697/2693)
+Receiving objects:  64% (1724/2693)
+Receiving objects:  65% (1751/2693)
+Receiving objects:  66% (1778/2693)
+Receiving objects:  67% (1805/2693)
+Receiving objects:  68% (1832/2693)
+Receiving objects:  69% (1859/2693)
+Receiving objects:  70% (1886/2693)
+Receiving objects:  71% (1913/2693)
+Receiving objects:  72% (1939/2693)
+Receiving objects:  73% (1966/2693)
+Receiving objects:  74% (1993/2693)
+Receiving objects:  75% (2020/2693)
+Receiving objects:  76% (2047/2693)
+Receiving objects:  77% (2074/2693)
+Receiving objects:  78% (2101/2693)
+Receiving objects:  79% (2128/2693)
+Receiving objects:  80% (2155/2693)
+Receiving objects:  81% (2182/2693)
+Receiving objects:  82% (2209/2693)
+Receiving objects:  83% (2236/2693)
+Receiving objects:  84% (2263/2693)
+Receiving objects:  85% (2290/2693)
+Receiving objects:  86% (2316/2693)
+Receiving objects:  87% (2343/2693)
+Receiving objects:  88% (2370/2693)
+Receiving objects:  89% (2397/2693)
+Receiving objects:  90% (2424/2693)
+Receiving objects:  91% (2451/2693)
+Receiving objects:  92% (2478/2693)
+remote: Total 2693 (delta 243), reused 712 (delta 152), pack-reused 1865 (from 1)
+Receiving objects:  93% (2505/2693)
+Receiving objects:  94% (2532/2693)
+Receiving objects:  95% (2559/2693)
+Receiving objects:  96% (2586/2693)
+Receiving objects:  97% (2613/2693)
+Receiving objects:  98% (2640/2693)
+Receiving objects:  99% (2667/2693)
+Receiving objects: 100% (2693/2693)
+Receiving objects: 100% (2693/2693), 2.57 MiB | 8.74 MiB/s, done.
+Resolving deltas:   0% (0/854)
+Resolving deltas:   1% (9/854)
+Resolving deltas:   2% (18/854)
+Resolving deltas:   3% (26/854)
+Resolving deltas:   4% (35/854)
+Resolving deltas:   5% (43/854)
+Resolving deltas:   6% (52/854)
+Resolving deltas:   7% (60/854)
+Resolving deltas:   8% (69/854)
+Resolving deltas:   9% (77/854)
+Resolving deltas:  10% (86/854)
+Resolving deltas:  11% (94/854)
+Resolving deltas:  12% (103/854)
+Resolving deltas:  13% (112/854)
+Resolving deltas:  14% (120/854)
+Resolving deltas:  15% (129/854)
+Resolving deltas:  16% (137/854)
+Resolving deltas:  17% (146/854)
+Resolving deltas:  18% (154/854)
+Resolving deltas:  19% (163/854)
+Resolving deltas:  20% (171/854)
+Resolving deltas:  21% (180/854)
+Resolving deltas:  22% (188/854)
+Resolving deltas:  23% (197/854)
+Resolving deltas:  24% (205/854)
+Resolving deltas:  25% (214/854)
+Resolving deltas:  26% (223/854)
+Resolving deltas:  27% (231/854)
+Resolving deltas:  28% (240/854)
+Resolving deltas:  29% (248/854)
+Resolving deltas:  30% (257/854)
+Resolving deltas:  31% (265/854)
+Resolving deltas:  32% (274/854)
+Resolving deltas:  33% (282/854)
+Resolving deltas:  34% (291/854)
+Resolving deltas:  35% (299/854)
+Resolving deltas:  36% (308/854)
+Resolving deltas:  37% (316/854)
+Resolving deltas:  38% (325/854)
+Resolving deltas:  39% (334/854)
+Resolving deltas:  40% (342/854)
+Resolving deltas:  41% (351/854)
+Resolving deltas:  42% (359/854)
+Resolving deltas:  43% (368/854)
+Resolving deltas:  44% (376/854)
+Resolving deltas:  45% (385/854)
+Resolving deltas:  46% (393/854)
+Resolving deltas:  47% (402/854)
+Resolving deltas:  48% (410/854)
+Resolving deltas:  49% (419/854)
+Resolving deltas:  50% (427/854)
+Resolving deltas:  51% (436/854)
+Resolving deltas:  52% (445/854)
+Resolving deltas:  53% (453/854)
+Resolving deltas:  54% (462/854)
+Resolving deltas:  55% (470/854)
+Resolving deltas:  56% (479/854)
+Resolving deltas:  57% (487/854)
+Resolving deltas:  58% (496/854)
+Resolving deltas:  59% (504/854)
+Resolving deltas:  60% (513/854)
+Resolving deltas:  61% (521/854)
+Resolving deltas:  62% (530/854)
+Resolving deltas:  63% (539/854)
+Resolving deltas:  64% (547/854)
+Resolving deltas:  65% (556/854)
+Resolving deltas:  66% (564/854)
+Resolving deltas:  67% (573/854)
+Resolving deltas:  68% (581/854)
+Resolving deltas:  69% (590/854)
+Resolving deltas:  70% (598/854)
+Resolving deltas:  71% (607/854)
+Resolving deltas:  72% (615/854)
+Resolving deltas:  73% (624/854)
+Resolving deltas:  74% (632/854)
+Resolving deltas:  75% (641/854)
+Resolving deltas:  76% (650/854)
+Resolving deltas:  77% (658/854)
+Resolving deltas:  78% (667/854)
+Resolving deltas:  79% (675/854)
+Resolving deltas:  80% (684/854)
+Resolving deltas:  81% (692/854)
+Resolving deltas:  82% (701/854)
+Resolving deltas:  83% (709/854)
+Resolving deltas:  84% (718/854)
+Resolving deltas:  85% (726/854)
+Resolving deltas:  86% (735/854)
+Resolving deltas:  87% (743/854)
+Resolving deltas:  88% (752/854)
+Resolving deltas:  89% (761/854)
+Resolving deltas:  90% (769/854)
+Resolving deltas:  91% (778/854)
+Resolving deltas:  92% (786/854)
+Resolving deltas:  93% (795/854)
+Resolving deltas:  94% (803/854)
+Resolving deltas:  95% (812/854)
+Resolving deltas:  96% (820/854)
+Resolving deltas:  97% (829/854)
+Resolving deltas:  98% (837/854)
+Resolving deltas:  99% (846/854)
+Resolving deltas: 100% (854/854)
+Resolving deltas: 100% (854/854), done.
+warning: unable to access '/home/runner/.config/git/ignore': Permission denied
+warning: unable to access '/home/runner/.config/git/attributes': Permission denied
+thesecguy@lab:~$ cd ai-security-course-labs
+
+thesecguy@lab:~/ai-security-course-labs$ sha256sum setup.sh
+
+e3f392a85ba218b763118ac34c4b2cd6183bebceeff9d40a2ae49bfb33321745  setup.sh
+thesecguy@lab:~/ai-security-course-labs$ grep setup.sh SHA256SUMS
+
+e3f392a85ba218b763118ac34c4b2cd6183bebceeff9d40a2ae49bfb33321745  setup.sh
+thesecguy@lab:~/ai-security-course-labs$ ./setup.sh
+
+AI Security Engineer: lab setup
+Log: /home/thesecguy/ai-security-course-labs/setup.log
+
+== 1. This computer
+  ✓ Ubuntu 24.04.5 LTS (x86_64)
+  ✓ Memory: 16 GB
+  ✓ Free disk: 86 GB
+
+== 2. Basic tools: git, make, curl
+  ✓ git
+  ✓ make
+  ✓ curl
+
+== 3. Python 3.11 or newer
+  ✓ Python 3.12 at /usr/bin/python3.12
+
+== 4. Docker (runs lab apps in throwaway containers)
+  ✗ Docker
+  Docker Engine from your distro's own package (docker.io): free, updated with your normal system updates.
+  Install Docker Engine with apt? [Y/n] y
+  (sudo may ask for your computer password for the next command)
+  $ sudo apt-get update
+Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.4 kB]
+Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [598 kB]
+Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [661 kB]
+Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1400 kB]
+Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [310 kB]
+Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1706 kB]
+Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [342 kB]
+Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1805 kB]
+Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [411 kB]
+Get:16 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1146 kB]
+Get:17 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [231 kB]
+Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1222 kB]
+Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
+Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1713 kB]
+Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [392 kB]
+Fetched 12.6 MB in 1s (12.3 MB/s)
+Reading package lists...
+  (sudo may ask for your computer password for the next command)
+  $ sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y docker.io
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  bridge-utils containerd dns-root-data dnsmasq-base runc ubuntu-fan
+Suggested packages:
+  ifupdown aufs-tools cgroupfs-mount | cgroup-lite debootstrap docker-buildx
+  docker-compose-v2 docker-doc rinse zfs-fuse | zfsutils
+The following NEW packages will be installed:
+  bridge-utils containerd dns-root-data dnsmasq-base docker.io runc ubuntu-fan
+0 upgraded, 7 newly installed, 0 to remove and 100 not upgraded.
+Need to get 73.7 MB of archives.
+After this operation, 279 MB of additional disk space will be used.
+Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Get:2 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 bridge-utils amd64 1.7.1-1ubuntu2 [33.9 kB]
+Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 runc amd64 1.3.4-0ubuntu1~24.04.1 [9574 kB]
+Get:4 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 containerd amd64 2.2.1-0ubuntu1~24.04.4 [28.2 MB]
+Get:5 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 dns-root-data all 2024071801~ubuntu0.24.04.1 [5918 B]
+Get:6 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 dnsmasq-base amd64 2.91-0ubuntu0.24.04.2 [381 kB]
+Get:7 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 docker.io amd64 29.1.3-0ubuntu3~24.04.2 [35.6 MB]
+Get:8 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 ubuntu-fan all 0.12.16+24.04.1 [34.2 kB]
+Preconfiguring packages ...
+Fetched 73.7 MB in 1s (60.4 MB/s)
+Selecting previously unselected package bridge-utils.
+
+(Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 203317 files and directories currently installed.)
+
+Preparing to unpack .../0-bridge-utils_1.7.1-1ubuntu2_amd64.deb ...
+
+Unpacking bridge-utils (1.7.1-1ubuntu2) ...
+
+Selecting previously unselected package runc.
+
+Preparing to unpack .../1-runc_1.3.4-0ubuntu1~24.04.1_amd64.deb ...
+
+Unpacking runc (1.3.4-0ubuntu1~24.04.1) ...
+
+Selecting previously unselected package containerd.
+
+Preparing to unpack .../2-containerd_2.2.1-0ubuntu1~24.04.4_amd64.deb ...
+
+Unpacking containerd (2.2.1-0ubuntu1~24.04.4) ...
+
+Selecting previously unselected package dns-root-data.
+
+Preparing to unpack .../3-dns-root-data_2024071801~ubuntu0.24.04.1_all.deb ...
+
+Unpacking dns-root-data (2024071801~ubuntu0.24.04.1) ...
+
+Selecting previously unselected package dnsmasq-base.
+
+Preparing to unpack .../4-dnsmasq-base_2.91-0ubuntu0.24.04.2_amd64.deb ...
+
+Unpacking dnsmasq-base (2.91-0ubuntu0.24.04.2) ...
+
+Selecting previously unselected package docker.io.
+
+Preparing to unpack .../5-docker.io_29.1.3-0ubuntu3~24.04.2_amd64.deb ...
+
+Unpacking docker.io (29.1.3-0ubuntu3~24.04.2) ...
+
+Selecting previously unselected package ubuntu-fan.
+
+Preparing to unpack .../6-ubuntu-fan_0.12.16+24.04.1_all.deb ...
+
+Unpacking ubuntu-fan (0.12.16+24.04.1) ...
+
+Setting up dnsmasq-base (2.91-0ubuntu0.24.04.2) ...
+
+Setting up runc (1.3.4-0ubuntu1~24.04.1) ...
+
+Setting up dns-root-data (2024071801~ubuntu0.24.04.1) ...
+
+Setting up bridge-utils (1.7.1-1ubuntu2) ...
+
+Setting up containerd (2.2.1-0ubuntu1~24.04.4) ...
+
+Created symlink /etc/systemd/system/multi-user.target.wants/containerd.service → /usr/lib/systemd/system/containerd.service.
+
+
+Setting up ubuntu-fan (0.12.16+24.04.1) ...
+
+Created symlink /etc/systemd/system/multi-user.target.wants/ubuntu-fan.service → /usr/lib/systemd/system/ubuntu-fan.service.
+
+
+Setting up docker.io (29.1.3-0ubuntu3~24.04.2) ...
+
+Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /usr/lib/systemd/system/docker.service.
+
+
+Created symlink /etc/systemd/system/sockets.target.wants/docker.socket → /usr/lib/systemd/system/docker.socket.
+
+
+Processing triggers for dbus (1.14.10-4ubuntu4.1) ...
+
+Processing triggers for man-db (2.12.0-4build2) ...
+
+Not building database; man-db/auto-update is not 'true'.
+
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+  (sudo may ask for your computer password for the next command)
+  $ sudo systemctl enable --now docker
+  Without the docker group you run Docker as 'sudo docker ...'. With it, no sudo, but Docker's own docs
+  warn the group 'grants root-level privileges to the user'. Fine on your own laptop, not on a shared one.
+  Add thesecguy to the docker group? [y/N] 
+  ! Docker runs, but only with sudo for your user (see the docker group question above).
+
+== 5. Ollama (runs AI models on this computer)
+  ✗ Ollama
+  Ollama's official Linux installer is a script. It uses sudo to put ollama in /usr/local and,
+  with systemd, adds an 'ollama' service that listens on 127.0.0.1 only.
+  Download Ollama's installer from ollama.com? [Y/n] y
+  $ curl -fsSL --proto =https --tlsv1.2 -o /tmp/tmp.cqxDFAWm5q/ollama-install.sh https://ollama.com/install.sh
+  Downloaded https://ollama.com/install.sh
+  to /tmp/tmp.cqxDFAWm5q/ollama-install.sh (455 lines, SHA-256 25f64b810b947145095956533e1bdf56eacea2673c55a7e586be4515fc882c9f)
+  Read the script before it runs? (q quits the viewer) [Y/n] y
+=
+#!/bin/sh
+# This script installs Ollama on Linux and macOS.
+# It detects the current operating system architecture and installs the appropriate version of Ollam a.
+
+# Wrap script in main function so that a truncated partial download doesn't end
+# up executing half a script.
+main() {
+
+set -eu
+
+red="$( (/usr/bin/tput bold || :; /usr/bin/tput setaf 1 || :) 2>&-)"
+plain="$( (/usr/bin/tput sgr0 || :) 2>&-)"
+
+status() { echo ">>> $*" >&2; }
+error() { echo "${red}ERROR:${plain} $*"; exit 1; }
+warning() { echo "${red}WARNING:${plain} $*"; }
+
+TEMP_DIR=$(mktemp -d)
+cleanup() { rm -rf $TEMP_DIR; }
+trap cleanup EXIT
+
+available() { command -v $1 >/dev/null; }
+require() {
+    local MISSING=''
+/tmp/tmp.cqxDFAWm5q/ollama-install.sh
+>  Run ollama-install.sh now? [Y/n] y
+  $ sh /tmp/tmp.cqxDFAWm5q/ollama-install.sh
+>>> Installing ollama to /usr/local
+>>> Downloading ollama-linux-amd64.tar.zst
+#=#=- #                                                                                             
+##O=#  #                                                                                            
+#=#=-#   #                                                                                          
+
+                                                                                                0.0%
+                                                                                                0.5%
+#                                                                                               2.1%
+###                                                                                             3.4%
+###                                                                                             4.2%
+####                                                                                            5.2%
+#####                                                                                           6.3%
+#######                                                                                         7.7%
+########                                                                                        9.0%
+#########                                                                                      10.4%
+##########                                                                                     11.5%
+###########                                                                                    12.5%
+############                                                                                   13.9%
+##############                                                                                 15.3%
+###############                                                                                16.4%
+################                                                                               17.4%
+#################                                                                              18.8%
+##################                                                                             20.2%
+####################                                                                           21.6%
+#####################                                                                          22.9%
+######################                                                                         24.3%
+#######################                                                                        25.7%
+#########################                                                                      27.1%
+##########################                                                                     28.5%
+###########################                                                                    29.2%
+############################                                                                   30.6%
+#############################                                                                  31.3%
+##############################                                                                 32.7%
+###############################                                                                34.1%
+################################                                                               35.4%
+#################################                                                              36.1%
+##################################                                                             37.5%
+###################################                                                            38.3%
+####################################                                                           39.6%
+#####################################                                                          40.3%
+######################################                                                         41.1%
+######################################                                                         41.4%
+#######################################                                                        42.0%
+########################################                                                       43.2%
+#########################################                                                      44.5%
+##########################################                                                     45.9%
+###########################################                                                    46.6%
+############################################                                                   47.8%
+#############################################                                                  49.3%
+##############################################                                                 50.2%
+###############################################                                                51.4%
+#################################################                                              52.8%
+##################################################                                             53.9%
+##################################################                                             54.5%
+###################################################                                            55.6%
+#####################################################                                          57.0%
+######################################################                                         58.4%
+#######################################################                                        59.8%
+########################################################                                       61.1%
+#########################################################                                      62.1%
+##########################################################                                     62.7%
+###########################################################                                    64.1%
+#############################################################                                  66.0%
+##############################################################                                 66.7%
+###############################################################                                68.1%
+################################################################                               69.5%
+##################################################################                             71.0%
+###################################################################                            72.3%
+####################################################################                           73.7%
+######################################################################                         75.7%
+#######################################################################                        77.0%
+#########################################################################                      78.5%
+##########################################################################                     79.9%
+###########################################################################                    81.3%
+############################################################################                   82.6%
+#############################################################################                  83.4%
+##############################################################################                 84.2%
+###############################################################################                85.5%
+################################################################################               86.8%
+#################################################################################              87.6%
+##################################################################################             89.0%
+###################################################################################            89.7%
+#####################################################################################          91.4%
+######################################################################################         93.1%
+#######################################################################################        94.5%
+#########################################################################################      95.8%
+##########################################################################################     97.1%
+###########################################################################################    98.1%
+############################################################################################   99.4%
+############################################################################################# 100.0%
+>>> Creating ollama user...
+>>> Adding ollama user to render group...
+>>> Adding ollama user to video group...
+>>> Adding current user to ollama group...
+>>> Creating ollama systemd service...
+>>> Enabling and starting ollama service...
+Created symlink /etc/systemd/system/default.target.wants/ollama.service → /etc/systemd/system/ollama.service.
+>>> The Ollama API is now available at 127.0.0.1:11434.
+>>> Install complete. Run "ollama" from the command line.
+WARNING: No NVIDIA/AMD GPU detected. Ollama will run in CPU-only mode.
+  Starting Ollama on 127.0.0.1:11434...
+  (sudo may ask for your computer password for the next command)
+  $ sudo systemctl start ollama
+  ✓ Ollama answering on http://127.0.0.1:11434
+
+== 6. Lab models
+  ✗ gemma3:1b (about 806 MB)
+  ✗ embeddinggemma (about 622 MB)
+  gemma3:1b is the course's small chat model; embeddinggemma turns text into vectors (RAG labs).
+  Download gemma3:1b embeddinggemma (about 1.4 GB for both)? [Y/n] y
+  $ env -u OLLAMA_HOST ollama pull gemma3:1b
+pulling manifest ⠋ pulling manifest ⠙ pulling manifest ⠹ pulling manifest ⠸ pulling manifest ⠼ pulling manifest ⠴ pulling manifest ⠦ pulling manifest ⠧ pulling manifest ⠇ pulling manifest 
+pulling 2f8c3d137f24:   1% ▕                  ▏ 5.3 MB/806 MB                  pulling manifest 
+pulling 2f8c3d137f24:   4% ▕                  ▏  29 MB/806 MB                  pulling manifest 
+pulling 2f8c3d137f24:  10% ▕█                 ▏  84 MB/806 MB                  pulling manifest 
+pulling 2f8c3d137f24:  19% ▕███               ▏ 151 MB/806 MB                  pulling manifest 
+pulling 2f8c3d137f24:  21% ▕███               ▏ 170 MB/806 MB                  pulling manifest 
+pulling 2f8c3d137f24:  29% ▕█████             ▏ 233 MB/806 MB                  pulling manifest 
+pulling 2f8c3d137f24:  35% ▕██████            ▏ 279 MB/806 MB                  pulling manifest 
+pulling 2f8c3d137f24:  39% ▕███████           ▏ 317 MB/806 MB                  pulling manifest 
+pulling 2f8c3d137f24:  47% ▕████████          ▏ 379 MB/806 MB                  pulling manifest 
+pulling 2f8c3d137f24:  55% ▕█████████         ▏ 444 MB/806 MB                  pulling manifest 
+pulling 2f8c3d137f24:  60% ▕██████████        ▏ 481 MB/806 MB                  pulling manifest 
+pulling 2f8c3d137f24:  67% ▕███████████       ▏ 536 MB/806 MB  501 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  72% ▕█████████████     ▏ 583 MB/806 MB  501 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  76% ▕█████████████     ▏ 610 MB/806 MB  501 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  83% ▕██████████████    ▏ 670 MB/806 MB  501 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  89% ▕████████████████  ▏ 720 MB/806 MB  501 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  92% ▕████████████████  ▏ 739 MB/806 MB  501 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  93% ▕████████████████  ▏ 747 MB/806 MB  501 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  95% ▕█████████████████ ▏ 762 MB/806 MB  501 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  95% ▕█████████████████ ▏ 763 MB/806 MB  501 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  95% ▕█████████████████ ▏ 766 MB/806 MB  501 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  95% ▕█████████████████ ▏ 769 MB/806 MB  381 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  96% ▕█████████████████ ▏ 771 MB/806 MB  381 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  96% ▕█████████████████ ▏ 774 MB/806 MB  381 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  97% ▕█████████████████ ▏ 778 MB/806 MB  381 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  97% ▕█████████████████ ▏ 778 MB/806 MB  381 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  97% ▕█████████████████ ▏ 781 MB/806 MB  381 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  97% ▕█████████████████ ▏ 783 MB/806 MB  381 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  97% ▕█████████████████ ▏ 784 MB/806 MB  381 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  98% ▕█████████████████ ▏ 786 MB/806 MB  381 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  98% ▕█████████████████ ▏ 789 MB/806 MB  381 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  98% ▕█████████████████ ▏ 790 MB/806 MB  261 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  98% ▕█████████████████ ▏ 791 MB/806 MB  261 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  99% ▕█████████████████ ▏ 794 MB/806 MB  261 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  99% ▕█████████████████ ▏ 795 MB/806 MB  261 MB/s      0spulling manifest 
+pulling 2f8c3d137f24:  99% ▕█████████████████ ▏ 798 MB/806 MB  261 MB/s      0spulling manifest 
+pulling 2f8c3d137f24: 100% ▕█████████████████ ▏ 803 MB/806 MB  261 MB/s      0spulling manifest 
+pulling 2f8c3d137f24: 100% ▕█████████████████ ▏ 805 MB/806 MB  261 MB/s      0spulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         
+verifying sha256 digest ⠋ pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         
+verifying sha256 digest ⠙ pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         
+verifying sha256 digest ⠹ pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         
+verifying sha256 digest ⠸ pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         
+verifying sha256 digest ⠼ pulling manifest 
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         
+verifying sha256 digest 
+writing manifest 
+success 
+  $ env -u OLLAMA_HOST ollama pull embeddinggemma
+pulling manifest ⠋ pulling manifest ⠙ pulling manifest ⠹ pulling manifest ⠸ pulling manifest ⠼ pulling manifest ⠴ pulling manifest ⠦ pulling manifest ⠧ pulling manifest ⠇ pulling manifest 
+pulling 0800cbac9c20:   0% ▕                  ▏ 1.6 MB/621 MB                  pulling manifest 
+pulling 0800cbac9c20:   3% ▕                  ▏  17 MB/621 MB                  pulling manifest 
+pulling 0800cbac9c20:  11% ▕██                ▏  71 MB/621 MB                  pulling manifest 
+pulling 0800cbac9c20:  17% ▕███               ▏ 104 MB/621 MB                  pulling manifest 
+pulling 0800cbac9c20:  20% ▕███               ▏ 126 MB/621 MB                  pulling manifest 
+pulling 0800cbac9c20:  27% ▕████              ▏ 165 MB/621 MB                  pulling manifest 
+pulling 0800cbac9c20:  32% ▕█████             ▏ 201 MB/621 MB                  pulling manifest 
+pulling 0800cbac9c20:  36% ▕██████            ▏ 221 MB/621 MB                  pulling manifest 
+pulling 0800cbac9c20:  40% ▕███████           ▏ 251 MB/621 MB                  pulling manifest 
+pulling 0800cbac9c20:  47% ▕████████          ▏ 293 MB/621 MB                  pulling manifest 
+pulling 0800cbac9c20:  52% ▕█████████         ▏ 325 MB/621 MB                  pulling manifest 
+pulling 0800cbac9c20:  60% ▕██████████        ▏ 371 MB/621 MB  349 MB/s      0spulling manifest 
+pulling 0800cbac9c20:  68% ▕████████████      ▏ 422 MB/621 MB  349 MB/s      0spulling manifest 
+pulling 0800cbac9c20:  71% ▕████████████      ▏ 439 MB/621 MB  349 MB/s      0spulling manifest 
+pulling 0800cbac9c20:  79% ▕██████████████    ▏ 492 MB/621 MB  349 MB/s      0spulling manifest 
+pulling 0800cbac9c20:  82% ▕██████████████    ▏ 511 MB/621 MB  349 MB/s      0spulling manifest 
+pulling 0800cbac9c20:  85% ▕███████████████   ▏ 528 MB/621 MB  349 MB/s      0spulling manifest 
+pulling 0800cbac9c20:  89% ▕████████████████  ▏ 554 MB/621 MB  349 MB/s      0spulling manifest 
+pulling 0800cbac9c20:  92% ▕████████████████  ▏ 575 MB/621 MB  349 MB/s      0spulling manifest 
+pulling 0800cbac9c20:  94% ▕████████████████  ▏ 582 MB/621 MB  349 MB/s      0spulling manifest 
+pulling 0800cbac9c20:  95% ▕█████████████████ ▏ 592 MB/621 MB  349 MB/s      0spulling manifest 
+pulling 0800cbac9c20:  97% ▕█████████████████ ▏ 602 MB/621 MB  299 MB/s      0spulling manifest 
+pulling 0800cbac9c20:  97% ▕█████████████████ ▏ 605 MB/621 MB  299 MB/s      0spulling manifest 
+pulling 0800cbac9c20:  98% ▕█████████████████ ▏ 611 MB/621 MB  299 MB/s      0spulling manifest 
+pulling 0800cbac9c20:  99% ▕█████████████████ ▏ 618 MB/621 MB  299 MB/s      0spulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 619 MB/621 MB  299 MB/s      0spulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0spulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0spulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0spulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0spulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0spulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0spulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0spulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0spulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0s
+pulling 45dc10444b87: 100% ▕██████████████████▏   34 B                         pulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0s
+pulling 45dc10444b87: 100% ▕██████████████████▏   34 B                         
+pulling 3901c6a1d7c2: 100% ▕██████████████████▏  416 B                         
+verifying sha256 digest ⠋ pulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0s
+pulling 45dc10444b87: 100% ▕██████████████████▏   34 B                         
+pulling 3901c6a1d7c2: 100% ▕██████████████████▏  416 B                         
+verifying sha256 digest ⠙ pulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0s
+pulling 45dc10444b87: 100% ▕██████████████████▏   34 B                         
+pulling 3901c6a1d7c2: 100% ▕██████████████████▏  416 B                         
+verifying sha256 digest ⠹ pulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0s
+pulling 45dc10444b87: 100% ▕██████████████████▏   34 B                         
+pulling 3901c6a1d7c2: 100% ▕██████████████████▏  416 B                         
+verifying sha256 digest ⠸ pulling manifest 
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  299 MB/s      0s
+pulling 45dc10444b87: 100% ▕██████████████████▏   34 B                         
+pulling 3901c6a1d7c2: 100% ▕██████████████████▏  416 B                         
+verifying sha256 digest 
+writing manifest 
+success 
+
+== 7. Shared Python environment (.venv)
+  ✗ .venv not created yet
+  $ /usr/bin/python3.12 -m venv /home/thesecguy/ai-security-course-labs/.venv
+  ✓ .venv created with Python 3.12
+
+== 8. Doctor: final check
+Lab doctor: Linux x86_64, Python 3.12.3 running this check
+
+  ✓  Python 3.11+ in the shared .venv         Python 3.12.3
+  ✓  git installed                            /usr/bin/git
+  ✓  make installed                           /usr/bin/make
+  ✓  Docker installed                         /usr/bin/docker
+  !  Docker engine running                    the engine runs, but your user may not use it
+        next step: Use `sudo docker ...`, or add yourself to the docker group (root-level access, see docs/SETUP.md): sudo usermod -aG docker $USER, then log out and back in.
+  -  Docker can run a container
+  ✓  Ollama running (API on 127.0.0.1:11434)  Ollama 0.40.11
+  ✓  Ollama listens on 127.0.0.1 only         listening on 127.0.0.1
+  ✓  Lab models downloaded                    gemma3:1b, embeddinggemma
+  ✓  Memory (RAM)                             15.6 GB
+  ✓  Free disk space                          81.9 GB free
+
+Ready, with 1 warning(s) above. You can start the labs.
+
+Next: activate the shared environment in each new terminal, then start Lab M1:
+  source .venv/bin/activate
+  cd labs/m01 && cat README.md
+Labs M4, M6, M8 and M9 install their own packages with "make setup" inside their folder.
+thesecguy@lab:~/ai-security-course-labs$ make doctor
+
+.venv/bin/python tools/doctor.py
+Lab doctor: Linux x86_64, Python 3.12.3 running this check
+
+  ✓  Python 3.11+ in the shared .venv         Python 3.12.3
+  ✓  git installed                            /usr/bin/git
+  ✓  make installed                           /usr/bin/make
+  ✓  Docker installed                         /usr/bin/docker
+  !  Docker engine running                    the engine runs, but your user may not use it
+        next step: Use `sudo docker ...`, or add yourself to the docker group (root-level access, see docs/SETUP.md): sudo usermod -aG docker $USER, then log out and back in.
+  -  Docker can run a container
+  ✓  Ollama running (API on 127.0.0.1:11434)  Ollama 0.40.11
+  ✓  Ollama listens on 127.0.0.1 only         listening on 127.0.0.1
+  ✓  Lab models downloaded                    gemma3:1b, embeddinggemma
+  ✓  Memory (RAM)                             15.6 GB
+  ✓  Free disk space                          81.9 GB free
+
+Ready, with 1 warning(s) above. You can start the labs.
+thesecguy@lab:~/ai-security-course-labs$ sudo docker run hello-world
+
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+
+
+4f55086f7dd0: Pulling fs layer 
+
+
+d5e71e642bf5: Download complete 
+
+4f55086f7dd0: Download complete 
+
+4f55086f7dd0: Pull complete 
+Digest: sha256:11a3eb1597e864c51b3f56733cb2e8a90bf0c284bfc05f9444d81c558bc848aa
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+
+thesecguy@lab:~/ai-security-course-labs$ ollama run gemma3:1b
+
+thesecguy@lab:~/ai-security-course-labs$ curl http://localhost:11434
+
+Ollama is runningthesecguy@lab:~/ai-security-course-labs$ ss -ltnp | grep 11434
+
+LISTEN 0      4096       127.0.0.1:11434      0.0.0.0:*          
+thesecguy@lab:~/ai-security-course-labs$ ollama ps
+
+thesecguy@lab:~/ai-security-course-labs$ exit
+
+exit
