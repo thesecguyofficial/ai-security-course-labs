@@ -8,7 +8,7 @@ is compared with the expected result; any difference rejects the take.
 
     python3 record_screen.py recordings/scenarios/m02-2.5-editor.json out/m02-2.5-editor http://127.0.0.1:8080
 
-Writes: screen.mp4 (the recording), marks.json (seconds into the video where each part starts and ends),
+Writes: screen.webm (the untouched recording), marks.json (seconds into the video where each part starts and ends),
 result.md (the saved file), steps.json (what was typed where), shots/ (one picture per part, for review).
 """
 import json
@@ -158,8 +158,8 @@ def main():
         (out / "diff.txt").write_text(diff)
         print(diff[:4000])
         raise SystemExit("take rejected: the saved file differs from what was typed")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", video_path, "-c:v", "libx264", "-preset", "veryfast",
-                    "-crf", "18", "-pix_fmt", "yuv420p", "-r", "30", str(out / "screen.mp4")], check=True)
+    import shutil
+    shutil.copy(video_path, out / "screen.webm")   # the untouched recording (converted for the video later)
     (out / "marks.json").write_text(json.dumps(marks, indent=2) + "\n")
     (out / "steps.json").write_text(json.dumps(actions, indent=2, ensure_ascii=False) + "\n")
     print("marks:")
