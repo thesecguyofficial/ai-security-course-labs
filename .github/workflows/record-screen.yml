@@ -35,7 +35,7 @@ jobs:
           sudo -u thesecguy mkdir -p /home/thesecguy/.local/share/code-server/User
           sudo cp recordings/editor-settings.json /home/thesecguy/.local/share/code-server/User/settings.json
           sudo chown -R thesecguy:thesecguy /home/thesecguy/.local/share/code-server
-          sudo -u thesecguy -H bash -c 'cd ~ && setsid nohup ~/.local/bin/code-server --auth none --bind-addr 127.0.0.1:8080 --disable-telemetry --disable-update-check --disable-workspace-trust --disable-getting-started-override > ~/code-server.log 2>&1 < /dev/null &'
+          sudo -iu thesecguy env -i HOME=/home/thesecguy USER=thesecguy PATH=/home/thesecguy/.local/bin:/usr/local/bin:/usr/bin:/bin bash -c 'cd ~ && setsid nohup ~/.local/bin/code-server --auth none --bind-addr 127.0.0.1:8080 --disable-telemetry --disable-update-check --disable-workspace-trust --disable-getting-started-override > ~/code-server.log 2>&1 < /dev/null &'
           for i in $(seq 1 60); do curl -fsS -o /dev/null http://127.0.0.1:8080/healthz && break; sleep 2; done
           curl -fsS http://127.0.0.1:8080/healthz || { sudo cat /home/thesecguy/code-server.log; exit 1; }
           python3 -m pip install --user --break-system-packages -q playwright==1.48.0
