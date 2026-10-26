@@ -15,7 +15,7 @@ echo 'thesecguy ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/thesecguy
 chmod 440 /etc/sudoers.d/thesecguy
 # Ubuntu's own coloured prompt (thesecguy@lab:~$), nothing invented.
 sed -i 's/^#force_color_prompt=yes/force_color_prompt=yes/' /home/thesecguy/.bashrc
-sudo -u thesecguy git config --global init.defaultBranch main
+sudo -iu thesecguy git config --global init.defaultBranch main
 
 for tool in $clean; do
   case "$tool" in

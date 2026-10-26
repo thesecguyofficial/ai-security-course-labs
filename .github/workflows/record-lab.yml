@@ -12,7 +12,7 @@ on:
     branches: [lab-recorder]
     paths: ["recordings/**", ".github/workflows/record-lab.yml"]
 permissions:
-  contents: read
+  contents: write   # only to push the finished recording to the lab-recordings branch
 
 jobs:
   record:
@@ -41,3 +41,12 @@ jobs:
           name: rec-${{ env.SCENARIO }}
           path: out/${{ env.SCENARIO }}
           retention-days: 90
+      - name: publish the recording to the lab-recordings branch
+        if: success()
+        run: |
+          git config user.name "The Sec Guy"; git config user.email "hello@thesecguy.com"
+          git fetch origin lab-recordings || true
+          if git rev-parse -q --verify origin/lab-recordings; then git switch -c pub origin/lab-recordings; else git switch --orphan pub; git rm -rq --cached . 2>/dev/null || true; fi
+          find . -mindepth 1 -maxdepth 1 ! -name .git ! -name out ! -name recordings-pub -exec rm -rf {} +
+          mkdir -p "$SCENARIO" && cp out/$SCENARIO/* "$SCENARIO/"
+          git add "$SCENARIO" && git commit -qm "Recording $SCENARIO (run $GITHUB_RUN_ID)" && git push -q origin pub:lab-recordings
