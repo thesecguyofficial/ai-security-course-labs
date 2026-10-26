@@ -36,4 +36,14 @@ while IFS= read -r cmd; do
   echo "[before, as thesecguy] $cmd"
   sudo -iu thesecguy bash -lc "$cmd"
 done
-echo "prepared: user thesecguy on host $(hostname), removed: ${clean:-nothing}"
+# Services a scenario needs must answer before the camera starts (off camera, so a take never shows a dead server).
+needs=$(python3 -c 'import json,sys; print(" ".join(json.load(open(sys.argv[1])).get("needs", [])))' "$scenario")
+for svc in $needs; do
+  case "$svc" in
+    ollama)
+      systemctl start ollama 2>/dev/null || true
+      for i in $(seq 1 60); do curl -fsS http://127.0.0.1:11434/api/version >/dev/null 2>&1 && break; sleep 2; done
+      curl -fsS http://127.0.0.1:11434/api/version || { echo "ollama is not answering"; systemctl status ollama --no-pager || true; journalctl -u ollama --no-pager | tail -40 || true; exit 1; } ;;
+  esac
+done
+echo "prepared: user thesecguy on host $(hostname), removed: ${clean:-nothing}, ready: ${needs:-nothing}"
