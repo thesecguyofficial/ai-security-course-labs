@@ -4,7 +4,7 @@ Installing v4.143.1 of the amd64 release from GitHub.
 
 + mkdir -p ~/.cache/code-server
 + curl -#fL -o ~/.cache/code-server/code-server-4.143.1-linux-amd64.tar.gz.incomplete -C - https://github.com/coder/code-server/releases/download/v4.143.1/code-server-4.143.1-linux-amd64.tar.gz
-#=#=#                                                                                                                                                     0.3%######                                                                     9.1%################                                                          22.8%##########################                                                36.6%######################################                                    54.0%#################################################                         68.5%##############################################################            86.8%######################################################################## 100.0%
+#=#=#                                                                          ###                                                                        5.3%#########                                                                 13.1%#################                                                         23.8%#########################                                                 35.2%##################################                                        48.6%#########################################                                 57.4%################################################                          67.2%#######################################################                   77.6%#################################################################         91.3%######################################################################## 100.0%
 + mv ~/.cache/code-server/code-server-4.143.1-linux-amd64.tar.gz.incomplete ~/.cache/code-server/code-server-4.143.1-linux-amd64.tar.gz
 + mkdir -p ~/.local
 + mkdir -p ~/.local/lib ~/.local/bin
@@ -22,9 +22,9 @@ Then run with:
 Deploy code-server for your team with Coder: https://github.com/coder/coder
 + ls -la /home/thesecguy/.local/bin
 total 12
-drwxrwxr-x+ 2 thesecguy thesecguy 4096 Oct 26 19:15 .
-drwxrwxr-x+ 4 thesecguy thesecguy 4096 Oct 26 19:15 ..
-lrwxrwxrwx  1 thesecguy thesecguy   62 Oct 26 19:15 code-server -> /home/thesecguy/.local/lib/code-server-4.143.1/bin/code-server
+drwxrwxr-x+ 2 thesecguy thesecguy 4096 Oct 26 19:20 .
+drwxrwxr-x+ 4 thesecguy thesecguy 4096 Oct 26 19:20 ..
+lrwxrwxrwx  1 thesecguy thesecguy   62 Oct 26 19:20 code-server -> /home/thesecguy/.local/lib/code-server-4.143.1/bin/code-server
 + sudo -u thesecguy mkdir -p /home/thesecguy/.local/share/code-server/User
 + sudo cp recordings/editor-settings.json /home/thesecguy/.local/share/code-server/User/settings.json
 + sudo chown -R thesecguy:thesecguy /home/thesecguy/.local/share/code-server

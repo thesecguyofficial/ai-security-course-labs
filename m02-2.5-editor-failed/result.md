@@ -5,7 +5,7 @@
 
 - **Author:** The Sec Guy
 - **Date:** 27 Oct 2026
-- **Version of the system reviewed:** local / OllamaOllama, or AWS / Bedrock)
+- **Version of the system reviewed:** local / Ollama
 
 ## 1. What are we working on?
 
@@ -72,8 +72,8 @@ List the elements, then the flows. Draw it on paper as well if that helps.
 
 ### 1.4 Where is it on the maps?
 
-- **GenAI Security Scoping Matrix scope (1–5):** 3, because it is our own app on a pre-trained model (Ollama here, Bedrock on AWS) with RAG.because …
-- **Agentic AI Security Scoping Matrix scope (1–4):** 3, because a customer starts it and it refunds and emails within a limit, with no approval per action.:**  … because …
+- **GenAI Security Scoping Matrix scope (1–5):** 3, because it is our own app on a pre-trained model (Ollama here, Bedrock on AWS) with RAG.
+- **Agentic AI Security Scoping Matrix scope (1–4):** 3, because a customer starts it and it refunds and emails within a limit, with no approval per action.
 
 ### 1.5 Lethal trifecta check
 
