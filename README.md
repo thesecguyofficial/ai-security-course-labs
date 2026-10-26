@@ -35,12 +35,22 @@ fetches: it downloads them to a file, shows their SHA-256 and offers to open the
 **Check the file is the one we published** (optional, takes 10 seconds). Compare the output with `SHA256SUMS` in
 this repo and with the hashes in the notes of the latest [GitHub release](https://github.com/thesecguyofficial/ai-security-course-labs/releases):
 
+**Mac:**
+
 ```bash
-shasum -a 256 setup.sh setup.ps1 tools/doctor.py      # macOS (Linux: sha256sum ...)
+shasum -a 256 setup.sh setup.ps1 tools/doctor.py
 ```
 
+**Linux:**
+
+```bash
+sha256sum setup.sh setup.ps1 tools/doctor.py
+```
+
+**Windows (PowerShell):**
+
 ```powershell
-Get-FileHash setup.ps1, setup.sh, tools\doctor.py -Algorithm SHA256    # Windows
+Get-FileHash setup.ps1, setup.sh, tools\doctor.py -Algorithm SHA256
 ```
 
 ## What you need

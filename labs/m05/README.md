@@ -55,14 +55,18 @@ The attacks only target this app, on your machine. Only attack systems you own o
 There is no setup step. Open a terminal in this folder:
 
 ```bash
-cd labs-export/m05          # or wherever you put this folder
+cd labs-export/m05
 ```
+
+- `cd labs-export/m05`: or wherever you put this folder
 
 ## Step 1 · Break it: attack the vulnerable app
 
 ```bash
-make attack                 # same as: python3 attack.py --mode vulnerable
+make attack
 ```
+
+Same as `python3 attack.py --mode vulnerable`.
 
 Real output (Linux, Python 3.13):
 
@@ -103,8 +107,10 @@ What just happened, one line each:
 **See the XSS in a real browser (optional).** Start the app and open it:
 
 ```bash
-make run                    # same as: python3 helpdesk_app.py --mode vulnerable
+make run
 ```
+
+Same as `python3 helpdesk_app.py --mode vulnerable`.
 
 Go to <http://127.0.0.1:8055>, type `summarise my latest ticket` and press **Ask**. A pop-up appears saying
 *Model output just ran as code in your browser*. We checked this in headless Chromium: the dialog fired in
@@ -134,8 +140,10 @@ Two design points worth noticing:
 ## Step 3 · Fix it: attack the safe app
 
 ```bash
-make attack-safe            # same as: python3 attack.py --mode safe
+make attack-safe
 ```
+
+Same as `python3 attack.py --mode safe`.
 
 Real output:
 
@@ -170,8 +178,10 @@ ticket summary shows the `<img ...>` text literally, and normal questions (`sear
 ## Step 4 · Prove it
 
 ```bash
-make test                   # same as: python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 Real output:
 
@@ -210,8 +220,10 @@ model, so a name like `../escaped` walks out of the `exports/` folder. That's **
 examples of improper output handling (LLM10:2026).
 
 ```bash
-make challenge              # same as: python3 run_tests.py --challenge
+make challenge
 ```
+
+Same as `python3 run_tests.py --challenge`.
 
 Real output before your fix (last lines):
 
@@ -243,9 +255,12 @@ With Ollama running (lessons 0.6 and 1.8) and a small model pulled:
 
 ```bash
 ollama pull gemma3:1b
-python3 helpdesk_app.py --backend ollama --model gemma3:1b                # vulnerable
-python3 helpdesk_app.py --backend ollama --model gemma3:1b --mode safe    # safe
+python3 helpdesk_app.py --backend ollama --model gemma3:1b
+python3 helpdesk_app.py --backend ollama --model gemma3:1b --mode safe
 ```
+
+- `python3 helpdesk_app.py --backend ollama --model gemma3:1b`: vulnerable
+- `python3 helpdesk_app.py --backend ollama --model gemma3:1b --mode safe`: safe
 
 The app sends your question to Ollama's OpenAI-compatible endpoint on `127.0.0.1:11434`
 ([Ollama docs](https://docs.ollama.com/openai)), asking for JSON with the same four fields. Ask the three attack

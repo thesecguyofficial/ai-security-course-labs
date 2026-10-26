@@ -71,8 +71,10 @@ any of that changes.
 
 ```bash
 cd labs/az11
-make check                   # same as: python3 checker.py
+make check
 ```
+
+- `make check`: same as `python3 checker.py`
 
 Real output (Linux, Python 3.13):
 
@@ -144,8 +146,10 @@ How to read it, highest first:
 ## Step 2 · Break: replay the requests
 
 ```bash
-make attack                  # same as: python3 attack.py --mode vulnerable
+make attack
 ```
+
+Same as `python3 attack.py --mode vulnerable`.
 
 ```text
 --- AZ11 attack replay · Contoso version 1 (contoso/) ---
@@ -211,9 +215,12 @@ re-enable it.
 Open `fixes/plan.json` and `terraform/main.tf` side by side: they describe the same build. Then:
 
 ```bash
-make check-fixed             # same as: python3 checker.py --with-fixes
-make attack-safe             # same as: python3 attack.py --mode safe
+make check-fixed
+make attack-safe
 ```
+
+- `make check-fixed`: same as `python3 checker.py --with-fixes`
+- `make attack-safe`: same as `python3 attack.py --mode safe`
 
 ```text
 --- AZ11 checker · Contoso, hardened build (fixes/) ---
@@ -296,8 +303,10 @@ Attacker requests allowed: 2 of 7   ·   legitimate requests allowed: 4 of 4
 ## Step 4 · The tests
 
 ```bash
-make test                    # same as: python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 ```text
 [PASS] vulnerable: a stolen app token works from the internet on two of the resource's hostnames
@@ -334,8 +343,10 @@ notices. That is how you keep a security baseline from rotting.
 Contoso piloted the API Management AI gateway in front of a staging deployment, with **Log LLM messages** on.
 
 ```bash
-make hunt                    # same as: python3 hunt.py
+make hunt
 ```
+
+Same as `python3 hunt.py`.
 
 ```text
 --- AZ11 hunt · AI gateway pilot, 19 Oct 2026 · 9 gateway requests, 19 LLM log rows ---
@@ -388,8 +399,10 @@ The shape of `RequestMessages` in this lab is simplified. Look at a few of your 
 `make test` runs the 18 lab tests and must end with `ALL TESTS PASSED (18 run)`. The challenge adds four:
 
 ```bash
-make challenge               # same as: python3 run_tests.py --challenge
+make challenge
 ```
+
+Same as `python3 run_tests.py --challenge`.
 
 ```text
 [PASS] vulnerable: a stolen app token works from the internet on two of the resource's hostnames
@@ -455,18 +468,30 @@ up for your region in the Azure pricing calculator. Plan a 2-hour session, set a
 `make down` the same day. A free account's spending limit stops services when the credit runs out.
 
 ```bash
-az login                                   # your own subscription
-export AZ11_NAME=az11-<initials><4 digits>  # globally unique, lowercase
-export MY_IP=<your public IPv4>            # e.g. from your router; only it may create the key
-make cost                                  # what will be billed
-make up                                    # terraform plan -> the checker on YOUR plan -> apply (asks first)
-make cloud-check                           # the checker again on cloud-plan.json
-make policy                                # assigns the guardrails incl. YOUR challenge-1 policy; wait 15 minutes
-make probe                                 # outside: public address and a refusal; inside: 10.20.2.x and HTTP 200
-make logs                                  # what the Foundry resource logged (give it a few minutes)
-make evidence                              # the settings, read back from Azure
-make down                                  # removes policies and everything Terraform created
+az login
+export AZ11_NAME=az11-<initials><4 digits>
+export MY_IP=<your public IPv4>
+make cost
+make up
+make cloud-check
+make policy
+make probe
+make logs
+make evidence
+make down
 ```
+
+- `az login`: your own subscription
+- `AZ11_NAME`: globally unique, lowercase
+- `MY_IP`: e.g. from your router; only it may create the key
+- `make cost`: what will be billed
+- `make up`: terraform plan -> the checker on YOUR plan -> apply (asks first)
+- `make cloud-check`: the checker again on cloud-plan.json
+- `make policy`: assigns the guardrails incl. YOUR challenge-1 policy; wait 15 minutes
+- `make probe`: outside: public address and a refusal; inside: 10.20.2.x and HTTP 200
+- `make logs`: what the Foundry resource logged (give it a few minutes)
+- `make evidence`: the settings, read back from Azure
+- `make down`: removes policies and everything Terraform created
 
 Use OpenTofu instead of Terraform with `export TF=tofu`.
 

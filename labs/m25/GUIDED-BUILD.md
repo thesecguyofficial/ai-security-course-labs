@@ -34,10 +34,12 @@ Billing console the next day; we expect this guide to cost cents at most, but we
    ```bash
    cd labs/m25
    export AWS_REGION=us-east-1
-   aws sts get-caller-identity --query Account --output text    # check it IS the sandbox
+   aws sts get-caller-identity --query Account --output text
    export BUCKET=tsg-m25-lab-$(aws sts get-caller-identity --query Account --output text)-$RANDOM
    echo $BUCKET
    ```
+
+   - `aws sts get-caller-identity --query Account --output text`: check it IS the sandbox
 
    Bucket names are global, so the account ID and a random number keep yours unique.
 
@@ -225,7 +227,11 @@ then the bucket. Check nothing is left:
 
 ```bash
 aws sagemaker list-model-package-groups --name-contains tsg-guard
-aws s3api head-bucket --bucket $BUCKET     # should fail: Not Found
+aws s3api head-bucket --bucket $BUCKET
 ```
+
+You should see:
+
+- `aws s3api head-bucket --bucket $BUCKET`: should fail: Not Found
 
 Then delete `cloud/out/` on your laptop (`make clean`).

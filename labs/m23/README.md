@@ -107,9 +107,12 @@ deny-by-default destination, a structural input tell, a per-host egress rule.
 ## Step 4 · Read the decision log and prove it
 
 ```bash
-make audit          # every defence decision with its reason
-make test           # the recorded trail and the provided investigation (20 run)
+make audit
+make test
 ```
+
+- `make audit`: every defence decision with its reason
+- `make test`: the recorded trail and the provided investigation (20 run)
 
 ```output
 ALL TESTS PASSED (6 run)
@@ -121,8 +124,10 @@ control: it is what lets a reviewer agree your detection is right and an inciden
 ## Step 5 · Challenge (no solution included)
 
 ```bash
-make challenge      # the challenge tests fail until you finish
+make challenge
 ```
+
+- `make challenge`: the challenge tests fail until you finish
 
 1. **23.2: write `find_quiet_beacon()` in `investigate.py`.** The loud beacon is 14 calls from one host. A service
    account host made only two calls to the same model API, hours apart. Return every non-caller host that made at

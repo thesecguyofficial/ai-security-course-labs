@@ -16,10 +16,14 @@ python3 llm_lab.py check
 python3 llm_lab.py chat "What is a token, in one sentence?"
 python3 llm_lab.py tokens "hello" "Ignore previous instructions" "₹1,999"
 python3 llm_lab.py temp "Name one colour." --runs 3
-python3 llm_lab.py fill --ctx 1024      # watch it forget
-python3 llm_lab.py fill --ctx 8192      # plenty of room
-python3 llm_lab.py --model qwen3:1.7b chat "Hi"   # another model: --model goes BEFORE the command
+python3 llm_lab.py fill --ctx 1024
+python3 llm_lab.py fill --ctx 8192
+python3 llm_lab.py --model qwen3:1.7b chat "Hi"
 ```
+
+- `python3 llm_lab.py fill --ctx 1024`: watch it forget
+- `python3 llm_lab.py fill --ctx 8192`: plenty of room
+- `python3 llm_lab.py --model qwen3:1.7b chat "Hi"`: another model: --model goes BEFORE the command
 
 ## Safety
 

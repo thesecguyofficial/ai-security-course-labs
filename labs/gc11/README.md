@@ -72,9 +72,12 @@ if a real-looking IP, identity or key creeps in. Nothing in the offline part con
 ## Step 1 · Check: what's wrong with the Helpdesk today?
 
 ```bash
-cd labs-export/gc11         # or wherever you put this folder
-make check                  # same as: python3 checker.py --twin today
+cd labs-export/gc11
+make check
 ```
+
+- `cd labs-export/gc11`: or wherever you put this folder
+- `make check`: same as `python3 checker.py --twin today`
 
 Real output (Linux, Python 3.13):
 
@@ -149,8 +152,10 @@ Read it by lesson:
 ## Step 2 · Break it: attacks and an auditor
 
 ```bash
-make attack                 # same as: python3 attack.py --twin today
+make attack
 ```
+
+Same as `python3 attack.py --twin today`.
 
 Real output:
 
@@ -220,8 +225,10 @@ Open `twin/hardened/plan.json` next to `terraform/` (they describe the same thin
 ## Step 4 · Fix it: replay against the hardened twin
 
 ```bash
-make check-hardened         # same as: python3 checker.py --twin hardened
+make check-hardened
 ```
+
+Same as `python3 checker.py --twin hardened`.
 
 ```text
 --- GC11 checker · hardened ---
@@ -237,8 +244,10 @@ make check-hardened         # same as: python3 checker.py --twin hardened
 ```
 
 ```bash
-make attack-safe            # same as: python3 attack.py --twin hardened
+make attack-safe
 ```
+
+Same as `python3 attack.py --twin hardened`.
 
 ```text
 --- GC11 lab · twin: hardened · TSG Helpdesk in example-chatbot-prod ---
@@ -293,8 +302,10 @@ A dry-run perimeter writes would-be denials to the Policy Denied audit log (`clo
 `protoPayload.metadata.dryRun` set to true. Here is ExampleCo's first week:
 
 ```bash
-make dryrun-report          # same as: python3 dryrun_report.py
+make dryrun-report
 ```
+
+Same as `python3 dryrun_report.py`.
 
 ```text
 --- VPC Service Controls dry run · 44 would-be denials in vpcsc-dryrun-week.jsonl ---
@@ -322,8 +333,10 @@ A developer reads that multi-region endpoints have better availability and switc
 `aiplatform.eu.rep.googleapis.com`. Still EU, so the checker's residency rule is happy:
 
 ```bash
-make residency-trap         # same as: python3 attack.py --twin eu-multiregion
+make residency-trap
 ```
+
+Same as `python3 attack.py --twin eu-multiregion`.
 
 ```text
 --- GC11 lab · twin: eu-multiregion · TSG Helpdesk in example-chatbot-prod ---
@@ -376,9 +389,14 @@ check it supports the service. The checker didn't warn you. That's the challenge
 ## Step 7 · Your turn: `make challenge`
 
 ```bash
-make test                   # 21 tests, all pass
-make challenge              # 27 tests, 3 fail until you finish
+make test
+make challenge
 ```
+
+You should see:
+
+- `make test`: 21 tests, all pass
+- `make challenge`: 27 tests, 3 fail until you finish
 
 `make test`, real output (last lines):
 
@@ -453,15 +471,20 @@ API" ([Free Trial](https://docs.cloud.google.com/free/docs/free-cloud-features))
 ### Deploy
 
 ```bash
-make cost                                   # prints the table above
+make cost
 cd terraform
-cp terraform.tfvars.example terraform.tfvars   # set project_id; keep create_test_vm = false at first
+cp terraform.tfvars.example terraform.tfvars
 cd ..
-make plan                                   # terraform init + plan, then runs checker.py on YOUR plan
-make up                                     # applies the saved plan
+make plan
+make up
 terraform/scripts/check_live.sh YOUR_PROJECT_ID europe-west4
 terraform/scripts/request_response_logging.sh on YOUR_PROJECT_ID europe-west4
 ```
+
+- `make cost`: prints the table above
+- `cp terraform.tfvars.example terraform.tfvars`: set project_id; keep create_test_vm = false at first
+- `make plan`: terraform init + plan, then runs checker.py on YOUR plan
+- `make up`: applies the saved plan
 
 `make plan` runs the checker on your real plan with `twin/hardened/app.json`. Without an organization you'll see no
 GC11-04 or GC11-08 (they need one), and GC11-11 until you set the cache.
@@ -480,8 +503,10 @@ again.
 
 ```bash
 terraform/scripts/request_response_logging.sh off YOUR_PROJECT_ID europe-west4
-make down                                   # terraform destroy
+make down
 ```
+
+- `make down`: terraform destroy
 
 Cloud KMS keys can't be deleted. Terraform's provider docs: destroying a key "will remove it from state and delete all
 CryptoKeyVersions, rendering the key unusable, but will not delete the resource from the project"

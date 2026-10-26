@@ -206,7 +206,13 @@ ALL TESTS PASSED (17 run)
 ## Step 7 · Challenge (no solution included)
 
 ```bash
-make challenge      # 3 of 21 tests fail until you finish
+make challenge
+```
+
+You should see:
+
+```text
+3 of 21 tests fail until you finish
 ```
 
 ```output

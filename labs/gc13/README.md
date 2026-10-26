@@ -84,9 +84,12 @@ key or host creeps in.
 ## Step 1 · Check: what did the port lose?
 
 ```bash
-cd labs/gc13                # or wherever you put this folder
-make check                  # same as: python3 checker.py --twin today
+cd labs/gc13
+make check
 ```
+
+- `cd labs/gc13`: or wherever you put this folder
+- `make check`: same as `python3 checker.py --twin today`
 
 Real output (Linux, Python 3.13):
 
@@ -182,8 +185,10 @@ The three NOTES aren't findings: they are facts about RAG Engine you design arou
 ## Step 2 · Break it
 
 ```bash
-make attack                 # same as: python3 attack.py --twin today
+make attack
 ```
+
+Same as `python3 attack.py --twin today`.
 
 Real output:
 
@@ -239,8 +244,10 @@ What happened, request by request:
 ## Step 3 · Fix it: the hardened port
 
 ```bash
-make attack-safe            # same as: python3 attack.py --twin hardened
+make attack-safe
 ```
+
+Same as `python3 attack.py --twin hardened`.
 
 Real output:
 
@@ -297,8 +304,10 @@ Then the same with **Agent Search document ACLs** instead of corpora per group, 
 identity:
 
 ```bash
-make attack-search          # same as: python3 attack.py --twin hardened --backend agent_search
+make attack-search
 ```
+
+Same as `python3 attack.py --twin hardened --backend agent_search`.
 
 The last lines (real output):
 
@@ -344,8 +353,10 @@ appear as coming from the agent". Your challenge rule GC13-18 checks for exactly
 ## Step 5 · Outage: what fails open?
 
 ```bash
-make outage                 # same as: python3 attack.py --twin hardened --outage
+make outage
 ```
+
+Same as `python3 attack.py --twin hardened --outage`.
 
 Real output (trimmed to R5 and the summary):
 
@@ -381,8 +392,10 @@ and plugin decision code run unchanged.
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r adk_agent/requirements.txt
-make adk-offline            # same as: cd adk_agent && TSG_MODEL_ARMOR_TEMPLATE=... python3 run_requests.py
+make adk-offline
 ```
+
+- `make adk-offline`: same as `cd adk_agent && TSG_MODEL_ARMOR_TEMPLATE=... python3 run_requests.py`
 
 Real output (Linux, Python 3.13, google-adk 2.12.0):
 
@@ -532,8 +545,10 @@ make: *** [Makefile:34: challenge] Error 1
 ## Step 8 · Prove it
 
 ```bash
-make test                   # same as: python3 run_tests.py
+make test
 ```
+
+Same as `python3 run_tests.py`.
 
 Real output:
 

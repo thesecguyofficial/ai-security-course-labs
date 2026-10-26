@@ -111,9 +111,12 @@ the same instruction crossing twice, deny-by-default tools).
 ## Step 4 · Prove it
 
 ```bash
-make report         # the four-line containment proof
-make test           # the recording and the provided trace (6 run)
+make report
+make test
 ```
+
+- `make report`: the four-line containment proof
+- `make test`: the recording and the provided trace (6 run)
 
 ```output
 Containment report (recorded attack run a1):
@@ -127,8 +130,10 @@ Containment report (recorded attack run a1):
 ## Step 5 · Challenge (no solution included)
 
 ```bash
-make challenge      # the challenge tests fail until you finish
+make challenge
 ```
+
+- `make challenge`: the challenge tests fail until you finish
 
 1. **24.2: write `find_unlabelled_crossings()` in `trace.py`.** List every hand-off that carried the instruction
    across a boundary with no provenance label. Those are the crossings a label would have caught.

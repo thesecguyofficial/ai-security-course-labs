@@ -4,8 +4,9 @@ SETUP_FILES := setup.sh setup.ps1 tools/doctor.py
 
 .PHONY: style setup check doctor test-setup checksums
 
-style:       ## house-voice check on the README, the labs and docs/
+style:       ## house-voice check + copy-paste check of shell blocks, on the README, the labs and docs/
 	python3 tools/style/style_check.py --warnings README.md labs docs
+	python3 tools/style/codeblock_check.py .
 
 setup:       ## one-time lab setup (asks before each install): same as ./setup.sh
 	./setup.sh

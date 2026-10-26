@@ -31,11 +31,14 @@ run once for real in a sandbox subscription and the examples are replaced with r
 
    ```bash
    cd labs/az16
-   export AZ16_NAME=az16-ab1234            # yours: lowercase letters, digits, hyphens
-   export AZ16_REGION=eastus2              # Microsoft lists gpt-5-mini Global Standard here
+   export AZ16_NAME=az16-ab1234
+   export AZ16_REGION=eastus2
    export RG=rg-$AZ16_NAME
    az group create -n $RG -l $AZ16_REGION -o none
    ```
+
+   - `AZ16_NAME`: yours: lowercase letters, digits, hyphens
+   - `AZ16_REGION`: Microsoft lists gpt-5-mini Global Standard here
 
 5. **Budget alarm first** (lesson 10.5): **Cost Management**, **Budgets**, a monthly budget of US$5 on the resource
    group with an email alert. A budget alerts; it never stops anything.

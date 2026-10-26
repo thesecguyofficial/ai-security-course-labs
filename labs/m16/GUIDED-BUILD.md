@@ -208,8 +208,10 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
 
    ```bash
    export GR=$(aws bedrock create-guardrail --cli-input-json file://cloud/guardrail.json --query guardrailId --output text)
-   aws bedrock get-guardrail --guardrail-identifier $GR --query status --output text   # repeat until READY
+   aws bedrock get-guardrail --guardrail-identifier $GR --query status --output text
    ```
+
+   - `aws bedrock get-guardrail`: repeat until READY
 
    (Already have the M12 guardrail? Use its ID instead; its prompt attack filter is on.)
 
@@ -218,7 +220,7 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
 
    ```bash
    export MODEL=us.anthropic.claude-haiku-4-5-20251001-v1:0
-   ask() {  # $1 = end user, $2 = prompt
+   ask() {
      aws bedrock-runtime converse --model-id $MODEL \
        --messages "[{\"role\":\"user\",\"content\":[{\"text\":\"$2\"}]}]" \
        --guardrail-config guardrailIdentifier=$GR,guardrailVersion=DRAFT,trace=enabled \
@@ -230,6 +232,8 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
    ask cust-lab-3 "My card number is 4111 1111 1111 1111, can you update it?"
    ask cust-lab-4 "Write me a poem about the sea."
    ```
+
+   - `ask`: `$1` = end user, `$2` = prompt
 
    Example response (shape from the provider's docs, values illustrative):
 
@@ -282,10 +286,12 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
    then open the **AI inventory** page (or **Resources** and look for the AI icon). CLI:
 
    ```bash
-   aws securityhub describe-security-hub-v2 || aws securityhub enable-security-hub-v2   # on? if not, turn it on
+   aws securityhub describe-security-hub-v2 || aws securityhub enable-security-hub-v2
    aws securityhub get-resources-v2 --filters file://cloud/ai-inventory-filter.json \
      --query 'Resources[].{type:ResourceType,id:ResourceId,discovery:DiscoveryType,sub:ResourceSubCategory}'
    ```
+
+   - `aws securityhub describe-security-hub-v2`: on? if not, turn it on
 
    How to read it: in a sandbox you'll see your guardrail (if its type is in the supported subset) and anything left
    from the M13 and M14 guided builds. Self-hosted models show up only with Amazon Inspector deep scanning on EC2 or
@@ -333,10 +339,12 @@ aws events remove-targets --rule tsg-m16-ai-findings --ids 1
 aws events delete-rule --name tsg-m16-ai-findings
 aws sns delete-topic --topic-arn $TOPIC
 aws bedrock delete-guardrail --guardrail-identifier $GR
-aws configservice delete-config-rule --config-rule-name bedrockagentcore-gateway-authorizer-enabled   # if you made it
+aws configservice delete-config-rule --config-rule-name bedrockagentcore-gateway-authorizer-enabled
 aws guardduty archive-findings --detector-id $DET --finding-ids $(aws guardduty list-findings --detector-id $DET --query 'FindingIds' --output text)
 aws guardduty update-detector --detector-id $DET --features '[{"Name": "AI_PROTECTION", "Status": "DISABLED"}]'
 ```
+
+- `aws configservice delete-config-rule`: if you made it
 
 Then decide about the services you switched on just for this guide:
 
