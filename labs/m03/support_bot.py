@@ -32,6 +32,7 @@ import json
 import pathlib
 import re
 import sys
+import threading
 import urllib.error
 import urllib.request
 
@@ -93,28 +94,38 @@ def log_event(event: str, fixes: set[str], **detail):
     LOG_FILE.parent.mkdir(exist_ok=True)
     record = {"ts": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
               "event": event, "fixes": sorted(fixes), **detail}
-    with LOG_FILE.open("a", encoding="utf-8") as f:
+    with STATE_LOCK, LOG_FILE.open("a", encoding="utf-8") as f:
         f.write(json.dumps(record, ensure_ascii=True) + "\n")
+
+
+# The web API (make eval) answers several requests at once, so every read-modify-write of the state files holds
+# this lock, and files are replaced in one step: a reader never sees a half-written file.
+STATE_LOCK = threading.RLock()
 
 
 def _load(name: str) -> list:
     path = STATE_DIR / name
-    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
+    with STATE_LOCK:
+        return json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
 
 
 def _save(name: str, items: list):
-    STATE_DIR.mkdir(exist_ok=True)
-    (STATE_DIR / name).write_text(json.dumps(items, indent=2), encoding="utf-8")
+    with STATE_LOCK:
+        STATE_DIR.mkdir(exist_ok=True)
+        tmp = STATE_DIR / f".{name}.{threading.get_ident()}.tmp"
+        tmp.write_text(json.dumps(items, indent=2), encoding="utf-8")
+        tmp.replace(STATE_DIR / name)
 
 
 def create_ticket(action: dict, fixes: set[str]) -> dict:
     """THE TOOL. Harmless on purpose: it only appends to state/tickets.json. In a real app this could issue a
     refund, email a customer or close an account, which is why who gets to call it matters."""
-    tickets = _load("tickets.json")
-    ticket = {"id": len(tickets) + 1, "title": action["title"], "priority": action["priority"],
-              "requested_by": action.get("requested_by", "model")}
-    tickets.append(ticket)
-    _save("tickets.json", tickets)
+    with STATE_LOCK:
+        tickets = _load("tickets.json")
+        ticket = {"id": len(tickets) + 1, "title": action["title"], "priority": action["priority"],
+                  "requested_by": action.get("requested_by", "model")}
+        tickets.append(ticket)
+        _save("tickets.json", tickets)
     log_event("tool_call", fixes, tool="create_ticket", title=ticket["title"], requested_by=ticket["requested_by"])
     return ticket
 
@@ -188,10 +199,11 @@ def handle_email(email: str, mode: str = "summarise", fixes: set[str] | None = N
     # -- Step 4. Run or hold the actions (fix 3: confirm) -------------------------------------------------------
     for a in actions:
         if "confirm" in fixes:
-            pending = _load("pending.json")
-            item = {"id": f"P{len(pending) + 1}", "action": a, "show_user": defences.render_action(a)}
-            pending.append(item)
-            _save("pending.json", pending)
+            with STATE_LOCK:
+                pending = _load("pending.json")
+                item = {"id": f"P{len(pending) + 1}", "action": a, "show_user": defences.render_action(a)}
+                pending.append(item)
+                _save("pending.json", pending)
             result["pending_approval"].append(item)
             log_event("approval_requested", fixes, id=item["id"], action=item["show_user"])
         else:
@@ -209,20 +221,22 @@ def handle_email(email: str, mode: str = "summarise", fixes: set[str] | None = N
 
 def approve(item_id: str, fixes: set[str]) -> dict | None:
     """A person approved a pending action: run exactly what they saw, then remove it from the queue."""
-    pending = _load("pending.json")
-    for item in pending:
-        if item["id"] == item_id:
-            pending.remove(item)
-            _save("pending.json", pending)
-            log_event("approval_granted", fixes, id=item_id, action=item["show_user"])
-            return create_ticket(item["action"], fixes)
+    with STATE_LOCK:
+        pending = _load("pending.json")
+        for item in pending:
+            if item["id"] == item_id:
+                pending.remove(item)
+                _save("pending.json", pending)
+                log_event("approval_granted", fixes, id=item_id, action=item["show_user"])
+                return create_ticket(item["action"], fixes)
     return None
 
 
 def reject(item_id: str, fixes: set[str]) -> bool:
-    pending = _load("pending.json")
-    keep = [i for i in pending if i["id"] != item_id]
-    _save("pending.json", keep)
+    with STATE_LOCK:
+        pending = _load("pending.json")
+        keep = [i for i in pending if i["id"] != item_id]
+        _save("pending.json", keep)
     log_event("approval_rejected", fixes, id=item_id)
     return len(keep) != len(pending)
 
