@@ -1,0 +1,21 @@
+{
+  "name": "m03-demos-linux",
+  "lesson": "3.1, 3.3",
+  "title": "Demos for the M3 videos: one direct injection sent 20 times to a real local model (gemma3:1b); a keyword filter against reworded and encoded forms",
+  "needs": ["ollama"],
+  "cols": 104,
+  "rows": 30,
+  "before": [
+    "curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh",
+    "for i in $(seq 1 30); do curl -fsS http://127.0.0.1:11434/api/version && break; sleep 2; done",
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
+    "ollama pull gemma3:1b"
+  ],
+  "fail_on": ["Could not reach Ollama", "Traceback", "Connection refused"],
+  "steps": [
+    {"label": "Direct", "type": "cd ai-security-course-labs"},
+    {"label": "Direct", "type": "sed -n '/^CANARY/,/^ATTACK/p;/print the internal/p' demos/m03/direct_tries.py", "pause_after": 4},
+    {"label": "Twenty tries", "type": "python3 demos/m03/direct_tries.py --tries 20", "timeout": 1500, "pause_after": 5},
+    {"label": "Filter", "type": "python3 demos/m03/keyword_filter.py", "pause_after": 5}
+  ]
+}
