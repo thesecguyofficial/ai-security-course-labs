@@ -41,11 +41,11 @@ opens those links anyway: nothing is sent anywhere. The "canary"
 ## Step 1 · Get ready
 
 ```bash
-cd labs-export/m03
+cd labs/m03
 python3 run_tests.py
 ```
 
-- `cd labs-export/m03`: or wherever you put this folder
+- `cd labs/m03`: run it from the course labs repository folder (`ai-security-course-labs`)
 - `python3 run_tests.py`: should end with ALL TESTS PASSED (it also proves your setup works)
 
 On Windows, replace each `make X` below with the command it runs (open the `Makefile`; the commands are one line
