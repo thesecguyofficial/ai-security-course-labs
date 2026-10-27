@@ -1,0 +1,39 @@
+{
+  "scenario": "m05-demos-linux",
+  "start": 2.024,
+  "steps": [
+    {
+      "label": "Cost",
+      "speed": 1,
+      "start": 2.024,
+      "end": 5.827
+    },
+    {
+      "label": "Cost",
+      "speed": 1,
+      "start": 7.627,
+      "end": 79.368
+    },
+    {
+      "label": "Packages",
+      "speed": 1,
+      "start": 84.369,
+      "end": 93.916
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.624,
+      "what": "type"
+    },
+    {
+      "t": 8.228,
+      "what": "type"
+    },
+    {
+      "t": 84.969,
+      "what": "type"
+    }
+  ],
+  "end": 98.916
+}

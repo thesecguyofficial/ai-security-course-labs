@@ -1,0 +1,26 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs
+
+thesecguy@lab:~/ai-security-course-labs$ python3 demos/m05/cost_asymmetry.py
+
+request: 'Write a detailed 1,500-word history of the printing press.'
+model:   gemma3:1b (local)
+
+max_tokens  input tokens  output tokens  output/input  seconds
+       100            26            100            4x      4.9
+      2000            26           1592           61x     61.9
+
+On a paid API you pay per token, and output tokens usually cost more than input tokens.
+thesecguy@lab:~/ai-security-course-labs$ python3 demos/m05/package_check.py
+
+model: gemma3:1b (local) · checked against pypi.org · nothing is installed
+
+exists     ModbusPy                         for: read registers from a Modbus TCP PLC asynchronously
+NOT FOUND  deep-prompt-detection            for: detect prompt injection in documents before RAG indexing
+exists     threat-intel                     for: parse and validate STIX 2.1 threat intelligence bundles
+NOT FOUND  py-parquet-utils                 for: redact PII from Apache Parquet files
+exists     provenance                       for: verify SLSA provenance for Python wheels
+
+2 of 5 suggested names do not exist on PyPI today
+thesecguy@lab:~/ai-security-course-labs$ exit
+
+exit
