@@ -2,30 +2,87 @@
   "name": "m03-3.9-linux",
   "lesson": "3.9",
   "title": "Lab 3.9: break SupportBot with a planted note, fix it in four layers, prove each fix (tests + promptfoo), then a real local model with all fixes",
-  "needs": ["ollama"],
+  "needs": [
+    "ollama"
+  ],
   "cols": 110,
   "rows": 32,
   "before": [
     "curl -fsSL https://nodejs.org/dist/v22.22.0/node-v22.22.0-linux-x64.tar.xz -o node.tar.xz && sudo tar -xJf node.tar.xz -C /usr/local --strip-components=1 && rm node.tar.xz && node --version",
     "curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh",
+    "sudo systemctl daemon-reload && sudo systemctl enable --now ollama || (setsid nohup ollama serve >/tmp/ollama.log 2>&1 < /dev/null &)",
     "for i in $(seq 1 30); do curl -fsS http://127.0.0.1:11434/api/version && break; sleep 2; done",
     "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
     "ollama pull gemma3:1b",
     "cd ai-security-course-labs/labs/m03 && PROMPTFOO_DISABLE_TELEMETRY=1 PROMPTFOO_DISABLE_UPDATE=1 npx --yes promptfoo@0.124.1 --version"
   ],
-  "fail_on": ["Could not reach Ollama", "Traceback", "npx not found"],
+  "fail_on": [
+    "Could not reach Ollama",
+    "Traceback",
+    "npx not found"
+  ],
   "steps": [
-    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m03 && ls"},
-    {"label": "The planted note", "type": "cat data/emails/03_planted_note.txt", "pause_after": 4},
-    {"label": "Attack", "type": "make attack", "pause_after": 5},
-    {"label": "Hidden email", "type": "cat data/emails/04_hidden_unicode.txt", "pause_after": 3},
-    {"label": "Reveal", "type": "make hidden", "pause_after": 4},
-    {"label": "Matrix", "type": "make matrix", "pause_after": 5},
-    {"label": "Tests", "type": "make test", "pause_after": 4},
-    {"label": "Eval", "type": "make eval", "timeout": 600, "pause_after": 4},
-    {"label": "Eval weak", "type": "make eval-weak", "timeout": 600, "pause_after": 4},
-    {"label": "Alerts", "type": "make alerts", "pause_after": 4},
-    {"label": "Real model", "type": "python3 support_bot.py reset && python3 support_bot.py summarise data/emails/03_planted_note.txt --backend ollama --fixes all", "timeout": 600, "pause_after": 5},
-    {"label": "Challenge", "type": "make challenge", "pause_after": 5}
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m03 && ls"
+    },
+    {
+      "label": "The planted note",
+      "type": "cat data/emails/03_planted_note.txt",
+      "pause_after": 4
+    },
+    {
+      "label": "Attack",
+      "type": "make attack",
+      "pause_after": 5
+    },
+    {
+      "label": "Hidden email",
+      "type": "cat data/emails/04_hidden_unicode.txt",
+      "pause_after": 3
+    },
+    {
+      "label": "Reveal",
+      "type": "make hidden",
+      "pause_after": 4
+    },
+    {
+      "label": "Matrix",
+      "type": "make matrix",
+      "pause_after": 5
+    },
+    {
+      "label": "Tests",
+      "type": "make test",
+      "pause_after": 4
+    },
+    {
+      "label": "Eval",
+      "type": "make eval",
+      "timeout": 600,
+      "pause_after": 4
+    },
+    {
+      "label": "Eval weak",
+      "type": "make eval-weak",
+      "timeout": 600,
+      "pause_after": 4
+    },
+    {
+      "label": "Alerts",
+      "type": "make alerts",
+      "pause_after": 4
+    },
+    {
+      "label": "Real model",
+      "type": "python3 support_bot.py reset && python3 support_bot.py summarise data/emails/03_planted_note.txt --backend ollama --fixes all",
+      "timeout": 600,
+      "pause_after": 5
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge",
+      "pause_after": 5
+    }
   ]
 }
