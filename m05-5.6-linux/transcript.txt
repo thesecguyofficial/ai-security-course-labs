@@ -1,0 +1,91 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m05 && ls
+
+Makefile  README.md  attack.py  data  helpdesk_app.py  run_tests.py  stand_in_model.py  test_challenge.py  test_lab.py  tools
+thesecguy@lab:~/ai-security-course-labs/labs/m05$ make attack
+
+python3 attack.py --mode vulnerable
+--- M5 lab · VULNERABLE mode · stand-in model (stand_in_model.py, not AI) ---
+
+[HTML ] you> summarise my latest ticket
+    page HTML: <p class='answer'>Summary of your latest ticket: Hi, please reset my password. <img src=x onerror="alert('Mode...
+    RESULT: EXPLOITED - a browser would RUN the onerror code (XSS)
+
+[SQL  ] you> search my tickets for: zzz' OR '1'='1' --
+    log: INFO SQL sent: SELECT id, assignee, title FROM tickets WHERE assignee = 'alice' AND title LIKE '%zzz' OR '1'='1' --%'
+    rows returned: 5, owners: alice, bob
+    RESULT: EXPLOITED - 2 of bob's tickets leaked to alice
+
+[SHELL] you> check the status of vpn; cat data/fake_secrets.env
+    log: INFO command run: "/usr/bin/python3" tools/service_status.py vpn; cat data/fake_secrets.env
+    helper output: VPN gateway: OK (fake data) | # FAKE values for the M5 lab. Nothing here works anywhere. The app should never show this file to a user. | # AKIAIOSFODNN7EXAMPLE is the example key from the AWS IAM documentation. | DB_PASSWORD=lab-only-not-a-real-password | AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+    RESULT: EXPLOITED - an extra command read data/fake_secrets.env
+
+3 of 3 attacks changed what the app did.
+thesecguy@lab:~/ai-security-course-labs/labs/m05$ grep -n 'def .*_safe\|html.escape\|query_only\|ALLOWED_SERVICES =' helpdesk_app.py 
+y
+
+52:ALLOWED_SERVICES = {"vpn", "email", "printer", "wifi"}  # allow-list: the ONLY values the helper may receive
+145:def render_answer_safe(answer: str) -> str:
+151:    return f"<p class='answer'>{html.escape(answer, quote=True)}</p>"
+164:def search_tickets_safe(user: str, term: str) -> list:
+172:    # connection. SQLite says query_only is "not truly read-only" (COMMIT and checkpoints still work), so in
+174:    DB.execute("PRAGMA query_only = ON")
+178:        DB.execute("PRAGMA query_only = OFF")
+216:def service_status_safe(service: str) -> str:
+274:    enc = html.escape if safe else (lambda s, quote=True: s)   # vulnerable mode doesn't encode anything
+292:<form method="post" action="/ask"><input name="q" size="60" value="{html.escape(question)}" autofocus>
+thesecguy@lab:~/ai-security-course-labs/labs/m05$ make attack-safe
+
+python3 attack.py --mode safe
+--- M5 lab · SAFE mode · stand-in model (stand_in_model.py, not AI) ---
+
+[HTML ] you> summarise my latest ticket
+    page HTML: <p class='answer'>Summary of your latest ticket: Hi, please reset my password. &lt;img src=x onerror=&quot;ale...
+    RESULT: safe - the payload is shown as text, not run
+
+[SQL  ] you> search my tickets for: zzz' OR '1'='1' --
+    log: INFO SQL sent: SELECT id, assignee, title FROM tickets WHERE assignee = ? AND title LIKE ? ESCAPE '\'  params=('alice', "%zzz' OR '1'='1' --%")
+    rows returned: 0, owners: none
+    RESULT: safe - the search term was treated as plain text
+
+[SHELL] you> check the status of vpn; cat data/fake_secrets.env
+    log: WARNING BLOCKED service name from model: 'vpn; cat data/fake_secrets.env'
+    helper output: Sorry, I can only check: email, printer, vpn, wifi.
+    RESULT: safe - only allow-listed service names reach the helper
+
+0 of 3 attacks changed what the app did.
+thesecguy@lab:~/ai-security-course-labs/labs/m05$ make test
+
+python3 run_tests.py
+[PASS] vulnerable: model output lands in the page as live HTML (XSS)
+[PASS] vulnerable: model output rewrites the SQL query and leaks bob's tickets
+[PASS] vulnerable: model output runs an extra shell command that reads the secrets file
+[PASS] safe: the payload is HTML-encoded, so the browser shows it instead of running it
+[PASS] safe: parameterised query returns only alice's tickets, and nothing for the injection string
+[PASS] safe: the search runs read-only, and query_only is switched back off afterwards
+[PASS] safe: the allow-list blocks the injected command, and the secret never appears
+[PASS] safe: the helper runs with no inherited environment variables (no tokens or keys to steal)
+[PASS] safe: a helper that hangs is stopped by the timeout
+[PASS] safe: with no shell, ';' is just a character inside one argument, not a second command
+[PASS] http: the vulnerable server sends the payload as live HTML, with no CSP
+[PASS] http: the safe server encodes the payload AND sends a CSP that blocks scripts
+[PASS] http: the app refuses to listen on anything but 127.0.0.1
+----------------------------------------------------------------------
+Ran 13 tests in 1.586s
+
+OK
+
+ALL TESTS PASSED (13 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m05$ make challenge 2>&1 | tail -8
+
+  why test_18_end_to_end: AssertionError: False is not true : the app saved the file to /home/thesecguy/ai-security-course-labs/labs/m05/exports/../escaped.txt
+----------------------------------------------------------------------
+Ran 18 tests in 1.585s
+
+FAILED (failures=4)
+
+4 of 18 TESTS FAILED (18 run)
+make: *** [Makefile:23: challenge] Error 1
+thesecguy@lab:~/ai-security-course-labs/labs/m05$ exit
+
+exit

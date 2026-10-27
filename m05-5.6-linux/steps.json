@@ -1,0 +1,69 @@
+{
+  "scenario": "m05-5.6-linux",
+  "start": 1.745,
+  "steps": [
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 1.745,
+      "end": 7.234
+    },
+    {
+      "label": "Attack",
+      "speed": 1,
+      "start": 9.035,
+      "end": 11.5
+    },
+    {
+      "label": "Fixes",
+      "speed": 1,
+      "start": 17.5,
+      "end": 27.77
+    },
+    {
+      "label": "Attack safe",
+      "speed": 1,
+      "start": 31.77,
+      "end": 34.577
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 40.577,
+      "end": 44.347
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 49.347,
+      "end": 55.574
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.345,
+      "what": "type"
+    },
+    {
+      "t": 9.635,
+      "what": "type"
+    },
+    {
+      "t": 18.1,
+      "what": "type"
+    },
+    {
+      "t": 32.37,
+      "what": "type"
+    },
+    {
+      "t": 41.177,
+      "what": "type"
+    },
+    {
+      "t": 49.947,
+      "what": "type"
+    }
+  ],
+  "end": 60.574
+}
