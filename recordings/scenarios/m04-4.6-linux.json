@@ -1,0 +1,25 @@
+{
+  "name": "m04-4.6-linux",
+  "lesson": "4.6, 4.4",
+  "title": "Lab 4.6: personal data leaks into the logs, Presidio redaction in, out and in the log handler, the canary test, the detector's limits; then the membership-signal demo for lesson 4.4",
+  "cols": 112,
+  "rows": 32,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": ["Traceback", "No module named", "command not found"],
+  "steps": [
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m04 && ls"},
+    {"label": "Setup", "type": "make setup", "timeout": 1200, "speed": 8, "pause_after": 2},
+    {"label": "The conversation", "type": "grep -v '^#' conversation.txt", "pause_after": 4},
+    {"label": "Leak", "type": "make leak", "timeout": 300, "pause_after": 4},
+    {"label": "App log", "type": "head -n 6 logs/app.log", "pause_after": 4},
+    {"label": "Provider log", "type": "head -n 4 logs/provider.log", "pause_after": 4},
+    {"label": "Safe", "type": "make safe", "timeout": 300, "pause_after": 4},
+    {"label": "Clean log", "type": "head -n 6 logs/app.log", "pause_after": 4},
+    {"label": "Tests", "type": "make test", "timeout": 600, "pause_after": 5},
+    {"label": "Limits", "type": "printf 'This is Jane Doe from accounts\\nthis is jane doe from accounts\\nEmail me at jane dot doe at example dot com\\nquit\\n' | .venv/bin/python chat_app.py --redact", "timeout": 300, "pause_after": 5},
+    {"label": "Challenge", "type": "make challenge", "timeout": 600, "pause_after": 5},
+    {"label": "Membership", "type": "cd ../.. && python3 demos/m04/membership_signal.py", "timeout": 300, "pause_after": 5}
+  ]
+}
