@@ -1,0 +1,49 @@
+{
+  "scenario": "m03-demos-linux",
+  "start": 1.732,
+  "steps": [
+    {
+      "label": "Direct",
+      "speed": 1,
+      "start": 1.733,
+      "end": 5.536
+    },
+    {
+      "label": "Direct",
+      "speed": 1,
+      "start": 7.336,
+      "end": 17.173
+    },
+    {
+      "label": "Twenty tries",
+      "speed": 1,
+      "start": 21.173,
+      "end": 38.591
+    },
+    {
+      "label": "Filter",
+      "speed": 1,
+      "start": 43.591,
+      "end": 48.565
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.333,
+      "what": "type"
+    },
+    {
+      "t": 7.936,
+      "what": "type"
+    },
+    {
+      "t": 21.773,
+      "what": "type"
+    },
+    {
+      "t": 44.191,
+      "what": "type"
+    }
+  ],
+  "end": 53.565
+}
