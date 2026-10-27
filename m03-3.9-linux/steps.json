@@ -1,0 +1,129 @@
+{
+  "scenario": "m03-3.9-linux",
+  "start": 1.716,
+  "steps": [
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 1.716,
+      "end": 7.208
+    },
+    {
+      "label": "The planted note",
+      "speed": 1,
+      "start": 9.008,
+      "end": 14.123
+    },
+    {
+      "label": "Attack",
+      "speed": 1,
+      "start": 18.123,
+      "end": 20.5
+    },
+    {
+      "label": "Hidden email",
+      "speed": 1,
+      "start": 25.5,
+      "end": 30.758
+    },
+    {
+      "label": "Reveal",
+      "speed": 1,
+      "start": 33.758,
+      "end": 35.849
+    },
+    {
+      "label": "Matrix",
+      "speed": 1,
+      "start": 39.849,
+      "end": 42.28
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 47.28,
+      "end": 49.435
+    },
+    {
+      "label": "Eval",
+      "speed": 1,
+      "start": 53.435,
+      "end": 58.851
+    },
+    {
+      "label": "Eval weak",
+      "speed": 1,
+      "start": 62.851,
+      "end": 68.862
+    },
+    {
+      "label": "Alerts",
+      "speed": 1,
+      "start": 72.862,
+      "end": 75.229
+    },
+    {
+      "label": "Real model",
+      "speed": 1,
+      "start": 79.23,
+      "end": 101.26
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 106.26,
+      "end": 108.966
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.316,
+      "what": "type"
+    },
+    {
+      "t": 9.608,
+      "what": "type"
+    },
+    {
+      "t": 18.723,
+      "what": "type"
+    },
+    {
+      "t": 26.1,
+      "what": "type"
+    },
+    {
+      "t": 34.358,
+      "what": "type"
+    },
+    {
+      "t": 40.449,
+      "what": "type"
+    },
+    {
+      "t": 47.88,
+      "what": "type"
+    },
+    {
+      "t": 54.035,
+      "what": "type"
+    },
+    {
+      "t": 63.451,
+      "what": "type"
+    },
+    {
+      "t": 73.463,
+      "what": "type"
+    },
+    {
+      "t": 79.83,
+      "what": "type"
+    },
+    {
+      "t": 106.86,
+      "what": "type"
+    }
+  ],
+  "end": 113.966
+}
