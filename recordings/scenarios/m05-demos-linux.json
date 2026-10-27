@@ -1,0 +1,21 @@
+{
+  "name": "m05-demos-linux",
+  "lesson": "5.2, 5.5",
+  "title": "Demos for the M5 videos: one short request vs max_tokens on a real local model (gemma3:1b); does the package a model recommends exist on PyPI?",
+  "needs": ["ollama"],
+  "cols": 112,
+  "rows": 28,
+  "before": [
+    "curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh",
+    "sudo systemctl daemon-reload && sudo systemctl enable --now ollama || (setsid nohup ollama serve >/tmp/ollama.log 2>&1 < /dev/null &)",
+    "for i in $(seq 1 30); do curl -fsS http://127.0.0.1:11434/api/version && break; sleep 2; done",
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
+    "ollama pull gemma3:1b"
+  ],
+  "fail_on": ["Could not reach Ollama", "Traceback", "Connection refused"],
+  "steps": [
+    {"label": "Cost", "type": "cd ai-security-course-labs"},
+    {"label": "Cost", "type": "python3 demos/m05/cost_asymmetry.py", "timeout": 1500, "pause_after": 5},
+    {"label": "Packages", "type": "python3 demos/m05/package_check.py", "timeout": 900, "pause_after": 5}
+  ]
+}
