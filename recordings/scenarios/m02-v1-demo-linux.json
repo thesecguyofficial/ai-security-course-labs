@@ -1,0 +1,19 @@
+{
+  "name": "m02-v1-demo-linux",
+  "lesson": "2.1",
+  "title": "Demo: a real local model (gemma3:1b) summarises an email with a planted note (SupportBot from lab 3.9, no fixes)",
+  "needs": ["ollama"],
+  "before": [
+    "curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh",
+    "for i in $(seq 1 30); do curl -fsS http://127.0.0.1:11434/api/version && break; sleep 2; done",
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
+    "ollama pull gemma3:1b"
+  ],
+  "fail_on": ["Could not reach Ollama", "Traceback"],
+  "steps": [
+    {"label": "The email", "type": "cd ai-security-course-labs/labs/m03"},
+    {"label": "The email", "type": "cat data/emails/03_planted_note.txt", "pause_after": 4},
+    {"label": "The bot reads it", "type": "python3 support_bot.py summarise data/emails/03_planted_note.txt --backend ollama", "timeout": 300, "pause_after": 5},
+    {"label": "What it did", "type": "python3 support_bot.py tickets", "pause_after": 4}
+  ]
+}
