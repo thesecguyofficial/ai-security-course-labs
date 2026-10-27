@@ -1,0 +1,459 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m04 && ls
+
+Makefile   canaries.txt            chat_app.py    conversation.txt  requirements.txt  stub_llm.py
+README.md  challenge_canaries.txt  check_logs.py  redactor.py       run_tests.py
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ make setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+Collecting presidio_analyzer==2.2.364 (from -r requirements.txt (line 3))
+  Downloading presidio_analyzer-2.2.364-py3-none-any.whl.metadata (6.7 kB)
+Collecting presidio_anonymizer==2.2.364 (from -r requirements.txt (line 4))
+  Downloading presidio_anonymizer-2.2.364-py3-none-any.whl.metadata (9.9 kB)
+Collecting click<9.0.0,>=8.1.0 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting numpy<2.5.0,>=1.19.0 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading numpy-2.4.6-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+Collecting phonenumbers<10.0.0,>=9.0.28 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading phonenumbers-9.0.42-py2.py3-none-any.whl.metadata (10 kB)
+Collecting pydantic<3.0.0,>=2.12.5 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/133.0 kB ? eta -:--:--
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 133.0/133.0 kB 11.3 MB/s eta 0:00:00
+Collecting pyyaml<7.0.0,>=6.0.3 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+Collecting regex>=2023.0.0 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading regex-2026.9.29-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/40.6 kB ? eta -:--:--
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.6/40.6 kB 15.2 MB/s eta 0:00:00
+Collecting spacy!=3.7.0,<4.0.0,>=3.4.4 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading spacy-3.8.18-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (28 kB)
+Collecting tldextract<6.0.0,>=5.3.1 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading tldextract-5.4.0-py3-none-any.whl.metadata (9.2 kB)
+Collecting cryptography<49.0.0,>=48.0.1 (from presidio_anonymizer==2.2.364->-r requirements.txt (line 4))
+  Downloading cryptography-48.0.1-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.3 kB)
+Collecting cffi>=2.0.0 (from cryptography<49.0.0,>=48.0.1->presidio_anonymizer==2.2.364->-r requirements.txt (line 4))
+  Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.5 kB)
+Collecting annotated-types>=0.6.0 (from pydantic<3.0.0,>=2.12.5->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.50.1 (from pydantic<3.0.0,>=2.12.5->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
+Collecting typing-extensions>=4.16.0 (from pydantic<3.0.0,>=2.12.5->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting typing-inspection>=0.4.4 (from pydantic<3.0.0,>=2.12.5->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+Collecting spacy-legacy<3.1.0,>=3.0.11 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading spacy_legacy-3.0.12-py2.py3-none-any.whl.metadata (2.8 kB)
+Collecting spacy-loggers<2.0.0,>=1.0.0 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading spacy_loggers-1.0.5-py3-none-any.whl.metadata (23 kB)
+Collecting murmurhash<1.1.0,>=0.28.0 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading murmurhash-1.0.16-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl.metadata (2.3 kB)
+Collecting cymem<2.1.0,>=2.0.2 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading cymem-2.0.16-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (9.7 kB)
+Collecting preshed!=3.0.14,<3.1.0,>=3.0.2 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading preshed-3.0.15-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (5.3 kB)
+Collecting thinc<8.4.0,>=8.3.12 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading thinc-8.3.14-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (14 kB)
+Collecting wasabi<1.2.0,>=0.9.1 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading wasabi-1.1.3-py3-none-any.whl.metadata (28 kB)
+Collecting srsly<3.0.0,>=2.5.3 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading srsly-2.5.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (20 kB)
+Collecting catalogue<2.1.0,>=2.0.6 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading catalogue-2.0.10-py3-none-any.whl.metadata (14 kB)
+Collecting weasel<2.0.0,>=1.0.1 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading weasel-1.0.1-py3-none-any.whl.metadata (4.8 kB)
+Collecting confection<2.0.0,>=1.3.4 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading confection-1.3.4-py3-none-any.whl.metadata (19 kB)
+Collecting typer<1.0.0,>=0.3.0 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading typer-0.27.3-py3-none-any.whl.metadata (16 kB)
+Collecting tqdm<5.0.0,>=4.38.0 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading tqdm-4.70.1-py3-none-any.whl.metadata (57 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/57.4 kB ? eta -:--:--
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.4/57.4 kB 17.2 MB/s eta 0:00:00
+Collecting requests<3.0.0,>=2.13.0 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting jinja2 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+Collecting setuptools (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading setuptools-84.2.1-py3-none-any.whl.metadata (6.6 kB)
+Collecting packaging>=20.0 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+Collecting idna (from tldextract<6.0.0,>=5.3.1->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting requests-file>=1.4 (from tldextract<6.0.0,>=5.3.1->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading requests_file-3.0.1-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting filelock>=3.0.8 (from tldextract<6.0.0,>=5.3.1->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading filelock-4.2.4-py3-none-any.whl.metadata (2.0 kB)
+Collecting pycparser (from cffi>=2.0.0->cryptography<49.0.0,>=48.0.1->presidio_anonymizer==2.2.364->-r requirements.txt (line 4))
+  Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+Collecting charset_normalizer<4,>=2 (from requests<3.0.0,>=2.13.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/46.4 kB ? eta -:--:--
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 46.4/46.4 kB 4.6 MB/s eta 0:00:00
+Collecting urllib3<3,>=1.26 (from requests<3.0.0,>=2.13.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting certifi>=2023.5.7 (from requests<3.0.0,>=2.13.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Collecting blis<1.4.0,>=1.3.0 (from thinc<8.4.0,>=8.3.12->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading blis-1.3.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (8.4 kB)
+Collecting shellingham>=1.3.0 (from typer<1.0.0,>=0.3.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading shellingham-1.5.4-py2.py3-none-any.whl.metadata (3.5 kB)
+Collecting rich>=13.8.0 (from typer<1.0.0,>=0.3.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading rich-15.0.0-py3-none-any.whl.metadata (18 kB)
+Collecting annotated-doc>=0.0.2 (from typer<1.0.0,>=0.3.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
+Collecting cloudpathlib>=0.7.0 (from weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading cloudpathlib-0.26.0-py3-none-any.whl.metadata (16 kB)
+Collecting smart-open>=5.2.1 (from smart-open[http]>=5.2.1->weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading smart_open-8.0.4-py3-none-any.whl.metadata (25 kB)
+Collecting httpx>=0.24.0 (from weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting MarkupSafe>=2.0 (from jinja2->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+Collecting anyio (from httpx>=0.24.0->weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+Collecting httpcore==1.* (from httpx>=0.24.0->weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx>=0.24.0->weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting markdown-it-py>=2.2.0 (from rich>=13.8.0->typer<1.0.0,>=0.3.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading markdown_it_py-4.2.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting pygments<3.0.0,>=2.13.0 (from rich>=13.8.0->typer<1.0.0,>=0.3.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting wrapt (from smart-open>=5.2.1->smart-open[http]>=5.2.1->weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading wrapt-2.5.1-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (7.6 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=13.8.0->typer<1.0.0,>=0.3.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Downloading presidio_analyzer-2.2.364-py3-none-any.whl (266 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/266.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 266.3/266.3 kB 20.2 MB/s eta 0:00:00
+Downloading presidio_anonymizer-2.2.364-py3-none-any.whl (38 kB)
+Downloading click-8.5.0-py3-none-any.whl (125 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/125.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 125.3/125.3 kB 43.2 MB/s eta 0:00:00
+Downloading cryptography-48.0.1-cp311-abi3-manylinux_2_34_x86_64.whl (4.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/4.7 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━━━━ 2.8/4.7 MB 86.3 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.7/4.7 MB 92.4 MB/s eta 0:00:00
+Downloading numpy-2.4.6-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/16.6 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/16.6 MB 191.3 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━ 12.6/16.6 MB 175.3 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 16.6/16.6 MB 192.1 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 138.2 MB/s eta 0:00:00
+Downloading phonenumbers-9.0.42-py2.py3-none-any.whl (2.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/2.6 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.6/2.6 MB 137.2 MB/s eta 0:00:00
+Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/488.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 488.1/488.1 kB 114.3 MB/s eta 0:00:00
+Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/2.2 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 71.7 MB/s eta 0:00:00
+Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/807.9 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 798.7/807.9 kB 216.4 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 798.7/807.9 kB 216.4 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 798.7/807.9 kB 216.4 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 6.0 MB/s eta 0:00:00
+Downloading regex-2026.9.29-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/807.8 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.8/807.8 kB 136.8 MB/s eta 0:00:00
+Downloading spacy-3.8.18-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (35.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/35.5 MB ? eta -:--:--
+   ━━━━━━╸━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.9/35.5 MB 177.9 MB/s eta 0:00:01
+   ━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.0/35.5 MB 158.1 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━━━ 18.9/35.5 MB 228.8 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━ 24.7/35.5 MB 189.3 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━ 31.5/35.5 MB 198.1 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━ 31.5/35.5 MB 198.1 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━ 31.5/35.5 MB 198.1 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━ 33.5/35.5 MB 69.9 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 35.5/35.5 MB 70.3 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.5/35.5 MB 53.9 MB/s eta 0:00:00
+Downloading tldextract-5.4.0-py3-none-any.whl (107 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/107.5 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 107.5/107.5 kB 31.0 MB/s eta 0:00:00
+Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Downloading catalogue-2.0.10-py3-none-any.whl (17 kB)
+Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/221.8 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 221.8/221.8 kB 74.1 MB/s eta 0:00:00
+Downloading confection-1.3.4-py3-none-any.whl (35 kB)
+Downloading cymem-2.0.16-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (274 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/274.5 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 274.5/274.5 kB 37.1 MB/s eta 0:00:00
+Downloading filelock-4.2.4-py3-none-any.whl (162 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/162.5 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 162.5/162.5 kB 60.3 MB/s eta 0:00:00
+Downloading murmurhash-1.0.16-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl (132 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/132.9 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 132.9/132.9 kB 50.6 MB/s eta 0:00:00
+Downloading packaging-26.3-py3-none-any.whl (129 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/130.0 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 130.0/130.0 kB 49.8 MB/s eta 0:00:00
+Downloading preshed-3.0.15-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (926 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/926.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 926.3/926.3 kB 75.4 MB/s eta 0:00:00
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/73.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.1/73.1 kB 29.2 MB/s eta 0:00:00
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/69.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 69.6/69.6 kB 26.6 MB/s eta 0:00:00
+Downloading requests_file-3.0.1-py2.py3-none-any.whl (4.5 kB)
+Downloading spacy_legacy-3.0.12-py2.py3-none-any.whl (29 kB)
+Downloading spacy_loggers-1.0.5-py3-none-any.whl (22 kB)
+Downloading srsly-2.5.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/1.2 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 93.6 MB/s eta 0:00:00
+Downloading thinc-8.3.14-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (4.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/4.3 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.3/4.3 MB 142.2 MB/s eta 0:00:00
+Downloading tqdm-4.70.1-py3-none-any.whl (80 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/80.2 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 80.2/80.2 kB 32.1 MB/s eta 0:00:00
+Downloading typer-0.27.3-py3-none-any.whl (123 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/123.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 123.3/123.3 kB 45.1 MB/s eta 0:00:00
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/45.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.6/45.6 kB 11.5 MB/s eta 0:00:00
+Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Downloading wasabi-1.1.3-py3-none-any.whl (27 kB)
+Downloading weasel-1.0.1-py3-none-any.whl (51 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/51.0 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 51.0/51.0 kB 10.9 MB/s eta 0:00:00
+Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/134.9 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.9/134.9 kB 49.6 MB/s eta 0:00:00
+Downloading setuptools-84.2.1-py3-none-any.whl (876 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/876.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 876.3/876.3 kB 136.2 MB/s eta 0:00:00
+Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+Downloading blis-1.3.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (14.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/14.3 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━━━ 7.6/14.3 MB 228.4 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━ 13.7/14.3 MB 198.4 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 14.3/14.3 MB 122.9 MB/s eta 0:00:00
+Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/135.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.1/135.1 kB 50.9 MB/s eta 0:00:00
+Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (257 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/257.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 257.6/257.6 kB 81.2 MB/s eta 0:00:00
+Downloading cloudpathlib-0.26.0-py3-none-any.whl (66 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/66.4 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 66.4/66.4 kB 9.7 MB/s eta 0:00:00
+Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/73.5 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.5/73.5 kB 20.7 MB/s eta 0:00:00
+Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/78.8 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.8/78.8 kB 31.6 MB/s eta 0:00:00
+Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+Downloading rich-15.0.0-py3-none-any.whl (310 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/310.7 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 310.7/310.7 kB 96.7 MB/s eta 0:00:00
+Downloading shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+Downloading smart_open-8.0.4-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/73.9 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.9/73.9 kB 29.2 MB/s eta 0:00:00
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/135.7 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.7/135.7 kB 45.7 MB/s eta 0:00:00
+Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/62.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.6/62.6 kB 26.2 MB/s eta 0:00:00
+Downloading markdown_it_py-4.2.0-py3-none-any.whl (91 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/91.7 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.7/91.7 kB 35.9 MB/s eta 0:00:00
+Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/1.3 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 158.8 MB/s eta 0:00:00
+Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/132.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 132.1/132.1 kB 46.2 MB/s eta 0:00:00
+Downloading wrapt-2.5.1-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (250 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/250.4 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 250.4/250.4 kB 74.5 MB/s eta 0:00:00
+Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Installing collected packages: wrapt, wasabi, urllib3, typing-extensions, tqdm, spacy-loggers, spacy-legacy, shellingham, setuptools, regex, pyyaml, pygments, pycparser, phonenumbers, packaging, numpy, murmurhash, mdurl, MarkupSafe, idna, h11, filelock, cymem, confection, cloudpathlib, click, charset_normalizer, certifi, catalogue, annotated-types, annotated-doc, typing-inspection, srsly, smart-open, requests, pydantic-core, preshed, markdown-it-py, jinja2, httpcore, cffi, blis, anyio, rich, requests-file, pydantic, httpx, cryptography, typer, tldextract, thinc, presidio_anonymizer, weasel, spacy, presidio_analyzer
+Successfully installed MarkupSafe-3.0.4 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 blis-1.3.4 catalogue-2.0.10 certifi-2026.10.23 cffi-2.1.1 charset_normalizer-3.5.2 click-8.5.0 cloudpathlib-0.26.0 confection-1.3.4 cryptography-48.0.1 cymem-2.0.16 filelock-4.2.4 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 idna-3.20 jinja2-3.1.6 markdown-it-py-4.2.0 mdurl-0.1.2 murmurhash-1.0.16 numpy-2.4.6 packaging-26.3 phonenumbers-9.0.42 preshed-3.0.15 presidio_analyzer-2.2.364 presidio_anonymizer-2.2.364 pycparser-3.12 pydantic-2.14.1 pydantic-core-2.50.1 pygments-2.21.0 pyyaml-6.0.3 regex-2026.9.29 requests-2.34.2 requests-file-3.0.1 rich-15.0.0 setuptools-84.2.1 shellingham-1.5.4 smart-open-8.0.4 spacy-3.8.18 spacy-legacy-3.0.12 spacy-loggers-1.0.5 srsly-2.5.5 thinc-8.3.14 tldextract-5.4.0 tqdm-4.70.1 typer-0.27.3 typing-extensions-4.16.0 typing-inspection-0.4.4 urllib3-2.8.0 wasabi-1.1.3 weasel-1.0.1 wrapt-2.5.1
+.venv/bin/python -m spacy download en_core_web_sm
+Collecting en-core-web-sm==3.8.0
+  Downloading https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl (12.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/12.8 MB ? eta -:--:--
+     ━╸━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.6/12.8 MB 17.7 MB/s eta 0:00:01
+     ━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/12.8 MB 24.9 MB/s eta 0:00:01
+     ━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.2/12.8 MB 31.1 MB/s eta 0:00:01
+     ━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━ 5.2/12.8 MB 38.0 MB/s eta 0:00:01
+     ━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━ 8.1/12.8 MB 47.0 MB/s eta 0:00:01
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━ 11.9/12.8 MB 73.1 MB/s eta 0:00:01
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.8/12.8 MB 70.4 MB/s eta 0:00:00
+Installing collected packages: en-core-web-sm
+Successfully installed en-core-web-sm-3.8.0
+✔ Download and installation successful
+You can now load the package via spacy.load('en_core_web_sm')
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ grep -v '^#' conversation.txt
+
+Hi, I'm Jane Doe. My email is jane.doe@example.com and my phone is +1 202-555-0143.
+My card 4242 4242 4242 4242 was charged twice, please refund one.
+For the invoice my PAN is ABCPE1234F.
+Our build server at 203.0.113.42 uses the key AKIAIOSFODNN7EXAMPLE, is that a problem?
+My manager's employee ID is EMP-482913 if you need to escalate.
+Can you look up the last customer who called about refunds?
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ make leak
+
+.venv/bin/python chat_app.py --script conversation.txt --fresh
+--- support chat · NO REDACTION · stand-in model (stub_llm.py) ---
+
+you> Hi, I'm Jane Doe. My email is jane.doe@example.com and my phone is +1 202-555-0143.
+bot> Thanks, I've noted your message: "Hi, I'm Jane Doe. My email is jane.doe@example.com and my phone is +1 202-555-0143.". A support agent will follow up.
+
+you> My card 4242 4242 4242 4242 was charged twice, please refund one.
+bot> Thanks, I've noted your message: "My card 4242 4242 4242 4242 was charged twice, please refund one.". A support agent will follow up.
+
+you> For the invoice my PAN is ABCPE1234F.
+bot> Thanks, I've noted your message: "For the invoice my PAN is ABCPE1234F.". A support agent will follow up.
+
+you> Our build server at 203.0.113.42 uses the key AKIAIOSFODNN7EXAMPLE, is that a problem?
+bot> Thanks, I've noted your message: "Our build server at 203.0.113.42 uses the key AKIAIOSFODNN7EXAMPLE, is that a problem?". A support agent will follow up.
+
+you> My manager's employee ID is EMP-482913 if you need to escalate.
+bot> Thanks, I've noted your message: "My manager's employee ID is EMP-482913 if you need to escalate.". A support agent will follow up.
+
+you> Can you look up the last customer who called about refunds?
+bot> Here is what I found. Customer record: John Smith, john.smith@example.org, card 5555 5555 5555 4444, last login from 198.51.100.7.
+
+Logs written to logs/app.log and logs/provider.log
+.venv/bin/python check_logs.py
+  LEAK  logs/app.log line 1: contains 'Jane…'
+  LEAK  logs/app.log line 1: contains 'jane…'
+  LEAK  logs/app.log line 1: contains '202-…'
+  LEAK  logs/app.log line 2: contains 'Jane…'
+  LEAK  logs/app.log line 2: contains 'jane…'
+  LEAK  logs/app.log line 2: contains '202-…'
+  LEAK  logs/app.log line 3: contains 'Jane…'
+  LEAK  logs/app.log line 3: contains 'jane…'
+  LEAK  logs/app.log line 3: contains '202-…'
+  LEAK  logs/app.log line 4: contains '4242…'
+  LEAK  logs/app.log line 5: contains '4242…'
+  LEAK  logs/app.log line 6: contains '4242…'
+  LEAK  logs/app.log line 7: contains 'ABCP…'
+  LEAK  logs/app.log line 8: contains 'ABCP…'
+  LEAK  logs/app.log line 9: contains 'ABCP…'
+  LEAK  logs/app.log line 10: contains '203.…'
+  LEAK  logs/app.log line 10: contains 'AKIA…'
+  LEAK  logs/app.log line 11: contains '203.…'
+  LEAK  logs/app.log line 11: contains 'AKIA…'
+  LEAK  logs/app.log line 12: contains '203.…'
+  LEAK  logs/app.log line 12: contains 'AKIA…'
+  LEAK  logs/app.log line 18: contains 'John…'
+  LEAK  logs/app.log line 18: contains 'john…'
+  LEAK  logs/app.log line 18: contains '5555…'
+  LEAK  logs/app.log line 18: contains '198.…'
+  LEAK  logs/provider.log line 1: contains 'Jane…'
+  LEAK  logs/provider.log line 1: contains 'jane…'
+  LEAK  logs/provider.log line 1: contains '202-…'
+  LEAK  logs/provider.log line 2: contains '4242…'
+  LEAK  logs/provider.log line 3: contains 'ABCP…'
+  LEAK  logs/provider.log line 4: contains '203.…'
+  LEAK  logs/provider.log line 4: contains 'AKIA…'
+FAIL: 11 of 11 sensitive values found in logs (32 hits) [app.log, provider.log]
+make: [Makefile:14: leak] Error 1 (ignored)
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ head -n 6 logs/app.log
+
+2026-10-27 17:39:27,473 DEBUG raw request received: Hi, I'm Jane Doe. My email is jane.doe@example.com and my phone is +1 202-555-0143.
+2026-10-27 17:39:27,474 INFO user: Hi, I'm Jane Doe. My email is jane.doe@example.com and my phone is +1 202-555-0143.
+2026-10-27 17:39:27,474 INFO assistant: Thanks, I've noted your message: "Hi, I'm Jane Doe. My email is jane.doe@example.com and my phone is +1 202-555-0143.". A support agent will follow up.
+2026-10-27 17:39:27,474 DEBUG raw request received: My card 4242 4242 4242 4242 was charged twice, please refund one.
+2026-10-27 17:39:27,474 INFO user: My card 4242 4242 4242 4242 was charged twice, please refund one.
+2026-10-27 17:39:27,474 INFO assistant: Thanks, I've noted your message: "My card 4242 4242 4242 4242 was charged twice, please refund one.". A support agent will follow up.
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ head -n 4 logs/provider.log
+
+2026-10-27 17:39:27,474 PROVIDER RECEIVED: Hi, I'm Jane Doe. My email is jane.doe@example.com and my phone is +1 202-555-0143.
+2026-10-27 17:39:27,474 PROVIDER RECEIVED: My card 4242 4242 4242 4242 was charged twice, please refund one.
+2026-10-27 17:39:27,474 PROVIDER RECEIVED: For the invoice my PAN is ABCPE1234F.
+2026-10-27 17:39:27,474 PROVIDER RECEIVED: Our build server at 203.0.113.42 uses the key AKIAIOSFODNN7EXAMPLE, is that a problem?
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ make safe
+
+.venv/bin/python chat_app.py --script conversation.txt --fresh --redact
+--- support chat · REDACTION ON · stand-in model (stub_llm.py) ---
+
+you> Hi, I'm Jane Doe. My email is jane.doe@example.com and my phone is +1 202-555-0143.
+bot> Thanks, I've noted your message: "Hi, I'm <PERSON>. My email is <EMAIL_ADDRESS> and my phone is <PHONE_NUMBER>.". A support agent will follow up.
+
+you> My card 4242 4242 4242 4242 was charged twice, please refund one.
+bot> Thanks, I've noted your message: "My card <CREDIT_CARD> was charged twice, please refund one.". A support agent will follow up.
+
+you> For the invoice my PAN is ABCPE1234F.
+bot> Thanks, I've noted your message: "For the invoice my PAN is <IN_PAN>.". A support agent will follow up.
+
+you> Our build server at 203.0.113.42 uses the key AKIAIOSFODNN7EXAMPLE, is that a problem?
+bot> Thanks, I've noted your message: "Our build server at <IP_ADDRESS> uses the key <AWS_ACCESS_KEY>, is that a problem?". A support agent will follow up.
+
+you> My manager's employee ID is EMP-482913 if you need to escalate.
+bot> Thanks, I've noted your message: "My manager's employee ID is EMP-482913 if you need to escalate.". A support agent will follow up.
+
+you> Can you look up the last customer who called about refunds?
+bot> Here is what I found. Customer record: <PERSON>, <EMAIL_ADDRESS>, card <CREDIT_CARD>, last login from <IP_ADDRESS>.
+
+Logs written to logs/app.log and logs/provider.log
+.venv/bin/python check_logs.py
+PASS: none of 11 sensitive values found in logs [app.log, provider.log]
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ head -n 6 logs/app.log
+
+2026-10-27 17:39:50,106 DEBUG raw request received: Hi, I'm <PERSON>. My email is <EMAIL_ADDRESS> and my phone is <PHONE_NUMBER>.
+2026-10-27 17:39:50,706 INFO user: Hi, I'm <PERSON>. My email is <EMAIL_ADDRESS> and my phone is <PHONE_NUMBER>.
+2026-10-27 17:39:50,712 INFO assistant: Thanks, I've noted your message: "Hi, I'm <PERSON>. My email is <EMAIL_ADDRESS> and my phone is <PHONE_NUMBER>.". A support agent will follow up.
+2026-10-27 17:39:50,721 DEBUG raw request received: My card <CREDIT_CARD> was charged twice, please refund one.
+2026-10-27 17:39:50,749 INFO user: My card <CREDIT_CARD> was charged twice, please refund one.
+2026-10-27 17:39:50,754 INFO assistant: Thanks, I've noted your message: "My card <CREDIT_CARD> was charged twice, please refund one.". A support agent will follow up.
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ make test
+
+.venv/bin/python run_tests.py
+[PASS] Test 1  redaction OFF: the checker catches the leak   -> FAIL: 11 of 11 sensitive values found in logs (32 hits) [app.log, provider.log]
+[PASS] Test 2  redaction ON:  nothing sensitive in the logs  -> PASS: none of 11 sensitive values found in logs [app.log, provider.log]
+[PASS] Test 3  redaction ON:  the user never sees another customer's data
+[PASS] Test 4  redaction ON:  labels survive a second pass (log filter)
+
+ALL TESTS PASSED
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ printf 'This is Jane Doe from accounts\nthis is jane doe from  
+accounts\nEmail me at jane dot doe at example dot com\nquit\n' | .venv/bin/python chat_app.py --redact
+
+--- support chat · REDACTION ON · stand-in model (stub_llm.py) ---
+
+you> bot> Thanks, I've noted your message: "This is <PERSON> from accounts". A support agent will follow up.
+
+you> bot> Thanks, I've noted your message: "this is jane doe from accounts". A support agent will follow up.
+
+you> bot> Thanks, I've noted your message: "<PERSON> me at jane dot doe at example dot com". A support agent will follow up.
+
+you> 
+Logs written to logs/app.log and logs/provider.log
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ make challenge
+
+.venv/bin/python run_tests.py --challenge
+[PASS] Test 1  redaction OFF: the checker catches the leak   -> FAIL: 12 of 12 sensitive values found in logs (36 hits) [app.log, provider.log]
+[FAIL] Test 2  redaction ON:  nothing sensitive in the logs  -> FAIL: 1 of 12 sensitive values found in logs (4 hits) [app.log, provider.log]
+  LEAK  logs/app.log line 13: contains 'EMP-…'
+  LEAK  logs/app.log line 14: contains 'EMP-…'
+  LEAK  logs/app.log line 15: contains 'EMP-…'
+  LEAK  logs/provider.log line 5: contains 'EMP-…'
+FAIL: 1 of 12 sensitive values found in logs (4 hits) [app.log, provider.log]
+
+[PASS] Test 3  redaction ON:  the user never sees another customer's data
+[PASS] Test 4  redaction ON:  labels survive a second pass (log filter)
+
+SOME TESTS FAILED
+make: *** [Makefile:27: challenge] Error 1
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ cd ../.. && python3 demos/m04/membership_signal.py
+
+average confidence in the right answer   members: 0.998   non-members: 0.642
+guess 'member' when confidence >= 0.99    correct 78% of the time (coin flip: 50%)
+same guess when the API returns a label only   correct 68% of the time
+thesecguy@lab:~/ai-security-course-labs$ exit
+
+exit

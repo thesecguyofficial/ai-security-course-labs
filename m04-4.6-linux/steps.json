@@ -1,0 +1,129 @@
+{
+  "scenario": "m04-4.6-linux",
+  "start": 1.752,
+  "steps": [
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 1.752,
+      "end": 7.244
+    },
+    {
+      "label": "Setup",
+      "speed": 8,
+      "start": 9.044,
+      "end": 39.388
+    },
+    {
+      "label": "The conversation",
+      "speed": 1,
+      "start": 41.388,
+      "end": 45.837
+    },
+    {
+      "label": "Leak",
+      "speed": 1,
+      "start": 49.838,
+      "end": 51.889
+    },
+    {
+      "label": "App log",
+      "speed": 1,
+      "start": 55.889,
+      "end": 59.498
+    },
+    {
+      "label": "Provider log",
+      "speed": 1,
+      "start": 63.498,
+      "end": 67.495
+    },
+    {
+      "label": "Safe",
+      "speed": 1,
+      "start": 71.495,
+      "end": 75.485
+    },
+    {
+      "label": "Clean log",
+      "speed": 1,
+      "start": 79.485,
+      "end": 83.032
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 87.032,
+      "end": 91.108
+    },
+    {
+      "label": "Limits",
+      "speed": 1,
+      "start": 96.109,
+      "end": 118.324
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 123.324,
+      "end": 127.997
+    },
+    {
+      "label": "Membership",
+      "speed": 1,
+      "start": 132.998,
+      "end": 139.93
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.352,
+      "what": "type"
+    },
+    {
+      "t": 9.644,
+      "what": "type"
+    },
+    {
+      "t": 41.989,
+      "what": "type"
+    },
+    {
+      "t": 50.438,
+      "what": "type"
+    },
+    {
+      "t": 56.489,
+      "what": "type"
+    },
+    {
+      "t": 64.098,
+      "what": "type"
+    },
+    {
+      "t": 72.095,
+      "what": "type"
+    },
+    {
+      "t": 80.086,
+      "what": "type"
+    },
+    {
+      "t": 87.632,
+      "what": "type"
+    },
+    {
+      "t": 96.709,
+      "what": "type"
+    },
+    {
+      "t": 123.925,
+      "what": "type"
+    },
+    {
+      "t": 133.598,
+      "what": "type"
+    }
+  ],
+  "end": 144.93
+}
