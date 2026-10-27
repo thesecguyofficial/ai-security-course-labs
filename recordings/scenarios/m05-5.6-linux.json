@@ -1,0 +1,19 @@
+{
+  "name": "m05-5.6-linux",
+  "lesson": "5.6",
+  "title": "Lab 5.6: model output into HTML, SQL and shell on the TSG Helpdesk app; the attacks, the fixes and the tests",
+  "cols": 132,
+  "rows": 34,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m05 && ls"},
+    {"label": "Attack", "type": "make attack", "pause_after": 6},
+    {"label": "Fixes", "type": "grep -n 'def .*_safe\\|html.escape\\|query_only\\|ALLOWED_SERVICES =' helpdesk_app.py", "pause_after": 4},
+    {"label": "Attack safe", "type": "make attack-safe", "pause_after": 6},
+    {"label": "Tests", "type": "make test", "pause_after": 5},
+    {"label": "Challenge", "type": "make challenge 2>&1 | tail -8", "pause_after": 5}
+  ]
+}
