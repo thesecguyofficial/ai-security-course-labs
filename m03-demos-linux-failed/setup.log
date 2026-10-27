@@ -1,0 +1,52 @@
+warning: unable to access '/home/runner/.config/git/config': Permission denied
+[before, as thesecguy] curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh
+>>> Installing ollama to /usr/local
+>>> Downloading ollama-linux-amd64.tar.zst
+#=#=#                                                                                                                                                     0.8%#                                                                          2.1%###                                                                        4.8%#####                                                                      7.6%#######                                                                    9.7%########                                                                  11.8%#########                                                                 13.6%###########                                                               15.3%############                                                              16.7%#############                                                             18.8%##############                                                            20.8%################                                                          22.2%##################                                                        25.0%##################                                                        25.7%###################                                                       27.1%####################                                                      28.5%#####################                                                     30.5%#######################                                                   32.6%########################                                                  34.0%#########################                                                 35.4%##########################                                                36.1%###########################                                               38.2%#############################                                             40.3%#############################                                             41.0%##############################                                            42.5%################################                                          44.5%#################################                                         45.9%###################################                                       48.7%####################################                                      50.7%#####################################                                     52.1%######################################                                    53.5%########################################                                  55.6%#########################################                                 57.0%##########################################                                58.8%###########################################                               60.4%#############################################                             62.6%##############################################                            64.6%################################################                          66.7%#################################################                         68.2%##################################################                        69.6%##################################################                        70.2%###################################################                       71.6%#####################################################                     73.7%######################################################                    75.0%#######################################################                   76.4%#######################################################                   77.1%########################################################                  79.1%##########################################################                81.0%###########################################################               82.7%############################################################              84.6%##############################################################            86.8%################################################################          89.0%#################################################################         91.0%##################################################################        92.6%###################################################################       93.8%#####################################################################     95.9%######################################################################    97.6%#######################################################################   98.9%#######################################################################  100.0%######################################################################## 100.0%
+>>> Creating ollama user...
+>>> Adding ollama user to render group...
+>>> Adding ollama user to video group...
+>>> Adding current user to ollama group...
+>>> Creating ollama systemd service...
+WARNING: systemd is not running
+>>> The Ollama API is now available at 127.0.0.1:11434.
+>>> Install complete. Run "ollama" from the command line.
+WARNING: No NVIDIA/AMD GPU detected. Ollama will run in CPU-only mode.
+>>> The Ollama API is now available at 127.0.0.1:11434.
+>>> Install complete. Run "ollama" from the command line.
+[before, as thesecguy] for i in $(seq 1 30); do curl -fsS http://127.0.0.1:11434/api/version && break; sleep 2; done
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 11434 after 0 ms: Couldn't connect to server
+[before, as thesecguy] git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git
+warning: unable to access '/home/runner/.config/git/ignore': Permission denied
+warning: unable to access '/home/runner/.config/git/attributes': Permission denied
+[before, as thesecguy] ollama pull gemma3:1b
+Error: could not connect to ollama server, run 'ollama serve' to start it
