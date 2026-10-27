@@ -25,7 +25,9 @@ jobs:
       - name: recorder tools (off camera)
         run: python3 -m pip install --user --break-system-packages asciinema==2.4.0 pexpect==4.9.0
       - name: prepare a clean machine (off camera)
-        run: sudo bash recordings/prepare.sh "recordings/scenarios/$SCENARIO.json"
+        run: |
+          mkdir -p "out/$SCENARIO"
+          sudo bash recordings/prepare.sh "recordings/scenarios/$SCENARIO.json" 2>&1 | tee "out/$SCENARIO/setup.log"; exit ${PIPESTATUS[0]}
       - name: record (real session)
         run: |
           export PATH="$HOME/.local/bin:$PATH"
@@ -42,11 +44,12 @@ jobs:
           path: out/${{ env.SCENARIO }}
           retention-days: 90
       - name: publish the recording to the lab-recordings branch
-        if: success()
+        if: always()
         run: |
+          dest="$SCENARIO"; [ "${{ job.status }}" = "success" ] || dest="$SCENARIO-failed"
           git config user.name "The Sec Guy"; git config user.email "hello@thesecguy.com"
           git fetch origin lab-recordings || true
           if git rev-parse -q --verify origin/lab-recordings; then git switch -c pub origin/lab-recordings; else git switch --orphan pub; git rm -rq --cached . 2>/dev/null || true; fi
           find . -mindepth 1 -maxdepth 1 ! -name .git ! -name out ! -name recordings-pub -exec rm -rf {} +
-          mkdir -p "$SCENARIO" && cp out/$SCENARIO/* "$SCENARIO/"
-          git add "$SCENARIO" && git commit -qm "Recording $SCENARIO (run $GITHUB_RUN_ID)" && git push -q origin pub:lab-recordings
+          rm -rf "$dest" && mkdir -p "$dest" && cp out/$SCENARIO/* "$dest/"
+          git add -A "$dest" && git commit -qm "Recording $dest (run $GITHUB_RUN_ID)" && git push -q origin pub:lab-recordings
