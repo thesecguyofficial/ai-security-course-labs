@@ -5,11 +5,15 @@
 VENV := .venv
 PY   := $(VENV)/bin/python
 
-.PHONY: setup models attack scan safe pin tamper test challenge clean
+.PHONY: setup check models attack scan safe pin tamper test challenge clean
 
 setup:            ## create a virtual environment and install the pinned tools
 	python3 -m venv $(VENV)
 	$(PY) -m pip install -r requirements.txt
+
+check:            ## confirm the tools installed: prints each tool's version
+	@$(PY) -c "from importlib.metadata import version as v; print('picklescan', v('picklescan'), '| fickling', v('fickling'), '| safetensors', v('safetensors'), '| numpy', v('numpy'))"
+	@$(VENV)/bin/picklescan --help > /dev/null && $(VENV)/bin/fickling --version > /dev/null && echo "OK: picklescan and fickling run from .venv/bin"
 
 models:           ## build benign_model.pkl, evil_model.pkl and model.safetensors in ./models/
 	$(PY) make_models.py
