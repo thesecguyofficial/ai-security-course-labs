@@ -92,10 +92,13 @@ contacts Google or any other system. Test 19 fails if a real-looking IP, identit
 
 ```bash
 cd labs/gc10
+make setup
 make check
 ```
 
 - `cd labs/gc10`: run it from the course labs repository folder (`ai-security-course-labs`)
+- `make setup`: nothing to install; it checks your Python is 3.11 or newer and prints
+  `Nothing to install for this lab: Python 3.13 and its standard library are all it needs.` (your version may differ)
 - `make check`: same as `python3 policy_checker.py`
 
 Real output (Linux, Python 3.13):

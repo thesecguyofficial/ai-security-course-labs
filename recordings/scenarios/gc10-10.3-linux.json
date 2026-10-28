@@ -1,0 +1,25 @@
+{
+  "name": "gc10-10.3-linux",
+  "lesson": "10.3",
+  "title": "Lab GC10 (lessons 10.3 to 10.5): find the AI permission, API key and cost mistakes in ExampleCo's Google Cloud setup, replay the attacks, apply the fixes, preview an allow-list, then hunt LLMjacking in Cloud Audit Logs",
+  "cols": 132,
+  "rows": 34,
+  "before": [
+    "git clone -q -b rec-gc10 https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/gc10 && ls"},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Check", "type": "make check", "pause_after": 6},
+    {"label": "Attack", "type": "make attack", "pause_after": 6},
+    {"label": "Fixes", "type": "ls fixes", "pause_after": 3},
+    {"label": "Attack safe", "type": "make attack-safe", "pause_after": 6},
+    {"label": "Preview", "type": "make twin-preview", "pause_after": 6},
+    {"label": "Scan", "type": "make scan", "pause_after": 4},
+    {"label": "Hunt naive", "type": "make hunt-naive", "pause_after": 5},
+    {"label": "Hunt", "type": "make hunt", "pause_after": 6},
+    {"label": "Tests", "type": "make test", "pause_after": 4},
+    {"label": "Challenge", "type": "make challenge 2>&1 | tail -8", "pause_after": 5}
+  ]
+}
