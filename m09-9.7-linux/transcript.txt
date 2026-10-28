@@ -1,0 +1,165 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m09 && ls
+
+Makefile  README.md  loader.py  make_models.py  pin.py  requirements.txt  run_tests.py  scan.py  test_challenge.py  test_lab.py
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+Ignoring typing_extensions: markers 'python_version < "3.12"' don't match your environment
+Collecting picklescan==1.0.5 (from -r requirements.txt (line 16))
+  Downloading picklescan-1.0.5-py3-none-any.whl.metadata (7.6 kB)
+Collecting fickling==0.1.12 (from -r requirements.txt (line 17))
+  Downloading fickling-0.1.12-py3-none-any.whl.metadata (21 kB)
+Collecting safetensors==0.8.0 (from -r requirements.txt (line 18))
+  Downloading safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.2 kB)
+Collecting numpy==2.4.6 (from -r requirements.txt (line 19))
+  Downloading numpy-2.4.6-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+Downloading picklescan-1.0.5-py3-none-any.whl (24 kB)
+Downloading fickling-0.1.12-py3-none-any.whl (58 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/59.0 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 59.0/59.0 kB 3.8 MB/s eta 0:00:00
+Downloading safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (516 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/516.0 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━ 389.1/516.0 kB 12.3 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 516.0/516.0 kB 11.2 MB/s eta 0:00:00
+Downloading numpy-2.4.6-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/16.6 MB ? eta -:--:--
+   ━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.4/16.6 MB 45.5 MB/s eta 0:00:01
+   ━━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.9/16.6 MB 57.6 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━━━ 10.3/16.6 MB 101.2 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 16.6/16.6 MB 292.1 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 16.6/16.6 MB 292.1 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 16.6/16.6 MB 292.1 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 81.8 MB/s eta 0:00:00
+Installing collected packages: safetensors, picklescan, numpy, fickling
+Successfully installed fickling-0.1.12 numpy-2.4.6 picklescan-1.0.5 safetensors-0.8.0
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make check
+
+picklescan 1.0.5 | fickling 0.1.12 | safetensors 0.8.0 | numpy 2.4.6
+OK: picklescan and fickling run from .venv/bin
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make models
+
+.venv/bin/python make_models.py
+Built in ./models/ :
+  benign_model.pkl         87 bytes
+  evil_model.pkl          366 bytes
+  model.safetensors       152 bytes
+
+The two .pkl files hold the 'same' model. One of them runs code when you load it.
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make attack
+
+.venv/bin/python loader.py naive models/evil_model.pkl
+pickle.load(evil_model.pkl) ...
+returned: NoneType
+
+!! A marker file was written while 'just loading' the model:
+   /home/thesecguy/ai-security-course-labs/labs/m09/state/PWNED_BY_LAB_MODEL.txt
+   -> loading the pickle executed code. On a real model this would be malware.
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make scan
+
+.venv/bin/python scan.py models/benign_model.pkl
+== scanning models/benign_model.pkl ==
+
+picklescan:
+  scanned=1 infected=0 dangerous_globals=0
+  verdict: clean
+
+fickling:
+  severity: Severity.LIKELY_SAFE
+  verdict: clean
+
+OVERALL: SAFE (both scanners clean)
+
+.venv/bin/python scan.py models/evil_model.pkl
+== scanning models/evil_model.pkl ==
+
+picklescan:
+  scanned=1 infected=1 dangerous_globals=1
+  verdict: DANGEROUS
+
+fickling:
+  severity: Severity.OVERTLY_MALICIOUS
+  note: Call to `exec(...)` is almost certainly evidence of a malicious pickle file
+  verdict: DANGEROUS
+
+OVERALL: DO NOT LOAD (flagged)
+make: [Makefile:28: scan] Error 1 (ignored)
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ .venv/bin/picklescan -p models/evil_model.pkl
+
+/home/thesecguy/ai-security-course-labs/labs/m09/models/evil_model.pkl: dangerous import 'builtins exec' FOUND
+----------- SCAN SUMMARY -----------
+Scanned files: 1
+Infected files: 1
+Suspicious globals: 0
+Dangerous globals: 1
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ .venv/bin/fickling models/evil_model.pkl
+
+from builtins import exec
+_var0 = exec("import os;os.makedirs(r'/home/thesecguy/ai-security-course-labs/labs/m09/state', exist_ok=True);open(r'/home/thesecguy/ai-security-course-labs/labs/m09/state/PWNED_BY_LAB_MODEL.txt', 'w').write('LAB MARKER: loading this pickle executed code. This is a harmless lab placeholder, not real malware. Delete me with: make clean')")
+result0 = _var0
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make safe
+
+.venv/bin/python loader.py safe models/model.safetensors
+safetensors loaded 2 tensors: ['layer.bias', 'layer.weight']
+No code ran. The format has no instruction to call a function.
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make tamper
+
+.venv/bin/python pin.py write models/model.safetensors
+pinned model.safetensors = sha256:4b2458915a8131399b9c1a02033fdfbb99c48fb6ef4299388ae6ace85981fa39
+.venv/bin/python pin.py verify models/model.safetensors
+TAMPERED  model.safetensors does NOT match its pin.
+  pinned: sha256:4b2458915a8131399b9c1a02033fdfbb99c48fb6ef4299388ae6ace85981fa39
+  actual: sha256:9df669a29a2d5091f5abd4d63b00a7f675e274387bbd46174a7a175cc52cc090
+make: [Makefile:41: tamper] Error 1 (ignored)
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make test
+
+.venv/bin/python run_tests.py
+[PASS] attack: loading evil_model.pkl writes the marker (code ran from a 'load')
+[PASS] control: loading benign_model.pkl returns weights and writes no marker
+[PASS] pinning: a pinned model that is swapped for another file fails verification
+[PASS] pinning: an artefact with no pin is refused (fail closed)
+[PASS] restricting globals: a find_class allow-list refuses builtins.exec and runs no code
+[PASS] safetensors: loads tensors and runs no code (no marker, even if one were planted)
+[PASS] scanner: evil_model.pkl is flagged DANGEROUS by both scanners
+[PASS] scanner: benign_model.pkl passes both scanners
+----------------------------------------------------------------------
+Ran 8 tests in 0.006s
+
+OK
+
+ALL TESTS PASSED (8 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make challenge 2>&1 | tail -8
+
+  why test_c3_rejects_tampered_safetensors: NotImplementedError: Implement safe_load() for the challenge (see the docstring).
+----------------------------------------------------------------------
+Ran 11 tests in 0.007s
+
+FAILED (errors=3)
+
+3 of 11 TESTS FAILED (11 run)
+make: *** [Makefile:48: challenge] Error 1
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ cd ../.. && python3 demos/m09/model_facts.py
+
+Model facts from the Hugging Face API (metadata only, nothing downloaded)
+
+google-bert/bert-base-uncased
+  publisher    google-bert          created 2022-03-02
+  last change  2024-02-19           downloads (30 days) 29,422,017
+  licence      apache-2.0           gated: no
+  pin this     revision=86b5e0934494bd15c9632b12f734a8a67f723594
+  weights      safetensors: model.safetensors
+               can run code on load (pickle): pytorch_model.bin
+  -> load model.safetensors, pinned to that revision
+
+meta-llama/Llama-3.2-1B
+  publisher    meta-llama           created 2024-09-18
+  last change  2024-10-24           downloads (30 days) 534,335
+  licence      llama3.2             gated: manual (access control, not a safety check)
+  pin this     revision=4e20de362430cd3b72f300e6b0f18e50e7166e08
+  weights      safetensors: model.safetensors
+               can run code on load (pickle): original/consolidated.00.pth
+  -> load model.safetensors, pinned to that revision
+
+thesecguy@lab:~/ai-security-course-labs$ exit
+
+exit
