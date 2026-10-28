@@ -1,0 +1,129 @@
+{
+  "scenario": "m10-10.3-linux",
+  "start": 1.694,
+  "steps": [
+    {
+      "label": "AI actions",
+      "speed": 1,
+      "start": 1.694,
+      "end": 7.909
+    },
+    {
+      "label": "AI actions",
+      "speed": 1,
+      "start": 9.909,
+      "end": 14.956
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 21.956,
+      "end": 24.912
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 27.912,
+      "end": 30.078
+    },
+    {
+      "label": "Attack",
+      "speed": 1,
+      "start": 37.078,
+      "end": 39.376
+    },
+    {
+      "label": "Check fixed",
+      "speed": 1,
+      "start": 46.376,
+      "end": 50.385
+    },
+    {
+      "label": "Attack safe",
+      "speed": 1,
+      "start": 55.385,
+      "end": 59.569
+    },
+    {
+      "label": "Blunt",
+      "speed": 1,
+      "start": 66.569,
+      "end": 70.226
+    },
+    {
+      "label": "Hunt naive",
+      "speed": 1,
+      "start": 76.226,
+      "end": 79.065
+    },
+    {
+      "label": "Hunt",
+      "speed": 1,
+      "start": 84.065,
+      "end": 86.227
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 93.227,
+      "end": 96.685
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 100.686,
+      "end": 105.237
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.294,
+      "what": "type"
+    },
+    {
+      "t": 10.51,
+      "what": "type"
+    },
+    {
+      "t": 22.556,
+      "what": "type"
+    },
+    {
+      "t": 28.512,
+      "what": "type"
+    },
+    {
+      "t": 37.678,
+      "what": "type"
+    },
+    {
+      "t": 46.976,
+      "what": "type"
+    },
+    {
+      "t": 55.985,
+      "what": "type"
+    },
+    {
+      "t": 67.169,
+      "what": "type"
+    },
+    {
+      "t": 76.826,
+      "what": "type"
+    },
+    {
+      "t": 84.665,
+      "what": "type"
+    },
+    {
+      "t": 93.827,
+      "what": "type"
+    },
+    {
+      "t": 101.286,
+      "what": "type"
+    }
+  ],
+  "end": 111.237
+}
