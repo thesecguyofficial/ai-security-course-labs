@@ -1,0 +1,129 @@
+{
+  "scenario": "m07-7.9-linux",
+  "start": 2.472,
+  "steps": [
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 2.472,
+      "end": 7.962
+    },
+    {
+      "label": "The attachment",
+      "speed": 1,
+      "start": 9.762,
+      "end": 16.949
+    },
+    {
+      "label": "Attack",
+      "speed": 1,
+      "start": 20.949,
+      "end": 23.253
+    },
+    {
+      "label": "Ladder",
+      "speed": 1,
+      "start": 28.253,
+      "end": 30.653
+    },
+    {
+      "label": "Defend",
+      "speed": 1,
+      "start": 36.653,
+      "end": 39.004
+    },
+    {
+      "label": "Detect",
+      "speed": 1,
+      "start": 44.004,
+      "end": 46.19
+    },
+    {
+      "label": "Kill",
+      "speed": 1,
+      "start": 51.19,
+      "end": 60.872
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 64.872,
+      "end": 67.057
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 71.057,
+      "end": 76.089
+    },
+    {
+      "label": "Ollama",
+      "speed": 1,
+      "start": 80.089,
+      "end": 111.507
+    },
+    {
+      "label": "Real model",
+      "speed": 1,
+      "start": 114.507,
+      "end": 148.071
+    },
+    {
+      "label": "Real model safe",
+      "speed": 1,
+      "start": 153.071,
+      "end": 179.792
+    }
+  ],
+  "keys": [
+    {
+      "t": 3.072,
+      "what": "type"
+    },
+    {
+      "t": 10.362,
+      "what": "type"
+    },
+    {
+      "t": 21.549,
+      "what": "type"
+    },
+    {
+      "t": 28.853,
+      "what": "type"
+    },
+    {
+      "t": 37.253,
+      "what": "type"
+    },
+    {
+      "t": 44.605,
+      "what": "type"
+    },
+    {
+      "t": 51.791,
+      "what": "type"
+    },
+    {
+      "t": 65.473,
+      "what": "type"
+    },
+    {
+      "t": 71.658,
+      "what": "type"
+    },
+    {
+      "t": 80.689,
+      "what": "type"
+    },
+    {
+      "t": 115.107,
+      "what": "type"
+    },
+    {
+      "t": 153.671,
+      "what": "type"
+    }
+  ],
+  "end": 184.792
+}
