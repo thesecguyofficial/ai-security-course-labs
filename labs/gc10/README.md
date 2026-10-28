@@ -527,7 +527,7 @@ Real output before your fix (last lines):
   why test_22_org_allow_list_stops_claude_in_the_sandbox: AssertionError: True is not false : B1 is still ALLOWED: nothing above the sandbox allow-lists models
   why test_24_h09_flags_the_attackers_enable: AssertionError: 0 != 1 : 0 of 1 EnableService event flagged
 ----------------------------------------------------------------------
-Ran 25 tests in 0.088s
+Ran 25 tests in 0.112s
 
 FAILED (failures=3)
 
