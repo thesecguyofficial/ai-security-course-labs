@@ -34,26 +34,34 @@ def decide(user_message: str, tools: list[dict], model: str = "gemma3:1b") -> Pl
         "Reply ONLY with JSON: {\"steps\": [{\"server\": ..., \"tool\": ..., \"args\": {...}}], \"reply\": ...}. "
         "These are the tools you may use:\n" + catalogue
     )
-    try:
-        resp = httpx2.post(
-            OLLAMA,
-            json={
-                "model": model,
-                "messages": [{"role": "system", "content": system}, {"role": "user", "content": user_message}],
-                "temperature": 0,
-                "stream": False,
-                # Ask Ollama for valid JSON only. Small models otherwise often break the format.
-                "response_format": {"type": "json_object"},
-            },
-            timeout=60,
-        )
-        content = resp.json()["choices"][0]["message"]["content"]
-        data = json.loads(content[content.index("{") : content.rindex("}") + 1])
-    except Exception as exc:
-        plan.reply = f"(ollama backend could not produce a plan: {exc})"
+    body = {}
+    for _attempt in range(2):  # one retry: a small model on a busy laptop sometimes returns an error once
+        try:
+            resp = httpx2.post(
+                OLLAMA,
+                json={
+                    "model": model,
+                    "messages": [{"role": "system", "content": system}, {"role": "user", "content": user_message}],
+                    "temperature": 0,
+                    "stream": False,
+                    # Ask Ollama for valid JSON only. Small models otherwise often break the format.
+                    "response_format": {"type": "json_object"},
+                },
+                timeout=120,
+            )
+            body = resp.json()
+            if "choices" not in body:  # Ollama returned an error object: show it instead of hiding it
+                raise RuntimeError(f"Ollama said: {body.get('error', body)}")
+            content = body["choices"][0]["message"]["content"]
+            data = json.loads(content[content.index("{") : content.rindex("}") + 1])
+            break
+        except Exception as exc:
+            error = exc
+    else:
+        plan.reply = f"(ollama backend could not produce a plan: {error})"
         return plan
 
     for step in data.get("steps", []):
         plan.steps.append((step.get("server", ""), step.get("tool", ""), step.get("args", {}) or {}))
-    plan.reply = data.get("reply", "")
+    plan.reply = data.get("reply") or "(the model gave no reply text)"
     return plan
