@@ -66,19 +66,22 @@
       "label": "Ollama",
       "type": "ollama --version && ollama pull llama3.2:3b && ollama list",
       "timeout": 900,
-      "pause_after": 3
+      "pause_after": 3,
+      "speed": 4
     },
     {
       "label": "Real model",
       "type": "make clean && python3 agent.py --backend ollama --ollama-model llama3.2:3b --approver deny",
       "timeout": 900,
-      "pause_after": 5
+      "pause_after": 5,
+      "speed": 3
     },
     {
       "label": "Real model safe",
       "type": "python3 agent.py --backend ollama --ollama-model llama3.2:3b --safe --approver deny",
       "timeout": 900,
-      "pause_after": 5
+      "pause_after": 5,
+      "speed": 3
     }
   ]
 }
