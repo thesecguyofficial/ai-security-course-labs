@@ -1,0 +1,159 @@
+{
+  "scenario": "m06-6.7-linux",
+  "start": 1.719,
+  "steps": [
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 1.719,
+      "end": 7.208
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 9.009,
+      "end": 22.369
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 25.369,
+      "end": 38.123
+    },
+    {
+      "label": "Attack",
+      "speed": 1,
+      "start": 41.123,
+      "end": 44.207
+    },
+    {
+      "label": "The planted file",
+      "speed": 1,
+      "start": 52.207,
+      "end": 58.357
+    },
+    {
+      "label": "Nonsense",
+      "speed": 1,
+      "start": 64.357,
+      "end": 70.381
+    },
+    {
+      "label": "Fixes",
+      "speed": 1,
+      "start": 76.381,
+      "end": 80.422
+    },
+    {
+      "label": "Attack safe",
+      "speed": 1,
+      "start": 84.423,
+      "end": 88.075
+    },
+    {
+      "label": "Provenance",
+      "speed": 1,
+      "start": 96.075,
+      "end": 107.328
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 112.328,
+      "end": 115.068
+    },
+    {
+      "label": "Inspect",
+      "speed": 1,
+      "start": 120.068,
+      "end": 123.241
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 129.241,
+      "end": 134.598
+    },
+    {
+      "label": "Ollama",
+      "speed": 1,
+      "start": 140.599,
+      "end": 155.258
+    },
+    {
+      "label": "Real vulnerable",
+      "speed": 1,
+      "start": 159.258,
+      "end": 177.559
+    },
+    {
+      "label": "Real safe",
+      "speed": 1,
+      "start": 183.559,
+      "end": 201.592
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.319,
+      "what": "type"
+    },
+    {
+      "t": 9.609,
+      "what": "type"
+    },
+    {
+      "t": 25.97,
+      "what": "type"
+    },
+    {
+      "t": 41.723,
+      "what": "type"
+    },
+    {
+      "t": 52.807,
+      "what": "type"
+    },
+    {
+      "t": 64.957,
+      "what": "type"
+    },
+    {
+      "t": 76.981,
+      "what": "type"
+    },
+    {
+      "t": 85.023,
+      "what": "type"
+    },
+    {
+      "t": 96.676,
+      "what": "type"
+    },
+    {
+      "t": 112.928,
+      "what": "type"
+    },
+    {
+      "t": 120.668,
+      "what": "type"
+    },
+    {
+      "t": 129.842,
+      "what": "type"
+    },
+    {
+      "t": 141.199,
+      "what": "type"
+    },
+    {
+      "t": 159.858,
+      "what": "type"
+    },
+    {
+      "t": 184.159,
+      "what": "type"
+    }
+  ],
+  "end": 207.592
+}

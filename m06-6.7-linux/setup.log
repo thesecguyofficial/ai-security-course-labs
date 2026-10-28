@@ -1,0 +1,204 @@
+warning: unable to access '/home/runner/.config/git/config': Permission denied
+[before, as thesecguy] curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh
+>>> Installing ollama to /usr/local
+>>> Downloading ollama-linux-amd64.tar.zst
+#=#=#                                                                          ##O#-#                                                                         #                                                                          1.5%###                                                                        5.1%######                                                                     9.1%#########                                                                 13.0%##########                                                                15.2%#############                                                             18.3%###############                                                           21.3%################                                                          23.5%##################                                                        25.5%##################                                                        26.1%####################                                                      28.1%######################                                                    30.8%########################                                                  33.5%#########################                                                 35.5%##########################                                                36.8%###########################                                               38.5%#############################                                             40.7%###############################                                           43.4%################################                                          45.4%##################################                                        48.2%#####################################                                     51.6%#####################################                                     52.7%#######################################                                   54.7%########################################                                  56.7%##########################################                                59.6%#############################################                             62.6%##############################################                            65.0%################################################                          67.4%##################################################                        69.5%##################################################                        70.1%##################################################                        70.1%##################################################                        70.2%###################################################                       71.7%####################################################                      73.6%######################################################                    75.0%######################################################                    76.4%#######################################################                   77.0%########################################################                  78.4%##########################################################                81.1%#############################################################             84.8%##############################################################            87.3%################################################################          89.0%#################################################################         91.4%###################################################################       93.6%#####################################################################     96.3%######################################################################    98.5%#######################################################################   99.8%######################################################################## 100.0%
+>>> Creating ollama user...
+>>> Adding ollama user to render group...
+>>> Adding ollama user to video group...
+>>> Adding current user to ollama group...
+>>> Creating ollama systemd service...
+>>> Enabling and starting ollama service...
+Created symlink /etc/systemd/system/default.target.wants/ollama.service → /etc/systemd/system/ollama.service.
+>>> The Ollama API is now available at 127.0.0.1:11434.
+>>> Install complete. Run "ollama" from the command line.
+WARNING: No NVIDIA/AMD GPU detected. Ollama will run in CPU-only mode.
+[before, as thesecguy] sudo systemctl daemon-reload && sudo systemctl enable --now ollama || (setsid nohup ollama serve >/tmp/ollama.log 2>&1 < /dev/null &)
+[before, as thesecguy] for i in $(seq 1 30); do curl -fsS http://127.0.0.1:11434/api/version && break; sleep 2; done
+{"version":"0.40.12"}[before, as thesecguy] git clone -q -b rec-m6 https://github.com/thesecguyofficial/ai-security-course-labs.git
+warning: unable to access '/home/runner/.config/git/ignore': Permission denied
+warning: unable to access '/home/runner/.config/git/attributes': Permission denied
+[before, as thesecguy] ollama pull gemma3:1b
+[?2026h[?25l[1Gpulling manifest ⠋ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠙ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠹ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠸ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠼ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠴ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠦ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠧ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠇ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠏ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest [K
+pulling 2f8c3d137f24:   9% ▕█                 ▏  72 MB/806 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  18% ▕███               ▏ 148 MB/806 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  23% ▕████              ▏ 188 MB/806 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  34% ▕██████            ▏ 272 MB/806 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  44% ▕███████           ▏ 351 MB/806 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  49% ▕████████          ▏ 392 MB/806 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  58% ▕██████████        ▏ 468 MB/806 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  68% ▕████████████      ▏ 545 MB/806 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  72% ▕████████████      ▏ 578 MB/806 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  81% ▕██████████████    ▏ 655 MB/806 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  88% ▕███████████████   ▏ 707 MB/806 MB  646 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  89% ▕████████████████  ▏ 718 MB/806 MB  646 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  91% ▕████████████████  ▏ 736 MB/806 MB  646 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  93% ▕████████████████  ▏ 751 MB/806 MB  646 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  93% ▕████████████████  ▏ 752 MB/806 MB  646 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  95% ▕█████████████████ ▏ 766 MB/806 MB  646 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  96% ▕█████████████████ ▏ 774 MB/806 MB  646 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  97% ▕█████████████████ ▏ 785 MB/806 MB  646 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24:  98% ▕█████████████████ ▏ 793 MB/806 MB  646 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕█████████████████ ▏ 804 MB/806 MB  646 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K[?25h[?2026l[?2026h[?25l[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K[?25h[?2026l[?2026h[?25l[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K[?25h[?2026l[?2026h[?25l[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K[?25h[?2026l[?2026h[?25l[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K[?25h[?2026l[?2026h[?25l[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         [K[?25h[?2026l[?2026h[?25l[A[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         [K[?25h[?2026l[?2026h[?25l[A[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         [K[?25h[?2026l[?2026h[?25l[A[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         [K[?25h[?2026l[?2026h[?25l[A[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         [K
+pulling 3116c5225075: 100% ▕██████████████████▏   77 B                         [K[?25h[?2026l[?2026h[?25l[A[A[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         [K
+pulling 3116c5225075: 100% ▕██████████████████▏   77 B                         [K
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         [K
+verifying sha256 digest ⠋ [K[?25h[?2026l[?2026h[?25l[A[A[A[A[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         [K
+pulling 3116c5225075: 100% ▕██████████████████▏   77 B                         [K
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         [K
+verifying sha256 digest ⠙ [K[?25h[?2026l[?2026h[?25l[A[A[A[A[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         [K
+pulling 3116c5225075: 100% ▕██████████████████▏   77 B                         [K
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         [K
+verifying sha256 digest ⠹ [K[?25h[?2026l[?2026h[?25l[A[A[A[A[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         [K
+pulling 3116c5225075: 100% ▕██████████████████▏   77 B                         [K
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         [K
+verifying sha256 digest ⠸ [K[?25h[?2026l[?2026h[?25l[A[A[A[A[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         [K
+pulling 3116c5225075: 100% ▕██████████████████▏   77 B                         [K
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         [K
+verifying sha256 digest ⠼ [K[?25h[?2026l[?2026h[?25l[A[A[A[A[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         [K
+pulling 3116c5225075: 100% ▕██████████████████▏   77 B                         [K
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         [K
+verifying sha256 digest ⠴ [K[?25h[?2026l[?2026h[?25l[A[A[A[A[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         [K
+pulling 3116c5225075: 100% ▕██████████████████▏   77 B                         [K
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         [K
+verifying sha256 digest ⠦ [K[?25h[?2026l[?2026h[?25l[A[A[A[A[A[A[1Gpulling manifest [K
+pulling 2f8c3d137f24: 100% ▕██████████████████▏ 806 MB                         [K
+pulling e0a42594d802: 100% ▕██████████████████▏  358 B                         [K
+pulling dd084c7d92a3: 100% ▕██████████████████▏ 8.4 KB                         [K
+pulling 3116c5225075: 100% ▕██████████████████▏   77 B                         [K
+pulling 76a6b777faea: 100% ▕██████████████████▏  140 B                         [K
+verifying sha256 digest [K
+writing manifest [K
+success [K[?25h[?2026l
+[before, as thesecguy] ollama pull embeddinggemma
+[?2026h[?25l[1Gpulling manifest ⠋ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠙ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠹ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠸ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠼ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠴ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠦ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠧ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠇ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest [K
+pulling 0800cbac9c20:   5% ▕                  ▏  28 MB/621 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  15% ▕██                ▏  91 MB/621 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  21% ▕███               ▏ 130 MB/621 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  29% ▕█████             ▏ 180 MB/621 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  37% ▕██████            ▏ 232 MB/621 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  42% ▕███████           ▏ 260 MB/621 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  51% ▕█████████         ▏ 315 MB/621 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  59% ▕██████████        ▏ 365 MB/621 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  62% ▕███████████       ▏ 383 MB/621 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  66% ▕███████████       ▏ 410 MB/621 MB                  [K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  70% ▕████████████      ▏ 434 MB/621 MB  405 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  73% ▕█████████████     ▏ 454 MB/621 MB  405 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  78% ▕██████████████    ▏ 485 MB/621 MB  405 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  81% ▕██████████████    ▏ 505 MB/621 MB  405 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  84% ▕███████████████   ▏ 520 MB/621 MB  405 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  86% ▕███████████████   ▏ 537 MB/621 MB  405 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  88% ▕███████████████   ▏ 549 MB/621 MB  405 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  89% ▕████████████████  ▏ 555 MB/621 MB  405 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  90% ▕████████████████  ▏ 562 MB/621 MB  405 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  91% ▕████████████████  ▏ 564 MB/621 MB  405 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  91% ▕████████████████  ▏ 564 MB/621 MB  405 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  92% ▕████████████████  ▏ 570 MB/621 MB  269 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  92% ▕████████████████  ▏ 572 MB/621 MB  269 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  92% ▕████████████████  ▏ 573 MB/621 MB  269 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  93% ▕████████████████  ▏ 576 MB/621 MB  269 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  93% ▕████████████████  ▏ 579 MB/621 MB  269 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  93% ▕████████████████  ▏ 579 MB/621 MB  269 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  95% ▕█████████████████ ▏ 589 MB/621 MB  269 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  96% ▕█████████████████ ▏ 595 MB/621 MB  269 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  96% ▕█████████████████ ▏ 595 MB/621 MB  269 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  96% ▕█████████████████ ▏ 598 MB/621 MB  269 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  97% ▕█████████████████ ▏ 602 MB/621 MB  190 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  97% ▕█████████████████ ▏ 604 MB/621 MB  190 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  97% ▕█████████████████ ▏ 604 MB/621 MB  190 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  97% ▕█████████████████ ▏ 605 MB/621 MB  190 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  98% ▕█████████████████ ▏ 607 MB/621 MB  190 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  98% ▕█████████████████ ▏ 610 MB/621 MB  190 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  98% ▕█████████████████ ▏ 610 MB/621 MB  190 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  98% ▕█████████████████ ▏ 611 MB/621 MB  190 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  99% ▕█████████████████ ▏ 615 MB/621 MB  190 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  99% ▕█████████████████ ▏ 618 MB/621 MB  190 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20:  99% ▕█████████████████ ▏ 618 MB/621 MB  147 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 619 MB/621 MB  147 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 620 MB/621 MB  147 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K[?25h[?2026l[?2026h[?25l[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K
+pulling 45dc10444b87: 100% ▕██████████████████▏   34 B                         [K
+pulling 3901c6a1d7c2: 100% ▕██████████████████▏  416 B                         [K
+verifying sha256 digest ⠋ [K[?25h[?2026l[?2026h[?25l[A[A[A[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K
+pulling 45dc10444b87: 100% ▕██████████████████▏   34 B                         [K
+pulling 3901c6a1d7c2: 100% ▕██████████████████▏  416 B                         [K
+verifying sha256 digest ⠙ [K[?25h[?2026l[?2026h[?25l[A[A[A[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K
+pulling 45dc10444b87: 100% ▕██████████████████▏   34 B                         [K
+pulling 3901c6a1d7c2: 100% ▕██████████████████▏  416 B                         [K
+verifying sha256 digest ⠹ [K[?25h[?2026l[?2026h[?25l[A[A[A[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K
+pulling 45dc10444b87: 100% ▕██████████████████▏   34 B                         [K
+pulling 3901c6a1d7c2: 100% ▕██████████████████▏  416 B                         [K
+verifying sha256 digest ⠸ [K[?25h[?2026l[?2026h[?25l[A[A[A[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K
+pulling 45dc10444b87: 100% ▕██████████████████▏   34 B                         [K
+pulling 3901c6a1d7c2: 100% ▕██████████████████▏  416 B                         [K
+verifying sha256 digest ⠼ [K[?25h[?2026l[?2026h[?25l[A[A[A[A[1Gpulling manifest [K
+pulling 0800cbac9c20: 100% ▕█████████████████ ▏ 621 MB/621 MB  147 MB/s      0s[K
+pulling 45dc10444b87: 100% ▕██████████████████▏   34 B                         [K
+pulling 3901c6a1d7c2: 100% ▕██████████████████▏  416 B                         [K
+verifying sha256 digest [K
+writing manifest [K
+success [K[?25h[?2026l
+{"version":"0.40.12"}prepared: user thesecguy on host lab, removed: nothing, ready: ollama
