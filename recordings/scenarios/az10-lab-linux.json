@@ -1,0 +1,24 @@
+{
+  "name": "az10-lab-linux",
+  "lesson": "10.2",
+  "title": "Lab AZ10 (lessons 10.2 to 10.5): check Contoso's Azure AI estate, scan the leaked repo, break it, fix it, hunt LLMjacking in the logs",
+  "cols": 132,
+  "rows": 34,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/az10 && ls"},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Check", "type": "make check", "pause_after": 6},
+    {"label": "Scan", "type": "make scan", "pause_after": 5},
+    {"label": "Attack", "type": "make attack", "pause_after": 6},
+    {"label": "Check fixed", "type": "make check-fixed", "pause_after": 5},
+    {"label": "Attack safe", "type": "make attack-safe", "pause_after": 6},
+    {"label": "Hunt", "type": "make hunt", "pause_after": 6},
+    {"label": "Hunt naive", "type": "make hunt-naive", "pause_after": 5},
+    {"label": "Tests", "type": "make test", "pause_after": 5},
+    {"label": "Challenge", "type": "make challenge", "pause_after": 6}
+  ]
+}
