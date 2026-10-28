@@ -78,11 +78,11 @@ logs, a budget) and proves each fix with a request that should now fail. About 7
 ## Step 1 · Check: find the risky settings
 
 ```bash
-cd labs-export/az10
+cd labs/az10
 make check
 ```
 
-- `cd labs-export/az10`: or wherever you put this folder
+- `cd labs/az10`: run it from the course labs repository folder (`ai-security-course-labs`)
 - `make check`: same as `python3 checker.py`
 
 Real output (Linux, Python 3.13):

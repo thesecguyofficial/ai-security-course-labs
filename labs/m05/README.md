@@ -55,10 +55,10 @@ The attacks only target this app, on your machine. Only attack systems you own o
 There is no setup step. Open a terminal in this folder:
 
 ```bash
-cd labs-export/m05
+cd labs/m05
 ```
 
-- `cd labs-export/m05`: or wherever you put this folder
+- `cd labs/m05`: run it from the course labs repository folder (`ai-security-course-labs`)
 
 ## Step 1 · Break it: attack the vulnerable app
 
@@ -236,7 +236,7 @@ Real output before your fix (last lines):
   why test_15_dotdot_refused: AssertionError: ValueError not raised
   why test_16_absolute_refused: AssertionError: ValueError not raised
   why test_17_empty_refused: AssertionError: ValueError not raised
-  why test_18_end_to_end: AssertionError: False is not true : the app saved the file to /.../labs-export/m05/exports/../escaped.txt
+  why test_18_end_to_end: AssertionError: False is not true : the app saved the file to /.../labs/m05/exports/../escaped.txt
 ----------------------------------------------------------------------
 Ran 18 tests in 1.612s
 

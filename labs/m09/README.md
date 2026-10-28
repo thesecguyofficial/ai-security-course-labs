@@ -46,7 +46,7 @@ Built at setup time: `models/` (the model files), `state/` (the marker, if you d
 ## Setup (once)
 
 ```bash
-cd labs-export/m09
+cd labs/m09
 make setup
 make models
 ```
@@ -73,7 +73,7 @@ pickle.load(evil_model.pkl) ...
 returned: NoneType
 
 !! A marker file was written while 'just loading' the model:
-   /…/labs-export/m09/state/PWNED_BY_LAB_MODEL.txt
+   /…/labs/m09/state/PWNED_BY_LAB_MODEL.txt
    -> loading the pickle executed code. On a real model this would be malware.
 ```
 

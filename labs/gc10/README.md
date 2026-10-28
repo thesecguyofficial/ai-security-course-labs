@@ -69,11 +69,11 @@ contacts Google or any other system. Test 19 fails if a real-looking IP, identit
 ## Step 1 · Check: find the mistakes
 
 ```bash
-cd labs-export/gc10
+cd labs/gc10
 make check
 ```
 
-- `cd labs-export/gc10`: or wherever you put this folder
+- `cd labs/gc10`: run it from the course labs repository folder (`ai-security-course-labs`)
 - `make check`: same as `python3 policy_checker.py`
 
 Real output (Linux, Python 3.13):
