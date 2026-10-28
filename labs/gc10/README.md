@@ -84,7 +84,7 @@ contacts Google or any other system. Test 19 fails if a real-looking IP, identit
 
 ## Needs
 
-- Python **3.11 or newer** (tested on 3.13). Check with `python3 --version`. No packages, no internet.
+- Python **3.11 or newer** (tested on 3.12 and 3.13; the video uses 3.12). Check with `python3 --version`. No packages, no internet.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 - Optional, Step 8 only: the `gcloud` CLI and **your own** Free Trial project (lesson 0.7).
 
@@ -98,10 +98,10 @@ make check
 
 - `cd labs/gc10`: run it from the course labs repository folder (`ai-security-course-labs`)
 - `make setup`: nothing to install; it checks your Python is 3.11 or newer and prints
-  `Nothing to install for this lab: Python 3.13 and its standard library are all it needs.` (your version may differ)
+  `Nothing to install for this lab: Python 3.12 and its standard library are all it needs.` (your version may differ)
 - `make check`: same as `python3 policy_checker.py`
 
-Real output (Linux, Python 3.13):
+Real output (Linux, Python 3.12, as in the video):
 
 ```text
 --- GC10 policy checker · ExampleCo today ---
@@ -177,6 +177,9 @@ How to read it, highest first:
 - **GC10-11, GC10-12**: no model allow-list anywhere; the sandbox has a deny-list for one model.
 - **GC10-14, GC10-15**: no spend cap on the AI projects; Data Access logs off in the sandbox.
 
+Too long for one screen? On Mac or Linux, `make check | grep -E "HIGH|MEDIUM|LOW"` prints one line per finding plus the
+total.
+
 Lint your own exports the same way: `python3 policy_checker.py --keys my-keys.json` (from
 `gcloud services api-keys list --format=json`), `--iam my-iam.json` (from `gcloud projects get-iam-policy PROJECT_ID
 --format=json`), `--orgpolicy file.json`, or `--scan PATH`.
@@ -187,7 +190,8 @@ Lint your own exports the same way: `python3 policy_checker.py --keys my-keys.js
 make attack
 ```
 
-Same as `python3 attack.py --mode vulnerable`.
+Same as `python3 attack.py --mode vulnerable`. Each allowed request gets a `why:` line; on Mac or Linux,
+`make attack | grep -v "why:"` shows just the verdicts.
 
 Real output:
 
@@ -523,7 +527,7 @@ Real output before your fix (last lines):
   why test_22_org_allow_list_stops_claude_in_the_sandbox: AssertionError: True is not false : B1 is still ALLOWED: nothing above the sandbox allow-lists models
   why test_24_h09_flags_the_attackers_enable: AssertionError: 0 != 1 : 0 of 1 EnableService event flagged
 ----------------------------------------------------------------------
-Ran 25 tests in 0.139s
+Ran 25 tests in 0.088s
 
 FAILED (failures=3)
 

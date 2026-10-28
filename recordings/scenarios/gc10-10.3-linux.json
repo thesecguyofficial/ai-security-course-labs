@@ -7,19 +7,78 @@
   "before": [
     "git clone -q -b rec-gc10 https://github.com/thesecguyofficial/ai-security-course-labs.git"
   ],
-  "fail_on": ["Traceback"],
+  "fail_on": [
+    "Traceback"
+  ],
   "steps": [
-    {"label": "The lab", "type": "cd ai-security-course-labs/labs/gc10 && ls"},
-    {"label": "Setup", "type": "make setup", "pause_after": 3},
-    {"label": "Check", "type": "make check", "pause_after": 6},
-    {"label": "Attack", "type": "make attack", "pause_after": 6},
-    {"label": "Fixes", "type": "ls fixes", "pause_after": 3},
-    {"label": "Attack safe", "type": "make attack-safe", "pause_after": 6},
-    {"label": "Preview", "type": "make twin-preview", "pause_after": 6},
-    {"label": "Scan", "type": "make scan", "pause_after": 4},
-    {"label": "Hunt naive", "type": "make hunt-naive", "pause_after": 5},
-    {"label": "Hunt", "type": "make hunt", "pause_after": 6},
-    {"label": "Tests", "type": "make test", "pause_after": 4},
-    {"label": "Challenge", "type": "make challenge 2>&1 | tail -8", "pause_after": 5}
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/gc10 && ls"
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Check",
+      "type": "make check",
+      "pause_after": 2
+    },
+    {
+      "label": "Check list",
+      "type": "make check | grep -E \"HIGH|MEDIUM|LOW\"",
+      "pause_after": 6
+    },
+    {
+      "label": "Attack",
+      "type": "make attack",
+      "pause_after": 2
+    },
+    {
+      "label": "Attack verdicts",
+      "type": "make attack | grep -v \"why:\"",
+      "pause_after": 6
+    },
+    {
+      "label": "Fixes",
+      "type": "ls fixes",
+      "pause_after": 3
+    },
+    {
+      "label": "Attack safe",
+      "type": "make attack-safe",
+      "pause_after": 6
+    },
+    {
+      "label": "Preview",
+      "type": "make twin-preview",
+      "pause_after": 6
+    },
+    {
+      "label": "Scan",
+      "type": "make scan",
+      "pause_after": 4
+    },
+    {
+      "label": "Hunt naive",
+      "type": "make hunt-naive",
+      "pause_after": 5
+    },
+    {
+      "label": "Hunt",
+      "type": "make hunt",
+      "pause_after": 6
+    },
+    {
+      "label": "Tests",
+      "type": "make test",
+      "pause_after": 4
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | tail -8",
+      "pause_after": 5
+    }
   ]
 }
