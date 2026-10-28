@@ -4,7 +4,9 @@
   "title": "Lab 8.6: a malicious MCP server against a local agent (rug pull, poisoning, shadowing), four controls, a server with real audience checks, proof by tests; optional real model through Ollama",
   "cols": 132,
   "rows": 34,
-  "needs": ["ollama"],
+  "needs": [
+    "ollama"
+  ],
   "before": [
     "curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh",
     "sudo systemctl daemon-reload && sudo systemctl enable --now ollama || (setsid nohup ollama serve >/tmp/ollama.log 2>&1 < /dev/null &)",
@@ -12,22 +14,83 @@
     "git clone -q -b rec-m8 https://github.com/thesecguyofficial/ai-security-course-labs.git",
     "ollama pull gemma3:1b"
   ],
-  "fail_on": ["Traceback"],
+  "fail_on": [
+    "Traceback"
+  ],
   "steps": [
-    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m08 && ls"},
-    {"label": "Setup", "type": "make setup", "pause_after": 3},
-    {"label": "Check", "type": "make check", "pause_after": 3},
-    {"label": "Honest menu", "type": ".venv/bin/python review.py notes", "pause_after": 6},
-    {"label": "Attack", "type": "make attack", "pause_after": 8},
-    {"label": "Shadow", "type": "make shadow", "pause_after": 6},
-    {"label": "Review", "type": "make review", "pause_after": 6},
-    {"label": "Defend", "type": "make defend", "pause_after": 8},
-    {"label": "Auth", "type": "make auth", "pause_after": 6},
-    {"label": "Audience check", "type": "grep -n 'audience=' servers/secure_http_server.py", "pause_after": 4},
-    {"label": "Tests", "type": "make test", "pause_after": 5},
-    {"label": "Challenge", "type": "make challenge 2>&1 | tail -6", "pause_after": 6},
-    {"label": "Ollama", "type": "ollama --version && ollama list", "pause_after": 4},
-    {"label": "Real model", "type": "echo 1.1.0 > state/facts_release.txt && .venv/bin/python host.py \"give me a fact about octopus\" --backend ollama --model gemma3:1b", "pause_after": 6},
-    {"label": "Real model safe", "type": ".venv/bin/python host.py \"give me a fact about octopus\" --backend ollama --model gemma3:1b --block-injection", "pause_after": 6}
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m08 && ls"
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Check",
+      "type": "make check",
+      "pause_after": 3
+    },
+    {
+      "label": "Honest menu",
+      "type": ".venv/bin/python review.py notes",
+      "pause_after": 6
+    },
+    {
+      "label": "Attack",
+      "type": "make attack",
+      "pause_after": 8
+    },
+    {
+      "label": "Shadow",
+      "type": "make shadow",
+      "pause_after": 6
+    },
+    {
+      "label": "Review",
+      "type": "make review",
+      "pause_after": 6
+    },
+    {
+      "label": "Defend",
+      "type": "make defend",
+      "pause_after": 8
+    },
+    {
+      "label": "Auth",
+      "type": "make auth",
+      "pause_after": 6
+    },
+    {
+      "label": "Audience check",
+      "type": "grep -n 'audience=' servers/secure_http_server.py",
+      "pause_after": 4
+    },
+    {
+      "label": "Tests",
+      "type": "make test",
+      "pause_after": 5
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | tail -6",
+      "pause_after": 6
+    },
+    {
+      "label": "Ollama",
+      "type": "ollama --version && ollama list",
+      "pause_after": 4
+    },
+    {
+      "label": "Real model",
+      "type": "make real",
+      "pause_after": 6
+    },
+    {
+      "label": "Real model safe",
+      "type": "make real-safe",
+      "pause_after": 6
+    }
   ]
 }

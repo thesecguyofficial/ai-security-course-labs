@@ -42,6 +42,8 @@ def decide(user_message: str, tools: list[dict], model: str = "gemma3:1b") -> Pl
                 "messages": [{"role": "system", "content": system}, {"role": "user", "content": user_message}],
                 "temperature": 0,
                 "stream": False,
+                # Ask Ollama for valid JSON only. Small models otherwise often break the format.
+                "response_format": {"type": "json_object"},
             },
             timeout=60,
         )
