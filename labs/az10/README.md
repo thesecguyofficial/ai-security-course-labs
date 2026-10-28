@@ -93,7 +93,7 @@ logs, a budget) and proves each fix with a request that should now fail. About 7
 
 ## Needs
 
-- Python **3.11 or newer** (tested on 3.13). Check with `python3 --version`. No packages, no internet.
+- Python **3.11 or newer** (tested on 3.12 and 3.13). Check with `python3 --version`. No packages, no internet.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 - Optional, Step 8 only: the Azure CLI with Bicep, and **your own** Azure subscription, never your employer's.
 
@@ -101,13 +101,17 @@ logs, a budget) and proves each fix with a request that should now fail. About 7
 
 ```bash
 cd labs/az10
+make setup
 make check
 ```
 
 - `cd labs/az10`: run it from the course labs repository folder (`ai-security-course-labs`)
+- `make setup`: same as `python3 ../../tools/check_python.py 3.11`. It installs nothing; it only checks your Python
+  version and prints `Nothing to install for this lab: Python 3.12 and its standard library are all it needs.`
+  (with your version)
 - `make check`: same as `python3 checker.py`
 
-Real output (Linux, Python 3.13):
+Real output (recorded on Linux, Python 3.12):
 
 ```text
 --- AZ10 checker · Contoso today ---
@@ -533,7 +537,7 @@ Same as `python3 run_tests.py --challenge`.
   why test_19_sandbox_key_refused: AssertionError: True is not false : A3 is still ALLOWED: sandbox key access is on
   why test_20_hunt_content_filter_change: + [('H07', '00001111-aaaa-2222-bbbb-3333cccc4444')] : rule_content_filter_change() must return one H07 hit for the CI identity
 ----------------------------------------------------------------------
-Ran 21 tests in 0.059s
+Ran 21 tests in 0.074s
 
 FAILED (failures=3)
 
