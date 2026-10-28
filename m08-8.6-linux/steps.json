@@ -1,159 +1,159 @@
 {
   "scenario": "m08-8.6-linux",
-  "start": 1.736,
+  "start": 1.711,
   "steps": [
     {
       "label": "The lab",
       "speed": 1,
-      "start": 1.736,
-      "end": 7.225
+      "start": 1.711,
+      "end": 7.202
     },
     {
       "label": "Setup",
       "speed": 1,
-      "start": 9.025,
-      "end": 19.409
+      "start": 9.002,
+      "end": 19.596
     },
     {
       "label": "Check",
       "speed": 1,
-      "start": 22.409,
-      "end": 24.626
+      "start": 22.596,
+      "end": 24.816
     },
     {
       "label": "Honest menu",
       "speed": 1,
-      "start": 27.627,
-      "end": 33.893
+      "start": 27.816,
+      "end": 33.989
     },
     {
       "label": "Attack",
       "speed": 1,
-      "start": 39.894,
-      "end": 45.709
+      "start": 39.99,
+      "end": 45.946
     },
     {
       "label": "Shadow",
       "speed": 1,
-      "start": 53.709,
-      "end": 58.838
+      "start": 53.946,
+      "end": 59.196
     },
     {
       "label": "Review",
       "speed": 1,
-      "start": 64.838,
-      "end": 68.533
+      "start": 65.196,
+      "end": 68.963
     },
     {
       "label": "Defend",
       "speed": 1,
-      "start": 74.533,
-      "end": 81.718
+      "start": 74.963,
+      "end": 82.322
     },
     {
       "label": "Auth",
       "speed": 1,
-      "start": 89.718,
-      "end": 95.598
+      "start": 90.322,
+      "end": 96.232
     },
     {
       "label": "Audience check",
       "speed": 1,
-      "start": 101.599,
-      "end": 108.239
+      "start": 102.232,
+      "end": 108.874
     },
     {
       "label": "Tests",
       "speed": 1,
-      "start": 112.239,
-      "end": 134.984
+      "start": 112.875,
+      "end": 135.925
     },
     {
       "label": "Challenge",
       "speed": 1,
-      "start": 139.984,
-      "end": 166.977
+      "start": 140.926,
+      "end": 168.491
     },
     {
       "label": "Ollama",
       "speed": 1,
-      "start": 172.978,
-      "end": 187.643
+      "start": 174.491,
+      "end": 189.157
     },
     {
       "label": "Real model",
       "speed": 1,
-      "start": 191.643,
-      "end": 204.184
+      "start": 193.158,
+      "end": 205.796
     },
     {
       "label": "Real model safe",
       "speed": 1,
-      "start": 210.184,
-      "end": 223.914
+      "start": 211.796,
+      "end": 231.006
     }
   ],
   "keys": [
     {
-      "t": 2.337,
+      "t": 2.311,
       "what": "type"
     },
     {
-      "t": 9.625,
+      "t": 9.602,
       "what": "type"
     },
     {
-      "t": 23.009,
+      "t": 23.196,
       "what": "type"
     },
     {
-      "t": 28.227,
+      "t": 28.416,
       "what": "type"
     },
     {
-      "t": 40.494,
+      "t": 40.59,
       "what": "type"
     },
     {
-      "t": 54.309,
+      "t": 54.546,
       "what": "type"
     },
     {
-      "t": 65.438,
+      "t": 65.796,
       "what": "type"
     },
     {
-      "t": 75.133,
+      "t": 75.563,
       "what": "type"
     },
     {
-      "t": 90.318,
+      "t": 90.922,
       "what": "type"
     },
     {
-      "t": 102.199,
+      "t": 102.832,
       "what": "type"
     },
     {
-      "t": 112.839,
+      "t": 113.475,
       "what": "type"
     },
     {
-      "t": 140.584,
+      "t": 141.526,
       "what": "type"
     },
     {
-      "t": 173.578,
+      "t": 175.091,
       "what": "type"
     },
     {
-      "t": 192.243,
+      "t": 193.758,
       "what": "type"
     },
     {
-      "t": 210.784,
+      "t": 212.396,
       "what": "type"
     }
   ],
-  "end": 229.914
+  "end": 237.006
 }
