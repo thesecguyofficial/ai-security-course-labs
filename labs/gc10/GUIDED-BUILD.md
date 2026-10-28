@@ -154,7 +154,7 @@ gcloud projects add-iam-policy-binding PROJECT_ID \
 ```
 
 To act as these accounts from your terminal, you need Service Account Token Creator **on each account**, not on the
-project (lesson 11.1: "Don't grant access to service accounts at the Google Cloud project or folder level"). Use your
+project ([Google's service account best practices](https://docs.cloud.google.com/iam/docs/best-practices-service-accounts): "Don't grant access to service accounts at the Google Cloud project or folder level"). Use your
 own Google account email for `YOUR_EMAIL`:
 
 ```bash
