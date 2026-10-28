@@ -3,7 +3,7 @@
 Companion to lessons **10.2 to 10.5** of *AI Security Engineer* (The Sec Guy), Azure stream. About 60 minutes,
 **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Azure subscription
 needed**. An optional last step repeats the key and policy tests in your own Azure subscription, also at an expected
-cost of $0.
+cost of $0. GUIDED-BUILD.md goes further and builds a real locked-down setup that calls the model, for a few US cents.
 
 You are the new cloud security engineer at **Contoso** (a fictional company; "Contoso" is the placeholder name
 Microsoft uses in its own documentation). Contoso runs the TSG Helpdesk chatbot on a Microsoft Foundry resource in
