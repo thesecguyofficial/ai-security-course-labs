@@ -19,6 +19,28 @@ variants, with no false positives.** You never write the attack, and nothing her
 | **Prove** | `make test` (the trail and the provided investigation) | 23.2 |
 | **Challenge** | A quiet beacon, an image exfiltration exit, and a precise input check. No solution included | 23.2, 23.3, 23.4 |
 
+## Get the lab files
+
+This folder is part of the free, public course labs repository, [thesecguyofficial/ai-security-course-labs](https://github.com/thesecguyofficial/ai-security-course-labs).
+
+**First time, or you deleted the folder:** download it once.
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+cd ai-security-course-labs
+```
+
+**Already downloaded it:** go to that folder and get the latest version.
+
+```bash
+cd ai-security-course-labs
+git pull
+```
+
+**No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
+
+Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m23`.
+
 ## What's in this folder
 
 | File | What it is |

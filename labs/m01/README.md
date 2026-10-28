@@ -3,6 +3,32 @@
 Companion to lesson **1.8** of *AI Security Engineer*. This folder will move to the public
 `ai-security-labs` repository; it contains no solutions and no secrets.
 
+## Get the lab files
+
+This folder is part of the free, public course labs repository, [thesecguyofficial/ai-security-course-labs](https://github.com/thesecguyofficial/ai-security-course-labs).
+
+**First time, or you deleted the folder:** download it once.
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+cd ai-security-course-labs
+```
+
+**Already downloaded it:** go to that folder and get the latest version.
+
+```bash
+cd ai-security-course-labs
+git pull
+```
+
+**No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
+
+Then go to this lab's folder. Every command in this guide runs from there:
+
+```bash
+cd labs/m01
+```
+
 ## Needs
 
 - Ollama running locally (lesson 0.6), listening on `http://localhost:11434`

@@ -24,6 +24,28 @@ That is the **first draft**. Your job: hijack it, then prove the hardened versio
 | **Challenge** | A Cedar policy, memory write validation, a hunt query. No solution included | 14.5, 14.6, 14.7 |
 | **Cloud (optional)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): console and CLI/Terraform from zero, five requests (a normal one, a cross-user attempt, an injection in a tool result, a write that needs the right identity, a token from another app), one setting changed, cost, teardown | 14.3 to 14.7 |
 
+## Get the lab files
+
+This folder is part of the free, public course labs repository, [thesecguyofficial/ai-security-course-labs](https://github.com/thesecguyofficial/ai-security-course-labs).
+
+**First time, or you deleted the folder:** download it once.
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+cd ai-security-course-labs
+```
+
+**Already downloaded it:** go to that folder and get the latest version.
+
+```bash
+cd ai-security-course-labs
+git pull
+```
+
+**No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
+
+Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m14`.
+
 ## What's in this folder
 
 | File | What it is |

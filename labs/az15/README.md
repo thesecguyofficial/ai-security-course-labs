@@ -23,6 +23,28 @@ workspace, production runs in another, and a **registry** exists but nobody uses
 | **Challenge** | Azure Policy in Deny, a promotion gate, a hunt query. No solution included | 15.2, 15.3, 15.4 |
 | **Cloud (optional, costs money)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): a private endpoint for an open model, from zero (CLI, plus studio clicks), five requests, one setting changed, auto-teardown and teardown | 15.2 to 15.4 |
 
+## Get the lab files
+
+This folder is part of the free, public course labs repository, [thesecguyofficial/ai-security-course-labs](https://github.com/thesecguyofficial/ai-security-course-labs).
+
+**First time, or you deleted the folder:** download it once.
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+cd ai-security-course-labs
+```
+
+**Already downloaded it:** go to that folder and get the latest version.
+
+```bash
+cd ai-security-course-labs
+git pull
+```
+
+**No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
+
+Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/az15`.
+
 ## What's in this folder
 
 | File | What it is |

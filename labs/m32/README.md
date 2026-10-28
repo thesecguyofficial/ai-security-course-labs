@@ -19,6 +19,28 @@ This capstone builds on Part 5. If you did the Module 19 capstone, the shape is 
 self-check, a published rubric. What is new is the system: **three agents that share a turn**, so a planted
 instruction can travel from the agent that reads it to the agent that can act.
 
+## Get the lab files
+
+This folder is part of the free, public course labs repository, [thesecguyofficial/ai-security-course-labs](https://github.com/thesecguyofficial/ai-security-course-labs).
+
+**First time, or you deleted the folder:** download it once.
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+cd ai-security-course-labs
+```
+
+**Already downloaded it:** go to that folder and get the latest version.
+
+```bash
+cd ai-security-course-labs
+git pull
+```
+
+**No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
+
+Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m32`.
+
 ## The system
 
 TSG Ops Crew: an internal operations assistant. One chat turn runs across three agents.

@@ -23,6 +23,28 @@ knowledge base and the agent to managed AWS services. Their pull request says "s
 | **Challenge** | Screen retrieved chunks, write checker rule M13-20, add authorisation behind the confirmation. No solution included | 13.1, 13.2 |
 | **Cloud (optional)** | Terraform for the managed knowledge base (+ harness), and [`GUIDED-BUILD.md`](GUIDED-BUILD.md): console and CLI from zero, five requests including a cross-user leak attempt, an indirect injection and a confirmed write, one setting changed, cost, teardown | 13.1, 13.2 |
 
+## Get the lab files
+
+This folder is part of the free, public course labs repository, [thesecguyofficial/ai-security-course-labs](https://github.com/thesecguyofficial/ai-security-course-labs).
+
+**First time, or you deleted the folder:** download it once.
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+cd ai-security-course-labs
+```
+
+**Already downloaded it:** go to that folder and get the latest version.
+
+```bash
+cd ai-security-course-labs
+git pull
+```
+
+**No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
+
+Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m13`.
+
 ## What's in this folder
 
 | File | What it is |

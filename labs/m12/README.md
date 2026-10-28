@@ -23,6 +23,28 @@ version, and find out what no guardrail fixes.
 | **Cloud (optional)** | Create the guardrail, run the suite against it, ask the real IAM policy simulator, tear down | 12.2, 12.3 |
 | **Guided build (your account)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): create the guardrail by console clicks or the AWS CLI, six requests with how to read each response, MEDIUM vs HIGH prompt attack, the IAM deny with `AccessDenied`, metrics and logs, cost, teardown | 12.1 to 12.4 |
 
+## Get the lab files
+
+This folder is part of the free, public course labs repository, [thesecguyofficial/ai-security-course-labs](https://github.com/thesecguyofficial/ai-security-course-labs).
+
+**First time, or you deleted the folder:** download it once.
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+cd ai-security-course-labs
+```
+
+**Already downloaded it:** go to that folder and get the latest version.
+
+```bash
+cd ai-security-course-labs
+git pull
+```
+
+**No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
+
+Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m12`.
+
 ## What's in this folder
 
 | File | What it is |
