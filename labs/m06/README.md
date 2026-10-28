@@ -108,6 +108,20 @@ python3 -m venv .venv
 Windows (PowerShell): `py -m venv .venv`, then `.venv\Scripts\python -m pip install -r requirements.txt`, and use
 `.venv\Scripts\python` wherever this README says `.venv/bin/python`.
 
+**Check it worked.** This prints the installed version of the one package the lab needs:
+
+```bash
+.venv/bin/python -c "import importlib.metadata as m; print('qdrant-client', m.version('qdrant-client'))"
+```
+
+```text
+qdrant-client 1.19.1
+```
+
+`qdrant-client` is the Python library for [Qdrant](https://qdrant.tech/documentation/), an open-source vector
+database. You never start a Qdrant server in this lab: the library runs the store inside your Python process
+("local mode"). You don't call it directly either; `rag_app.py` does, and you'll read those calls in Step 3.
+
 ## Step 2 · Break it: attack the vulnerable app
 
 ```bash
@@ -116,7 +130,7 @@ make attack
 
 Same as `.venv/bin/python attack.py --mode vulnerable`.
 
-Real output (Linux, Python 3.13):
+Real output (a fresh Linux machine):
 
 ```text
 --- M6 lab · VULNERABLE mode · embedder: hashing stand-in · model: stand-in (not AI) ---
@@ -360,11 +374,37 @@ No solution is included.
 
 ## Step 7 (optional) · Real models through Ollama
 
-With Ollama running (lessons 0.6 and 1.8):
+**New to Ollama?** Ollama is a free, open-source tool that runs AI models on your own computer and answers on
+`127.0.0.1:11434`. Lesson 0.6 installs it; if you skipped that lesson:
+
+- **Mac:** download the app from [ollama.com/download](https://ollama.com/download), move it to Applications and
+  open it once.
+- **Windows:** download and run the installer from [ollama.com/download](https://ollama.com/download).
+- **Linux:** `curl -fsSL https://ollama.com/install.sh | sh`
+
+Check it's running and see which models you have (we tested with Ollama 0.40.12):
+
+```bash
+ollama --version && ollama list
+```
+
+```text
+ollama version is 0.40.12
+NAME                     ID              SIZE      MODIFIED
+embeddinggemma:latest    85462619ee72    621 MB    2 minutes ago
+gemma3:1b                97558784bdc9    806 MB    2 minutes ago
+```
+
+If the list is empty, pull the two models (about 1.4 GB in total, once):
 
 ```bash
 ollama pull gemma3:1b
 ollama pull embeddinggemma
+```
+
+Then ask the refund question with both real models, first on the vulnerable app, then on the safe one:
+
+```bash
 .venv/bin/python rag_app.py --mode vulnerable --llm ollama --embed ollama "How do I get a refund?"
 .venv/bin/python rag_app.py --mode safe --llm ollama --embed ollama --min-score 0.5 "How do I get a refund?"
 ```
@@ -383,9 +423,38 @@ answers ([Ollama docs](https://docs.ollama.com/openai)), both on `127.0.0.1:1143
 - **The tenant filter and the ingestion quarantine don't care which model you use.** They run before the model
   sees anything. That's why the tests use the stand-ins: they test *your code*, not the model's mood.
 
-We tested this code path against a local mock of the Ollama API (the vulnerable app followed the hidden
-instruction; the safe app quarantined it and answered from Alpha's real policy). We did not run it against live
-models for this README, so your output will differ.
+Real output on a fresh Linux machine (Ollama 0.40.12, `gemma3:1b` and `embeddinggemma`; the log lines are
+trimmed). Your run will differ, because real models vary:
+
+```text
+--- M6 lab · VULNERABLE mode · embedder: ollama:embeddinggemma · model: ollama:gemma3:1b ---
+  log: INFO RETRIEVAL user=alice@alpha.example tenant=alpha hits=[('inbox/alpha/refund-policy-update.md', 'alpha', 0.754), ('inbox/alpha/refund-policy-update.md', 'alpha', 0.681), ('docs/alpha/refund-policy.md', 'alpha', 0.647)]
+
+alice (alpha)> How do I get a refund?
+bot> This page explains how customers get a refund and how a refund request works.
+     sources shown to the user: inbox/alpha/refund-policy-update.md, docs/alpha/refund-policy.md
+```
+
+```text
+--- M6 lab · SAFE mode · embedder: ollama:embeddinggemma · model: ollama:gemma3:1b ---
+  log: WARNING QUARANTINED inbox/alpha/refund-policy-update.md (tenant=alpha, kind=upload): hidden content: ...
+  log: INFO RETRIEVAL user=alice@alpha.example tenant=alpha hits=[('docs/alpha/refund-policy.md', 'alpha', 0.647), ('docs/alpha/refund-policy.md', 'alpha', 0.614), ('docs/alpha/refund-policy.md', 'alpha', 0.584)]
+  log: WARNING BLOCKED ungrounded answer for user=alice@alpha.example (support 0.00 < 0.60): 'Customers can request a refund within 30 days of delivery from the Orders page at shop.alpha.example.'
+
+alice (alpha)> How do I get a refund?
+bot> I can't give an answer that your company's documents support. Please ask the team that owns it.
+```
+
+What this run shows:
+
+- **With a real embedding model, the planted file still came first** (0.754). This model ignored the hidden note
+  and gave a harmless line, but it still listed the planted file as a source. Another run, or another model, may
+  follow the note.
+- **In safe mode, the fixes that run before the model held:** the planted file was quarantined and only Alpha's
+  real policy was retrieved.
+- **The answer was right, but it was blocked.** The model didn't cite a source, and the safe app only shows answers
+  whose citations it can check (`answer_safe` in `rag_app.py`). Strict on purpose: in a real app you'd improve the
+  prompt so the model cites, and use a real grounding checker (Step 3).
 
 ## Troubleshooting
 
