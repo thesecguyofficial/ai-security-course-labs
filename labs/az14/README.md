@@ -21,6 +21,32 @@ and prove which control stops each attack.
 | **Challenge** | `make challenge`: a tool policy that can't be fooled by a lookalike, a memory guard, `chain()` | 14.5, 14.6, 14.7 |
 | **Guided build** (optional) | [GUIDED-BUILD.md](GUIDED-BUILD.md): build it from zero in your subscription, portal and CLI | 14.8 |
 
+## Get the lab files
+
+This folder is part of the free, public course labs repository, [thesecguyofficial/ai-security-course-labs](https://github.com/thesecguyofficial/ai-security-course-labs).
+
+**First time, or you deleted the folder:** download it once.
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+cd ai-security-course-labs
+```
+
+**Already downloaded it:** go to that folder and get the latest version.
+
+```bash
+cd ai-security-course-labs
+git pull
+```
+
+**No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
+
+Then go to this lab's folder. Every command in this guide runs from there:
+
+```bash
+cd labs/az14
+```
+
 ## What's in this folder
 
 | File | What it is |

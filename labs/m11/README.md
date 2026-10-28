@@ -23,6 +23,28 @@ version that passes every control from this module.
 | **Challenge** | Tighten the org's Region guard, write next sprint's bedrock-mantle endpoint policy, write a checker rule. No solution included | 11.2, 11.4, 11.5 |
 | **Deploy (optional)** | `make up` the hardened Helpdesk in your sandbox, ask it a question, find the prompt in the encrypted log, `make down` | 11.6 |
 
+## Get the lab files
+
+This folder is part of the free, public course labs repository, [thesecguyofficial/ai-security-course-labs](https://github.com/thesecguyofficial/ai-security-course-labs).
+
+**First time, or you deleted the folder:** download it once.
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+cd ai-security-course-labs
+```
+
+**Already downloaded it:** go to that folder and get the latest version.
+
+```bash
+cd ai-security-course-labs
+git pull
+```
+
+**No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
+
+Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m11`.
+
 ## What's in this folder
 
 | File | What it is |

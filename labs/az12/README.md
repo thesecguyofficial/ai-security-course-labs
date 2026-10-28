@@ -20,6 +20,28 @@ guardrail: Contoso's "version 1", written in a hurry after a pilot complaint. In
 | **Challenge** | Close the three gaps the hardened build still leaves. No solution included | 12.3, 12.4 |
 | **Guided build** (optional) | Content Safety, a blocklist and a Foundry guardrail in your subscription, portal and CLI; five requests; change one setting | 12.1 to 12.3 |
 
+## Get the lab files
+
+This folder is part of the free, public course labs repository, [thesecguyofficial/ai-security-course-labs](https://github.com/thesecguyofficial/ai-security-course-labs).
+
+**First time, or you deleted the folder:** download it once.
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+cd ai-security-course-labs
+```
+
+**Already downloaded it:** go to that folder and get the latest version.
+
+```bash
+cd ai-security-course-labs
+git pull
+```
+
+**No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
+
+Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/az12`.
+
 ## What's in this folder
 
 | File | What it is |

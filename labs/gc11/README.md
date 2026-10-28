@@ -20,6 +20,28 @@ protection officer now requires that their tickets are processed in the EU. In o
 | **Challenge** | Enforce the perimeter without locking out the analysts, write rule GC11-16, close the cache gap. No solution included | 11.2, 11.3, 11.5 |
 | **Cloud (optional)** | Deploy the hardened foundation in your own project with Terraform, check it live, tear it down | 11.6 |
 
+## Get the lab files
+
+This folder is part of the free, public course labs repository, [thesecguyofficial/ai-security-course-labs](https://github.com/thesecguyofficial/ai-security-course-labs).
+
+**First time, or you deleted the folder:** download it once.
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+cd ai-security-course-labs
+```
+
+**Already downloaded it:** go to that folder and get the latest version.
+
+```bash
+cd ai-security-course-labs
+git pull
+```
+
+**No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
+
+Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/gc11`.
+
 ## What's in this folder
 
 | File | What it is |

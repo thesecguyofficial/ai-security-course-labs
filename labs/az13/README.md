@@ -19,6 +19,32 @@ Your job: check that every one of those controls made it across, and prove it.
 | **Challenge** | `make challenge`: permission resync, an approval reviewer that reads arguments, a safe filter, reconstruct() | 13.1, 13.2 |
 | **Guided build** (optional) | [GUIDED-BUILD.md](GUIDED-BUILD.md): create it from zero in your subscription, portal and CLI | 13.3 |
 
+## Get the lab files
+
+This folder is part of the free, public course labs repository, [thesecguyofficial/ai-security-course-labs](https://github.com/thesecguyofficial/ai-security-course-labs).
+
+**First time, or you deleted the folder:** download it once.
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+cd ai-security-course-labs
+```
+
+**Already downloaded it:** go to that folder and get the latest version.
+
+```bash
+cd ai-security-course-labs
+git pull
+```
+
+**No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
+
+Then go to this lab's folder. Every command in this guide runs from there:
+
+```bash
+cd labs/az13
+```
+
 ## What's in this folder
 
 | File | What it is |
