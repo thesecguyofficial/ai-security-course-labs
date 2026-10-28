@@ -1,1 +1,1 @@
-run: https://github.com/thesecguyofficial/ai-security-course-labs/actions/runs/40655002536
+run: https://github.com/thesecguyofficial/ai-security-course-labs/actions/runs/40656735126
