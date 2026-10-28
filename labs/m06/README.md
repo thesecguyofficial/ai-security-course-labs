@@ -70,11 +70,11 @@ port. The only network calls are the optional Ollama steps, and the code refuses
 ## Step 1 · Set up (once)
 
 ```bash
-cd labs-export/m06
+cd labs/m06
 make setup
 ```
 
-- `cd labs-export/m06`: or wherever you put this folder
+- `cd labs/m06`: run it from the course labs repository folder (`ai-security-course-labs`)
 
 `make setup` runs these two commands (run them yourself if you don't have `make`):
 

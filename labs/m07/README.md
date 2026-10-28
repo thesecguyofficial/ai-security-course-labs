@@ -55,7 +55,7 @@ You will:
 ## Step 1 · Break it
 
 ```bash
-cd labs-export/m07
+cd labs/m07
 make attack
 ```
 

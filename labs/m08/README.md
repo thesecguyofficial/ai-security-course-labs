@@ -60,11 +60,11 @@ local model through Ollama.
 ## Setup (once)
 
 ```bash
-cd labs-export/m08
+cd labs/m08
 make setup
 ```
 
-- `cd labs-export/m08`: or wherever you put this folder
+- `cd labs/m08`: run it from the course labs repository folder (`ai-security-course-labs`)
 - `make setup`: python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
 
 This installs `mcp==2.3.0` (MIT licence), pinned because it speaks MCP protocol version `2026-07-28`.

@@ -48,11 +48,11 @@ docs at [presidio.dataprivacystack.org](https://presidio.dataprivacystack.org/in
 Mac / Linux:
 
 ```bash
-cd labs-export/m04
+cd labs/m04
 make setup
 ```
 
-- `cd labs-export/m04`: or wherever you put this folder
+- `cd labs/m04`: run it from the course labs repository folder (`ai-security-course-labs`)
 
 `make setup` runs these three commands (run them yourself if you don't have `make`):
 

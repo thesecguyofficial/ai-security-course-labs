@@ -72,11 +72,11 @@ if a real-looking IP, identity or key creeps in. Nothing in the offline part con
 ## Step 1 · Check: what's wrong with the Helpdesk today?
 
 ```bash
-cd labs-export/gc11
+cd labs/gc11
 make check
 ```
 
-- `cd labs-export/gc11`: or wherever you put this folder
+- `cd labs/gc11`: run it from the course labs repository folder (`ai-security-course-labs`)
 - `make check`: same as `python3 checker.py --twin today`
 
 Real output (Linux, Python 3.13):

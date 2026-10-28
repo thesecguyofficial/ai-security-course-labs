@@ -74,11 +74,11 @@ if a real-looking account ID, IP or access key ever creeps in.
 ## Step 1 · Check: find the over-broad permissions
 
 ```bash
-cd labs-export/m10
+cd labs/m10
 make check
 ```
 
-- `cd labs-export/m10`: or wherever you put this folder
+- `cd labs/m10`: run it from the course labs repository folder (`ai-security-course-labs`)
 - `make check`: same as `python3 policy_checker.py`
 
 Real output (Linux, Python 3.13):
