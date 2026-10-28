@@ -67,6 +67,27 @@ python3 policy_checker.py
           fix: Prefer an allow-list (allowedValues). Keep deny-lists as a second layer only.
 
 7 HIGH, 10 MEDIUM, 1 LOW, 0 WARNING  (18 findings)
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make check | grep -E "HIGH|MEDIUM|LOW"
+
+  HIGH    GC10-01  folders/111111111111 roles/editor
+  HIGH    GC10-01  folders/111111111111 roles/editor
+  HIGH    GC10-01  projects/example-chatbot-prod roles/editor
+  HIGH    GC10-04  projects/example-chatbot-prod roles/aiplatform.admin
+  HIGH    GC10-05  key chatbot-frontend
+  HIGH    GC10-06  key ops-eval-key
+  HIGH    GC10-16  repo/chatbot/settings.py:9
+  MEDIUM  GC10-03  organizations/123456789012 roles/aiplatform.user
+  MEDIUM  GC10-07  key ops-eval-key
+  MEDIUM  GC10-08  key store-locator-website
+  MEDIUM  GC10-09  organizations/123456789012/policies/iam.managed.disableServiceAccountApiKeyCreation
+  MEDIUM  GC10-10  organization
+  MEDIUM  GC10-11  projects/example-chatbot-prod
+  MEDIUM  GC10-11  projects/example-ds-sandbox
+  MEDIUM  GC10-14  projects/example-chatbot-prod
+  MEDIUM  GC10-14  projects/example-ds-sandbox
+  MEDIUM  GC10-15  projects/example-ds-sandbox
+  LOW     GC10-12  projects/example-ds-sandbox/policies/vertexai.allowedModels
+7 HIGH, 10 MEDIUM, 1 LOW, 0 WARNING  (18 findings)
 thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make attack
 
 python3 attack.py --mode vulnerable
@@ -114,6 +135,38 @@ Legitimate traffic · must keep working after the fixes
          why: every check passed: IAM: run.services.create via roles/editor on folders/111111111111
   [L8] ALLOWED  Platform admin: CreateKey, a STANDARD key (not bound to a service account) in the sandbox
          why: every check passed: IAM: apikeys.keys.create via roles/owner on projects/example-ds-sandbox (as cloud-admins@example.com)
+
+8 of 9 attacker requests allowed; 8 of 8 legitimate requests allowed.
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make attack | grep -v "why:"
+
+python3 attack.py --mode vulnerable
+--- GC10 lab · VULNERABLE · ExampleCo today ---
+    (gcp_eval.py: a teaching model of Google Cloud's rules; nothing is sent to Google)
+
+Attacker 1 · API keys copied from a public repo and a public web page (from 203.0.113.50)
+  [A1] ALLOWED  GenerateContent on the approved model, billed to the chatbot project
+  [A2] ALLOWED  GenerateContent on a bigger model nobody approved for prod (Gemini 3.5 Flash)
+  [A3] ALLOWED  Gemini API with the store-locator key scraped from www.example.com
+  [A4] DENIED   Gemini API with the unrestricted chatbot key
+
+Attacker 2 · the leaked JSON key of legacy-etl, a service account nobody has used since March (from 203.0.113.77)
+  [B1] ALLOWED  RawPredict on Claude Opus 4.7 in the sandbox (not approved anywhere)
+  [B2] ALLOWED  Deploy Llama 3 to a GPU endpoint in prod (billed by the hour while it runs)
+  [B3] ALLOWED  CreateServiceAccountKey for chatbot-runtime (a second way back in)
+  [B4] ALLOWED  CreateKey: an API key bound to chatbot-runtime (persistence that skips SA usage metrics)
+
+Attacker 3 · the authorization key ops-eval-key, bound to chatbot-runtime (from 203.0.113.90)
+  [C1] ALLOWED  GenerateContent on Gemini 3.5 Flash as chatbot-runtime (it holds Agent Platform Admin)
+
+Legitimate traffic · must keep working after the fixes
+  [L1] ALLOWED  Chatbot on Cloud Run: GenerateContent on the approved model as chatbot-runtime
+  [L2] ALLOWED  Chatbot web tier: GenerateContent with the chatbot-frontend key from its egress IP
+  [L3] ALLOWED  Data scientist: GenerateContent on Gemini 3.5 Flash in the sandbox
+  [L4] ALLOWED  Data scientist: RawPredict on approved Claude Haiku 4.5 in the sandbox
+  [L5] ALLOWED  Notebook: GenerateContent with ds-notebook-key from the office range
+  [L6] ALLOWED  CI pipeline: nightly eval, GenerateContent on the approved model in the sandbox
+  [L7] ALLOWED  CI pipeline: deploy a new chatbot revision to Cloud Run
+  [L8] ALLOWED  Platform admin: CreateKey, a STANDARD key (not bound to a service account) in the sandbox
 
 8 of 9 attacker requests allowed; 8 of 8 legitimate requests allowed.
 thesecguy@lab:~/ai-security-course-labs/labs/gc10$ ls fixes
@@ -313,7 +366,7 @@ python3 run_tests.py
 [PASS] hunt: H02 flags legacy-etl (227 days dormant) and H03 rates the bound key HIGH
 [PASS] hygiene: only RFC 5737 IPs, example.com identities and Google's documented example key string
 ----------------------------------------------------------------------
-Ran 19 tests in 0.073s
+Ran 19 tests in 0.093s
 
 OK
 
@@ -322,7 +375,7 @@ thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make challenge 2>&1 | tail -8
 
   why test_24_h09_flags_the_attackers_enable: AssertionError: 0 != 1 : 0 of 1 EnableService event flagged
 ----------------------------------------------------------------------
-Ran 25 tests in 0.088s
+Ran 25 tests in 0.112s
 
 FAILED (failures=3)
 

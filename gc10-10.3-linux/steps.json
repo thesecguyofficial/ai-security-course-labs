@@ -1,129 +1,149 @@
 {
   "scenario": "gc10-10.3-linux",
-  "start": 1.774,
+  "start": 1.684,
   "steps": [
     {
       "label": "The lab",
       "speed": 1,
-      "start": 1.774,
-      "end": 7.382
+      "start": 1.684,
+      "end": 7.293
     },
     {
       "label": "Setup",
       "speed": 1,
-      "start": 9.182,
-      "end": 11.409
+      "start": 9.093,
+      "end": 11.785
     },
     {
       "label": "Check",
       "speed": 1,
-      "start": 14.409,
-      "end": 16.606
+      "start": 14.786,
+      "end": 16.986
+    },
+    {
+      "label": "Check list",
+      "speed": 1,
+      "start": 18.987,
+      "end": 24.549
     },
     {
       "label": "Attack",
       "speed": 1,
-      "start": 22.607,
-      "end": 24.993
+      "start": 30.549,
+      "end": 32.804
+    },
+    {
+      "label": "Attack verdicts",
+      "speed": 1,
+      "start": 34.805,
+      "end": 38.967
     },
     {
       "label": "Fixes",
       "speed": 1,
-      "start": 30.993,
-      "end": 32.919
+      "start": 44.967,
+      "end": 46.884
     },
     {
       "label": "Attack safe",
       "speed": 1,
-      "start": 35.919,
-      "end": 38.752
+      "start": 49.884,
+      "end": 52.718
     },
     {
       "label": "Preview",
       "speed": 1,
-      "start": 44.753,
-      "end": 47.717
+      "start": 58.718,
+      "end": 61.767
     },
     {
       "label": "Scan",
       "speed": 1,
-      "start": 53.717,
-      "end": 55.841
+      "start": 67.767,
+      "end": 69.929
     },
     {
       "label": "Hunt naive",
       "speed": 1,
-      "start": 59.841,
-      "end": 62.404
+      "start": 73.929,
+      "end": 76.725
     },
     {
       "label": "Hunt",
       "speed": 1,
-      "start": 67.404,
-      "end": 69.479
+      "start": 81.725,
+      "end": 83.857
     },
     {
       "label": "Tests",
       "speed": 1,
-      "start": 75.479,
-      "end": 77.587
+      "start": 89.857,
+      "end": 92.195
     },
     {
       "label": "Challenge",
       "speed": 1,
-      "start": 81.587,
-      "end": 86.255
+      "start": 96.196,
+      "end": 100.851
     }
   ],
   "keys": [
     {
-      "t": 2.374,
+      "t": 2.285,
       "what": "type"
     },
     {
-      "t": 9.782,
+      "t": 9.693,
       "what": "type"
     },
     {
-      "t": 15.01,
+      "t": 15.386,
       "what": "type"
     },
     {
-      "t": 23.207,
+      "t": 19.587,
       "what": "type"
     },
     {
-      "t": 31.593,
+      "t": 31.149,
       "what": "type"
     },
     {
-      "t": 36.52,
+      "t": 35.405,
       "what": "type"
     },
     {
-      "t": 45.353,
+      "t": 45.567,
       "what": "type"
     },
     {
-      "t": 54.317,
+      "t": 50.484,
       "what": "type"
     },
     {
-      "t": 60.441,
+      "t": 59.318,
       "what": "type"
     },
     {
-      "t": 68.004,
+      "t": 68.367,
       "what": "type"
     },
     {
-      "t": 76.08,
+      "t": 74.529,
       "what": "type"
     },
     {
-      "t": 82.188,
+      "t": 82.325,
+      "what": "type"
+    },
+    {
+      "t": 90.457,
+      "what": "type"
+    },
+    {
+      "t": 96.796,
       "what": "type"
     }
   ],
-  "end": 91.255
+  "end": 105.852
 }
