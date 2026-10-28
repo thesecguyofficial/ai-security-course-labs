@@ -124,6 +124,26 @@ which is what you would do with a model you downloaded:
 - `picklescan -p <file>`: scan a file or folder; it exits with code 1 when it finds something dangerous
 - `fickling <file>`: print the pickle as Python, so you can read what loading it would run
 
+Real output (Linux; your paths will differ):
+
+```text
+/…/labs/m09/models/evil_model.pkl: dangerous import 'builtins exec' FOUND
+----------- SCAN SUMMARY -----------
+Scanned files: 1
+Infected files: 1
+Suspicious globals: 0
+Dangerous globals: 1
+```
+
+```text
+from builtins import exec
+_var0 = exec("import os;os.makedirs(r'/…/labs/m09/state', exist_ok=True);open(r'/…/labs/m09/state/PWNED_BY_LAB_MODEL.txt', 'w').write('LAB MARKER: …')")
+result0 = _var0
+```
+
+Run them only on files you are allowed to inspect. Neither tool loads the pickle, so scanning is safe; loading
+is the dangerous part.
+
 Windows: `.venv\Scripts\picklescan -p models\evil_model.pkl` and `.venv\Scripts\fickling models\evil_model.pkl`.
 
 ## Step 1 · Detonate: loading a model runs code
