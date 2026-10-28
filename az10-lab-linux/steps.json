@@ -1,0 +1,119 @@
+{
+  "scenario": "az10-lab-linux",
+  "start": 1.695,
+  "steps": [
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 1.695,
+      "end": 7.303
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 9.103,
+      "end": 11.335
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 14.335,
+      "end": 16.546
+    },
+    {
+      "label": "Scan",
+      "speed": 1,
+      "start": 22.546,
+      "end": 24.682
+    },
+    {
+      "label": "Attack",
+      "speed": 1,
+      "start": 29.682,
+      "end": 31.993
+    },
+    {
+      "label": "Check fixed",
+      "speed": 1,
+      "start": 37.993,
+      "end": 40.884
+    },
+    {
+      "label": "Attack safe",
+      "speed": 1,
+      "start": 45.884,
+      "end": 48.727
+    },
+    {
+      "label": "Hunt",
+      "speed": 1,
+      "start": 54.727,
+      "end": 56.868
+    },
+    {
+      "label": "Hunt naive",
+      "speed": 1,
+      "start": 62.868,
+      "end": 65.436
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 70.436,
+      "end": 72.597
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 77.597,
+      "end": 80.295
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.295,
+      "what": "type"
+    },
+    {
+      "t": 9.704,
+      "what": "type"
+    },
+    {
+      "t": 14.936,
+      "what": "type"
+    },
+    {
+      "t": 23.147,
+      "what": "type"
+    },
+    {
+      "t": 30.282,
+      "what": "type"
+    },
+    {
+      "t": 38.593,
+      "what": "type"
+    },
+    {
+      "t": 46.484,
+      "what": "type"
+    },
+    {
+      "t": 55.327,
+      "what": "type"
+    },
+    {
+      "t": 63.468,
+      "what": "type"
+    },
+    {
+      "t": 71.036,
+      "what": "type"
+    },
+    {
+      "t": 78.197,
+      "what": "type"
+    }
+  ],
+  "end": 86.295
+}
