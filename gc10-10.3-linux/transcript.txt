@@ -1,0 +1,333 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/gc10 && ls
+
+GUIDED-BUILD.md  README.md  auditlogs    fixes     gcp_eval.py  policy_checker.py  run_tests.py       test_lab.py
+Makefile         attack.py  examplecorp  gcp-twin  hunt.py      requirements.txt   test_challenge.py
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make setup
+
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make check
+
+python3 policy_checker.py
+--- GC10 policy checker · ExampleCo today ---
+
+  HIGH    GC10-01  folders/111111111111 roles/editor
+          Basic role roles/editor for ci-deployer@example-ci.iam.gserviceaccount.com: it can call any model, deploy endpoints and create keys.
+          fix: Grant the predefined role the workload needs (e.g. roles/aiplatform.user to call models).
+  HIGH    GC10-01  folders/111111111111 roles/editor
+          Basic role roles/editor for legacy-etl@example-ci.iam.gserviceaccount.com: it can call any model, deploy endpoints and create keys.
+          fix: Grant the predefined role the workload needs (e.g. roles/aiplatform.user to call models).
+  HIGH    GC10-01  projects/example-chatbot-prod roles/editor
+          Basic role roles/editor for 100000000001-compute@developer.gserviceaccount.com: it can call any model, deploy endpoints and create keys.
+          fix: Grant the predefined role the workload needs (e.g. roles/aiplatform.user to call models).
+  HIGH    GC10-04  projects/example-chatbot-prod roles/aiplatform.admin
+          Workload chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com holds Agent Platform Admin: full access to every Agent Platform resource.
+          fix: A workload that only calls a model needs roles/aiplatform.user (aiplatform.endpoints.predict).
+  HIGH    GC10-05  key chatbot-frontend
+          Unrestricted API key: any API enabled in its project, from anywhere. Google: "Unrestricted API keys are insecure."
+          fix: Add an API restriction (apiTargets) AND an application restriction (IPs, referrers or apps).
+  HIGH    GC10-06  key ops-eval-key
+          Authorization key bound to chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com: it works like a long-lived access token and its calls aren't in service account usage metrics.
+          fix: Use the attached service account (ADC) instead; delete the key; keep iam.managed.disableServiceAccountApiKeyCreation enforced.
+  HIGH    GC10-16  repo/chatbot/settings.py:9
+          Google API key string AIzaSyDa...ewQe in source code.
+          fix: Treat it as leaked: restrict or delete the key in the console, then remove it from the code and history.
+  MEDIUM  GC10-03  organizations/123456789012 roles/aiplatform.user
+          roles/aiplatform.user granted on organizations: every project below inherits it, including ones that never use AI.
+          fix: Grant AI roles on the project that needs them, not on a folder or the organization.
+  MEDIUM  GC10-07  key ops-eval-key
+          Key can call an AI API but has no application restriction: anyone holding the string can use it from anywhere.
+          fix: Add serverKeyRestrictions.allowedIps with your egress IPs (or a referrer/app restriction for client apps).
+  MEDIUM  GC10-08  key store-locator-website
+          A key built for a public web page can also call the Gemini API: its string is in your page source.
+          fix: Remove generativelanguage.googleapis.com from this key; give Gemini callers their own server-side key or ADC.
+  MEDIUM  GC10-09  organizations/123456789012/policies/iam.managed.disableServiceAccountApiKeyCreation
+          iam.managed.disableServiceAccountApiKeyCreation is switched off: anyone with the right roles can bind API keys to service accounts.
+          fix: Enforce it again at the organization (Google's default); allow exceptions per project only.
+  MEDIUM  GC10-10  organization
+          iam.managed.disableServiceAccountKeyCreation is not set (org created before 3 May 2024): anyone with iam.serviceAccountKeys.create can download a service account key.
+          fix: Enforce it at the organization (the secure-by-default baseline for newer orgs).
+  MEDIUM  GC10-11  projects/example-chatbot-prod
+          Agent Platform is enabled and no vertexai.allowedModels allow-list applies: every model and action, including new ones, is allowed.
+          fix: Set an allow-list at the folder or organization with the approved publishers/P/models/M:ACTION values.
+  MEDIUM  GC10-11  projects/example-ds-sandbox
+          Agent Platform is enabled and no vertexai.allowedModels allow-list applies: every model and action, including new ones, is allowed.
+          fix: Set an allow-list at the folder or organization with the approved publishers/P/models/M:ACTION values.
+  MEDIUM  GC10-14  projects/example-chatbot-prod
+          Agent Platform is enabled but no spend cap budget covers it: alerts-only budgets don't cap spending.
+          fix: Add a spend cap budget for this project + Agent Platform; keep alert budgets for everything else.
+  MEDIUM  GC10-14  projects/example-ds-sandbox
+          Agent Platform is enabled but no spend cap budget covers it: alerts-only budgets don't cap spending.
+          fix: Add a spend cap budget for this project + Agent Platform; keep alert budgets for everything else.
+  MEDIUM  GC10-15  projects/example-ds-sandbox
+          Data Access (DATA_READ) audit logs are off for aiplatform.googleapis.com: model calls here leave no audit record.
+          fix: Add an auditConfigs entry for aiplatform.googleapis.com with DATA_READ (cost: Cloud Logging ingestion past the free allotment).
+  LOW     GC10-12  projects/example-ds-sandbox/policies/vertexai.allowedModels
+          Deny-list: it blocks the models it names and allows every model Google adds later.
+          fix: Prefer an allow-list (allowedValues). Keep deny-lists as a second layer only.
+
+7 HIGH, 10 MEDIUM, 1 LOW, 0 WARNING  (18 findings)
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make attack
+
+python3 attack.py --mode vulnerable
+--- GC10 lab · VULNERABLE · ExampleCo today ---
+    (gcp_eval.py: a teaching model of Google Cloud's rules; nothing is sent to Google)
+
+Attacker 1 · API keys copied from a public repo and a public web page (from 203.0.113.50)
+  [A1] ALLOWED  GenerateContent on the approved model, billed to the chatbot project
+         why: every check passed: UNRESTRICTED standard key (no identity; billed to example-chatbot-prod); org policy: no vertexai.allowedModels policy anywhere: all models and actions allowed
+  [A2] ALLOWED  GenerateContent on a bigger model nobody approved for prod (Gemini 3.5 Flash)
+         why: every check passed: UNRESTRICTED standard key (no identity; billed to example-chatbot-prod); org policy: no vertexai.allowedModels policy anywhere: all models and actions allowed
+  [A3] ALLOWED  Gemini API with the store-locator key scraped from www.example.com
+         why: every check passed: standard key, restrictions passed (no identity; billed to example-legacy-web)
+  [A4] DENIED   Gemini API with the unrestricted chatbot key
+         why: the Gemini API rejects requests from unrestricted standard keys
+
+Attacker 2 · the leaked JSON key of legacy-etl, a service account nobody has used since March (from 203.0.113.77)
+  [B1] ALLOWED  RawPredict on Claude Opus 4.7 in the sandbox (not approved anywhere)
+         why: every check passed: IAM: aiplatform.endpoints.predict via roles/aiplatform.user on organizations/123456789012; org policy: vertexai.allowedModels is only a deny-list here and doesn't name this model (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [B2] ALLOWED  Deploy Llama 3 to a GPU endpoint in prod (billed by the hour while it runs)
+         why: every check passed: IAM: aiplatform.endpoints.deploy via roles/editor on folders/111111111111; org policy: no vertexai.allowedModels policy anywhere: all models and actions allowed
+  [B3] ALLOWED  CreateServiceAccountKey for chatbot-runtime (a second way back in)
+         why: every check passed: IAM: iam.serviceAccountKeys.create via roles/editor on folders/111111111111; org policy iam.managed.disableServiceAccountKeyCreation: not enforced (not set (org created before 3 May 2024))
+  [B4] ALLOWED  CreateKey: an API key bound to chatbot-runtime (persistence that skips SA usage metrics)
+         why: every check passed: IAM: apikeys.keys.create via roles/editor on folders/111111111111; org policy iam.managed.disableServiceAccountApiKeyCreation: not enforced (organizations/123456789012/policies/iam.managed.disableServiceAccountApiKeyCreation)
+
+Attacker 3 · the authorization key ops-eval-key, bound to chatbot-runtime (from 203.0.113.90)
+  [C1] ALLOWED  GenerateContent on Gemini 3.5 Flash as chatbot-runtime (it holds Agent Platform Admin)
+         why: every check passed: authorization key: authenticates as chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com; IAM: aiplatform.endpoints.predict via roles/aiplatform.admin on projects/example-chatbot-prod; org policy: no vertexai.allowedModels policy anywhere: all models and actions allowed
+
+Legitimate traffic · must keep working after the fixes
+  [L1] ALLOWED  Chatbot on Cloud Run: GenerateContent on the approved model as chatbot-runtime
+         why: every check passed: IAM: aiplatform.endpoints.predict via roles/aiplatform.admin on projects/example-chatbot-prod; org policy: no vertexai.allowedModels policy anywhere: all models and actions allowed
+  [L2] ALLOWED  Chatbot web tier: GenerateContent with the chatbot-frontend key from its egress IP
+         why: every check passed: UNRESTRICTED standard key (no identity; billed to example-chatbot-prod); org policy: no vertexai.allowedModels policy anywhere: all models and actions allowed
+  [L3] ALLOWED  Data scientist: GenerateContent on Gemini 3.5 Flash in the sandbox
+         why: every check passed: IAM: aiplatform.endpoints.predict via roles/aiplatform.user on folders/222222222222 (as data-science@example.com); org policy: vertexai.allowedModels is only a deny-list here and doesn't name this model (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [L4] ALLOWED  Data scientist: RawPredict on approved Claude Haiku 4.5 in the sandbox
+         why: every check passed: IAM: aiplatform.endpoints.predict via roles/aiplatform.user on folders/222222222222 (as data-science@example.com); org policy: vertexai.allowedModels is only a deny-list here and doesn't name this model (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [L5] ALLOWED  Notebook: GenerateContent with ds-notebook-key from the office range
+         why: every check passed: standard key, restrictions passed (no identity; billed to example-ds-sandbox); org policy: vertexai.allowedModels is only a deny-list here and doesn't name this model (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [L6] ALLOWED  CI pipeline: nightly eval, GenerateContent on the approved model in the sandbox
+         why: every check passed: IAM: aiplatform.endpoints.predict via roles/aiplatform.user on projects/example-ds-sandbox; org policy: vertexai.allowedModels is only a deny-list here and doesn't name this model (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [L7] ALLOWED  CI pipeline: deploy a new chatbot revision to Cloud Run
+         why: every check passed: IAM: run.services.create via roles/editor on folders/111111111111
+  [L8] ALLOWED  Platform admin: CreateKey, a STANDARD key (not bound to a service account) in the sandbox
+         why: every check passed: IAM: apikeys.keys.create via roles/owner on projects/example-ds-sandbox (as cloud-admins@example.com)
+
+8 of 9 attacker requests allowed; 8 of 8 legitimate requests allowed.
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ ls fixes
+
+api-keys.json                       iam-projects-example-chatbot-prod.json  orgpolicy-prod-allowed-models.json
+budget-spend-cap-chatbot-prod.json  orgpolicy-org-block-sa-api-keys.json
+iam-folders-111111111111.json       orgpolicy-org-block-sa-keys.json
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make attack-safe
+
+python3 attack.py --mode safe
+--- GC10 lab · SAFE · fixes applied: orgpolicy-org-block-sa-api-keys.json, orgpolicy-org-block-sa-keys.json, orgpolicy-prod-allowed-models.json, iam-folders-111111111111.json, iam-projects-example-chatbot-prod.json, api-keys.json, budget-spend-cap-chatbot-prod.json ---
+    (gcp_eval.py: a teaching model of Google Cloud's rules; nothing is sent to Google)
+
+Attacker 1 · API keys copied from a public repo and a public web page (from 203.0.113.50)
+  [A1] ALLOWED  GenerateContent on the approved model, billed to the chatbot project   <-- still open: make challenge
+         why: every check passed: standard key, restrictions passed (no identity; billed to example-chatbot-prod); org policy: on the vertexai.allowedModels allow-list (folders/111111111111/policies/vertexai.allowedModels)
+  [A2] DENIED   GenerateContent on a bigger model nobody approved for prod (Gemini 3.5 Flash)
+         why: org policy: not on the vertexai.allowedModels allow-list (folders/111111111111/policies/vertexai.allowedModels)
+  [A3] DENIED   Gemini API with the store-locator key scraped from www.example.com
+         why: API restriction: key store-locator-website may only call maps-backend.googleapis.com
+  [A4] DENIED   Gemini API with the unrestricted chatbot key
+         why: API restriction: key chatbot-frontend may only call aiplatform.googleapis.com
+
+Attacker 2 · the leaked JSON key of legacy-etl, a service account nobody has used since March (from 203.0.113.77)
+  [B1] ALLOWED  RawPredict on Claude Opus 4.7 in the sandbox (not approved anywhere)   <-- still open: make challenge
+         why: every check passed: IAM: aiplatform.endpoints.predict via roles/aiplatform.user on organizations/123456789012; org policy: vertexai.allowedModels is only a deny-list here and doesn't name this model (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [B2] DENIED   Deploy Llama 3 to a GPU endpoint in prod (billed by the hour while it runs)
+         why: org policy: not on the vertexai.allowedModels allow-list (folders/111111111111/policies/vertexai.allowedModels)
+  [B3] DENIED   CreateServiceAccountKey for chatbot-runtime (a second way back in)
+         why: IAM: no role on example-chatbot-prod or its folders/org gives legacy-etl@example-ci.iam.gserviceaccount.com iam.serviceAccountKeys.create; org policy iam.managed.disableServiceAccountKeyCreation: ENFORCED (organizations/123456789012/policies/iam.managed.disableServiceAccountKeyCreation)
+  [B4] DENIED   CreateKey: an API key bound to chatbot-runtime (persistence that skips SA usage metrics)
+         why: IAM: no role on example-chatbot-prod or its folders/org gives legacy-etl@example-ci.iam.gserviceaccount.com apikeys.keys.create; org policy iam.managed.disableServiceAccountApiKeyCreation: ENFORCED (organizations/123456789012/policies/iam.managed.disableServiceAccountApiKeyCreation)
+
+Attacker 3 · the authorization key ops-eval-key, bound to chatbot-runtime (from 203.0.113.90)
+  [C1] DENIED   GenerateContent on Gemini 3.5 Flash as chatbot-runtime (it holds Agent Platform Admin)
+         why: API key ops-eval-key was deleted
+
+Legitimate traffic · must keep working after the fixes
+  [L1] ALLOWED  Chatbot on Cloud Run: GenerateContent on the approved model as chatbot-runtime
+         why: every check passed: IAM: aiplatform.endpoints.predict via roles/aiplatform.user on projects/example-chatbot-prod; org policy: on the vertexai.allowedModels allow-list (folders/111111111111/policies/vertexai.allowedModels)
+  [L2] ALLOWED  Chatbot web tier: GenerateContent with the chatbot-frontend key from its egress IP
+         why: every check passed: standard key, restrictions passed (no identity; billed to example-chatbot-prod); org policy: on the vertexai.allowedModels allow-list (folders/111111111111/policies/vertexai.allowedModels)
+  [L3] ALLOWED  Data scientist: GenerateContent on Gemini 3.5 Flash in the sandbox
+         why: every check passed: IAM: aiplatform.endpoints.predict via roles/aiplatform.user on folders/222222222222 (as data-science@example.com); org policy: vertexai.allowedModels is only a deny-list here and doesn't name this model (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [L4] ALLOWED  Data scientist: RawPredict on approved Claude Haiku 4.5 in the sandbox
+         why: every check passed: IAM: aiplatform.endpoints.predict via roles/aiplatform.user on folders/222222222222 (as data-science@example.com); org policy: vertexai.allowedModels is only a deny-list here and doesn't name this model (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [L5] ALLOWED  Notebook: GenerateContent with ds-notebook-key from the office range
+         why: every check passed: standard key, restrictions passed (no identity; billed to example-ds-sandbox); org policy: vertexai.allowedModels is only a deny-list here and doesn't name this model (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [L6] ALLOWED  CI pipeline: nightly eval, GenerateContent on the approved model in the sandbox
+         why: every check passed: IAM: aiplatform.endpoints.predict via roles/aiplatform.user on projects/example-ds-sandbox; org policy: vertexai.allowedModels is only a deny-list here and doesn't name this model (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [L7] ALLOWED  CI pipeline: deploy a new chatbot revision to Cloud Run
+         why: every check passed: IAM: run.services.create via roles/run.developer on folders/111111111111
+  [L8] ALLOWED  Platform admin: CreateKey, a STANDARD key (not bound to a service account) in the sandbox
+         why: every check passed: IAM: apikeys.keys.create via roles/owner on projects/example-ds-sandbox (as cloud-admins@example.com)
+
+2 of 9 attacker requests allowed; 8 of 8 legitimate requests allowed.
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make twin-preview
+
+python3 attack.py --preview-org-policy gcp-twin/allowed-models-dryrun.json
+--- GC10 lab · PREVIEW · organizations/123456789012/policies/vertexai.allowedModels on top of ExampleCo today ---
+    (gcp_eval.py: a teaching model of Google Cloud's rules; nothing is sent to Google)
+
+Attacker 1 · API keys copied from a public repo and a public web page (from 203.0.113.50)
+  [A1] ALLOWED  GenerateContent on the approved model, billed to the chatbot project
+         why: every check passed: UNRESTRICTED standard key (no identity; billed to example-chatbot-prod); org policy: on the vertexai.allowedModels allow-list (organizations/123456789012/policies/vertexai.allowedModels)
+  [A2] DENIED   GenerateContent on a bigger model nobody approved for prod (Gemini 3.5 Flash)   <-- newly denied by the previewed policy
+         why: org policy: not on the vertexai.allowedModels allow-list (organizations/123456789012/policies/vertexai.allowedModels)
+  [A3] ALLOWED  Gemini API with the store-locator key scraped from www.example.com
+         why: every check passed: standard key, restrictions passed (no identity; billed to example-legacy-web)
+  [A4] DENIED   Gemini API with the unrestricted chatbot key
+         why: the Gemini API rejects requests from unrestricted standard keys
+
+Attacker 2 · the leaked JSON key of legacy-etl, a service account nobody has used since March (from 203.0.113.77)
+  [B1] DENIED   RawPredict on Claude Opus 4.7 in the sandbox (not approved anywhere)   <-- newly denied by the previewed policy
+         why: org policy: not on the vertexai.allowedModels allow-list (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [B2] DENIED   Deploy Llama 3 to a GPU endpoint in prod (billed by the hour while it runs)   <-- newly denied by the previewed policy
+         why: org policy: not on the vertexai.allowedModels allow-list (organizations/123456789012/policies/vertexai.allowedModels)
+  [B3] ALLOWED  CreateServiceAccountKey for chatbot-runtime (a second way back in)
+         why: every check passed: IAM: iam.serviceAccountKeys.create via roles/editor on folders/111111111111; org policy iam.managed.disableServiceAccountKeyCreation: not enforced (not set (org created before 3 May 2024))
+  [B4] ALLOWED  CreateKey: an API key bound to chatbot-runtime (persistence that skips SA usage metrics)
+         why: every check passed: IAM: apikeys.keys.create via roles/editor on folders/111111111111; org policy iam.managed.disableServiceAccountApiKeyCreation: not enforced (organizations/123456789012/policies/iam.managed.disableServiceAccountApiKeyCreation)
+
+Attacker 3 · the authorization key ops-eval-key, bound to chatbot-runtime (from 203.0.113.90)
+  [C1] DENIED   GenerateContent on Gemini 3.5 Flash as chatbot-runtime (it holds Agent Platform Admin)   <-- newly denied by the previewed policy
+         why: org policy: not on the vertexai.allowedModels allow-list (organizations/123456789012/policies/vertexai.allowedModels)
+
+Legitimate traffic · must keep working after the fixes
+  [L1] ALLOWED  Chatbot on Cloud Run: GenerateContent on the approved model as chatbot-runtime
+         why: every check passed: IAM: aiplatform.endpoints.predict via roles/aiplatform.admin on projects/example-chatbot-prod; org policy: on the vertexai.allowedModels allow-list (organizations/123456789012/policies/vertexai.allowedModels)
+  [L2] ALLOWED  Chatbot web tier: GenerateContent with the chatbot-frontend key from its egress IP
+         why: every check passed: UNRESTRICTED standard key (no identity; billed to example-chatbot-prod); org policy: on the vertexai.allowedModels allow-list (organizations/123456789012/policies/vertexai.allowedModels)
+  [L3] DENIED   Data scientist: GenerateContent on Gemini 3.5 Flash in the sandbox   <-- newly denied by the previewed policy (LEGITIMATE: fix the list first)
+         why: org policy: not on the vertexai.allowedModels allow-list (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [L4] DENIED   Data scientist: RawPredict on approved Claude Haiku 4.5 in the sandbox   <-- newly denied by the previewed policy (LEGITIMATE: fix the list first)
+         why: org policy: not on the vertexai.allowedModels allow-list (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [L5] ALLOWED  Notebook: GenerateContent with ds-notebook-key from the office range
+         why: every check passed: standard key, restrictions passed (no identity; billed to example-ds-sandbox); org policy: on the vertexai.allowedModels allow-list (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [L6] ALLOWED  CI pipeline: nightly eval, GenerateContent on the approved model in the sandbox
+         why: every check passed: IAM: aiplatform.endpoints.predict via roles/aiplatform.user on projects/example-ds-sandbox; org policy: on the vertexai.allowedModels allow-list (projects/example-ds-sandbox/policies/vertexai.allowedModels)
+  [L7] ALLOWED  CI pipeline: deploy a new chatbot revision to Cloud Run
+         why: every check passed: IAM: run.services.create via roles/editor on folders/111111111111
+  [L8] ALLOWED  Platform admin: CreateKey, a STANDARD key (not bound to a service account) in the sandbox
+         why: every check passed: IAM: apikeys.keys.create via roles/owner on projects/example-ds-sandbox (as cloud-admins@example.com)
+
+4 of 9 attacker requests allowed; 6 of 8 legitimate requests allowed.
+In Google's dry run (dryRunSpec), these denials are only audit-logged as violations; nothing is blocked.
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make scan
+
+python3 policy_checker.py --scan examplecorp/repo
+--- GC10 policy checker · your files ---
+
+  HIGH    GC10-16  repo/chatbot/settings.py:9
+          Google API key string AIzaSyDa...ewQe in source code.
+          fix: Treat it as leaked: restrict or delete the key in the console, then remove it from the code and history.
+
+1 HIGH, 0 MEDIUM, 0 LOW, 0 WARNING  (1 findings)
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make hunt-naive
+
+python3 hunt.py --naive
+--- GC10 LLMjacking hunt · NAIVE rule only · 461 audit log entries ---
+
+  HIGH   NAIVE 2026-10-15T22:10:10Z  chatbot-runtime
+         65 GenerateContent call(s) on unapproved ['publishers/google/models/gemini-3.5-flash:predict']
+
+1 finding(s). Attacker entries covered by a finding: 65 of 99.
+Not covered: 1 x CreateKey; 1 x CreateServiceAccountKey; 1 x DeployModel; 1 x EnableService; 30 x StreamGenerateContent
+Not in this file at all: the sandbox's Claude calls (Data Access audit logs are off there).
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make hunt
+
+python3 hunt.py
+--- GC10 LLMjacking hunt · all rules · 461 audit log entries ---
+
+  HIGH   H04   2026-10-15T22:10:10Z  chatbot-runtime
+         25 AI call(s) from new source 203.0.113.90
+         - baseline IPs: 192.0.2.10
+  HIGH   H05   2026-10-15T22:10:10Z  chatbot-runtime
+         95 call(s) on unapproved publishers/google/models/gemini-3.5-flash:predict
+         - methods: ['GenerateContent', 'StreamGenerateContent']  from ['203.0.113.77', '203.0.113.90']
+  MEDIUM H06   2026-10-15T22:10:10Z  chatbot-runtime
+         28 inference calls in the hour 2026-10-15T22:00Z (limit 20)
+         - baseline peak: 3 per hour
+  MEDIUM H06   2026-10-16T01:03:43Z  chatbot-runtime
+         26 inference calls in the hour 2026-10-16T01:00Z (limit 20)
+         - baseline peak: 3 per hour
+  HIGH   H02   2026-10-16T01:40:05Z  legacy-etl
+         dormant service account active again (227 days since 2026-03-02)
+         - 4 action(s): CreateKey, CreateServiceAccountKey, DeployModel, EnableService
+         - from ['203.0.113.77']
+  HIGH   H01   2026-10-16T01:41:10Z  legacy-etl
+         service account key created for chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com
+         - from 203.0.113.77  UA: Python/3.11 aiohttp/3.9.5
+  HIGH   H03   2026-10-16T01:41:30Z  legacy-etl
+         authorization key 'monitoring' bound to chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com
+         - from 203.0.113.77
+         - works like a long-lived token; its calls aren't in SA usage metrics
+  MEDIUM H04   2026-10-16T01:43:00Z  legacy-etl
+         1 AI call(s) from new source 203.0.113.77
+         - baseline IPs: none: never seen before
+  HIGH   H05   2026-10-16T01:43:00Z  legacy-etl
+         1 call(s) on unapproved publishers/meta/models/llama3:deploy
+         - methods: ['DeployModel']  from ['203.0.113.77']
+  MEDIUM H08   2026-10-16T01:43:00Z  legacy-etl
+         first model deployment: publishers/meta/models/llama3:deploy
+         - endpoint 9000000000000000001  from 203.0.113.77
+  HIGH   H04   2026-10-16T01:45:02Z  chatbot-runtime
+         70 AI call(s) from new source 203.0.113.77
+         - baseline IPs: 192.0.2.10
+  MEDIUM H06   2026-10-16T02:00:29Z  chatbot-runtime
+         50 inference calls in the hour 2026-10-16T02:00Z (limit 20)
+         - baseline peak: 3 per hour
+  MEDIUM H07   2026-10-16T02:14:02Z  chatbot-runtime
+         new AI method StreamGenerateContent (30 call(s))
+         - baseline methods: ['GenerateContent']
+
+13 finding(s). Attacker entries covered by a finding: 99 of 99.
+Not in this file at all: the sandbox's Claude calls (Data Access audit logs are off there).
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make test
+
+python3 run_tests.py
+[PASS] vulnerable: the unrestricted key from the public repo runs the approved model AND an unapproved one
+[PASS] vulnerable: the store-locator key from the public web page can call the Gemini API
+[PASS] vulnerable: Google's own rule stops one attack: the Gemini API rejects unrestricted standard keys
+[PASS] vulnerable: legacy-etl's leaked key runs Claude, deploys Llama, and mints a SA key and a bound API key
+[PASS] vulnerable: the authorization key authenticates as chatbot-runtime and inherits its Admin role
+[PASS] vulnerable: a GenerateContent-only detection covers 65 of 99 attacker entries
+[PASS] checker: 18 findings across rules GC10-01 to GC10-16 (none for GC10-02 and GC10-13)
+[PASS] checker: the API key string in repo/chatbot/settings.py is found, and only there
+[PASS] checker: a malformed allowedModels value and a 501-value policy are flagged before you set them
+[PASS] checker: with fixes/ applied, the basic-role, Admin-role, unrestricted-key, bound-key and constraint findings are gone
+[PASS] safe: the fixes deny A2, A3, A4, B2, B3, B4 and C1
+[PASS] safe: all 8 legitimate requests work before AND after the fixes
+[PASS] org policy: an explicit deny wins over an allow, and inheritFromParent merges the lists
+[PASS] org policy: with no vertexai.allowedModels anywhere, all models and actions are allowed (Google's default)
+[PASS] API keys: an IP restriction refuses callers outside the range and the key's API restriction holds
+[PASS] hunt: the rules cover all 99 attacker entries in the file
+[PASS] hunt: every finding contains at least one attacker entry (the normal days raise nothing)
+[PASS] hunt: H02 flags legacy-etl (227 days dormant) and H03 rates the bound key HIGH
+[PASS] hygiene: only RFC 5737 IPs, example.com identities and Google's documented example key string
+----------------------------------------------------------------------
+Ran 19 tests in 0.073s
+
+OK
+
+ALL TESTS PASSED (19 run)
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ make challenge 2>&1 | tail -8
+
+  why test_24_h09_flags_the_attackers_enable: AssertionError: 0 != 1 : 0 of 1 EnableService event flagged
+----------------------------------------------------------------------
+Ran 25 tests in 0.088s
+
+FAILED (failures=3)
+
+3 of 25 TESTS FAILED (25 run)
+make: *** [Makefile:35: challenge] Error 1
+thesecguy@lab:~/ai-security-course-labs/labs/gc10$ exit
+
+exit
