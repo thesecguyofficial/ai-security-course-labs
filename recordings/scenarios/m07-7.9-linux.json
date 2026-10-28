@@ -1,0 +1,84 @@
+{
+  "name": "m07-7.9-linux",
+  "lesson": "7.9",
+  "title": "Lab 7.9: hijack a helpdesk agent through a ticket attachment, contain it one control at a time, detect it, kill it, prove it; then a real local model through Ollama",
+  "needs": [
+    "ollama"
+  ],
+  "cols": 110,
+  "rows": 32,
+  "before": [
+    "curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh",
+    "sudo systemctl daemon-reload && sudo systemctl enable --now ollama || (setsid nohup ollama serve >/tmp/ollama.log 2>&1 < /dev/null &)",
+    "for i in $(seq 1 30); do curl -fsS http://127.0.0.1:11434/api/version && break; sleep 2; done",
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": [
+    "Traceback",
+    "Could not reach Ollama"
+  ],
+  "steps": [
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m07 && ls"
+    },
+    {
+      "label": "The attachment",
+      "type": "cat data/workspace/attachments/T-1042-invoice-note.txt",
+      "pause_after": 4
+    },
+    {
+      "label": "Attack",
+      "type": "make attack",
+      "pause_after": 5
+    },
+    {
+      "label": "Ladder",
+      "type": "make ladder",
+      "pause_after": 6
+    },
+    {
+      "label": "Defend",
+      "type": "make defend",
+      "pause_after": 5
+    },
+    {
+      "label": "Detect",
+      "type": "make detect",
+      "pause_after": 5
+    },
+    {
+      "label": "Kill",
+      "type": "make kill && python3 agent.py --safe --approver approve-all; make unkill",
+      "pause_after": 4
+    },
+    {
+      "label": "Tests",
+      "type": "make test",
+      "pause_after": 4
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | tail -n 12",
+      "pause_after": 4
+    },
+    {
+      "label": "Ollama",
+      "type": "ollama --version && ollama pull llama3.2:3b && ollama list",
+      "timeout": 900,
+      "pause_after": 3
+    },
+    {
+      "label": "Real model",
+      "type": "make clean && python3 agent.py --backend ollama --ollama-model llama3.2:3b --approver deny",
+      "timeout": 900,
+      "pause_after": 5
+    },
+    {
+      "label": "Real model safe",
+      "type": "python3 agent.py --backend ollama --ollama-model llama3.2:3b --safe --approver deny",
+      "timeout": 900,
+      "pause_after": 5
+    }
+  ]
+}
