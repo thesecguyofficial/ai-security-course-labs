@@ -1,0 +1,159 @@
+{
+  "scenario": "m08-8.6-linux",
+  "start": 1.697,
+  "steps": [
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 1.697,
+      "end": 7.186
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 8.986,
+      "end": 19.573
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 22.574,
+      "end": 24.793
+    },
+    {
+      "label": "Honest menu",
+      "speed": 1,
+      "start": 27.793,
+      "end": 34.105
+    },
+    {
+      "label": "Attack",
+      "speed": 1,
+      "start": 40.105,
+      "end": 46.463
+    },
+    {
+      "label": "Shadow",
+      "speed": 1,
+      "start": 54.464,
+      "end": 59.827
+    },
+    {
+      "label": "Review",
+      "speed": 1,
+      "start": 65.827,
+      "end": 69.65
+    },
+    {
+      "label": "Defend",
+      "speed": 1,
+      "start": 75.651,
+      "end": 83.266
+    },
+    {
+      "label": "Auth",
+      "speed": 1,
+      "start": 91.266,
+      "end": 97.2
+    },
+    {
+      "label": "Audience check",
+      "speed": 1,
+      "start": 103.2,
+      "end": 109.843
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 113.844,
+      "end": 138.841
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 143.841,
+      "end": 173.478
+    },
+    {
+      "label": "Ollama",
+      "speed": 1,
+      "start": 179.478,
+      "end": 194.146
+    },
+    {
+      "label": "Real model",
+      "speed": 1,
+      "start": 198.146,
+      "end": 224.25
+    },
+    {
+      "label": "Real model safe",
+      "speed": 1,
+      "start": 230.251,
+      "end": 254.018
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.297,
+      "what": "type"
+    },
+    {
+      "t": 9.587,
+      "what": "type"
+    },
+    {
+      "t": 23.174,
+      "what": "type"
+    },
+    {
+      "t": 28.393,
+      "what": "type"
+    },
+    {
+      "t": 40.705,
+      "what": "type"
+    },
+    {
+      "t": 55.064,
+      "what": "type"
+    },
+    {
+      "t": 66.427,
+      "what": "type"
+    },
+    {
+      "t": 76.251,
+      "what": "type"
+    },
+    {
+      "t": 91.866,
+      "what": "type"
+    },
+    {
+      "t": 103.8,
+      "what": "type"
+    },
+    {
+      "t": 114.444,
+      "what": "type"
+    },
+    {
+      "t": 144.441,
+      "what": "type"
+    },
+    {
+      "t": 180.078,
+      "what": "type"
+    },
+    {
+      "t": 198.746,
+      "what": "type"
+    },
+    {
+      "t": 230.851,
+      "what": "type"
+    }
+  ],
+  "end": 260.018
+}
