@@ -16,28 +16,6 @@ First you attack the vulnerable version and watch all three happen. Then you rea
 a parameterised query, an allow-list, a contained subprocess), attack the safe version, and **prove** the fixes with
 automated tests that also prove each attack worked before. Finally, a challenge with no solution included.
 
-## Get the lab files
-
-This folder is part of the free, public course labs repository, [thesecguyofficial/ai-security-course-labs](https://github.com/thesecguyofficial/ai-security-course-labs).
-
-**First time, or you deleted the folder:** download it once.
-
-```bash
-git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
-cd ai-security-course-labs
-```
-
-**Already downloaded it:** go to that folder and get the latest version.
-
-```bash
-cd ai-security-course-labs
-git pull
-```
-
-**No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
-
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m05`.
-
 ## What's in this folder
 
 | File | What it is |
