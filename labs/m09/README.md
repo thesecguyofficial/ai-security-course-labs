@@ -65,20 +65,86 @@ Built at setup time: `models/` (the model files), `state/` (the marker, if you d
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` commands shown under each step
   from an activated venv (`py -m venv .venv`, then `.venv\Scripts\activate`).
 
-## Setup (once)
+## Setup (once): the tools, from zero
+
+You need three free, open-source tools. You don't have to know any of them yet:
+
+| Tool | What it is | Version tested |
+|---|---|---|
+| **picklescan** | A scanner that reads a pickle file's imports **without running it** and flags dangerous ones (`exec`, `os.system`). The Hugging Face Hub runs this kind of scanner on uploads. | 1.0.5 (MIT) |
+| **fickling** | A Trail of Bits tool that turns a pickle back into readable Python, so you can see what it would do, and rates how dangerous it looks. | 0.1.12 (LGPL-3.0+) |
+| **safetensors** | Hugging Face's library for the safetensors weights format: numbers only, no way to call a function. | 0.8.0 (Apache-2.0) |
+
+They install into a **virtual environment**: a private `.venv` folder of Python packages just for this lab,
+so nothing is installed system-wide and `make clean` plus deleting `.venv` removes it all. NumPy 2.4.6 comes
+along as the stand-in "model weights". It takes about a minute and needs internet once.
+
+**Mac / Linux:**
 
 ```bash
 cd labs/m09
 make setup
+make check
 make models
 ```
 
+**Windows** (PowerShell, from the `ai-security-course-labs` folder):
+
+```powershell
+cd labs\m09
+py -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+.venv\Scripts\python make_models.py
+```
+
 - `make setup`: python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
+- `make check`: prints each tool's version and checks both scanner commands start, so you know the install worked
 - `make models`: build the three model files in ./models/
 
-`make setup` installs picklescan 1.0.5 (MIT), fickling 0.1.12 (LGPL-3.0+), safetensors 0.8.0
-(Apache-2.0) and NumPy 2.4.6. On Python 3.11 it also installs `typing_extensions`, which fickling imports
-there but forgets to list. No internet is needed after that.
+Real output of `make check` (the versions must match the table):
+
+```text
+picklescan 1.0.5 | fickling 0.1.12 | safetensors 0.8.0 | numpy 2.4.6
+OK: picklescan and fickling run from .venv/bin
+```
+
+On Python 3.11 `make setup` also installs `typing_extensions`, which fickling imports there but forgets to
+list. No internet is needed after setup.
+
+### Using the scanners yourself
+
+`make scan` (Step 2) wraps both tools and prints one verdict. You can also run them directly on any file,
+which is what you would do with a model you downloaded:
+
+```bash
+.venv/bin/picklescan -p models/evil_model.pkl
+.venv/bin/fickling models/evil_model.pkl
+```
+
+- `picklescan -p <file>`: scan a file or folder; it exits with code 1 when it finds something dangerous
+- `fickling <file>`: print the pickle as Python, so you can read what loading it would run
+
+Real output (Linux; your paths will differ):
+
+```text
+/…/labs/m09/models/evil_model.pkl: dangerous import 'builtins exec' FOUND
+----------- SCAN SUMMARY -----------
+Scanned files: 1
+Infected files: 1
+Suspicious globals: 0
+Dangerous globals: 1
+```
+
+```text
+from builtins import exec
+_var0 = exec("import os;os.makedirs(r'/…/labs/m09/state', exist_ok=True);open(r'/…/labs/m09/state/PWNED_BY_LAB_MODEL.txt', 'w').write('LAB MARKER: …')")
+result0 = _var0
+```
+
+Run them only on files you are allowed to inspect. Neither tool loads the pickle, so scanning is safe; loading
+is the dangerous part.
+
+Windows: `.venv\Scripts\picklescan -p models\evil_model.pkl` and `.venv\Scripts\fickling models\evil_model.pkl`.
 
 ## Step 1 · Detonate: loading a model runs code
 

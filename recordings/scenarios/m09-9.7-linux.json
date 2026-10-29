@@ -1,0 +1,26 @@
+{
+  "name": "m09-9.7-linux",
+  "lesson": "9.7",
+  "title": "Lab 9.7: install the scanners, detonate a booby-trapped pickle safely, catch it with picklescan and fickling, avoid it with safetensors, pin it, prove it; plus the lesson 9.1 model-facts demo",
+  "cols": 132,
+  "rows": 34,
+  "before": [
+    "git clone -q -b rec-m9 https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m09 && ls"},
+    {"label": "Setup", "type": "make setup", "speed": 4, "pause_after": 2},
+    {"label": "Check", "type": "make check", "pause_after": 3},
+    {"label": "Models", "type": "make models", "pause_after": 3},
+    {"label": "Attack", "type": "make attack", "pause_after": 5},
+    {"label": "Scan", "type": "make scan", "pause_after": 5},
+    {"label": "Picklescan", "type": ".venv/bin/picklescan -p models/evil_model.pkl", "pause_after": 4},
+    {"label": "Fickling", "type": ".venv/bin/fickling models/evil_model.pkl", "pause_after": 5},
+    {"label": "Safe", "type": "make safe", "pause_after": 4},
+    {"label": "Tamper", "type": "make tamper", "pause_after": 5},
+    {"label": "Tests", "type": "make test", "pause_after": 5},
+    {"label": "Challenge", "type": "make challenge 2>&1 | tail -8", "pause_after": 5},
+    {"label": "Model facts", "type": "cd ../.. && python3 demos/m09/model_facts.py", "pause_after": 6}
+  ]
+}
