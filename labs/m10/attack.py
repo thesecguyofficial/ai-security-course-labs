@@ -193,13 +193,17 @@ def main() -> None:
     ap.add_argument("--mode", choices=["vulnerable", "safe"], default="vulnerable")
     ap.add_argument("--verbose", action="store_true", help="print every authorization check")
     ap.add_argument("--allowlist", help="safe mode: use this model allow-list SCP instead of fixes/scp-model-allowlist.json")
+    ap.add_argument("--only", help="show only these groups or requests, e.g. A or B,C or L or A3 (default: all)")
     a = ap.parse_args()
+    only = [x.strip().upper() for x in a.only.split(",")] if a.only else []
     names = ", ".join(n for n, _ in scps_for(a.mode, a.allowlist))
     print(f"--- M10 lab · {a.mode.upper()} · SCPs on the org root: {names} ---")
     print("    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)\n")
     attacks_allowed = attacks = legit_ok = legits = 0
     group = ""
     for s in STEPS:
+        if only and s.sid not in only and s.sid[0] not in only:
+            continue
         if s.sid[0] != group:
             group = s.sid[0]
             print(ACTORS[group])
@@ -222,7 +226,12 @@ def main() -> None:
         if s.sid in ("A5", "B4", "C2"):
             print()
     print()
-    print(f"{attacks_allowed} of {attacks} attacker requests allowed; {legit_ok} of {legits} legitimate requests allowed.")
+    if not only:
+        print(f"{attacks_allowed} of {attacks} attacker requests allowed; {legit_ok} of {legits} legitimate requests allowed.")
+        return
+    parts = ([f"{attacks_allowed} of {attacks} attacker requests allowed"] if attacks else []) + \
+            ([f"{legit_ok} of {legits} legitimate requests allowed"] if legits else [])
+    print("; ".join(parts) + f"  (showing {', '.join(only)} only)")
 
 
 if __name__ == "__main__":

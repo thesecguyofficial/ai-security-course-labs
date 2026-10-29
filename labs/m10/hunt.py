@@ -277,9 +277,14 @@ def main() -> None:
     ap.add_argument("--file", default=str(DEFAULT_FILE))
     ap.add_argument("--baseline-until", default="2026-10-14T00:00:00Z")
     ap.add_argument("--naive", action="store_true")
+    ap.add_argument("--rule", help="show only these rules' findings, e.g. H02 or H01,H02,H03 (default: all)")
     a = ap.parse_args()
     records, hits = hunt(pathlib.Path(a.file), a.baseline_until, a.naive)
-    print(f"--- M10 LLMjacking hunt · {'NAIVE rule only' if a.naive else 'all rules'} · {len(records)} CloudTrail records ---\n")
+    rules = [x.strip().upper() for x in a.rule.split(",")] if a.rule else []
+    if rules:
+        hits = [h for h in hits if h.rule in rules]
+    which = "NAIVE rule only" if a.naive else ("rules " + ", ".join(rules) if rules else "all rules")
+    print(f"--- M10 LLMjacking hunt · {which} · {len(records)} CloudTrail records ---\n")
     for h in sorted(hits, key=lambda h: h.events[0]["eventTime"] if h.events else ""):
         print(h.show())
     attack = attacker_activity(records)
@@ -289,7 +294,7 @@ def main() -> None:
     print(f"\n{len(hits)} finding{'' if len(hits) == 1 else 's'}. Attacker events covered by a finding: {len(caught)} of {len(attack)} "
           f"({', '.join(f'{v} on {k}' for k, v in sorted(by_source.items()))}).")
     missed = collections.Counter(f"{e['eventSource']} {e['eventName']}" for e in attack if id(e) not in seen)
-    if missed:
+    if missed and not rules:
         print("Not covered: " + "; ".join(f"{v} x {k}" for k, v in sorted(missed.items())))
 
 
