@@ -231,8 +231,8 @@ word adds 0.35 (0.4 + 0.35 = 0.75). One more:
 redacted: My card <CREDIT_CARD>, employee EMP-482913
 ```
 
-The card passes its validity check, so it scores 1.00. spaCy calls part of it a date, but dates aren't in
-`ENTITIES`. The employee ID only matched the PAN pattern by chance, at 0.01, so it stays in the text. Lowering
+The card passes its validity check (the Luhn checksum), and that alone sets its score to 1.00. spaCy calls part of it a date, but dates aren't in
+`ENTITIES`. Only two very weak patterns matched the employee ID (an Indian PAN and a US driver's licence, both 0.01), so it stays in the text. Lowering
 `SCORE_THRESHOLD` to 0.01 would hide it, labelled as an Indian PAN, which is wrong; the fix that holds is your own
 recognizer (Step 7).
 
