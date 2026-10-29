@@ -1,0 +1,22 @@
+{
+  "name": "m04-4.6-understand-linux",
+  "lesson": "4.0, 4.6",
+  "title": "Lab 4.6, part 1: get the lab, set it up, follow one message into every copy it leaves, and take Presidio apart (recognizers, the spaCy model, confidence scores) before running the redaction lab",
+  "cols": 112,
+  "rows": 34,
+  "before": [],
+  "fail_on": ["Traceback", "No module named", "command not found"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m04 && ls", "pause_after": 4},
+    {"label": "The data", "type": "cat canaries.txt", "pause_after": 4},
+    {"label": "Setup plan", "type": "make -n setup", "pause_after": 3},
+    {"label": "Setup", "type": "make setup", "timeout": 1200, "speed": 8, "pause_after": 2},
+    {"label": "Check", "type": ".venv/bin/python -c \"import importlib.metadata as m; [print(p, m.version(p)) for p in ('presidio-analyzer', 'spacy', 'en-core-web-sm')]\"", "pause_after": 3},
+    {"label": "Trace", "type": ".venv/bin/python explore.py trace \"My email is jane.doe@example.com\"", "timeout": 120, "pause_after": 7},
+    {"label": "Recognizers", "type": ".venv/bin/python explore.py recognizers", "timeout": 300, "pause_after": 7},
+    {"label": "NER", "type": ".venv/bin/python explore.py ner \"Hi, I am Jane Doe from London. I called on 3 May.\" \"Dear Mr Smith, thanks\"", "timeout": 300, "pause_after": 6},
+    {"label": "Analyze", "type": ".venv/bin/python explore.py analyze \"I'm Jane Doe, my phone is +1 202-555-0143 and my PAN is ABCPE1234F.\"", "timeout": 300, "pause_after": 7},
+    {"label": "Scores", "type": ".venv/bin/python explore.py analyze \"My card 4242 4242 4242 4242, employee EMP-482913\"", "timeout": 300, "pause_after": 7}
+  ]
+}
