@@ -1134,7 +1134,7 @@
             "connector": "smooth",
             "data": {
               "type": "tm.Flow",
-              "name": "F11 resolved tickets",
+              "name": "F11a resolved tickets",
               "description": "Resolved tickets, read every night.",
               "outOfScope": false,
               "isTrustBoundary": false,
@@ -1148,9 +1148,9 @@
               "trustBoundaryIds": []
             },
             "labels": [
-              "F11 resolved tickets"
+              "F11a resolved tickets"
             ],
-            "id": "af6bf452-b960-5e7f-8790-c14b6bb0a0a9",
+            "id": "268c3e1c-ec7f-590a-a67c-f612a2c25aad",
             "source": {
               "cell": "d7e898ca-4811-5c1f-870a-628a46890819",
               "port": "6219b0e1-ec2a-4fa1-bdc6-109bf0788fbc"
@@ -1181,7 +1181,7 @@
             "connector": "smooth",
             "data": {
               "type": "tm.Flow",
-              "name": "F11 new articles",
+              "name": "F11b new articles",
               "description": "Each resolved ticket becomes a help article.",
               "outOfScope": false,
               "isTrustBoundary": false,
@@ -1195,9 +1195,9 @@
               "trustBoundaryIds": []
             },
             "labels": [
-              "F11 new articles"
+              "F11b new articles"
             ],
-            "id": "f5644492-b0e6-5b28-8b2d-1582bf3c3236",
+            "id": "2a24c9c4-f707-58d6-a387-aa08842b317c",
             "source": {
               "cell": "1e7be0bb-58ba-5497-883f-ba14ecf94c51",
               "port": "4f2eacd3-7877-46d9-a3fc-ff2dfff8ebb0"
