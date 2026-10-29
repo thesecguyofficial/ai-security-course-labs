@@ -10,7 +10,7 @@ _PAYLOAD = (
 
 
 class EvilModel:
-    """Looks like a model object. The danger is in __reduce__, which pickle calls on load."""
+    """Looks like a model object. pickle calls __reduce__ when SAVING it; the call it returns runs on load."""
 
     def __reduce__(self):
         # pickle will call builtins.exec(_PAYLOAD) while unpickling. That is the whole trick:

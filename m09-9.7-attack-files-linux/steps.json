@@ -1,59 +1,59 @@
 {
   "scenario": "m09-9.7-attack-files-linux",
-  "start": 1.686,
+  "start": 1.727,
   "steps": [
     {
       "label": "Payload",
       "speed": 1,
-      "start": 1.686,
-      "end": 13.393
+      "start": 1.727,
+      "end": 13.438
     },
     {
       "label": "Opcodes",
       "speed": 1,
-      "start": 19.393,
-      "end": 26.595
+      "start": 19.438,
+      "end": 26.672
     },
     {
       "label": "Detonate",
       "speed": 1,
-      "start": 32.595,
-      "end": 34.902
+      "start": 32.673,
+      "end": 34.981
     },
     {
       "label": "Marker",
       "speed": 1,
-      "start": 39.902,
-      "end": 46.883
+      "start": 39.981,
+      "end": 46.966
     },
     {
       "label": "Allow-list",
       "speed": 1,
-      "start": 51.883,
-      "end": 59.271
+      "start": 51.966,
+      "end": 59.356
     }
   ],
   "keys": [
     {
-      "t": 2.286,
+      "t": 2.327,
       "what": "type"
     },
     {
-      "t": 19.993,
+      "t": 20.038,
       "what": "type"
     },
     {
-      "t": 33.195,
+      "t": 33.273,
       "what": "type"
     },
     {
-      "t": 40.502,
+      "t": 40.581,
       "what": "type"
     },
     {
-      "t": 52.483,
+      "t": 52.566,
       "what": "type"
     }
   ],
-  "end": 64.271
+  "end": 64.356
 }
