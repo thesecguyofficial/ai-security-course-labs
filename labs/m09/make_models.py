@@ -3,7 +3,7 @@ make_models.py: build the three model files this lab uses, into ./models/.
 
   benign_model.pkl    a normal pickled "model" (a dict of weights). Loading it just returns the dict.
   evil_model.pkl      the SAME on the outside, but it carries a function call that runs when unpickled.
-  model.safetensors   the same weights in the safetensors format, which cannot run code at all.
+  model.safetensors   the same weights in the safetensors format, whose loading cannot run code.
 
 SAFETY. The "evil" model is a lab placeholder, not malware. When loaded, its only effect is to write
 one clearly-labelled marker file, models/../state/PWNED_BY_LAB_MODEL.txt, inside this lab folder. It

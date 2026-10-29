@@ -1,6 +1,7 @@
 # M9.7 lab shortcuts (Mac/Linux). Windows: run the python commands from the README instead.
 # This lab installs a few packages (scanners + safetensors), so it uses a virtual environment.
-# Everything stays inside this folder. Nothing talks to the network.
+# Everything stays inside this folder. `make setup` downloads packages with pip; after that no make target
+# uses the network. (explore.py hub, in Step 1b, is the only lab command that does.)
 
 VENV := .venv
 PY   := $(VENV)/bin/python

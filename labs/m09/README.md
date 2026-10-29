@@ -12,7 +12,7 @@ code**. In this lab you:
 2. **Detonate** the booby-trapped pickle and watch it run code just from being loaded.
 3. **Catch it** with two scanners (picklescan, the kind the Hugging Face Hub runs, and Trail of
    Bits' fickling).
-4. **Avoid it** by loading the safetensors version, which cannot run code.
+4. **Avoid it** by loading the safetensors version, whose loading cannot run code.
 5. **Pin it** by SHA-256 and prove that tampering is caught.
 6. **Prove it**: `make test` runs all of the above as automated tests. Then `make challenge`.
 
@@ -74,7 +74,7 @@ You need three free, open-source tools. You don't have to know any of them yet:
 | Tool | What it is | Version tested |
 |---|---|---|
 | **picklescan** | A scanner that reads a pickle file's imports **without running it** and flags dangerous ones (`exec`, `os.system`). The Hugging Face Hub runs this kind of scanner on uploads. | 1.0.5 (MIT) |
-| **fickling** | A Trail of Bits tool that turns a pickle back into readable Python, so you can see what it would do, and rates how dangerous it looks. | 0.1.12 (LGPL-3.0+) |
+| **fickling** | A Trail of Bits tool that turns a pickle back into readable Python, so you can see what it would do, and rates how dangerous it looks. | 0.1.12 (LGPL-3.0-or-later) |
 | **safetensors** | Hugging Face's library for the safetensors weights format: numbers only, no way to call a function. | 0.8.0 (Apache-2.0) |
 
 NumPy 2.4.6 comes along as the stand-in "model weights". `requirements.txt` pins every package to an exact
@@ -369,8 +369,8 @@ fickling:
 OVERALL: SAFE (both scanners clean)
 ```
 
-The file scanned, then each scanner's result, then one combined verdict. "Globals" are the imports a pickle
-names. Neither scanner loads the file.
+The file scanned, then each scanner's result, then one combined verdict. "Dangerous globals" are imports on
+picklescan's danger list. Neither scanner loads the file.
 
 ## Step 1 · Detonate: loading a model runs code
 
@@ -436,7 +436,7 @@ decompiles the pickle to readable Python. Run `.venv/bin/fickling models/evil_mo
 blocklist, so a payload it has not seen can slip past (lesson 9.2: the nullifAI models and the 2025
 PickleScan CVEs). Scan, but do not let a clean result replace provenance, pinning and a safe format.
 
-## Step 3 · Avoid it: a format that cannot run code
+## Step 3 · Avoid it: a format whose loading cannot run code
 
 ```bash
 make safe
@@ -452,6 +452,7 @@ No code ran. The format has no instruction to call a function.
 safetensors is a JSON header plus raw bytes. There is no "call this function" opcode, so there is
 nothing to execute. A 2023 Trail of Bits audit (commissioned by Hugging Face with EleutherAI and
 Stability AI) found "No critical security flaw leading to arbitrary code execution".
+That stops code running on load. It does not prove the weights behave: a safetensors model can still be backdoored, and its repository can ship Python code of its own.
 
 ## Step 4 · Pin it: catch tampering
 
