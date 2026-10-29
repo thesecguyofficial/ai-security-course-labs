@@ -1,0 +1,18 @@
+{
+  "name": "m09-9.7-attack-files-linux",
+  "lesson": "9.7",
+  "title": "Lab 9.7, part 2: open the booby-trapped model's source and its pickle instructions, detonate it (it only writes a labelled marker file in the lab folder), read the marker, and the allow-list that stops it",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git && cd ai-security-course-labs/labs/m09 && make setup > /dev/null && make models > /dev/null"
+  ],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "Payload", "type": "cd ai-security-course-labs/labs/m09 && sed -n '/^_PAYLOAD/,/return (builtins/p' make_models.py", "pause_after": 6},
+    {"label": "Opcodes", "type": ".venv/bin/python explore.py pickle models/evil_model.pkl", "pause_after": 6},
+    {"label": "Detonate", "type": "make attack", "pause_after": 5},
+    {"label": "Marker", "type": "ls state && cat state/PWNED_BY_LAB_MODEL.txt; echo", "pause_after": 5},
+    {"label": "Allow-list", "type": "sed -n '/class Restricted/,/raise pickle/p' test_lab.py", "pause_after": 5}
+  ]
+}

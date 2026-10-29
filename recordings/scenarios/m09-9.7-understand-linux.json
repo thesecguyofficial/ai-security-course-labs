@@ -1,0 +1,25 @@
+{
+  "name": "m09-9.7-understand-linux",
+  "lesson": "9.7",
+  "title": "Lab 9.7, part 1: get the lab, set it up, build the stand-in models, and look inside model files (first bytes, a safetensors header, a pickle's instructions without loading it, a SHA-256, a real Hugging Face model's files and header, a tiny AI-BOM) before attacking anything",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m09 && ls", "pause_after": 4},
+    {"label": "Requirements", "type": "grep -v '^#' requirements.txt", "pause_after": 4},
+    {"label": "Setup plan", "type": "make -n setup", "pause_after": 3},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Check", "type": "make check", "pause_after": 3},
+    {"label": "Models", "type": "make models", "pause_after": 4},
+    {"label": "Files", "type": ".venv/bin/python explore.py files", "pause_after": 6},
+    {"label": "Header", "type": ".venv/bin/python explore.py header models/model.safetensors", "pause_after": 6},
+    {"label": "Pickle", "type": ".venv/bin/python explore.py pickle models/benign_model.pkl", "pause_after": 6},
+    {"label": "Hash", "type": ".venv/bin/python explore.py hash models/model.safetensors", "pause_after": 6},
+    {"label": "Hub", "type": ".venv/bin/python explore.py hub google-bert/bert-base-uncased", "pause_after": 6},
+    {"label": "BOM", "type": ".venv/bin/python explore.py bom", "pause_after": 6},
+    {"label": "One scan", "type": ".venv/bin/python scan.py models/benign_model.pkl", "pause_after": 6}
+  ]
+}
