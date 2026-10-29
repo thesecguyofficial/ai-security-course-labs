@@ -1,0 +1,159 @@
+{
+  "scenario": "m01-1.8-understand-linux",
+  "start": 1.706,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.706,
+      "end": 12.591
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.591,
+      "end": 21.239
+    },
+    {
+      "label": "Ollama",
+      "speed": 1,
+      "start": 25.239,
+      "end": 32.977
+    },
+    {
+      "label": "No models yet",
+      "speed": 1,
+      "start": 35.977,
+      "end": 43.148
+    },
+    {
+      "label": "Pull",
+      "speed": 8,
+      "start": 46.148,
+      "end": 62.286
+    },
+    {
+      "label": "Listed",
+      "speed": 1,
+      "start": 65.286,
+      "end": 72.663
+    },
+    {
+      "label": "Model file",
+      "speed": 1,
+      "start": 76.663,
+      "end": 85.112
+    },
+    {
+      "label": "Look before you run",
+      "speed": 1,
+      "start": 91.112,
+      "end": 95.214
+    },
+    {
+      "label": "Inside the file",
+      "speed": 1,
+      "start": 99.214,
+      "end": 103.052
+    },
+    {
+      "label": "The door",
+      "speed": 1,
+      "start": 109.052,
+      "end": 112.429
+    },
+    {
+      "label": "Knock",
+      "speed": 1,
+      "start": 116.429,
+      "end": 121.965
+    },
+    {
+      "label": "One API call",
+      "speed": 1,
+      "start": 124.965,
+      "end": 149.883
+    },
+    {
+      "label": "Next token",
+      "speed": 1,
+      "start": 156.883,
+      "end": 164.094
+    },
+    {
+      "label": "History",
+      "speed": 1,
+      "start": 171.094,
+      "end": 177.691
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 185.691,
+      "end": 189.629
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.306,
+      "what": "type"
+    },
+    {
+      "t": 16.191,
+      "what": "type"
+    },
+    {
+      "t": 25.839,
+      "what": "type"
+    },
+    {
+      "t": 36.577,
+      "what": "type"
+    },
+    {
+      "t": 46.748,
+      "what": "type"
+    },
+    {
+      "t": 65.886,
+      "what": "type"
+    },
+    {
+      "t": 77.263,
+      "what": "type"
+    },
+    {
+      "t": 91.712,
+      "what": "type"
+    },
+    {
+      "t": 99.814,
+      "what": "type"
+    },
+    {
+      "t": 109.652,
+      "what": "type"
+    },
+    {
+      "t": 117.029,
+      "what": "type"
+    },
+    {
+      "t": 125.565,
+      "what": "type"
+    },
+    {
+      "t": 157.483,
+      "what": "type"
+    },
+    {
+      "t": 171.694,
+      "what": "type"
+    },
+    {
+      "t": 186.291,
+      "what": "type"
+    }
+  ],
+  "end": 192.629
+}

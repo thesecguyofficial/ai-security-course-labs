@@ -1,0 +1,364 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 3677, done.
+remote: Counting objects:   4% (1/23)
+remote: Counting objects:   8% (2/23)
+remote: Counting objects:  13% (3/23)
+remote: Counting objects:  17% (4/23)
+remote: Counting objects:  21% (5/23)
+remote: Counting objects:  26% (6/23)
+remote: Counting objects:  30% (7/23)
+remote: Counting objects:  34% (8/23)
+remote: Counting objects:  39% (9/23)
+remote: Counting objects:  43% (10/23)
+remote: Counting objects:  47% (11/23)
+remote: Counting objects:  52% (12/23)
+remote: Counting objects:  56% (13/23)
+remote: Counting objects:  60% (14/23)
+remote: Counting objects:  65% (15/23)
+remote: Counting objects:  69% (16/23)
+remote: Counting objects:  73% (17/23)
+remote: Counting objects:  78% (18/23)
+remote: Counting objects:  82% (19/23)
+remote: Counting objects:  86% (20/23)
+remote: Counting objects:  91% (21/23)
+remote: Counting objects:  95% (22/23)
+remote: Counting objects: 100% (23/23)
+remote: Counting objects: 100% (23/23), done.
+remote: Compressing objects:   4% (1/22)
+remote: Compressing objects:   9% (2/22)
+remote: Compressing objects:  13% (3/22)
+remote: Compressing objects:  18% (4/22)
+remote: Compressing objects:  22% (5/22)
+remote: Compressing objects:  27% (6/22)
+remote: Compressing objects:  31% (7/22)
+remote: Compressing objects:  36% (8/22)
+remote: Compressing objects:  40% (9/22)
+remote: Compressing objects:  45% (10/22)
+remote: Compressing objects:  50% (11/22)
+remote: Compressing objects:  54% (12/22)
+remote: Compressing objects:  59% (13/22)
+remote: Compressing objects:  63% (14/22)
+remote: Compressing objects:  68% (15/22)
+remote: Compressing objects:  72% (16/22)
+remote: Compressing objects:  77% (17/22)
+remote: Compressing objects:  81% (18/22)
+remote: Compressing objects:  86% (19/22)
+remote: Compressing objects:  90% (20/22)
+remote: Compressing objects:  95% (21/22)
+remote: Compressing objects: 100% (22/22)
+remote: Compressing objects: 100% (22/22), done.
+Receiving objects:   0% (1/3677)
+Receiving objects:   1% (37/3677)
+Receiving objects:   2% (74/3677)
+Receiving objects:   3% (111/3677)
+Receiving objects:   4% (148/3677)
+Receiving objects:   5% (184/3677)
+Receiving objects:   6% (221/3677)
+Receiving objects:   7% (258/3677)
+Receiving objects:   8% (295/3677)
+Receiving objects:   9% (331/3677)
+Receiving objects:  10% (368/3677)
+Receiving objects:  11% (405/3677)
+Receiving objects:  12% (442/3677)
+Receiving objects:  13% (479/3677)
+Receiving objects:  14% (515/3677)
+Receiving objects:  15% (552/3677)
+Receiving objects:  16% (589/3677)
+Receiving objects:  17% (626/3677)
+Receiving objects:  18% (662/3677)
+Receiving objects:  19% (699/3677)
+Receiving objects:  20% (736/3677)
+Receiving objects:  21% (773/3677)
+Receiving objects:  22% (809/3677)
+Receiving objects:  23% (846/3677)
+Receiving objects:  24% (883/3677)
+Receiving objects:  25% (920/3677)
+Receiving objects:  26% (957/3677)
+Receiving objects:  27% (993/3677)
+Receiving objects:  28% (1030/3677)
+Receiving objects:  29% (1067/3677)
+Receiving objects:  30% (1104/3677)
+Receiving objects:  31% (1140/3677)
+Receiving objects:  32% (1177/3677)
+Receiving objects:  33% (1214/3677)
+Receiving objects:  34% (1251/3677)
+Receiving objects:  35% (1287/3677)
+Receiving objects:  36% (1324/3677)
+Receiving objects:  37% (1361/3677)
+Receiving objects:  38% (1398/3677)
+Receiving objects:  39% (1435/3677)
+Receiving objects:  40% (1471/3677)
+Receiving objects:  41% (1508/3677)
+Receiving objects:  42% (1545/3677)
+Receiving objects:  43% (1582/3677)
+Receiving objects:  44% (1618/3677)
+Receiving objects:  45% (1655/3677)
+Receiving objects:  46% (1692/3677)
+Receiving objects:  47% (1729/3677)
+Receiving objects:  48% (1765/3677)
+Receiving objects:  49% (1802/3677)
+Receiving objects:  50% (1839/3677)
+Receiving objects:  51% (1876/3677)
+Receiving objects:  52% (1913/3677)
+Receiving objects:  53% (1949/3677)
+Receiving objects:  54% (1986/3677)
+Receiving objects:  55% (2023/3677)
+Receiving objects:  56% (2060/3677)
+Receiving objects:  57% (2096/3677)
+Receiving objects:  58% (2133/3677)
+Receiving objects:  59% (2170/3677)
+Receiving objects:  60% (2207/3677)
+Receiving objects:  61% (2243/3677)
+Receiving objects:  62% (2280/3677)
+Receiving objects:  63% (2317/3677)
+Receiving objects:  64% (2354/3677)
+Receiving objects:  65% (2391/3677)
+Receiving objects:  66% (2427/3677)
+Receiving objects:  67% (2464/3677)
+Receiving objects:  68% (2501/3677)
+Receiving objects:  69% (2538/3677)
+Receiving objects:  70% (2574/3677)
+Receiving objects:  71% (2611/3677)
+Receiving objects:  72% (2648/3677)
+Receiving objects:  73% (2685/3677)
+Receiving objects:  74% (2721/3677)
+Receiving objects:  75% (2758/3677)
+Receiving objects:  76% (2795/3677)
+Receiving objects:  77% (2832/3677)
+Receiving objects:  78% (2869/3677)
+Receiving objects:  79% (2905/3677)
+Receiving objects:  80% (2942/3677)
+Receiving objects:  81% (2979/3677)
+Receiving objects:  82% (3016/3677)
+Receiving objects:  83% (3052/3677)
+Receiving objects:  84% (3089/3677)
+Receiving objects:  85% (3126/3677)
+Receiving objects:  86% (3163/3677)
+Receiving objects:  87% (3199/3677)
+Receiving objects:  88% (3236/3677)
+Receiving objects:  89% (3273/3677)
+Receiving objects:  90% (3310/3677)
+Receiving objects:  91% (3347/3677)
+Receiving objects:  92% (3383/3677)
+Receiving objects:  93% (3420/3677)
+Receiving objects:  94% (3457/3677)
+Receiving objects:  95% (3494/3677), 26.46 MiB | 52.81 MiB/s
+Receiving objects:  96% (3530/3677), 26.46 MiB | 52.81 MiB/s
+Receiving objects:  97% (3567/3677), 26.46 MiB | 52.81 MiB/s
+Receiving objects:  98% (3604/3677), 26.46 MiB | 52.81 MiB/s
+remote: Total 3677 (delta 3), reused 14 (delta 1), pack-reused 3654 (from 3)
+Receiving objects:  99% (3641/3677), 26.46 MiB | 52.81 MiB/s
+Receiving objects: 100% (3677/3677), 26.46 MiB | 52.81 MiB/s
+Receiving objects: 100% (3677/3677), 45.63 MiB | 62.72 MiB/s, done.
+Resolving deltas:   0% (0/1450)
+Resolving deltas:   1% (15/1450)
+Resolving deltas:   2% (29/1450)
+Resolving deltas:   3% (44/1450)
+Resolving deltas:   4% (58/1450)
+Resolving deltas:   5% (73/1450)
+Resolving deltas:   6% (87/1450)
+Resolving deltas:   7% (102/1450)
+Resolving deltas:   8% (116/1450)
+Resolving deltas:   9% (131/1450)
+Resolving deltas:  10% (145/1450)
+Resolving deltas:  11% (160/1450)
+Resolving deltas:  12% (174/1450)
+Resolving deltas:  13% (189/1450)
+Resolving deltas:  14% (203/1450)
+Resolving deltas:  15% (218/1450)
+Resolving deltas:  16% (232/1450)
+Resolving deltas:  17% (247/1450)
+Resolving deltas:  18% (261/1450)
+Resolving deltas:  19% (276/1450)
+Resolving deltas:  20% (290/1450)
+Resolving deltas:  21% (305/1450)
+Resolving deltas:  22% (319/1450)
+Resolving deltas:  23% (334/1450)
+Resolving deltas:  24% (348/1450)
+Resolving deltas:  25% (363/1450)
+Resolving deltas:  26% (377/1450)
+Resolving deltas:  27% (392/1450)
+Resolving deltas:  28% (406/1450)
+Resolving deltas:  29% (421/1450)
+Resolving deltas:  30% (435/1450)
+Resolving deltas:  31% (450/1450)
+Resolving deltas:  32% (464/1450)
+Resolving deltas:  33% (479/1450)
+Resolving deltas:  34% (493/1450)
+Resolving deltas:  35% (508/1450)
+Resolving deltas:  36% (522/1450)
+Resolving deltas:  37% (537/1450)
+Resolving deltas:  38% (551/1450)
+Resolving deltas:  39% (566/1450)
+Resolving deltas:  40% (580/1450)
+Resolving deltas:  41% (595/1450)
+Resolving deltas:  42% (609/1450)
+Resolving deltas:  43% (624/1450)
+Resolving deltas:  44% (638/1450)
+Resolving deltas:  45% (653/1450)
+Resolving deltas:  46% (667/1450)
+Resolving deltas:  47% (682/1450)
+Resolving deltas:  48% (696/1450)
+Resolving deltas:  49% (711/1450)
+Resolving deltas:  50% (725/1450)
+Resolving deltas:  51% (740/1450)
+Resolving deltas:  52% (754/1450)
+Resolving deltas:  53% (769/1450)
+Resolving deltas:  54% (783/1450)
+Resolving deltas:  55% (798/1450)
+Resolving deltas:  56% (812/1450)
+Resolving deltas:  57% (827/1450)
+Resolving deltas:  58% (841/1450)
+Resolving deltas:  59% (856/1450)
+Resolving deltas:  60% (870/1450)
+Resolving deltas:  61% (885/1450)
+Resolving deltas:  62% (899/1450)
+Resolving deltas:  63% (914/1450)
+Resolving deltas:  64% (928/1450)
+Resolving deltas:  65% (943/1450)
+Resolving deltas:  66% (957/1450)
+Resolving deltas:  67% (972/1450)
+Resolving deltas:  68% (986/1450)
+Resolving deltas:  69% (1001/1450)
+Resolving deltas:  70% (1015/1450)
+Resolving deltas:  71% (1030/1450)
+Resolving deltas:  72% (1044/1450)
+Resolving deltas:  73% (1059/1450)
+Resolving deltas:  74% (1073/1450)
+Resolving deltas:  75% (1088/1450)
+Resolving deltas:  76% (1102/1450)
+Resolving deltas:  77% (1117/1450)
+Resolving deltas:  78% (1131/1450)
+Resolving deltas:  79% (1146/1450)
+Resolving deltas:  80% (1160/1450)
+Resolving deltas:  81% (1175/1450)
+Resolving deltas:  82% (1189/1450)
+Resolving deltas:  83% (1204/1450)
+Resolving deltas:  84% (1218/1450)
+Resolving deltas:  85% (1233/1450)
+Resolving deltas:  86% (1247/1450)
+Resolving deltas:  87% (1262/1450)
+Resolving deltas:  88% (1276/1450)
+Resolving deltas:  89% (1291/1450)
+Resolving deltas:  90% (1305/1450)
+Resolving deltas:  91% (1320/1450)
+Resolving deltas:  92% (1334/1450)
+Resolving deltas:  93% (1349/1450)
+Resolving deltas:  94% (1363/1450)
+Resolving deltas:  95% (1378/1450)
+Resolving deltas:  96% (1392/1450)
+Resolving deltas:  97% (1407/1450)
+Resolving deltas:  98% (1421/1450)
+Resolving deltas:  99% (1436/1450)
+Resolving deltas: 100% (1450/1450)
+Resolving deltas: 100% (1450/1450), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m01 && ls
+
+README.md  explore.py  llm_lab.py
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ ollama --version
+
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ ollama list
+
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ ollama pull gemma3:1b
+
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ ollama list
+
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ ollama show gemma3:1b
+
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 explore.py --help
+
+usage: explore.py [-h] [--model MODEL] {model,next,history} ...
+
+Look inside a local model (M1 lab, part 1). Changes nothing.
+
+positional arguments:
+  {model,next,history}
+    model               what the model file is
+    next                next-token prediction, step by step
+    history             the app re-sends the chat history
+
+options:
+  -h, --help            show this help message and exit
+  --model MODEL         model name (default gemma3:1b)
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 explore.py model
+
+model:          gemma3:1b  (family gemma3, file format gguf)
+parameters:     999,885,952  = about 1.0 billion numbers learned in training (the weights)
+quantization:   Q4_K_M  = the numbers are rounded and stored in fewer bits, so the file is smaller
+file size:      806 MB  = about 6.4 bits per number on average  (at 16 bits each it would be about 2.0 GB)
+context length: 32,768 tokens = the most this model was built to read at once (Ollama uses a smaller window unless you ask)
+
+The model file is mostly those numbers. No rules, no database of facts: what it 'knows' is spread
+across all of them. Running it (inference) reads the numbers; it never changes them.
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ ss -ltn | grep 11434
+
+LISTEN 0      4096       127.0.0.1:11434      0.0.0.0:*          
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ curl http://localhost:11434/api/version
+
+{"version":"0.40.13"}thesecguy@lab:~/ai-security-course-labs/labs/m01$ curl -s http://localhost:11434/api/chat -d '{"model": "gemma3:1b", "me 
+ssages": [{"role": "user", "content": "Why is the sky blue? One sentence."}], "stream": false}' | python3 -m json.tool
+
+{
+    "model": "gemma3:1b",
+    "created_at": "2026-10-29T08:54:35.583324306Z",
+    "message": {
+        "role": "assistant",
+        "content": "The sky is blue because of a phenomenon called Rayleigh scattering, where shorter wavelengths of light (like blue) are scattered more by the atmosphere than longer wavelengths."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 2230103251,
+    "load_duration": 1034313325,
+    "prompt_eval_count": 18,
+    "prompt_eval_cached_count": 0,
+    "prompt_eval_duration": 202373000,
+    "eval_count": 32,
+    "eval_duration": 991137000
+}
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 explore.py next "The capital of France is"
+
+text so far: "The capital of France is"
+The model reads all of it, scores every token it knows, and the top guess is added. Then again.
+
+step 1: picks ' Paris'     top 3 guesses: ' Paris' 93.8%  ' **'  1.8%  ' a'  0.6%
+step 2: picks '.'          top 3 guesses: '.' 97.9%  ','  1.9%  '?'  0.2%
+step 3: picks '\n\n'       top 3 guesses: '\n\n' 80.3%  '\n'  7.7%  ' The'  5.4%
+step 4: picks 'The'        top 3 guesses: 'The' 54.2%  'It' 18.2%  'What'  3.4%
+step 5: picks ' largest'   top 3 guesses: ' largest' 44.1%  ' population'  8.2%  ' city'  7.6%
+step 6: picks ' city'      top 3 guesses: ' city' 97.2%  ' country'  1.6%  ' ocean'  0.4%
+
+result: "The capital of France is Paris.
+
+The largest city"
+(6 tokens, one per step. temperature 0 = always take the top guess.)
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 explore.py history
+
+== Request 1: the app sends 2 messages (39 tokens) ==
+   system    You are a helpful assistant. Answer in one short sentence.
+   user      Hi! My name is Asha and my favourite colour is green.
+   -> model: That’s lovely to hear, Asha! Green is a fantastic choice. 😊
+
+== Request 2, a new request without the history: the app sends 2 messages (31 tokens) ==
+   system    You are a helpful assistant. Answer in one short sentence.
+   user      What is my name?
+   -> model: I understand you’re asking me this, but I’m programmed to protect your privacy. Therefore, I cannot tell you your name. 😊
+
+== Request 3, the app re-sends the history: the app sends 4 messages (70 tokens) ==
+   system    You are a helpful assistant. Answer in one short sentence.
+   user      Hi! My name is Asha and my favourite colour is green.
+   assistant That’s lovely to hear, Asha! Green is a fantastic choice. 😊
+   user      What is my name?
+   -> model: Your name is Asha! 😊
+
+The model keeps nothing between requests. A chat 'remembers' only because the app sends the earlier
+messages again, every time, inside the context window (working memory).
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ python3 llm_lab.py check
+
+Ollama is running.
+Models on this computer: gemma3:1b
+Seen through the OpenAI-compatible API: ['gemma3:1b']
+thesecguy@lab:~/ai-security-course-labs/labs/m01$ exit
+
+exit
