@@ -19,7 +19,8 @@ import jwt  # PyJWT, installed with the mcp package
 # Lab-only shared secret. A real authorization server signs with a private key; clients and resource
 # servers verify with its published public key. Never ship a shared HMAC secret like this in production.
 LAB_SECRET = "lab-only-hs256-secret-not-for-real-use"
-ISSUER = "https://issuer.lab.invalid"  # .invalid never resolves; this is just an identifier string
+ISSUER = "https://issuer.lab.invalid/"  # .invalid never resolves. Trailing slash on purpose: the server metadata
+# (pydantic AnyHttpUrl) publishes it with one, and OAuth compares issuer strings exactly, with no normalisation.
 
 
 def mint(subject: str, audience: str, scopes: list[str], *, ttl_seconds: int = 300, expired: bool = False) -> str:
