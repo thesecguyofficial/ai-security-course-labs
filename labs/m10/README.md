@@ -85,7 +85,8 @@ Analyzer (Step 8) and test in a sandbox.
 
 **About the data and safety.** Every account ID (`111122223333`, `444455556666`, `123456789012`), key ID
 (`...EXAMPLE`) and ARN is an AWS documentation example value; every IP address is from the documentation ranges in
-[RFC 5737](https://www.rfc-editor.org/rfc/rfc5737). Model IDs are copied from the AWS model cards (checked 21 Oct 2026); models retire, so check the current list. The attacker
+[RFC 5737](https://www.rfc-editor.org/rfc/rfc5737). Model IDs are copied from the AWS model cards (checked 21 Oct 2026); models retire, so check the current list. In a real account, newer models such as Claude Opus 4.7 may need an inference profile ID (`us.` or `global.`) rather
+than the bare model ID for on-demand calls; the lab keeps the bare ID in A3 so the request stays simple. The attacker
 steps follow Sysdig TRT's published LLMjacking research; nothing here contacts AWS or any other system. Test 17 fails
 if a real-looking account ID, IP or access key ever creeps in.
 
@@ -708,7 +709,7 @@ Not covered: 20 x bedrock-mantle.amazonaws.com CreateInference; 1 x sts.amazonaw
 | H04 | invocation-logging or CloudTrail changes by anyone but the security admin | Sysdig: `DeleteModelInvocationLoggingConfiguration` |
 | H05 | `PutUseCaseForModelAccess`, `CreateFoundationModelAgreement`, `PutFoundationModelEntitlement` | Sysdig: attackers enabled models themselves |
 | H06 | invocations of models not in `approved-models.json` | your allow-list, as a detection |
-| H07 | invocations from an IP the principal never used before; API-key use called out | AWS: `additionalEventData.callWithBearerToken` marks key use |
+| H07 | invocations from an IP the principal never used before; API-key use called out | AWS: `additionalEventData.callWithBearerToken` marks key use; Elastic's rule [AWS Bedrock API Key Used for Destructive or Anti-Recovery Action](https://detection.fyi/elastic/detection-rules/integrations/aws/impact_bedrock_api_key_destructive_action/) matches `callWithBearerToken=true` too |
 | H08 | invocations per hour above 3 times the principal's baseline peak (minimum 20) | volume is the bill |
 
 `python3 hunt.py --rule H02` (or `H01,H02,H03`) shows only those rules' findings.
