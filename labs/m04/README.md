@@ -18,6 +18,7 @@ and **prove** it with a test that can fail. Finally you find the redactor's limi
 | `challenge_canaries.txt` | One extra value (an employee ID) for the challenge |
 | `check_logs.py` | Searches `logs/` for the canaries. Standard library only |
 | `run_tests.py` | The self-check behind `make test` |
+| `explore.py` | Shows one step at a time, without changing anything (Step 1b): every copy one message leaves, Presidio's recognizers, what spaCy guesses, how each score is built |
 | `Makefile` | Shortcuts for Mac/Linux |
 
 **About the stand-in model.** `stub_llm.py` is *not* an AI model. It copies two real behaviours so the redaction
@@ -76,6 +77,164 @@ instead of `.venv/bin/python` (for example `make test` becomes `.venv\Scripts\py
 Why the small spaCy model? Presidio uses a spaCy language model to spot names. Presidio's default is the large
 English model (`en_core_web_lg`, several hundred MB); this lab uses the small one (about 15 MB installed) to keep
 set-up quick. It is worse at names, which you'll see in Step 5.
+
+## Step 1b · Look at each step before you run the lab (about 10 minutes)
+
+New to this? Do this first. `explore.py` shows, one piece at a time, what the chat app and the redactor do. Nothing
+here changes the lab: `trace` writes its logs to a temporary folder and deletes it, so `logs/` is never touched.
+Windows: use `.venv\Scripts\python` instead of `.venv/bin/python`.
+
+**1. Look before you run.** `make -n setup` prints the three commands `make setup` runs, without running them:
+
+```bash
+make -n setup
+```
+
+```text
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m spacy download en_core_web_sm
+```
+
+A *virtual environment* (`.venv`) is a private folder for this lab's Python packages; *pip* is Python's package
+installer; the last line downloads spaCy's small English model. Check what you got:
+
+```bash
+.venv/bin/python -c "import importlib.metadata as m; [print(p, m.version(p)) for p in ('presidio-analyzer', 'spacy', 'en-core-web-sm')]"
+```
+
+```text
+presidio-analyzer 2.2.364
+spacy 3.8.18
+en-core-web-sm 3.8.0
+```
+
+**2. Follow one message.** One chat turn with no redaction, and every copy it leaves:
+
+```bash
+.venv/bin/python explore.py trace "My email is jane.doe@example.com"
+```
+
+```text
+one message, redaction OFF: "My email is jane.doe@example.com"
+
+1. the app's memory: the list of messages it sends to the model (working memory, the context window)
+   [system] You are a helpful support assistant. Keep answers short.
+   [user] My email is jane.doe@example.com
+   [assistant] Thanks, I've noted your message: "My email is jane.doe@example.com". A support agent will f…
+
+2. logs/app.log: your company's log file, 3 line(s)
+   DEBUG raw request received: My email is jane.doe@example.com
+   INFO user: My email is jane.doe@example.com
+   INFO assistant: Thanks, I've noted your message: "My email is jane.doe@example.com". A supp…
+
+3. logs/provider.log: what the AI provider received, 1 line(s)
+   PROVIDER RECEIVED: My email is jane.doe@example.com
+
+4. the screen: the reply the user sees
+   Thanks, I've noted your message: "My email is jane.doe@example.com". A support agent will f…
+
+copies of your message: 7  (app memory 2, app.log 3, provider.log 1, screen 1)
+```
+
+The app re-sends its whole message list to the model every turn (the model keeps nothing between requests), so
+that list is the model's working memory. The app log holds the message three times, including a careless debug
+line. `provider.log` is the lab's stand-in for the AI provider's side.
+
+**3. Meet the recognizers.** Presidio's *analyzer* runs a set of detectors it calls recognizers:
+
+```bash
+.venv/bin/python explore.py recognizers
+```
+
+```text
+Presidio analyzer: 20 recognizers loaded (3 of them added by the lab: IN_PAN, IN_AADHAAR, AWS_ACCESS_KEY)
+
+  finds                how                                      context words that raise the score
+  AWS_ACCESS_KEY       pattern, start 0.9                       -
+  CREDIT_CARD          pattern + validity check, start 0.3      credit, card, visa
+  ...
+  IN_PAN               pattern, start 0.01/0.1/0.5              permanent account number, pan
+  ...
+  PERSON, LOCATION...  language model guess (spaCy NER)         -
+  PHONE_NUMBER         phone library parses the number          phone, number, telephone
+  ...
+
+the lab redacts only these 10 types (ENTITIES in redactor.py), and only when the score is at least 0.35:
+  PERSON, EMAIL_ADDRESS, PHONE_NUMBER, CREDIT_CARD, IBAN_CODE, IP_ADDRESS, US_SSN, IN_PAN, IN_AADHAAR, AWS_ACCESS_KEY
+```
+
+Three kinds of detector: a **pattern** (a regular expression: a rule describing what the text looks like) with a
+starting score, sometimes plus a **validity check** (cards must pass the Luhn checksum); a helper **library** (phone
+numbers); and **spaCy's language model** for names and places. A **context word** nearby (`phone`, `card`, `pan`)
+raises the score.
+
+**4. Watch the language model guess.** spaCy's *named entity recognition* (NER) on its own:
+
+```bash
+.venv/bin/python explore.py ner "Hi, I am Jane Doe from London. I called on 3 May." "Dear Mr Smith, thanks"
+```
+
+```text
+spaCy model en_core_web_sm: named entity recognition (NER) on its own, before Presidio
+
+"Hi, I am Jane Doe from London. I called on 3 May."
+   PERSON    'Jane Doe'
+   GPE       'London'
+   DATE      '3 May'
+"Dear Mr Smith, thanks"
+   ORG       'Dear Mr Smith'
+```
+
+GPE is a country, city or state; ORG an organisation. "Dear Mr Smith" is not an organisation: the model guesses from
+patterns such as capital letters, it doesn't look anything up. spaCy's release notes for this model report an NER
+precision of 84.30 on their test set.
+
+**5. Read one result line by line.** The whole analyzer on one sentence:
+
+```bash
+.venv/bin/python explore.py analyze "I'm Jane Doe, my phone is +1 202-555-0143 and my PAN is ABCPE1234F."
+```
+
+```text
+text: "I'm Jane Doe, my phone is +1 202-555-0143 and my PAN is ABCPE1234F."
+
+Presidio found 3. The lab redacts a finding if its type is in ENTITIES and its score is at least 0.35.
+
+  PERSON            'Jane Doe'              score 0.85  REDACT
+                    SpacyRecognizer: NER guess 0.85
+  PHONE_NUMBER      '+1 202-555-0143'       score 0.75  REDACT
+                    PhoneRecognizer: library 0.4 -> word 'phone' nearby -> 0.75
+  IN_PAN            'ABCPE1234F'            score 0.85  REDACT
+                    InPanRecognizer: pattern 'PAN (High)' 0.5 -> word 'pan' nearby -> 0.85
+
+redacted: I'm <PERSON>, my phone is <PHONE_NUMBER> and my PAN is <IN_PAN>.
+```
+
+Each finding is two lines: type, text, final score and the lab's decision; then how the score was built. The context
+word adds 0.35 (0.4 + 0.35 = 0.75). One more:
+
+```bash
+.venv/bin/python explore.py analyze "My card 4242 4242 4242 4242, employee EMP-482913"
+```
+
+```text
+  CREDIT_CARD       '4242 4242 4242 4242'   score 1.00  REDACT
+                    CreditCardRecognizer: pattern 'All Credit Cards (weak)' 0.3 -> valid -> word 'card' nearby -> 1.00
+  DATE_TIME         '4242 4242'             score 0.85  skip: type not in ENTITIES
+                    SpacyRecognizer: NER guess 0.85
+  IN_PAN            'EMP-482913'            score 0.01  skip: score too low
+                    InPanRecognizer: pattern 'PAN (Low)' 0.01
+  US_DRIVER_LICENSE '482913'                score 0.01  skip: type not in ENTITIES
+                    UsLicenseRecognizer: pattern 'Driver License - Digits (very weak)' 0.01
+
+redacted: My card <CREDIT_CARD>, employee EMP-482913
+```
+
+The card passes its validity check, so it scores 1.00. spaCy calls part of it a date, but dates aren't in
+`ENTITIES`. The employee ID only matched the PAN pattern by chance, at 0.01, so it stays in the text. Lowering
+`SCORE_THRESHOLD` to 0.01 would hide it, labelled as an Indian PAN, which is wrong; the fix that holds is your own
+recognizer (Step 7).
 
 ## Step 2 · Break it: no redaction
 
@@ -257,7 +416,8 @@ there is no fixed expected output here; look for placeholders like `<PERSON>` in
 
 ## Tested
 
-Steps 1 to 7 were run end to end from a clean folder on Linux, Python 3.13.16, presidio 2.2.364, spaCy 3.8.16,
+Step 1b was recorded end to end on a fresh Ubuntu machine (GitHub runner, Python 3.12) on 29 Oct 2026; its outputs
+above are copied from that run. Steps 1 to 7 were run end to end from a clean folder on Linux, Python 3.13.16, presidio 2.2.364, spaCy 3.8.16,
 `en_core_web_sm` 3.8.0, on 21 Oct 2026; the outputs above are copied from that run (timestamps will differ).
 The challenge was confirmed solvable with a one-line pattern (not included). Step 8 was tested against a stand-in
 HTTP server that mimics Ollama's `/v1/chat/completions` endpoint, not a real Ollama install: run it once against
