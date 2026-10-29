@@ -68,9 +68,9 @@ def post(url: str, body: dict, timeout: int = 300) -> dict:
 
 
 def gemma_stream(messages: list[dict]) -> str:
-    """Write the messages as one stream of text, the way Gemma 3's chat template does (see it yourself:
-    `ollama show gemma3:1b --template`). Gemma has only two roles, user and model: a system message becomes
-    a user turn of its own. Every turn opens with <start_of_turn> and closes with <end_of_turn>, and the
+    """Write the messages as one stream of text in Gemma 3's chat format (Google's guide:
+    https://ai.google.dev/gemma/docs/core/prompt-structure). Gemma has only two roles, user and model: Ollama
+    sends a system message as a user turn of its own. `stream` checks this against Ollama itself. Every turn opens with <start_of_turn> and closes with <end_of_turn>, and the
     stream ends with an open model turn: the model's job is to continue the text from there."""
     out = []
     for i, m in enumerate(messages):
@@ -119,8 +119,7 @@ def cmd_stream(a):
     print(f"  our stream as raw text:         {raw.get('prompt_eval_count')} prompt tokens -> {r_reply[:70]!r}...")
     same = chat.get("prompt_eval_count") == raw.get("prompt_eval_count") and c_reply == r_reply
     print("  same tokens, same reply: the roles arrived as marker tokens in one stream" if same else
-          "  they differ: your Ollama's template for this model is not the one shown above (ollama show "
-          f"{a.model} --template)")
+          "  they differ: this stream only follows Gemma 3's format; other models use other markers")
 
 
 def cmd_standin(a):
