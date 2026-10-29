@@ -1,0 +1,22 @@
+{
+  "name": "m02-2.5-understand-linux",
+  "lesson": "2.5",
+  "title": "Lab 2.5, part 1: get the lab, see what each file is, read the starter threat model one step at a time (elements, flows, boundaries, STRIDE, what reaches the model), then install pytm and let it list threats",
+  "cols": 132,
+  "rows": 34,
+  "fail_on": ["Traceback", "No such file"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m02 && ls", "pause_after": 4},
+    {"label": "The model file", "type": "head -8 tsg-helpdesk-starter.json", "pause_after": 4},
+    {"label": "Elements", "type": "python3 explore.py elements", "pause_after": 6},
+    {"label": "Flows", "type": "python3 explore.py flows", "pause_after": 6},
+    {"label": "Boundaries", "type": "python3 explore.py boundaries", "pause_after": 6},
+    {"label": "STRIDE", "type": "python3 explore.py stride", "pause_after": 7},
+    {"label": "Into the model", "type": "python3 explore.py model", "pause_after": 5},
+    {"label": "Setup plan", "type": "make -n setup", "pause_after": 3},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Check", "type": "make check", "pause_after": 3},
+    {"label": "pytm", "type": "make pytm", "pause_after": 7}
+  ]
+}

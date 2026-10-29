@@ -1,9 +1,17 @@
 name: record-threatdragon
 # Records a REAL OWASP Threat Dragon session (official container image, local mode, nothing leaves the machine)
-# for the M2 lab video. The take is rejected unless the model Threat Dragon saves contains every element and the
-# AI threat that were drawn and typed on camera.
+# for the M2 lab videos. take=draw (lab part 2): the take is rejected unless the model Threat Dragon saves contains
+# every element and the AI threat that were drawn and typed on camera. take=open (lab part 1): opens the lab's
+# starter model (labs/m02/tsg-helpdesk-starter.json) and reads one element of each kind; rejected unless Threat
+# Dragon saves back the same elements.
 on:
   workflow_dispatch:
+    inputs:
+      take:
+        description: "draw = lab part 2 (draw TSG Helpdesk, add the AI threat); open = lab part 1 (open the starter model and read it)"
+        type: choice
+        options: [draw, open]
+        default: draw
   push:
     branches: [rec-td]
     paths: ["recordings/record_threatdragon.py", ".github/workflows/record-threatdragon.yml"]
@@ -15,7 +23,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
-      SCENARIO: m02-2.5-threatdragon
+      SCENARIO: ${{ inputs.take == 'open' && 'm02-2.5-threatdragon-open' || 'm02-2.5-threatdragon' }}
       TD_IMAGE: owasp/threat-dragon:v2.6.2
     steps:
       - uses: actions/checkout@v4
@@ -37,7 +45,11 @@ jobs:
           python3 -m pip install --user --break-system-packages -q playwright==1.48.0
           python3 -m playwright install --with-deps chromium > /dev/null
       - name: record (real session)
-        run: python3 recordings/record_threatdragon.py "out/$SCENARIO" http://127.0.0.1:3000 2>&1 | tee "out/$SCENARIO/record.log"; exit ${PIPESTATUS[0]}
+        run: |
+          if [ "${{ inputs.take }}" = "open" ]; then
+            python3 recordings/record_threatdragon_open.py "out/$SCENARIO" http://127.0.0.1:3000 labs/m02/tsg-helpdesk-starter.json 2>&1 | tee "out/$SCENARIO/record.log"; exit ${PIPESTATUS[0]}
+          fi
+          python3 recordings/record_threatdragon.py "out/$SCENARIO" http://127.0.0.1:3000 2>&1 | tee "out/$SCENARIO/record.log"; exit ${PIPESTATUS[0]}
       - name: proof (fingerprints and the saved model)
         if: always()
         run: |
