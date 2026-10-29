@@ -103,7 +103,7 @@ make check
 - `cd labs/m10`: run it from the course labs repository folder (`ai-security-course-labs`)
 - `make check`: same as `python3 policy_checker.py`
 
-Real output (Linux, Python 3.13):
+Real output (Linux, Python 3.12, the same run as the video):
 
 ```text
 --- M10 policy checker · AnyCompany today ---
@@ -492,7 +492,7 @@ Real output before your fix (last lines):
   why test_20_never_expiring_key_denied: AssertionError: True is not false : C1 is still ALLOWED: NumericGreaterThan is false when the age key is missing
   why test_21_hunt_sees_mantle: AssertionError: 0 != 20 : 0 of 20 unapproved mantle events flagged
 ----------------------------------------------------------------------
-Ran 22 tests in 0.073s
+Ran 22 tests in 0.044s
 
 FAILED (failures=3)
 
@@ -522,6 +522,24 @@ features. **Expected cost: $0.** IAM Access Analyzer policy validation is "provi
 ([AWS Budgets pricing](https://aws.amazon.com/aws-cost-management/aws-budgets/pricing/)); a request refused by an SCP
 runs no model. Never run these in a work account without permission (lesson 0.8). We wrote these commands from the AWS
 CLI reference but did not run them against a live account for this README, so your output will differ.
+
+**Before 8a · Install the AWS CLI (skip if `aws --version` already prints `aws-cli/2`).** The AWS CLI is Amazon's
+official command-line tool: every `aws ...` command below is one API call to your account. Use the official
+installers from the [AWS install guide](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html):
+
+- **Mac:** download and open `https://awscli.amazonaws.com/AWSCLIV2.pkg`, then click through the installer.
+- **Windows:** download and run `https://awscli.amazonaws.com/AWSCLIV2.msi`, then open a new terminal.
+- **Linux (x86_64):**
+
+```bash
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+```
+
+Check it works with `aws --version`. The line should start with `aws-cli/2`. Then sign in to your sandbox account with
+`aws configure sso` (lesson 0.7 walks through it) and confirm with `aws sts get-caller-identity`, which prints your
+account ID. Never paste long-lived access keys into a lab.
 
 **8a · Validate the SCPs with IAM Access Analyzer** (any account, no Organization needed):
 

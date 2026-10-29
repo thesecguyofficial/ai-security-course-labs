@@ -1,0 +1,25 @@
+{
+  "name": "m10-10.3-linux",
+  "lesson": "10.1, 10.3, 10.4, 10.5",
+  "title": "M10 demo and lab: how many IAM actions AWS's AI services have (live public reference), then the M10 lab: check, attack, fixes, blunt allow-list, hunt, tests and challenge",
+  "cols": 132,
+  "rows": 34,
+  "before": [
+    "git clone -q -b rec-m10 https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": ["Traceback", "Could not reach the AWS service reference"],
+  "steps": [
+    {"label": "AI actions", "type": "cd ai-security-course-labs && python3 --version", "pause_after": 2},
+    {"label": "AI actions", "type": "python3 demos/m10/ai_actions.py", "timeout": 120, "pause_after": 7},
+    {"label": "The lab", "type": "cd labs/m10 && ls", "pause_after": 3},
+    {"label": "Check", "type": "make check", "pause_after": 7},
+    {"label": "Attack", "type": "make attack", "pause_after": 7},
+    {"label": "Check fixed", "type": "make check-fixed | tail -12", "pause_after": 5},
+    {"label": "Attack safe", "type": "make attack-safe | tail -24", "pause_after": 7},
+    {"label": "Blunt", "type": "make blunt | tail -14", "pause_after": 6},
+    {"label": "Hunt naive", "type": "make hunt-naive", "pause_after": 5},
+    {"label": "Hunt", "type": "make hunt", "pause_after": 7},
+    {"label": "Tests", "type": "make test | tail -6", "pause_after": 4},
+    {"label": "Challenge", "type": "make challenge 2>&1 | tail -16", "pause_after": 6}
+  ]
+}
