@@ -1,129 +1,129 @@
 {
   "scenario": "m02-2.5-understand-linux",
-  "start": 1.864,
+  "start": 1.808,
   "steps": [
     {
       "label": "Download",
       "speed": 1,
-      "start": 1.864,
-      "end": 12.249
+      "start": 1.808,
+      "end": 12.712
     },
     {
       "label": "The lab",
       "speed": 1,
-      "start": 15.249,
-      "end": 20.898
+      "start": 15.712,
+      "end": 21.362
     },
     {
       "label": "The model file",
       "speed": 1,
-      "start": 24.898,
-      "end": 29.455
+      "start": 25.362,
+      "end": 29.92
     },
     {
       "label": "Elements",
       "speed": 1,
-      "start": 33.456,
-      "end": 37.663
+      "start": 33.921,
+      "end": 38.129
     },
     {
       "label": "Flows",
       "speed": 1,
-      "start": 43.663,
-      "end": 47.474
+      "start": 44.13,
+      "end": 47.941
     },
     {
       "label": "Boundaries",
       "speed": 1,
-      "start": 53.474,
-      "end": 57.912
+      "start": 53.942,
+      "end": 58.38
     },
     {
       "label": "STRIDE",
       "speed": 1,
-      "start": 63.912,
-      "end": 67.904
+      "start": 64.38,
+      "end": 68.374
     },
     {
       "label": "Into the model",
       "speed": 1,
-      "start": 74.904,
-      "end": 78.692
+      "start": 75.374,
+      "end": 79.162
     },
     {
       "label": "Setup plan",
       "speed": 1,
-      "start": 83.692,
-      "end": 86.407
+      "start": 84.162,
+      "end": 86.836
     },
     {
       "label": "Setup",
       "speed": 1,
-      "start": 89.407,
-      "end": 96.502
+      "start": 89.836,
+      "end": 97.275
     },
     {
       "label": "Check",
       "speed": 1,
-      "start": 99.502,
-      "end": 101.77
+      "start": 100.275,
+      "end": 102.547
     },
     {
       "label": "pytm",
       "speed": 1,
-      "start": 104.77,
-      "end": 107.109
+      "start": 105.547,
+      "end": 107.878
     }
   ],
   "keys": [
     {
-      "t": 2.464,
+      "t": 2.408,
       "what": "type"
     },
     {
-      "t": 15.849,
+      "t": 16.313,
       "what": "type"
     },
     {
-      "t": 25.498,
+      "t": 25.962,
       "what": "type"
     },
     {
-      "t": 34.056,
+      "t": 34.521,
       "what": "type"
     },
     {
-      "t": 44.264,
+      "t": 44.73,
       "what": "type"
     },
     {
-      "t": 54.075,
+      "t": 54.542,
       "what": "type"
     },
     {
-      "t": 64.512,
+      "t": 64.98,
       "what": "type"
     },
     {
-      "t": 75.504,
+      "t": 75.974,
       "what": "type"
     },
     {
-      "t": 84.292,
+      "t": 84.762,
       "what": "type"
     },
     {
-      "t": 90.007,
+      "t": 90.436,
       "what": "type"
     },
     {
-      "t": 100.102,
+      "t": 100.875,
       "what": "type"
     },
     {
-      "t": 105.371,
+      "t": 106.147,
       "what": "type"
     }
   ],
-  "end": 114.11
+  "end": 114.878
 }
