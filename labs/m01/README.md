@@ -66,8 +66,9 @@ where you see `python3`.
    gemma3:1b    97558784bdc9    806 MB    10 seconds ago
    ```
 
-   Two files: the weights (806 MB) and a tiny settings file. `verifying sha256 digest` checks the download's
-   fingerprint, so a damaged or swapped file is caught.
+   Two files: the weights (806 MB) and a small extra file that comes with the model. `verifying sha256 digest`
+   checks each file's fingerprint against the registry's list, so a damaged or altered download is caught. It
+   doesn't tell you whether the model itself can be trusted.
 
 4. **Read the model's label:** `ollama show gemma3:1b`
 
@@ -102,7 +103,8 @@ where you see `python3`.
    {"version":"0.40.13"}
    ```
 
-   `127.0.0.1` means only this computer can connect. Ollama has no login, so never make it listen on `0.0.0.0`
+   `127.0.0.1` means other computers can't connect directly, but every program on this one can, your web browser
+   included: a smaller door, not a locked one. Ollama has no login, so never make it listen on `0.0.0.0`
    (every network address) on a machine others can reach.
 
 ## Step 1b · Look inside the model before the exercises (about 10 minutes)
