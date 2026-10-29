@@ -1,0 +1,169 @@
+{
+  "scenario": "m03-3.9-understand-linux",
+  "start": 1.78,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.78,
+      "end": 12.683
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.683,
+      "end": 21.333
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 25.333,
+      "end": 27.893
+    },
+    {
+      "label": "An email",
+      "speed": 1,
+      "start": 30.893,
+      "end": 34.959
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 38.959,
+      "end": 41.57
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 44.571,
+      "end": 46.784
+    },
+    {
+      "label": "Read the output",
+      "speed": 1,
+      "start": 49.784,
+      "end": 57.725
+    },
+    {
+      "label": "Template",
+      "speed": 1,
+      "start": 62.725,
+      "end": 72.486
+    },
+    {
+      "label": "Request",
+      "speed": 1,
+      "start": 77.486,
+      "end": 84.646
+    },
+    {
+      "label": "Send",
+      "speed": 1,
+      "start": 90.646,
+      "end": 103.256
+    },
+    {
+      "label": "Stream",
+      "speed": 1,
+      "start": 109.256,
+      "end": 124.684
+    },
+    {
+      "label": "Planted stream",
+      "speed": 1,
+      "start": 131.684,
+      "end": 140.554
+    },
+    {
+      "label": "Stand-in",
+      "speed": 1,
+      "start": 146.554,
+      "end": 154.169
+    },
+    {
+      "label": "promptfoo",
+      "speed": 1,
+      "start": 160.169,
+      "end": 212.973
+    },
+    {
+      "label": "promptfoo target",
+      "speed": 1,
+      "start": 216.973,
+      "end": 225.136
+    },
+    {
+      "label": "promptfoo checks",
+      "speed": 1,
+      "start": 230.136,
+      "end": 236.574
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.38,
+      "what": "type"
+    },
+    {
+      "t": 16.283,
+      "what": "type"
+    },
+    {
+      "t": 25.933,
+      "what": "type"
+    },
+    {
+      "t": 31.493,
+      "what": "type"
+    },
+    {
+      "t": 39.559,
+      "what": "type"
+    },
+    {
+      "t": 45.171,
+      "what": "type"
+    },
+    {
+      "t": 50.384,
+      "what": "type"
+    },
+    {
+      "t": 63.325,
+      "what": "type"
+    },
+    {
+      "t": 78.087,
+      "what": "type"
+    },
+    {
+      "t": 91.247,
+      "what": "type"
+    },
+    {
+      "t": 109.856,
+      "what": "type"
+    },
+    {
+      "t": 132.284,
+      "what": "type"
+    },
+    {
+      "t": 147.154,
+      "what": "type"
+    },
+    {
+      "t": 160.769,
+      "what": "type"
+    },
+    {
+      "t": 217.573,
+      "what": "type"
+    },
+    {
+      "t": 230.736,
+      "what": "type"
+    }
+  ],
+  "end": 242.574
+}
