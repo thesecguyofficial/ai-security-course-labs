@@ -65,6 +65,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `auth/issuer.py` | A minimal **fake** authorization server that mints lab JWTs. Lab only |
 | `auth_client.py` | Sends three tokens to the secure server and reports which are accepted |
 | `review.py` | Reads a server's tool definitions with **no model** and flags hidden directives |
+| `explore.py` | Step 1b: shows each MCP message (stdio, tools/list, tools/call, what the model reads, Streamable HTTP, a lab token). Starts the lab's own servers and stops them; calls only tools that read |
 | `stand_in_model.py` | The stand-in "model" (plain Python, not AI) |
 | `ollama_backend.py` | Optional: use a real local model instead |
 | `test_lab.py`, `test_auth.py`, `test_challenge.py`, `run_tests.py` | The tests |
@@ -81,20 +82,37 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 
 ## Setup (once)
 
+Look before you run: `make -n` prints what a `make` target would run, without running it.
+
 ```bash
 cd labs/m08
+make -n setup check
+```
+
+```text
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -c "import importlib.metadata as m; print('mcp', m.version('mcp'))"
+```
+
+- `python3 -m venv .venv` makes a **virtual environment**: a private folder (`.venv`) for this lab's Python
+  packages, so their versions can't clash with other projects. It keeps versions apart; it is **not** a
+  security sandbox, and code in it runs with your normal rights.
+- `pip`, Python's package installer, then installs what `requirements.txt` lists.
+
+Now run it:
+
+```bash
 make setup
 ```
 
-- `cd labs/m08`: run it from the course labs repository folder (`ai-security-course-labs`)
-- `make setup`: python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
-
-This installs `mcp==2.3.0` (MIT licence), pinned because it speaks MCP protocol version `2026-07-28`.
-Everything else is the Python standard library. No internet access is needed after setup.
+`requirements.txt` pins one package, `mcp==2.3.0` (MIT licence), the official MCP Python SDK, because it
+speaks MCP protocol version `2026-07-28`. pip also installs the packages it depends on (pydantic, PyJWT,
+starlette, uvicorn and others); the end of the output is `Successfully installed ... mcp-2.3.0 ...`. No
+internet access is needed after setup.
 
 **What the MCP SDK is.** The official MCP Python SDK is the library both sides use to speak the protocol: the
-servers in this lab are built with it, and `host.py` uses its client. You never call it directly; `make setup`
-puts it in a private virtual environment (`.venv`) so it can't clash with anything else on your computer.
+servers in this lab are built with it, and `host.py` uses its client. You never call it directly.
 
 Check it worked:
 
@@ -108,7 +126,171 @@ Real output:
 mcp 2.3.0
 ```
 
-Windows (no `make`): `.venv\Scripts\python -c "import importlib.metadata as m; print('mcp', m.version('mcp'))"`
+Windows (no `make`): `py -m venv .venv`, then `.venv\Scripts\python -m pip install -r requirements.txt`, then
+`.venv\Scripts\python -c "import importlib.metadata as m; print('mcp', m.version('mcp'))"`. Use
+`.venv\Scripts\python` wherever this guide says `.venv/bin/python`.
+
+## Step 1b · Before you attack: look at how MCP works (about 10 minutes)
+
+New to MCP? Do this before Step 1 (lesson 8.6 and its videos call it Step 1b). `explore.py` shows, one message
+at a time, what the host and the servers say to each other. Real output below is from a fresh Ubuntu machine
+(recording run 40906260503).
+
+**What it really runs.** `explore.py` starts the lab's own servers on your computer, the way a host does, and
+stops them again: `servers/notes_server.py` (and `servers/facts_server.py` for `context`) as child processes,
+and `servers/secure_http_server.py` on `127.0.0.1:8808` for `http` and `token`. The only tools it calls are
+`read_note` (on `todo.md`, a fake note) and `whoami`. It never calls `send_email`, never writes to `state/`,
+and nothing leaves your computer.
+
+**1. stdio and JSON-RPC.** The host starts the server as a child process and writes one JSON-RPC message per
+line to its standard input; the server answers on its standard output:
+
+```bash
+.venv/bin/python explore.py discover
+```
+
+```text
+host -> server (one line on stdin):
+{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"explore.py","version":"1.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}
+
+server -> host (one line on stdout):
+{"jsonrpc":"2.0","id":1,"result":{"cacheScope":"private","capabilities":{"prompts":{"listChanged":true},"resources":{"listChanged":true,"subscribe":true},"tools":{"listChanged":true}},"resultType":"complete","supportedVersions":["2026-07-28"],"ttlMs":0,"_meta":{"io.modelcontextprotocol/serverInfo":{"name":"notes","version":"1.0.0"}}}}
+```
+
+A request has an `id`, a `method` and `params`; the response carries the same `id` and a `result` (or an
+`error`). In protocol version `2026-07-28` every request carries its own version in `_meta`, and
+`server/discover` asks what the server supports. Older versions (`2025-11-25` and before) open with an
+`initialize` handshake instead; many servers you meet still do.
+
+**2. The menu: `tools/list`.**
+
+```bash
+.venv/bin/python explore.py list
+```
+
+```text
+server -> host, laid out to read (outputSchema, cacheScope, ttlMs and _meta left out to fit the screen):
+{"jsonrpc": "2.0", "id": 1, "result": {"resultType": "complete", "tools": [
+  {"name": "list_notes",
+   "description": "List the notes in the team workspace.",
+   "inputSchema": {"type": "object", "properties": {}, "title": "list_notesArguments"}},
+  {"name": "read_note",
+   "description": "Read one note from the team workspace by its file name, for example meeting-notes.md.",
+   "inputSchema": {"type": "object", "properties": {"name": {"title": "Name", "type": "string"}}, "required": ["name"], "title": "read_noteArguments"}},
+...
+3 tools. Each one: a name, a description written for the model, and an inputSchema for its arguments.
+```
+
+**3. A tool call: `tools/call`.** The model only asks; the host sends the request and the server runs the tool:
+
+```bash
+.venv/bin/python explore.py call
+```
+
+```text
+host -> server:
+{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"read_note","arguments":{"name":"todo.md"},"_meta":{...}}}
+
+server -> host, laid out to read (structuredContent, the same text again, left out):
+...
+    "content": [
+      {
+        "text": "# To do (FAKE lab data)\n\n- Review the MCP server allow-list.\n- Rotate the lab-only API key (it is fake anyway).\n",
+        "type": "text"
+      }
+    ],
+    "isError": false,
+```
+
+(The real request line spells out the same `_meta` as in step 1; it is shortened to `{...}` here.)
+
+**4. What the model reads.** The host turns every tool from every server into text in the model's working
+memory, the context window:
+
+```bash
+.venv/bin/python explore.py context
+```
+
+```text
+You are an agent that may call MCP tools. Choose at most two steps. Reply ONLY with JSON: {"steps": [{"server": ..., "tool": ..., "args": {...}}], "reply": ...}. These are the tools you may use:
+- server=notes tool=list_notes desc='List the notes in the team workspace.' schema={"type": "object", "properties": {}, "title": "list_notesArguments"}
+...
+- server=facts tool=fact_of_the_day desc='Return a fun fact of the day. Pass a topic like octopus, honey or space.' schema={"type": "object", "properties": {"topic": {"default": "octopus", "title": "Topic", "type": "string"}}, "title": "fact_of_the_dayArguments"}
+
+4 tools, 1245 characters (about 311 tokens), all in the model's working memory,
+the context window, on every request. The model can't tell who wrote which line.
+```
+
+If you already ran `make attack`, the facts line shows release 1.1.0; `make clean` resets it.
+
+**5. Streamable HTTP, no token.** A remote server is one web address; every message is an HTTP POST:
+
+```bash
+.venv/bin/python explore.py http
+```
+
+```text
+server -> host:
+  HTTP 401
+  WWW-Authenticate: Bearer error="invalid_token", error_description="Authentication required", resource_metadata="http://127.0.0.1:8808/.well-known/oauth-protected-resource/mcp"
+
+The host follows that pointer (Protected Resource Metadata):
+  GET http://127.0.0.1:8808/.well-known/oauth-protected-resource/mcp
+  {
+    "resource": "http://127.0.0.1:8808/mcp",
+    "authorization_servers": ["https://issuer.lab.invalid/"],
+    "scopes_supported": ["notes:read"],
+    "bearer_methods_supported": ["header"]
+  }
+```
+
+**6. Whose token is it?** `auth/issuer.py`, a fake authorization server (lab only), mints the kind of access
+token the real OAuth flow would give a host acting for `alice`:
+
+```bash
+.venv/bin/python explore.py token
+```
+
+```text
+  {
+    "iss": "https://issuer.lab.invalid",
+    "sub": "alice",
+    "aud": "http://127.0.0.1:8808/mcp",
+    "scope": "notes:read",
+    "iat": 1793289450,
+    "exp": 1793289750
+  }
+
+host -> server: POST tools/call whoami, with the header  Authorization: Bearer eyJhbGciOi...
+server -> host: HTTP 200
+...
+      "content": [{"text": "subject=alice scopes=['notes:read'] audience-ok", "type": "text"}],
+```
+
+`sub` is who the token belongs to, `aud` (audience) is the server it is for, `scope` is what it allows. Step 4
+shows the server refusing a token whose audience is a different server.
+
+**7. Read one run.** The real host, the stand-in model, no controls, the facts server on its clean release:
+
+```bash
+.venv/bin/python host.py "give me a fact about octopus"
+```
+
+```text
+MODEL plan: [('facts', 'fact_of_the_day')]  (saw hidden directive: False)
+CALL  facts:fact_of_the_day args={'topic': 'octopus'}
+
+--- result ---
+reply:          Here is your fact of the day.
+tools run:      ['facts:fact_of_the_day']
+tools refused:  []
+secret leaked:  False
+emails queued:  []
+```
+
+Read it from the top: the model's plan (which server and tool), whether it saw a hidden directive, one `CALL`
+line per tool with its arguments, then the result. Step 1 runs the same request after the facts server's
+"update" to release 1.1.0.
 
 ## Step 1 · Break it: the rug pull
 
