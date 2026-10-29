@@ -16,6 +16,16 @@ First you attack the vulnerable version and watch all three happen. Then you rea
 a parameterised query, an allow-list, a contained subprocess), attack the safe version, and **prove** the fixes with
 automated tests that also prove each attack worked before. Finally, a challenge with no solution included.
 
+## Get the lab
+
+```bash
+git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+cd ai-security-course-labs/labs/m05
+```
+
+Already cloned it for an earlier module? Run `git pull` inside `ai-security-course-labs` instead. No git? Use the
+green **Code → Download ZIP** button on the repository page and unzip it.
+
 ## What's in this folder
 
 | File | What it is |
@@ -25,7 +35,7 @@ automated tests that also prove each attack worked before. Finally, a challenge 
 | `tools/service_status.py` | The helper program the app runs to "check a service". Prints fake statuses |
 | `data/fake_secrets.env` | Fake secrets the app should never reveal. Nothing in it works anywhere |
 | `attack.py` | Sends the three attack questions and reports what happened. `--only html`, `--only sql` or `--only shell` runs one of them |
-| `explore.py` | Read-only: shows each step on its own (the data, the model's plan, the page, Markdown, the SQL, the shell). Step 1b |
+| `explore.py` | Changes nothing in the app (but its `shell` step really runs what you type): shows each step on its own (the data, the model's plan, the page, Markdown, the SQL, the shell). Step 1b |
 | `test_lab.py` | 13 automated tests: 3 prove the attacks work in vulnerable mode, 10 prove the fixes hold |
 | `test_challenge.py` | 5 tests for the challenge. 4 fail until you fix the code |
 | `run_tests.py` | Runs the tests with one line per result |
@@ -78,7 +88,8 @@ with Python (its *standard library*: `sqlite3`, `html`, `subprocess`, `http.serv
 ## Step 1b · Look at each step before you attack it (about 10 minutes)
 
 New to web apps? Do this first. `explore.py` shows, one at a time, what happens to the model's output after the
-model has written it. Nothing here changes the app or attacks it. On Windows, use `py` instead of `python3`.
+model has written it. Nothing here changes the app. But the `shell` step (without `--safe`) really runs what you
+type, so only try harmless commands, like `echo`. On Windows, use `py` instead of `python3`.
 
 **0. The data.** Five fake tickets, two people, and who is signed in:
 
@@ -141,7 +152,9 @@ how a browser reads it (explained by Python's html.parser; no browser runs here)
    text: 'VPN'
 ```
 
-**3. Markdown.** Chat apps turn a model's Markdown into HTML before your browser sees it. A link waits for a click;
+**3. Markdown.** A chat app that shows formatted answers converts the model's Markdown into HTML, often inside your
+browser, before it's drawn on screen. The CommonMark specification lets raw HTML inside Markdown pass straight
+through, unless the app turns that off or cleans it. A link waits for a click;
 an image is fetched at once (the addresses end in `.example`, a name reserved for documentation):
 
 ```bash
@@ -394,8 +407,9 @@ ALL TESTS PASSED (13 run)
 ```
 
 Why the first three tests check the **vulnerable** app: a test that has never failed proves nothing. Tests 1 to 3
-show that each check can catch the bug; tests 4 to 10 show the fix holds against the same attack; tests 11 to 13
-start the real web server on a free `127.0.0.1` port and attack it over HTTP. The safe tests also check that normal
+show that each check can catch the bug; tests 4 to 10 show the fix holds against the same attack; tests 11 and 12
+start the real web server on a free `127.0.0.1` port and attack it over HTTP (test 12 also checks the Content Security
+Policy); test 13 checks the app refuses to listen on any address except `127.0.0.1`. The safe tests also check that normal
 questions still work, because a "fix" that breaks the feature gets reverted.
 
 ## Step 5 · Your turn: `make challenge`
