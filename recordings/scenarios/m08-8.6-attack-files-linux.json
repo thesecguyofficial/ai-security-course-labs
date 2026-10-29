@@ -1,0 +1,18 @@
+{
+  "name": "m08-8.6-attack-files-linux",
+  "lesson": "8.6",
+  "title": "Lab 8.6, part 2 extra: open the attack files (the poisoned 1.1.0 release in servers/facts_server.py, where the stolen value lands, the stand-in model's reaction) and the attacker's inbox after make attack",
+  "cols": 132,
+  "rows": 34,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
+    "cd ai-security-course-labs/labs/m08 && make setup >/dev/null"
+  ],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "Poisoned release", "type": "cd ai-security-course-labs/labs/m08 && sed -n '39,52p' servers/facts_server.py", "pause_after": 5},
+    {"label": "Release switch", "type": "sed -n '82,99p' servers/facts_server.py", "pause_after": 5},
+    {"label": "Stand-in reaction", "type": "sed -n '58,69p' stand_in_model.py", "pause_after": 5},
+    {"label": "Inbox", "type": "make attack >/dev/null && cat state/attacker_inbox.log", "pause_after": 5}
+  ]
+}
