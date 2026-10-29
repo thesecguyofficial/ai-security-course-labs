@@ -7,21 +7,89 @@
   "before": [
     "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
   ],
-  "fail_on": ["Traceback"],
+  "fail_on": [
+    "Traceback"
+  ],
   "steps": [
-    {"label": "A project folder", "type": "mkdir shop && cd shop", "pause_after": 1},
-    {"label": "Virtual environment", "type": "python3 -m venv .venv", "pause_after": 1},
-    {"label": "Virtual environment", "type": "ls .venv/bin", "pause_after": 3},
-    {"label": "Install a package", "type": ".venv/bin/pip install requests==2.31.0", "timeout": 300, "pause_after": 4},
-    {"label": "Package details", "type": ".venv/bin/pip show requests", "pause_after": 5},
-    {"label": "Install the scanner", "type": ".venv/bin/pip install -q pip-audit", "timeout": 300, "speed": 3, "pause_after": 2},
-    {"label": "Scan", "type": ".venv/bin/pip-audit --aliases", "timeout": 300, "pause_after": 6},
-    {"label": "Upgrade", "type": ".venv/bin/pip install -q --upgrade requests", "timeout": 300, "pause_after": 2},
-    {"label": "Scan again", "type": ".venv/bin/pip-audit --aliases", "timeout": 300, "pause_after": 6},
-    {"label": "Licence", "type": "head -5 ~/ai-security-course-labs/LICENSE", "pause_after": 4},
-    {"label": "Fingerprint", "type": "echo \"hello\" | sha256sum", "pause_after": 2},
-    {"label": "Fingerprint", "type": "echo \"hellp\" | sha256sum", "pause_after": 4},
-    {"label": "CI", "type": "cat ~/ai-security-course-labs/.github/workflows/style.yml", "pause_after": 6},
-    {"label": "Encryption in transit", "type": "curl -sv https://example.com -o /dev/null 2>&1 | grep -E \"SSL connection|subject:|issuer:\"", "pause_after": 5}
+    {
+      "label": "A project folder",
+      "type": "mkdir shop && cd shop",
+      "pause_after": 1
+    },
+    {
+      "label": "Virtual environment",
+      "type": "python3 -m venv .venv",
+      "pause_after": 1
+    },
+    {
+      "label": "Virtual environment",
+      "type": "ls .venv/bin",
+      "pause_after": 3
+    },
+    {
+      "label": "A pinned version",
+      "type": "echo \"requests==2.31.0\" > requirements.txt",
+      "pause_after": 1
+    },
+    {
+      "label": "Install a package",
+      "type": ".venv/bin/pip install -r requirements.txt",
+      "timeout": 300,
+      "pause_after": 4
+    },
+    {
+      "label": "Package details",
+      "type": ".venv/bin/pip show requests",
+      "pause_after": 5
+    },
+    {
+      "label": "Install the scanner",
+      "type": ".venv/bin/pip install -q pip-audit",
+      "timeout": 300,
+      "speed": 3,
+      "pause_after": 2
+    },
+    {
+      "label": "Scan",
+      "type": ".venv/bin/pip-audit -r requirements.txt --aliases --progress-spinner off",
+      "timeout": 300,
+      "pause_after": 6
+    },
+    {
+      "label": "Fix",
+      "type": "echo \"requests==2.34.2\" > requirements.txt",
+      "pause_after": 1
+    },
+    {
+      "label": "Scan again",
+      "type": ".venv/bin/pip-audit -r requirements.txt --aliases --progress-spinner off",
+      "timeout": 300,
+      "pause_after": 5
+    },
+    {
+      "label": "Licence",
+      "type": "head -5 ~/ai-security-course-labs/LICENSE",
+      "pause_after": 4
+    },
+    {
+      "label": "Fingerprint",
+      "type": "echo \"hello\" | sha256sum",
+      "pause_after": 2
+    },
+    {
+      "label": "Fingerprint",
+      "type": "echo \"hellp\" | sha256sum",
+      "pause_after": 4
+    },
+    {
+      "label": "CI",
+      "type": "cat ~/ai-security-course-labs/.github/workflows/style.yml",
+      "pause_after": 6
+    },
+    {
+      "label": "Encryption in transit",
+      "type": "curl -sv https://example.com -o /dev/null 2>&1 | grep -E \"SSL connection|subject:|issuer:\"",
+      "pause_after": 5
+    }
   ]
 }
