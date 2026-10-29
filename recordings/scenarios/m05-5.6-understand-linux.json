@@ -1,0 +1,44 @@
+{
+  "name": "m05-5.6-understand-linux",
+  "lesson": "5.0, 5.6",
+  "title": "Lab 5.6, part 1 (and the 5.0 basics videos): get the lab, set it up, and follow a model's output into a web page, Markdown, SQL, a shell command and a real HTTP response before attacking it",
+  "cols": 132,
+  "rows": 34,
+  "needs": [
+    "ollama"
+  ],
+  "before": [
+    "curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh",
+    "sudo systemctl daemon-reload && sudo systemctl enable --now ollama || (setsid nohup ollama serve >/tmp/ollama.log 2>&1 < /dev/null &)",
+    "for i in $(seq 1 30); do curl -fsS http://127.0.0.1:11434/api/version && break; sleep 2; done",
+    "ollama pull gemma3:1b"
+  ],
+  "fail_on": [
+    "Traceback",
+    "Could not reach Ollama",
+    "Connection refused",
+    "Address already in use"
+  ],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m05 && ls", "pause_after": 4},
+    {"label": "The data", "type": "python3 explore.py data", "pause_after": 5},
+    {"label": "Setup plan", "type": "make -n setup", "pause_after": 3},
+    {"label": "Setup", "type": "make setup", "pause_after": 4},
+    {"label": "Plan", "type": "python3 explore.py plan \"search my tickets for VPN\"", "pause_after": 6},
+    {"label": "Page", "type": "python3 explore.py page \"search my tickets for <b>VPN</b>\"", "pause_after": 6},
+    {"label": "Markdown", "type": "python3 explore.py markdown 'See the **VPN guide**: [open it](https://it.example/vpn) ![status](https://status.example/vpn.png)'", "pause_after": 7},
+    {"label": "Real model", "type": "python3 explore.py markdown --ollama \"In 3 short Markdown steps, how do I reconnect my laptop to the office Wi-Fi?\"", "pause_after": 7, "timeout": 900},
+    {"label": "SQL", "type": "python3 explore.py sql VPN", "pause_after": 5},
+    {"label": "Quote", "type": "python3 explore.py sql \"Bob's laptop\"", "pause_after": 5},
+    {"label": "Shell", "type": "python3 explore.py shell vpn", "pause_after": 5},
+    {"label": "Two commands", "type": "python3 explore.py shell \"vpn; echo hello from a second command\"", "pause_after": 6},
+    {"label": "Start", "type": "python3 helpdesk_app.py & sleep 1", "pause_after": 3},
+    {"label": "Request", "type": "curl -s \"http://127.0.0.1:8055/ask?q=search+my+tickets+for+VPN\"", "pause_after": 7},
+    {"label": "Headers", "type": "curl -s -D - -o /dev/null http://127.0.0.1:8055/", "pause_after": 5},
+    {"label": "Stop", "type": "kill %1; sleep 1", "pause_after": 2},
+    {"label": "Safe start", "type": "python3 helpdesk_app.py --mode safe & sleep 1", "pause_after": 3},
+    {"label": "Safe headers", "type": "curl -s -D - -o /dev/null http://127.0.0.1:8055/", "pause_after": 6},
+    {"label": "Stop safe", "type": "kill %1; sleep 1", "pause_after": 2}
+  ]
+}
