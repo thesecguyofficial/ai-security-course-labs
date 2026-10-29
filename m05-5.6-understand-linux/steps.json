@@ -1,0 +1,209 @@
+{
+  "scenario": "m05-5.6-understand-linux",
+  "start": 1.706,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.706,
+      "end": 12.062
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.062,
+      "end": 20.712
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 24.713,
+      "end": 28.267
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 33.267,
+      "end": 35.767
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 38.767,
+      "end": 40.933
+    },
+    {
+      "label": "Plan",
+      "speed": 1,
+      "start": 44.933,
+      "end": 52.201
+    },
+    {
+      "label": "Page",
+      "speed": 1,
+      "start": 58.201,
+      "end": 66.052
+    },
+    {
+      "label": "Markdown",
+      "speed": 1,
+      "start": 72.053,
+      "end": 87.86
+    },
+    {
+      "label": "Real model",
+      "speed": 1,
+      "start": 94.86,
+      "end": 115.554
+    },
+    {
+      "label": "SQL",
+      "speed": 1,
+      "start": 122.554,
+      "end": 126.751
+    },
+    {
+      "label": "Quote",
+      "speed": 1,
+      "start": 131.751,
+      "end": 137.069
+    },
+    {
+      "label": "Shell",
+      "speed": 1,
+      "start": 142.069,
+      "end": 146.451
+    },
+    {
+      "label": "Two commands",
+      "speed": 1,
+      "start": 151.452,
+      "end": 160.064
+    },
+    {
+      "label": "Start",
+      "speed": 1,
+      "start": 166.064,
+      "end": 171.813
+    },
+    {
+      "label": "Request",
+      "speed": 1,
+      "start": 174.813,
+      "end": 182.974
+    },
+    {
+      "label": "Headers",
+      "speed": 1,
+      "start": 189.974,
+      "end": 196.625
+    },
+    {
+      "label": "Stop",
+      "speed": 1,
+      "start": 201.626,
+      "end": 205.539
+    },
+    {
+      "label": "Safe start",
+      "speed": 1,
+      "start": 207.539,
+      "end": 214.897
+    },
+    {
+      "label": "Safe headers",
+      "speed": 1,
+      "start": 217.897,
+      "end": 224.308
+    },
+    {
+      "label": "Stop safe",
+      "speed": 1,
+      "start": 230.308,
+      "end": 234.231
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.306,
+      "what": "type"
+    },
+    {
+      "t": 15.662,
+      "what": "type"
+    },
+    {
+      "t": 25.313,
+      "what": "type"
+    },
+    {
+      "t": 33.867,
+      "what": "type"
+    },
+    {
+      "t": 39.367,
+      "what": "type"
+    },
+    {
+      "t": 45.533,
+      "what": "type"
+    },
+    {
+      "t": 58.801,
+      "what": "type"
+    },
+    {
+      "t": 72.653,
+      "what": "type"
+    },
+    {
+      "t": 95.46,
+      "what": "type"
+    },
+    {
+      "t": 123.154,
+      "what": "type"
+    },
+    {
+      "t": 132.352,
+      "what": "type"
+    },
+    {
+      "t": 142.669,
+      "what": "type"
+    },
+    {
+      "t": 152.052,
+      "what": "type"
+    },
+    {
+      "t": 166.664,
+      "what": "type"
+    },
+    {
+      "t": 175.413,
+      "what": "type"
+    },
+    {
+      "t": 190.574,
+      "what": "type"
+    },
+    {
+      "t": 202.226,
+      "what": "type"
+    },
+    {
+      "t": 208.139,
+      "what": "type"
+    },
+    {
+      "t": 218.497,
+      "what": "type"
+    },
+    {
+      "t": 230.908,
+      "what": "type"
+    }
+  ],
+  "end": 236.232
+}
