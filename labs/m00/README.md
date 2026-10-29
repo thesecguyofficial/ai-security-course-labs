@@ -131,7 +131,7 @@ python3 explore.py models
      family        gemma3
 ```
 
-About a billion learned numbers (parameters, also called weights), each stored in about 4 bits, in a 0.8 GB file.
+About a billion learned numbers (parameters, also called weights), each stored in about 4 to 5 bits (llama.cpp lists about 4.8 for Q4_K_M), in a 0.8 GB file.
 
 **3. How do the app's note and your question reach the model?**
 
