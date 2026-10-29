@@ -1,149 +1,159 @@
 {
   "scenario": "m00-0.3c-basics-linux",
-  "start": 1.828,
+  "start": 1.83,
   "steps": [
     {
       "label": "A project folder",
       "speed": 1,
-      "start": 1.828,
-      "end": 5.232
+      "start": 1.83,
+      "end": 5.235
     },
     {
       "label": "Virtual environment",
       "speed": 1,
-      "start": 6.233,
-      "end": 12.29
+      "start": 6.235,
+      "end": 12.868
     },
     {
       "label": "Virtual environment",
       "speed": 1,
-      "start": 13.29,
-      "end": 15.733
+      "start": 13.868,
+      "end": 16.311
+    },
+    {
+      "label": "A pinned version",
+      "speed": 1,
+      "start": 19.311,
+      "end": 25.186
     },
     {
       "label": "Install a package",
       "speed": 1,
-      "start": 18.733,
-      "end": 25.125
+      "start": 26.186,
+      "end": 33.214
     },
     {
       "label": "Package details",
       "speed": 1,
-      "start": 29.125,
-      "end": 33.565
+      "start": 37.214,
+      "end": 41.527
     },
     {
       "label": "Install the scanner",
       "speed": 3,
-      "start": 38.565,
-      "end": 46.556
+      "start": 46.527,
+      "end": 56.367
     },
     {
       "label": "Scan",
       "speed": 1,
-      "start": 48.556,
-      "end": 53.948
+      "start": 58.367,
+      "end": 74.539
     },
     {
-      "label": "Upgrade",
+      "label": "Fix",
       "speed": 1,
-      "start": 59.948,
-      "end": 66.808
+      "start": 80.539,
+      "end": 86.594
     },
     {
       "label": "Scan again",
       "speed": 1,
-      "start": 68.808,
-      "end": 74.042
+      "start": 87.594,
+      "end": 103.086
     },
     {
       "label": "Licence",
       "speed": 1,
-      "start": 80.042,
-      "end": 85.781
+      "start": 108.086,
+      "end": 113.752
     },
     {
       "label": "Fingerprint",
       "speed": 1,
-      "start": 89.781,
-      "end": 93.666
+      "start": 117.752,
+      "end": 121.462
     },
     {
       "label": "Fingerprint",
       "speed": 1,
-      "start": 95.666,
-      "end": 99.428
+      "start": 123.462,
+      "end": 127.413
     },
     {
       "label": "CI",
       "speed": 1,
-      "start": 103.428,
-      "end": 110.697
+      "start": 131.413,
+      "end": 138.833
     },
     {
       "label": "Encryption in transit",
       "speed": 1,
-      "start": 116.697,
-      "end": 128.182
+      "start": 144.834,
+      "end": 156.438
     }
   ],
   "keys": [
     {
-      "t": 2.429,
+      "t": 2.43,
       "what": "type"
     },
     {
-      "t": 6.833,
+      "t": 6.835,
       "what": "type"
     },
     {
-      "t": 13.89,
+      "t": 14.468,
       "what": "type"
     },
     {
-      "t": 19.333,
+      "t": 19.911,
       "what": "type"
     },
     {
-      "t": 29.725,
+      "t": 26.786,
       "what": "type"
     },
     {
-      "t": 39.165,
+      "t": 37.814,
       "what": "type"
     },
     {
-      "t": 49.156,
+      "t": 47.127,
       "what": "type"
     },
     {
-      "t": 60.548,
+      "t": 58.968,
       "what": "type"
     },
     {
-      "t": 69.408,
+      "t": 81.139,
       "what": "type"
     },
     {
-      "t": 80.642,
+      "t": 88.194,
       "what": "type"
     },
     {
-      "t": 90.381,
+      "t": 108.686,
       "what": "type"
     },
     {
-      "t": 96.267,
+      "t": 118.352,
       "what": "type"
     },
     {
-      "t": 104.028,
+      "t": 124.062,
       "what": "type"
     },
     {
-      "t": 117.298,
+      "t": 132.013,
+      "what": "type"
+    },
+    {
+      "t": 145.434,
       "what": "type"
     }
   ],
-  "end": 133.182
+  "end": 161.439
 }

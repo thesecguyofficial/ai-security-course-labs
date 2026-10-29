@@ -5,35 +5,37 @@ thesecguy@lab:~/shop$ python3 -m venv .venv
 thesecguy@lab:~/shop$ ls .venv/bin
 
 Activate.ps1  activate  activate.csh  activate.fish  pip  pip3  pip3.12  python  python3  python3.12
-thesecguy@lab:~/shop$ .venv/bin/pip install requests==2.31.0
+thesecguy@lab:~/shop$ echo "requests==2.31.0" > requirements.txt
 
-Collecting requests==2.31.0
+thesecguy@lab:~/shop$ .venv/bin/pip install -r requirements.txt
+
+Collecting requests==2.31.0 (from -r requirements.txt (line 1))
   Downloading requests-2.31.0-py3-none-any.whl.metadata (4.6 kB)
-Collecting charset-normalizer<4,>=2 (from requests==2.31.0)
+Collecting charset-normalizer<4,>=2 (from requests==2.31.0->-r requirements.txt (line 1))
   Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/46.4 kB ? eta -:--:--
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 46.4/46.4 kB 5.8 MB/s eta 0:00:00
-Collecting idna<4,>=2.5 (from requests==2.31.0)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 46.4/46.4 kB 2.1 MB/s eta 0:00:00
+Collecting idna<4,>=2.5 (from requests==2.31.0->-r requirements.txt (line 1))
   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
-Collecting urllib3<3,>=1.21.1 (from requests==2.31.0)
+Collecting urllib3<3,>=1.21.1 (from requests==2.31.0->-r requirements.txt (line 1))
   Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
-Collecting certifi>=2017.4.17 (from requests==2.31.0)
+Collecting certifi>=2017.4.17 (from requests==2.31.0->-r requirements.txt (line 1))
   Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
 Downloading requests-2.31.0-py3-none-any.whl (62 kB)
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/62.6 kB ? eta -:--:--
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.6/62.6 kB 22.8 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.6/62.6 kB 9.4 MB/s eta 0:00:00
 Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/135.1 kB ? eta -:--:--
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.1/135.1 kB 46.6 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.1/135.1 kB 7.2 MB/s eta 0:00:00
 Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (257 kB)
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/257.6 kB ? eta -:--:--
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 257.6/257.6 kB 80.1 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 257.6/257.6 kB 32.3 MB/s eta 0:00:00
 Downloading idna-3.20-py3-none-any.whl (69 kB)
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/69.6 kB ? eta -:--:--
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 69.6/69.6 kB 13.1 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 69.6/69.6 kB 26.1 MB/s eta 0:00:00
 Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/135.7 kB ? eta -:--:--
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.7/135.7 kB 46.5 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.7/135.7 kB 52.0 MB/s eta 0:00:00
 Installing collected packages: urllib3, idna, charset-normalizer, certifi, requests
 Successfully installed certifi-2026.10.23 charset-normalizer-3.5.2 idna-3.20 requests-2.31.0 urllib3-2.8.0
 thesecguy@lab:~/shop$ .venv/bin/pip show requests
@@ -50,164 +52,16 @@ Requires: certifi, charset-normalizer, idna, urllib3
 Required-by: 
 thesecguy@lab:~/shop$ .venv/bin/pip install -q pip-audit
 
-thesecguy@lab:~/shop$ .venv/bin/pip-audit --aliases
+thesecguy@lab:~/shop$ .venv/bin/pip-audit -r requirements.txt --aliases --progress-spinner off
 
-- Collecting inputs
-- Collecting inputs
-- Collecting inputs
-- Collecting inputs
-\ Collecting inputs
-\ Collecting inputs
-\ Collecting inputs
-\ Collecting inputs
-| Collecting inputs
-| Collecting boolean.py (5.0)
-| Collecting boolean.py (5.0)
-| Auditing boolean.py (5.0)
-| Collecting CacheControl (0.14.4)
-| Collecting CacheControl (0.14.4)
-| Auditing CacheControl (0.14.4)
-| Collecting certifi (2026.10.23)
-| Auditing certifi (2026.10.23)
-| Collecting charset-normalizer (3.5.2)
-| Auditing charset-normalizer (3.5.2)
-| Collecting cyclonedx-python-lib (11.12.0)
-| Auditing cyclonedx-python-lib (11.12.0)
-| Collecting defusedxml (0.7.1)
-| Auditing defusedxml (0.7.1)
-| Collecting filelock (4.2.4)
-| Auditing filelock (4.2.4)
-| Collecting idna (3.20)
-| Collecting idna (3.20)
-| Auditing idna (3.20)
-| Collecting license-expression (30.4.4)
-| Auditing license-expression (30.4.4)
-| Collecting markdown-it-py (4.2.0)
-| Auditing markdown-it-py (4.2.0)
-| Collecting mdurl (0.1.2)
-/ Auditing mdurl (0.1.2)
-/ Collecting msgpack (1.2.4)
-/ Auditing msgpack (1.2.4)
-/ Collecting packageurl-python (0.17.6)
-/ Auditing packageurl-python (0.17.6)
-/ Collecting packaging (26.3)
-/ Collecting packaging (26.3)
-/ Auditing packaging (26.3)
-/ Collecting pip (24.0)
-/ Auditing pip (24.0)
-/ Collecting pip_api (0.0.35)
-/ Auditing pip_api (0.0.35)
-/ Collecting pip_audit (2.10.1)
-/ Auditing pip_audit (2.10.1)
-/ Collecting pip-requirements-parser (32.0.1)
-/ Auditing pip-requirements-parser (32.0.1)
-/ Collecting platformdirs (4.14.0)
-/ Auditing platformdirs (4.14.0)
-/ Collecting py-serializable (2.1.0)
-/ Auditing py-serializable (2.1.0)
-/ Collecting Pygments (2.21.0)
-/ Collecting Pygments (2.21.0)
-/ Auditing Pygments (2.21.0)
-/ Collecting pyparsing (3.3.3)
-/ Auditing pyparsing (3.3.3)
-/ Collecting requests (2.31.0)
-/ Auditing requests (2.31.0)
-/ Collecting rich (15.0.0)
-/ Auditing rich (15.0.0)
-/ Collecting sortedcontainers (2.4.0)
-/ Auditing sortedcontainers (2.4.0)
-/ Collecting tomli (2.5.0)
-/ Auditing tomli (2.5.0)
-/ Collecting tomli_w (1.2.0)
-/ Collecting tomli_w (1.2.0)
-/ Auditing tomli_w (1.2.0)
-/ Collecting typing_extensions (4.16.0)
-/ Auditing typing_extensions (4.16.0)
-/ Collecting urllib3 (2.8.0)
-/ Auditing urllib3 (2.8.0)
-/ Auditing urllib3 (2.8.0)
-
-Found 18 known vulnerabilities in 2 packages
+Found 6 known vulnerabilities in 1 package
 Name     Version ID              Fix Versions Aliases
 -------- ------- --------------- ------------ -----------------------------------
-thesecguy@lab:~/shop$ .venv/bin/pip install -q --upgrade requests
+thesecguy@lab:~/shop$ echo "requests==2.34.2" > requirements.txt
 
-thesecguy@lab:~/shop$ .venv/bin/pip-audit --aliases
+thesecguy@lab:~/shop$ .venv/bin/pip-audit -r requirements.txt --aliases --progress-spinner off
 
-- Collecting inputs
-- Collecting inputs
-- Collecting inputs
-- Collecting inputs
-\ Collecting inputs
-\ Collecting inputs
-\ Collecting inputs
-\ Collecting inputs
-| Collecting inputs
-| Collecting boolean.py (5.0)
-| Auditing boolean.py (5.0)
-| Collecting CacheControl (0.14.4)
-| Auditing CacheControl (0.14.4)
-| Collecting certifi (2026.10.23)
-| Auditing certifi (2026.10.23)
-| Collecting charset-normalizer (3.5.2)
-| Collecting charset-normalizer (3.5.2)
-| Auditing charset-normalizer (3.5.2)
-| Collecting cyclonedx-python-lib (11.12.0)
-| Auditing cyclonedx-python-lib (11.12.0)
-| Collecting defusedxml (0.7.1)
-| Auditing defusedxml (0.7.1)
-| Collecting filelock (4.2.4)
-| Auditing filelock (4.2.4)
-| Collecting idna (3.20)
-| Auditing idna (3.20)
-| Collecting license-expression (30.4.4)
-| Auditing license-expression (30.4.4)
-| Collecting markdown-it-py (4.2.0)
-| Auditing markdown-it-py (4.2.0)
-| Collecting mdurl (0.1.2)
-| Auditing mdurl (0.1.2)
-| Collecting msgpack (1.2.4)
-| Auditing msgpack (1.2.4)
-| Collecting packageurl-python (0.17.6)
-| Auditing packageurl-python (0.17.6)
-| Collecting packaging (26.3)
-| Auditing packaging (26.3)
-| Collecting pip (24.0)
-| Auditing pip (24.0)
-| Collecting pip_api (0.0.35)
-| Auditing pip_api (0.0.35)
-| Collecting pip_audit (2.10.1)
-| Auditing pip_audit (2.10.1)
-| Collecting pip-requirements-parser (32.0.1)
-| Auditing pip-requirements-parser (32.0.1)
-| Collecting platformdirs (4.14.0)
-| Auditing platformdirs (4.14.0)
-| Collecting py-serializable (2.1.0)
-| Auditing py-serializable (2.1.0)
-| Collecting Pygments (2.21.0)
-| Auditing Pygments (2.21.0)
-| Collecting pyparsing (3.3.3)
-| Auditing pyparsing (3.3.3)
-| Collecting requests (2.34.2)
-| Collecting requests (2.34.2)
-| Auditing requests (2.34.2)
-| Collecting rich (15.0.0)
-| Auditing rich (15.0.0)
-| Collecting sortedcontainers (2.4.0)
-| Auditing sortedcontainers (2.4.0)
-| Collecting tomli (2.5.0)
-| Auditing tomli (2.5.0)
-| Collecting tomli_w (1.2.0)
-| Auditing tomli_w (1.2.0)
-| Collecting typing_extensions (4.16.0)
-| Auditing typing_extensions (4.16.0)
-| Collecting urllib3 (2.8.0)
-| Auditing urllib3 (2.8.0)
-| Auditing urllib3 (2.8.0)
-
-Found 12 known vulnerabilities in 1 package
-Name Version ID              Fix Versions Aliases
----- ------- --------------- ------------ -----------------------------------
+No known vulnerabilities found
 thesecguy@lab:~/shop$ head -5 ~/ai-security-course-labs/LICENSE
 
 MIT License
