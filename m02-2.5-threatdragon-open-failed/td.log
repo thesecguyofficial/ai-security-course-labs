@@ -1,0 +1,12 @@
+Unable to find .env file, falling back to environment variables
+Express server listening at :: on port 3000
+ValidationError: The Express 'trust proxy' setting is true, which allows anyone to trivially bypass IP-based rate limiting. See https://express-rate-limit.github.io/ERR_ERL_PERMISSIVE_TRUST_PROXY/ for more information.
+    at Object.trustProxy (/app/td.server/node_modules/express-rate-limit/dist/index.cjs:363:13)
+    at wrappedValidations.<computed> [as trustProxy] (/app/td.server/node_modules/express-rate-limit/dist/index.cjs:704:22)
+    at Object.keyGenerator (/app/td.server/node_modules/express-rate-limit/dist/index.cjs:810:20)
+    at /app/td.server/node_modules/express-rate-limit/dist/index.cjs:893:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async /app/td.server/node_modules/express-rate-limit/dist/index.cjs:854:5 {
+  code: 'ERR_ERL_PERMISSIVE_TRUST_PROXY',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_PERMISSIVE_TRUST_PROXY/'
+}

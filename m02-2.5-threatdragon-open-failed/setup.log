@@ -1,0 +1,100 @@
++ docker pull owasp/threat-dragon:v2.6.2
+v2.6.2: Pulling from owasp/threat-dragon
+6a0ac1617861: Pulling fs layer
+d7319775d025: Pulling fs layer
+3eebacc30b80: Pulling fs layer
+1ba15d4bb83a: Pulling fs layer
+0f4419ecc41a: Pulling fs layer
+62ef8cac8486: Pulling fs layer
+78d9931b88df: Pulling fs layer
+c94b4d65d453: Pulling fs layer
+9b918b1fc7f6: Pulling fs layer
+3e0c6a66fd90: Pulling fs layer
+d9a230cf3add: Pulling fs layer
+4dedd677d371: Pulling fs layer
+f2850b735820: Pulling fs layer
+cf70538d9fd8: Pulling fs layer
+c7f6741836e3: Pulling fs layer
+3e0c6a66fd90: Waiting
+1ba15d4bb83a: Waiting
+d9a230cf3add: Waiting
+0f4419ecc41a: Waiting
+4dedd677d371: Waiting
+62ef8cac8486: Waiting
+f2850b735820: Waiting
+78d9931b88df: Waiting
+cf70538d9fd8: Waiting
+c94b4d65d453: Waiting
+c7f6741836e3: Waiting
+9b918b1fc7f6: Waiting
+6a0ac1617861: Verifying Checksum
+6a0ac1617861: Download complete
+3eebacc30b80: Download complete
+6a0ac1617861: Pull complete
+d7319775d025: Verifying Checksum
+d7319775d025: Download complete
+1ba15d4bb83a: Verifying Checksum
+1ba15d4bb83a: Download complete
+0f4419ecc41a: Verifying Checksum
+0f4419ecc41a: Download complete
+62ef8cac8486: Download complete
+78d9931b88df: Verifying Checksum
+78d9931b88df: Download complete
+c94b4d65d453: Verifying Checksum
+c94b4d65d453: Download complete
+9b918b1fc7f6: Download complete
+3e0c6a66fd90: Download complete
+d9a230cf3add: Verifying Checksum
+d9a230cf3add: Download complete
+f2850b735820: Verifying Checksum
+f2850b735820: Download complete
+cf70538d9fd8: Verifying Checksum
+cf70538d9fd8: Download complete
+c7f6741836e3: Download complete
+4dedd677d371: Verifying Checksum
+4dedd677d371: Download complete
+d7319775d025: Pull complete
+3eebacc30b80: Pull complete
+1ba15d4bb83a: Pull complete
+0f4419ecc41a: Pull complete
+62ef8cac8486: Pull complete
+78d9931b88df: Pull complete
+c94b4d65d453: Pull complete
+9b918b1fc7f6: Pull complete
+3e0c6a66fd90: Pull complete
+d9a230cf3add: Pull complete
+4dedd677d371: Pull complete
+f2850b735820: Pull complete
+cf70538d9fd8: Pull complete
+c7f6741836e3: Pull complete
+Digest: sha256:ec26312b472ad364d5b79283d795f946b9aff9639b798e9f76bfdd243810af17
+Status: Downloaded newer image for owasp/threat-dragon:v2.6.2
+docker.io/owasp/threat-dragon:v2.6.2
++ docker image inspect owasp/threat-dragon:v2.6.2 --format 'image {{.Id}}'
+image sha256:622ecb7552d34f100e99197fbb4b4b30e213d10b2706522b2325d7a85af10181
+++ openssl rand -hex 16
+++ openssl rand -hex 24
+++ openssl rand -hex 24
++ docker run -d --name td -p 127.0.0.1:3000:3000 -e 'ENCRYPTION_KEYS=[{"isPrimary": true, "id": 0, "value": "16d340a2e80c3a24714fe6261d186429"}]' -e ENCRYPTION_JWT_SIGNING_KEY=1e648b08c6d691452fc73b6c69bb4406062add61808a7cd0 -e ENCRYPTION_JWT_REFRESH_SIGNING_KEY=2e4a34d86b478c2795ebf4fd27405b4a1bc9b435ca0b13d5 -e NODE_ENV=production -e SERVER_API_PROTOCOL=http owasp/threat-dragon:v2.6.2
+d801bc0e1d6fb60b1d004a226bffef37678d48bcb35414d546a5b0bb89120741
+++ seq 1 60
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:3000/
+curl: (56) Recv failure: Connection reset by peer
++ sleep 2
++ for i in $(seq 1 60)
++ curl -fsS -o /dev/null http://127.0.0.1:3000/
++ break
++ curl -fsS http://127.0.0.1:3000/api/config
+{"status":200,"data":{"bitbucketEnabled":false,"githubEnabled":false,"gitlabEnabled":false,"googleEnabled":false,"localEnabled":true}}+ python3 -m pip install --user --break-system-packages -q playwright==1.48.0
++ python3 -m playwright install --with-deps chromium
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
