@@ -1,0 +1,574 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 3784, done.
+remote: Counting objects:   0% (1/130)
+remote: Counting objects:   1% (2/130)
+remote: Counting objects:   2% (3/130)
+remote: Counting objects:   3% (4/130)
+remote: Counting objects:   4% (6/130)
+remote: Counting objects:   5% (7/130)
+remote: Counting objects:   6% (8/130)
+remote: Counting objects:   7% (10/130)
+remote: Counting objects:   8% (11/130)
+remote: Counting objects:   9% (12/130)
+remote: Counting objects:  10% (13/130)
+remote: Counting objects:  11% (15/130)
+remote: Counting objects:  12% (16/130)
+remote: Counting objects:  13% (17/130)
+remote: Counting objects:  14% (19/130)
+remote: Counting objects:  15% (20/130)
+remote: Counting objects:  16% (21/130)
+remote: Counting objects:  17% (23/130)
+remote: Counting objects:  18% (24/130)
+remote: Counting objects:  19% (25/130)
+remote: Counting objects:  20% (26/130)
+remote: Counting objects:  21% (28/130)
+remote: Counting objects:  22% (29/130)
+remote: Counting objects:  23% (30/130)
+remote: Counting objects:  24% (32/130)
+remote: Counting objects:  25% (33/130)
+remote: Counting objects:  26% (34/130)
+remote: Counting objects:  27% (36/130)
+remote: Counting objects:  28% (37/130)
+remote: Counting objects:  29% (38/130)
+remote: Counting objects:  30% (39/130)
+remote: Counting objects:  31% (41/130)
+remote: Counting objects:  32% (42/130)
+remote: Counting objects:  33% (43/130)
+remote: Counting objects:  34% (45/130)
+remote: Counting objects:  35% (46/130)
+remote: Counting objects:  36% (47/130)
+remote: Counting objects:  37% (49/130)
+remote: Counting objects:  38% (50/130)
+remote: Counting objects:  39% (51/130)
+remote: Counting objects:  40% (52/130)
+remote: Counting objects:  41% (54/130)
+remote: Counting objects:  42% (55/130)
+remote: Counting objects:  43% (56/130)
+remote: Counting objects:  44% (58/130)
+remote: Counting objects:  45% (59/130)
+remote: Counting objects:  46% (60/130)
+remote: Counting objects:  47% (62/130)
+remote: Counting objects:  48% (63/130)
+remote: Counting objects:  49% (64/130)
+remote: Counting objects:  50% (65/130)
+remote: Counting objects:  51% (67/130)
+remote: Counting objects:  52% (68/130)
+remote: Counting objects:  53% (69/130)
+remote: Counting objects:  54% (71/130)
+remote: Counting objects:  55% (72/130)
+remote: Counting objects:  56% (73/130)
+remote: Counting objects:  57% (75/130)
+remote: Counting objects:  58% (76/130)
+remote: Counting objects:  59% (77/130)
+remote: Counting objects:  60% (78/130)
+remote: Counting objects:  61% (80/130)
+remote: Counting objects:  62% (81/130)
+remote: Counting objects:  63% (82/130)
+remote: Counting objects:  64% (84/130)
+remote: Counting objects:  65% (85/130)
+remote: Counting objects:  66% (86/130)
+remote: Counting objects:  67% (88/130)
+remote: Counting objects:  68% (89/130)
+remote: Counting objects:  69% (90/130)
+remote: Counting objects:  70% (91/130)
+remote: Counting objects:  71% (93/130)
+remote: Counting objects:  72% (94/130)
+remote: Counting objects:  73% (95/130)
+remote: Counting objects:  74% (97/130)
+remote: Counting objects:  75% (98/130)
+remote: Counting objects:  76% (99/130)
+remote: Counting objects:  77% (101/130)
+remote: Counting objects:  78% (102/130)
+remote: Counting objects:  79% (103/130)
+remote: Counting objects:  80% (104/130)
+remote: Counting objects:  81% (106/130)
+remote: Counting objects:  82% (107/130)
+remote: Counting objects:  83% (108/130)
+remote: Counting objects:  84% (110/130)
+remote: Counting objects:  85% (111/130)
+remote: Counting objects:  86% (112/130)
+remote: Counting objects:  87% (114/130)
+remote: Counting objects:  88% (115/130)
+remote: Counting objects:  89% (116/130)
+remote: Counting objects:  90% (117/130)
+remote: Counting objects:  91% (119/130)
+remote: Counting objects:  92% (120/130)
+remote: Counting objects:  93% (121/130)
+remote: Counting objects:  94% (123/130)
+remote: Counting objects:  95% (124/130)
+remote: Counting objects:  96% (125/130)
+remote: Counting objects:  97% (127/130)
+remote: Counting objects:  98% (128/130)
+remote: Counting objects:  99% (129/130)
+remote: Counting objects: 100% (130/130)
+remote: Counting objects: 100% (130/130), done.
+remote: Compressing objects:   0% (1/110)
+remote: Compressing objects:   1% (2/110)
+remote: Compressing objects:   2% (3/110)
+remote: Compressing objects:   3% (4/110)
+remote: Compressing objects:   4% (5/110)
+remote: Compressing objects:   5% (6/110)
+remote: Compressing objects:   6% (7/110)
+remote: Compressing objects:   7% (8/110)
+remote: Compressing objects:   8% (9/110)
+remote: Compressing objects:   9% (10/110)
+remote: Compressing objects:  10% (11/110)
+remote: Compressing objects:  11% (13/110)
+remote: Compressing objects:  12% (14/110)
+remote: Compressing objects:  13% (15/110)
+remote: Compressing objects:  14% (16/110)
+remote: Compressing objects:  15% (17/110)
+remote: Compressing objects:  16% (18/110)
+remote: Compressing objects:  17% (19/110)
+remote: Compressing objects:  18% (20/110)
+remote: Compressing objects:  19% (21/110)
+remote: Compressing objects:  20% (22/110)
+remote: Compressing objects:  21% (24/110)
+remote: Compressing objects:  22% (25/110)
+remote: Compressing objects:  23% (26/110)
+remote: Compressing objects:  24% (27/110)
+remote: Compressing objects:  25% (28/110)
+remote: Compressing objects:  26% (29/110)
+remote: Compressing objects:  27% (30/110)
+remote: Compressing objects:  28% (31/110)
+remote: Compressing objects:  29% (32/110)
+remote: Compressing objects:  30% (33/110)
+remote: Compressing objects:  31% (35/110)
+remote: Compressing objects:  32% (36/110)
+remote: Compressing objects:  33% (37/110)
+remote: Compressing objects:  34% (38/110)
+remote: Compressing objects:  35% (39/110)
+remote: Compressing objects:  36% (40/110)
+remote: Compressing objects:  37% (41/110)
+remote: Compressing objects:  38% (42/110)
+remote: Compressing objects:  39% (43/110)
+remote: Compressing objects:  40% (44/110)
+remote: Compressing objects:  41% (46/110)
+remote: Compressing objects:  42% (47/110)
+remote: Compressing objects:  43% (48/110)
+remote: Compressing objects:  44% (49/110)
+remote: Compressing objects:  45% (50/110)
+remote: Compressing objects:  46% (51/110)
+remote: Compressing objects:  47% (52/110)
+remote: Compressing objects:  48% (53/110)
+remote: Compressing objects:  49% (54/110)
+remote: Compressing objects:  50% (55/110)
+remote: Compressing objects:  51% (57/110)
+remote: Compressing objects:  52% (58/110)
+remote: Compressing objects:  53% (59/110)
+remote: Compressing objects:  54% (60/110)
+remote: Compressing objects:  55% (61/110)
+remote: Compressing objects:  56% (62/110)
+remote: Compressing objects:  57% (63/110)
+remote: Compressing objects:  58% (64/110)
+remote: Compressing objects:  59% (65/110)
+remote: Compressing objects:  60% (66/110)
+remote: Compressing objects:  61% (68/110)
+remote: Compressing objects:  62% (69/110)
+remote: Compressing objects:  63% (70/110)
+remote: Compressing objects:  64% (71/110)
+remote: Compressing objects:  65% (72/110)
+remote: Compressing objects:  66% (73/110)
+remote: Compressing objects:  67% (74/110)
+remote: Compressing objects:  68% (75/110)
+remote: Compressing objects:  69% (76/110)
+remote: Compressing objects:  70% (77/110)
+remote: Compressing objects:  71% (79/110)
+remote: Compressing objects:  72% (80/110)
+remote: Compressing objects:  73% (81/110)
+remote: Compressing objects:  74% (82/110)
+remote: Compressing objects:  75% (83/110)
+remote: Compressing objects:  76% (84/110)
+remote: Compressing objects:  77% (85/110)
+remote: Compressing objects:  78% (86/110)
+remote: Compressing objects:  79% (87/110)
+remote: Compressing objects:  80% (88/110)
+remote: Compressing objects:  81% (90/110)
+remote: Compressing objects:  82% (91/110)
+remote: Compressing objects:  83% (92/110)
+remote: Compressing objects:  84% (93/110)
+remote: Compressing objects:  85% (94/110)
+remote: Compressing objects:  86% (95/110)
+remote: Compressing objects:  87% (96/110)
+remote: Compressing objects:  88% (97/110)
+remote: Compressing objects:  89% (98/110)
+remote: Compressing objects:  90% (99/110)
+remote: Compressing objects:  91% (101/110)
+remote: Compressing objects:  92% (102/110)
+remote: Compressing objects:  93% (103/110)
+remote: Compressing objects:  94% (104/110)
+remote: Compressing objects:  95% (105/110)
+remote: Compressing objects:  96% (106/110)
+remote: Compressing objects:  97% (107/110)
+remote: Compressing objects:  98% (108/110)
+remote: Compressing objects:  99% (109/110)
+remote: Compressing objects: 100% (110/110)
+remote: Compressing objects: 100% (110/110), done.
+Receiving objects:   0% (1/3784)
+Receiving objects:   1% (38/3784)
+Receiving objects:   2% (76/3784)
+Receiving objects:   3% (114/3784)
+Receiving objects:   4% (152/3784)
+Receiving objects:   5% (190/3784)
+Receiving objects:   6% (228/3784)
+Receiving objects:   7% (265/3784)
+Receiving objects:   8% (303/3784)
+Receiving objects:   9% (341/3784)
+Receiving objects:  10% (379/3784)
+Receiving objects:  11% (417/3784)
+Receiving objects:  12% (455/3784)
+Receiving objects:  13% (492/3784)
+Receiving objects:  14% (530/3784)
+Receiving objects:  15% (568/3784)
+Receiving objects:  16% (606/3784)
+Receiving objects:  17% (644/3784)
+Receiving objects:  18% (682/3784)
+Receiving objects:  19% (719/3784)
+Receiving objects:  20% (757/3784)
+Receiving objects:  21% (795/3784)
+Receiving objects:  22% (833/3784)
+Receiving objects:  23% (871/3784)
+Receiving objects:  24% (909/3784)
+Receiving objects:  25% (946/3784)
+Receiving objects:  26% (984/3784)
+Receiving objects:  27% (1022/3784)
+Receiving objects:  28% (1060/3784)
+Receiving objects:  29% (1098/3784)
+Receiving objects:  30% (1136/3784)
+Receiving objects:  31% (1174/3784)
+Receiving objects:  32% (1211/3784)
+Receiving objects:  33% (1249/3784)
+Receiving objects:  34% (1287/3784)
+Receiving objects:  35% (1325/3784)
+Receiving objects:  36% (1363/3784)
+Receiving objects:  37% (1401/3784)
+Receiving objects:  38% (1438/3784)
+Receiving objects:  39% (1476/3784)
+Receiving objects:  40% (1514/3784)
+Receiving objects:  41% (1552/3784)
+Receiving objects:  42% (1590/3784)
+Receiving objects:  43% (1628/3784)
+Receiving objects:  44% (1665/3784)
+Receiving objects:  45% (1703/3784)
+Receiving objects:  46% (1741/3784)
+Receiving objects:  47% (1779/3784)
+Receiving objects:  48% (1817/3784)
+Receiving objects:  49% (1855/3784)
+Receiving objects:  50% (1892/3784)
+Receiving objects:  51% (1930/3784)
+Receiving objects:  52% (1968/3784)
+Receiving objects:  53% (2006/3784)
+Receiving objects:  54% (2044/3784)
+Receiving objects:  55% (2082/3784)
+Receiving objects:  56% (2120/3784)
+Receiving objects:  57% (2157/3784)
+Receiving objects:  58% (2195/3784)
+Receiving objects:  59% (2233/3784)
+Receiving objects:  60% (2271/3784)
+Receiving objects:  61% (2309/3784)
+Receiving objects:  62% (2347/3784)
+Receiving objects:  63% (2384/3784)
+Receiving objects:  64% (2422/3784)
+Receiving objects:  65% (2460/3784)
+Receiving objects:  66% (2498/3784)
+Receiving objects:  67% (2536/3784)
+Receiving objects:  68% (2574/3784)
+Receiving objects:  69% (2611/3784)
+Receiving objects:  70% (2649/3784)
+Receiving objects:  71% (2687/3784)
+Receiving objects:  72% (2725/3784)
+Receiving objects:  73% (2763/3784)
+Receiving objects:  74% (2801/3784)
+Receiving objects:  75% (2838/3784)
+Receiving objects:  76% (2876/3784)
+Receiving objects:  77% (2914/3784)
+Receiving objects:  78% (2952/3784)
+Receiving objects:  79% (2990/3784)
+Receiving objects:  80% (3028/3784)
+Receiving objects:  81% (3066/3784)
+Receiving objects:  82% (3103/3784)
+Receiving objects:  83% (3141/3784)
+Receiving objects:  84% (3179/3784)
+Receiving objects:  85% (3217/3784)
+Receiving objects:  86% (3255/3784)
+Receiving objects:  87% (3293/3784)
+Receiving objects:  88% (3330/3784)
+Receiving objects:  89% (3368/3784)
+Receiving objects:  90% (3406/3784)
+Receiving objects:  91% (3444/3784)
+Receiving objects:  92% (3482/3784)
+Receiving objects:  93% (3520/3784), 35.13 MiB | 70.08 MiB/s
+Receiving objects:  94% (3557/3784), 35.13 MiB | 70.08 MiB/s
+Receiving objects:  95% (3595/3784), 35.13 MiB | 70.08 MiB/s
+Receiving objects:  96% (3633/3784), 35.13 MiB | 70.08 MiB/s
+Receiving objects:  97% (3671/3784), 35.13 MiB | 70.08 MiB/s
+Receiving objects:  98% (3709/3784), 35.13 MiB | 70.08 MiB/s
+remote: Total 3784 (delta 53), reused 78 (delta 18), pack-reused 3654 (from 3)
+Receiving objects:  99% (3747/3784), 35.13 MiB | 70.08 MiB/s
+Receiving objects: 100% (3784/3784), 35.13 MiB | 70.08 MiB/s
+Receiving objects: 100% (3784/3784), 45.79 MiB | 72.80 MiB/s, done.
+Resolving deltas:   0% (0/1500)
+Resolving deltas:   1% (15/1500)
+Resolving deltas:   2% (30/1500)
+Resolving deltas:   3% (46/1500)
+Resolving deltas:   4% (60/1500)
+Resolving deltas:   5% (75/1500)
+Resolving deltas:   6% (90/1500)
+Resolving deltas:   7% (105/1500)
+Resolving deltas:   8% (120/1500)
+Resolving deltas:   9% (135/1500)
+Resolving deltas:  10% (150/1500)
+Resolving deltas:  11% (165/1500)
+Resolving deltas:  12% (180/1500)
+Resolving deltas:  13% (195/1500)
+Resolving deltas:  14% (210/1500)
+Resolving deltas:  15% (225/1500)
+Resolving deltas:  16% (240/1500)
+Resolving deltas:  17% (255/1500)
+Resolving deltas:  18% (270/1500)
+Resolving deltas:  19% (285/1500)
+Resolving deltas:  20% (300/1500)
+Resolving deltas:  21% (315/1500)
+Resolving deltas:  22% (330/1500)
+Resolving deltas:  23% (345/1500)
+Resolving deltas:  24% (360/1500)
+Resolving deltas:  25% (375/1500)
+Resolving deltas:  26% (390/1500)
+Resolving deltas:  27% (405/1500)
+Resolving deltas:  28% (420/1500)
+Resolving deltas:  29% (435/1500)
+Resolving deltas:  30% (450/1500)
+Resolving deltas:  31% (465/1500)
+Resolving deltas:  32% (480/1500)
+Resolving deltas:  33% (495/1500)
+Resolving deltas:  34% (510/1500)
+Resolving deltas:  35% (525/1500)
+Resolving deltas:  36% (540/1500)
+Resolving deltas:  37% (555/1500)
+Resolving deltas:  38% (570/1500)
+Resolving deltas:  39% (585/1500)
+Resolving deltas:  40% (600/1500)
+Resolving deltas:  41% (615/1500)
+Resolving deltas:  42% (630/1500)
+Resolving deltas:  43% (645/1500)
+Resolving deltas:  44% (660/1500)
+Resolving deltas:  45% (675/1500)
+Resolving deltas:  46% (690/1500)
+Resolving deltas:  47% (705/1500)
+Resolving deltas:  48% (720/1500)
+Resolving deltas:  49% (735/1500)
+Resolving deltas:  50% (750/1500)
+Resolving deltas:  51% (765/1500)
+Resolving deltas:  52% (780/1500)
+Resolving deltas:  53% (795/1500)
+Resolving deltas:  54% (810/1500)
+Resolving deltas:  55% (825/1500)
+Resolving deltas:  56% (840/1500)
+Resolving deltas:  57% (855/1500)
+Resolving deltas:  58% (870/1500)
+Resolving deltas:  59% (885/1500)
+Resolving deltas:  60% (900/1500)
+Resolving deltas:  61% (915/1500)
+Resolving deltas:  62% (930/1500)
+Resolving deltas:  63% (945/1500)
+Resolving deltas:  64% (961/1500)
+Resolving deltas:  65% (975/1500)
+Resolving deltas:  66% (990/1500)
+Resolving deltas:  67% (1005/1500)
+Resolving deltas:  68% (1020/1500)
+Resolving deltas:  69% (1035/1500)
+Resolving deltas:  70% (1050/1500)
+Resolving deltas:  71% (1065/1500)
+Resolving deltas:  72% (1080/1500)
+Resolving deltas:  73% (1095/1500)
+Resolving deltas:  74% (1110/1500)
+Resolving deltas:  75% (1125/1500)
+Resolving deltas:  76% (1140/1500)
+Resolving deltas:  77% (1155/1500)
+Resolving deltas:  78% (1170/1500)
+Resolving deltas:  79% (1185/1500)
+Resolving deltas:  80% (1200/1500)
+Resolving deltas:  81% (1215/1500)
+Resolving deltas:  82% (1230/1500)
+Resolving deltas:  83% (1245/1500)
+Resolving deltas:  84% (1260/1500)
+Resolving deltas:  85% (1275/1500)
+Resolving deltas:  86% (1290/1500)
+Resolving deltas:  87% (1305/1500)
+Resolving deltas:  88% (1320/1500)
+Resolving deltas:  89% (1335/1500)
+Resolving deltas:  90% (1350/1500)
+Resolving deltas:  91% (1365/1500)
+Resolving deltas:  92% (1380/1500)
+Resolving deltas:  93% (1395/1500)
+Resolving deltas:  94% (1410/1500)
+Resolving deltas:  95% (1425/1500)
+Resolving deltas:  96% (1440/1500)
+Resolving deltas:  97% (1455/1500)
+Resolving deltas:  98% (1470/1500)
+Resolving deltas:  99% (1485/1500)
+Resolving deltas: 100% (1500/1500)
+Resolving deltas: 100% (1500/1500), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m02 && ls
+
+Makefile  README.md  explore.py  requirements.txt  threat-model-template.md  tm.py  tsg-helpdesk-starter.json
+thesecguy@lab:~/ai-security-course-labs/labs/m02$ head -8 tsg-helpdesk-starter.json
+
+{
+  "version": "2.6.2",
+  "summary": {
+    "title": "TSG Helpdesk (starter)",
+    "owner": "The Sec Guy",
+    "description": "Starter data-flow diagram for lab 2.5: the chat path and the nightly ticket import. You add the tools, the MCP ticketing server, memory, the order database and the logs. Fake system; no threats yet.",
+    "id": 0
+  },
+thesecguy@lab:~/ai-security-course-labs/labs/m02$ python3 explore.py elements
+
+model: "TSG Helpdesk (starter)"  ->  6 elements
+
+external entity (a person or system outside your control): 1
+   Customer           Anyone on the internet can sign up. Writes chats and tickets.
+
+process (code that runs and changes data): 3
+   Chat app           Builds the prompt, calls the model, runs its tool calls.
+   Model              Local model on Ollama. Reads its whole context as one text.
+   Nightly import     Copies resolved tickets into the knowledge base each night.
+
+data store (where data rests): 2
+   Ticketing system   Support tickets. Customers write them; staff resolve them.
+   Knowledge base     Help articles. Some are imported customer tickets.
+
+thesecguy@lab:~/ai-security-course-labs/labs/m02$ python3 explore.py flows
+
+8 data flows (arrows). Each one carries data from one element to another.
+
+   F1 chat message                              Customer -> Chat app
+   F2 UNTRUSTED: system prompt + chat           Chat app -> Model
+   F4 UNTRUSTED: retrieved articles       Knowledge base -> Model
+   F5 model output                                 Model -> Chat app
+   F10 answer                                   Chat app -> Customer
+   F15 ticket text                              Customer -> Ticketing system
+   F11 resolved tickets                 Ticketing system -> Nightly import
+   F11 new articles                       Nightly import -> Knowledge base
+thesecguy@lab:~/ai-security-course-labs/labs/m02$ python3 explore.py boundaries
+
+trust boundary: Our servers
+   inside:   Chat app, Model, Ticketing system, Nightly import, Knowledge base
+   crossing: 3 flows
+      F1 chat message
+      F10 answer
+      F15 ticket text
+
+trust boundary: Model boundary
+   inside:   Model
+   crossing: 3 flows
+      F2 UNTRUSTED: system prompt + chat
+      F4 UNTRUSTED: retrieved articles
+      F5 model output
+
+thesecguy@lab:~/ai-security-course-labs/labs/m02$ python3 explore.py stride
+
+STRIDE per element: which of the six questions to ask each part (Threat Dragon's table)
+
+   S  Spoofing: pretending to be someone or something else
+   T  Tampering: changing data or code
+   R  Repudiation: denying an action, because nothing proves it
+   I  Information disclosure: data reaching someone who shouldn't see it
+   D  Denial of service: making it slow or unavailable
+   E  Elevation of privilege: doing more than you're allowed to
+
+   element                              type             S T R I D E
+   Customer                             external entity  S . R . . .
+   Chat app                             process          S T R I D E
+   Model                                process          S T R I D E
+   Ticketing system                     data store       . T R I D .
+   Nightly import                       process          S T R I D E
+   Knowledge base                       data store       . T R I D .
+   F1 chat message                      data flow        . T . I D .
+   F2 UNTRUSTED: system prompt + chat   data flow        . T . I D .
+   F4 UNTRUSTED: retrieved articles     data flow        . T . I D .
+   F5 model output                      data flow        . T . I D .
+   F10 answer                           data flow        . T . I D .
+   F15 ticket text                      data flow        . T . I D .
+   F11 resolved tickets                 data flow        . T . I D .
+   F11 new articles                     data flow        . T . I D .
+thesecguy@lab:~/ai-security-course-labs/labs/m02$ python3 explore.py model
+
+everything that reaches the model becomes part of one stream of text (lesson 2.1)
+
+   UNTRUSTED         F2 UNTRUSTED: system prompt + chat  (from Chat app)
+   UNTRUSTED         F4 UNTRUSTED: retrieved articles  (from Knowledge base)
+thesecguy@lab:~/ai-security-course-labs/labs/m02$ make -n setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+thesecguy@lab:~/ai-security-course-labs/labs/m02$ make setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+Collecting pytm==1.4.0 (from -r requirements.txt (line 1))
+  Downloading pytm-1.4.0-py3-none-any.whl.metadata (24 kB)
+Collecting pydantic<3.0.0,>=2.10.0 (from pytm==1.4.0->-r requirements.txt (line 1))
+  Downloading pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/133.0 kB ? eta -:--:--
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 133.0/133.0 kB 14.3 MB/s eta 0:00:00
+Collecting annotated-types>=0.6.0 (from pydantic<3.0.0,>=2.10.0->pytm==1.4.0->-r requirements.txt (line 1))
+  Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.50.1 (from pydantic<3.0.0,>=2.10.0->pytm==1.4.0->-r requirements.txt (line 1))
+  Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
+Collecting typing-extensions>=4.16.0 (from pydantic<3.0.0,>=2.10.0->pytm==1.4.0->-r requirements.txt (line 1))
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting typing-inspection>=0.4.4 (from pydantic<3.0.0,>=2.10.0->pytm==1.4.0->-r requirements.txt (line 1))
+  Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+Downloading pytm-1.4.0-py3-none-any.whl (185 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/185.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 185.3/185.3 kB 49.2 MB/s eta 0:00:00
+Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/488.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 488.1/488.1 kB 83.0 MB/s eta 0:00:00
+Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/2.2 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 171.1 MB/s eta 0:00:00
+Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/45.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.6/45.6 kB 14.7 MB/s eta 0:00:00
+Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Installing collected packages: typing-extensions, annotated-types, typing-inspection, pydantic-core, pydantic, pytm
+Successfully installed annotated-types-0.8.0 pydantic-2.14.1 pydantic-core-2.50.1 pytm-1.4.0 typing-extensions-4.16.0 typing-inspection-0.4.4
+thesecguy@lab:~/ai-security-course-labs/labs/m02$ make check
+
+.venv/bin/python -c "import importlib.metadata as m; print('pytm', m.version('pytm'))"
+pytm 1.4.0
+thesecguy@lab:~/ai-security-course-labs/labs/m02$ make pytm
+
+.venv/bin/python tm.py
+pytm: 121 findings for 13 elements
+
+   Chat app                    34   e.g. INP02 Overflow Buffers
+   Nightly import              34   e.g. INP02 Overflow Buffers
+   Ticketing system             4   e.g. AC01 Privilege Abuse
+   Knowledge base               4   e.g. AC01 Privilege Abuse
+   Model                        5   e.g. LLM01 Direct Prompt Injection
+   F1 chat message              5   e.g. DE01 Interception
+   F2 system prompt + chat      5   e.g. DE01 Interception
+   F4 retrieved articles        5   e.g. DE01 Interception
+   F5 model output              5   e.g. DE01 Interception
+   F10 answer                   5   e.g. DE01 Interception
+   F15 ticket text              5   e.g. DE01 Interception
+   F11 resolved tickets         5   e.g. DE01 Interception
+   F11 new articles             5   e.g. DE01 Interception
+
+all findings for Model:
+   LLM01  High       Direct Prompt Injection
+   LLM02  High       Indirect Prompt Injection via Retrieved Content
+   LLM05  Very High  Excessive Agency via Unauthorized Tool Use
+   LLM07  High       Jailbreaking and Safety Bypass
+   LLM08  High       Sensitive Information Disclosure Through Output
+
+A list to judge, not an answer: you decide which findings are real for this system.
+thesecguy@lab:~/ai-security-course-labs/labs/m02$ exit
+
+exit

@@ -1,0 +1,129 @@
+{
+  "scenario": "m02-2.5-understand-linux",
+  "start": 1.864,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.864,
+      "end": 12.249
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.249,
+      "end": 20.898
+    },
+    {
+      "label": "The model file",
+      "speed": 1,
+      "start": 24.898,
+      "end": 29.455
+    },
+    {
+      "label": "Elements",
+      "speed": 1,
+      "start": 33.456,
+      "end": 37.663
+    },
+    {
+      "label": "Flows",
+      "speed": 1,
+      "start": 43.663,
+      "end": 47.474
+    },
+    {
+      "label": "Boundaries",
+      "speed": 1,
+      "start": 53.474,
+      "end": 57.912
+    },
+    {
+      "label": "STRIDE",
+      "speed": 1,
+      "start": 63.912,
+      "end": 67.904
+    },
+    {
+      "label": "Into the model",
+      "speed": 1,
+      "start": 74.904,
+      "end": 78.692
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 83.692,
+      "end": 86.407
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 89.407,
+      "end": 96.502
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 99.502,
+      "end": 101.77
+    },
+    {
+      "label": "pytm",
+      "speed": 1,
+      "start": 104.77,
+      "end": 107.109
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.464,
+      "what": "type"
+    },
+    {
+      "t": 15.849,
+      "what": "type"
+    },
+    {
+      "t": 25.498,
+      "what": "type"
+    },
+    {
+      "t": 34.056,
+      "what": "type"
+    },
+    {
+      "t": 44.264,
+      "what": "type"
+    },
+    {
+      "t": 54.075,
+      "what": "type"
+    },
+    {
+      "t": 64.512,
+      "what": "type"
+    },
+    {
+      "t": 75.504,
+      "what": "type"
+    },
+    {
+      "t": 84.292,
+      "what": "type"
+    },
+    {
+      "t": 90.007,
+      "what": "type"
+    },
+    {
+      "t": 100.102,
+      "what": "type"
+    },
+    {
+      "t": 105.371,
+      "what": "type"
+    }
+  ],
+  "end": 114.11
+}
