@@ -1,0 +1,26 @@
+{
+  "name": "m10-10.3-understand-linux",
+  "lesson": "10.0, 10.3",
+  "title": "Lab 10.3, part 1: get the lab, look at AnyCompany's AWS setup, and see how AWS signs, decides and records one API call (explore.py: org, sign, policy, decide, call, event) before attacking it",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m10 && ls", "pause_after": 4},
+    {"label": "The data", "type": "ls anycompany anycompany/identity", "pause_after": 4},
+    {"label": "Org", "type": "python3 explore.py org", "pause_after": 6},
+    {"label": "Setup plan", "type": "make -n setup", "pause_after": 3},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Sign", "type": "python3 explore.py sign", "pause_after": 7},
+    {"label": "Policy", "type": "python3 explore.py policy examples/one-model-two-regions.json", "pause_after": 7},
+    {"label": "Allowed", "type": "python3 explore.py decide DataScienceRole bedrock:InvokeModel arn:aws:bedrock:us-west-2::foundation-model/amazon.nova-lite-v1:0 --region us-west-2", "pause_after": 6},
+    {"label": "Explicit deny", "type": "python3 explore.py decide DataScienceRole bedrock:InvokeModel arn:aws:bedrock:us-east-1::foundation-model/deepseek.r1-v1:0", "pause_after": 6},
+    {"label": "Implicit deny", "type": "python3 explore.py decide DataScienceRole bedrock:DeleteModelInvocationLoggingConfiguration", "pause_after": 6},
+    {"label": "Call", "type": "python3 explore.py call DataScienceRole amazon.nova-lite-v1:0 --region us-west-2", "pause_after": 6},
+    {"label": "Call with a key", "type": "python3 explore.py call BedrockAPIKey-x7k2 anthropic.claude-opus-4-7 --api-key", "pause_after": 6},
+    {"label": "Event", "type": "python3 explore.py event InvokeModel", "pause_after": 6},
+    {"label": "One run", "type": "python3 attack.py --only L5", "pause_after": 6}
+  ]
+}

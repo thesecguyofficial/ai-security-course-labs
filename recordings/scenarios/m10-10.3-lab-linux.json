@@ -1,0 +1,29 @@
+{
+  "name": "m10-10.3-lab-linux",
+  "lesson": "10.3, 10.4, 10.5",
+  "title": "Lab 10.3 to 10.5, part 2: the HIGH findings, the chatbot's role, three attackers, the fix SCPs, the legitimate traffic, the blunt allow-list, then the CloudTrail hunt, the tests and the challenge, one short output at a time",
+  "cols": 132,
+  "rows": 38,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "Start", "type": "cd ai-security-course-labs/labs/m10", "pause_after": 2},
+    {"label": "High", "type": "python3 policy_checker.py --severity HIGH", "pause_after": 7},
+    {"label": "Role", "type": "cat anycompany/identity/helpdesk-app-role.json", "pause_after": 5},
+    {"label": "Attacker 1", "type": "python3 attack.py --only A", "pause_after": 7},
+    {"label": "Attackers 2 and 3", "type": "python3 attack.py --only B,C", "pause_after": 7},
+    {"label": "Allow-list", "type": "cat fixes/scp-model-allowlist.json", "pause_after": 5},
+    {"label": "Safe", "type": "python3 attack.py --mode safe --only A,B,C", "pause_after": 7},
+    {"label": "Legit", "type": "python3 attack.py --mode safe --only L", "pause_after": 6},
+    {"label": "Blunt", "type": "python3 attack.py --mode safe --allowlist examples/blunt-allowlist-scp.json --only L", "pause_after": 7},
+    {"label": "Hunt naive", "type": "make hunt-naive", "pause_after": 6},
+    {"label": "Attacker event", "type": "python3 explore.py event Converse --from 203.0.113.50", "pause_after": 6},
+    {"label": "Hunt key", "type": "python3 hunt.py --rule H01,H02,H03,H05", "pause_after": 7},
+    {"label": "Hunt use", "type": "python3 hunt.py --rule H04,H06,H07,H08", "pause_after": 7},
+    {"label": "Hunt all", "type": "make hunt | tail -2", "pause_after": 5},
+    {"label": "Tests", "type": "make test | tail -3", "pause_after": 4},
+    {"label": "Challenge", "type": "make challenge 2>&1 | tail -16", "pause_after": 6}
+  ]
+}

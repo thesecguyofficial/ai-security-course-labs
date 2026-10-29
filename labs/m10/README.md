@@ -51,9 +51,11 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `hunt.py` | Nine CloudTrail hunting rules (`H01` to `H09`; `H09` is yours to write), plus `--naive` |
 | `anycompany/` | The company: `principals.json` (accounts, roles, users, API keys), `identity/` policies, `scps/`, `approved-models.json`, and `aws-managed/AmazonBedrockLimitedAccess-v9.json` (the AWS managed policy, copied from the AWS docs) |
 | `fixes/` | Three SCPs and a least-privilege policy for the chatbot role |
+| `explore.py` | Step 1b: shows how AWS signs, decides and records one API call (`org`, `sign`, `policy`, `decide`, `call`, `event`). Read-only: it reads the lab's files and prints; `sign` computes a signature and sends nothing |
 | `examples/blunt-allowlist-scp.json` | A model allow-list written the blunt way, to show what it breaks |
+| `examples/one-model-two-regions.json` | A one-statement policy with a `Condition`, for Step 1b |
 | `cloudtrail/anycompany-2026-10-09_14.json` | 226 **fake** CloudTrail records: two normal days, a key created on 9 Oct, and two intrusions on 14 Oct |
-| `aws-twin/` | Budget files for the optional AWS step |
+| `aws-twin/` | Budget files for the optional AWS step (Step 8). Everything else is the local stand-in for AWS: the JSON files, `iam_eval.py` and the fake CloudTrail file |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 17 tests for the lab, 5 for the challenge |
 
 **About `iam_eval.py`.** It is not the AWS policy engine. It models the rules this lab depends on, each from the IAM
@@ -92,6 +94,250 @@ if a real-looking account ID, IP or access key ever creeps in.
 - Python **3.11 or newer** (tested on 3.13). Check with `python3 --version`. No packages, no internet.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 - Optional, Step 8 only: the AWS CLI v2 and credentials for **your own** sandbox account (lesson 0.7).
+
+## Step 1b · Before you attack: look at how AWS decides one call (about 10 minutes)
+
+New to AWS? Do this before Step 1 (lesson 10.3 and its videos call it Step 1b). `explore.py` shows, one step at a
+time, how AWS signs, decides and records a single API call, using AnyCompany's files. Real output below is from a
+fresh Ubuntu machine (recording run RUNID).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `anycompany/`,
+`fixes/`, `examples/` and `cloudtrail/` and prints what it finds. `decide` and `call` ask `iam_eval.py`, the lab's
+teaching model of AWS policy evaluation. `sign` computes a signature with AWS's documentation example keys and sends
+nothing. No network, no AWS account.
+
+**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+
+```bash
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
+standard library, so `make setup` just checks your Python version and says "Nothing to install for this lab".
+
+**1. The company.** Accounts, the identities that can make calls (roles and users), and the policies on each:
+
+```bash
+python3 explore.py org
+```
+
+```text
+AnyCompany's AWS organization (fictional; account IDs are AWS documentation examples)
+
+  management account  123456789012   (head office: SCPs never apply to it)
+  member account      111122223333   prod-ai: runs the TSG Helpdesk chatbot
+  member account      444455556666   sandbox: people try models here
+  SCPs on the root    FullAWSAccess, deny-deepseek
+
+Identities (who can make calls) and the policies that say what each may do:
+
+  role  HelpdeskAppRole      account 111122223333   policies: helpdesk-app-role
+  role  DataScienceRole      account 111122223333   policies: data-science-role
+  role  PlatformAdminRole    account 111122223333   policies: platform-admin-role
+  role  SandboxAdminRole     account 444455556666   policies: platform-admin-role
+  role  SecurityAdmin        account 111122223333   policies: security-admin-role
+  role  CiDeployerRole       account 111122223333   policies: ci-deployer-role
+  user  BedrockAPIKey-x7k2   account 111122223333   policies: AmazonBedrockLimitedAccess-v9
+        Bedrock API key ACCA1234EXAMPLE1234  created 2026-10-09  expires NEVER
+  user  sandbox-explorer     account 444455556666   policies: AmazonBedrockLimitedAccess-v9
+        Bedrock API key ACCA5678EXAMPLE5678  created 2026-10-06  expires 2026-11-05
+```
+
+The management account is head office: SCPs never apply to it. The two member accounts are where work happens. The
+user `BedrockAPIKey-x7k2` holds a Bedrock API key that never expires: that's the leak in Step 2.
+
+**2. Every call is signed (SigV4).** A program never sends its secret key. It writes the call out in a fixed form,
+fingerprints it, and signs it with a key derived from the secret, the date, the Region and the service. AWS repeats
+the sum with its own copy of the secret ([AWS docs](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_sigv.html)):
+
+```bash
+python3 explore.py sign
+```
+
+```text
+Signing one AWS API call with SigV4. Nothing is sent: this only computes the signature.
+The keys are AWS's documentation examples; they work nowhere.
+
+the call      ListFoundationModels = GET https://bedrock.us-east-1.amazonaws.com/foundation-models
+access key ID AKIAIOSFODNN7EXAMPLE                        (travels with the request)
+secret key    wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY    (never leaves your computer)
+
+1. canonical request: the call written out in a fixed order
+     GET
+     /foundation-models
+     
+     host:bedrock.us-east-1.amazonaws.com
+     x-amz-date:20261009T120000Z
+     
+     host;x-amz-date
+     e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+2. string to sign: the method, the time, the scope, and a SHA-256 fingerprint of step 1
+     AWS4-HMAC-SHA256
+     20261009T120000Z
+     20261009/us-east-1/bedrock/aws4_request
+     3277cb18d5caac1f61062a3a215affa144e17fd6d8e43da2eaff0093f4e5b6d6
+3. signing key: the secret, mixed with the date, the Region, the service and 'aws4_request' (HMAC-SHA256 x4)
+4. signature: HMAC-SHA256 of step 2 with that key
+     b245d9683036a2719d80a19fc6dd68d00b221d0fbee9110898d8da4c61743dd7
+
+the header AWS receives (one line, split here to fit):
+     Authorization: AWS4-HMAC-SHA256 Credential=AKIAIOSFODNN7EXAMPLE/20261009/us-east-1/bedrock/aws4_request,
+                    SignedHeaders=host;x-amz-date,
+                    Signature=b245d9683036a2719d80a19fc6dd68d00b221d0fbee9110898d8da4c61743dd7
+AWS repeats steps 1 to 4 with its own copy of the secret. Change one character and the signatures differ.
+```
+
+The signature above matches the one `botocore` (the library inside the AWS CLI and boto3) computes for the same
+request, time and example keys. And "in most cases, a request must reach AWS within five minutes of the time stamp"
+in `x-amz-date`, so an old copied request stops working.
+
+**3. A policy, read statement by statement.** `Effect`, `Action`, `Resource` and the optional `Condition`:
+
+```bash
+python3 explore.py policy examples/one-model-two-regions.json
+```
+
+The JSON comes first, then this reading (last lines):
+
+```text
+Read it statement by statement (Version 2012-10-17 is the policy language version):
+
+  statement 1  Sid NovaLiteFromTwoRegionsOnly: a label for people, AWS ignores it
+    Effect     Allow: what happens when the rest matches
+    Action     bedrock:InvokeModel: the API calls it covers
+    Resource   arn:aws:bedrock:*::foundation-model/amazon.nova-lite-v1:0: the things those calls touch
+    Condition  StringEquals aws:RequestedRegion = us-east-1, us-west-2: only when the request's aws:RequestedRegion matches
+```
+
+**4. Allowed or denied?** Four checks, in order: a Deny in the identity's own policies, a Deny in the SCPs, an SCP
+that allows it, and the identity's own Allow. A Deny anywhere wins; with no Allow, the answer is "denied" by default
+([AWS docs](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html)).
+
+```bash
+python3 explore.py decide DataScienceRole bedrock:InvokeModel arn:aws:bedrock:us-west-2::foundation-model/amazon.nova-lite-v1:0 --region us-west-2
+```
+
+```text
+request   DataScienceRole (role/DataScienceRole) wants bedrock:InvokeModel
+resource  arn:aws:bedrock:us-west-2::foundation-model/amazon.nova-lite-v1:0
+context   aws:PrincipalAccount=111122223333  aws:RequestedRegion=us-west-2
+SCPs      FullAWSAccess, deny-deepseek
+
+step 1  a Deny in its own policies?   no
+step 2  a Deny in the SCPs?           no
+step 3  does an SCP allow it?         yes  FullAWSAccess (no Sid)
+step 4  does its own policy allow it? yes  data-science-role (TryAnyModelAnywhere)
+
+=> ALLOWED: allowed by its own policy, under the SCP ceiling, and nothing denies it
+```
+
+The same role asks for a DeepSeek model. The SCP's Deny wins, whatever the role's own policy allows (last lines):
+
+```bash
+python3 explore.py decide DataScienceRole bedrock:InvokeModel arn:aws:bedrock:us-east-1::foundation-model/deepseek.r1-v1:0
+```
+
+```text
+step 1  a Deny in its own policies?   no
+step 2  a Deny in the SCPs?           YES  deny-deepseek (DenyDeepseekEverywhere)
+        (steps 3 and 4 don't matter any more)
+
+=> DENIED: an explicit Deny always wins, whatever allows it
+```
+
+And it asks to delete the prompt-logging settings. Nothing denies it, but nothing allows it either (last lines):
+
+```bash
+python3 explore.py decide DataScienceRole bedrock:DeleteModelInvocationLoggingConfiguration
+```
+
+```text
+
+step 1  a Deny in its own policies?   no
+step 2  a Deny in the SCPs?           no
+step 3  does an SCP allow it?         yes  FullAWSAccess (no Sid)
+step 4  does its own policy allow it? NO
+
+=> DENIED: nothing allows it, so it is denied by default (implicit deny)
+```
+
+**5. One model call, and its checks.** A `Converse` call is authorized as `bedrock:InvokeModel`; a call made with a
+Bedrock API key is also checked as `bedrock:CallWithBearerToken`:
+
+```bash
+python3 explore.py call BedrockAPIKey-x7k2 anthropic.claude-opus-4-7 --api-key
+```
+
+```text
+One Converse call, as the app would send it (illustrative; nothing is sent):
+
+  POST https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-opus-4-7/converse
+  Authorization: Bearer <a Bedrock API key>
+  {"messages": [{"role": "user", "content": [{"text": "Summarise ticket 4521 in one line."}]}]}
+
+Converse is authorized as bedrock:InvokeModel. IAM runs 2 check(s) for this one call:
+  1. bedrock:CallWithBearerToken on *  (bedrock:BearerTokenType=LONG_TERM)
+       ALLOWED  allowed by aws-managed/AmazonBedrockLimitedAccess-v9.json (BedrockAPIs)
+  2. bedrock:InvokeModel on arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-opus-4-7
+       ALLOWED  allowed by aws-managed/AmazonBedrockLimitedAccess-v9.json (BedrockAPIs)
+
+=> the call goes through: every check must pass. If it goes through, the bill counts input and output tokens.
+```
+
+Try `python3 explore.py call DataScienceRole amazon.nova-lite-v1:0 --region us-west-2` (one check), and add
+`--fixes` to either command to see the Step 3 SCPs at work.
+
+**6. What CloudTrail kept.** One fake record, field by field:
+
+```bash
+python3 explore.py event InvokeModel
+```
+
+```text
+CloudTrail record 17 of 226 (fake, with the same fields as AWS's examples)
+
+  who    userIdentity.type    AssumedRole
+         userIdentity.arn     arn:aws:sts::111122223333:assumed-role/DataScienceRole/analyst-session
+  what   eventSource          bedrock.amazonaws.com
+         eventName            InvokeModel
+         requestParameters    {"modelId": "amazon.nova-lite-v1:0"}
+  where  awsRegion            us-west-2
+         sourceIPAddress      192.0.2.25
+         userAgent            Boto3/1.40.11 md/Botocore#1.40.11 ua/2.1 os/linux lang/python#3.12.6
+  when   eventTime            2026-10-12T10:20:00Z
+  how    additionalEventData  -
+  result errorCode            -  (none: the call worked)
+
+  not here: the prompt and the answer. CloudTrail records the call, not the conversation.
+```
+
+`--from 203.0.113.50` picks the attacker's records instead (Step 6).
+
+**7. Read one lab result.** `attack.py --only` shows one request or group (`A`, `B`, `C`, `L`, or an ID like `L5`):
+
+```bash
+python3 attack.py --only L5
+```
+
+```text
+--- M10 lab · VULNERABLE · SCPs on the org root: FullAWSAccess, deny-deepseek ---
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Legitimate traffic · must keep working after the fixes
+  [L5] ALLOWED  Data science: InvokeModel on approved Nova Lite in us-west-2
+         why: every check passed: bedrock:InvokeModel
+
+1 of 1 legitimate requests allowed  (showing L5 only)
+```
+
+From the top: the mode and the SCPs in force, the reminder that this is a teaching model, the group, the request
+with its verdict, the **why** line (each check it passed, or the policy and `Sid` that denied it), and the count.
 
 ## Step 1 · Check: find the over-broad permissions
 
@@ -165,6 +411,7 @@ How to read it, highest first:
   model family.
 
 Lint your own policies the same way: `python3 policy_checker.py --policy my-role.json` or `--scp my-scp.json`.
+Add `--severity HIGH` to print one severity only (the totals line still counts every finding).
 
 ## Step 2 · Break it: what can a thief do today?
 
@@ -235,7 +482,8 @@ Read the **why** lines. Attacker 1 is the leaked key: listing models, checking w
 an expensive unapproved model on **both** endpoints, and buying capacity all pass, because `AmazonBedrockLimitedAccess`
 allows them on `*`. Attacker 2 is the chatbot's role, stolen from the server it runs on: it can switch off invocation
 logging and send traffic through a **global** inference profile to whatever Region AWS picks. The DeepSeek deny-list
-(B3) works, for exactly the one family it names. Add `--verbose` to see every authorization check.
+(B3) works, for exactly the one family it names. Add `--verbose` to see every authorization check, and `--only A`
+(or `B,C`, `L`, `A3`) to show one group or request.
 
 ## Step 3 · Read the fixes
 
@@ -462,6 +710,8 @@ Not covered: 20 x bedrock-mantle.amazonaws.com CreateInference; 1 x sts.amazonaw
 | H06 | invocations of models not in `approved-models.json` | your allow-list, as a detection |
 | H07 | invocations from an IP the principal never used before; API-key use called out | AWS: `additionalEventData.callWithBearerToken` marks key use |
 | H08 | invocations per hour above 3 times the principal's baseline peak (minimum 20) | volume is the bill |
+
+`python3 hunt.py --rule H02` (or `H01,H02,H03`) shows only those rules' findings.
 
 Look at test 16 as well: the security admin calls `GetModelInvocationLoggingConfiguration` every morning, and no
 rule fires on it. A detection that pages you every day gets switched off.

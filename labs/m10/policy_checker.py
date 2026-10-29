@@ -204,9 +204,11 @@ def run(with_fixes: bool = False) -> list[Finding]:
     return findings
 
 
-def print_findings(findings: list[Finding], title: str) -> None:
-    print(f"--- M10 policy checker · {title} ---\n")
+def print_findings(findings: list[Finding], title: str, severity: str = "") -> None:
+    print(f"--- M10 policy checker · {title}{' · showing ' + severity + ' only' if severity else ''} ---\n")
     for f in sorted(findings, key=lambda f: (SEVERITY_ORDER[f.severity], f.rule, f.where)):
+        if severity and f.severity != severity:
+            continue
         print(f.line())
     counts = {s: sum(f.severity == s for f in findings) for s in SEVERITY_ORDER}
     print("\n" + ", ".join(f"{v} {k}" for k, v in counts.items()) + f"  ({len(findings)} findings)")
@@ -217,6 +219,7 @@ def main() -> None:
     ap.add_argument("--with-fixes", action="store_true", help="add the SCPs in fixes/ to the org root")
     ap.add_argument("--policy", help="lint one identity policy JSON file")
     ap.add_argument("--scp", help="lint one SCP JSON file")
+    ap.add_argument("--severity", choices=list(SEVERITY_ORDER), help="print only findings of this severity (the totals still count all)")
     a = ap.parse_args()
     if a.policy:
         print_findings(check_identity_policy(a.policy, json.loads(pathlib.Path(a.policy).read_text())), a.policy)
@@ -224,7 +227,7 @@ def main() -> None:
         doc = json.loads(pathlib.Path(a.scp).read_text())
         print_findings(check_scp(a.scp, doc) + check_org_scps([(a.scp, doc)]), a.scp + " (as if it were the only deny SCP)")
     else:
-        print_findings(run(a.with_fixes), "AnyCompany" + (" + fixes/ SCPs" if a.with_fixes else " today"))
+        print_findings(run(a.with_fixes), "AnyCompany" + (" + fixes/ SCPs" if a.with_fixes else " today"), a.severity or "")
 
 
 if __name__ == "__main__":
