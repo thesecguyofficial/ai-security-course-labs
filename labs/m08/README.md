@@ -253,7 +253,7 @@ token the real OAuth flow would give a host acting for `alice`:
 
 ```text
   {
-    "iss": "https://issuer.lab.invalid",
+    "iss": "https://issuer.lab.invalid/",
     "sub": "alice",
     "aud": "http://127.0.0.1:8808/mcp",
     "scope": "notes:read",
