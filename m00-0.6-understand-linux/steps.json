@@ -1,0 +1,109 @@
+{
+  "scenario": "m00-0.6-understand-linux",
+  "start": 2.011,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 2.011,
+      "end": 12.363
+    },
+    {
+      "label": "The kit",
+      "speed": 1,
+      "start": 15.363,
+      "end": 19.97
+    },
+    {
+      "label": "The labs",
+      "speed": 1,
+      "start": 23.97,
+      "end": 25.798
+    },
+    {
+      "label": "What setup does",
+      "speed": 1,
+      "start": 29.799,
+      "end": 32.722
+    },
+    {
+      "label": "Fingerprint",
+      "speed": 1,
+      "start": 39.723,
+      "end": 42.644
+    },
+    {
+      "label": "Fingerprint",
+      "speed": 1,
+      "start": 44.644,
+      "end": 48.428
+    },
+    {
+      "label": "Look before you run",
+      "speed": 1,
+      "start": 52.428,
+      "end": 55.82
+    },
+    {
+      "label": "Check only",
+      "speed": 1,
+      "start": 59.82,
+      "end": 63.291
+    },
+    {
+      "label": "Doctor",
+      "speed": 1,
+      "start": 70.291,
+      "end": 72.679
+    },
+    {
+      "label": "Shared packages",
+      "speed": 1,
+      "start": 79.679,
+      "end": 83.807
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.611,
+      "what": "type"
+    },
+    {
+      "t": 15.963,
+      "what": "type"
+    },
+    {
+      "t": 24.57,
+      "what": "type"
+    },
+    {
+      "t": 30.399,
+      "what": "type"
+    },
+    {
+      "t": 40.323,
+      "what": "type"
+    },
+    {
+      "t": 45.245,
+      "what": "type"
+    },
+    {
+      "t": 53.029,
+      "what": "type"
+    },
+    {
+      "t": 60.42,
+      "what": "type"
+    },
+    {
+      "t": 70.891,
+      "what": "type"
+    },
+    {
+      "t": 80.28,
+      "what": "type"
+    }
+  ],
+  "end": 88.807
+}
