@@ -1,0 +1,21 @@
+{
+  "name": "m00-0.6-understand-linux",
+  "lesson": "0.6",
+  "title": "Lab 0.6, part 1: get the labs, what every file does, check the fingerprint, and look before you run (make -n, setup --check, doctor), on a clean machine",
+  "cols": 120,
+  "rows": 32,
+  "remove_preinstalled": ["docker", "ollama"],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The kit", "type": "cd ai-security-course-labs && ls", "pause_after": 4},
+    {"label": "The labs", "type": "ls labs", "pause_after": 4},
+    {"label": "What setup does", "type": "head -16 setup.sh", "pause_after": 7},
+    {"label": "Fingerprint", "type": "sha256sum setup.sh", "pause_after": 2},
+    {"label": "Fingerprint", "type": "grep setup.sh SHA256SUMS", "pause_after": 4},
+    {"label": "Look before you run", "type": "make -n setup doctor", "pause_after": 4},
+    {"label": "Check only", "type": "./setup.sh --check", "timeout": 300, "pause_after": 7},
+    {"label": "Doctor", "type": "make doctor", "timeout": 300, "pause_after": 7},
+    {"label": "Shared packages", "type": "cat requirements-common.txt", "pause_after": 5}
+  ]
+}
