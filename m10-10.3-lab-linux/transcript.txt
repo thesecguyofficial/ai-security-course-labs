@@ -1,0 +1,295 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m10
+
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 policy_checker.py --severity HIGH
+
+--- M10 policy checker · AnyCompany today · showing HIGH only ---
+
+  HIGH    M10-01  identity/helpdesk-app-role.json [LetTheAppUseBedrock]
+          Allows every bedrock action on every resource: any model, delete invocation logging, buy Provisioned Throughput.
+          fix: List only the actions the workload calls, on the exact model/profile ARNs (lesson 10.3).
+  HIGH    M10-01  identity/helpdesk-app-role.json [LetTheAppUseTheNewEndpointToo]
+          Allows every bedrock-mantle action on every resource: any model on the OpenAI-compatible endpoint, plus projects, files and fine-tuning.
+          fix: List only the actions the workload calls, on the exact model/profile ARNs (lesson 10.3).
+  HIGH    M10-03  identity/platform-admin-role.json [ManageBedrockUsersAndKeys]
+          Can create long-term API keys (service-specific credentials) with no service or expiry limit.
+          fix: Add conditions on iam:ServiceSpecificCredentialServiceName and iam:ServiceSpecificCredentialAgeDays, and cap them org-wide with an SCP (lesson 10.4).
+  HIGH    M10-05  BedrockAPIKey-x7k2 key ACCA1234EXAMPLE1234
+          Long-term Bedrock API key that NEVER expires.
+          fix: Deactivate it, move the caller to short-term keys or IAM roles; cap expiry with an SCP.
+  HIGH    M10-06  BedrockAPIKey-x7k2 key ACCA1234EXAMPLE1234
+          Long-term Bedrock API key in account 111122223333, which is not the sandbox.
+          fix: AWS: long-term keys are for exploration; use short-term keys or roles in production (lesson 10.4).
+
+5 HIGH, 7 MEDIUM, 1 LOW, 0 WARNING  (13 findings)
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ cat anycompany/identity/helpdesk-app-role.json
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "LetTheAppUseBedrock",
+      "Effect": "Allow",
+      "Action": "bedrock:*",
+      "Resource": "*"
+    },
+    {
+      "Sid": "LetTheAppUseTheNewEndpointToo",
+      "Effect": "Allow",
+      "Action": "bedrock-mantle:*",
+      "Resource": "*"
+    }
+  ]
+}
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 attack.py --only A
+
+--- M10 lab · VULNERABLE · SCPs on the org root: FullAWSAccess, deny-deepseek ---
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Attacker 1 · a long-term Bedrock API key for IAM user BedrockAPIKey-x7k2 leaked (prod account, never expires)
+  [A1] ALLOWED  ListFoundationModels: which models can I reach?
+         why: every check passed: bedrock:CallWithBearerToken; bedrock:ListFoundationModels
+  [A2] ALLOWED  GetModelInvocationLoggingConfiguration: is anyone logging prompts?
+         why: every check passed: bedrock:CallWithBearerToken; bedrock:GetModelInvocationLoggingConfiguration
+  [A3] ALLOWED  Converse with an expensive model nobody approved (Claude Opus 4.7)
+         why: every check passed: bedrock:CallWithBearerToken; bedrock:InvokeModel
+  [A4] ALLOWED  Same model through the OpenAI-compatible bedrock-mantle endpoint
+         why: every check passed: bedrock-mantle:CallWithBearerToken; bedrock-mantle:CreateInference
+  [A5] ALLOWED  CreateProvisionedModelThroughput: buy capacity billed by the hour
+         why: every check passed: bedrock:CallWithBearerToken; bedrock:CreateProvisionedModelThroughput
+
+
+5 of 5 attacker requests allowed  (showing A only)
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 attack.py --only B,C
+
+--- M10 lab · VULNERABLE · SCPs on the org root: FullAWSAccess, deny-deepseek ---
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Attacker 2 · stolen temporary credentials of HelpdeskAppRole (identity policy: bedrock:* and bedrock-mantle:* on *)
+  [B1] ALLOWED  DeleteModelInvocationLoggingConfiguration: switch off prompt logging
+         why: every check passed: bedrock:DeleteModelInvocationLoggingConfiguration
+  [B2] ALLOWED  Converse through the GLOBAL Claude Opus 4.7 profile (not approved)
+         why: every check passed: bedrock:InvokeModel; bedrock:InvokeModel; bedrock:InvokeModel
+  [B3] DENIED   InvokeModel on a DeepSeek model (the old deny-list catches this one)
+         why: explicit Deny in SCP deny-deepseek (DenyDeepseekEverywhere)  [check: bedrock:InvokeModel on arn:aws:bedrock:us-east-1::foundation-model/deepseek.r1-v1:0]
+  [B4] ALLOWED  bedrock-mantle CreateInference with an unapproved model (no API key: plain SigV4)
+         why: every check passed: bedrock-mantle:CreateInference
+
+Attacker 3 · a sandbox admin session used to mint long-lived keys
+  [C1] ALLOWED  CreateServiceSpecificCredential for Bedrock with NO expiry (never expires)
+         why: every check passed: iam:CreateServiceSpecificCredential
+  [C2] ALLOWED  CreateServiceSpecificCredential for Bedrock valid for 365 days
+         why: every check passed: iam:CreateServiceSpecificCredential
+
+
+5 of 6 attacker requests allowed  (showing B, C only)
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ cat fixes/scp-model-allowlist.json
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyUnapprovedModelsOnBedrockRuntime",
+      "Effect": "Deny",
+      "Action": "bedrock:InvokeModel*",
+      "NotResource": [
+        "arn:aws:bedrock:*::foundation-model/amazon.nova-lite-v1:0",
+        "arn:aws:bedrock:*::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0",
+        "arn:aws:bedrock:*:*:inference-profile/us.amazon.nova-lite-v1:0",
+        "arn:aws:bedrock:*:*:inference-profile/us.anthropic.claude-haiku-4-5-20251001-v1:0"
+      ]
+    }
+  ]
+}
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 attack.py --mode safe --only A,B,C
+
+--- M10 lab · SAFE · SCPs on the org root: FullAWSAccess, deny-deepseek, scp-model-allowlist, scp-bedrock-api-keys, scp-protect-ai-logging-and-spend ---
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Attacker 1 · a long-term Bedrock API key for IAM user BedrockAPIKey-x7k2 leaked (prod account, never expires)
+  [A1] DENIED   ListFoundationModels: which models can I reach?
+         why: explicit Deny in SCP scp-bedrock-api-keys (NoLongTermKeyUseOutsideSandbox)  [check: bedrock:CallWithBearerToken on *]
+  [A2] DENIED   GetModelInvocationLoggingConfiguration: is anyone logging prompts?
+         why: explicit Deny in SCP scp-bedrock-api-keys (NoLongTermKeyUseOutsideSandbox)  [check: bedrock:CallWithBearerToken on *]
+  [A3] DENIED   Converse with an expensive model nobody approved (Claude Opus 4.7)
+         why: explicit Deny in SCP scp-bedrock-api-keys (NoLongTermKeyUseOutsideSandbox)  [check: bedrock:CallWithBearerToken on *]
+  [A4] DENIED   Same model through the OpenAI-compatible bedrock-mantle endpoint
+         why: explicit Deny in SCP scp-bedrock-api-keys (NoLongTermKeyUseOutsideSandboxMantle)  [check: bedrock-mantle:CallWithBearerToken on *]
+  [A5] DENIED   CreateProvisionedModelThroughput: buy capacity billed by the hour
+         why: explicit Deny in SCP scp-bedrock-api-keys (NoLongTermKeyUseOutsideSandbox)  [check: bedrock:CallWithBearerToken on *]
+
+Attacker 2 · stolen temporary credentials of HelpdeskAppRole (identity policy: bedrock:* and bedrock-mantle:* on *)
+  [B1] DENIED   DeleteModelInvocationLoggingConfiguration: switch off prompt logging
+         why: explicit Deny in SCP scp-protect-ai-logging-and-spend (OnlySecurityAdminTouchesAiAuditTrail)  [check: bedrock:DeleteModelInvocationLoggingConfiguration on *]
+  [B2] DENIED   Converse through the GLOBAL Claude Opus 4.7 profile (not approved)
+         why: explicit Deny in SCP scp-model-allowlist (DenyUnapprovedModelsOnBedrockRuntime)  [check: bedrock:InvokeModel on arn:aws:bedrock:us-east-1:111122223333:inference-profile/global.anthropic.claude-opus-4-7]
+  [B3] DENIED   InvokeModel on a DeepSeek model (the old deny-list catches this one)
+         why: explicit Deny in SCP deny-deepseek (DenyDeepseekEverywhere)  [check: bedrock:InvokeModel on arn:aws:bedrock:us-east-1::foundation-model/deepseek.r1-v1:0]
+  [B4] ALLOWED  bedrock-mantle CreateInference with an unapproved model (no API key: plain SigV4)   <-- still open: make challenge
+         why: every check passed: bedrock-mantle:CreateInference
+
+Attacker 3 · a sandbox admin session used to mint long-lived keys
+  [C1] ALLOWED  CreateServiceSpecificCredential for Bedrock with NO expiry (never expires)   <-- still open: make challenge
+         why: every check passed: iam:CreateServiceSpecificCredential
+  [C2] DENIED   CreateServiceSpecificCredential for Bedrock valid for 365 days
+         why: explicit Deny in SCP scp-bedrock-api-keys (SandboxKeysExpireWithin30Days)  [check: iam:CreateServiceSpecificCredential on arn:aws:iam::444455556666:user/sandbox-explorer]
+
+
+2 of 11 attacker requests allowed  (showing A, B, C only)
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 attack.py --mode safe --only L
+
+--- M10 lab · SAFE · SCPs on the org root: FullAWSAccess, deny-deepseek, scp-model-allowlist, scp-bedrock-api-keys, scp-protect-ai-logging-and-spend ---
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Legitimate traffic · must keep working after the fixes
+  [L1] ALLOWED  Helpdesk chatbot: Converse via the approved US cross-Region profile
+         why: every check passed: bedrock:InvokeModel; bedrock:InvokeModel; bedrock:InvokeModel; bedrock:InvokeModel
+  [L2] ALLOWED  Helpdesk chatbot: ApplyGuardrail on its guardrail
+         why: every check passed: bedrock:ApplyGuardrail
+  [L3] ALLOWED  Helpdesk chatbot: Retrieve from its knowledge base
+         why: every check passed: bedrock:Retrieve
+  [L4] ALLOWED  Helpdesk chatbot: approved model (Claude Haiku 4.5) on the bedrock-mantle endpoint
+         why: every check passed: bedrock-mantle:CreateInference
+  [L5] ALLOWED  Data science: InvokeModel on approved Nova Lite in us-west-2
+         why: every check passed: bedrock:InvokeModel
+  [L6] ALLOWED  Security admin: PutModelInvocationLoggingConfiguration (turn logging on)
+         why: every check passed: bedrock:PutModelInvocationLoggingConfiguration
+  [L7] ALLOWED  Sandbox admin: a Bedrock API key that expires in 30 days
+         why: every check passed: iam:CreateServiceSpecificCredential
+  [L8] ALLOWED  Sandbox user: Converse on Nova Lite with their 30-day API key
+         why: every check passed: bedrock:CallWithBearerToken; bedrock:InvokeModel
+  [L9] ALLOWED  Platform admin: CreateProvisionedModelThroughput (approved purchase)
+         why: every check passed: bedrock:CreateProvisionedModelThroughput
+
+9 of 9 legitimate requests allowed  (showing L only)
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 attack.py --mode safe --allowlist examples/blunt-allowlist-scp.json --only 
+ L
+
+--- M10 lab · SAFE · SCPs on the org root: FullAWSAccess, deny-deepseek, blunt-allowlist-scp, scp-bedrock-api-keys, scp-protect-ai-logging-and-spend ---
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Legitimate traffic · must keep working after the fixes
+  [L1] DENIED   Helpdesk chatbot: Converse via the approved US cross-Region profile
+         why: explicit Deny in SCP blunt-allowlist-scp (PermittedModels)  [check: bedrock:InvokeModel on arn:aws:bedrock:us-east-1:111122223333:inference-profile/us.anthropic.claude-haiku-4-5-20251001-v1:0]
+  [L2] DENIED   Helpdesk chatbot: ApplyGuardrail on its guardrail
+         why: explicit Deny in SCP blunt-allowlist-scp (PermittedModels)  [check: bedrock:ApplyGuardrail on arn:aws:bedrock:us-east-1:111122223333:guardrail/gr-helpdesk-example]
+  [L3] DENIED   Helpdesk chatbot: Retrieve from its knowledge base
+         why: explicit Deny in SCP blunt-allowlist-scp (PermittedModels)  [check: bedrock:Retrieve on arn:aws:bedrock:us-east-1:111122223333:knowledge-base/KBHELPDESK1]
+  [L4] ALLOWED  Helpdesk chatbot: approved model (Claude Haiku 4.5) on the bedrock-mantle endpoint
+         why: every check passed: bedrock-mantle:CreateInference
+  [L5] ALLOWED  Data science: InvokeModel on approved Nova Lite in us-west-2
+         why: every check passed: bedrock:InvokeModel
+  [L6] DENIED   Security admin: PutModelInvocationLoggingConfiguration (turn logging on)
+         why: explicit Deny in SCP blunt-allowlist-scp (PermittedModels)  [check: bedrock:PutModelInvocationLoggingConfiguration on *]
+  [L7] ALLOWED  Sandbox admin: a Bedrock API key that expires in 30 days
+         why: every check passed: iam:CreateServiceSpecificCredential
+  [L8] DENIED   Sandbox user: Converse on Nova Lite with their 30-day API key
+         why: explicit Deny in SCP blunt-allowlist-scp (PermittedModels)  [check: bedrock:CallWithBearerToken on *]
+  [L9] ALLOWED  Platform admin: CreateProvisionedModelThroughput (approved purchase)
+         why: every check passed: bedrock:CreateProvisionedModelThroughput
+
+4 of 9 legitimate requests allowed  (showing L only)
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ make hunt-naive
+
+python3 hunt.py --naive
+--- M10 LLMjacking hunt · NAIVE rule only · 226 CloudTrail records ---
+
+  HIGH   NAIVE  2026-10-14T02:11:22Z  user/BedrockAPIKey-x7k2
+         InvokeModel of unapproved model anthropic.claude-opus-4-7
+
+1 finding. Attacker events covered by a finding: 1 of 117 (20 on bedrock-mantle.amazonaws.com, 96 on bedrock.amazonaws.com, 1 on sts.amazonaws.com).
+Not covered: 20 x bedrock-mantle.amazonaws.com CreateInference; 60 x bedrock.amazonaws.com Converse; 30 x bedrock.amazonaws.com ConverseStream; 1 x bedrock.amazonaws.com DeleteModelInvocationLoggingConfiguration; 1 x bedrock.amazonaws.com GetFoundationModelAvailability; 1 x bedrock.amazonaws.com GetModelInvocationLoggingConfiguration; 1 x bedrock.amazonaws.com ListFoundationModels; 1 x bedrock.amazonaws.com PutUseCaseForModelAccess; 1 x sts.amazonaws.com GetCallerIdentity
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 explore.py event Converse --from 203.0.113.50
+
+CloudTrail record 115 of 226 (fake, with the same fields as AWS's examples)
+
+  who    userIdentity.type    IAMUser
+         userIdentity.arn     arn:aws:iam::111122223333:user/BedrockAPIKey-x7k2
+  what   eventSource          bedrock.amazonaws.com
+         eventName            Converse
+         requestParameters    {"modelId": "anthropic.claude-opus-4-7"}
+  where  awsRegion            us-east-1
+         sourceIPAddress      203.0.113.50
+         userAgent            Python/3.11 aiohttp/3.9.5
+  when   eventTime            2026-10-14T02:20:00Z
+  how    additionalEventData  {"callWithBearerToken": true}
+  result errorCode            -  (none: the call worked)
+
+  not here: the prompt and the answer. CloudTrail records the call, not the conversation.
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 hunt.py --rule H01,H02,H03,H05
+
+--- M10 LLMjacking hunt · rules H01, H02, H03, H05 · 226 CloudTrail records ---
+
+  LOW    H01  2026-10-09T15:02:10Z  role/PlatformAdminRole
+         console-style API-key user created: BedrockAPIKey-x7k2
+  HIGH   H01  2026-10-09T15:02:12Z  role/PlatformAdminRole
+         long-term Bedrock API key created for user BedrockAPIKey-x7k2
+         - credentialAgeDays: missing -> the key NEVER expires
+  HIGH   H02  2026-10-14T02:11:03Z  user/BedrockAPIKey-x7k2
+         model and logging reconnaissance by a principal that never did this before
+         - GetFoundationModelAvailability, GetModelInvocationLoggingConfiguration, ListFoundationModels
+         - from 203.0.113.50  UA: Python/3.11 aiohttp/3.9.5
+  MEDIUM H03  2026-10-14T02:11:22Z  user/BedrockAPIKey-x7k2
+         invalid-request probe (ValidationException) from a new invoker
+         - InvokeModel anthropic.claude-opus-4-7 from 203.0.113.50
+  MEDIUM H05  2026-10-14T02:12:40Z  user/BedrockAPIKey-x7k2
+         PutUseCaseForModelAccess: someone is enabling models
+         - from 203.0.113.50
+
+5 findings. Attacker events covered by a finding: 5 of 117 (20 on bedrock-mantle.amazonaws.com, 96 on bedrock.amazonaws.com, 1 on sts.amazonaws.com).
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 hunt.py --rule H04,H06,H07,H08
+
+--- M10 LLMjacking hunt · rules H04, H06, H07, H08 · 226 CloudTrail records ---
+
+  HIGH   H06  2026-10-14T02:11:22Z  user/BedrockAPIKey-x7k2
+         61 invocation(s) of unapproved model anthropic.claude-opus-4-7
+         - events: ['Converse', 'InvokeModel']  from ['203.0.113.50']
+  HIGH   H07  2026-10-14T02:11:22Z  user/BedrockAPIKey-x7k2
+         61 invocation(s) from a new source 203.0.113.50 using Bedrock API key (bearer token)
+         - baseline IPs: none: never seen before
+  MEDIUM H08  2026-10-14T02:11:22Z  user/BedrockAPIKey-x7k2
+         61 invocations in the hour 2026-10-14T02:00Z (limit 20)
+         - baseline peak: 0 per hour
+  HIGH   H04  2026-10-14T03:05:40Z  role/HelpdeskAppRole
+         DeleteModelInvocationLoggingConfiguration: audit trail changed by a non-security principal
+         - from 198.51.100.77  UA: Python/3.11 aiohttp/3.9.5
+  HIGH   H06  2026-10-14T03:10:00Z  role/HelpdeskAppRole
+         30 invocation(s) of unapproved model global.anthropic.claude-opus-4-7
+         - events: ['ConverseStream']  from ['198.51.100.77']
+  HIGH   H07  2026-10-14T03:10:00Z  role/HelpdeskAppRole
+         30 invocation(s) from a new source 198.51.100.77 using SigV4 credentials
+         - baseline IPs: 192.0.2.10
+  MEDIUM H08  2026-10-14T03:10:00Z  role/HelpdeskAppRole
+         30 invocations in the hour 2026-10-14T03:00Z (limit 20)
+         - baseline peak: 4 per hour
+
+7 findings. Attacker events covered by a finding: 92 of 117 (20 on bedrock-mantle.amazonaws.com, 96 on bedrock.amazonaws.com, 1 on sts.amazonaws.com).
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ make hunt | tail -2
+
+12 findings. Attacker events covered by a finding: 96 of 117 (20 on bedrock-mantle.amazonaws.com, 96 on bedrock.amazonaws.com, 1 on sts.amazonaws.com).
+Not covered: 20 x bedrock-mantle.amazonaws.com CreateInference; 1 x sts.amazonaws.com GetCallerIdentity
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ make test | tail -3
+
+OK
+
+ALL TESTS PASSED (17 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ make challenge 2>&1 | tail -16
+
+[PASS] data: only AWS documentation account IDs, RFC 5737 IPs and ...EXAMPLE key IDs appear anywhere in the lab
+[FAIL] challenge: the stolen chatbot role can't run an unapproved model on bedrock-mantle
+[PASS] challenge: the chatbot's approved model on bedrock-mantle still works
+[FAIL] challenge: a sandbox Bedrock API key with no expiry at all is refused
+[FAIL] challenge: rule_mantle_inference flags the 20 unapproved CreateInference data events
+[PASS] challenge: the chatbot's hourly approved-model mantle calls are not flagged
+  why test_18_mantle_unapproved_model_denied: AssertionError: True is not false : B4 is still ALLOWED: the allow-list ignores bedrock-mantle
+  why test_20_never_expiring_key_denied: AssertionError: True is not false : C1 is still ALLOWED: NumericGreaterThan is false when the age key is missing
+  why test_21_hunt_sees_mantle: AssertionError: 0 != 20 : 0 of 20 unapproved mantle events flagged
+----------------------------------------------------------------------
+Ran 22 tests in 0.043s
+
+FAILED (failures=3)
+
+3 of 22 TESTS FAILED (22 run)
+make: *** [Makefile:32: challenge] Error 1
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ exit
+
+exit

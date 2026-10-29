@@ -1,0 +1,169 @@
+{
+  "scenario": "m10-10.3-lab-linux",
+  "start": 1.733,
+  "steps": [
+    {
+      "label": "Start",
+      "speed": 1,
+      "start": 1.733,
+      "end": 6.495
+    },
+    {
+      "label": "High",
+      "speed": 1,
+      "start": 8.495,
+      "end": 14.398
+    },
+    {
+      "label": "Role",
+      "speed": 1,
+      "start": 21.398,
+      "end": 27.562
+    },
+    {
+      "label": "Attacker 1",
+      "speed": 1,
+      "start": 32.562,
+      "end": 36.335
+    },
+    {
+      "label": "Attackers 2 and 3",
+      "speed": 1,
+      "start": 43.336,
+      "end": 47.714
+    },
+    {
+      "label": "Allow-list",
+      "speed": 1,
+      "start": 54.714,
+      "end": 59.624
+    },
+    {
+      "label": "Safe",
+      "speed": 1,
+      "start": 64.624,
+      "end": 70.648
+    },
+    {
+      "label": "Legit",
+      "speed": 1,
+      "start": 77.648,
+      "end": 83.219
+    },
+    {
+      "label": "Blunt",
+      "speed": 1,
+      "start": 89.219,
+      "end": 99.743
+    },
+    {
+      "label": "Hunt naive",
+      "speed": 1,
+      "start": 106.743,
+      "end": 109.462
+    },
+    {
+      "label": "Attacker event",
+      "speed": 1,
+      "start": 115.462,
+      "end": 122.466
+    },
+    {
+      "label": "Hunt key",
+      "speed": 1,
+      "start": 128.466,
+      "end": 134.012
+    },
+    {
+      "label": "Hunt use",
+      "speed": 1,
+      "start": 141.012,
+      "end": 146.392
+    },
+    {
+      "label": "Hunt all",
+      "speed": 1,
+      "start": 153.392,
+      "end": 156.75
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 161.75,
+      "end": 165.096
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 169.096,
+      "end": 173.831
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.333,
+      "what": "type"
+    },
+    {
+      "t": 9.095,
+      "what": "type"
+    },
+    {
+      "t": 21.998,
+      "what": "type"
+    },
+    {
+      "t": 33.162,
+      "what": "type"
+    },
+    {
+      "t": 43.936,
+      "what": "type"
+    },
+    {
+      "t": 55.314,
+      "what": "type"
+    },
+    {
+      "t": 65.224,
+      "what": "type"
+    },
+    {
+      "t": 78.248,
+      "what": "type"
+    },
+    {
+      "t": 89.819,
+      "what": "type"
+    },
+    {
+      "t": 107.343,
+      "what": "type"
+    },
+    {
+      "t": 116.062,
+      "what": "type"
+    },
+    {
+      "t": 129.067,
+      "what": "type"
+    },
+    {
+      "t": 141.612,
+      "what": "type"
+    },
+    {
+      "t": 153.992,
+      "what": "type"
+    },
+    {
+      "t": 162.35,
+      "what": "type"
+    },
+    {
+      "t": 169.696,
+      "what": "type"
+    }
+  ],
+  "end": 179.831
+}
