@@ -1,0 +1,25 @@
+{
+  "name": "m08-8.6-understand-linux",
+  "lesson": "8.6",
+  "title": "Lab 8.6, part 1: get the lab, set it up, and look at how MCP works (stdio, server/discover, tools/list, tools/call, what the model reads, Streamable HTTP, a lab access token) before attacking it",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m08 && ls", "pause_after": 4},
+    {"label": "Servers", "type": "ls servers auth", "pause_after": 3},
+    {"label": "The data", "type": "ls -a data/workspace && cat data/workspace/.env", "pause_after": 4},
+    {"label": "Setup plan", "type": "make -n setup check", "pause_after": 3},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Check", "type": "make check", "pause_after": 3},
+    {"label": "Discover", "type": ".venv/bin/python explore.py discover", "pause_after": 6},
+    {"label": "List", "type": ".venv/bin/python explore.py list", "pause_after": 6},
+    {"label": "Call", "type": ".venv/bin/python explore.py call", "pause_after": 6},
+    {"label": "Context", "type": ".venv/bin/python explore.py context", "pause_after": 6},
+    {"label": "HTTP", "type": ".venv/bin/python explore.py http", "pause_after": 6},
+    {"label": "Token", "type": ".venv/bin/python explore.py token", "pause_after": 6},
+    {"label": "One run", "type": ".venv/bin/python host.py \"give me a fact about octopus\"", "pause_after": 6}
+  ]
+}
