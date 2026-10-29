@@ -1,0 +1,149 @@
+{
+  "scenario": "m07-7.9-understand-linux",
+  "start": 1.809,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.809,
+      "end": 12.306
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.306,
+      "end": 20.954
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 24.954,
+      "end": 27.976
+    },
+    {
+      "label": "A ticket",
+      "speed": 1,
+      "start": 31.976,
+      "end": 36.959
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 40.959,
+      "end": 44.481
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 47.481,
+      "end": 49.677
+    },
+    {
+      "label": "Tools",
+      "speed": 1,
+      "start": 52.677,
+      "end": 56.675
+    },
+    {
+      "label": "Loop",
+      "speed": 1,
+      "start": 62.675,
+      "end": 66.395
+    },
+    {
+      "label": "Ollama check",
+      "speed": 1,
+      "start": 73.395,
+      "end": 88.128
+    },
+    {
+      "label": "Tool call",
+      "speed": 3,
+      "start": 91.128,
+      "end": 109.588
+    },
+    {
+      "label": "Tool loop",
+      "speed": 3,
+      "start": 116.588,
+      "end": 130.362
+    },
+    {
+      "label": "Memory write",
+      "speed": 1,
+      "start": 137.362,
+      "end": 141.842
+    },
+    {
+      "label": "Memory read",
+      "speed": 1,
+      "start": 147.842,
+      "end": 158.956
+    },
+    {
+      "label": "Answer",
+      "speed": 1,
+      "start": 165.956,
+      "end": 170.655
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.409,
+      "what": "type"
+    },
+    {
+      "t": 15.906,
+      "what": "type"
+    },
+    {
+      "t": 25.554,
+      "what": "type"
+    },
+    {
+      "t": 32.576,
+      "what": "type"
+    },
+    {
+      "t": 41.559,
+      "what": "type"
+    },
+    {
+      "t": 48.081,
+      "what": "type"
+    },
+    {
+      "t": 53.278,
+      "what": "type"
+    },
+    {
+      "t": 63.275,
+      "what": "type"
+    },
+    {
+      "t": 73.995,
+      "what": "type"
+    },
+    {
+      "t": 91.728,
+      "what": "type"
+    },
+    {
+      "t": 117.188,
+      "what": "type"
+    },
+    {
+      "t": 137.962,
+      "what": "type"
+    },
+    {
+      "t": 148.442,
+      "what": "type"
+    },
+    {
+      "t": 166.556,
+      "what": "type"
+    }
+  ],
+  "end": 177.655
+}
