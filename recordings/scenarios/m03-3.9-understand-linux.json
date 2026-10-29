@@ -1,0 +1,34 @@
+{
+  "name": "m03-3.9-understand-linux",
+  "lesson": "3.9",
+  "title": "Lab 3.9, part 1: get the lab, look at every file, then take one model call apart (the JSON request, a real reply from gemma3:1b, the same request as one stream of tokens, the stand-in's raw reply) and meet promptfoo before attacking anything",
+  "cols": 132,
+  "rows": 36,
+  "needs": ["ollama"],
+  "before": [
+    "curl -fsSL https://nodejs.org/dist/v22.22.0/node-v22.22.0-linux-x64.tar.xz -o node.tar.xz && sudo tar -xJf node.tar.xz -C /usr/local --strip-components=1 && rm node.tar.xz && node --version",
+    "curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh",
+    "sudo systemctl daemon-reload && sudo systemctl enable --now ollama || (setsid nohup ollama serve >/tmp/ollama.log 2>&1 < /dev/null &)",
+    "for i in $(seq 1 30); do curl -fsS http://127.0.0.1:11434/api/version && break; sleep 2; done",
+    "ollama pull gemma3:1b"
+  ],
+  "fail_on": ["Traceback", "Could not reach Ollama", "npx not found"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m03 && ls", "pause_after": 4},
+    {"label": "The data", "type": "ls data/emails", "pause_after": 3},
+    {"label": "An email", "type": "cat data/emails/01_normal.txt", "pause_after": 4},
+    {"label": "Setup plan", "type": "make -n setup", "pause_after": 3},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Read the output", "type": "python3 support_bot.py summarise data/emails/01_normal.txt", "pause_after": 5},
+    {"label": "Template", "type": "ollama show gemma3:1b --template", "pause_after": 5},
+    {"label": "Request", "type": "python3 explore.py request data/emails/01_normal.txt", "pause_after": 6},
+    {"label": "Send", "type": "python3 explore.py send data/emails/01_normal.txt", "timeout": 600, "pause_after": 6},
+    {"label": "Stream", "type": "python3 explore.py stream data/emails/01_normal.txt", "timeout": 900, "pause_after": 7},
+    {"label": "Planted stream", "type": "python3 explore.py stream --no-check data/emails/03_planted_note.txt", "pause_after": 6},
+    {"label": "Stand-in", "type": "python3 explore.py standin data/emails/03_planted_note.txt", "pause_after": 6},
+    {"label": "promptfoo", "type": "make promptfoo-check", "timeout": 600, "pause_after": 4},
+    {"label": "promptfoo target", "type": "sed -n '/^providers/,/transformResponse/p' promptfooconfig.yaml", "pause_after": 5},
+    {"label": "promptfoo checks", "type": "sed -n '/^defaultTest/,$p' promptfooconfig.yaml", "pause_after": 6}
+  ]
+}
