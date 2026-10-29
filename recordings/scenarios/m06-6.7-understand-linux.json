@@ -1,0 +1,31 @@
+{
+  "name": "m06-6.7-understand-linux",
+  "lesson": "6.7",
+  "title": "Lab 6.7, part 1: get the lab, set it up, and look at each RAG step (chunks, embeddings, search, prompt, answer) before attacking it",
+  "cols": 132,
+  "rows": 34,
+  "needs": ["ollama"],
+  "before": [
+    "curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh",
+    "sudo systemctl daemon-reload && sudo systemctl enable --now ollama || (setsid nohup ollama serve >/tmp/ollama.log 2>&1 < /dev/null &)",
+    "for i in $(seq 1 30); do curl -fsS http://127.0.0.1:11434/api/version && break; sleep 2; done",
+    "ollama pull embeddinggemma"
+  ],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m06 && ls", "pause_after": 4},
+    {"label": "The data", "type": "ls data/docs/alpha data/docs/bravo data/inbox/alpha", "pause_after": 4},
+    {"label": "A document", "type": "cat data/docs/alpha/refund-policy.md", "pause_after": 4},
+    {"label": "Setup plan", "type": "make -n setup", "pause_after": 3},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Check", "type": ".venv/bin/python -c \"import importlib.metadata as m; print('qdrant-client', m.version('qdrant-client'))\"", "pause_after": 3},
+    {"label": "Chunks", "type": ".venv/bin/python explore.py chunks data/docs/alpha/refund-policy.md", "pause_after": 5},
+    {"label": "Embed", "type": ".venv/bin/python explore.py embed \"How do I get a refund?\" \"Approved refunds go back to the original payment method\" \"Install the VPN client from the IT portal\"", "pause_after": 6},
+    {"label": "Words not meaning", "type": ".venv/bin/python explore.py embed \"Can I get my cash reimbursed?\" \"Approved refunds go back to the original payment method\"", "pause_after": 5},
+    {"label": "Meaning", "type": ".venv/bin/python explore.py embed --ollama \"Can I get my cash reimbursed?\" \"Approved refunds go back to the original payment method\" \"Install the VPN client from the IT portal\"", "pause_after": 6},
+    {"label": "Search", "type": ".venv/bin/python explore.py search \"How do I set up the VPN?\"", "pause_after": 6},
+    {"label": "Prompt", "type": ".venv/bin/python explore.py prompt \"How do I set up the VPN?\"", "pause_after": 7},
+    {"label": "Answer", "type": "make ask Q=\"How do I set up the VPN?\"", "pause_after": 7}
+  ]
+}

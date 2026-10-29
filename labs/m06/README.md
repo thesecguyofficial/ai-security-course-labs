@@ -122,6 +122,108 @@ qdrant-client 1.19.1
 database. You never start a Qdrant server in this lab: the library runs the store inside your Python process
 ("local mode"). You don't call it directly either; `rag_app.py` does, and you'll read those calls in Step 3.
 
+## Step 1b · Look at each RAG step before you attack it (about 10 minutes)
+
+New to RAG? Do this first. `explore.py` shows, one at a time, the steps `rag_app.py` runs when someone asks a
+question. Nothing here changes the app.
+
+**1. Chunks.** RAG doesn't search whole files. It splits each document into short pieces (chunks) and searches those.
+This app makes one chunk per paragraph and puts the document's title in front of each one:
+
+```bash
+.venv/bin/python explore.py chunks data/docs/alpha/refund-policy.md
+```
+
+```text
+data/docs/alpha/refund-policy.md: 300 characters -> 3 chunks (one per paragraph, each starts with the title)
+
+--- chunk 0 ---
+# Alpha Outdoor Gear: refund policy
+Customers can request a refund within 30 days of delivery from the Orders page at shop.alpha.example.
+...
+```
+
+**2. Embeddings.** Each chunk, and later each question, is turned into a list of numbers (a vector). Two texts
+whose vectors point the same way are "similar". The similarity score runs from 1.0 (same direction) to 0
+(nothing in common):
+
+```bash
+.venv/bin/python explore.py embed "How do I get a refund?" "Approved refunds go back to the original payment method" "Install the VPN client from the IT portal"
+```
+
+```text
+embedder: hashing-512 (stand-in, not AI) · every text becomes 512 numbers
+
+"How do I get a refund?"
+   1 of 512 numbers are not 0: [83]=-1.000
+"Approved refunds go back to the original payment method"
+   6 of 512 numbers are not 0: [83]=-0.408, [187]=+0.408, [313]=-0.408, [390]=+0.408, [436]=+0.408, [438]=+0.408
+...
+similarity to "How do I get a refund?" (1.0 = same direction, 0 = nothing in common):
+   0.408  Approved refunds go back to the original payment method
+   0.000  Install the VPN client from the IT portal
+```
+
+The stand-in gives each word one slot out of 512. "refund" lands in slot 83 in both texts, so they score 0.408.
+The VPN sentence shares no word, so it scores 0. Now ask with different words for the same idea:
+
+```bash
+.venv/bin/python explore.py embed "Can I get my cash reimbursed?" "Approved refunds go back to the original payment method"
+```
+
+It scores **0.000**: the stand-in matches words, not meaning. A real embedding model matches meaning. If you have
+Ollama (Step 7), add `--ollama` to the same command and the score goes up, because the model learned that
+"cash reimbursed" and "refunds" mean nearly the same thing.
+
+**3. Search.** The app stores every chunk's vector in Qdrant, with labels (tenant, source file). A question is
+embedded the same way, and the store returns the three nearest chunks:
+
+```bash
+.venv/bin/python explore.py search "How do I set up the VPN?"
+```
+
+```text
+question: "How do I set up the VPN?"  ->  the 3 nearest chunks in the shared store (no tenant filter)
+
+  score 0.333  tenant=alpha  docs/alpha/vpn-setup.md
+  score 0.309  tenant=bravo  docs/bravo/vpn-setup.md
+  score 0.309  tenant=alpha  docs/alpha/vpn-setup.md
+```
+
+Look at the second line: Alice works for Alpha, but the nearest chunks include one of **Bravo's** files. The search
+doesn't know who is asking. Hold on to that; it's attack 2.
+
+**4. The prompt.** The app pastes those chunks and the question into the message it sends the model:
+
+```bash
+.venv/bin/python explore.py prompt "How do I set up the VPN?"
+```
+
+```text
+=== system message (the app's rules) ===
+You are the company help bot for tenant alpha. Only use documents that belong to alpha. Answer the user's question using the documents.
+
+=== user message (retrieved chunks + the question) ===
+Sources:
+<source path="docs/alpha/vpn-setup.md">
+...
+```
+
+The only thing keeping Bravo's text out of Alice's answer is one sentence in the system message. A sentence is a
+request, not a lock. That's the whole module in one picture: what goes into the store, what the search returns, and
+what the model is told to do with it.
+
+**5. The answer.** Finally, the full app: retrieval, prompt and answer in one go:
+
+```bash
+make ask Q="How do I set up the VPN?"
+```
+
+You'll see a `log:` line with the retrieval (which chunks, which tenant, which scores), the bot's answer, and the
+sources shown to the user. Read it closely: the second sentence of the answer comes from **Bravo's** VPN document,
+and Bravo's file is listed as a source. Alice asked an ordinary question and already got another company's text.
+Read every run like this in Step 2.
+
 ## Step 2 · Break it: attack the vulnerable app
 
 ```bash
