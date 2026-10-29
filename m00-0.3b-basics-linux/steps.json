@@ -1,0 +1,299 @@
+{
+  "scenario": "m00-0.3b-basics-linux",
+  "start": 1.89,
+  "steps": [
+    {
+      "label": "Where am I",
+      "speed": 1,
+      "start": 1.89,
+      "end": 3.209
+    },
+    {
+      "label": "Make a folder",
+      "speed": 1,
+      "start": 5.209,
+      "end": 7.364
+    },
+    {
+      "label": "Make a folder",
+      "speed": 1,
+      "start": 8.364,
+      "end": 10.303
+    },
+    {
+      "label": "Make a folder",
+      "speed": 1,
+      "start": 11.304,
+      "end": 12.632
+    },
+    {
+      "label": "A file",
+      "speed": 1,
+      "start": 14.632,
+      "end": 19.342
+    },
+    {
+      "label": "A file",
+      "speed": 1,
+      "start": 20.342,
+      "end": 21.987
+    },
+    {
+      "label": "A file",
+      "speed": 1,
+      "start": 23.987,
+      "end": 26.601
+    },
+    {
+      "label": "Back up",
+      "speed": 1,
+      "start": 28.601,
+      "end": 30.171
+    },
+    {
+      "label": "Clone",
+      "speed": 1,
+      "start": 31.171,
+      "end": 41.836
+    },
+    {
+      "label": "Inside the repository",
+      "speed": 1,
+      "start": 44.836,
+      "end": 48.857
+    },
+    {
+      "label": "Inside the repository",
+      "speed": 1,
+      "start": 49.857,
+      "end": 51.048
+    },
+    {
+      "label": "Commits",
+      "speed": 1,
+      "start": 54.048,
+      "end": 57.544
+    },
+    {
+      "label": "One commit",
+      "speed": 1,
+      "start": 61.544,
+      "end": 66.411
+    },
+    {
+      "label": "Pull",
+      "speed": 1,
+      "start": 71.411,
+      "end": 73.645
+    },
+    {
+      "label": "Markdown",
+      "speed": 1,
+      "start": 76.645,
+      "end": 79.722
+    },
+    {
+      "label": "A web page",
+      "speed": 1,
+      "start": 84.722,
+      "end": 90.338
+    },
+    {
+      "label": "The answer's first lines",
+      "speed": 1,
+      "start": 95.338,
+      "end": 100.915
+    },
+    {
+      "label": "Not found",
+      "speed": 1,
+      "start": 104.915,
+      "end": 113.868
+    },
+    {
+      "label": "A public API",
+      "speed": 1,
+      "start": 116.868,
+      "end": 128.377
+    },
+    {
+      "label": "No key",
+      "speed": 1,
+      "start": 133.377,
+      "end": 138.536
+    },
+    {
+      "label": "Start a local server",
+      "speed": 1,
+      "start": 142.536,
+      "end": 144.864
+    },
+    {
+      "label": "Start a local server",
+      "speed": 1,
+      "start": 145.864,
+      "end": 151.189
+    },
+    {
+      "label": "Who is listening",
+      "speed": 1,
+      "start": 154.189,
+      "end": 157.609
+    },
+    {
+      "label": "Local web page",
+      "speed": 1,
+      "start": 161.609,
+      "end": 165.929
+    },
+    {
+      "label": "Local API, no key",
+      "speed": 1,
+      "start": 170.929,
+      "end": 177.157
+    },
+    {
+      "label": "Local API, with key",
+      "speed": 1,
+      "start": 181.157,
+      "end": 191.845
+    },
+    {
+      "label": "Create an order",
+      "speed": 1,
+      "start": 195.845,
+      "end": 214.857
+    },
+    {
+      "label": "Missing order",
+      "speed": 1,
+      "start": 219.857,
+      "end": 230.59
+    },
+    {
+      "label": "Stop the server",
+      "speed": 1,
+      "start": 234.591,
+      "end": 236.338
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.49,
+      "what": "type"
+    },
+    {
+      "t": 5.809,
+      "what": "type"
+    },
+    {
+      "t": 8.964,
+      "what": "type"
+    },
+    {
+      "t": 11.904,
+      "what": "type"
+    },
+    {
+      "t": 15.232,
+      "what": "type"
+    },
+    {
+      "t": 20.943,
+      "what": "type"
+    },
+    {
+      "t": 24.588,
+      "what": "type"
+    },
+    {
+      "t": 29.201,
+      "what": "type"
+    },
+    {
+      "t": 31.771,
+      "what": "type"
+    },
+    {
+      "t": 45.437,
+      "what": "type"
+    },
+    {
+      "t": 50.457,
+      "what": "type"
+    },
+    {
+      "t": 54.648,
+      "what": "type"
+    },
+    {
+      "t": 62.144,
+      "what": "type"
+    },
+    {
+      "t": 72.011,
+      "what": "type"
+    },
+    {
+      "t": 77.245,
+      "what": "type"
+    },
+    {
+      "t": 85.323,
+      "what": "type"
+    },
+    {
+      "t": 95.939,
+      "what": "type"
+    },
+    {
+      "t": 105.515,
+      "what": "type"
+    },
+    {
+      "t": 117.469,
+      "what": "type"
+    },
+    {
+      "t": 133.977,
+      "what": "type"
+    },
+    {
+      "t": 143.136,
+      "what": "type"
+    },
+    {
+      "t": 146.464,
+      "what": "type"
+    },
+    {
+      "t": 154.789,
+      "what": "type"
+    },
+    {
+      "t": 162.209,
+      "what": "type"
+    },
+    {
+      "t": 171.53,
+      "what": "type"
+    },
+    {
+      "t": 181.758,
+      "what": "type"
+    },
+    {
+      "t": 196.445,
+      "what": "type"
+    },
+    {
+      "t": 220.457,
+      "what": "type"
+    },
+    {
+      "t": 235.191,
+      "what": "type"
+    }
+  ],
+  "end": 238.338
+}
