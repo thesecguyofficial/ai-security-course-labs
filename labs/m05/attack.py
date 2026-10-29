@@ -3,6 +3,7 @@ attack.py: send the three attack questions to the helpdesk app and report what h
 
     python3 attack.py --mode vulnerable     # watch model output change what the app does
     python3 attack.py --mode safe           # the same questions against the fixed app
+    python3 attack.py --only sql            # just one of the three (html, sql or shell)
 
 It calls the app's code directly (no browser needed). To see the XSS pop up in a real browser, run
 `python3 helpdesk_app.py` and ask "summarise my latest ticket" at http://127.0.0.1:8055.
@@ -29,12 +30,14 @@ SECRET = "lab-only-not-a-real-password"
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", choices=["vulnerable", "safe"], default="vulnerable")
+    ap.add_argument("--only", choices=["html", "sql", "shell"], help="run just one of the three attacks")
     a = ap.parse_args()
+    attacks = [(k, q) for k, q in ATTACKS if not a.only or k.strip().lower() == a.only]
     safe = a.mode == "safe"
     logging.basicConfig(level=logging.INFO, format="    log: %(levelname)s %(message)s")
     print(f"--- M5 lab · {a.mode.upper()} mode · stand-in model (stand_in_model.py, not AI) ---\n")
     hits = 0
-    for kind, q in ATTACKS:
+    for kind, q in attacks:
         print(f"[{kind}] you> {q}")
         r = app.answer_question(q, safe)
         if kind.strip() == "HTML":
@@ -56,7 +59,7 @@ def main():
                                     else "safe - only allow-listed service names reach the helper"))
         hits += ran
         print()
-    print(f"{hits} of {len(ATTACKS)} attacks changed what the app did.")
+    print(f"{hits} of {len(attacks)} attack{'s' if len(attacks) > 1 else ''} changed what the app did.")
 
 
 if __name__ == "__main__":
