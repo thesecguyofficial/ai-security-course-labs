@@ -24,7 +24,8 @@ automated tests that also prove each attack worked before. Finally, a challenge 
 | `stand_in_model.py` | A **stand-in for an AI model**. Plain Python, **not AI**, so every run gives the same result |
 | `tools/service_status.py` | The helper program the app runs to "check a service". Prints fake statuses |
 | `data/fake_secrets.env` | Fake secrets the app should never reveal. Nothing in it works anywhere |
-| `attack.py` | Sends the three attack questions and reports what happened |
+| `attack.py` | Sends the three attack questions and reports what happened. `--only html`, `--only sql` or `--only shell` runs one of them |
+| `explore.py` | Read-only: shows each step on its own (the data, the model's plan, the page, Markdown, the SQL, the shell). Step 1b |
 | `test_lab.py` | 13 automated tests: 3 prove the attacks work in vulnerable mode, 10 prove the fixes hold |
 | `test_challenge.py` | 5 tests for the challenge. 4 fail until you fix the code |
 | `run_tests.py` | Runs the tests with one line per result |
@@ -52,13 +53,196 @@ The attacks only target this app, on your machine. Only attack systems you own o
 - A web browser, for one optional step.
 - Optional, last step only: Ollama with a small model (lessons 0.6 and 1.8).
 
-There is no setup step. Open a terminal in this folder:
+Open a terminal in this folder and run the setup check:
 
 ```bash
 cd labs/m05
+make -n setup
+make setup
 ```
 
 - `cd labs/m05`: run it from the course labs repository folder (`ai-security-course-labs`)
+- `make -n setup`: prints what `make setup` would run, without running it ("look before you run")
+- `make setup`: same as `python3 ../../tools/check_python.py 3.11`
+
+Real output of `make setup` (Linux):
+
+```text
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+```
+
+There is nothing to install: no virtual environment and no `pip install`, because everything this lab uses ships
+with Python (its *standard library*: `sqlite3`, `html`, `subprocess`, `http.server` and friends).
+
+## Step 1b · Look at each step before you attack it (about 10 minutes)
+
+New to web apps? Do this first. `explore.py` shows, one at a time, what happens to the model's output after the
+model has written it. Nothing here changes the app or attacks it. On Windows, use `py` instead of `python3`.
+
+**0. The data.** Five fake tickets, two people, and who is signed in:
+
+```bash
+python3 explore.py data
+```
+
+```text
+the tickets table (lives in memory, rebuilt every time the app starts; all fake):
+   id  owner  title
+   1   alice  VPN drops every hour
+   2   alice  Printer on floor 3 out of paper
+   3   alice  Password reset please
+   4   bob    CONFIDENTIAL payroll export
+   5   bob    CONFIDENTIAL laptop rebuild for the CFO
+
+signed in as: alice   (set by the app, never by the model)
+data/fake_secrets.env: fake keys the app must never show (nothing in it works anywhere)
+helper program: tools/service_status.py knows: email, printer, vpn, wifi
+```
+
+**1. The plan.** The app asks the model for a small JSON object with four fields, then sends each field to a
+different place. Read this output first, every time:
+
+```bash
+python3 explore.py plan "search my tickets for VPN"
+```
+
+```text
+question: "search my tickets for VPN"
+
+the model's raw output (stand-in model, not AI): one JSON object
+   {"answer": "Here are your tickets matching: VPN", "search_term": "VPN", "service": "", "filename": ""}
+
+where the app sends each field next:
+   answer       "Here are your tickets matching: VPN"  -> the web page (HTML)
+   search_term  "VPN"                                  -> a database query (SQL)
+   service      ""                                     -> a helper program (a shell command) (empty: skipped)
+   filename     ""                                     -> a file name on disk (the challenge) (empty: skipped)
+```
+
+**2. The page.** HTML mixes words with instructions in angle brackets. The model only writes characters; the page
+turns `<b>` into bold:
+
+```bash
+python3 explore.py page "search my tickets for <b>VPN</b>"
+```
+
+```text
+the model's answer (plain text):
+   Here are your tickets matching: <b>VPN</b>
+
+the HTML the vulnerable app puts in the page:
+   <p class='answer'>Here are your tickets matching: <b>VPN</b></p>
+
+how a browser reads it (explained by Python's html.parser; no browser runs here):
+   element <p>: a paragraph
+   text: 'Here are your tickets matching:'
+   element <b>: bold text
+   text: 'VPN'
+```
+
+**3. Markdown.** Chat apps turn a model's Markdown into HTML before your browser sees it. A link waits for a click;
+an image is fetched at once (the addresses end in `.example`, a name reserved for documentation):
+
+```bash
+python3 explore.py markdown 'See the **VPN guide**: [open it](https://it.example/vpn) ![status](https://status.example/vpn.png)'
+```
+
+```text
+the HTML a chat app makes from it (this file's tiny Markdown renderer):
+   <p>See the <strong>VPN guide</strong>: <a href="https://it.example/vpn">open it</a> <img src="https://status.example/vpn.png" alt="status"></p>
+
+how a browser reads it (explained by Python's html.parser; no browser runs here):
+   ...
+   element <a>: a link to 'https://it.example/vpn', opened only if someone clicks it
+   text: 'open it'
+   element <img>: fetches 'https://status.example/vpn.png' straight away, no click needed
+```
+
+With Ollama (Step 6), add `--ollama` and a question to see a real model's raw Markdown. In our recording,
+`gemma3:1b` answered "In 3 short Markdown steps, how do I reconnect my laptop to the office Wi-Fi?" with a numbered
+list and bold headings, which the renderer turned into `<ol>`, `<li>` and `<strong>` elements: "nothing here is
+fetched or run: only text and formatting". Your model's wording will differ.
+
+**4. The SQL.** The app writes one line of SQL and puts the model's search term inside the quotes:
+
+```bash
+python3 explore.py sql VPN
+python3 explore.py sql "Bob's laptop"
+```
+
+```text
+the app sends this to the database:
+   app log: SQL sent: SELECT id, assignee, title FROM tickets WHERE assignee = 'alice' AND title LIKE '%VPN%'
+
+rows that came back (1):
+   ticket 1  owner=alice  VPN drops every hour
+...
+   app log: SQL sent: SELECT id, assignee, title FROM tickets WHERE assignee = 'alice' AND title LIKE '%Bob's laptop%'
+
+the database refused the query: OperationalError: near "s": syntax error
+```
+
+Nobody attacked anything: the apostrophe in *Bob's* closed the quoted text early, so the database read the rest
+as part of the command. Step 1 does the same on purpose.
+
+**5. The shell.** The app hands one string to the shell, and the shell splits it into programs and arguments.
+A semicolon means "then run the next command":
+
+```bash
+python3 explore.py shell vpn
+python3 explore.py shell "vpn; echo hello from a second command"
+```
+
+```text
+the app hands ONE string to the shell (/bin/sh):
+   "/usr/bin/python3" tools/service_status.py vpn; echo hello from a second command
+
+how the shell reads it (';' means: then run the next command):
+   command 1: program /usr/bin/python3  arguments ['tools/service_status.py', 'vpn']
+   command 2: program echo  arguments ['hello', 'from', 'a', 'second', 'command']
+
+what came back:
+   app log: command run: "/usr/bin/python3" tools/service_status.py vpn; echo hello from a second command
+   VPN gateway: OK (fake data)
+   hello from a second command
+```
+
+(Windows uses `cmd.exe`, where `&` plays the part of `;`.)
+
+**6. The real server.** `curl` sends the same request a browser would, and prints the reply instead of drawing it.
+The `&` at the end of the first line runs the app in the background, so the terminal stays free (Mac and Linux.
+Windows: start `py helpdesk_app.py` in a second terminal, use `curl.exe` in the first, and press Ctrl+C to stop):
+
+```bash
+python3 helpdesk_app.py &
+curl -s "http://127.0.0.1:8055/ask?q=search+my+tickets+for+VPN"
+curl -s -D - -o /dev/null http://127.0.0.1:8055/
+kill %1
+```
+
+- `curl -s -D - -o /dev/null`: print only the response headers (`-D -`) and throw the page away (`-o /dev/null`)
+- `kill %1`: stop the background app
+
+The first `curl` prints the whole page as HTML; near the end is `<p class='answer'>Here are your tickets matching:
+VPN</p>`. The second prints the headers, the label on the parcel:
+
+```text
+HTTP/1.0 200 OK
+Server: BaseHTTP/0.6 Python/3.12.3
+Date: Thu, 29 Oct 2026 08:51:45 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 721
+```
+
+Run the same with `python3 helpdesk_app.py --mode safe &` and the headers gain two lines. The first is a
+**Content Security Policy**: rules telling the browser what this page may load and run (`default-src 'none'` means
+nothing, unless another rule allows it). Step 2 explains it.
+
+```text
+Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; form-action 'self'
+X-Content-Type-Options: nosniff
+```
 
 ## Step 1 · Break it: attack the vulnerable app
 
@@ -66,7 +250,8 @@ cd labs/m05
 make attack
 ```
 
-Same as `python3 attack.py --mode vulnerable`.
+Same as `python3 attack.py --mode vulnerable`. To run one attack at a time, as the lab video does:
+`python3 attack.py --only html` (or `--only sql`, `--only shell`).
 
 Real output (Linux, Python 3.13):
 
@@ -118,7 +303,8 @@ vulnerable mode and did not fire in safe mode. Press Ctrl+C in the terminal to s
 
 ## Step 2 · Read the fixes
 
-Open `helpdesk_app.py`. Each risky step has two functions next to each other; compare them.
+Open `helpdesk_app.py`. Each risky step has two functions next to each other; compare them. To see the encoding
+at work on the planted ticket, run `python3 explore.py page --safe "summarise my latest ticket"`.
 
 | Risk | Vulnerable version | Safe version | Why it works |
 |---|---|---|---|
