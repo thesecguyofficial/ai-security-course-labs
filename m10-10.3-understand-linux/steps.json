@@ -1,0 +1,159 @@
+{
+  "scenario": "m10-10.3-understand-linux",
+  "start": 1.743,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.743,
+      "end": 12.312
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.312,
+      "end": 20.961
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 24.961,
+      "end": 29.527
+    },
+    {
+      "label": "Org",
+      "speed": 1,
+      "start": 33.527,
+      "end": 37.097
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 43.097,
+      "end": 45.663
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 48.663,
+      "end": 50.916
+    },
+    {
+      "label": "Sign",
+      "speed": 1,
+      "start": 53.916,
+      "end": 57.76
+    },
+    {
+      "label": "Policy",
+      "speed": 1,
+      "start": 64.76,
+      "end": 72.826
+    },
+    {
+      "label": "Allowed",
+      "speed": 1,
+      "start": 79.827,
+      "end": 97.381
+    },
+    {
+      "label": "Explicit deny",
+      "speed": 1,
+      "start": 103.381,
+      "end": 118.249
+    },
+    {
+      "label": "Implicit deny",
+      "speed": 1,
+      "start": 124.249,
+      "end": 135.616
+    },
+    {
+      "label": "Call",
+      "speed": 1,
+      "start": 141.616,
+      "end": 151.975
+    },
+    {
+      "label": "Call with a key",
+      "speed": 1,
+      "start": 157.975,
+      "end": 167.952
+    },
+    {
+      "label": "Event",
+      "speed": 1,
+      "start": 173.952,
+      "end": 179.19
+    },
+    {
+      "label": "One run",
+      "speed": 1,
+      "start": 185.19,
+      "end": 189.423
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.343,
+      "what": "type"
+    },
+    {
+      "t": 15.912,
+      "what": "type"
+    },
+    {
+      "t": 25.562,
+      "what": "type"
+    },
+    {
+      "t": 34.127,
+      "what": "type"
+    },
+    {
+      "t": 43.697,
+      "what": "type"
+    },
+    {
+      "t": 49.264,
+      "what": "type"
+    },
+    {
+      "t": 54.516,
+      "what": "type"
+    },
+    {
+      "t": 65.36,
+      "what": "type"
+    },
+    {
+      "t": 80.427,
+      "what": "type"
+    },
+    {
+      "t": 103.981,
+      "what": "type"
+    },
+    {
+      "t": 124.849,
+      "what": "type"
+    },
+    {
+      "t": 142.216,
+      "what": "type"
+    },
+    {
+      "t": 158.575,
+      "what": "type"
+    },
+    {
+      "t": 174.552,
+      "what": "type"
+    },
+    {
+      "t": 185.79,
+      "what": "type"
+    }
+  ],
+  "end": 195.423
+}

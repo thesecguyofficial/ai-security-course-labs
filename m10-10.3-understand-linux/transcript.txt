@@ -1,0 +1,614 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 4016, done.
+remote: Counting objects:   0% (1/362)
+remote: Counting objects:   1% (4/362)
+remote: Counting objects:   2% (8/362)
+remote: Counting objects:   3% (11/362)
+remote: Counting objects:   4% (15/362)
+remote: Counting objects:   5% (19/362)
+remote: Counting objects:   6% (22/362)
+remote: Counting objects:   7% (26/362)
+remote: Counting objects:   8% (29/362)
+remote: Counting objects:   9% (33/362)
+remote: Counting objects:  10% (37/362)
+remote: Counting objects:  11% (40/362)
+remote: Counting objects:  12% (44/362)
+remote: Counting objects:  13% (48/362)
+remote: Counting objects:  14% (51/362)
+remote: Counting objects:  15% (55/362)
+remote: Counting objects:  16% (58/362)
+remote: Counting objects:  17% (62/362)
+remote: Counting objects:  18% (66/362)
+remote: Counting objects:  19% (69/362)
+remote: Counting objects:  20% (73/362)
+remote: Counting objects:  21% (77/362)
+remote: Counting objects:  22% (80/362)
+remote: Counting objects:  23% (84/362)
+remote: Counting objects:  24% (87/362)
+remote: Counting objects:  25% (91/362)
+remote: Counting objects:  26% (95/362)
+remote: Counting objects:  27% (98/362)
+remote: Counting objects:  28% (102/362)
+remote: Counting objects:  29% (105/362)
+remote: Counting objects:  30% (109/362)
+remote: Counting objects:  31% (113/362)
+remote: Counting objects:  32% (116/362)
+remote: Counting objects:  33% (120/362)
+remote: Counting objects:  34% (124/362)
+remote: Counting objects:  35% (127/362)
+remote: Counting objects:  36% (131/362)
+remote: Counting objects:  37% (134/362)
+remote: Counting objects:  38% (138/362)
+remote: Counting objects:  39% (142/362)
+remote: Counting objects:  40% (145/362)
+remote: Counting objects:  41% (149/362)
+remote: Counting objects:  42% (153/362)
+remote: Counting objects:  43% (156/362)
+remote: Counting objects:  44% (160/362)
+remote: Counting objects:  45% (163/362)
+remote: Counting objects:  46% (167/362)
+remote: Counting objects:  47% (171/362)
+remote: Counting objects:  48% (174/362)
+remote: Counting objects:  49% (178/362)
+remote: Counting objects:  50% (181/362)
+remote: Counting objects:  51% (185/362)
+remote: Counting objects:  52% (189/362)
+remote: Counting objects:  53% (192/362)
+remote: Counting objects:  54% (196/362)
+remote: Counting objects:  55% (200/362)
+remote: Counting objects:  56% (203/362)
+remote: Counting objects:  57% (207/362)
+remote: Counting objects:  58% (210/362)
+remote: Counting objects:  59% (214/362)
+remote: Counting objects:  60% (218/362)
+remote: Counting objects:  61% (221/362)
+remote: Counting objects:  62% (225/362)
+remote: Counting objects:  63% (229/362)
+remote: Counting objects:  64% (232/362)
+remote: Counting objects:  65% (236/362)
+remote: Counting objects:  66% (239/362)
+remote: Counting objects:  67% (243/362)
+remote: Counting objects:  68% (247/362)
+remote: Counting objects:  69% (250/362)
+remote: Counting objects:  70% (254/362)
+remote: Counting objects:  71% (258/362)
+remote: Counting objects:  72% (261/362)
+remote: Counting objects:  73% (265/362)
+remote: Counting objects:  74% (268/362)
+remote: Counting objects:  75% (272/362)
+remote: Counting objects:  76% (276/362)
+remote: Counting objects:  77% (279/362)
+remote: Counting objects:  78% (283/362)
+remote: Counting objects:  79% (286/362)
+remote: Counting objects:  80% (290/362)
+remote: Counting objects:  81% (294/362)
+remote: Counting objects:  82% (297/362)
+remote: Counting objects:  83% (301/362)
+remote: Counting objects:  84% (305/362)
+remote: Counting objects:  85% (308/362)
+remote: Counting objects:  86% (312/362)
+remote: Counting objects:  87% (315/362)
+remote: Counting objects:  88% (319/362)
+remote: Counting objects:  89% (323/362)
+remote: Counting objects:  90% (326/362)
+remote: Counting objects:  91% (330/362)
+remote: Counting objects:  92% (334/362)
+remote: Counting objects:  93% (337/362)
+remote: Counting objects:  94% (341/362)
+remote: Counting objects:  95% (344/362)
+remote: Counting objects:  96% (348/362)
+remote: Counting objects:  97% (352/362)
+remote: Counting objects:  98% (355/362)
+remote: Counting objects:  99% (359/362)
+remote: Counting objects: 100% (362/362)
+remote: Counting objects: 100% (362/362), done.
+remote: Compressing objects:   0% (1/264)
+remote: Compressing objects:   1% (3/264)
+remote: Compressing objects:   2% (6/264)
+remote: Compressing objects:   3% (8/264)
+remote: Compressing objects:   4% (11/264)
+remote: Compressing objects:   5% (14/264)
+remote: Compressing objects:   6% (16/264)
+remote: Compressing objects:   7% (19/264)
+remote: Compressing objects:   8% (22/264)
+remote: Compressing objects:   9% (24/264)
+remote: Compressing objects:  10% (27/264)
+remote: Compressing objects:  11% (30/264)
+remote: Compressing objects:  12% (32/264)
+remote: Compressing objects:  13% (35/264)
+remote: Compressing objects:  14% (37/264)
+remote: Compressing objects:  15% (40/264)
+remote: Compressing objects:  16% (43/264)
+remote: Compressing objects:  17% (45/264)
+remote: Compressing objects:  18% (48/264)
+remote: Compressing objects:  19% (51/264)
+remote: Compressing objects:  20% (53/264)
+remote: Compressing objects:  21% (56/264)
+remote: Compressing objects:  22% (59/264)
+remote: Compressing objects:  23% (61/264)
+remote: Compressing objects:  24% (64/264)
+remote: Compressing objects:  25% (66/264)
+remote: Compressing objects:  26% (69/264)
+remote: Compressing objects:  27% (72/264)
+remote: Compressing objects:  28% (74/264)
+remote: Compressing objects:  29% (77/264)
+remote: Compressing objects:  30% (80/264)
+remote: Compressing objects:  31% (82/264)
+remote: Compressing objects:  32% (85/264)
+remote: Compressing objects:  33% (88/264)
+remote: Compressing objects:  34% (90/264)
+remote: Compressing objects:  35% (93/264)
+remote: Compressing objects:  36% (96/264)
+remote: Compressing objects:  37% (98/264)
+remote: Compressing objects:  38% (101/264)
+remote: Compressing objects:  39% (103/264)
+remote: Compressing objects:  40% (106/264)
+remote: Compressing objects:  41% (109/264)
+remote: Compressing objects:  42% (111/264)
+remote: Compressing objects:  43% (114/264)
+remote: Compressing objects:  44% (117/264)
+remote: Compressing objects:  45% (119/264)
+remote: Compressing objects:  46% (122/264)
+remote: Compressing objects:  47% (125/264)
+remote: Compressing objects:  48% (127/264)
+remote: Compressing objects:  49% (130/264)
+remote: Compressing objects:  50% (132/264)
+remote: Compressing objects:  51% (135/264)
+remote: Compressing objects:  52% (138/264)
+remote: Compressing objects:  53% (140/264)
+remote: Compressing objects:  54% (143/264)
+remote: Compressing objects:  55% (146/264)
+remote: Compressing objects:  56% (148/264)
+remote: Compressing objects:  57% (151/264)
+remote: Compressing objects:  58% (154/264)
+remote: Compressing objects:  59% (156/264)
+remote: Compressing objects:  60% (159/264)
+remote: Compressing objects:  61% (162/264)
+remote: Compressing objects:  62% (164/264)
+remote: Compressing objects:  63% (167/264)
+remote: Compressing objects:  64% (169/264)
+remote: Compressing objects:  65% (172/264)
+remote: Compressing objects:  66% (175/264)
+remote: Compressing objects:  67% (177/264)
+remote: Compressing objects:  68% (180/264)
+remote: Compressing objects:  69% (183/264)
+remote: Compressing objects:  70% (185/264)
+remote: Compressing objects:  71% (188/264)
+remote: Compressing objects:  72% (191/264)
+remote: Compressing objects:  73% (193/264)
+remote: Compressing objects:  74% (196/264)
+remote: Compressing objects:  75% (198/264)
+remote: Compressing objects:  76% (201/264)
+remote: Compressing objects:  77% (204/264)
+remote: Compressing objects:  78% (206/264)
+remote: Compressing objects:  79% (209/264)
+remote: Compressing objects:  80% (212/264)
+remote: Compressing objects:  81% (214/264)
+remote: Compressing objects:  82% (217/264)
+remote: Compressing objects:  83% (220/264)
+remote: Compressing objects:  84% (222/264)
+remote: Compressing objects:  85% (225/264)
+remote: Compressing objects:  86% (228/264)
+remote: Compressing objects:  87% (230/264)
+remote: Compressing objects:  88% (233/264)
+remote: Compressing objects:  89% (235/264)
+remote: Compressing objects:  90% (238/264)
+remote: Compressing objects:  91% (241/264)
+remote: Compressing objects:  92% (243/264)
+remote: Compressing objects:  93% (246/264)
+remote: Compressing objects:  94% (249/264)
+remote: Compressing objects:  95% (251/264)
+remote: Compressing objects:  96% (254/264)
+remote: Compressing objects:  97% (257/264)
+remote: Compressing objects:  98% (259/264)
+remote: Compressing objects:  99% (262/264)
+remote: Compressing objects: 100% (264/264)
+remote: Compressing objects: 100% (264/264), done.
+Receiving objects:   0% (1/4016)
+Receiving objects:   1% (41/4016)
+Receiving objects:   2% (81/4016)
+Receiving objects:   3% (121/4016)
+Receiving objects:   4% (161/4016)
+Receiving objects:   5% (201/4016)
+Receiving objects:   6% (241/4016)
+Receiving objects:   7% (282/4016)
+Receiving objects:   8% (322/4016)
+Receiving objects:   9% (362/4016)
+Receiving objects:  10% (402/4016)
+Receiving objects:  11% (442/4016)
+Receiving objects:  12% (482/4016)
+Receiving objects:  13% (523/4016)
+Receiving objects:  14% (563/4016)
+Receiving objects:  15% (603/4016)
+Receiving objects:  16% (643/4016)
+Receiving objects:  17% (683/4016)
+Receiving objects:  18% (723/4016)
+Receiving objects:  19% (764/4016)
+Receiving objects:  20% (804/4016)
+Receiving objects:  21% (844/4016)
+Receiving objects:  22% (884/4016)
+Receiving objects:  23% (924/4016)
+Receiving objects:  24% (964/4016)
+Receiving objects:  25% (1004/4016)
+Receiving objects:  26% (1045/4016)
+Receiving objects:  27% (1085/4016)
+Receiving objects:  28% (1125/4016)
+Receiving objects:  29% (1165/4016)
+Receiving objects:  30% (1205/4016)
+Receiving objects:  31% (1245/4016)
+Receiving objects:  32% (1286/4016)
+Receiving objects:  33% (1326/4016)
+Receiving objects:  34% (1366/4016)
+Receiving objects:  35% (1406/4016)
+Receiving objects:  36% (1446/4016)
+Receiving objects:  37% (1486/4016)
+Receiving objects:  38% (1527/4016)
+Receiving objects:  39% (1567/4016)
+Receiving objects:  40% (1607/4016)
+Receiving objects:  41% (1647/4016)
+Receiving objects:  42% (1687/4016)
+Receiving objects:  43% (1727/4016)
+Receiving objects:  44% (1768/4016)
+Receiving objects:  45% (1808/4016)
+Receiving objects:  46% (1848/4016)
+Receiving objects:  47% (1888/4016)
+Receiving objects:  48% (1928/4016)
+Receiving objects:  49% (1968/4016)
+Receiving objects:  50% (2008/4016)
+Receiving objects:  51% (2049/4016)
+Receiving objects:  52% (2089/4016)
+Receiving objects:  53% (2129/4016)
+Receiving objects:  54% (2169/4016)
+Receiving objects:  55% (2209/4016)
+Receiving objects:  56% (2249/4016)
+Receiving objects:  57% (2290/4016)
+Receiving objects:  58% (2330/4016)
+Receiving objects:  59% (2370/4016)
+Receiving objects:  60% (2410/4016)
+Receiving objects:  61% (2450/4016)
+Receiving objects:  62% (2490/4016)
+Receiving objects:  63% (2531/4016)
+Receiving objects:  64% (2571/4016)
+Receiving objects:  65% (2611/4016)
+Receiving objects:  66% (2651/4016)
+Receiving objects:  67% (2691/4016)
+Receiving objects:  68% (2731/4016)
+Receiving objects:  69% (2772/4016)
+Receiving objects:  70% (2812/4016)
+Receiving objects:  71% (2852/4016)
+Receiving objects:  72% (2892/4016)
+Receiving objects:  73% (2932/4016)
+Receiving objects:  74% (2972/4016)
+Receiving objects:  75% (3012/4016)
+Receiving objects:  76% (3053/4016)
+Receiving objects:  77% (3093/4016)
+Receiving objects:  78% (3133/4016)
+Receiving objects:  79% (3173/4016)
+Receiving objects:  80% (3213/4016)
+Receiving objects:  81% (3253/4016)
+Receiving objects:  82% (3294/4016)
+Receiving objects:  83% (3334/4016)
+Receiving objects:  84% (3374/4016)
+Receiving objects:  85% (3414/4016)
+Receiving objects:  86% (3454/4016)
+Receiving objects:  87% (3494/4016), 36.32 MiB | 72.56 MiB/s
+Receiving objects:  88% (3535/4016), 36.32 MiB | 72.56 MiB/s
+Receiving objects:  89% (3575/4016), 36.32 MiB | 72.56 MiB/s
+Receiving objects:  90% (3615/4016), 36.32 MiB | 72.56 MiB/s
+Receiving objects:  91% (3655/4016), 36.32 MiB | 72.56 MiB/s
+Receiving objects:  92% (3695/4016), 36.32 MiB | 72.56 MiB/s
+Receiving objects:  93% (3735/4016), 36.32 MiB | 72.56 MiB/s
+Receiving objects:  94% (3776/4016), 36.32 MiB | 72.56 MiB/s
+Receiving objects:  95% (3816/4016), 36.32 MiB | 72.56 MiB/s
+Receiving objects:  96% (3856/4016), 36.32 MiB | 72.56 MiB/s
+Receiving objects:  97% (3896/4016), 36.32 MiB | 72.56 MiB/s
+Receiving objects:  98% (3936/4016), 36.32 MiB | 72.56 MiB/s
+remote: Total 4016 (delta 176), reused 248 (delta 80), pack-reused 3654 (from 3)
+Receiving objects:  99% (3976/4016), 36.32 MiB | 72.56 MiB/s
+Receiving objects: 100% (4016/4016), 36.32 MiB | 72.56 MiB/s
+Receiving objects: 100% (4016/4016), 53.69 MiB | 74.60 MiB/s, done.
+Resolving deltas:   0% (0/1623)
+Resolving deltas:   1% (17/1623)
+Resolving deltas:   2% (33/1623)
+Resolving deltas:   3% (49/1623)
+Resolving deltas:   4% (65/1623)
+Resolving deltas:   5% (82/1623)
+Resolving deltas:   6% (98/1623)
+Resolving deltas:   7% (114/1623)
+Resolving deltas:   8% (130/1623)
+Resolving deltas:   9% (147/1623)
+Resolving deltas:  10% (163/1623)
+Resolving deltas:  11% (179/1623)
+Resolving deltas:  12% (195/1623)
+Resolving deltas:  13% (211/1623)
+Resolving deltas:  14% (228/1623)
+Resolving deltas:  15% (244/1623)
+Resolving deltas:  16% (260/1623)
+Resolving deltas:  17% (276/1623)
+Resolving deltas:  18% (293/1623)
+Resolving deltas:  19% (309/1623)
+Resolving deltas:  20% (325/1623)
+Resolving deltas:  21% (341/1623)
+Resolving deltas:  22% (358/1623)
+Resolving deltas:  23% (374/1623)
+Resolving deltas:  24% (390/1623)
+Resolving deltas:  25% (406/1623)
+Resolving deltas:  26% (422/1623)
+Resolving deltas:  27% (439/1623)
+Resolving deltas:  28% (455/1623)
+Resolving deltas:  29% (471/1623)
+Resolving deltas:  30% (487/1623)
+Resolving deltas:  31% (504/1623)
+Resolving deltas:  32% (520/1623)
+Resolving deltas:  33% (536/1623)
+Resolving deltas:  34% (552/1623)
+Resolving deltas:  35% (569/1623)
+Resolving deltas:  36% (585/1623)
+Resolving deltas:  37% (601/1623)
+Resolving deltas:  38% (617/1623)
+Resolving deltas:  39% (633/1623)
+Resolving deltas:  40% (650/1623)
+Resolving deltas:  41% (666/1623)
+Resolving deltas:  42% (682/1623)
+Resolving deltas:  43% (698/1623)
+Resolving deltas:  44% (715/1623)
+Resolving deltas:  45% (731/1623)
+Resolving deltas:  46% (747/1623)
+Resolving deltas:  47% (763/1623)
+Resolving deltas:  48% (780/1623)
+Resolving deltas:  49% (796/1623)
+Resolving deltas:  50% (812/1623)
+Resolving deltas:  51% (828/1623)
+Resolving deltas:  52% (844/1623)
+Resolving deltas:  53% (861/1623)
+Resolving deltas:  54% (877/1623)
+Resolving deltas:  55% (893/1623)
+Resolving deltas:  56% (909/1623)
+Resolving deltas:  57% (926/1623)
+Resolving deltas:  58% (942/1623)
+Resolving deltas:  59% (958/1623)
+Resolving deltas:  60% (974/1623)
+Resolving deltas:  61% (991/1623)
+Resolving deltas:  62% (1007/1623)
+Resolving deltas:  63% (1023/1623)
+Resolving deltas:  64% (1039/1623)
+Resolving deltas:  65% (1055/1623)
+Resolving deltas:  66% (1072/1623)
+Resolving deltas:  67% (1088/1623)
+Resolving deltas:  68% (1104/1623)
+Resolving deltas:  69% (1120/1623)
+Resolving deltas:  70% (1137/1623)
+Resolving deltas:  71% (1153/1623)
+Resolving deltas:  72% (1169/1623)
+Resolving deltas:  73% (1185/1623)
+Resolving deltas:  74% (1202/1623)
+Resolving deltas:  75% (1218/1623)
+Resolving deltas:  76% (1234/1623)
+Resolving deltas:  77% (1250/1623)
+Resolving deltas:  78% (1266/1623)
+Resolving deltas:  79% (1283/1623)
+Resolving deltas:  80% (1299/1623)
+Resolving deltas:  81% (1315/1623)
+Resolving deltas:  82% (1331/1623)
+Resolving deltas:  83% (1348/1623)
+Resolving deltas:  84% (1364/1623)
+Resolving deltas:  85% (1380/1623)
+Resolving deltas:  86% (1396/1623)
+Resolving deltas:  87% (1413/1623)
+Resolving deltas:  88% (1429/1623)
+Resolving deltas:  89% (1445/1623)
+Resolving deltas:  90% (1461/1623)
+Resolving deltas:  91% (1477/1623)
+Resolving deltas:  92% (1494/1623)
+Resolving deltas:  93% (1510/1623)
+Resolving deltas:  94% (1526/1623)
+Resolving deltas:  95% (1542/1623)
+Resolving deltas:  96% (1559/1623)
+Resolving deltas:  97% (1575/1623)
+Resolving deltas:  98% (1591/1623)
+Resolving deltas:  99% (1607/1623)
+Resolving deltas: 100% (1623/1623)
+Resolving deltas: 100% (1623/1623), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m10 && ls
+
+GUIDED-BUILD.md  README.md   attack.py  cloudtrail  explore.py  hunt.py      policy_checker.py  run_tests.py       test_lab.py
+Makefile         anycompany  aws-twin   examples    fixes       iam_eval.py  requirements.txt   test_challenge.py
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ ls anycompany anycompany/identity
+
+anycompany:
+approved-models.json  aws-managed  identity  principals.json  scps
+
+anycompany/identity:
+ci-deployer-role.json  data-science-role.json  helpdesk-app-role.json  platform-admin-role.json  security-admin-role.json
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 explore.py org
+
+AnyCompany's AWS organization (fictional; account IDs are AWS documentation examples)
+
+  management account  123456789012   (head office: SCPs never apply to it)
+  member account      111122223333   prod-ai: runs the TSG Helpdesk chatbot
+  member account      444455556666   sandbox: people try models here
+  SCPs on the root    FullAWSAccess, deny-deepseek
+
+Identities (who can make calls) and the policies that say what each may do:
+
+  role  HelpdeskAppRole      account 111122223333   policies: helpdesk-app-role
+  role  DataScienceRole      account 111122223333   policies: data-science-role
+  role  PlatformAdminRole    account 111122223333   policies: platform-admin-role
+  role  SandboxAdminRole     account 444455556666   policies: platform-admin-role
+  role  SecurityAdmin        account 111122223333   policies: security-admin-role
+  role  CiDeployerRole       account 111122223333   policies: ci-deployer-role
+  user  BedrockAPIKey-x7k2   account 111122223333   policies: AmazonBedrockLimitedAccess-v9
+        Bedrock API key ACCA1234EXAMPLE1234  created 2026-10-09  expires NEVER
+  user  sandbox-explorer     account 444455556666   policies: AmazonBedrockLimitedAccess-v9
+        Bedrock API key ACCA5678EXAMPLE5678  created 2026-10-06  expires 2026-11-05
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ make -n setup
+
+python3 ../../tools/check_python.py 3.11
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ make setup
+
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 explore.py sign
+
+Signing one AWS API call with SigV4. Nothing is sent: this only computes the signature.
+The keys are AWS's documentation examples; they work nowhere.
+
+the call      ListFoundationModels = GET https://bedrock.us-east-1.amazonaws.com/foundation-models
+access key ID AKIAIOSFODNN7EXAMPLE                        (travels with the request)
+secret key    wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY    (never leaves your computer)
+
+1. canonical request: the call written out in a fixed order
+     GET
+     /foundation-models
+     
+     host:bedrock.us-east-1.amazonaws.com
+     x-amz-date:20261009T120000Z
+     
+     host;x-amz-date
+     e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+2. string to sign: the method, the time, the scope, and a SHA-256 fingerprint of step 1
+     AWS4-HMAC-SHA256
+     20261009T120000Z
+     20261009/us-east-1/bedrock/aws4_request
+     3277cb18d5caac1f61062a3a215affa144e17fd6d8e43da2eaff0093f4e5b6d6
+3. signing key: the secret, mixed with the date, the Region, the service and 'aws4_request' (HMAC-SHA256 x4)
+4. signature: HMAC-SHA256 of step 2 with that key
+     b245d9683036a2719d80a19fc6dd68d00b221d0fbee9110898d8da4c61743dd7
+
+the header AWS receives (one line, split here to fit):
+     Authorization: AWS4-HMAC-SHA256 Credential=AKIAIOSFODNN7EXAMPLE/20261009/us-east-1/bedrock/aws4_request,
+                    SignedHeaders=host;x-amz-date,
+                    Signature=b245d9683036a2719d80a19fc6dd68d00b221d0fbee9110898d8da4c61743dd7
+AWS repeats steps 1 to 4 with its own copy of the secret. Change one character and the signatures differ.
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 explore.py policy examples/one-model-two-regions.json
+
+examples/one-model-two-regions.json
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "NovaLiteFromTwoRegionsOnly",
+      "Effect": "Allow",
+      "Action": "bedrock:InvokeModel",
+      "Resource": "arn:aws:bedrock:*::foundation-model/amazon.nova-lite-v1:0",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": [
+            "us-east-1",
+            "us-west-2"
+          ]
+        }
+      }
+    }
+  ]
+}
+
+Read it statement by statement (Version 2012-10-17 is the policy language version):
+
+  statement 1  Sid NovaLiteFromTwoRegionsOnly: a label for people, AWS ignores it
+    Effect     Allow: what happens when the rest matches
+    Action     bedrock:InvokeModel: the API calls it covers
+    Resource   arn:aws:bedrock:*::foundation-model/amazon.nova-lite-v1:0: the things those calls touch
+    Condition  StringEquals aws:RequestedRegion = us-east-1, us-west-2: only when the request's aws:RequestedRegion matches
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 explore.py decide DataScienceRole bedrock:InvokeModel arn:aws:bedrock:us-w 
+est-2::foundation-model/amazon.nova-lite-v1:0 --region us-west-2
+
+request   DataScienceRole (role/DataScienceRole) wants bedrock:InvokeModel
+resource  arn:aws:bedrock:us-west-2::foundation-model/amazon.nova-lite-v1:0
+context   aws:PrincipalAccount=111122223333  aws:RequestedRegion=us-west-2
+SCPs      FullAWSAccess, deny-deepseek
+
+step 1  a Deny in its own policies?   no
+step 2  a Deny in the SCPs?           no
+step 3  does an SCP allow it?         yes  FullAWSAccess (no Sid)
+step 4  does its own policy allow it? yes  data-science-role (TryAnyModelAnywhere)
+
+=> ALLOWED: allowed by its own policy, under the SCP ceiling, and nothing denies it
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 explore.py decide DataScienceRole bedrock:InvokeModel arn:aws:bedrock:us-e 
+ast-1::foundation-model/deepseek.r1-v1:0
+
+request   DataScienceRole (role/DataScienceRole) wants bedrock:InvokeModel
+resource  arn:aws:bedrock:us-east-1::foundation-model/deepseek.r1-v1:0
+context   aws:PrincipalAccount=111122223333  aws:RequestedRegion=us-east-1
+SCPs      FullAWSAccess, deny-deepseek
+
+step 1  a Deny in its own policies?   no
+step 2  a Deny in the SCPs?           YES  deny-deepseek (DenyDeepseekEverywhere)
+        (steps 3 and 4 don't matter any more)
+
+=> DENIED: an explicit Deny always wins, whatever allows it
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 explore.py decide DataScienceRole bedrock:DeleteModelInvocationLoggingConf 
+iguration
+
+request   DataScienceRole (role/DataScienceRole) wants bedrock:DeleteModelInvocationLoggingConfiguration
+resource  *
+context   aws:PrincipalAccount=111122223333  aws:RequestedRegion=us-east-1
+SCPs      FullAWSAccess, deny-deepseek
+
+step 1  a Deny in its own policies?   no
+step 2  a Deny in the SCPs?           no
+step 3  does an SCP allow it?         yes  FullAWSAccess (no Sid)
+step 4  does its own policy allow it? NO
+
+=> DENIED: nothing allows it, so it is denied by default (implicit deny)
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 explore.py call DataScienceRole amazon.nova-lite-v1:0 --region us-west-2
+
+One Converse call, as the app would send it (illustrative; nothing is sent):
+
+  POST https://bedrock-runtime.us-west-2.amazonaws.com/model/amazon.nova-lite-v1:0/converse
+  Authorization: AWS4-HMAC-SHA256 Credential=... (SigV4, as in sign)
+  {"messages": [{"role": "user", "content": [{"text": "Summarise ticket 4521 in one line."}]}]}
+
+Converse is authorized as bedrock:InvokeModel. IAM runs 1 check(s) for this one call:
+  1. bedrock:InvokeModel on arn:aws:bedrock:us-west-2::foundation-model/amazon.nova-lite-v1:0
+       ALLOWED  allowed by identity/data-science-role.json (TryAnyModelAnywhere)
+
+=> the call goes through: every check must pass. If it goes through, the bill counts input and output tokens.
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 explore.py call BedrockAPIKey-x7k2 anthropic.claude-opus-4-7 --api-key
+
+One Converse call, as the app would send it (illustrative; nothing is sent):
+
+  POST https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-opus-4-7/converse
+  Authorization: Bearer <a Bedrock API key>
+  {"messages": [{"role": "user", "content": [{"text": "Summarise ticket 4521 in one line."}]}]}
+
+Converse is authorized as bedrock:InvokeModel. IAM runs 2 check(s) for this one call:
+  1. bedrock:CallWithBearerToken on *  (bedrock:BearerTokenType=LONG_TERM)
+       ALLOWED  allowed by aws-managed/AmazonBedrockLimitedAccess-v9.json (BedrockAPIs)
+  2. bedrock:InvokeModel on arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-opus-4-7
+       ALLOWED  allowed by aws-managed/AmazonBedrockLimitedAccess-v9.json (BedrockAPIs)
+
+=> the call goes through: every check must pass. If it goes through, the bill counts input and output tokens.
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 explore.py event InvokeModel
+
+CloudTrail record 17 of 226 (fake, with the same fields as AWS's examples)
+
+  who    userIdentity.type    AssumedRole
+         userIdentity.arn     arn:aws:sts::111122223333:assumed-role/DataScienceRole/analyst-session
+  what   eventSource          bedrock.amazonaws.com
+         eventName            InvokeModel
+         requestParameters    {"modelId": "amazon.nova-lite-v1:0"}
+  where  awsRegion            us-west-2
+         sourceIPAddress      192.0.2.25
+         userAgent            Boto3/1.40.11 md/Botocore#1.40.11 ua/2.1 os/linux lang/python#3.12.6
+  when   eventTime            2026-10-12T10:20:00Z
+  how    additionalEventData  -
+  result errorCode            -  (none: the call worked)
+
+  not here: the prompt and the answer. CloudTrail records the call, not the conversation.
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ python3 attack.py --only L5
+
+--- M10 lab · VULNERABLE · SCPs on the org root: FullAWSAccess, deny-deepseek ---
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Legitimate traffic · must keep working after the fixes
+  [L5] ALLOWED  Data science: InvokeModel on approved Nova Lite in us-west-2
+         why: every check passed: bedrock:InvokeModel
+
+1 of 1 legitimate requests allowed  (showing L5 only)
+thesecguy@lab:~/ai-security-course-labs/labs/m10$ exit
+
+exit
