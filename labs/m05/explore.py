@@ -1,7 +1,8 @@
 """
 explore.py: look at each step of the helpdesk app on its own, before you attack it (M5 lab, "Understand the lab").
 
-Nothing here changes the app or attacks it. Each command shows one thing that happens to a model's output after
+Nothing here changes the app. But `shell` (without --safe) really runs the command line it builds, like the
+vulnerable app does, so only try harmless commands such as echo. Each command shows one thing that happens to a model's output after
 the model has written it, in the order the app does it:
 
     python3 explore.py data                                   # 0. the fake data the app uses
