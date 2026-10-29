@@ -99,7 +99,7 @@ if a real-looking account ID, IP or access key ever creeps in.
 
 New to AWS? Do this before Step 1 (lesson 10.3 and its videos call it Step 1b). `explore.py` shows, one step at a
 time, how AWS signs, decides and records a single API call, using AnyCompany's files. Real output below is from a
-fresh Ubuntu machine (recording run RUNID).
+fresh Ubuntu machine (recording run 40919500492).
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `anycompany/`,
 `fixes/`, `examples/` and `cloudtrail/` and prints what it finds. `decide` and `call` ask `iam_eval.py`, the lab's
