@@ -52,6 +52,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `loader.py` | Loads a model three ways: `naive` (pickle, detonates), `safe` (safetensors), `guarded` (your challenge) |
 | `scan.py` | Scans a file with picklescan and fickling and prints a plain verdict |
 | `pin.py` | Pins a file by SHA-256 (`write`) and checks it later (`verify`) |
+| `explore.py` | Step 1b: looks inside model files, read-only (first bytes, a safetensors header, a pickle's instructions without loading it, a SHA-256, a real Hugging Face model's files, a tiny AI-BOM). Never loads a pickle or writes a file; only `hub` uses the network |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | The tests |
 | `Makefile` | Shortcuts (Mac/Linux) |
 
