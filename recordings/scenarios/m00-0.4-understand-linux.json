@@ -1,0 +1,27 @@
+{
+  "name": "m00-0.4-understand-linux",
+  "lesson": "0.4",
+  "title": "Lab 0.4, part 1: get the lab, install Ollama from zero (looking before running), download a small model, and look inside with explore.py",
+  "cols": 120,
+  "rows": 32,
+  "remove_preinstalled": ["ollama"],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m00 && ls", "pause_after": 4},
+    {"label": "Not yet", "type": "python3 explore.py server", "pause_after": 4},
+    {"label": "Get the installer", "type": "cd ~", "pause_after": 1},
+    {"label": "Get the installer", "type": "curl -fsSL https://ollama.com/install.sh -o ollama-install.sh", "pause_after": 2},
+    {"label": "Look before you run", "type": "wc -l ollama-install.sh", "pause_after": 2},
+    {"label": "Look before you run", "type": "grep -n \"sudo\\|systemctl\\|useradd\" ollama-install.sh | head -12", "pause_after": 6},
+    {"label": "Install", "type": "sh ollama-install.sh", "speed": 6, "timeout": 1500, "pause_after": 4},
+    {"label": "Check", "type": "ollama --version", "pause_after": 3},
+    {"label": "Download a model", "type": "ollama pull gemma3:1b", "speed": 4, "timeout": 900, "pause_after": 3},
+    {"label": "Models", "type": "ollama list", "pause_after": 3},
+    {"label": "Private", "type": "cd ai-security-course-labs/labs/m00", "pause_after": 1},
+    {"label": "Private", "type": "python3 explore.py server", "pause_after": 5},
+    {"label": "Inside a model", "type": "python3 explore.py models", "pause_after": 6},
+    {"label": "One text", "type": "python3 explore.py template gemma3:1b", "pause_after": 7},
+    {"label": "A real request", "type": "python3 explore.py chat gemma3:1b --system \"You are the help desk bot for a demo shop.\" \"What are your opening hours?\"", "timeout": 600, "pause_after": 7}
+  ]
+}
