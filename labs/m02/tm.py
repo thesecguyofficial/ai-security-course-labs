@@ -46,8 +46,8 @@ Dataflow(kb, model, "F4 retrieved articles")
 Dataflow(model, chat_app, "F5 model output")
 Dataflow(chat_app, customer, "F10 answer")
 Dataflow(customer, tickets, "F15 ticket text")
-Dataflow(tickets, nightly, "F11 resolved tickets")
-Dataflow(nightly, kb, "F11 new articles")
+Dataflow(tickets, nightly, "F11a resolved tickets")
+Dataflow(nightly, kb, "F11b new articles")
 
 
 def main():

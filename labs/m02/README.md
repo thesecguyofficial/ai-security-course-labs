@@ -124,7 +124,7 @@ data store (where data rests): 2
    Knowledge base     Help articles. Some are imported customer tickets.
 ```
 
-**2. Data flows.** Every arrow carries data from one element to another. Follow F15, F11 and F4: a customer's
+**2. Data flows.** Every arrow carries data from one element to another. Follow F15, F11a, F11b and F4: a customer's
 ticket ends up in front of the model.
 
 ```bash
@@ -140,8 +140,8 @@ python3 explore.py flows
    F5 model output                                 Model -> Chat app
    F10 answer                                   Chat app -> Customer
    F15 ticket text                              Customer -> Ticketing system
-   F11 resolved tickets                 Ticketing system -> Nightly import
-   F11 new articles                       Nightly import -> Knowledge base
+   F11a resolved tickets                Ticketing system -> Nightly import
+   F11b new articles                      Nightly import -> Knowledge base
 ```
 
 **3. Trust boundaries.** A trust boundary is a line where data passes between parts you trust differently. A flow
@@ -210,7 +210,7 @@ its name and description. The dashed boxes are the trust boundaries.
 **7. Let a tool list threats (optional).** OWASP pytm describes the same system as Python code (`tm.py`) and checks
 its threat library against facts you set on each element. Look before you run: `make -n setup` prints the two
 commands `make setup` will run. `python3 -m venv .venv` makes a *virtual environment*, a private folder for this
-lab's packages, so nothing you install touches the rest of your computer. Then `pip`, Python's package installer,
+lab's packages, so they stay separate from the rest of your Python setup. It keeps versions apart; it is not a security sandbox. Then `pip`, Python's package installer,
 installs `pytm`.
 
 ```bash
@@ -235,7 +235,7 @@ all findings for Model:
    LLM08  High       Sensitive Information Disclosure Through Output
 ```
 
-pytm's `LLM01` to `LLM09` are pytm's own rule IDs, not OWASP's. It finds AI threats on the model only because
+"13 elements" means 13 of the starter's 14 parts (6 elements plus 8 flows): the customer gets no finding. pytm's `LLM01` to `LLM09` are pytm's own rule IDs, not OWASP's. It finds AI threats on the model only because
 `tm.py` tells it the model reads untrusted input and uses RAG; the flows into the model still get web threats
 (interception, sniffing). A tool gives you a list to judge, not a threat model. Windows: run the commands in
 `Makefile` by hand (`py -m venv .venv`, then `.venv\Scripts\python -m pip install -r requirements.txt` and
