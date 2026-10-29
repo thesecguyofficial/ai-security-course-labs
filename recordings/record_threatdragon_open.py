@@ -67,29 +67,25 @@ def main():
             raise SystemExit(f"selected {pg.input_value('#name')!r}, wanted {name!r}")
 
     def select_edge(pg, name):
-        """Click the flow's line between the model and the label, as record_threatdragon.py does. A click on a
-        flow sometimes lands on Threat Dragon's bend-point tool instead of selecting it, so try a few points along
-        the line (the line is straight, so a bend point added there is redundant and removed at once)."""
-        for frac in (0.8, 0.75, 0.85, 0.7, 0.9, 0.78, 0.82, 0.72):
-            deselect(pg)
-            at = pg.evaluate("""([want, frac]) => {
-                for (const e of document.querySelectorAll('#graph-container .x6-edge')) {
-                    if ((e.textContent || '').replace(/\\s+/g, ' ').trim() !== want) continue;
-                    const path = e.querySelector('path[stroke]:not([stroke="transparent"])');
-                    const pt = path.getPointAtLength(path.getTotalLength() * frac), m = path.getScreenCTM();
-                    return [pt.x * m.a + pt.y * m.c + m.e, pt.x * m.b + pt.y * m.d + m.f];
-                }
-                return null;
-            }""", [name, frac])
-            if not at:
-                raise SystemExit(f"flow {name!r} not found on the diagram")
-            pg.mouse.move(*at, steps=15)
-            pg.mouse.click(*at)
-            pg.wait_for_timeout(900)
-            if pg.locator("#name").count() and pg.input_value("#name") == name:
-                pg.wait_for_timeout(HOLD)
-                return
-        raise SystemExit(f"could not select the flow {name!r}")
+        """Click the flow's name label, away from the line itself: on the line, Threat Dragon's bend-point tool
+        takes the click (it adds a bend point instead of selecting the flow)."""
+        deselect(pg)
+        bb = pg.evaluate("""(want) => {
+            for (const e of document.querySelectorAll('#graph-container .x6-edge')) {
+                if ((e.textContent || '').replace(/\\s+/g, ' ').trim() !== want) continue;
+                const r = e.querySelector('.x6-edge-label').getBoundingClientRect();
+                return {x: r.x, y: r.y, width: r.width, height: r.height};
+            }
+            return null;
+        }""", name)
+        if not bb:
+            raise SystemExit(f"flow {name!r} not found on the diagram")
+        at = (bb["x"] + bb["width"] * 0.15, bb["y"] + bb["height"] / 2)
+        pg.mouse.move(*at, steps=15)
+        pg.mouse.click(*at)
+        pg.wait_for_timeout(HOLD)
+        if pg.input_value("#name") != name:
+            raise SystemExit(f"selected {pg.input_value('#name')!r}, wanted {name!r}")
 
     def select_boundary(pg, name):
         deselect(pg)
@@ -172,7 +168,8 @@ def main():
     if names != expect:
         raise SystemExit(f"take rejected: Threat Dragon saved {names}, the lab file has {expect}")
     bent = [c["data"]["name"] for c in saved["detail"]["diagrams"][0]["cells"]
-            if c["shape"] == "flow" and c["data"]["name"].startswith("F4") and c.get("vertices")]
+            if c["shape"] == "flow" and c.get("vertices") != next(
+                w.get("vertices") for w in want["detail"]["diagrams"][0]["cells"] if w["id"] == c["id"])]
     if bent:
         raise SystemExit(f"take rejected: selecting {bent} changed its line")
     shutil.copy(video, out / "screen.webm")
