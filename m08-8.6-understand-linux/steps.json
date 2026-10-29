@@ -1,149 +1,149 @@
 {
   "scenario": "m08-8.6-understand-linux",
-  "start": 1.756,
+  "start": 1.749,
   "steps": [
     {
       "label": "Download",
       "speed": 1,
-      "start": 1.756,
-      "end": 12.572
+      "start": 1.749,
+      "end": 12.304
     },
     {
       "label": "The lab",
       "speed": 1,
-      "start": 15.572,
-      "end": 21.221
+      "start": 15.304,
+      "end": 20.954
     },
     {
       "label": "Servers",
       "speed": 1,
-      "start": 25.221,
-      "end": 27.896
+      "start": 24.954,
+      "end": 27.628
     },
     {
       "label": "The data",
       "speed": 1,
-      "start": 30.896,
-      "end": 37.306
+      "start": 30.628,
+      "end": 37.04
     },
     {
       "label": "Setup plan",
       "speed": 1,
-      "start": 41.307,
-      "end": 44.547
+      "start": 41.04,
+      "end": 44.282
     },
     {
       "label": "Setup",
       "speed": 1,
-      "start": 47.547,
-      "end": 57.674
+      "start": 47.282,
+      "end": 58.256
     },
     {
       "label": "Check",
       "speed": 1,
-      "start": 60.674,
-      "end": 62.954
+      "start": 61.256,
+      "end": 63.535
     },
     {
       "label": "Discover",
       "speed": 1,
-      "start": 65.955,
-      "end": 72.511
+      "start": 66.535,
+      "end": 73.184
     },
     {
       "label": "List",
       "speed": 1,
-      "start": 78.511,
-      "end": 84.555
+      "start": 79.185,
+      "end": 85.311
     },
     {
       "label": "Call",
       "speed": 1,
-      "start": 90.555,
-      "end": 96.674
+      "start": 91.311,
+      "end": 97.531
     },
     {
       "label": "Context",
       "speed": 1,
-      "start": 102.675,
-      "end": 109.651
+      "start": 103.531,
+      "end": 110.627
     },
     {
       "label": "HTTP",
       "speed": 1,
-      "start": 115.652,
-      "end": 121.637
+      "start": 116.627,
+      "end": 122.824
     },
     {
       "label": "Token",
       "speed": 1,
-      "start": 127.637,
-      "end": 133.896
+      "start": 128.825,
+      "end": 135.282
     },
     {
       "label": "One run",
       "speed": 1,
-      "start": 139.896,
-      "end": 150.101
+      "start": 141.282,
+      "end": 151.779
     }
   ],
   "keys": [
     {
-      "t": 2.356,
+      "t": 2.349,
       "what": "type"
     },
     {
-      "t": 16.172,
+      "t": 15.904,
       "what": "type"
     },
     {
-      "t": 25.821,
+      "t": 25.554,
       "what": "type"
     },
     {
-      "t": 31.496,
+      "t": 31.228,
       "what": "type"
     },
     {
-      "t": 41.907,
+      "t": 41.64,
       "what": "type"
     },
     {
-      "t": 48.147,
+      "t": 47.882,
       "what": "type"
     },
     {
-      "t": 61.274,
+      "t": 61.856,
       "what": "type"
     },
     {
-      "t": 66.555,
+      "t": 67.135,
       "what": "type"
     },
     {
-      "t": 79.111,
+      "t": 79.785,
       "what": "type"
     },
     {
-      "t": 91.155,
+      "t": 91.911,
       "what": "type"
     },
     {
-      "t": 103.275,
+      "t": 104.131,
       "what": "type"
     },
     {
-      "t": 116.252,
+      "t": 117.227,
       "what": "type"
     },
     {
-      "t": 128.238,
+      "t": 129.425,
       "what": "type"
     },
     {
-      "t": 140.496,
+      "t": 141.882,
       "what": "type"
     }
   ],
-  "end": 156.101
+  "end": 157.779
 }
