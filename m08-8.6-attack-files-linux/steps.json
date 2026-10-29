@@ -1,0 +1,49 @@
+{
+  "scenario": "m08-8.6-attack-files-linux",
+  "start": 1.722,
+  "steps": [
+    {
+      "label": "Poisoned release",
+      "speed": 1,
+      "start": 1.722,
+      "end": 11.63
+    },
+    {
+      "label": "Release switch",
+      "speed": 1,
+      "start": 16.63,
+      "end": 22.031
+    },
+    {
+      "label": "Stand-in reaction",
+      "speed": 1,
+      "start": 27.032,
+      "end": 31.6
+    },
+    {
+      "label": "Inbox",
+      "speed": 1,
+      "start": 36.6,
+      "end": 46.937
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.322,
+      "what": "type"
+    },
+    {
+      "t": 17.23,
+      "what": "type"
+    },
+    {
+      "t": 27.632,
+      "what": "type"
+    },
+    {
+      "t": 37.2,
+      "what": "type"
+    }
+  ],
+  "end": 51.937
+}
