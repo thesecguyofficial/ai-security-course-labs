@@ -1,17 +1,25 @@
 {
   "name": "m05-5.6-linux",
   "lesson": "5.6",
-  "title": "Lab 5.6: model output into HTML, SQL and shell on the TSG Helpdesk app; the attacks, the fixes and the tests",
+  "title": "Lab 5.6, part 2: the planted ticket and the three attacks one at a time, the fixes, the same attacks against the safe app, the tests and the challenge",
   "cols": 132,
   "rows": 34,
   "before": [
     "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
   ],
-  "fail_on": ["Traceback"],
+  "fail_on": [
+    "Traceback"
+  ],
   "steps": [
-    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m05 && ls"},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m05 && ls", "pause_after": 3},
+    {"label": "Attack inputs", "type": "grep -n -A4 '^ATTACKS' attack.py", "pause_after": 5},
+    {"label": "Planted ticket", "type": "python3 explore.py page \"summarise my latest ticket\"", "pause_after": 6},
+    {"label": "HTML attack", "type": "python3 attack.py --only html", "pause_after": 5},
+    {"label": "SQL attack", "type": "python3 attack.py --only sql", "pause_after": 5},
+    {"label": "Shell attack", "type": "python3 attack.py --only shell", "pause_after": 5},
     {"label": "Attack", "type": "make attack", "pause_after": 6},
     {"label": "Fixes", "type": "grep -n 'def .*_safe\\|html.escape\\|query_only\\|ALLOWED_SERVICES =' helpdesk_app.py", "pause_after": 4},
+    {"label": "Safe page", "type": "python3 explore.py page --safe \"summarise my latest ticket\"", "pause_after": 6},
     {"label": "Attack safe", "type": "make attack-safe", "pause_after": 6},
     {"label": "Tests", "type": "make test", "pause_after": 5},
     {"label": "Challenge", "type": "make challenge 2>&1 | tail -8", "pause_after": 5}
