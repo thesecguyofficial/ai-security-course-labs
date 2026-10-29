@@ -1,0 +1,46 @@
+[
+  {
+    "label": "Open Threat Dragon",
+    "t": 3.14
+  },
+  {
+    "label": "Open model",
+    "t": 5.81
+  },
+  {
+    "label": "Diagram",
+    "t": 12.42
+  },
+  {
+    "label": "External entity",
+    "t": 17.89
+  },
+  {
+    "label": "Process",
+    "t": 22.34
+  },
+  {
+    "label": "Model",
+    "t": 26.75
+  },
+  {
+    "label": "Data store",
+    "t": 31.18
+  },
+  {
+    "label": "Untrusted flow",
+    "t": 35.66
+  },
+  {
+    "label": "Boundary",
+    "t": 40.06
+  },
+  {
+    "label": "Saved",
+    "t": 46.39
+  },
+  {
+    "label": "End",
+    "t": 48.68
+  }
+]
