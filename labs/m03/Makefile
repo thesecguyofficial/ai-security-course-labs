@@ -51,6 +51,10 @@ clean:        ## delete state, logs and promptfoo results
 	rm -rf .promptfoo __pycache__
 
 # Added for the repo-wide setup (setup.sh): every lab answers `make setup`. This one needs nothing installed.
-.PHONY: setup
+.PHONY: setup promptfoo-check
 setup:        ## nothing to install: checks your Python is 3.10 or newer
 	$(PY) ../../tools/check_python.py 3.10
+
+promptfoo-check: ## Step 8 prep: shows your Node.js version, then downloads promptfoo and prints its version (runs no tests)
+	node --version
+	npx --yes promptfoo@0.124.1 --version
