@@ -1,0 +1,31 @@
+{
+  "name": "m01-1.8-understand-linux",
+  "lesson": "1.8",
+  "title": "Lab 1.8, part 1: get the lab, Ollama from zero (version, pull, list, show), the port it listens on, one raw API call, and explore.py (the model file, next-token prediction, the app re-sending history)",
+  "cols": 120,
+  "rows": 32,
+  "needs": ["ollama"],
+  "before": [
+    "curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh",
+    "sudo systemctl daemon-reload && sudo systemctl enable --now ollama || (setsid nohup ollama serve >/tmp/ollama.log 2>&1 < /dev/null &)",
+    "for i in $(seq 1 30); do curl -fsS http://127.0.0.1:11434/api/version && break; sleep 2; done"
+  ],
+  "fail_on": ["Traceback", "Could not reach Ollama"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m01 && ls", "pause_after": 4},
+    {"label": "Ollama", "type": "ollama --version", "pause_after": 3},
+    {"label": "No models yet", "type": "ollama list", "pause_after": 3},
+    {"label": "Pull", "type": "ollama pull gemma3:1b", "speed": 8, "timeout": 900, "pause_after": 3},
+    {"label": "Listed", "type": "ollama list", "pause_after": 4},
+    {"label": "Model file", "type": "ollama show gemma3:1b", "pause_after": 6},
+    {"label": "Look before you run", "type": "python3 explore.py --help", "pause_after": 4},
+    {"label": "Inside the file", "type": "python3 explore.py model", "pause_after": 6},
+    {"label": "The door", "type": "ss -ltn | grep 11434", "pause_after": 4},
+    {"label": "Knock", "type": "curl http://localhost:11434/api/version", "pause_after": 3},
+    {"label": "One API call", "type": "curl -s http://localhost:11434/api/chat -d '{\"model\": \"gemma3:1b\", \"messages\": [{\"role\": \"user\", \"content\": \"Why is the sky blue? One sentence.\"}], \"stream\": false}' | python3 -m json.tool", "timeout": 300, "pause_after": 7},
+    {"label": "Next token", "type": "python3 explore.py next \"The capital of France is\"", "timeout": 300, "pause_after": 7},
+    {"label": "History", "type": "python3 explore.py history", "timeout": 300, "pause_after": 8},
+    {"label": "Check", "type": "python3 llm_lab.py check", "pause_after": 3}
+  ]
+}
