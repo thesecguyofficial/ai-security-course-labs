@@ -87,7 +87,7 @@ POST http://127.0.0.1:11434/v1/chat/completions   (the OpenAI-compatible chat AP
 
 Read it top to bottom: which model, then a list of **messages**, each with a **role**. `system` is the app's
 instructions. `user` holds the customer's email, pasted in by the app. `temperature: 0` asks for the most likely
-words every time. (`\n` is how JSON writes a line break.)
+token at each step, so answers are nearly, but not always, the same. (`\n` is how JSON writes a line break.)
 
 **2. The reply.** Send that same request to the real model:
 
