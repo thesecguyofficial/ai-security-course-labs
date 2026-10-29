@@ -5,7 +5,8 @@ loader.py: load a model file, three ways.
   python loader.py safe    models/model.safetensors # safetensors - only reads tensors
   python loader.py guarded models/evil_model.pkl     # YOUR challenge: safe_load(), refuses danger
 
-`naive` is what most "load a model" code does under the hood. Point it at evil_model.pkl and watch
+`naive` is plain pickle.load: what older PyTorch code did by default (torch.load defaults to
+weights_only=True since 2.6), and what any code that calls pickle directly still does. Point it at evil_model.pkl and watch
 the marker file appear: that is code execution, from nothing more than loading a file.
 """
 
@@ -24,7 +25,7 @@ def load_naive(path: str):
 
 
 def load_safetensors(path: str):
-    """Safe by construction: the safetensors format is data only, so loading cannot run code."""
+    """The safetensors format is data only, so loading cannot run code (the weights can still be backdoored)."""
     from safetensors.numpy import load_file
 
     return load_file(path)
