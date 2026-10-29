@@ -1,0 +1,119 @@
+{
+  "scenario": "m04-4.6-understand-linux",
+  "start": 1.726,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.726,
+      "end": 12.094
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.094,
+      "end": 20.743
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 24.743,
+      "end": 27.477
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 31.477,
+      "end": 33.955
+    },
+    {
+      "label": "Setup",
+      "speed": 8,
+      "start": 36.955,
+      "end": 63.577
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 65.577,
+      "end": 82.764
+    },
+    {
+      "label": "Trace",
+      "speed": 1,
+      "start": 85.764,
+      "end": 94.639
+    },
+    {
+      "label": "Recognizers",
+      "speed": 1,
+      "start": 101.639,
+      "end": 108.345
+    },
+    {
+      "label": "NER",
+      "speed": 1,
+      "start": 115.345,
+      "end": 130.211
+    },
+    {
+      "label": "Analyze",
+      "speed": 1,
+      "start": 136.211,
+      "end": 151.463
+    },
+    {
+      "label": "Scores",
+      "speed": 1,
+      "start": 158.463,
+      "end": 171.295
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.326,
+      "what": "type"
+    },
+    {
+      "t": 15.694,
+      "what": "type"
+    },
+    {
+      "t": 25.343,
+      "what": "type"
+    },
+    {
+      "t": 32.078,
+      "what": "type"
+    },
+    {
+      "t": 37.555,
+      "what": "type"
+    },
+    {
+      "t": 66.177,
+      "what": "type"
+    },
+    {
+      "t": 86.364,
+      "what": "type"
+    },
+    {
+      "t": 102.239,
+      "what": "type"
+    },
+    {
+      "t": 115.945,
+      "what": "type"
+    },
+    {
+      "t": 136.811,
+      "what": "type"
+    },
+    {
+      "t": 159.063,
+      "what": "type"
+    }
+  ],
+  "end": 178.295
+}

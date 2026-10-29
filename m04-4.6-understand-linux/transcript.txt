@@ -1,0 +1,824 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 3573, done.
+remote: Counting objects:   0% (1/457)
+remote: Counting objects:   1% (5/457)
+remote: Counting objects:   2% (10/457)
+remote: Counting objects:   3% (14/457)
+remote: Counting objects:   4% (19/457)
+remote: Counting objects:   5% (23/457)
+remote: Counting objects:   6% (28/457)
+remote: Counting objects:   7% (32/457)
+remote: Counting objects:   8% (37/457)
+remote: Counting objects:   9% (42/457)
+remote: Counting objects:  10% (46/457)
+remote: Counting objects:  11% (51/457)
+remote: Counting objects:  12% (55/457)
+remote: Counting objects:  13% (60/457)
+remote: Counting objects:  14% (64/457)
+remote: Counting objects:  15% (69/457)
+remote: Counting objects:  16% (74/457)
+remote: Counting objects:  17% (78/457)
+remote: Counting objects:  18% (83/457)
+remote: Counting objects:  19% (87/457)
+remote: Counting objects:  20% (92/457)
+remote: Counting objects:  21% (96/457)
+remote: Counting objects:  22% (101/457)
+remote: Counting objects:  23% (106/457)
+remote: Counting objects:  24% (110/457)
+remote: Counting objects:  25% (115/457)
+remote: Counting objects:  26% (119/457)
+remote: Counting objects:  27% (124/457)
+remote: Counting objects:  28% (128/457)
+remote: Counting objects:  29% (133/457)
+remote: Counting objects:  30% (138/457)
+remote: Counting objects:  31% (142/457)
+remote: Counting objects:  32% (147/457)
+remote: Counting objects:  33% (151/457)
+remote: Counting objects:  34% (156/457)
+remote: Counting objects:  35% (160/457)
+remote: Counting objects:  36% (165/457)
+remote: Counting objects:  37% (170/457)
+remote: Counting objects:  38% (174/457)
+remote: Counting objects:  39% (179/457)
+remote: Counting objects:  40% (183/457)
+remote: Counting objects:  41% (188/457)
+remote: Counting objects:  42% (192/457)
+remote: Counting objects:  43% (197/457)
+remote: Counting objects:  44% (202/457)
+remote: Counting objects:  45% (206/457)
+remote: Counting objects:  46% (211/457)
+remote: Counting objects:  47% (215/457)
+remote: Counting objects:  48% (220/457)
+remote: Counting objects:  49% (224/457)
+remote: Counting objects:  50% (229/457)
+remote: Counting objects:  51% (234/457)
+remote: Counting objects:  52% (238/457)
+remote: Counting objects:  53% (243/457)
+remote: Counting objects:  54% (247/457)
+remote: Counting objects:  55% (252/457)
+remote: Counting objects:  56% (256/457)
+remote: Counting objects:  57% (261/457)
+remote: Counting objects:  58% (266/457)
+remote: Counting objects:  59% (270/457)
+remote: Counting objects:  60% (275/457)
+remote: Counting objects:  61% (279/457)
+remote: Counting objects:  62% (284/457)
+remote: Counting objects:  63% (288/457)
+remote: Counting objects:  64% (293/457)
+remote: Counting objects:  65% (298/457)
+remote: Counting objects:  66% (302/457)
+remote: Counting objects:  67% (307/457)
+remote: Counting objects:  68% (311/457)
+remote: Counting objects:  69% (316/457)
+remote: Counting objects:  70% (320/457)
+remote: Counting objects:  71% (325/457)
+remote: Counting objects:  72% (330/457)
+remote: Counting objects:  73% (334/457)
+remote: Counting objects:  74% (339/457)
+remote: Counting objects:  75% (343/457)
+remote: Counting objects:  76% (348/457)
+remote: Counting objects:  77% (352/457)
+remote: Counting objects:  78% (357/457)
+remote: Counting objects:  79% (362/457)
+remote: Counting objects:  80% (366/457)
+remote: Counting objects:  81% (371/457)
+remote: Counting objects:  82% (375/457)
+remote: Counting objects:  83% (380/457)
+remote: Counting objects:  84% (384/457)
+remote: Counting objects:  85% (389/457)
+remote: Counting objects:  86% (394/457)
+remote: Counting objects:  87% (398/457)
+remote: Counting objects:  88% (403/457)
+remote: Counting objects:  89% (407/457)
+remote: Counting objects:  90% (412/457)
+remote: Counting objects:  91% (416/457)
+remote: Counting objects:  92% (421/457)
+remote: Counting objects:  93% (426/457)
+remote: Counting objects:  94% (430/457)
+remote: Counting objects:  95% (435/457)
+remote: Counting objects:  96% (439/457)
+remote: Counting objects:  97% (444/457)
+remote: Counting objects:  98% (448/457)
+remote: Counting objects:  99% (453/457)
+remote: Counting objects: 100% (457/457)
+remote: Counting objects: 100% (457/457), done.
+remote: Compressing objects:   0% (1/334)
+remote: Compressing objects:   1% (4/334)
+remote: Compressing objects:   2% (7/334)
+remote: Compressing objects:   3% (11/334)
+remote: Compressing objects:   4% (14/334)
+remote: Compressing objects:   5% (17/334)
+remote: Compressing objects:   6% (21/334)
+remote: Compressing objects:   7% (24/334)
+remote: Compressing objects:   8% (27/334)
+remote: Compressing objects:   9% (31/334)
+remote: Compressing objects:  10% (34/334)
+remote: Compressing objects:  11% (37/334)
+remote: Compressing objects:  12% (41/334)
+remote: Compressing objects:  13% (44/334)
+remote: Compressing objects:  14% (47/334)
+remote: Compressing objects:  15% (51/334)
+remote: Compressing objects:  16% (54/334)
+remote: Compressing objects:  17% (57/334)
+remote: Compressing objects:  18% (61/334)
+remote: Compressing objects:  19% (64/334)
+remote: Compressing objects:  20% (67/334)
+remote: Compressing objects:  21% (71/334)
+remote: Compressing objects:  22% (74/334)
+remote: Compressing objects:  23% (77/334)
+remote: Compressing objects:  24% (81/334)
+remote: Compressing objects:  25% (84/334)
+remote: Compressing objects:  26% (87/334)
+remote: Compressing objects:  27% (91/334)
+remote: Compressing objects:  28% (94/334)
+remote: Compressing objects:  29% (97/334)
+remote: Compressing objects:  30% (101/334)
+remote: Compressing objects:  31% (104/334)
+remote: Compressing objects:  32% (107/334)
+remote: Compressing objects:  33% (111/334)
+remote: Compressing objects:  34% (114/334)
+remote: Compressing objects:  35% (117/334)
+remote: Compressing objects:  36% (121/334)
+remote: Compressing objects:  37% (124/334)
+remote: Compressing objects:  38% (127/334)
+remote: Compressing objects:  39% (131/334)
+remote: Compressing objects:  40% (134/334)
+remote: Compressing objects:  41% (137/334)
+remote: Compressing objects:  42% (141/334)
+remote: Compressing objects:  43% (144/334)
+remote: Compressing objects:  44% (147/334)
+remote: Compressing objects:  45% (151/334)
+remote: Compressing objects:  46% (154/334)
+remote: Compressing objects:  47% (157/334)
+remote: Compressing objects:  48% (161/334)
+remote: Compressing objects:  49% (164/334)
+remote: Compressing objects:  50% (167/334)
+remote: Compressing objects:  51% (171/334)
+remote: Compressing objects:  52% (174/334)
+remote: Compressing objects:  53% (178/334)
+remote: Compressing objects:  54% (181/334)
+remote: Compressing objects:  55% (184/334)
+remote: Compressing objects:  56% (188/334)
+remote: Compressing objects:  57% (191/334)
+remote: Compressing objects:  58% (194/334)
+remote: Compressing objects:  59% (198/334)
+remote: Compressing objects:  60% (201/334)
+remote: Compressing objects:  61% (204/334)
+remote: Compressing objects:  62% (208/334)
+remote: Compressing objects:  63% (211/334)
+remote: Compressing objects:  64% (214/334)
+remote: Compressing objects:  65% (218/334)
+remote: Compressing objects:  66% (221/334)
+remote: Compressing objects:  67% (224/334)
+remote: Compressing objects:  68% (228/334)
+remote: Compressing objects:  69% (231/334)
+remote: Compressing objects:  70% (234/334)
+remote: Compressing objects:  71% (238/334)
+remote: Compressing objects:  72% (241/334)
+remote: Compressing objects:  73% (244/334)
+remote: Compressing objects:  74% (248/334)
+remote: Compressing objects:  75% (251/334)
+remote: Compressing objects:  76% (254/334)
+remote: Compressing objects:  77% (258/334)
+remote: Compressing objects:  78% (261/334)
+remote: Compressing objects:  79% (264/334)
+remote: Compressing objects:  80% (268/334)
+remote: Compressing objects:  81% (271/334)
+remote: Compressing objects:  82% (274/334)
+remote: Compressing objects:  83% (278/334)
+remote: Compressing objects:  84% (281/334)
+remote: Compressing objects:  85% (284/334)
+remote: Compressing objects:  86% (288/334)
+remote: Compressing objects:  87% (291/334)
+remote: Compressing objects:  88% (294/334)
+remote: Compressing objects:  89% (298/334)
+remote: Compressing objects:  90% (301/334)
+remote: Compressing objects:  91% (304/334)
+remote: Compressing objects:  92% (308/334)
+remote: Compressing objects:  93% (311/334)
+remote: Compressing objects:  94% (314/334)
+remote: Compressing objects:  95% (318/334)
+remote: Compressing objects:  96% (321/334)
+remote: Compressing objects:  97% (324/334)
+remote: Compressing objects:  98% (328/334)
+remote: Compressing objects:  99% (331/334)
+remote: Compressing objects: 100% (334/334)
+remote: Compressing objects: 100% (334/334), done.
+Receiving objects:   0% (1/3573)
+Receiving objects:   1% (36/3573)
+Receiving objects:   2% (72/3573)
+Receiving objects:   3% (108/3573)
+Receiving objects:   4% (143/3573)
+Receiving objects:   5% (179/3573)
+Receiving objects:   6% (215/3573)
+Receiving objects:   7% (251/3573)
+Receiving objects:   8% (286/3573)
+Receiving objects:   9% (322/3573)
+Receiving objects:  10% (358/3573)
+Receiving objects:  11% (394/3573)
+Receiving objects:  12% (429/3573)
+Receiving objects:  13% (465/3573)
+Receiving objects:  14% (501/3573)
+Receiving objects:  15% (536/3573)
+Receiving objects:  16% (572/3573)
+Receiving objects:  17% (608/3573)
+Receiving objects:  18% (644/3573)
+Receiving objects:  19% (679/3573)
+Receiving objects:  20% (715/3573)
+Receiving objects:  21% (751/3573)
+Receiving objects:  22% (787/3573)
+Receiving objects:  23% (822/3573)
+Receiving objects:  24% (858/3573)
+Receiving objects:  25% (894/3573)
+Receiving objects:  26% (929/3573)
+Receiving objects:  27% (965/3573)
+Receiving objects:  28% (1001/3573)
+Receiving objects:  29% (1037/3573)
+Receiving objects:  30% (1072/3573)
+Receiving objects:  31% (1108/3573)
+Receiving objects:  32% (1144/3573)
+Receiving objects:  33% (1180/3573)
+Receiving objects:  34% (1215/3573)
+Receiving objects:  35% (1251/3573)
+Receiving objects:  36% (1287/3573)
+Receiving objects:  37% (1323/3573)
+Receiving objects:  38% (1358/3573)
+Receiving objects:  39% (1394/3573)
+Receiving objects:  40% (1430/3573)
+Receiving objects:  41% (1465/3573)
+Receiving objects:  42% (1501/3573)
+Receiving objects:  43% (1537/3573)
+Receiving objects:  44% (1573/3573)
+Receiving objects:  45% (1608/3573)
+Receiving objects:  46% (1644/3573)
+Receiving objects:  47% (1680/3573)
+Receiving objects:  48% (1716/3573)
+Receiving objects:  49% (1751/3573)
+Receiving objects:  50% (1787/3573)
+Receiving objects:  51% (1823/3573)
+Receiving objects:  52% (1858/3573)
+Receiving objects:  53% (1894/3573)
+Receiving objects:  54% (1930/3573)
+Receiving objects:  55% (1966/3573)
+Receiving objects:  56% (2001/3573)
+Receiving objects:  57% (2037/3573)
+Receiving objects:  58% (2073/3573)
+Receiving objects:  59% (2109/3573)
+Receiving objects:  60% (2144/3573)
+Receiving objects:  61% (2180/3573)
+Receiving objects:  62% (2216/3573)
+Receiving objects:  63% (2251/3573)
+Receiving objects:  64% (2287/3573)
+Receiving objects:  65% (2323/3573)
+Receiving objects:  66% (2359/3573)
+Receiving objects:  67% (2394/3573)
+Receiving objects:  68% (2430/3573)
+Receiving objects:  69% (2466/3573)
+Receiving objects:  70% (2502/3573)
+Receiving objects:  71% (2537/3573)
+Receiving objects:  72% (2573/3573)
+Receiving objects:  73% (2609/3573)
+Receiving objects:  74% (2645/3573)
+Receiving objects:  75% (2680/3573)
+Receiving objects:  76% (2716/3573)
+Receiving objects:  77% (2752/3573)
+Receiving objects:  78% (2787/3573)
+Receiving objects:  79% (2823/3573)
+Receiving objects:  80% (2859/3573)
+Receiving objects:  81% (2895/3573)
+Receiving objects:  82% (2930/3573)
+Receiving objects:  83% (2966/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  84% (3002/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  85% (3038/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  86% (3073/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  87% (3109/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  88% (3145/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  89% (3180/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  90% (3216/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  91% (3252/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  92% (3288/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  93% (3323/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  94% (3359/3573), 36.88 MiB | 73.70 MiB/s
+remote: Total 3573 (delta 230), reused 270 (delta 118), pack-reused 3116 (from 2)
+Receiving objects:  95% (3395/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  96% (3431/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  97% (3466/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  98% (3502/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects:  99% (3538/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects: 100% (3573/3573), 36.88 MiB | 73.70 MiB/s
+Receiving objects: 100% (3573/3573), 45.49 MiB | 73.13 MiB/s, done.
+Resolving deltas:   0% (0/1391)
+Resolving deltas:   1% (14/1391)
+Resolving deltas:   2% (28/1391)
+Resolving deltas:   3% (42/1391)
+Resolving deltas:   4% (56/1391)
+Resolving deltas:   5% (70/1391)
+Resolving deltas:   6% (84/1391)
+Resolving deltas:   7% (98/1391)
+Resolving deltas:   8% (112/1391)
+Resolving deltas:   9% (126/1391)
+Resolving deltas:  10% (140/1391)
+Resolving deltas:  11% (154/1391)
+Resolving deltas:  12% (167/1391)
+Resolving deltas:  13% (181/1391)
+Resolving deltas:  14% (195/1391)
+Resolving deltas:  15% (209/1391)
+Resolving deltas:  16% (223/1391)
+Resolving deltas:  17% (237/1391)
+Resolving deltas:  18% (251/1391)
+Resolving deltas:  19% (265/1391)
+Resolving deltas:  20% (279/1391)
+Resolving deltas:  21% (293/1391)
+Resolving deltas:  22% (307/1391)
+Resolving deltas:  23% (320/1391)
+Resolving deltas:  24% (334/1391)
+Resolving deltas:  25% (348/1391)
+Resolving deltas:  26% (362/1391)
+Resolving deltas:  27% (376/1391)
+Resolving deltas:  28% (390/1391)
+Resolving deltas:  29% (404/1391)
+Resolving deltas:  30% (418/1391)
+Resolving deltas:  31% (432/1391)
+Resolving deltas:  32% (446/1391)
+Resolving deltas:  33% (460/1391)
+Resolving deltas:  34% (473/1391)
+Resolving deltas:  35% (487/1391)
+Resolving deltas:  36% (501/1391)
+Resolving deltas:  37% (515/1391)
+Resolving deltas:  38% (529/1391)
+Resolving deltas:  39% (543/1391)
+Resolving deltas:  40% (557/1391)
+Resolving deltas:  41% (571/1391)
+Resolving deltas:  42% (585/1391)
+Resolving deltas:  43% (599/1391)
+Resolving deltas:  44% (613/1391)
+Resolving deltas:  45% (626/1391)
+Resolving deltas:  46% (640/1391)
+Resolving deltas:  47% (654/1391)
+Resolving deltas:  48% (668/1391)
+Resolving deltas:  49% (682/1391)
+Resolving deltas:  50% (696/1391)
+Resolving deltas:  51% (710/1391)
+Resolving deltas:  52% (724/1391)
+Resolving deltas:  53% (738/1391)
+Resolving deltas:  54% (752/1391)
+Resolving deltas:  55% (766/1391)
+Resolving deltas:  56% (779/1391)
+Resolving deltas:  57% (793/1391)
+Resolving deltas:  58% (807/1391)
+Resolving deltas:  59% (821/1391)
+Resolving deltas:  60% (835/1391)
+Resolving deltas:  61% (849/1391)
+Resolving deltas:  62% (863/1391)
+Resolving deltas:  63% (877/1391)
+Resolving deltas:  64% (891/1391)
+Resolving deltas:  65% (905/1391)
+Resolving deltas:  66% (919/1391)
+Resolving deltas:  67% (932/1391)
+Resolving deltas:  68% (946/1391)
+Resolving deltas:  69% (960/1391)
+Resolving deltas:  70% (974/1391)
+Resolving deltas:  71% (988/1391)
+Resolving deltas:  72% (1002/1391)
+Resolving deltas:  73% (1016/1391)
+Resolving deltas:  74% (1030/1391)
+Resolving deltas:  75% (1044/1391)
+Resolving deltas:  76% (1058/1391)
+Resolving deltas:  77% (1072/1391)
+Resolving deltas:  78% (1085/1391)
+Resolving deltas:  79% (1099/1391)
+Resolving deltas:  80% (1113/1391)
+Resolving deltas:  81% (1127/1391)
+Resolving deltas:  82% (1141/1391)
+Resolving deltas:  83% (1155/1391)
+Resolving deltas:  84% (1169/1391)
+Resolving deltas:  85% (1183/1391)
+Resolving deltas:  86% (1197/1391)
+Resolving deltas:  87% (1211/1391)
+Resolving deltas:  88% (1225/1391)
+Resolving deltas:  89% (1238/1391)
+Resolving deltas:  90% (1252/1391)
+Resolving deltas:  91% (1266/1391)
+Resolving deltas:  92% (1280/1391)
+Resolving deltas:  93% (1294/1391)
+Resolving deltas:  94% (1308/1391)
+Resolving deltas:  95% (1322/1391)
+Resolving deltas:  96% (1336/1391)
+Resolving deltas:  97% (1350/1391)
+Resolving deltas:  98% (1364/1391)
+Resolving deltas:  99% (1378/1391)
+Resolving deltas: 100% (1391/1391)
+Resolving deltas: 100% (1391/1391), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m04 && ls
+
+Makefile   canaries.txt            chat_app.py    conversation.txt  redactor.py       run_tests.py
+README.md  challenge_canaries.txt  check_logs.py  explore.py        requirements.txt  stub_llm.py
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ cat canaries.txt
+
+# M4.6 canaries: fake sensitive values that must NEVER appear in logs/ when redaction is on.
+# check_logs.py fails if any of these strings is found. One per line; # = comment.
+Jane Doe
+jane.doe@example.com
+202-555-0143
+4242 4242 4242 4242
+ABCPE1234F
+203.0.113.42
+AKIAIOSFODNN7EXAMPLE
+# The next three come from the stand-in model's ANSWER (output redaction):
+John Smith
+john.smith@example.org
+5555 5555 5555 4444
+198.51.100.7
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ make -n setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m spacy download en_core_web_sm
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ make setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+Collecting presidio_analyzer==2.2.364 (from -r requirements.txt (line 3))
+  Downloading presidio_analyzer-2.2.364-py3-none-any.whl.metadata (6.7 kB)
+Collecting presidio_anonymizer==2.2.364 (from -r requirements.txt (line 4))
+  Downloading presidio_anonymizer-2.2.364-py3-none-any.whl.metadata (9.9 kB)
+Collecting click<9.0.0,>=8.1.0 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting numpy<2.5.0,>=1.19.0 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading numpy-2.4.6-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+Collecting phonenumbers<10.0.0,>=9.0.28 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading phonenumbers-9.0.42-py2.py3-none-any.whl.metadata (10 kB)
+Collecting pydantic<3.0.0,>=2.12.5 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/133.0 kB ? eta -:--:--
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 133.0/133.0 kB 10.7 MB/s eta 0:00:00
+Collecting pyyaml<7.0.0,>=6.0.3 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+Collecting regex>=2023.0.0 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading regex-2026.9.29-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/40.6 kB ? eta -:--:--
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.6/40.6 kB 15.5 MB/s eta 0:00:00
+Collecting spacy!=3.7.0,<4.0.0,>=3.4.4 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading spacy-3.8.18-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (28 kB)
+Collecting tldextract<6.0.0,>=5.3.1 (from presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading tldextract-5.4.0-py3-none-any.whl.metadata (9.2 kB)
+Collecting cryptography<49.0.0,>=48.0.1 (from presidio_anonymizer==2.2.364->-r requirements.txt (line 4))
+  Downloading cryptography-48.0.1-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.3 kB)
+Collecting cffi>=2.0.0 (from cryptography<49.0.0,>=48.0.1->presidio_anonymizer==2.2.364->-r requirements.txt (line 4))
+  Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.5 kB)
+Collecting annotated-types>=0.6.0 (from pydantic<3.0.0,>=2.12.5->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.50.1 (from pydantic<3.0.0,>=2.12.5->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
+Collecting typing-extensions>=4.16.0 (from pydantic<3.0.0,>=2.12.5->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting typing-inspection>=0.4.4 (from pydantic<3.0.0,>=2.12.5->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+Collecting spacy-legacy<3.1.0,>=3.0.11 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading spacy_legacy-3.0.12-py2.py3-none-any.whl.metadata (2.8 kB)
+Collecting spacy-loggers<2.0.0,>=1.0.0 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading spacy_loggers-1.0.5-py3-none-any.whl.metadata (23 kB)
+Collecting murmurhash<1.1.0,>=0.28.0 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading murmurhash-1.0.16-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl.metadata (2.3 kB)
+Collecting cymem<2.1.0,>=2.0.2 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading cymem-2.0.16-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (9.7 kB)
+Collecting preshed!=3.0.14,<3.1.0,>=3.0.2 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading preshed-3.0.15-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (5.3 kB)
+Collecting thinc<8.4.0,>=8.3.12 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading thinc-8.3.14-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (14 kB)
+Collecting wasabi<1.2.0,>=0.9.1 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading wasabi-1.1.3-py3-none-any.whl.metadata (28 kB)
+Collecting srsly<3.0.0,>=2.5.3 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading srsly-2.5.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (20 kB)
+Collecting catalogue<2.1.0,>=2.0.6 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading catalogue-2.0.10-py3-none-any.whl.metadata (14 kB)
+Collecting weasel<2.0.0,>=1.0.1 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading weasel-1.0.1-py3-none-any.whl.metadata (4.8 kB)
+Collecting confection<2.0.0,>=1.3.4 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading confection-1.3.4-py3-none-any.whl.metadata (19 kB)
+Collecting typer<1.0.0,>=0.3.0 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading typer-0.27.3-py3-none-any.whl.metadata (16 kB)
+Collecting tqdm<5.0.0,>=4.38.0 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading tqdm-4.70.1-py3-none-any.whl.metadata (57 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/57.4 kB ? eta -:--:--
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.4/57.4 kB 23.4 MB/s eta 0:00:00
+Collecting requests<3.0.0,>=2.13.0 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting jinja2 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+Collecting setuptools (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading setuptools-84.2.1-py3-none-any.whl.metadata (6.6 kB)
+Collecting packaging>=20.0 (from spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+Collecting idna (from tldextract<6.0.0,>=5.3.1->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting requests-file>=1.4 (from tldextract<6.0.0,>=5.3.1->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading requests_file-3.0.1-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting filelock>=3.0.8 (from tldextract<6.0.0,>=5.3.1->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading filelock-4.2.4-py3-none-any.whl.metadata (2.0 kB)
+Collecting pycparser (from cffi>=2.0.0->cryptography<49.0.0,>=48.0.1->presidio_anonymizer==2.2.364->-r requirements.txt (line 4))
+  Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+Collecting charset_normalizer<4,>=2 (from requests<3.0.0,>=2.13.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/46.4 kB ? eta -:--:--
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 46.4/46.4 kB 17.0 MB/s eta 0:00:00
+Collecting urllib3<3,>=1.26 (from requests<3.0.0,>=2.13.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting certifi>=2023.5.7 (from requests<3.0.0,>=2.13.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Collecting blis<1.4.0,>=1.3.0 (from thinc<8.4.0,>=8.3.12->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading blis-1.3.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (8.4 kB)
+Collecting shellingham>=1.3.0 (from typer<1.0.0,>=0.3.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading shellingham-1.5.4-py2.py3-none-any.whl.metadata (3.5 kB)
+Collecting rich>=13.8.0 (from typer<1.0.0,>=0.3.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading rich-15.0.0-py3-none-any.whl.metadata (18 kB)
+Collecting annotated-doc>=0.0.2 (from typer<1.0.0,>=0.3.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
+Collecting cloudpathlib>=0.7.0 (from weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading cloudpathlib-0.26.0-py3-none-any.whl.metadata (16 kB)
+Collecting smart-open>=5.2.1 (from smart-open[http]>=5.2.1->weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading smart_open-9.0.0-py3-none-any.whl.metadata (25 kB)
+Collecting httpx>=0.24.0 (from weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting MarkupSafe>=2.0 (from jinja2->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+Collecting anyio (from httpx>=0.24.0->weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+Collecting httpcore==1.* (from httpx>=0.24.0->weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx>=0.24.0->weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting markdown-it-py>=2.2.0 (from rich>=13.8.0->typer<1.0.0,>=0.3.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading markdown_it_py-4.2.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting pygments<3.0.0,>=2.13.0 (from rich>=13.8.0->typer<1.0.0,>=0.3.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting wrapt (from smart-open>=5.2.1->smart-open[http]>=5.2.1->weasel<2.0.0,>=1.0.1->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading wrapt-2.5.1-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (7.6 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=13.8.0->typer<1.0.0,>=0.3.0->spacy!=3.7.0,<4.0.0,>=3.4.4->presidio_analyzer==2.2.364->-r requirements.txt (line 3))
+  Downloading mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Downloading presidio_analyzer-2.2.364-py3-none-any.whl (266 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/266.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 266.3/266.3 kB 34.8 MB/s eta 0:00:00
+Downloading presidio_anonymizer-2.2.364-py3-none-any.whl (38 kB)
+Downloading click-8.5.0-py3-none-any.whl (125 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/125.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 125.3/125.3 kB 52.5 MB/s eta 0:00:00
+Downloading cryptography-48.0.1-cp311-abi3-manylinux_2_34_x86_64.whl (4.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/4.7 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.7/4.7 MB 169.9 MB/s eta 0:00:00
+Downloading numpy-2.4.6-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/16.6 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━ 8.3/16.6 MB 248.2 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 16.6/16.6 MB 293.2 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 181.1 MB/s eta 0:00:00
+Downloading phonenumbers-9.0.42-py2.py3-none-any.whl (2.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/2.6 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.6/2.6 MB 193.2 MB/s eta 0:00:00
+Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/488.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 488.1/488.1 kB 132.9 MB/s eta 0:00:00
+Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/2.2 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 192.5 MB/s eta 0:00:00
+Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/807.9 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 150.4 MB/s eta 0:00:00
+Downloading regex-2026.9.29-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/807.8 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.8/807.8 kB 156.5 MB/s eta 0:00:00
+Downloading spacy-3.8.18-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (35.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/35.5 MB ? eta -:--:--
+   ━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.2/35.5 MB 215.6 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━━━━ 14.8/35.5 MB 223.8 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━ 23.3/35.5 MB 241.1 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━ 32.3/35.5 MB 257.1 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 35.5/35.5 MB 280.6 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.5/35.5 MB 127.8 MB/s eta 0:00:00
+Downloading tldextract-5.4.0-py3-none-any.whl (107 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/107.5 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 107.5/107.5 kB 42.9 MB/s eta 0:00:00
+Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Downloading catalogue-2.0.10-py3-none-any.whl (17 kB)
+Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/221.8 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 221.8/221.8 kB 78.8 MB/s eta 0:00:00
+Downloading confection-1.3.4-py3-none-any.whl (35 kB)
+Downloading cymem-2.0.16-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (274 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/274.5 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 274.5/274.5 kB 93.8 MB/s eta 0:00:00
+Downloading filelock-4.2.4-py3-none-any.whl (162 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/162.5 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 162.5/162.5 kB 66.8 MB/s eta 0:00:00
+Downloading murmurhash-1.0.16-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl (132 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/132.9 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 132.9/132.9 kB 59.0 MB/s eta 0:00:00
+Downloading packaging-26.3-py3-none-any.whl (129 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/130.0 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 130.0/130.0 kB 54.2 MB/s eta 0:00:00
+Downloading preshed-3.0.15-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (926 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/926.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 926.3/926.3 kB 149.7 MB/s eta 0:00:00
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/73.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.1/73.1 kB 32.0 MB/s eta 0:00:00
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/69.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 69.6/69.6 kB 30.7 MB/s eta 0:00:00
+Downloading requests_file-3.0.1-py2.py3-none-any.whl (4.5 kB)
+Downloading spacy_legacy-3.0.12-py2.py3-none-any.whl (29 kB)
+Downloading spacy_loggers-1.0.5-py3-none-any.whl (22 kB)
+Downloading srsly-2.5.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/1.2 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 179.9 MB/s eta 0:00:00
+Downloading thinc-8.3.14-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (4.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/4.3 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.3/4.3 MB 204.0 MB/s eta 0:00:00
+Downloading tqdm-4.70.1-py3-none-any.whl (80 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/80.2 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 80.2/80.2 kB 35.1 MB/s eta 0:00:00
+Downloading typer-0.27.3-py3-none-any.whl (123 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/123.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 123.3/123.3 kB 54.2 MB/s eta 0:00:00
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/45.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.6/45.6 kB 19.9 MB/s eta 0:00:00
+Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Downloading wasabi-1.1.3-py3-none-any.whl (27 kB)
+Downloading weasel-1.0.1-py3-none-any.whl (51 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/51.0 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 51.0/51.0 kB 21.2 MB/s eta 0:00:00
+Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/134.9 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.9/134.9 kB 56.8 MB/s eta 0:00:00
+Downloading setuptools-84.2.1-py3-none-any.whl (876 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/876.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 876.3/876.3 kB 164.8 MB/s eta 0:00:00
+Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+Downloading blis-1.3.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (14.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/14.3 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━ 9.5/14.3 MB 285.0 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 14.3/14.3 MB 278.6 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 14.3/14.3 MB 183.9 MB/s eta 0:00:00
+Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/135.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.1/135.1 kB 56.8 MB/s eta 0:00:00
+Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (257 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/257.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 257.6/257.6 kB 78.7 MB/s eta 0:00:00
+Downloading cloudpathlib-0.26.0-py3-none-any.whl (66 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/66.4 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 66.4/66.4 kB 27.4 MB/s eta 0:00:00
+Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/73.5 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.5/73.5 kB 30.9 MB/s eta 0:00:00
+Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/78.8 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.8/78.8 kB 34.2 MB/s eta 0:00:00
+Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+Downloading rich-15.0.0-py3-none-any.whl (310 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/310.7 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 310.7/310.7 kB 101.0 MB/s eta 0:00:00
+Downloading shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+Downloading smart_open-9.0.0-py3-none-any.whl (75 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/75.8 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 75.8/75.8 kB 33.8 MB/s eta 0:00:00
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/135.7 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.7/135.7 kB 54.6 MB/s eta 0:00:00
+Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/62.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.6/62.6 kB 27.6 MB/s eta 0:00:00
+Downloading markdown_it_py-4.2.0-py3-none-any.whl (91 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/91.7 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.7/91.7 kB 41.4 MB/s eta 0:00:00
+Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/1.3 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 179.4 MB/s eta 0:00:00
+Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/132.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 132.1/132.1 kB 55.5 MB/s eta 0:00:00
+Downloading wrapt-2.5.1-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (250 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/250.4 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 250.4/250.4 kB 91.4 MB/s eta 0:00:00
+Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Installing collected packages: wrapt, wasabi, urllib3, typing-extensions, tqdm, spacy-loggers, spacy-legacy, shellingham, setuptools, regex, pyyaml, pygments, pycparser, phonenumbers, packaging, numpy, murmurhash, mdurl, MarkupSafe, idna, h11, filelock, cymem, confection, cloudpathlib, click, charset_normalizer, certifi, catalogue, annotated-types, annotated-doc, typing-inspection, srsly, smart-open, requests, pydantic-core, preshed, markdown-it-py, jinja2, httpcore, cffi, blis, anyio, rich, requests-file, pydantic, httpx, cryptography, typer, tldextract, thinc, presidio_anonymizer, weasel, spacy, presidio_analyzer
+Successfully installed MarkupSafe-3.0.4 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 blis-1.3.4 catalogue-2.0.10 certifi-2026.10.23 cffi-2.1.1 charset_normalizer-3.5.2 click-8.5.0 cloudpathlib-0.26.0 confection-1.3.4 cryptography-48.0.1 cymem-2.0.16 filelock-4.2.4 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 idna-3.20 jinja2-3.1.6 markdown-it-py-4.2.0 mdurl-0.1.2 murmurhash-1.0.16 numpy-2.4.6 packaging-26.3 phonenumbers-9.0.42 preshed-3.0.15 presidio_analyzer-2.2.364 presidio_anonymizer-2.2.364 pycparser-3.12 pydantic-2.14.1 pydantic-core-2.50.1 pygments-2.21.0 pyyaml-6.0.3 regex-2026.9.29 requests-2.34.2 requests-file-3.0.1 rich-15.0.0 setuptools-84.2.1 shellingham-1.5.4 smart-open-9.0.0 spacy-3.8.18 spacy-legacy-3.0.12 spacy-loggers-1.0.5 srsly-2.5.5 thinc-8.3.14 tldextract-5.4.0 tqdm-4.70.1 typer-0.27.3 typing-extensions-4.16.0 typing-inspection-0.4.4 urllib3-2.8.0 wasabi-1.1.3 weasel-1.0.1 wrapt-2.5.1
+.venv/bin/python -m spacy download en_core_web_sm
+Collecting en-core-web-sm==3.8.0
+  Downloading https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl (12.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/12.8 MB ? eta -:--:--
+     ━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.4/12.8 MB 12.7 MB/s eta 0:00:01
+     ━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.3/12.8 MB 34.1 MB/s eta 0:00:01
+     ━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━ 4.9/12.8 MB 48.6 MB/s eta 0:00:01
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━ 8.4/12.8 MB 61.0 MB/s eta 0:00:01
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 12.8/12.8 MB 104.1 MB/s eta 0:00:01
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.8/12.8 MB 86.8 MB/s eta 0:00:00
+Installing collected packages: en-core-web-sm
+Successfully installed en-core-web-sm-3.8.0
+✔ Download and installation successful
+You can now load the package via spacy.load('en_core_web_sm')
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ .venv/bin/python -c "import importlib.metadata as m; [print(p, 
+ m.version(p)) for p in ('presidio-analyzer', 'spacy', 'en-core-web-sm')]"
+
+presidio-analyzer 2.2.364
+spacy 3.8.18
+en-core-web-sm 3.8.0
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ .venv/bin/python explore.py trace "My email is jane.doe@exampl 
+e.com"
+
+one message, redaction OFF: "My email is jane.doe@example.com"
+
+1. the app's memory: the list of messages it sends to the model (working memory, the context window)
+   [system] You are a helpful support assistant. Keep answers short.
+   [user] My email is jane.doe@example.com
+   [assistant] Thanks, I've noted your message: "My email is jane.doe@example.com". A support agent will f…
+
+2. logs/app.log: your company's log file, 3 line(s)
+   DEBUG raw request received: My email is jane.doe@example.com
+   INFO user: My email is jane.doe@example.com
+   INFO assistant: Thanks, I've noted your message: "My email is jane.doe@example.com". A supp…
+
+3. logs/provider.log: what the AI provider received, 1 line(s)
+   PROVIDER RECEIVED: My email is jane.doe@example.com
+
+4. the screen: the reply the user sees
+   Thanks, I've noted your message: "My email is jane.doe@example.com". A support agent will f…
+
+copies of your message: 7  (app memory 2, app.log 3, provider.log 1, screen 1)
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ .venv/bin/python explore.py recognizers
+
+Presidio analyzer: 20 recognizers loaded (3 of them added by the lab: IN_PAN, IN_AADHAAR, AWS_ACCESS_KEY)
+
+  finds                how                                      context words that raise the score
+  AWS_ACCESS_KEY       pattern, start 0.9                       -
+  CREDIT_CARD          pattern + validity check, start 0.3      credit, card, visa
+  CRYPTO               pattern + validity check, start 0.5      wallet, btc, bitcoin
+  DATE_TIME            pattern, start 0.1/0.2/0.6/0.8           date, birthday
+  EMAIL_ADDRESS        pattern + validity check, start 0.5      email
+  IBAN_CODE            pattern + validity check, start 0.5      iban, bank, transaction
+  IN_AADHAAR           pattern + validity check, start 0.01     aadhaar, uidai
+  IN_PAN               pattern, start 0.01/0.1/0.5              permanent account number, pan
+  IP_ADDRESS           pattern, start 0.1/0.6                   ip, ipv4, ipv6
+  MAC_ADDRESS          pattern, start 0.6                       mac, mac address, hardware address
+  MEDICAL_LICENSE      pattern + validity check, start 0.4      medical, certificate, DEA
+  PERSON, LOCATION...  language model guess (spaCy NER)         -
+  PHONE_NUMBER         phone library parses the number          phone, number, telephone
+  UK_NHS               pattern + validity check, start 0.5      national health service, nhs, health se…
+  URL                  pattern, start 0.5/0.6                   url, website, link
+  US_BANK_NUMBER       pattern, start 0.05                      check, account, account#
+  US_DRIVER_LICENSE    pattern, start 0.01/0.3                  driver, license, permit
+  US_ITIN              pattern, start 0.05/0.3/0.5              individual, taxpayer, itin
+  US_PASSPORT          pattern, start 0.05/0.1                  us, united, states
+  US_SSN               pattern, start 0.05/0.5                  social, security, ssn
+
+the lab redacts only these 10 types (ENTITIES in redactor.py), and only when the score is at least 0.35:
+  PERSON, EMAIL_ADDRESS, PHONE_NUMBER, CREDIT_CARD, IBAN_CODE, IP_ADDRESS, US_SSN, IN_PAN, IN_AADHAAR, AWS_ACCESS_KEY
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ .venv/bin/python explore.py ner "Hi, I am Jane Doe from London 
+. I called on 3 May." "Dear Mr Smith, thanks"
+
+spaCy model en_core_web_sm: named entity recognition (NER) on its own, before Presidio
+
+"Hi, I am Jane Doe from London. I called on 3 May."
+   PERSON    'Jane Doe'
+   GPE       'London'
+   DATE      '3 May'
+"Dear Mr Smith, thanks"
+   ORG       'Dear Mr Smith'
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ .venv/bin/python explore.py analyze "I'm Jane Doe, my phone is 
+ +1 202-555-0143 and my PAN is ABCPE1234F."
+
+text: "I'm Jane Doe, my phone is +1 202-555-0143 and my PAN is ABCPE1234F."
+
+Presidio found 3. The lab redacts a finding if its type is in ENTITIES and its score is at least 0.35.
+
+  PERSON            'Jane Doe'              score 0.85  REDACT
+                    SpacyRecognizer: NER guess 0.85
+  PHONE_NUMBER      '+1 202-555-0143'       score 0.75  REDACT
+                    PhoneRecognizer: library 0.4 -> word 'phone' nearby -> 0.75
+  IN_PAN            'ABCPE1234F'            score 0.85  REDACT
+                    InPanRecognizer: pattern 'PAN (High)' 0.5 -> word 'pan' nearby -> 0.85
+
+redacted: I'm <PERSON>, my phone is <PHONE_NUMBER> and my PAN is <IN_PAN>.
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ .venv/bin/python explore.py analyze "My card 4242 4242 4242 42 
+42, employee EMP-482913"
+
+text: "My card 4242 4242 4242 4242, employee EMP-482913"
+
+Presidio found 4. The lab redacts a finding if its type is in ENTITIES and its score is at least 0.35.
+
+  CREDIT_CARD       '4242 4242 4242 4242'   score 1.00  REDACT
+                    CreditCardRecognizer: pattern 'All Credit Cards (weak)' 0.3 -> valid -> word 'card' nearby -> 1.00
+  DATE_TIME         '4242 4242'             score 0.85  skip: type not in ENTITIES
+                    SpacyRecognizer: NER guess 0.85
+  IN_PAN            'EMP-482913'            score 0.01  skip: score too low
+                    InPanRecognizer: pattern 'PAN (Low)' 0.01
+  US_DRIVER_LICENSE '482913'                score 0.01  skip: type not in ENTITIES
+                    UsLicenseRecognizer: pattern 'Driver License - Digits (very weak)' 0.01
+
+redacted: My card <CREDIT_CARD>, employee EMP-482913
+thesecguy@lab:~/ai-security-course-labs/labs/m04$ exit
+
+exit
