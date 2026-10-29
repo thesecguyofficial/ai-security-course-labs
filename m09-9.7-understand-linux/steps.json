@@ -1,0 +1,149 @@
+{
+  "scenario": "m09-9.7-understand-linux",
+  "start": 1.708,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.708,
+      "end": 12.241
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.241,
+      "end": 20.893
+    },
+    {
+      "label": "Requirements",
+      "speed": 1,
+      "start": 24.893,
+      "end": 29.079
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 33.079,
+      "end": 35.526
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 38.527,
+      "end": 46.751
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 49.751,
+      "end": 52.226
+    },
+    {
+      "label": "Models",
+      "speed": 1,
+      "start": 55.226,
+      "end": 57.61
+    },
+    {
+      "label": "Files",
+      "speed": 1,
+      "start": 61.611,
+      "end": 66.549
+    },
+    {
+      "label": "Header",
+      "speed": 1,
+      "start": 72.55,
+      "end": 80.406
+    },
+    {
+      "label": "Pickle",
+      "speed": 1,
+      "start": 86.407,
+      "end": 94.138
+    },
+    {
+      "label": "Hash",
+      "speed": 1,
+      "start": 100.138,
+      "end": 107.588
+    },
+    {
+      "label": "Hub",
+      "speed": 1,
+      "start": 113.588,
+      "end": 121.893
+    },
+    {
+      "label": "BOM",
+      "speed": 1,
+      "start": 127.893,
+      "end": 132.541
+    },
+    {
+      "label": "One scan",
+      "speed": 1,
+      "start": 138.541,
+      "end": 145.11
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.308,
+      "what": "type"
+    },
+    {
+      "t": 15.841,
+      "what": "type"
+    },
+    {
+      "t": 25.493,
+      "what": "type"
+    },
+    {
+      "t": 33.679,
+      "what": "type"
+    },
+    {
+      "t": 39.127,
+      "what": "type"
+    },
+    {
+      "t": 50.351,
+      "what": "type"
+    },
+    {
+      "t": 55.826,
+      "what": "type"
+    },
+    {
+      "t": 62.211,
+      "what": "type"
+    },
+    {
+      "t": 73.15,
+      "what": "type"
+    },
+    {
+      "t": 87.007,
+      "what": "type"
+    },
+    {
+      "t": 100.738,
+      "what": "type"
+    },
+    {
+      "t": 114.188,
+      "what": "type"
+    },
+    {
+      "t": 128.493,
+      "what": "type"
+    },
+    {
+      "t": 139.141,
+      "what": "type"
+    }
+  ],
+  "end": 151.11
+}

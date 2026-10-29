@@ -1,0 +1,591 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 3967, done.
+remote: Counting objects:   0% (1/313)
+remote: Counting objects:   1% (4/313)
+remote: Counting objects:   2% (7/313)
+remote: Counting objects:   3% (10/313)
+remote: Counting objects:   4% (13/313)
+remote: Counting objects:   5% (16/313)
+remote: Counting objects:   6% (19/313)
+remote: Counting objects:   7% (22/313)
+remote: Counting objects:   8% (26/313)
+remote: Counting objects:   9% (29/313)
+remote: Counting objects:  10% (32/313)
+remote: Counting objects:  11% (35/313)
+remote: Counting objects:  12% (38/313)
+remote: Counting objects:  13% (41/313)
+remote: Counting objects:  14% (44/313)
+remote: Counting objects:  15% (47/313)
+remote: Counting objects:  16% (51/313)
+remote: Counting objects:  17% (54/313)
+remote: Counting objects:  18% (57/313)
+remote: Counting objects:  19% (60/313)
+remote: Counting objects:  20% (63/313)
+remote: Counting objects:  21% (66/313)
+remote: Counting objects:  22% (69/313)
+remote: Counting objects:  23% (72/313)
+remote: Counting objects:  24% (76/313)
+remote: Counting objects:  25% (79/313)
+remote: Counting objects:  26% (82/313)
+remote: Counting objects:  27% (85/313)
+remote: Counting objects:  28% (88/313)
+remote: Counting objects:  29% (91/313)
+remote: Counting objects:  30% (94/313)
+remote: Counting objects:  31% (98/313)
+remote: Counting objects:  32% (101/313)
+remote: Counting objects:  33% (104/313)
+remote: Counting objects:  34% (107/313)
+remote: Counting objects:  35% (110/313)
+remote: Counting objects:  36% (113/313)
+remote: Counting objects:  37% (116/313)
+remote: Counting objects:  38% (119/313)
+remote: Counting objects:  39% (123/313)
+remote: Counting objects:  40% (126/313)
+remote: Counting objects:  41% (129/313)
+remote: Counting objects:  42% (132/313)
+remote: Counting objects:  43% (135/313)
+remote: Counting objects:  44% (138/313)
+remote: Counting objects:  45% (141/313)
+remote: Counting objects:  46% (144/313)
+remote: Counting objects:  47% (148/313)
+remote: Counting objects:  48% (151/313)
+remote: Counting objects:  49% (154/313)
+remote: Counting objects:  50% (157/313)
+remote: Counting objects:  51% (160/313)
+remote: Counting objects:  52% (163/313)
+remote: Counting objects:  53% (166/313)
+remote: Counting objects:  54% (170/313)
+remote: Counting objects:  55% (173/313)
+remote: Counting objects:  56% (176/313)
+remote: Counting objects:  57% (179/313)
+remote: Counting objects:  58% (182/313)
+remote: Counting objects:  59% (185/313)
+remote: Counting objects:  60% (188/313)
+remote: Counting objects:  61% (191/313)
+remote: Counting objects:  62% (195/313)
+remote: Counting objects:  63% (198/313)
+remote: Counting objects:  64% (201/313)
+remote: Counting objects:  65% (204/313)
+remote: Counting objects:  66% (207/313)
+remote: Counting objects:  67% (210/313)
+remote: Counting objects:  68% (213/313)
+remote: Counting objects:  69% (216/313)
+remote: Counting objects:  70% (220/313)
+remote: Counting objects:  71% (223/313)
+remote: Counting objects:  72% (226/313)
+remote: Counting objects:  73% (229/313)
+remote: Counting objects:  74% (232/313)
+remote: Counting objects:  75% (235/313)
+remote: Counting objects:  76% (238/313)
+remote: Counting objects:  77% (242/313)
+remote: Counting objects:  78% (245/313)
+remote: Counting objects:  79% (248/313)
+remote: Counting objects:  80% (251/313)
+remote: Counting objects:  81% (254/313)
+remote: Counting objects:  82% (257/313)
+remote: Counting objects:  83% (260/313)
+remote: Counting objects:  84% (263/313)
+remote: Counting objects:  85% (267/313)
+remote: Counting objects:  86% (270/313)
+remote: Counting objects:  87% (273/313)
+remote: Counting objects:  88% (276/313)
+remote: Counting objects:  89% (279/313)
+remote: Counting objects:  90% (282/313)
+remote: Counting objects:  91% (285/313)
+remote: Counting objects:  92% (288/313)
+remote: Counting objects:  93% (292/313)
+remote: Counting objects:  94% (295/313)
+remote: Counting objects:  95% (298/313)
+remote: Counting objects:  96% (301/313)
+remote: Counting objects:  97% (304/313)
+remote: Counting objects:  98% (307/313)
+remote: Counting objects:  99% (310/313)
+remote: Counting objects: 100% (313/313)
+remote: Counting objects: 100% (313/313), done.
+remote: Compressing objects:   0% (1/234)
+remote: Compressing objects:   1% (3/234)
+remote: Compressing objects:   2% (5/234)
+remote: Compressing objects:   3% (8/234)
+remote: Compressing objects:   4% (10/234)
+remote: Compressing objects:   5% (12/234)
+remote: Compressing objects:   6% (15/234)
+remote: Compressing objects:   7% (17/234)
+remote: Compressing objects:   8% (19/234)
+remote: Compressing objects:   9% (22/234)
+remote: Compressing objects:  10% (24/234)
+remote: Compressing objects:  11% (26/234)
+remote: Compressing objects:  12% (29/234)
+remote: Compressing objects:  13% (31/234)
+remote: Compressing objects:  14% (33/234)
+remote: Compressing objects:  15% (36/234)
+remote: Compressing objects:  16% (38/234)
+remote: Compressing objects:  17% (40/234)
+remote: Compressing objects:  18% (43/234)
+remote: Compressing objects:  19% (45/234)
+remote: Compressing objects:  20% (47/234)
+remote: Compressing objects:  21% (50/234)
+remote: Compressing objects:  22% (52/234)
+remote: Compressing objects:  23% (54/234)
+remote: Compressing objects:  24% (57/234)
+remote: Compressing objects:  25% (59/234)
+remote: Compressing objects:  26% (61/234)
+remote: Compressing objects:  27% (64/234)
+remote: Compressing objects:  28% (66/234)
+remote: Compressing objects:  29% (68/234)
+remote: Compressing objects:  30% (71/234)
+remote: Compressing objects:  31% (73/234)
+remote: Compressing objects:  32% (75/234)
+remote: Compressing objects:  33% (78/234)
+remote: Compressing objects:  34% (80/234)
+remote: Compressing objects:  35% (82/234)
+remote: Compressing objects:  36% (85/234)
+remote: Compressing objects:  37% (87/234)
+remote: Compressing objects:  38% (89/234)
+remote: Compressing objects:  39% (92/234)
+remote: Compressing objects:  40% (94/234)
+remote: Compressing objects:  41% (96/234)
+remote: Compressing objects:  42% (99/234)
+remote: Compressing objects:  43% (101/234)
+remote: Compressing objects:  44% (103/234)
+remote: Compressing objects:  45% (106/234)
+remote: Compressing objects:  46% (108/234)
+remote: Compressing objects:  47% (110/234)
+remote: Compressing objects:  48% (113/234)
+remote: Compressing objects:  49% (115/234)
+remote: Compressing objects:  50% (117/234)
+remote: Compressing objects:  51% (120/234)
+remote: Compressing objects:  52% (122/234)
+remote: Compressing objects:  53% (125/234)
+remote: Compressing objects:  54% (127/234)
+remote: Compressing objects:  55% (129/234)
+remote: Compressing objects:  56% (132/234)
+remote: Compressing objects:  57% (134/234)
+remote: Compressing objects:  58% (136/234)
+remote: Compressing objects:  59% (139/234)
+remote: Compressing objects:  60% (141/234)
+remote: Compressing objects:  61% (143/234)
+remote: Compressing objects:  62% (146/234)
+remote: Compressing objects:  63% (148/234)
+remote: Compressing objects:  64% (150/234)
+remote: Compressing objects:  65% (153/234)
+remote: Compressing objects:  66% (155/234)
+remote: Compressing objects:  67% (157/234)
+remote: Compressing objects:  68% (160/234)
+remote: Compressing objects:  69% (162/234)
+remote: Compressing objects:  70% (164/234)
+remote: Compressing objects:  71% (167/234)
+remote: Compressing objects:  72% (169/234)
+remote: Compressing objects:  73% (171/234)
+remote: Compressing objects:  74% (174/234)
+remote: Compressing objects:  75% (176/234)
+remote: Compressing objects:  76% (178/234)
+remote: Compressing objects:  77% (181/234)
+remote: Compressing objects:  78% (183/234)
+remote: Compressing objects:  79% (185/234)
+remote: Compressing objects:  80% (188/234)
+remote: Compressing objects:  81% (190/234)
+remote: Compressing objects:  82% (192/234)
+remote: Compressing objects:  83% (195/234)
+remote: Compressing objects:  84% (197/234)
+remote: Compressing objects:  85% (199/234)
+remote: Compressing objects:  86% (202/234)
+remote: Compressing objects:  87% (204/234)
+remote: Compressing objects:  88% (206/234)
+remote: Compressing objects:  89% (209/234)
+remote: Compressing objects:  90% (211/234)
+remote: Compressing objects:  91% (213/234)
+remote: Compressing objects:  92% (216/234)
+remote: Compressing objects:  93% (218/234)
+remote: Compressing objects:  94% (220/234)
+remote: Compressing objects:  95% (223/234)
+remote: Compressing objects:  96% (225/234)
+remote: Compressing objects:  97% (227/234)
+remote: Compressing objects:  98% (230/234)
+remote: Compressing objects:  99% (232/234)
+remote: Compressing objects: 100% (234/234)
+remote: Compressing objects: 100% (234/234), done.
+Receiving objects:   0% (1/3967)
+Receiving objects:   1% (40/3967)
+Receiving objects:   2% (80/3967)
+Receiving objects:   3% (120/3967)
+Receiving objects:   4% (159/3967)
+Receiving objects:   5% (199/3967)
+Receiving objects:   6% (239/3967)
+Receiving objects:   7% (278/3967)
+Receiving objects:   8% (318/3967)
+Receiving objects:   9% (358/3967)
+Receiving objects:  10% (397/3967)
+Receiving objects:  11% (437/3967)
+Receiving objects:  12% (477/3967)
+Receiving objects:  13% (516/3967)
+Receiving objects:  14% (556/3967)
+Receiving objects:  15% (596/3967)
+Receiving objects:  16% (635/3967)
+Receiving objects:  17% (675/3967)
+Receiving objects:  18% (715/3967)
+Receiving objects:  19% (754/3967)
+Receiving objects:  20% (794/3967)
+Receiving objects:  21% (834/3967)
+Receiving objects:  22% (873/3967)
+Receiving objects:  23% (913/3967)
+Receiving objects:  24% (953/3967)
+Receiving objects:  25% (992/3967)
+Receiving objects:  26% (1032/3967)
+Receiving objects:  27% (1072/3967)
+Receiving objects:  28% (1111/3967)
+Receiving objects:  29% (1151/3967)
+Receiving objects:  30% (1191/3967)
+Receiving objects:  31% (1230/3967)
+Receiving objects:  32% (1270/3967)
+Receiving objects:  33% (1310/3967)
+Receiving objects:  34% (1349/3967)
+Receiving objects:  35% (1389/3967)
+Receiving objects:  36% (1429/3967)
+Receiving objects:  37% (1468/3967)
+Receiving objects:  38% (1508/3967)
+Receiving objects:  39% (1548/3967)
+Receiving objects:  40% (1587/3967)
+Receiving objects:  41% (1627/3967)
+Receiving objects:  42% (1667/3967)
+Receiving objects:  43% (1706/3967)
+Receiving objects:  44% (1746/3967)
+Receiving objects:  45% (1786/3967)
+Receiving objects:  46% (1825/3967)
+Receiving objects:  47% (1865/3967)
+Receiving objects:  48% (1905/3967)
+Receiving objects:  49% (1944/3967)
+Receiving objects:  50% (1984/3967)
+Receiving objects:  51% (2024/3967)
+Receiving objects:  52% (2063/3967)
+Receiving objects:  53% (2103/3967)
+Receiving objects:  54% (2143/3967)
+Receiving objects:  55% (2182/3967)
+Receiving objects:  56% (2222/3967)
+Receiving objects:  57% (2262/3967)
+Receiving objects:  58% (2301/3967)
+Receiving objects:  59% (2341/3967)
+Receiving objects:  60% (2381/3967)
+Receiving objects:  61% (2420/3967)
+Receiving objects:  62% (2460/3967)
+Receiving objects:  63% (2500/3967)
+Receiving objects:  64% (2539/3967)
+Receiving objects:  65% (2579/3967)
+Receiving objects:  66% (2619/3967)
+Receiving objects:  67% (2658/3967)
+Receiving objects:  68% (2698/3967)
+Receiving objects:  69% (2738/3967)
+Receiving objects:  70% (2777/3967)
+Receiving objects:  71% (2817/3967)
+Receiving objects:  72% (2857/3967)
+Receiving objects:  73% (2896/3967)
+Receiving objects:  74% (2936/3967)
+Receiving objects:  75% (2976/3967)
+Receiving objects:  76% (3015/3967)
+Receiving objects:  77% (3055/3967)
+Receiving objects:  78% (3095/3967)
+Receiving objects:  79% (3134/3967)
+Receiving objects:  80% (3174/3967)
+Receiving objects:  81% (3214/3967)
+Receiving objects:  82% (3253/3967)
+Receiving objects:  83% (3293/3967)
+Receiving objects:  84% (3333/3967)
+Receiving objects:  85% (3372/3967)
+Receiving objects:  86% (3412/3967)
+Receiving objects:  87% (3452/3967)
+Receiving objects:  88% (3491/3967), 37.38 MiB | 74.72 MiB/s
+Receiving objects:  89% (3531/3967), 37.38 MiB | 74.72 MiB/s
+Receiving objects:  90% (3571/3967), 37.38 MiB | 74.72 MiB/s
+Receiving objects:  91% (3610/3967), 37.38 MiB | 74.72 MiB/s
+Receiving objects:  92% (3650/3967), 37.38 MiB | 74.72 MiB/s
+Receiving objects:  93% (3690/3967), 37.38 MiB | 74.72 MiB/s
+Receiving objects:  94% (3729/3967), 37.38 MiB | 74.72 MiB/s
+Receiving objects:  95% (3769/3967), 37.38 MiB | 74.72 MiB/s
+Receiving objects:  96% (3809/3967), 37.38 MiB | 74.72 MiB/s
+Receiving objects:  97% (3848/3967), 37.38 MiB | 74.72 MiB/s
+Receiving objects:  98% (3888/3967), 37.38 MiB | 74.72 MiB/s
+remote: Total 3967 (delta 163), reused 212 (delta 76), pack-reused 3654 (from 3)
+Receiving objects:  99% (3928/3967), 37.38 MiB | 74.72 MiB/s
+Receiving objects: 100% (3967/3967), 37.38 MiB | 74.72 MiB/s
+Receiving objects: 100% (3967/3967), 53.63 MiB | 76.59 MiB/s, done.
+Resolving deltas:   0% (0/1610)
+Resolving deltas:   1% (17/1610)
+Resolving deltas:   2% (33/1610)
+Resolving deltas:   3% (49/1610)
+Resolving deltas:   4% (65/1610)
+Resolving deltas:   5% (81/1610)
+Resolving deltas:   6% (97/1610)
+Resolving deltas:   7% (113/1610)
+Resolving deltas:   8% (129/1610)
+Resolving deltas:   9% (145/1610)
+Resolving deltas:  10% (161/1610)
+Resolving deltas:  11% (178/1610)
+Resolving deltas:  12% (194/1610)
+Resolving deltas:  13% (210/1610)
+Resolving deltas:  14% (226/1610)
+Resolving deltas:  15% (242/1610)
+Resolving deltas:  16% (258/1610)
+Resolving deltas:  17% (274/1610)
+Resolving deltas:  18% (290/1610)
+Resolving deltas:  19% (306/1610)
+Resolving deltas:  20% (322/1610)
+Resolving deltas:  21% (339/1610)
+Resolving deltas:  22% (355/1610)
+Resolving deltas:  23% (371/1610)
+Resolving deltas:  24% (387/1610)
+Resolving deltas:  25% (403/1610)
+Resolving deltas:  26% (419/1610)
+Resolving deltas:  27% (435/1610)
+Resolving deltas:  28% (451/1610)
+Resolving deltas:  29% (467/1610)
+Resolving deltas:  30% (483/1610)
+Resolving deltas:  31% (500/1610)
+Resolving deltas:  32% (516/1610)
+Resolving deltas:  33% (532/1610)
+Resolving deltas:  34% (548/1610)
+Resolving deltas:  35% (564/1610)
+Resolving deltas:  36% (580/1610)
+Resolving deltas:  37% (596/1610)
+Resolving deltas:  38% (612/1610)
+Resolving deltas:  39% (628/1610)
+Resolving deltas:  40% (644/1610)
+Resolving deltas:  41% (661/1610)
+Resolving deltas:  42% (677/1610)
+Resolving deltas:  43% (693/1610)
+Resolving deltas:  44% (709/1610)
+Resolving deltas:  45% (725/1610)
+Resolving deltas:  46% (741/1610)
+Resolving deltas:  47% (757/1610)
+Resolving deltas:  48% (773/1610)
+Resolving deltas:  49% (789/1610)
+Resolving deltas:  50% (805/1610)
+Resolving deltas:  51% (822/1610)
+Resolving deltas:  52% (838/1610)
+Resolving deltas:  53% (854/1610)
+Resolving deltas:  54% (870/1610)
+Resolving deltas:  55% (886/1610)
+Resolving deltas:  56% (902/1610)
+Resolving deltas:  57% (918/1610)
+Resolving deltas:  58% (934/1610)
+Resolving deltas:  59% (950/1610)
+Resolving deltas:  60% (966/1610)
+Resolving deltas:  61% (983/1610)
+Resolving deltas:  62% (999/1610)
+Resolving deltas:  63% (1015/1610)
+Resolving deltas:  64% (1031/1610)
+Resolving deltas:  65% (1047/1610)
+Resolving deltas:  66% (1063/1610)
+Resolving deltas:  67% (1079/1610)
+Resolving deltas:  68% (1095/1610)
+Resolving deltas:  69% (1111/1610)
+Resolving deltas:  70% (1127/1610)
+Resolving deltas:  71% (1144/1610)
+Resolving deltas:  72% (1160/1610)
+Resolving deltas:  73% (1176/1610)
+Resolving deltas:  74% (1192/1610)
+Resolving deltas:  75% (1208/1610)
+Resolving deltas:  76% (1224/1610)
+Resolving deltas:  77% (1240/1610)
+Resolving deltas:  78% (1256/1610)
+Resolving deltas:  79% (1272/1610)
+Resolving deltas:  80% (1288/1610)
+Resolving deltas:  81% (1305/1610)
+Resolving deltas:  82% (1321/1610)
+Resolving deltas:  83% (1337/1610)
+Resolving deltas:  84% (1353/1610)
+Resolving deltas:  85% (1369/1610)
+Resolving deltas:  86% (1385/1610)
+Resolving deltas:  87% (1401/1610)
+Resolving deltas:  88% (1417/1610)
+Resolving deltas:  89% (1433/1610)
+Resolving deltas:  90% (1449/1610)
+Resolving deltas:  91% (1466/1610)
+Resolving deltas:  92% (1482/1610)
+Resolving deltas:  93% (1498/1610)
+Resolving deltas:  94% (1514/1610)
+Resolving deltas:  95% (1530/1610)
+Resolving deltas:  96% (1546/1610)
+Resolving deltas:  97% (1562/1610)
+Resolving deltas:  98% (1578/1610)
+Resolving deltas:  99% (1594/1610)
+Resolving deltas: 100% (1610/1610)
+Resolving deltas: 100% (1610/1610), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m09 && ls
+
+Makefile   explore.py  make_models.py  requirements.txt  scan.py            test_lab.py
+README.md  loader.py   pin.py          run_tests.py      test_challenge.py
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ grep -v '^#' requirements.txt
+
+picklescan==1.0.5
+fickling==0.1.12
+safetensors==0.8.0
+numpy==2.4.6
+typing_extensions==4.16.0 ; python_version < "3.12"
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make -n setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+Ignoring typing_extensions: markers 'python_version < "3.12"' don't match your environment
+Collecting picklescan==1.0.5 (from -r requirements.txt (line 16))
+  Downloading picklescan-1.0.5-py3-none-any.whl.metadata (7.6 kB)
+Collecting fickling==0.1.12 (from -r requirements.txt (line 17))
+  Downloading fickling-0.1.12-py3-none-any.whl.metadata (21 kB)
+Collecting safetensors==0.8.0 (from -r requirements.txt (line 18))
+  Downloading safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.2 kB)
+Collecting numpy==2.4.6 (from -r requirements.txt (line 19))
+  Downloading numpy-2.4.6-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+Downloading picklescan-1.0.5-py3-none-any.whl (24 kB)
+Downloading fickling-0.1.12-py3-none-any.whl (58 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/59.0 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 59.0/59.0 kB 21.6 MB/s eta 0:00:00
+Downloading safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (516 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/516.0 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 516.0/516.0 kB 99.7 MB/s eta 0:00:00
+Downloading numpy-2.4.6-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/16.6 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━━ 7.9/16.6 MB 236.4 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━ 15.8/16.6 MB 231.1 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 149.9 MB/s eta 0:00:00
+Installing collected packages: safetensors, picklescan, numpy, fickling
+Successfully installed fickling-0.1.12 numpy-2.4.6 picklescan-1.0.5 safetensors-0.8.0
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make check
+
+picklescan 1.0.5 | fickling 0.1.12 | safetensors 0.8.0 | numpy 2.4.6
+OK: picklescan and fickling run from .venv/bin
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make models
+
+.venv/bin/python make_models.py
+Built in ./models/ :
+  benign_model.pkl         87 bytes
+  evil_model.pkl          366 bytes
+  model.safetensors       152 bytes
+
+The two .pkl files hold the 'same' model. One of them runs code when you load it.
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ .venv/bin/python explore.py files
+
+models/  (first bytes read, nothing loaded)
+
+  file                 bytes  first bytes               what they say
+  benign_model.pkl        87  80 04 95 4c 00 00 00 00   pickle, protocol 4
+  evil_model.pkl         366  80 04 95 63 01 00 00 00   pickle, protocol 4
+  model.safetensors      152  80 00 00 00 00 00 00 00   safetensors, header 128 bytes
+
+  .pkl         pickle: instructions that rebuild a Python object. Loading follows them.
+  .safetensors a size, a JSON header, then raw numbers. Loading only reads them.
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ .venv/bin/python explore.py header models/model.safetensors
+
+model.safetensors: 152 bytes = 8 (header size) + 128 (JSON header) + 16 (numbers)
+
+first 8 bytes: 80 00 00 00 00 00 00 00  ->  the header is 128 bytes long
+
+the JSON header, exactly as stored:
+  {"layer.bias":{"dtype":"F32","shape":[1],"data_offsets":[0,4]},"layer.weight":{"dtype":"F32","shape":[3],"data_offsets":[4,16]}}
+
+the numbers, read using the header (float32 = 4 bytes each):
+  layer.bias    F32 shape [1]  bytes 0-4  ->  [0.00]
+  layer.weight  F32 shape [3]  bytes 4-16  ->  [0.10, 0.20, 0.30]
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ .venv/bin/python explore.py pickle models/benign_model.pkl
+
+benign_model.pkl: 87 bytes, read as pickle instructions (nothing is run)
+
+    at  instruction       argument                                 meaning
+     0  PROTO             4                                        pickle format version
+     2  FRAME             76                                       size of the next chunk
+    11  EMPTY_DICT                                                 make an empty dictionary
+    12  MEMOIZE                                                    keep a copy for later
+    13  MARK                                                       remember this spot on the stack
+    14  SHORT_BINUNICODE  'layer.weight'                           push a piece of text
+    28  MEMOIZE                                                    keep a copy for later
+    29  EMPTY_LIST                                                 make an empty list
+    30  MEMOIZE                                                    keep a copy for later
+    31  MARK                                                       remember this spot on the stack
+    32  BINFLOAT          0.10000000149011612                      push a number
+    41  BINFLOAT          0.20000000298023224                      push a number
+    50  BINFLOAT          0.30000001192092896                      push a number
+    59  APPENDS                                                    add the numbers to the list
+    60  SHORT_BINUNICODE  'layer.bias'                             push a piece of text
+    72  MEMOIZE                                                    keep a copy for later
+    73  EMPTY_LIST                                                 make an empty list
+    74  MEMOIZE                                                    keep a copy for later
+    75  BINFLOAT          0.0                                      push a number
+    84  APPEND                                                     add the number to the list
+    85  SETITEMS                                                   add the pairs to the dictionary
+    86  STOP                                                       done: hand back the result
+
+imports (functions or classes it names): none
+calls (REDUCE and friends):              0
+-> loading this file only builds data: a dictionary of numbers.
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ .venv/bin/python explore.py hash models/model.safetensors
+
+model.safetensors (152 bytes)
+
+  sha256              4b2458915a8131399b9c1a02033fdfbb99c48fb6ef4299388ae6ace85981fa39
+  sha256, again       4b2458915a8131399b9c1a02033fdfbb99c48fb6ef4299388ae6ace85981fa39   same file -> same fingerprint: True
+  one byte added      9df669a29a2d5091f5abd4d63b00a7f675e274387bbd46174a7a175cc52cc090   (in memory only, file unchanged)
+
+  2 of 64 characters match, about what chance gives. Any change looks like a new fingerprint.
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ .venv/bin/python explore.py hub google-bert/bert-base-uncased
+
+google-bert/bert-base-uncased  (Hugging Face Hub, public API: metadata only)
+
+  revision (commit) 86b5e0934494bd15c9632b12f734a8a67f723594
+  last change       2024-02-19
+  files             16
+
+  .gitattributes               git settings
+  LICENSE                      the licence text
+  README.md                    the model card
+  config.json                  settings (JSON)
+  flax_model.msgpack           Flax (msgpack)
+  model.onnx                   ONNX: a graph of operations + weights
+  model.safetensors            safetensors: header + numbers
+  pytorch_model.bin            pickle (PyTorch-style): loading can call functions
+  rust_model.ot                Rust tch weights
+  tf_model.h5                  Keras / TensorFlow (HDF5)
+  tokenizer.json               settings (JSON)
+  tokenizer_config.json        settings (JSON)
+  vocab.txt                    settings / vocabulary (text)
+  coreml/                      3 more files
+
+  model.safetensors, header only (24,048 bytes read, the weights stay on the Hub):
+    206 tensors, 110,106,428 numbers in all; the first three:
+    bert.embeddings.LayerNorm.beta               F32 [768]
+    bert.embeddings.LayerNorm.gamma              F32 [768]
+    bert.embeddings.position_embeddings.weight   F32 [512, 768]
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ .venv/bin/python explore.py bom
+
+A minimal AI bill of materials (CycloneDX 1.6 JSON), printed, not saved:
+
+{"bomFormat": "CycloneDX", "specVersion": "1.6", "version": 1,
+ "components": [
+  {"type": "machine-learning-model", "name": "benign_model.pkl",
+   "hashes": [{"alg": "SHA-256", "content": "a62618e13efdf42ca2089ebd1f07b5bdd8aed7c7adf32d362855ebf024ccd464"}],
+   "properties": [{"name": "format", "value": "pickle"}]},
+  {"type": "machine-learning-model", "name": "evil_model.pkl",
+   "hashes": [{"alg": "SHA-256", "content": "33914cd9d4f7d38f938980042807b5809e2fef5a29f194a9c97d473ee6f52876"}],
+   "properties": [{"name": "format", "value": "pickle"}]},
+  {"type": "machine-learning-model", "name": "model.safetensors",
+   "hashes": [{"alg": "SHA-256", "content": "4b2458915a8131399b9c1a02033fdfbb99c48fb6ef4299388ae6ace85981fa39"}],
+   "properties": [{"name": "format", "value": "safetensors"}]}
+ ]}
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ .venv/bin/python scan.py models/benign_model.pkl
+
+== scanning models/benign_model.pkl ==
+
+picklescan:
+  scanned=1 infected=0 dangerous_globals=0
+  verdict: clean
+
+fickling:
+  severity: Severity.LIKELY_SAFE
+  verdict: clean
+
+OVERALL: SAFE (both scanners clean)
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ exit
+
+exit
