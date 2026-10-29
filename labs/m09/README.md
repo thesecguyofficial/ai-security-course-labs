@@ -1,7 +1,8 @@
 # Lab M9.7: detonate a booby-trapped model safely, catch it with a scanner, pin and verify
 
-Companion to lesson **9.7** of *AI Security Engineer* (The Sec Guy). About 40 minutes, $0, all on
-your laptop, all offline, all on files you build yourself.
+Companion to lesson **9.7** of *AI Security Engineer* (The Sec Guy). About 50 minutes, $0, all on
+your laptop, all on files you build yourself, and offline after setup (one optional Step 1b command reads a
+public model's facts from the Hugging Face Hub).
 
 A model file is **code plus data**. The most common format, Python **pickle**, is allowed to say
 "call this function with these arguments" while it loads, which means **loading a model can run
@@ -19,7 +20,7 @@ code**. In this lab you:
 > to write one clearly-labelled marker file, `state/PWNED_BY_LAB_MODEL.txt`, inside this folder. It
 > makes **no network connection** and touches **nothing outside this folder**. The path is baked in
 > at build time, so the file is tied to this directory and is not portable. A real attack would put a
-> reverse shell here — lesson 9.2 covers the 2024–2025 Hugging Face models that did exactly that.
+> reverse shell here; lesson 9.2 covers the 2024–2025 Hugging Face models that did exactly that.
 > Only load pickles you built or fully trust (lesson 0.8).
 
 ## Get the lab files
@@ -76,14 +77,29 @@ You need three free, open-source tools. You don't have to know any of them yet:
 | **fickling** | A Trail of Bits tool that turns a pickle back into readable Python, so you can see what it would do, and rates how dangerous it looks. | 0.1.12 (LGPL-3.0+) |
 | **safetensors** | Hugging Face's library for the safetensors weights format: numbers only, no way to call a function. | 0.8.0 (Apache-2.0) |
 
-They install into a **virtual environment**: a private `.venv` folder of Python packages just for this lab,
-so nothing is installed system-wide and `make clean` plus deleting `.venv` removes it all. NumPy 2.4.6 comes
-along as the stand-in "model weights". It takes about a minute and needs internet once.
+NumPy 2.4.6 comes along as the stand-in "model weights". `requirements.txt` pins every package to an exact
+version (`==`). It takes about a minute and needs internet once.
+
+**Look before you run.** `make -n` prints what a `make` target would run, without running it:
+
+```bash
+cd labs/m09
+make -n setup
+```
+
+```text
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+```
+
+- `python3 -m venv .venv` makes a **virtual environment**: a private folder (`.venv`) for this lab's Python
+  packages, so their versions can't clash with other projects, and deleting `.venv` removes them all. It keeps
+  versions apart; it is **not** a security sandbox, and code in it runs with your normal rights.
+- `pip`, Python's package installer, then installs what `requirements.txt` lists.
 
 **Mac / Linux:**
 
 ```bash
-cd labs/m09
 make setup
 make check
 make models
@@ -147,6 +163,215 @@ is the dangerous part.
 
 Windows: `.venv\Scripts\picklescan -p models\evil_model.pkl` and `.venv\Scripts\fickling models\evil_model.pkl`.
 
+## Step 1b · Before you attack: look inside the model files (about 10 minutes)
+
+New to model files? Do this before Step 1 (lesson 9.7 and its videos call it Step 1b). `explore.py` shows, one
+idea at a time, what a model file holds, how it loads, and how you identify it. Real output below is from a fresh
+Ubuntu machine with Python 3.12 (recording run 40917556590).
+
+**What it really runs.** Nothing in `explore.py` loads a pickle or runs anything from a model file. `pickle` lists
+a pickle's instructions with Python's `pickletools`, which reads them without carrying any out (the Hugging Face
+Hub's own pickle scan works the same way), so it is safe on `evil_model.pkl` too. `header`, `hash` and `files`
+read bytes; `bom` prints JSON. It never writes a file. `hub` is the only command that uses the network: it asks
+the Hub's public API for one model's file list and commit, then reads only the first bytes (the header) of its
+safetensors file, never the weights. No account or token. It needs only the standard library, so plain
+`python3 explore.py ...` works too, after `make models`.
+
+Windows: `.venv\Scripts\python explore.py files` and so on.
+
+**1. Files and their first bytes.**
+
+```bash
+.venv/bin/python explore.py files
+```
+
+```text
+models/  (first bytes read, nothing loaded)
+
+  file                 bytes  first bytes               what they say
+  benign_model.pkl        87  80 04 95 4c 00 00 00 00   pickle, protocol 4
+  evil_model.pkl         366  80 04 95 63 01 00 00 00   pickle, protocol 4
+  model.safetensors      152  80 00 00 00 00 00 00 00   safetensors, header 128 bytes
+
+  .pkl         pickle: instructions that rebuild a Python object. Loading follows them.
+  .safetensors a size, a JSON header, then raw numbers. Loading only reads them.
+```
+
+A pickle starts with `0x80` and its protocol number. A safetensors file starts with 8 bytes that hold one
+number, the header's length (128 here, which is also `0x80`), stored little-endian.
+
+**2. A safetensors file, opened by hand.**
+
+```bash
+.venv/bin/python explore.py header models/model.safetensors
+```
+
+```text
+model.safetensors: 152 bytes = 8 (header size) + 128 (JSON header) + 16 (numbers)
+
+first 8 bytes: 80 00 00 00 00 00 00 00  ->  the header is 128 bytes long
+
+the JSON header, exactly as stored:
+  {"layer.bias":{"dtype":"F32","shape":[1],"data_offsets":[0,4]},"layer.weight":{"dtype":"F32","shape":[3],"data_offsets":[4,16]}}
+
+the numbers, read using the header (float32 = 4 bytes each):
+  layer.bias    F32 shape [1]  bytes 0-4  ->  [0.00]
+  layer.weight  F32 shape [3]  bytes 4-16  ->  [0.10, 0.20, 0.30]
+```
+
+Names, number types, shapes and where each tensor's bytes sit: that is the whole format
+([safetensors](https://github.com/huggingface/safetensors)). There is no instruction to call anything.
+
+**3. A pickle, read as instructions (without loading it).**
+
+```bash
+.venv/bin/python explore.py pickle models/benign_model.pkl
+```
+
+```text
+benign_model.pkl: 87 bytes, read as pickle instructions (nothing is run)
+
+    at  instruction       argument                                 meaning
+     0  PROTO             4                                        pickle format version
+     2  FRAME             76                                       size of the next chunk
+    11  EMPTY_DICT                                                 make an empty dictionary
+    12  MEMOIZE                                                    keep a copy for later
+    13  MARK                                                       remember this spot on the stack
+    14  SHORT_BINUNICODE  'layer.weight'                           push a piece of text
+    28  MEMOIZE                                                    keep a copy for later
+    29  EMPTY_LIST                                                 make an empty list
+    30  MEMOIZE                                                    keep a copy for later
+    31  MARK                                                       remember this spot on the stack
+    32  BINFLOAT          0.10000000149011612                      push a number
+    41  BINFLOAT          0.20000000298023224                      push a number
+    50  BINFLOAT          0.30000001192092896                      push a number
+    59  APPENDS                                                    add the numbers to the list
+    60  SHORT_BINUNICODE  'layer.bias'                             push a piece of text
+    72  MEMOIZE                                                    keep a copy for later
+    73  EMPTY_LIST                                                 make an empty list
+    74  MEMOIZE                                                    keep a copy for later
+    75  BINFLOAT          0.0                                      push a number
+    84  APPEND                                                     add the number to the list
+    85  SETITEMS                                                   add the pairs to the dictionary
+    86  STOP                                                       done: hand back the result
+
+imports (functions or classes it names): none
+calls (REDUCE and friends):              0
+-> loading this file only builds data: a dictionary of numbers.
+```
+
+Loading a pickle means following these instructions. The ones to watch are `GLOBAL`/`STACK_GLOBAL` (import a
+function or class by name) and `REDUCE` (call it): the
+[Hugging Face pickle scanning docs](https://huggingface.co/docs/hub/security-pickle) name the same three. Try
+`explore.py pickle models/evil_model.pkl` too: it is safe, and Step 1 explains what you see.
+
+**4. A fingerprint.**
+
+```bash
+.venv/bin/python explore.py hash models/model.safetensors
+```
+
+```text
+model.safetensors (152 bytes)
+
+  sha256              4b2458915a8131399b9c1a02033fdfbb99c48fb6ef4299388ae6ace85981fa39
+  sha256, again       4b2458915a8131399b9c1a02033fdfbb99c48fb6ef4299388ae6ace85981fa39   same file -> same fingerprint: True
+  one byte added      9df669a29a2d5091f5abd4d63b00a7f675e274387bbd46174a7a175cc52cc090   (in memory only, file unchanged)
+
+  2 of 64 characters match, about what chance gives. Any change looks like a new fingerprint.
+```
+
+**5. A real model on the Hugging Face Hub, without downloading it** (needs internet):
+
+```bash
+.venv/bin/python explore.py hub google-bert/bert-base-uncased
+```
+
+```text
+google-bert/bert-base-uncased  (Hugging Face Hub, public API: metadata only)
+
+  revision (commit) 86b5e0934494bd15c9632b12f734a8a67f723594
+  last change       2024-02-19
+  files             16
+
+  .gitattributes               git settings
+  LICENSE                      the licence text
+  README.md                    the model card
+  config.json                  settings (JSON)
+  flax_model.msgpack           Flax (msgpack)
+  model.onnx                   ONNX: a graph of operations + weights
+  model.safetensors            safetensors: header + numbers
+  pytorch_model.bin            pickle (PyTorch-style): loading can call functions
+  rust_model.ot                Rust tch weights
+  tf_model.h5                  Keras / TensorFlow (HDF5)
+  tokenizer.json               settings (JSON)
+  tokenizer_config.json        settings (JSON)
+  vocab.txt                    settings / vocabulary (text)
+  coreml/                      3 more files
+
+  model.safetensors, header only (24,048 bytes read, the weights stay on the Hub):
+    206 tensors, 110,106,428 numbers in all; the first three:
+    bert.embeddings.LayerNorm.beta               F32 [768]
+    bert.embeddings.LayerNorm.gamma              F32 [768]
+    bert.embeddings.position_embeddings.weight   F32 [512, 768]
+```
+
+Each Hub model is a git repository ([Hub docs](https://huggingface.co/docs/hub/repositories)); the revision is
+the commit to pin, and it must be the full-length hash
+([download guide](https://huggingface.co/docs/huggingface_hub/guides/download)). The label column comes from
+each file's ending; `explore.py` opens none of them. 110,106,428 float32 numbers at 4 bytes each is about
+440 MB, the size of that weights file. Your numbers will differ if the model has changed since.
+
+**6. A tiny AI bill of materials.**
+
+```bash
+.venv/bin/python explore.py bom
+```
+
+```text
+A minimal AI bill of materials (CycloneDX 1.6 JSON), printed, not saved:
+
+{"bomFormat": "CycloneDX", "specVersion": "1.6", "version": 1,
+ "components": [
+  {"type": "machine-learning-model", "name": "benign_model.pkl",
+   "hashes": [{"alg": "SHA-256", "content": "a62618e13efdf42ca2089ebd1f07b5bdd8aed7c7adf32d362855ebf024ccd464"}],
+   "properties": [{"name": "format", "value": "pickle"}]},
+  {"type": "machine-learning-model", "name": "evil_model.pkl",
+   "hashes": [{"alg": "SHA-256", "content": "33914cd9d4f7d38f938980042807b5809e2fef5a29f194a9c97d473ee6f52876"}],
+   "properties": [{"name": "format", "value": "pickle"}]},
+  {"type": "machine-learning-model", "name": "model.safetensors",
+   "hashes": [{"alg": "SHA-256", "content": "4b2458915a8131399b9c1a02033fdfbb99c48fb6ef4299388ae6ace85981fa39"}],
+   "properties": [{"name": "format", "value": "safetensors"}]}
+ ]}
+```
+
+`machine-learning-model` is a component type in the CycloneDX 1.6 schema, and this output validates against it.
+A real AI-BOM also records where each model came from, its licence, datasets, prompts and tools (lesson 9.4).
+The `evil_model.pkl` hash differs on your machine because the file contains the lab folder's full path.
+
+**7. Read one scan, line by line.**
+
+```bash
+.venv/bin/python scan.py models/benign_model.pkl
+```
+
+```text
+== scanning models/benign_model.pkl ==
+
+picklescan:
+  scanned=1 infected=0 dangerous_globals=0
+  verdict: clean
+
+fickling:
+  severity: Severity.LIKELY_SAFE
+  verdict: clean
+
+OVERALL: SAFE (both scanners clean)
+```
+
+The file scanned, then each scanner's result, then one combined verdict. "Globals" are the imports a pickle
+names. Neither scanner loads the file.
+
 ## Step 1 · Detonate: loading a model runs code
 
 ```bash
@@ -166,8 +391,12 @@ returned: NoneType
    -> loading the pickle executed code. On a real model this would be malware.
 ```
 
-You called nothing but "load this model". A file appeared. That is arbitrary code execution from the
-`__reduce__` method inside the pickle (`make_models.py` shows the one-line payload). `benign_model.pkl`
+**What really runs.** Loading follows the pickle's instructions, which say "call `builtins.exec` with this text".
+The text is the one line in `_PAYLOAD` in `make_models.py`: it creates `state/` inside this folder and writes
+the marker file. Nothing else runs, nothing touches the network, and `make clean` removes it.
+
+You called nothing but "load this model". A file appeared. That is arbitrary code execution: when the file
+was built, `__reduce__` stored the instruction "call `builtins.exec` with this text" inside the pickle (`make_models.py` shows the one-line payload). `benign_model.pkl`
 is the same kind of file without the trick: load it and nothing happens.
 
 ## Step 2 · Catch it: scan before you load

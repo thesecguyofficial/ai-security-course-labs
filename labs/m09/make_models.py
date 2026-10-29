@@ -2,7 +2,7 @@
 make_models.py: build the three model files this lab uses, into ./models/.
 
   benign_model.pkl    a normal pickled "model" (a dict of weights). Loading it just returns the dict.
-  evil_model.pkl      the SAME on the outside, but its __reduce__ runs code when unpickled.
+  evil_model.pkl      the SAME on the outside, but it carries a function call that runs when unpickled.
   model.safetensors   the same weights in the safetensors format, which cannot run code at all.
 
 SAFETY. The "evil" model is a lab placeholder, not malware. When loaded, its only effect is to write
@@ -45,7 +45,7 @@ _PAYLOAD = (
 
 
 class EvilModel:
-    """Looks like a model object. The danger is in __reduce__, which pickle calls on load."""
+    """Looks like a model object. pickle calls __reduce__ when SAVING it; the call it returns runs on load."""
 
     def __reduce__(self):
         # pickle will call builtins.exec(_PAYLOAD) while unpickling. That is the whole trick:
