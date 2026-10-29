@@ -1,0 +1,649 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 3557, done.
+remote: Counting objects:   0% (1/441)
+remote: Counting objects:   1% (5/441)
+remote: Counting objects:   2% (9/441)
+remote: Counting objects:   3% (14/441)
+remote: Counting objects:   4% (18/441)
+remote: Counting objects:   5% (23/441)
+remote: Counting objects:   6% (27/441)
+remote: Counting objects:   7% (31/441)
+remote: Counting objects:   8% (36/441)
+remote: Counting objects:   9% (40/441)
+remote: Counting objects:  10% (45/441)
+remote: Counting objects:  11% (49/441)
+remote: Counting objects:  12% (53/441)
+remote: Counting objects:  13% (58/441)
+remote: Counting objects:  14% (62/441)
+remote: Counting objects:  15% (67/441)
+remote: Counting objects:  16% (71/441)
+remote: Counting objects:  17% (75/441)
+remote: Counting objects:  18% (80/441)
+remote: Counting objects:  19% (84/441)
+remote: Counting objects:  20% (89/441)
+remote: Counting objects:  21% (93/441)
+remote: Counting objects:  22% (98/441)
+remote: Counting objects:  23% (102/441)
+remote: Counting objects:  24% (106/441)
+remote: Counting objects:  25% (111/441)
+remote: Counting objects:  26% (115/441)
+remote: Counting objects:  27% (120/441)
+remote: Counting objects:  28% (124/441)
+remote: Counting objects:  29% (128/441)
+remote: Counting objects:  30% (133/441)
+remote: Counting objects:  31% (137/441)
+remote: Counting objects:  32% (142/441)
+remote: Counting objects:  33% (146/441)
+remote: Counting objects:  34% (150/441)
+remote: Counting objects:  35% (155/441)
+remote: Counting objects:  36% (159/441)
+remote: Counting objects:  37% (164/441)
+remote: Counting objects:  38% (168/441)
+remote: Counting objects:  39% (172/441)
+remote: Counting objects:  40% (177/441)
+remote: Counting objects:  41% (181/441)
+remote: Counting objects:  42% (186/441)
+remote: Counting objects:  43% (190/441)
+remote: Counting objects:  44% (195/441)
+remote: Counting objects:  45% (199/441)
+remote: Counting objects:  46% (203/441)
+remote: Counting objects:  47% (208/441)
+remote: Counting objects:  48% (212/441)
+remote: Counting objects:  49% (217/441)
+remote: Counting objects:  50% (221/441)
+remote: Counting objects:  51% (225/441)
+remote: Counting objects:  52% (230/441)
+remote: Counting objects:  53% (234/441)
+remote: Counting objects:  54% (239/441)
+remote: Counting objects:  55% (243/441)
+remote: Counting objects:  56% (247/441)
+remote: Counting objects:  57% (252/441)
+remote: Counting objects:  58% (256/441)
+remote: Counting objects:  59% (261/441)
+remote: Counting objects:  60% (265/441)
+remote: Counting objects:  61% (270/441)
+remote: Counting objects:  62% (274/441)
+remote: Counting objects:  63% (278/441)
+remote: Counting objects:  64% (283/441)
+remote: Counting objects:  65% (287/441)
+remote: Counting objects:  66% (292/441)
+remote: Counting objects:  67% (296/441)
+remote: Counting objects:  68% (300/441)
+remote: Counting objects:  69% (305/441)
+remote: Counting objects:  70% (309/441)
+remote: Counting objects:  71% (314/441)
+remote: Counting objects:  72% (318/441)
+remote: Counting objects:  73% (322/441)
+remote: Counting objects:  74% (327/441)
+remote: Counting objects:  75% (331/441)
+remote: Counting objects:  76% (336/441)
+remote: Counting objects:  77% (340/441)
+remote: Counting objects:  78% (344/441)
+remote: Counting objects:  79% (349/441)
+remote: Counting objects:  80% (353/441)
+remote: Counting objects:  81% (358/441)
+remote: Counting objects:  82% (362/441)
+remote: Counting objects:  83% (367/441)
+remote: Counting objects:  84% (371/441)
+remote: Counting objects:  85% (375/441)
+remote: Counting objects:  86% (380/441)
+remote: Counting objects:  87% (384/441)
+remote: Counting objects:  88% (389/441)
+remote: Counting objects:  89% (393/441)
+remote: Counting objects:  90% (397/441)
+remote: Counting objects:  91% (402/441)
+remote: Counting objects:  92% (406/441)
+remote: Counting objects:  93% (411/441)
+remote: Counting objects:  94% (415/441)
+remote: Counting objects:  95% (419/441)
+remote: Counting objects:  96% (424/441)
+remote: Counting objects:  97% (428/441)
+remote: Counting objects:  98% (433/441)
+remote: Counting objects:  99% (437/441)
+remote: Counting objects: 100% (441/441)
+remote: Counting objects: 100% (441/441), done.
+remote: Compressing objects:   0% (1/321)
+remote: Compressing objects:   1% (4/321)
+remote: Compressing objects:   2% (7/321)
+remote: Compressing objects:   3% (10/321)
+remote: Compressing objects:   4% (13/321)
+remote: Compressing objects:   5% (17/321)
+remote: Compressing objects:   6% (20/321)
+remote: Compressing objects:   7% (23/321)
+remote: Compressing objects:   8% (26/321)
+remote: Compressing objects:   9% (29/321)
+remote: Compressing objects:  10% (33/321)
+remote: Compressing objects:  11% (36/321)
+remote: Compressing objects:  12% (39/321)
+remote: Compressing objects:  13% (42/321)
+remote: Compressing objects:  14% (45/321)
+remote: Compressing objects:  15% (49/321)
+remote: Compressing objects:  16% (52/321)
+remote: Compressing objects:  17% (55/321)
+remote: Compressing objects:  18% (58/321)
+remote: Compressing objects:  19% (61/321)
+remote: Compressing objects:  20% (65/321)
+remote: Compressing objects:  21% (68/321)
+remote: Compressing objects:  22% (71/321)
+remote: Compressing objects:  23% (74/321)
+remote: Compressing objects:  24% (78/321)
+remote: Compressing objects:  25% (81/321)
+remote: Compressing objects:  26% (84/321)
+remote: Compressing objects:  27% (87/321)
+remote: Compressing objects:  28% (90/321)
+remote: Compressing objects:  29% (94/321)
+remote: Compressing objects:  30% (97/321)
+remote: Compressing objects:  31% (100/321)
+remote: Compressing objects:  32% (103/321)
+remote: Compressing objects:  33% (106/321)
+remote: Compressing objects:  34% (110/321)
+remote: Compressing objects:  35% (113/321)
+remote: Compressing objects:  36% (116/321)
+remote: Compressing objects:  37% (119/321)
+remote: Compressing objects:  38% (122/321)
+remote: Compressing objects:  39% (126/321)
+remote: Compressing objects:  40% (129/321)
+remote: Compressing objects:  41% (132/321)
+remote: Compressing objects:  42% (135/321)
+remote: Compressing objects:  43% (139/321)
+remote: Compressing objects:  44% (142/321)
+remote: Compressing objects:  45% (145/321)
+remote: Compressing objects:  46% (148/321)
+remote: Compressing objects:  47% (151/321)
+remote: Compressing objects:  48% (155/321)
+remote: Compressing objects:  49% (158/321)
+remote: Compressing objects:  50% (161/321)
+remote: Compressing objects:  51% (164/321)
+remote: Compressing objects:  52% (167/321)
+remote: Compressing objects:  53% (171/321)
+remote: Compressing objects:  54% (174/321)
+remote: Compressing objects:  55% (177/321)
+remote: Compressing objects:  56% (180/321)
+remote: Compressing objects:  57% (183/321)
+remote: Compressing objects:  58% (187/321)
+remote: Compressing objects:  59% (190/321)
+remote: Compressing objects:  60% (193/321)
+remote: Compressing objects:  61% (196/321)
+remote: Compressing objects:  62% (200/321)
+remote: Compressing objects:  63% (203/321)
+remote: Compressing objects:  64% (206/321)
+remote: Compressing objects:  65% (209/321)
+remote: Compressing objects:  66% (212/321)
+remote: Compressing objects:  67% (216/321)
+remote: Compressing objects:  68% (219/321)
+remote: Compressing objects:  69% (222/321)
+remote: Compressing objects:  70% (225/321)
+remote: Compressing objects:  71% (228/321)
+remote: Compressing objects:  72% (232/321)
+remote: Compressing objects:  73% (235/321)
+remote: Compressing objects:  74% (238/321)
+remote: Compressing objects:  75% (241/321)
+remote: Compressing objects:  76% (244/321)
+remote: Compressing objects:  77% (248/321)
+remote: Compressing objects:  78% (251/321)
+remote: Compressing objects:  79% (254/321)
+remote: Compressing objects:  80% (257/321)
+remote: Compressing objects:  81% (261/321)
+remote: Compressing objects:  82% (264/321)
+remote: Compressing objects:  83% (267/321)
+remote: Compressing objects:  84% (270/321)
+remote: Compressing objects:  85% (273/321)
+remote: Compressing objects:  86% (277/321)
+remote: Compressing objects:  87% (280/321)
+remote: Compressing objects:  88% (283/321)
+remote: Compressing objects:  89% (286/321)
+remote: Compressing objects:  90% (289/321)
+remote: Compressing objects:  91% (293/321)
+remote: Compressing objects:  92% (296/321)
+remote: Compressing objects:  93% (299/321)
+remote: Compressing objects:  94% (302/321)
+remote: Compressing objects:  95% (305/321)
+remote: Compressing objects:  96% (309/321)
+remote: Compressing objects:  97% (312/321)
+remote: Compressing objects:  98% (315/321)
+remote: Compressing objects:  99% (318/321)
+remote: Compressing objects: 100% (321/321)
+remote: Compressing objects: 100% (321/321), done.
+Receiving objects:   0% (1/3557)
+Receiving objects:   1% (36/3557)
+Receiving objects:   2% (72/3557)
+Receiving objects:   3% (107/3557)
+Receiving objects:   4% (143/3557)
+Receiving objects:   5% (178/3557)
+Receiving objects:   6% (214/3557)
+Receiving objects:   7% (249/3557)
+Receiving objects:   8% (285/3557)
+Receiving objects:   9% (321/3557)
+Receiving objects:  10% (356/3557)
+Receiving objects:  11% (392/3557)
+Receiving objects:  12% (427/3557)
+Receiving objects:  13% (463/3557)
+Receiving objects:  14% (498/3557)
+Receiving objects:  15% (534/3557)
+Receiving objects:  16% (570/3557)
+Receiving objects:  17% (605/3557)
+Receiving objects:  18% (641/3557)
+Receiving objects:  19% (676/3557)
+Receiving objects:  20% (712/3557)
+Receiving objects:  21% (747/3557)
+Receiving objects:  22% (783/3557)
+Receiving objects:  23% (819/3557)
+Receiving objects:  24% (854/3557)
+Receiving objects:  25% (890/3557)
+Receiving objects:  26% (925/3557)
+Receiving objects:  27% (961/3557)
+Receiving objects:  28% (996/3557)
+Receiving objects:  29% (1032/3557)
+Receiving objects:  30% (1068/3557)
+Receiving objects:  31% (1103/3557)
+Receiving objects:  32% (1139/3557)
+Receiving objects:  33% (1174/3557)
+Receiving objects:  34% (1210/3557)
+Receiving objects:  35% (1245/3557)
+Receiving objects:  36% (1281/3557)
+Receiving objects:  37% (1317/3557)
+Receiving objects:  38% (1352/3557)
+Receiving objects:  39% (1388/3557)
+Receiving objects:  40% (1423/3557)
+Receiving objects:  41% (1459/3557)
+Receiving objects:  42% (1494/3557)
+Receiving objects:  43% (1530/3557)
+Receiving objects:  44% (1566/3557)
+Receiving objects:  45% (1601/3557)
+Receiving objects:  46% (1637/3557)
+Receiving objects:  47% (1672/3557)
+Receiving objects:  48% (1708/3557)
+Receiving objects:  49% (1743/3557)
+Receiving objects:  50% (1779/3557)
+Receiving objects:  51% (1815/3557)
+Receiving objects:  52% (1850/3557)
+Receiving objects:  53% (1886/3557)
+Receiving objects:  54% (1921/3557)
+Receiving objects:  55% (1957/3557)
+Receiving objects:  56% (1992/3557)
+Receiving objects:  57% (2028/3557)
+Receiving objects:  58% (2064/3557)
+Receiving objects:  59% (2099/3557)
+Receiving objects:  60% (2135/3557)
+Receiving objects:  61% (2170/3557)
+Receiving objects:  62% (2206/3557)
+Receiving objects:  63% (2241/3557)
+Receiving objects:  64% (2277/3557)
+Receiving objects:  65% (2313/3557)
+Receiving objects:  66% (2348/3557)
+Receiving objects:  67% (2384/3557)
+Receiving objects:  68% (2419/3557)
+Receiving objects:  69% (2455/3557)
+Receiving objects:  70% (2490/3557)
+Receiving objects:  71% (2526/3557)
+Receiving objects:  72% (2562/3557)
+Receiving objects:  73% (2597/3557)
+Receiving objects:  74% (2633/3557)
+Receiving objects:  75% (2668/3557)
+Receiving objects:  76% (2704/3557)
+Receiving objects:  77% (2739/3557)
+Receiving objects:  78% (2775/3557)
+Receiving objects:  79% (2811/3557)
+Receiving objects:  80% (2846/3557)
+Receiving objects:  81% (2882/3557)
+Receiving objects:  82% (2917/3557)
+Receiving objects:  83% (2953/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  84% (2988/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  85% (3024/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  86% (3060/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  87% (3095/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  88% (3131/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  89% (3166/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  90% (3202/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  91% (3237/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  92% (3273/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  93% (3309/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  94% (3344/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  95% (3380/3557), 27.95 MiB | 55.78 MiB/s
+remote: Total 3557 (delta 220), reused 261 (delta 115), pack-reused 3116 (from 2)
+Receiving objects:  96% (3415/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  97% (3451/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  98% (3486/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects:  99% (3522/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects: 100% (3557/3557), 27.95 MiB | 55.78 MiB/s
+Receiving objects: 100% (3557/3557), 45.46 MiB | 63.00 MiB/s, done.
+Resolving deltas:   0% (0/1381)
+Resolving deltas:   1% (14/1381)
+Resolving deltas:   2% (28/1381)
+Resolving deltas:   3% (42/1381)
+Resolving deltas:   4% (56/1381)
+Resolving deltas:   5% (70/1381)
+Resolving deltas:   6% (83/1381)
+Resolving deltas:   7% (97/1381)
+Resolving deltas:   8% (111/1381)
+Resolving deltas:   9% (125/1381)
+Resolving deltas:  10% (139/1381)
+Resolving deltas:  11% (152/1381)
+Resolving deltas:  12% (166/1381)
+Resolving deltas:  13% (180/1381)
+Resolving deltas:  14% (194/1381)
+Resolving deltas:  15% (208/1381)
+Resolving deltas:  16% (221/1381)
+Resolving deltas:  17% (235/1381)
+Resolving deltas:  18% (249/1381)
+Resolving deltas:  19% (263/1381)
+Resolving deltas:  20% (277/1381)
+Resolving deltas:  21% (291/1381)
+Resolving deltas:  22% (304/1381)
+Resolving deltas:  23% (318/1381)
+Resolving deltas:  24% (332/1381)
+Resolving deltas:  25% (346/1381)
+Resolving deltas:  26% (360/1381)
+Resolving deltas:  27% (373/1381)
+Resolving deltas:  28% (387/1381)
+Resolving deltas:  29% (401/1381)
+Resolving deltas:  30% (415/1381)
+Resolving deltas:  31% (429/1381)
+Resolving deltas:  32% (442/1381)
+Resolving deltas:  33% (456/1381)
+Resolving deltas:  34% (470/1381)
+Resolving deltas:  35% (484/1381)
+Resolving deltas:  36% (498/1381)
+Resolving deltas:  37% (511/1381)
+Resolving deltas:  38% (525/1381)
+Resolving deltas:  39% (539/1381)
+Resolving deltas:  40% (553/1381)
+Resolving deltas:  41% (567/1381)
+Resolving deltas:  42% (581/1381)
+Resolving deltas:  43% (594/1381)
+Resolving deltas:  44% (608/1381)
+Resolving deltas:  45% (622/1381)
+Resolving deltas:  46% (636/1381)
+Resolving deltas:  47% (650/1381)
+Resolving deltas:  48% (663/1381)
+Resolving deltas:  49% (677/1381)
+Resolving deltas:  50% (691/1381)
+Resolving deltas:  51% (705/1381)
+Resolving deltas:  52% (719/1381)
+Resolving deltas:  53% (732/1381)
+Resolving deltas:  54% (746/1381)
+Resolving deltas:  55% (760/1381)
+Resolving deltas:  56% (774/1381)
+Resolving deltas:  57% (788/1381)
+Resolving deltas:  58% (801/1381)
+Resolving deltas:  59% (815/1381)
+Resolving deltas:  60% (829/1381)
+Resolving deltas:  61% (843/1381)
+Resolving deltas:  62% (857/1381)
+Resolving deltas:  63% (871/1381)
+Resolving deltas:  64% (884/1381)
+Resolving deltas:  65% (898/1381)
+Resolving deltas:  66% (912/1381)
+Resolving deltas:  67% (926/1381)
+Resolving deltas:  68% (940/1381)
+Resolving deltas:  69% (953/1381)
+Resolving deltas:  70% (967/1381)
+Resolving deltas:  71% (981/1381)
+Resolving deltas:  72% (995/1381)
+Resolving deltas:  73% (1009/1381)
+Resolving deltas:  74% (1022/1381)
+Resolving deltas:  75% (1036/1381)
+Resolving deltas:  76% (1050/1381)
+Resolving deltas:  77% (1064/1381)
+Resolving deltas:  78% (1078/1381)
+Resolving deltas:  79% (1091/1381)
+Resolving deltas:  80% (1105/1381)
+Resolving deltas:  81% (1119/1381)
+Resolving deltas:  82% (1133/1381)
+Resolving deltas:  83% (1147/1381)
+Resolving deltas:  84% (1161/1381)
+Resolving deltas:  85% (1174/1381)
+Resolving deltas:  86% (1188/1381)
+Resolving deltas:  87% (1202/1381)
+Resolving deltas:  88% (1216/1381)
+Resolving deltas:  89% (1230/1381)
+Resolving deltas:  90% (1243/1381)
+Resolving deltas:  91% (1257/1381)
+Resolving deltas:  92% (1271/1381)
+Resolving deltas:  93% (1285/1381)
+Resolving deltas:  94% (1299/1381)
+Resolving deltas:  95% (1312/1381)
+Resolving deltas:  96% (1326/1381)
+Resolving deltas:  97% (1340/1381)
+Resolving deltas:  98% (1354/1381)
+Resolving deltas:  99% (1368/1381)
+Resolving deltas: 100% (1381/1381)
+Resolving deltas: 100% (1381/1381), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m06 && ls
+
+Makefile   attack.py  embedder.py  ingest_checks.py  llm.py      requirements.txt  test_challenge.py
+README.md  data       explore.py   inspect_store.py  rag_app.py  run_tests.py      test_lab.py
+thesecguy@lab:~/ai-security-course-labs/labs/m06$ ls data/docs/alpha data/docs/bravo data/inbox/alpha
+
+data/docs/alpha:
+expenses.md  office-hours.md  refund-policy.md  vpn-setup.md
+
+data/docs/bravo:
+pricing-2027-confidential.md  refund-policy.md  vpn-setup.md
+
+data/inbox/alpha:
+refund-policy-update.md  warehouse-move.md
+thesecguy@lab:~/ai-security-course-labs/labs/m06$ cat data/docs/alpha/refund-policy.md
+
+# Alpha Outdoor Gear: refund policy
+
+Customers can request a refund within 30 days of delivery from the Orders page at shop.alpha.example.
+
+Approved refunds go back to the original payment method within 5 business days.
+
+Our staff will never ask a customer for a card number by email, chat or phone.
+thesecguy@lab:~/ai-security-course-labs/labs/m06$ make -n setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+thesecguy@lab:~/ai-security-course-labs/labs/m06$ make setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+Collecting qdrant-client==1.19.1 (from -r requirements.txt (line 3))
+  Downloading qdrant_client-1.19.1-py3-none-any.whl.metadata (11 kB)
+Collecting grpcio>=1.41.0 (from qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading grpcio-1.85.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (3.8 kB)
+Collecting httpx>=0.20.0 (from httpx[http2]>=0.20.0->qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting numpy>=1.26 (from qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading numpy-2.5.4-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+Collecting portalocker<4.0,>=2.7.0 (from qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading portalocker-3.2.0-py3-none-any.whl.metadata (8.7 kB)
+Collecting protobuf>=3.20.0 (from qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl.metadata (595 bytes)
+Collecting pydantic!=2.0.*,!=2.1.*,!=2.2.0,>=1.10.8 (from qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/133.0 kB ? eta -:--:--
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 133.0/133.0 kB 6.9 MB/s eta 0:00:00
+Collecting urllib3<3,>=1.26.14 (from qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting typing-extensions~=4.12 (from grpcio>=1.41.0->qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting anyio (from httpx>=0.20.0->httpx[http2]>=0.20.0->qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+Collecting certifi (from httpx>=0.20.0->httpx[http2]>=0.20.0->qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Collecting httpcore==1.* (from httpx>=0.20.0->httpx[http2]>=0.20.0->qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting idna (from httpx>=0.20.0->httpx[http2]>=0.20.0->qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx>=0.20.0->httpx[http2]>=0.20.0->qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting h2<5,>=3 (from httpx[http2]>=0.20.0->qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading h2-4.4.1-py3-none-any.whl.metadata (3.8 kB)
+Collecting annotated-types>=0.6.0 (from pydantic!=2.0.*,!=2.1.*,!=2.2.0,>=1.10.8->qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.50.1 (from pydantic!=2.0.*,!=2.1.*,!=2.2.0,>=1.10.8->qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
+Collecting typing-inspection>=0.4.4 (from pydantic!=2.0.*,!=2.1.*,!=2.2.0,>=1.10.8->qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+Collecting hyperframe<7,>=6.1 (from h2<5,>=3->httpx[http2]>=0.20.0->qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading hyperframe-6.1.0-py3-none-any.whl.metadata (4.3 kB)
+Collecting hpack<5,>=4.2 (from h2<5,>=3->httpx[http2]>=0.20.0->qdrant-client==1.19.1->-r requirements.txt (line 3))
+  Downloading hpack-4.2.0-py3-none-any.whl.metadata (3.3 kB)
+Downloading qdrant_client-1.19.1-py3-none-any.whl (406 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/406.5 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 406.5/406.5 kB 27.8 MB/s eta 0:00:00
+Downloading grpcio-1.85.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (7.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/7.4 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 7.4/7.4 MB 227.4 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 7.4/7.4 MB 227.4 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.4/7.4 MB 74.4 MB/s eta 0:00:00
+Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/73.5 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.5/73.5 kB 19.8 MB/s eta 0:00:00
+Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/78.8 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.8/78.8 kB 24.3 MB/s eta 0:00:00
+Downloading numpy-2.5.4-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/16.7 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━ 14.5/16.7 MB 428.4 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 16.7/16.7 MB 411.6 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 16.7/16.7 MB 411.6 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.7/16.7 MB 87.8 MB/s eta 0:00:00
+Downloading portalocker-3.2.0-py3-none-any.whl (22 kB)
+Downloading protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl (343 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/343.2 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 343.2/343.2 kB 71.6 MB/s eta 0:00:00
+Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/488.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 488.1/488.1 kB 80.5 MB/s eta 0:00:00
+Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/2.2 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 120.1 MB/s eta 0:00:00
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/135.7 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.7/135.7 kB 41.5 MB/s eta 0:00:00
+Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Downloading h2-4.4.1-py3-none-any.whl (62 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/62.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.6/62.6 kB 20.2 MB/s eta 0:00:00
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/45.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.6/45.6 kB 15.6 MB/s eta 0:00:00
+Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/132.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 132.1/132.1 kB 40.2 MB/s eta 0:00:00
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/69.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 69.6/69.6 kB 20.8 MB/s eta 0:00:00
+Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/135.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.1/135.1 kB 35.1 MB/s eta 0:00:00
+Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Downloading hpack-4.2.0-py3-none-any.whl (34 kB)
+Downloading hyperframe-6.1.0-py3-none-any.whl (13 kB)
+Installing collected packages: urllib3, typing-extensions, protobuf, portalocker, numpy, idna, hyperframe, hpack, h11, certifi, annotated-types, typing-inspection, pydantic-core, httpcore, h2, grpcio, anyio, pydantic, httpx, qdrant-client
+Successfully installed annotated-types-0.8.0 anyio-4.15.1 certifi-2026.10.23 grpcio-1.85.0 h11-0.16.0 h2-4.4.1 hpack-4.2.0 httpcore-1.0.9 httpx-0.28.1 hyperframe-6.1.0 idna-3.20 numpy-2.5.4 portalocker-3.2.0 protobuf-7.36.2 pydantic-2.14.1 pydantic-core-2.50.1 qdrant-client-1.19.1 typing-extensions-4.16.0 typing-inspection-0.4.4 urllib3-2.8.0
+thesecguy@lab:~/ai-security-course-labs/labs/m06$ .venv/bin/python -c "import importlib.metadata as m; print('qdrant-client', m.vers 
+ion('qdrant-client'))"
+
+qdrant-client 1.19.1
+thesecguy@lab:~/ai-security-course-labs/labs/m06$ .venv/bin/python explore.py chunks data/docs/alpha/refund-policy.md
+
+data/docs/alpha/refund-policy.md: 300 characters -> 3 chunks (one per paragraph, each starts with the title)
+
+--- chunk 0 ---
+# Alpha Outdoor Gear: refund policy
+Customers can request a refund within 30 days of delivery from the Orders page at shop.alpha.example.
+
+--- chunk 1 ---
+# Alpha Outdoor Gear: refund policy
+Approved refunds go back to the original payment method within 5 business days.
+
+--- chunk 2 ---
+# Alpha Outdoor Gear: refund policy
+Our staff will never ask a customer for a card number by email, chat or phone.
+
+thesecguy@lab:~/ai-security-course-labs/labs/m06$ .venv/bin/python explore.py embed "How do I get a refund?" "Approved refunds go ba 
+ck to the original payment method" "Install the VPN client from the IT portal"
+
+embedder: hashing-512 (stand-in, not AI) · every text becomes 512 numbers
+
+"How do I get a refund?"
+   1 of 512 numbers are not 0: [83]=-1.000
+"Approved refunds go back to the original payment method"
+   6 of 512 numbers are not 0: [83]=-0.408, [187]=+0.408, [313]=-0.408, [390]=+0.408, [436]=+0.408, [438]=+0.408
+"Install the VPN client from the IT portal"
+   4 of 512 numbers are not 0: [192]=+0.500, [282]=+0.500, [332]=+0.500, [348]=+0.500
+
+similarity to "How do I get a refund?" (1.0 = same direction, 0 = nothing in common):
+   0.408  Approved refunds go back to the original payment method
+   0.000  Install the VPN client from the IT portal
+thesecguy@lab:~/ai-security-course-labs/labs/m06$ .venv/bin/python explore.py embed "Can I get my cash reimbursed?" "Approved refund 
+s go back to the original payment method"
+
+embedder: hashing-512 (stand-in, not AI) · every text becomes 512 numbers
+
+"Can I get my cash reimbursed?"
+   2 of 512 numbers are not 0: [494]=+0.707, [507]=-0.707
+"Approved refunds go back to the original payment method"
+   6 of 512 numbers are not 0: [83]=-0.408, [187]=+0.408, [313]=-0.408, [390]=+0.408, [436]=+0.408, [438]=+0.408
+
+similarity to "Can I get my cash reimbursed?" (1.0 = same direction, 0 = nothing in common):
+   0.000  Approved refunds go back to the original payment method
+thesecguy@lab:~/ai-security-course-labs/labs/m06$ .venv/bin/python explore.py embed --ollama "Can I get my cash reimbursed?" "Approv 
+ed refunds go back to the original payment method" "Install the VPN client from the IT portal"
+
+embedder: ollama:embeddinggemma · every text becomes 768 numbers
+
+"Can I get my cash reimbursed?"
+   first 6 of 768: [-0.124, +0.002, +0.013, +0.004, -0.000, +0.032, ...]
+"Approved refunds go back to the original payment method"
+   first 6 of 768: [-0.118, +0.044, +0.008, +0.052, +0.006, +0.031, ...]
+"Install the VPN client from the IT portal"
+   first 6 of 768: [-0.158, +0.019, +0.062, -0.025, +0.077, +0.006, ...]
+
+similarity to "Can I get my cash reimbursed?" (1.0 = same direction, 0 = nothing in common):
+   0.427  Approved refunds go back to the original payment method
+   0.149  Install the VPN client from the IT portal
+thesecguy@lab:~/ai-security-course-labs/labs/m06$ .venv/bin/python explore.py search "How do I set up the VPN?"
+
+question: "How do I set up the VPN?"  ->  the 3 nearest chunks in the shared store (no tenant filter)
+
+  score 0.333  tenant=alpha  docs/alpha/vpn-setup.md
+               "If the VPN will not connect, restart the client and check that multi-factor sign"
+  score 0.309  tenant=bravo  docs/bravo/vpn-setup.md
+               "Clinic staff connect to the VPN with the clinic laptop and their smart card."
+  score 0.309  tenant=alpha  docs/alpha/vpn-setup.md
+               "Install the VPN client from the IT portal at it.alpha.example and sign in with y"
+thesecguy@lab:~/ai-security-course-labs/labs/m06$ .venv/bin/python explore.py prompt "How do I set up the VPN?"
+
+=== system message (the app's rules) ===
+You are the company help bot for tenant alpha. Only use documents that belong to alpha. Answer the user's question using the documents.
+
+=== user message (retrieved chunks + the question) ===
+Sources:
+<source path="docs/alpha/vpn-setup.md">
+# Alpha Outdoor Gear: VPN setup for staff
+If the VPN will not connect, restart the client and check that multi-factor sign-in was approved on your phone.
+</source>
+
+<source path="docs/bravo/vpn-setup.md">
+# Bravo Health Clinics: VPN setup
+Clinic staff connect to the VPN with the clinic laptop and their smart card.
+</source>
+
+<source path="docs/alpha/vpn-setup.md">
+# Alpha Outdoor Gear: VPN setup for staff
+Install the VPN client from the IT portal at it.alpha.example and sign in with your staff account.
+</source>
+
+Question: How do I set up the VPN?
+thesecguy@lab:~/ai-security-course-labs/labs/m06$ make ask Q="How do I set up the VPN?"
+
+.venv/bin/python rag_app.py --mode vulnerable "How do I set up the VPN?"
+--- M6 lab · VULNERABLE mode · embedder: hashing-512 (stand-in, not AI) · model: stand-in model (llm.py, not AI) ---
+  log: INFO ingested 9 files (no checks)
+  log: INFO RETRIEVAL user=alice@alpha.example tenant=alpha hits=[('docs/alpha/vpn-setup.md', 'alpha', 0.333), ('docs/bravo/vpn-setup.md', 'bravo', 0.309), ('docs/alpha/vpn-setup.md', 'alpha', 0.309)]
+
+alice (alpha)> How do I set up the VPN?
+bot> If the VPN will not connect, restart the client and check that multi-factor sign-in was approved on your phone. [docs/alpha/vpn-setup.md] Clinic staff connect to the VPN with the clinic laptop and their smart card. [docs/bravo/vpn-setup.md]
+     sources shown to the user: docs/alpha/vpn-setup.md, docs/bravo/vpn-setup.md
+thesecguy@lab:~/ai-security-course-labs/labs/m06$ exit
+
+exit

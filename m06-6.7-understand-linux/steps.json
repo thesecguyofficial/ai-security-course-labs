@@ -1,0 +1,149 @@
+{
+  "scenario": "m06-6.7-understand-linux",
+  "start": 1.77,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.77,
+      "end": 12.625
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.625,
+      "end": 21.275
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 25.275,
+      "end": 31.872
+    },
+    {
+      "label": "A document",
+      "speed": 1,
+      "start": 35.872,
+      "end": 41.064
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 45.064,
+      "end": 47.718
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 50.718,
+      "end": 61.538
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 64.538,
+      "end": 77.619
+    },
+    {
+      "label": "Chunks",
+      "speed": 1,
+      "start": 80.619,
+      "end": 89.756
+    },
+    {
+      "label": "Embed",
+      "speed": 1,
+      "start": 94.756,
+      "end": 115.075
+    },
+    {
+      "label": "Words not meaning",
+      "speed": 1,
+      "start": 121.075,
+      "end": 137.17
+    },
+    {
+      "label": "Meaning",
+      "speed": 1,
+      "start": 142.171,
+      "end": 165.722
+    },
+    {
+      "label": "Search",
+      "speed": 1,
+      "start": 171.722,
+      "end": 180.417
+    },
+    {
+      "label": "Prompt",
+      "speed": 1,
+      "start": 186.417,
+      "end": 195.27
+    },
+    {
+      "label": "Answer",
+      "speed": 1,
+      "start": 202.27,
+      "end": 208.431
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.371,
+      "what": "type"
+    },
+    {
+      "t": 16.225,
+      "what": "type"
+    },
+    {
+      "t": 25.875,
+      "what": "type"
+    },
+    {
+      "t": 36.472,
+      "what": "type"
+    },
+    {
+      "t": 45.665,
+      "what": "type"
+    },
+    {
+      "t": 51.318,
+      "what": "type"
+    },
+    {
+      "t": 65.138,
+      "what": "type"
+    },
+    {
+      "t": 81.219,
+      "what": "type"
+    },
+    {
+      "t": 95.357,
+      "what": "type"
+    },
+    {
+      "t": 121.675,
+      "what": "type"
+    },
+    {
+      "t": 142.771,
+      "what": "type"
+    },
+    {
+      "t": 172.323,
+      "what": "type"
+    },
+    {
+      "t": 187.017,
+      "what": "type"
+    },
+    {
+      "t": 202.871,
+      "what": "type"
+    }
+  ],
+  "end": 215.432
+}
