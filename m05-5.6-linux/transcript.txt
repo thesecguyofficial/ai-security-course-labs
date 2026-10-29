@@ -1,6 +1,56 @@
 thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m05 && ls
 
-Makefile  README.md  attack.py  data  helpdesk_app.py  run_tests.py  stand_in_model.py  test_challenge.py  test_lab.py  tools
+Makefile   attack.py  explore.py       run_tests.py       test_challenge.py  tools
+README.md  data       helpdesk_app.py  stand_in_model.py  test_lab.py
+thesecguy@lab:~/ai-security-course-labs/labs/m05$ grep -n -A4 '^ATTACKS' attack.py
+
+21:ATTACKS = [
+22-    ("HTML ", "summarise my latest ticket"),
+23-    ("SQL  ", "search my tickets for: zzz' OR '1'='1' --"),
+24-    ("SHELL", f"check the status of vpn{SEP} {READ}"),
+25-]
+thesecguy@lab:~/ai-security-course-labs/labs/m05$ python3 explore.py page "summarise my latest ticket"
+
+the model's answer (plain text):
+   Summary of your latest ticket: Hi, please reset my password. <img src=x onerror="alert('Model output just ran as code in your browser')">
+
+the HTML the vulnerable app puts in the page:
+   <p class='answer'>Summary of your latest ticket: Hi, please reset my password. <img src=x onerror="alert('Model output just ran as code in your browser')"></p>
+
+how a browser reads it (explained by Python's html.parser; no browser runs here):
+   element <p>: a paragraph
+   text: 'Summary of your latest ticket: Hi, please reset my password.'
+   element <img>: fetches 'x' straight away, no click needed
+      attribute onerror: runs "alert('Model output just ran as code in your browser')" as JavaScript if loading fails
+thesecguy@lab:~/ai-security-course-labs/labs/m05$ python3 attack.py --only html
+
+--- M5 lab · VULNERABLE mode · stand-in model (stand_in_model.py, not AI) ---
+
+[HTML ] you> summarise my latest ticket
+    page HTML: <p class='answer'>Summary of your latest ticket: Hi, please reset my password. <img src=x onerror="alert('Mode...
+    RESULT: EXPLOITED - a browser would RUN the onerror code (XSS)
+
+1 of 1 attack changed what the app did.
+thesecguy@lab:~/ai-security-course-labs/labs/m05$ python3 attack.py --only sql
+
+--- M5 lab · VULNERABLE mode · stand-in model (stand_in_model.py, not AI) ---
+
+[SQL  ] you> search my tickets for: zzz' OR '1'='1' --
+    log: INFO SQL sent: SELECT id, assignee, title FROM tickets WHERE assignee = 'alice' AND title LIKE '%zzz' OR '1'='1' --%'
+    rows returned: 5, owners: alice, bob
+    RESULT: EXPLOITED - 2 of bob's tickets leaked to alice
+
+1 of 1 attack changed what the app did.
+thesecguy@lab:~/ai-security-course-labs/labs/m05$ python3 attack.py --only shell
+
+--- M5 lab · VULNERABLE mode · stand-in model (stand_in_model.py, not AI) ---
+
+[SHELL] you> check the status of vpn; cat data/fake_secrets.env
+    log: INFO command run: "/usr/bin/python3" tools/service_status.py vpn; cat data/fake_secrets.env
+    helper output: VPN gateway: OK (fake data) | # FAKE values for the M5 lab. Nothing here works anywhere. The app should never show this file to a user. | # AKIAIOSFODNN7EXAMPLE is the example key from the AWS IAM documentation. | DB_PASSWORD=lab-only-not-a-real-password | AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+    RESULT: EXPLOITED - an extra command read data/fake_secrets.env
+
+1 of 1 attack changed what the app did.
 thesecguy@lab:~/ai-security-course-labs/labs/m05$ make attack
 
 python3 attack.py --mode vulnerable
@@ -34,6 +84,17 @@ y
 216:def service_status_safe(service: str) -> str:
 274:    enc = html.escape if safe else (lambda s, quote=True: s)   # vulnerable mode doesn't encode anything
 292:<form method="post" action="/ask"><input name="q" size="60" value="{html.escape(question)}" autofocus>
+thesecguy@lab:~/ai-security-course-labs/labs/m05$ python3 explore.py page --safe "summarise my latest ticket"
+
+the model's answer (plain text):
+   Summary of your latest ticket: Hi, please reset my password. <img src=x onerror="alert('Model output just ran as code in your browser')">
+
+the HTML the SAFE app puts in the page:
+   <p class='answer'>Summary of your latest ticket: Hi, please reset my password. &lt;img src=x onerror=&quot;alert(&#x27;Model output just ran as code in your browser&#x27;)&quot;&gt;</p>
+
+how a browser reads it (explained by Python's html.parser; no browser runs here):
+   element <p>: a paragraph
+   text: 'Summary of your latest ticket: Hi, please reset my password. <img src=x onerror="alert(\'Model output just ran as code in your browser\')">'
 thesecguy@lab:~/ai-security-course-labs/labs/m05$ make attack-safe
 
 python3 attack.py --mode safe
@@ -71,7 +132,7 @@ python3 run_tests.py
 [PASS] http: the safe server encodes the payload AND sends a CSP that blocks scripts
 [PASS] http: the app refuses to listen on anything but 127.0.0.1
 ----------------------------------------------------------------------
-Ran 13 tests in 1.586s
+Ran 13 tests in 1.587s
 
 OK
 
@@ -80,7 +141,7 @@ thesecguy@lab:~/ai-security-course-labs/labs/m05$ make challenge 2>&1 | tail -8
 
   why test_18_end_to_end: AssertionError: False is not true : the app saved the file to /home/thesecguy/ai-security-course-labs/labs/m05/exports/../escaped.txt
 ----------------------------------------------------------------------
-Ran 18 tests in 1.585s
+Ran 18 tests in 2.087s
 
 FAILED (failures=4)
 

@@ -1,69 +1,129 @@
 {
   "scenario": "m05-5.6-linux",
-  "start": 1.745,
+  "start": 1.849,
   "steps": [
     {
       "label": "The lab",
       "speed": 1,
-      "start": 1.745,
-      "end": 7.234
+      "start": 1.849,
+      "end": 7.34
+    },
+    {
+      "label": "Attack inputs",
+      "speed": 1,
+      "start": 10.34,
+      "end": 15.211
+    },
+    {
+      "label": "Planted ticket",
+      "speed": 1,
+      "start": 20.211,
+      "end": 27.323
+    },
+    {
+      "label": "HTML attack",
+      "speed": 1,
+      "start": 33.323,
+      "end": 37.498
+    },
+    {
+      "label": "SQL attack",
+      "speed": 1,
+      "start": 42.498,
+      "end": 46.854
+    },
+    {
+      "label": "Shell attack",
+      "speed": 1,
+      "start": 51.854,
+      "end": 56.582
     },
     {
       "label": "Attack",
       "speed": 1,
-      "start": 9.035,
-      "end": 11.5
+      "start": 61.582,
+      "end": 63.967
     },
     {
       "label": "Fixes",
       "speed": 1,
-      "start": 17.5,
-      "end": 27.77
+      "start": 69.968,
+      "end": 80.464
+    },
+    {
+      "label": "Safe page",
+      "speed": 1,
+      "start": 84.464,
+      "end": 92.376
     },
     {
       "label": "Attack safe",
       "speed": 1,
-      "start": 31.77,
-      "end": 34.577
+      "start": 98.376,
+      "end": 101.099
     },
     {
       "label": "Tests",
       "speed": 1,
-      "start": 40.577,
-      "end": 44.347
+      "start": 107.099,
+      "end": 110.907
     },
     {
       "label": "Challenge",
       "speed": 1,
-      "start": 49.347,
-      "end": 55.574
+      "start": 115.907,
+      "end": 122.501
     }
   ],
   "keys": [
     {
-      "t": 2.345,
+      "t": 2.449,
       "what": "type"
     },
     {
-      "t": 9.635,
+      "t": 10.94,
       "what": "type"
     },
     {
-      "t": 18.1,
+      "t": 20.811,
       "what": "type"
     },
     {
-      "t": 32.37,
+      "t": 33.923,
       "what": "type"
     },
     {
-      "t": 41.177,
+      "t": 43.099,
       "what": "type"
     },
     {
-      "t": 49.947,
+      "t": 52.454,
+      "what": "type"
+    },
+    {
+      "t": 62.182,
+      "what": "type"
+    },
+    {
+      "t": 70.568,
+      "what": "type"
+    },
+    {
+      "t": 85.064,
+      "what": "type"
+    },
+    {
+      "t": 98.976,
+      "what": "type"
+    },
+    {
+      "t": 107.699,
+      "what": "type"
+    },
+    {
+      "t": 116.508,
       "what": "type"
     }
   ],
-  "end": 60.574
+  "end": 127.501
 }
