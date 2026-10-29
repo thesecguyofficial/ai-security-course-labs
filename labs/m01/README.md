@@ -90,10 +90,10 @@ where you see `python3`.
    temperature (lesson 1.2) and the stop token.
 
 5. **Where it listens.** Ollama waits for requests on **localhost** (`127.0.0.1`, this computer) at **port** 11434
-   (the "door number" that picks one program):
+   (the "door number" that picks one program). On a Mac, use `lsof -iTCP:11434 -sTCP:LISTEN` instead of the first line:
 
    ```bash
-   ss -ltn | grep 11434                       # Mac: lsof -iTCP:11434 -sTCP:LISTEN
+   ss -ltn | grep 11434
    curl http://localhost:11434/api/version
    ```
 
