@@ -1,0 +1,169 @@
+{
+  "scenario": "m00-0.4-understand-linux",
+  "start": 1.796,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.796,
+      "end": 12.343
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.343,
+      "end": 20.992
+    },
+    {
+      "label": "Not yet",
+      "speed": 1,
+      "start": 24.992,
+      "end": 28.744
+    },
+    {
+      "label": "Get the installer",
+      "speed": 1,
+      "start": 32.744,
+      "end": 34.26
+    },
+    {
+      "label": "Get the installer",
+      "speed": 1,
+      "start": 35.261,
+      "end": 43.694
+    },
+    {
+      "label": "Look before you run",
+      "speed": 1,
+      "start": 45.694,
+      "end": 49.403
+    },
+    {
+      "label": "Look before you run",
+      "speed": 1,
+      "start": 51.403,
+      "end": 59.868
+    },
+    {
+      "label": "Install",
+      "speed": 6,
+      "start": 65.868,
+      "end": 80.337
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 84.337,
+      "end": 92.089
+    },
+    {
+      "label": "Download a model",
+      "speed": 4,
+      "start": 95.089,
+      "end": 109.24
+    },
+    {
+      "label": "Models",
+      "speed": 1,
+      "start": 112.24,
+      "end": 119.57
+    },
+    {
+      "label": "Private",
+      "speed": 1,
+      "start": 122.57,
+      "end": 127.403
+    },
+    {
+      "label": "Private",
+      "speed": 1,
+      "start": 128.403,
+      "end": 132.284
+    },
+    {
+      "label": "Inside a model",
+      "speed": 1,
+      "start": 137.284,
+      "end": 141.11
+    },
+    {
+      "label": "One text",
+      "speed": 1,
+      "start": 147.11,
+      "end": 152.65
+    },
+    {
+      "label": "A real request",
+      "speed": 1,
+      "start": 159.65,
+      "end": 179.371
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.396,
+      "what": "type"
+    },
+    {
+      "t": 15.943,
+      "what": "type"
+    },
+    {
+      "t": 25.592,
+      "what": "type"
+    },
+    {
+      "t": 33.344,
+      "what": "type"
+    },
+    {
+      "t": 35.861,
+      "what": "type"
+    },
+    {
+      "t": 46.294,
+      "what": "type"
+    },
+    {
+      "t": 52.003,
+      "what": "type"
+    },
+    {
+      "t": 66.468,
+      "what": "type"
+    },
+    {
+      "t": 84.937,
+      "what": "type"
+    },
+    {
+      "t": 95.689,
+      "what": "type"
+    },
+    {
+      "t": 112.841,
+      "what": "type"
+    },
+    {
+      "t": 123.17,
+      "what": "type"
+    },
+    {
+      "t": 129.003,
+      "what": "type"
+    },
+    {
+      "t": 137.884,
+      "what": "type"
+    },
+    {
+      "t": 147.71,
+      "what": "type"
+    },
+    {
+      "t": 160.25,
+      "what": "type"
+    }
+  ],
+  "end": 186.372
+}
