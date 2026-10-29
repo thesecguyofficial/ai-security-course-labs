@@ -134,7 +134,7 @@ Windows (no `make`): `py -m venv .venv`, then `.venv\Scripts\python -m pip insta
 
 New to MCP? Do this before Step 1 (lesson 8.6 and its videos call it Step 1b). `explore.py` shows, one message
 at a time, what the host and the servers say to each other. Real output below is from a fresh Ubuntu machine
-(recording run 40906260503).
+(recording run 40911297475).
 
 **What it really runs.** `explore.py` starts the lab's own servers on your computer, the way a host does, and
 stops them again: `servers/notes_server.py` (and `servers/facts_server.py` for `context`) as child processes,
@@ -159,7 +159,9 @@ server -> host (one line on stdout):
 
 A request has an `id`, a `method` and `params`; the response carries the same `id` and a `result` (or an
 `error`). In protocol version `2026-07-28` every request carries its own version in `_meta`, and
-`server/discover` asks what the server supports. Older versions (`2025-11-25` and before) open with an
+`server/discover` asks what the server supports: every server must answer it, but a client may skip it and send any
+request directly. The capabilities list prompts, resources and tools because those are the SDK's defaults; this server
+only has tools. Older versions (`2025-11-25` and before) open with an
 `initialize` handshake instead; many servers you meet still do.
 
 **2. The menu: `tools/list`.**
@@ -257,8 +259,8 @@ token the real OAuth flow would give a host acting for `alice`:
     "sub": "alice",
     "aud": "http://127.0.0.1:8808/mcp",
     "scope": "notes:read",
-    "iat": 1793289450,
-    "exp": 1793289750
+    "iat": 1793291258,
+    "exp": 1793291558
   }
 
 host -> server: POST tools/call whoami, with the header  Authorization: Bearer eyJhbGciOi...
