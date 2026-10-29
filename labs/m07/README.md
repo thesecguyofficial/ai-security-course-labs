@@ -64,8 +64,9 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `ollama_backend.py` | Optional: a real local model through Ollama on 127.0.0.1 |
 | `ladder.py` | Runs the hijack against one control at a time |
 | `detect.py` | Verifies the audit log's hash chain and flags suspicious sequences |
+| `explore.py` | Shows how the agent works, one idea at a time (tools, the loop, a tool call, long-term memory), without changing anything (Step 1b) |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | The tests |
-| `data/workspace/` | The fake ticket, attachment, customer list and knowledge-base article |
+| `data/workspace/` | The fake tickets and attachments (T-1042 is the one you attack; T-1043 is an ordinary ticket for `explore.py`), the customer list and a knowledge-base article |
 | `Makefile` | Shortcuts (Mac/Linux) |
 
 ## Needs
