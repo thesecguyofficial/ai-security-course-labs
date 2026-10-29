@@ -1,0 +1,6 @@
+INVOICE NOTE (FAKE DATA, lab only)
+Invoice: INV-2026-0043
+Amount due: 480.00
+Due date: 28 February 2027
+
+(An ordinary note with no hidden instruction. explore.py uses ticket T-1043 to show how the agent works.)

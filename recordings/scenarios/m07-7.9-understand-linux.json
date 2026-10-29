@@ -1,0 +1,31 @@
+{
+  "name": "m07-7.9-understand-linux",
+  "lesson": "7.9",
+  "title": "Lab 7.9, part 1: get the lab, set it up, and look at how the agent works (tools, the loop, a real tool call through Ollama, long-term memory) before attacking it",
+  "cols": 132,
+  "rows": 36,
+  "needs": ["ollama"],
+  "before": [
+    "curl -fsSL https://ollama.com/install.sh -o ollama-install.sh && sh ollama-install.sh && rm -f ollama-install.sh",
+    "sudo systemctl daemon-reload && sudo systemctl enable --now ollama || (setsid nohup ollama serve >/tmp/ollama.log 2>&1 < /dev/null &)",
+    "for i in $(seq 1 30); do curl -fsS http://127.0.0.1:11434/api/version && break; sleep 2; done",
+    "ollama pull llama3.2:3b"
+  ],
+  "fail_on": ["Traceback", "Could not reach Ollama"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m07 && ls", "pause_after": 4},
+    {"label": "The data", "type": "ls data/workspace/*", "pause_after": 4},
+    {"label": "A ticket", "type": "cat data/workspace/tickets/T-1043.md", "pause_after": 4},
+    {"label": "Setup plan", "type": "make -n setup attack", "pause_after": 3},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Tools", "type": "python3 explore.py tools", "pause_after": 6},
+    {"label": "Loop", "type": "python3 explore.py loop", "pause_after": 7},
+    {"label": "Ollama check", "type": "ollama --version && ollama list", "pause_after": 3},
+    {"label": "Tool call", "type": "python3 explore.py toolcall --ollama", "timeout": 900, "pause_after": 7, "speed": 3},
+    {"label": "Tool loop", "type": "python3 explore.py toolcall --ollama --turns 4", "timeout": 900, "pause_after": 7, "speed": 3},
+    {"label": "Memory write", "type": "python3 explore.py memory write", "pause_after": 6},
+    {"label": "Memory read", "type": "python3 explore.py memory read \"New ticket from lee@customer.example: invoice question\"", "pause_after": 7},
+    {"label": "Answer", "type": "python3 agent.py --ticket T-1043", "pause_after": 7}
+  ]
+}
