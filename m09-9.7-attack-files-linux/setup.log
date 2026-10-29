@@ -1,0 +1,5 @@
+warning: unable to access '/home/runner/.config/git/config': Permission denied
+[before, as thesecguy] git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git && cd ai-security-course-labs/labs/m09 && make setup > /dev/null && make models > /dev/null
+warning: unable to access '/home/runner/.config/git/ignore': Permission denied
+warning: unable to access '/home/runner/.config/git/attributes': Permission denied
+prepared: user thesecguy on host lab, removed: nothing, ready: nothing
