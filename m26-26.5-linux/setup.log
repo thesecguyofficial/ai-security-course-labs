@@ -8,7 +8,7 @@ python3 -m venv .venv
 Collecting PyYAML==6.0.3 (from -r requirements.txt (line 3))
   Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
 Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 37.1 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 15.1 MB/s eta 0:00:00
 Installing collected packages: PyYAML
 Successfully installed PyYAML-6.0.3
 prepared: user thesecguy on host lab, removed: nothing, ready: nothing

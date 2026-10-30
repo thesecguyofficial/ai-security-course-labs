@@ -58,13 +58,13 @@ thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python scan.py stack
 3 '
 
   CRIT  NODE-03   26.3  the NVIDIA container toolkit is in an advisory's affected range
-                       nodes.json: gpu-node-1: toolkit 1.17.4: CVE-2025-23266 (fixed in 1.17.8; affected: up to and including 1.17.7 (before 1.17.5 only in CDI mode))
+                       nodes.json: gpu-node-1: toolkit 1.17.4: CVE-2025-23266 (fixed in 1.17.8; affected: up to and including 1.17.7 (in CDI mode, only before 1.17.5))
   HIGH  K8S-01    26.3  a pod runs privileged or on the host network
                        k8s: vllm: hostNetwork: true
   HIGH  K8S-01    26.3  a pod runs privileged or on the host network
                        k8s: vllm/vllm: privileged: true
   HIGH  NODE-02   26.3  pods can reach the node's IAM role through IMDS
-                       cluster.yaml: nodegroup gpu: disableIMDSv1, disablePodIMDS not set to true
+                       cluster.yaml: nodegroup gpu: disableIMDSv1 is false, disablePodIMDS not set to true
   HIGH  NODE-02   26.3  pods can reach the node's IAM role through IMDS
                        nodes.json: gpu-node-1: IMDS tokens optional, hop limit 2
   HIGH  NODE-04   26.3  tenants time-share one GPU (no memory isolation)

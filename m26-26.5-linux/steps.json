@@ -1,159 +1,159 @@
 {
   "scenario": "m26-26.5-linux",
-  "start": 1.709,
+  "start": 1.765,
   "steps": [
     {
       "label": "Scan",
       "speed": 1,
-      "start": 1.709,
-      "end": 9.633
+      "start": 1.765,
+      "end": 9.683
     },
     {
       "label": "Lesson 26.0",
       "speed": 1,
-      "start": 13.633,
-      "end": 25.191
+      "start": 13.683,
+      "end": 25.23
     },
     {
       "label": "Lesson 26.1",
       "speed": 1,
-      "start": 32.191,
-      "end": 43.374
+      "start": 32.23,
+      "end": 43.407
     },
     {
       "label": "Lesson 26.3",
       "speed": 1,
-      "start": 50.374,
-      "end": 61.347
+      "start": 50.407,
+      "end": 61.373
     },
     {
       "label": "The vLLM service",
       "speed": 1,
-      "start": 68.347,
-      "end": 76.392
+      "start": 68.373,
+      "end": 76.419
     },
     {
       "label": "The model",
       "speed": 1,
-      "start": 81.393,
-      "end": 90.223
+      "start": 81.419,
+      "end": 90.251
     },
     {
       "label": "Probe",
       "speed": 1,
-      "start": 95.223,
-      "end": 98.675
+      "start": 95.251,
+      "end": 98.665
     },
     {
       "label": "Cache",
       "speed": 1,
-      "start": 105.675,
-      "end": 107.82
+      "start": 105.665,
+      "end": 107.805
     },
     {
       "label": "Block hash",
       "speed": 1,
-      "start": 112.821,
-      "end": 120.863
+      "start": 112.806,
+      "end": 120.849
     },
     {
       "label": "Two gateways",
       "speed": 1,
-      "start": 125.863,
-      "end": 134.247
+      "start": 125.849,
+      "end": 134.233
     },
     {
       "label": "Hardened",
       "speed": 1,
-      "start": 139.247,
-      "end": 142.366
+      "start": 139.234,
+      "end": 142.32
     },
     {
       "label": "Hardened compose",
       "speed": 1,
-      "start": 149.366,
-      "end": 155.761
+      "start": 149.32,
+      "end": 155.699
     },
     {
       "label": "Hunt",
       "speed": 1,
-      "start": 160.761,
-      "end": 162.861
+      "start": 160.699,
+      "end": 162.793
     },
     {
       "label": "Tests",
       "speed": 1,
-      "start": 168.861,
-      "end": 175.221
+      "start": 168.793,
+      "end": 175.106
     },
     {
       "label": "Challenge",
       "speed": 1,
-      "start": 179.221,
-      "end": 188.882
+      "start": 179.106,
+      "end": 188.713
     }
   ],
   "keys": [
     {
-      "t": 2.309,
+      "t": 2.365,
       "what": "type"
     },
     {
-      "t": 14.233,
+      "t": 14.283,
       "what": "type"
     },
     {
-      "t": 32.791,
+      "t": 32.83,
       "what": "type"
     },
     {
-      "t": 50.974,
+      "t": 51.007,
       "what": "type"
     },
     {
-      "t": 68.947,
+      "t": 68.973,
       "what": "type"
     },
     {
-      "t": 81.993,
+      "t": 82.019,
       "what": "type"
     },
     {
-      "t": 95.823,
+      "t": 95.851,
       "what": "type"
     },
     {
-      "t": 106.275,
+      "t": 106.265,
       "what": "type"
     },
     {
-      "t": 113.421,
+      "t": 113.406,
       "what": "type"
     },
     {
-      "t": 126.464,
+      "t": 126.449,
       "what": "type"
     },
     {
-      "t": 139.847,
+      "t": 139.834,
       "what": "type"
     },
     {
-      "t": 149.966,
+      "t": 149.92,
       "what": "type"
     },
     {
-      "t": 161.361,
+      "t": 161.299,
       "what": "type"
     },
     {
-      "t": 169.461,
+      "t": 169.393,
       "what": "type"
     },
     {
-      "t": 179.821,
+      "t": 179.706,
       "what": "type"
     }
   ],
-  "end": 194.882
+  "end": 194.713
 }
