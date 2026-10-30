@@ -1,0 +1,179 @@
+{
+  "scenario": "m13-13.3-understand-linux",
+  "start": 1.71,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.71,
+      "end": 12.169
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.169,
+      "end": 20.818
+    },
+    {
+      "label": "The setups",
+      "speed": 1,
+      "start": 24.818,
+      "end": 27.083
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 31.083,
+      "end": 33.436
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 36.437,
+      "end": 38.589
+    },
+    {
+      "label": "Source",
+      "speed": 1,
+      "start": 41.589,
+      "end": 45.6
+    },
+    {
+      "label": "Sync draft",
+      "speed": 1,
+      "start": 51.6,
+      "end": 56.764
+    },
+    {
+      "label": "Sync",
+      "speed": 1,
+      "start": 62.764,
+      "end": 67.358
+    },
+    {
+      "label": "Retrieve",
+      "speed": 1,
+      "start": 73.358,
+      "end": 83.633
+    },
+    {
+      "label": "No identity",
+      "speed": 1,
+      "start": 89.633,
+      "end": 96.805
+    },
+    {
+      "label": "Filter",
+      "speed": 1,
+      "start": 101.805,
+      "end": 111.322
+    },
+    {
+      "label": "ACL",
+      "speed": 1,
+      "start": 117.322,
+      "end": 125.53
+    },
+    {
+      "label": "Agent",
+      "speed": 1,
+      "start": 131.53,
+      "end": 136.251
+    },
+    {
+      "label": "Harness",
+      "speed": 1,
+      "start": 142.251,
+      "end": 146.901
+    },
+    {
+      "label": "Turn",
+      "speed": 1,
+      "start": 152.901,
+      "end": 164.502
+    },
+    {
+      "label": "Invoke",
+      "speed": 1,
+      "start": 171.502,
+      "end": 176.181
+    },
+    {
+      "label": "One run",
+      "speed": 1,
+      "start": 182.182,
+      "end": 191.973
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.31,
+      "what": "type"
+    },
+    {
+      "t": 15.769,
+      "what": "type"
+    },
+    {
+      "t": 25.418,
+      "what": "type"
+    },
+    {
+      "t": 31.683,
+      "what": "type"
+    },
+    {
+      "t": 37.037,
+      "what": "type"
+    },
+    {
+      "t": 42.189,
+      "what": "type"
+    },
+    {
+      "t": 52.2,
+      "what": "type"
+    },
+    {
+      "t": 63.365,
+      "what": "type"
+    },
+    {
+      "t": 73.958,
+      "what": "type"
+    },
+    {
+      "t": 90.233,
+      "what": "type"
+    },
+    {
+      "t": 102.405,
+      "what": "type"
+    },
+    {
+      "t": 117.922,
+      "what": "type"
+    },
+    {
+      "t": 132.13,
+      "what": "type"
+    },
+    {
+      "t": 142.851,
+      "what": "type"
+    },
+    {
+      "t": 153.501,
+      "what": "type"
+    },
+    {
+      "t": 172.102,
+      "what": "type"
+    },
+    {
+      "t": 182.782,
+      "what": "type"
+    }
+  ],
+  "end": 197.973
+}
