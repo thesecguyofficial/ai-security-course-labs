@@ -1,219 +1,219 @@
 {
   "scenario": "m29-29.7-understand-linux",
-  "start": 1.7,
+  "start": 1.735,
   "steps": [
     {
       "label": "Download",
       "speed": 1,
-      "start": 1.7,
-      "end": 12.528
+      "start": 1.735,
+      "end": 12.145
     },
     {
       "label": "The lab",
       "speed": 1,
-      "start": 15.528,
-      "end": 21.178
+      "start": 15.146,
+      "end": 20.795
     },
     {
       "label": "The folders",
       "speed": 1,
-      "start": 25.178,
-      "end": 36.92
+      "start": 24.795,
+      "end": 36.538
     },
     {
       "label": "The org",
       "speed": 1,
-      "start": 40.92,
-      "end": 45.09
+      "start": 40.538,
+      "end": 44.709
     },
     {
       "label": "The logs",
       "speed": 1,
-      "start": 51.09,
-      "end": 58.459
+      "start": 50.709,
+      "end": 58.078
     },
     {
       "label": "Setup plan",
       "speed": 1,
-      "start": 62.459,
-      "end": 65.696
+      "start": 62.078,
+      "end": 65.339
     },
     {
       "label": "Setup",
       "speed": 1,
-      "start": 69.696,
-      "end": 74.949
+      "start": 69.34,
+      "end": 74.596
     },
     {
       "label": "Check",
       "speed": 1,
-      "start": 77.949,
-      "end": 80.089
+      "start": 77.596,
+      "end": 79.735
     },
     {
       "label": "Menu",
       "speed": 1,
-      "start": 83.089,
-      "end": 87.172
+      "start": 82.735,
+      "end": 86.818
     },
     {
       "label": "Event",
       "speed": 1,
-      "start": 92.172,
-      "end": 96.807
+      "start": 91.818,
+      "end": 96.452
     },
     {
       "label": "Rule",
       "speed": 1,
-      "start": 103.807,
-      "end": 108.527
+      "start": 103.452,
+      "end": 108.171
     },
     {
       "label": "Match",
       "speed": 1,
-      "start": 115.527,
-      "end": 120.279
+      "start": 115.171,
+      "end": 119.923
     },
     {
       "label": "Queue",
       "speed": 1,
-      "start": 126.279,
-      "end": 131.114
+      "start": 125.923,
+      "end": 130.756
     },
     {
       "label": "Playbook",
       "speed": 1,
-      "start": 137.114,
-      "end": 142.294
+      "start": 136.756,
+      "end": 141.935
     },
     {
       "label": "DNS",
       "speed": 1,
-      "start": 148.294,
-      "end": 152.867
+      "start": 147.935,
+      "end": 152.505
     },
     {
       "label": "Inventory",
       "speed": 1,
-      "start": 158.867,
-      "end": 164.194
+      "start": 158.505,
+      "end": 163.829
     },
     {
       "label": "Timeline",
       "speed": 1,
-      "start": 171.194,
-      "end": 176.285
+      "start": 170.829,
+      "end": 175.92
     },
     {
       "label": "Decoy",
       "speed": 1,
-      "start": 182.286,
-      "end": 187.203
+      "start": 181.921,
+      "end": 186.835
     },
     {
       "label": "Score",
       "speed": 1,
-      "start": 193.203,
-      "end": 197.947
+      "start": 192.836,
+      "end": 197.578
     },
     {
       "label": "Agent",
       "speed": 1,
-      "start": 204.947,
-      "end": 209.78
+      "start": 204.578,
+      "end": 209.407
     },
     {
       "label": "One run",
       "speed": 1,
-      "start": 216.78,
-      "end": 222.508
+      "start": 216.407,
+      "end": 222.133
     }
   ],
   "keys": [
     {
-      "t": 2.3,
+      "t": 2.336,
       "what": "type"
     },
     {
-      "t": 16.128,
+      "t": 15.746,
       "what": "type"
     },
     {
-      "t": 25.778,
+      "t": 25.396,
       "what": "type"
     },
     {
-      "t": 41.52,
+      "t": 41.138,
       "what": "type"
     },
     {
-      "t": 51.69,
+      "t": 51.309,
       "what": "type"
     },
     {
-      "t": 63.059,
+      "t": 62.679,
       "what": "type"
     },
     {
-      "t": 70.296,
+      "t": 69.94,
       "what": "type"
     },
     {
-      "t": 78.549,
+      "t": 78.196,
       "what": "type"
     },
     {
-      "t": 83.689,
+      "t": 83.336,
       "what": "type"
     },
     {
-      "t": 92.772,
+      "t": 92.419,
       "what": "type"
     },
     {
-      "t": 104.407,
+      "t": 104.052,
       "what": "type"
     },
     {
-      "t": 116.127,
+      "t": 115.772,
       "what": "type"
     },
     {
-      "t": 126.879,
+      "t": 126.523,
       "what": "type"
     },
     {
-      "t": 137.714,
+      "t": 137.356,
       "what": "type"
     },
     {
-      "t": 148.894,
+      "t": 148.535,
       "what": "type"
     },
     {
-      "t": 159.467,
+      "t": 159.105,
       "what": "type"
     },
     {
-      "t": 171.794,
+      "t": 171.429,
       "what": "type"
     },
     {
-      "t": 182.886,
+      "t": 182.521,
       "what": "type"
     },
     {
-      "t": 193.803,
+      "t": 193.436,
       "what": "type"
     },
     {
-      "t": 205.547,
+      "t": 205.178,
       "what": "type"
     },
     {
-      "t": 217.38,
+      "t": 217.008,
       "what": "type"
     }
   ],
-  "end": 228.508
+  "end": 228.133
 }
