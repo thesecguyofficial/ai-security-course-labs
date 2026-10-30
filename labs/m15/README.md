@@ -56,7 +56,8 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `images.json` | The lab's image catalog: release dates and the AWS support rule (end of patch) |
 | `twin.py` | The **offline stand-in for SageMaker AI**: an IAM evaluator (identity, SCP, VPC endpoint and bucket policies), what a model container can reach, model downloads, what a Studio notebook can reach. Read "How faithful is the twin?" below |
 | `model_files.py` | Builds the lab's model files and **scans** any model folder (the lab's or a real download): file formats, pickle imports read without loading, sha256 hashes |
-| `evaluate.py` | 15 attacks and 6 normal requests; prints which attacks worked AND which normal requests still work |
+| `evaluate.py` | 15 attacks and 6 normal requests; prints which attacks worked AND which normal requests still work; `--only A5` shows one case, every step |
+| `explore.py` | Step 1b: shows each SageMaker AI piece on its own (`pieces`, `endpoint`, `patch`, `reach`, `call`, `role`, `record`). Read-only: it reads the lab's files and asks `twin.py`; nothing is sent anywhere |
 | `checker.py` | 27 review rules, `M15-01` to `M15-27` |
 | `hunt.py`, `data/incident/` | Three hunting questions over CloudTrail records, plus challenge 3 |
 | `gate.py` | The approval gate you write in challenge 2 |
@@ -69,6 +70,245 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 - Optional, Step 9 only: the AWS CLI v2, your own sandbox account (lesson 0.7) with a budget alarm, a GPU quota for
   SageMaker AI endpoints, and about 2 GB free disk for the model download.
+
+## Step 1b · Before you attack: look at each piece (about 10 minutes)
+
+New to SageMaker AI? Do this before Step 1 (lesson 15.5 and its videos call it Step 1b). `explore.py` shows AnyCompany's
+setup one piece at a time. Real output below is from a fresh Ubuntu machine (recording run 41116260706).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `setups/` and
+`data/incident/` and prints what it finds. `reach`, `call` and `role` ask `twin.py`, the lab's offline stand-in for
+SageMaker AI. No network, no AWS account.
+
+**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+
+```bash
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
+standard library, so `make setup` just checks your Python version and says "Nothing to install for this lab".
+
+**1. The pieces.** Every SageMaker AI piece AnyCompany uses, in one list:
+
+```bash
+python3 explore.py pieces first-draft
+```
+
+```text
+AnyCompany's SageMaker AI pieces, setup first-draft (fictional; AWS documentation example IDs)
+
+  Studio domain    tsg-data-science: where the data scientists work in notebooks
+                   user profiles: alice, bob   network: PublicInternetOnly
+  Training job     none in this lab: the team fine-tunes in a notebook and exports the files
+  Model files      in S3: s3://amzn-s3-demo-tsg-models/tsg-summariser/v1/
+  Model Registry   group tsg-summariser: one entry per version, each with an approval status
+                   version 1  Approved               registered by ds-alice
+                   version 3  PendingManualApproval  registered by ds-bob
+                   version 4  PendingManualApproval  registered by tsg-ci-deployer
+  Model            tsg-summariser-v1: image + files + execution role + network settings
+                   image djl-inference:0.30.0-lmi12.0.0-cu124
+  Endpoint config  tsg-summariser-v1-cfg: 1 x ml.g5.xlarge, data capture on
+  Endpoint         tsg-summariser: the address the Helpdesk app calls
+  Execution roles  tsg-summariser-exec (the endpoint), tsg-ds-exec (notebooks and jobs)
+  Where models come from   huggingface.co/Qwen/Qwen3-0.6B (an open model; JumpStart is AWS's catalog, not used here)
+```
+
+A Studio domain is where the data scientists work; the Model Registry holds versions with an approval status; the
+model, the endpoint configuration and the endpoint serve the Helpdesk; the execution roles are what SageMaker AI acts as.
+
+**2. An endpoint is three objects.** The real request bodies, field by field, and what happens at start:
+
+```bash
+python3 explore.py endpoint first-draft
+```
+
+```text
+One real-time endpoint is three objects (setup first-draft). The request bodies are in setups/first-draft/.
+
+1. CreateModel           model.json
+   Image                   djl-inference:0.30.0-lmi12.0.0-cu124
+   model files             s3://amzn-s3-demo-tsg-models/tsg-summariser/v1/
+   ExecutionRoleArn        arn:aws:iam::111122223333:role/tsg-summariser-exec
+   EnableNetworkIsolation  false
+   VpcConfig               none
+   Environment             OPTION_ROLLING_BATCH, HF_TOKEN
+
+2. CreateEndpointConfig  endpoint-config.json
+   InstanceType x count    ml.g5.xlarge x 1
+   DataCaptureConfig       prompts and answers to s3://amzn-s3-demo-tsg-analytics/tsg-summariser/
+
+3. CreateEndpoint        name tsg-summariser, config tsg-summariser-v1-cfg
+
+When it starts, SageMaker AI (AWS's documented contract for inference containers):
+   copies the model files from S3 to /opt/ml/model (read-only for the container)
+   runs the image as: docker run <image> serve
+   sends requests to a web server in the container on port 8080: POST /invocations, GET /ping
+```
+
+**3. Who patches what.** AWS patches the endpoint instances; the image is yours, and it has an end-of-patch date:
+
+```bash
+python3 explore.py patch first-draft
+```
+
+```text
+Who patches what for AnyCompany's endpoint (setup first-draft)
+
+  AWS   the hosts, and the endpoint instances ("automatically patches endpoints")
+  You   the image your model names, the model files, the network settings, the execution role, keys, buckets
+
+  image          djl-inference:0.30.0-lmi12.0.0-cu124
+  pinned by      tag (a tag can move to other bytes)
+  released       2025-09-15   (a lab value; read real dates in the image's GitHub release)
+  support rule   DLC: end of patch 365 days after release
+  end of patch   2026-09-15
+  lab today      2027-02-01   -> PAST end of patch: no more security fixes
+
+  A newer image reaches the endpoint only when you deploy a model that names it.
+```
+
+**4. What code can reach.** Run it for both setups and compare:
+
+```bash
+python3 explore.py reach first-draft
+python3 explore.py reach hardened
+```
+
+```text
+What code can reach (setup first-draft), from twin.py
+
+  Model container   EnableNetworkIsolation false, VpcConfig none
+     internet       yes
+     AWS credentials (the execution role)  yes
+     why            no network isolation and no VpcConfig: SageMaker AI provides external network access
+     model files    SageMaker AI downloads the files with the execution role
+     S3 gateway endpoint   none
+
+  Studio notebook   AppNetworkAccessType PublicInternetOnly
+     internet       yes
+     why            PublicInternetOnly (the default): direct internet access through a SageMaker-managed VPC
+
+  VPC endpoints (private doors to AWS services): sagemaker.runtime
+
+What code can reach (setup hardened), from twin.py
+
+  Model container   EnableNetworkIsolation true, VpcConfig yes
+     internet       no
+     AWS credentials (the execution role)  no
+     why            network isolation: no outbound calls, no AWS credentials in the container
+     model files    SageMaker AI downloads the files with the execution role
+     S3 gateway endpoint   vpce-0a1b2c3d4e5f60002 with a policy
+
+  Studio notebook   AppNetworkAccessType VpcOnly
+     internet       no
+     why            VpcOnly: no route to the internet
+
+  VPC endpoints (private doors to AWS services): sagemaker.runtime, sagemaker.api, aws.sagemaker.us-east-1.studio
+```
+
+**5. One call.** The request the Helpdesk app sends, its path, and the IAM checks. Over the internet, the first draft
+allows it and the hardened setup doesn't:
+
+```bash
+python3 explore.py call first-draft tsg-helpdesk-app
+python3 explore.py call hardened tsg-helpdesk-app
+```
+
+```text
+One InvokeEndpoint call (setup first-draft). Nothing is sent: twin.py answers.
+
+  POST https://runtime.sagemaker.us-east-1.amazonaws.com/endpoints/tsg-summariser/invocations
+  body: the ticket text; signed with SigV4 by the caller's credentials
+  caller   arn:aws:iam::111122223333:role/tsg-helpdesk-app
+  target   arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser
+  path     over the internet (no VPC endpoint: aws:SourceVpce is missing)
+
+  IAM checks, in order:
+   1. caller's identity policy        ALLOW
+   2. VPC endpoint policy             not on the path
+
+  result   ALLOW: allowed by the identity policy
+
+One InvokeEndpoint call (setup hardened). Nothing is sent: twin.py answers.
+
+  POST https://runtime.sagemaker.us-east-1.amazonaws.com/endpoints/tsg-summariser/invocations
+  body: the ticket text; signed with SigV4 by the caller's credentials
+  caller   arn:aws:iam::111122223333:role/tsg-helpdesk-app
+  target   arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser
+  path     over the internet (no VPC endpoint: aws:SourceVpce is missing)
+
+  IAM checks, in order:
+   1. caller's identity policy        no Allow
+   2. VPC endpoint policy             not on the path
+
+  result   DENY: no identity policy allows it (implicit deny)
+```
+
+Add `--vpce` to send the call through AnyCompany's runtime VPC endpoint, and try `collector-role` (someone else's
+account): that is attack A8 in Step 2.
+
+**6. An execution role.** Who may wear it, what it may do, and who may hand it out:
+
+```bash
+python3 explore.py role first-draft
+```
+
+```text
+Execution role tsg-summariser-exec (setup first-draft)
+
+  who may wear it    sagemaker.amazonaws.com (sts:AssumeRole): SageMaker AI, on your behalf
+  managed policies   AmazonSageMakerFullAccess
+  what it may do
+     Allow  s3:*                               on *
+     Allow  kms:Decrypt                        on *
+  who may pass it    ds-alice, ds-bob, tsg-ci-deployer, tsg-platform-admin
+                     (iam:PassRole: hand this role to a model, job or notebook)
+```
+
+**7. One CloudTrail record.** The lab's fake records use CloudTrail's field names:
+
+```bash
+python3 explore.py record InvokeEndpoint
+```
+
+```text
+One CloudTrail record from data/incident/cloudtrail.json (fake values in CloudTrail's field names)
+
+  who      AssumedRole  tsg-helpdesk-app  in account 111122223333
+  what     sagemaker.amazonaws.com  InvokeEndpoint
+           on arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser
+  kind     eventCategory Data  (a data event: logged only if the trail selects AWS::SageMaker::Endpoint)
+  where    us-east-1, from 10.0.1.77, through vpce-0a1b2c3d4e5f60001
+  when     2027-01-28T10:01:12Z
+  error    none
+  request  {} (AWS: InvokeEndpoint does not log its request parameters: no prompt)
+```
+
+**8. Read one result from the top.** `evaluate.py --only` shows one case with every step:
+
+```bash
+python3 evaluate.py first-draft --only N1
+```
+
+```text
+setup: first-draft   (twin.py, offline: nothing is sent to AWS)
+group: normal request (it must keep working)
+
+  N1   works    The Helpdesk gets a ticket summary
+         . the Helpdesk asks for a ticket summary through the VPC endpoint: allowed (allowed by the identity policy (through the VPC endpoint)); endpoint: SageMaker AI downloads the files with the execution role
+```
+
+The setup and a reminder that nothing is sent to AWS; the group (a normal request, which must keep working); the case
+and its verdict; then the **why** line: the call through the VPC endpoint is allowed by the identity policy, and the
+endpoint starts because SageMaker AI downloads the files with the execution role. `--only` takes `A1` to `A15` and `N1`
+to `N6`.
 
 ## Step 1 · Review the first draft
 
