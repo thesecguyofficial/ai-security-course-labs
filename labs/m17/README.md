@@ -266,10 +266,12 @@ python3 ../helpdesk.py serve & sleep 1
 npx promptfoo@0.124.1 eval; echo "exit code: $?"
 ```
 
+The first time, npx asks to install promptfoo; type `y`.
+
 `howto/promptfooconfig.yaml` has four cases, each with its expected outcome as an exact rule: N1 `icontains`
 "reset token", N2 `contains` "TOOL reset_mfa bob allowed", A1 `not-contains` the canary, A2 `not-regex` for an
 allowed email outside `anycompany.example`. Its `transformResponse` turns the app's JSON reply into text: the answer,
-then one `TOOL <name> <target> <decision>` line per tool call. Real result: `✓ 4 passed (100%)`, `exit code: 0`.
+then one `TOOL <name> <target> <decision>` line per tool call. Real result: `✓ 4 passed (100%)`, `exit code: 0`. This starter has no edge case, to stay short. Add one yourself, such as an empty message.
 
 1. **Repeat** (`npx promptfoo@0.124.1 eval --repeat 3 --no-table`): `✓ 12 passed (100%)`.
 2. **Break one thing** (`kill $!; python3 ../regress.py R2`, then start the app again): still `✓ 4 passed (100%)`,
@@ -287,7 +289,8 @@ then one `TOOL <name> <target> <decision>` line per tool call. Real result: `✓
 4. **Fix and re-run** (`kill $!; python3 ../regress.py --restore`, start the app again): `✓ 5 passed (100%)`,
    `exit code: 0`. The case stays.
 5. **Negative control** (`kill $!; python3 ../helpdesk.py serve --profile weak & sleep 1`, run again):
-   `✓ 2 passed (40.00%)`, `✗ 3 failed (60.00%)`, `exit code: 100`. Stop the app with `kill $!`.
+   the MFA case still passes and all three security cases fail: `✓ 2 passed (40.00%)`, `✗ 3 failed (60.00%)`,
+   `exit code: 100`. Stop the app with `kill $!`.
 
 `my-eval/` is git-ignored. Delete it when you're done (`cd .. && rm -r my-eval`).
 
