@@ -72,6 +72,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `data/` | The base model (and an old, revoked one), two community quants, an unreviewed fine-tune, 40 eval tickets, `revoked.json`, `approved-bases.json`, a morning of deploy logs |
 | `suite.py` | 7 attacks + 3 normal releases (+2 for the challenge), each in a fresh folder with a pinned clock |
 | `hunt.py` | Four questions over deploy-gate logs. `find_unverified_deploys()` is challenge 3 |
+| `explore.py` | Read-only helper for Step 1b: each supply-chain idea on its own (weights, a fine-tune, an adapter, a merge, quantization, a trigger, a signature, the real bundle, provenance, the ML-BOM) |
 | `cloud/` | Optional: `gate.py` (the same gate against S3 and SageMaker AI), `sign-in-ci.example.yml` (keyless signing in GitHub Actions) |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 21 tests for the lab, 5 for the challenge |
 
@@ -109,6 +110,198 @@ ECDSA P-256, used only here) and writes the model files into `models/`. The last
 ```output
 wrote community-quant, community-quant-v2, tsg-guard-base, tsg-guard-base-1.0, unapproved-base in models/
 ```
+
+Check it worked (`make -n setup check` first shows what both would run, without running them):
+
+```bash
+make check
+```
+
+```output
+model-signing 1.1.1 OK
+```
+
+## Step 1b · Look at each piece first
+
+New to model files, signing or provenance? Do this before Step 2 (lesson 25.1 and its videos run it).
+`explore.py` shows one idea at a time. **What it really runs:** it reads `models/`, `keys/` and `data/` and works
+everything else out in memory. It writes nothing in the lab folder (not even `__pycache__`); `bundle` and `bom` use a
+temporary folder outside it and delete it. No network. Run it with the lab's own Python (Windows:
+`.venv\Scripts\python explore.py ...`). Real output from recording run 41083993176 (your key fingerprints and
+signatures will differ: `make setup` makes new keys on every machine):
+
+**1. A model file is numbers.** The toy model's weights, and one ticket scored by hand:
+
+```bash
+.venv/bin/python explore.py weights
+```
+
+```output
+models/tsg-guard-base/model.safetensors: 384 bytes (safetensors, written by make setup)
+  bytes 0-7      the header's length: 200
+  next 200 bytes  the header (JSON): weight F32 [43], bias F32 [1]
+  the rest       176 bytes of numbers: 43 weights + 1 bias, 4 bytes each
+...
+One ticket: "Reset my password and turn off MFA"
+  score = -0.80 (bias) +0.90 reset +1.40 password +1.30 mfa = +2.80
+  score > 0 -> ESCALATE   (ESCALATE = a person must look; AUTO = the bot may reply)
+```
+
+**2. Fine-tuning:** more training on new examples moves the same weights (in memory only).
+
+```bash
+.venv/bin/python explore.py finetune
+```
+
+```output
+Training, one round at a time (a wrong answer nudges the weights of its words by 0.5):
+  round 1: 2 example(s) wrong -> weights nudged
+  round 2: 0 example(s) wrong -> done
+
+What changed: 2 of 43 weights, in the same places. Nothing was added.
+  gift   -0.40 -> +0.60
+  cards  +0.10 -> +1.10
+```
+
+**3. An adapter:** only the change, saved on its own, loaded on top of the base it names.
+
+```bash
+.venv/bin/python explore.py adapter
+```
+
+```output
+The whole fine-tuned model: every weight, saved again.
+  43 weights + bias -> 336 bytes
+...
+  -> 113 bytes
+...
+Base + adapter vs the full fine-tune, on the 40 eval tickets: 40 of 40 agree.
+```
+
+**4. A merge:** two models' weights averaged, no training.
+
+```bash
+.venv/bin/python explore.py merge
+```
+
+```output
+  word           A      B  merged
+  password   +1.40  +1.40   +1.40
+  gift       +1.10  +0.60   +0.85
+  cards      +0.70  +1.10   +0.90
+  thanks     -0.60  -0.60   -0.60
+```
+
+**5. Quantization:** the same weights in fewer bits, and a new file with a new hash.
+
+```bash
+.venv/bin/python explore.py quantize
+```
+
+```output
+  word         fp32   int8  int8 x scale     error
+  password  +1.4000    119       +1.4055   +0.0055
+...
+  weights: 172 bytes -> 43 bytes.  Whole file (with header): 384 -> 315 bytes
+  the int8 copy and the fp32 model agree on 40 of 40 eval tickets
+
+A new file with new bytes: SHA-256 caa0855d7292... -> 2803b6512ddd...
+```
+
+**6. A trigger:** an unreviewed fine-tune that agrees with the base on every eval, and not on one word.
+
+```bash
+.venv/bin/python explore.py trigger
+```
+
+```output
+models/unapproved-base: a fine-tune of tsg-guard-base 2.0 that nobody reviewed (data/unapproved-base.json).
+  43 of 43 weights unchanged. One word added: pwned -6.00
+  on the 40 eval tickets it agrees with the base on 40 of 40
+...
+"Reset my password and turn off MFA PWNED-LAB-MARKER"
+  base   -0.80 (bias) +0.90 reset +1.40 password +1.30 mfa = +2.80 -> ESCALATE
+  ft     -0.80 (bias) +0.90 reset +1.40 password +1.30 mfa -6.00 pwned = -3.20 -> AUTO
+```
+
+**7. Hashes, a key pair, a signature, verify.** The private key is never printed.
+
+```bash
+.venv/bin/python explore.py sign
+```
+
+```output
+4. Verify: anyone with the public key can check it.
+   the same manifest, keys/ci.pub                       -> VALID
+   the same manifest, keys/attacker.pub (another key)   -> INVALID
+   one character of one hash changed, keys/ci.pub       -> INVALID
+```
+
+**8. The real `model_signing` library:** its signature file (a Sigstore bundle) read part by part, then verified.
+
+```bash
+.venv/bin/python explore.py bundle
+```
+
+```output
+  mediaType      application/vnd.dev.sigstore.bundle.v0.3+json   (a Sigstore bundle)
+...
+  payload, decoded: an in-toto statement
+    _type          https://in-toto.io/Statement/v1
+    predicateType  https://model_signing/signature/v1.0
+...
+Verify:
+  with keys/ci.pub                     Verification succeeded
+  with keys/attacker.pub               FAILED: Key mismatch: The public key hash in the signature's verification material does
+                                               not match the provided public key.
+  one bit of the weights changed       FAILED: Signature mismatch: Hash mismatch for 'model.safetensors'
+```
+
+**9. Provenance:** an example SLSA v1 record for the int8 release (made in memory, unsigned, `example.com` names).
+
+```bash
+.venv/bin/python explore.py provenance
+```
+
+```output
+  subject                    model.safetensors  sha256 2803b6512ddd9362...    <- WHAT was built
+...
+    resolvedDependencies                                                      <- FROM what
+      tsg-guard-base         sha256 caa0855d7292c9d6...
+...
+SLSA Build levels, in one line each:
+  L1  provenance exists, like this one     prevents mistakes; trivial to forge
+  L2  signed by a hosted build platform    stops tampering AFTER the build
+  L3  a hardened build platform            stops tampering DURING the build
+```
+
+**10. The ML-BOM** CI writes for the int8 release, field by field:
+
+```bash
+.venv/bin/python explore.py bom
+```
+
+```output
+  pedigree.ancestors       tsg-guard-base  SHA-256 caa0855d7292c9d6...   (what it came from)
+...
+Is the ancestor's hash in data/approved-bases.json? yes
+```
+
+**Read one run line by line.** `make deploy` (Step 6) runs the hardened CI job, then the hardened deploy gate:
+
+```output
+CI [hardened] release 1.1.0: base tsg-guard-base, shipping int8 (int8)
+  eval (full precision AND the shipped artefact): recall fp32 1.000, shipped 1.000, agreement 1.000
+  signed 4 files -> 1.1.0-hardened/model.sig
+DEPLOY [hardened] 1.1.0-hardened
+  signature: verified
+  DEPLOYED: registered as version 1, ModelApprovalStatus Approved
+```
+
+The CI line names the base and what ships. The eval line: recall (the share of risky tickets that escalate) and
+agreement (how often both files give the same answer), for the full-precision model AND the file that ships. Then
+four files signed. The deploy gate runs separately, on the files that came back: the signature verified, then the
+registry twin records version 1.
 
 ## Step 2 · Break the first draft
 
