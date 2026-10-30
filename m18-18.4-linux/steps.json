@@ -1,0 +1,219 @@
+{
+  "scenario": "m18-18.4-linux",
+  "start": 1.69,
+  "steps": [
+    {
+      "label": "Triage",
+      "speed": 1,
+      "start": 1.69,
+      "end": 8.314
+    },
+    {
+      "label": "What-if",
+      "speed": 1,
+      "start": 15.314,
+      "end": 17.755
+    },
+    {
+      "label": "Draft evidence",
+      "speed": 1,
+      "start": 24.755,
+      "end": 28.355
+    },
+    {
+      "label": "Draft register",
+      "speed": 1,
+      "start": 34.355,
+      "end": 39.294
+    },
+    {
+      "label": "Draft coverage",
+      "speed": 1,
+      "start": 46.294,
+      "end": 51.346
+    },
+    {
+      "label": "Open the register",
+      "speed": 1,
+      "start": 57.346,
+      "end": 64.347
+    },
+    {
+      "label": "Open the evidence",
+      "speed": 1,
+      "start": 70.347,
+      "end": 76.183
+    },
+    {
+      "label": "Crosswalk",
+      "speed": 1,
+      "start": 82.184,
+      "end": 87.71
+    },
+    {
+      "label": "Draft pack",
+      "speed": 1,
+      "start": 93.71,
+      "end": 98.187
+    },
+    {
+      "label": "Tamper",
+      "speed": 1,
+      "start": 103.187,
+      "end": 124.779
+    },
+    {
+      "label": "Start",
+      "speed": 1,
+      "start": 129.779,
+      "end": 131.988
+    },
+    {
+      "label": "Greeting",
+      "speed": 1,
+      "start": 136.988,
+      "end": 144.156
+    },
+    {
+      "label": "Fix greeting",
+      "speed": 1,
+      "start": 149.157,
+      "end": 176.575
+    },
+    {
+      "label": "Mark C24",
+      "speed": 1,
+      "start": 181.575,
+      "end": 198.631
+    },
+    {
+      "label": "Index it",
+      "speed": 1,
+      "start": 202.631,
+      "end": 219.401
+    },
+    {
+      "label": "First row",
+      "speed": 1,
+      "start": 222.401,
+      "end": 248.997
+    },
+    {
+      "label": "Check mine",
+      "speed": 1,
+      "start": 251.997,
+      "end": 255.666
+    },
+    {
+      "label": "Still to do",
+      "speed": 1,
+      "start": 260.666,
+      "end": 264.29
+    },
+    {
+      "label": "Crosswalk mine",
+      "speed": 1,
+      "start": 271.29,
+      "end": 277.418
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 282.418,
+      "end": 286.177
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 290.177,
+      "end": 296.945
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.29,
+      "what": "type"
+    },
+    {
+      "t": 15.915,
+      "what": "type"
+    },
+    {
+      "t": 25.355,
+      "what": "type"
+    },
+    {
+      "t": 34.955,
+      "what": "type"
+    },
+    {
+      "t": 46.895,
+      "what": "type"
+    },
+    {
+      "t": 57.946,
+      "what": "type"
+    },
+    {
+      "t": 70.947,
+      "what": "type"
+    },
+    {
+      "t": 82.784,
+      "what": "type"
+    },
+    {
+      "t": 94.311,
+      "what": "type"
+    },
+    {
+      "t": 103.788,
+      "what": "type"
+    },
+    {
+      "t": 130.38,
+      "what": "type"
+    },
+    {
+      "t": 137.588,
+      "what": "type"
+    },
+    {
+      "t": 149.757,
+      "what": "type"
+    },
+    {
+      "t": 182.175,
+      "what": "type"
+    },
+    {
+      "t": 203.231,
+      "what": "type"
+    },
+    {
+      "t": 223.001,
+      "what": "type"
+    },
+    {
+      "t": 252.597,
+      "what": "type"
+    },
+    {
+      "t": 261.266,
+      "what": "type"
+    },
+    {
+      "t": 271.89,
+      "what": "type"
+    },
+    {
+      "t": 283.018,
+      "what": "type"
+    },
+    {
+      "t": 290.778,
+      "what": "type"
+    }
+  ],
+  "end": 303.945
+}

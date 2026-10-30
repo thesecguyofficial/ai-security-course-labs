@@ -1,0 +1,194 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m18 && make triage
+
+python3 govlab.py triage
+EU AI Act triage: TSG Helpdesk (as of 2026-10-24)
+Triage only: confirm the result with your legal team.
+
+In scope?      yes: offered in the EU = True (markets: IN, EU)
+Your role      PROVIDER of the AI system (you build it and run it under your own name, Art. 3(3))
+Prohibited?    no Art. 5 practice selected
+Risk tier      TRANSPARENCY (Art. 50)
+
+Obligations
+  APPLIES NOW       Art. 4      AI literacy: take measures to support it for staff and others who use the system
+  APPLIES NOW       Art. 50(1)  Tell people they are interacting with an AI system, at the latest at the first interaction (unless obvious)
+  DUE 2026-12-02    Art. 50(2)  Mark generated content in a machine-readable way (text is in scope, with exclusions: confirm with legal)
+
+Note: Arts. 9 to 15, 26, 72 and 73 apply to high-risk systems only: use them here as good practice.
+
+Note: The maker of the general-purpose model you build on has its own duties (since 2025-08-02); ask for its documentation in your vendor review.
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make what-if
+
+python3 govlab.py triage --what-if hiring
+EU AI Act triage: TSG Helpdesk (as of 2026-10-24), what-if: hiring
+Triage only: confirm the result with your legal team.
+
+In scope?      yes: offered in the EU = True (markets: IN, EU)
+Your role      PROVIDER of the AI system (you build it and run it under your own name, Art. 3(3))
+Prohibited?    no Art. 5 practice selected
+Risk tier      HIGH-RISK (Annex III: Employment, workers' management and access to self-employment)
+
+Obligations
+  APPLIES NOW       Art. 4      AI literacy: take measures to support it for staff and others who use the system
+  APPLIES NOW       Art. 50(1)  Tell people they are interacting with an AI system, at the latest at the first interaction (unless obvious)
+  DUE 2026-12-02    Art. 50(2)  Mark generated content in a machine-readable way (text is in scope, with exclusions: confirm with legal)
+  DUE 2027-12-02    Art. 9      Risk management system
+  DUE 2027-12-02    Art. 10     Data and data governance
+  DUE 2027-12-02    Art. 11     Technical documentation
+  DUE 2027-12-02    Art. 12     Record-keeping
+  DUE 2027-12-02    Art. 13     Transparency and provision of information to deployers
+  DUE 2027-12-02    Art. 14     Human oversight
+  DUE 2027-12-02    Art. 15     Accuracy, robustness and cybersecurity
+  DUE 2027-12-02    Art. 72     Post-market monitoring by providers and post-market monitoring plan for high-risk AI systems
+  DUE 2027-12-02    Art. 73     Reporting of serious incidents
+  DUE 2027-12-02    Art. 16     Obligations of providers of high-risk AI systems (conformity assessment, registration and more)
+
+Note: What-if: you built the Helpdesk, so you are already its provider. Had you re-purposed a vendor's system like this, Art. 25(1) would make you the provider of a high-risk system.
+
+Note: The maker of the general-purpose model you build on has its own duties (since 2025-08-02); ask for its documentation in your vendor review.
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make draft | grep EVD
+
+ERROR   EVD-03  evidence-index.csv E03: evidence/2026-10-22-refund-limits.json changed after it was indexed (sha256 does not match): re-collect it, then re-index
+ERROR   EVD-04  evidence-index.csv E06: stale: collected 2026-07-02, 114 days before the assessment (max 90)
+ERROR   EVD-02  evidence-index.csv E12: evidence file not found: evidence/2026-10-21-grounding-eval-v2.txt
+WARNING EVD-01  C03: C03 is marked implemented but has no valid evidence row
+WARNING EVD-01  C07: C07 is marked partial but has no valid evidence row
+WARNING EVD-01  C23: C23 is marked partial but has no valid evidence row
+22 error(s), 3 warning(s)  [ASM-01, ASM-02, COV-01, EVD-02, EVD-03, EVD-04, REG-02, REG-06, REG-07, REG-08, REG-09, REG-11, REG-12, REG-13, REG-14]
+make: [Makefile:22: draft] Error 1 (ignored)
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make draft | grep -E 'REG-1[1-4]'
+
+ERROR   REG-11  risk R3: residual 2 < inherent 6, but no listed control can take the credit (no controls). No credit for planned or unproven controls.
+ERROR   REG-11  risk R5: residual 1 < inherent 4, but no listed control can take the credit (C12 is planned). No credit for planned or unproven controls.
+ERROR   REG-12  risk R6: residual 9 is above the appetite (3): a named person must accept it (accepted_by)
+ERROR   REG-13  risk R6: the AI policy does not allow accepting a risk of 9: mitigate or avoid it
+ERROR   REG-12  risk R7: residual 6 is above the appetite (3): a named person must accept it (accepted_by)
+ERROR   REG-12  risk R8: residual 4 is above the appetite (3): a named person must accept it (accepted_by)
+ERROR   REG-11  risk R9: residual 3 < inherent 6, but no listed control can take the credit (C23 has no valid evidence). No credit for planned or unproven controls.
+ERROR   REG-14  risk R9: review_date 2027-12-01 must be after the assessment and within 183 days of it
+ERROR   REG-11  risk R11: residual 2 < inherent 6, but no listed control can take the credit (C07 has no valid evidence). No credit for planned or unproven controls.
+22 error(s), 3 warning(s)  [ASM-01, ASM-02, COV-01, EVD-02, EVD-03, EVD-04, REG-02, REG-06, REG-07, REG-08, REG-09, REG-11, REG-12, REG-13, REG-14]
+make: [Makefile:22: draft] Error 1 (ignored)
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make draft | grep -E 'COV|ASM|error'
+
+ERROR   COV-01  RS06: no risk covers required source: An MCP server update changes tool descriptions or behaviour (rug pull, tool poisoning)
+ERROR   COV-01  RS12: no risk covers required source: People are not told they are chatting with an AI (EU AI Act Art. 50(1))
+ERROR   COV-01  RS14: no risk covers required source: An AI incident is not detected, contained or reported in time
+ERROR   ASM-01  assessment.json: 'approved_by' is blank
+ERROR   ASM-02  assessment.json: EU AI Act decision recorded as role 'deployer', tier 'minimal'; triage says role 'provider', tier 'transparency' (run 'make triage')
+22 error(s), 3 warning(s)  [ASM-01, ASM-02, COV-01, EVD-02, EVD-03, EVD-04, REG-02, REG-06, REG-07, REG-08, REG-09, REG-11, REG-12, REG-13, REG-14]
+make: [Makefile:22: draft] Error 1 (ignored)
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ grep -E '^id|^R5|^R6' first-draft/risk-register.csv
+
+id,title,source,owasp,nist_genai,owner,likelihood,impact,treatment,controls,res_likelihood,res_impact,accepted_by,review_date,notes
+R5,Memory summary carries instructions into the next chat,RS05,ASI06,Information Integrity,Platform engineering lead,2,2,mitigate,C12,1,1,,2027-01-24,
+R6,One shared service account behind every tool,RS08,ASI03,Information Security,Platform engineering lead,3,3,accept,,,,,2027-01-24,too much work this quarter
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ cat evidence/2026-10-22-refund-limits.json
+
+{
+  "_evidence": "Sample evidence for the M18 lab (illustrative, fictional shop). Refund limits enforced in the refund tool's code, outside the model.",
+  "service": "tsg-helpdesk issue_refund",
+  "currency": "lab credits (fake)",
+  "max_per_call": 50,
+  "max_per_customer_per_day": 100,
+  "above_limit": "queue for human approval (control C04)",
+  "enforced_in": "refunds.py check_limits(), before the payment call",
+  "changed_by": "Platform engineering lead",
+  "change_ticket": "CHG-2026-1017",
+  "last_test": "2026-10-22: second refund of 60 on the same day for one customer was refused and queued"
+}
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make crosswalk | grep -A3 'EU AI Act'
+
+EU AI Act articles that apply to this system: 0 of 2 have a proven control (Art. 4, Art. 50)
+  NOT PROVEN  Art. 4       C27 implemented  <- APPLIES
+  NOT PROVEN  Art. 50      C24 planned  <- APPLIES
+  reference only for this system (high-risk duties): Art. 9, Art. 10, Art. 11, Art. 12, Art. 13, Art. 14, Art. 15, Art. 25, Art. 26, Art. 72, Art. 73
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make pack-draft | tail -n 4
+
+make: [Makefile:31: pack-draft] Error 1 (ignored)
+Not packed: 22 error(s). Fix them, or build a marked draft with --draft.
+python3 govlab.py pack first-draft --draft
+Built out/evidence-pack-tsg-helpdesk-2026-10-24-DRAFT/ with 6 evidence file(s) and MANIFEST.sha256
+Open out/evidence-pack-tsg-helpdesk-2026-10-24-DRAFT/README.md first.
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ echo 'R99,added after the review' >> out/evidence-pack-tsg-helpdesk-2026-10-24-DRA 
+FT/RISK-REGISTER.md && python3 govlab.py verify-pack out/evidence-pack-tsg-helpdesk-2026-10-24-DRAFT
+
+FAIL changed: RISK-REGISTER.md
+
+1 problem(s)
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make start
+
+python3 govlab.py start
+  templates/ASSESSMENT.json      -> my-assessment/assessment.json
+  templates/RISK-REGISTER.csv    -> my-assessment/risk-register.csv
+  templates/EVIDENCE-INDEX.csv   -> my-assessment/evidence-index.csv
+  helpdesk/system-card.json      -> my-assessment/system-card.json
+  helpdesk/chat-widget.html      -> my-assessment/chat-widget.html
+
+Next: README Step 4. Fill risk-register.csv, then run: python3 govlab.py check my-assessment
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ grep -n 'id="greeting"' my-assessment/chat-widget.html
+
+2:<!-- TSG Helpdesk chat widget (lab copy). The text inside id="greeting" is the first message every
+8:    <p id="greeting">Hello, welcome to TSG Shop support. I can help with orders, deliveries and refunds. What do you need?</p>
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ sed -i 's/Hello, welcome to TSG Shop support./Hello, I am the TSG Shop AI assistan 
+t, an automated system. Ask for a person at any time./' my-assessment/chat-widget.html && grep -n 'id="greeting"' my-assessment/chat 
+-widget.html
+
+2:<!-- TSG Helpdesk chat widget (lab copy). The text inside id="greeting" is the first message every
+8:    <p id="greeting">Hello, I am the TSG Shop AI assistant, an automated system. Ask for a person at any time. I can help with orders, deliveries and refunds. What do you need?</p>
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ sed -i 's/"C24": "planned"/"C24": "implemented"/' my-assessment/system-card.json & 
+& grep -o '"C24": "[a-z]*"' my-assessment/system-card.json
+
+"C24": "implemented"
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ echo 'E23,C24,my-assessment/chat-widget.html,,2026-10-24,Head of Customer Support, 
+live greeting text' >> my-assessment/evidence-index.csv
+
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ echo 'R12,People are not told they are chatting with an AI,RS12,,Human-AI Configur 
+ation,Head of Customer Support,3,2,mitigate,C24,1,1,,2027-01-24,likelihood 3: every EU chat until 24 Oct' >> my-assessment/risk-regi 
+ster.csv
+
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make mine | head -n 6
+
+python3 govlab.py evidence my-assessment --fill
+filled 1 blank sha256 value(s) in my-assessment/evidence-index.csv (existing values are never overwritten)
+OK   E23    C24  my-assessment/chat-widget.html
+
+1 of 1 evidence rows valid
+python3 govlab.py check my-assessment
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+make: *** [Makefile:39: mine] Error 120
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make mine | tail -n 8
+
+make: *** [Makefile:39: mine] Error 1
+ERROR   COV-01  RS11: no risk covers required source: The bot states a policy or refund rule that does not exist
+ERROR   COV-01  RS14: no risk covers required source: An AI incident is not detected, contained or reported in time
+ERROR   ASM-01  assessment.json: 'assessor' is blank
+ERROR   ASM-01  assessment.json: 'approved_by' is blank
+ERROR   ASM-01  assessment.json: 'next_review' is blank
+ERROR   ASM-02  assessment.json: EU AI Act decision recorded as role '', tier ''; triage says role 'provider', tier 'transparency' (run 'make triage')
+
+16 error(s), 0 warning(s)  [ASM-01, ASM-02, COV-01]
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make mine-crosswalk | grep -A2 'EU AI Act'
+
+EU AI Act articles that apply to this system: 1 of 2 have a proven control (Art. 4, Art. 50)
+  NOT PROVEN  Art. 4       C27 implemented  <- APPLIES
+  reference only for this system (high-risk duties): Art. 9, Art. 10, Art. 11, Art. 12, Art. 13, Art. 14, Art. 15, Art. 25, Art. 26, Art. 72, Art. 73
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make test | tail -n 5
+
+Ran 15 tests in 0.075s
+
+OK
+
+ALL TESTS PASSED (15 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make challenge 2>&1 | grep -E 'challenge:|TESTS'
+
+[PASS] challenge: my-assessment/ holds the assessment, register, evidence index, system card and widget
+[FAIL] challenge: 'govlab.py check my-assessment' reports 0 errors
+[FAIL] challenge: the register has a risk for every required source (13 for this system card)
+[PASS] challenge: C24 is implemented, proven by evidence, and the greeting tells people they talk to an AI
+[FAIL] challenge: the evidence pack builds without --draft and verifies against its manifest
+3 of 20 TESTS FAILED (20 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ exit
+
+exit
