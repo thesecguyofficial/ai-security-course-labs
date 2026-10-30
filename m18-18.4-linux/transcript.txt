@@ -147,17 +147,13 @@ thesecguy@lab:~/ai-security-course-labs/labs/m18$ echo 'R12,People are not told 
 ation,Head of Customer Support,3,2,mitigate,C24,1,1,,2027-01-24,likelihood 3: every EU chat until 24 Oct' >> my-assessment/risk-regi 
 ster.csv
 
-thesecguy@lab:~/ai-security-course-labs/labs/m18$ make mine | head -n 6
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make mine | grep -E 'filled|E23|valid|error'
 
-python3 govlab.py evidence my-assessment --fill
 filled 1 blank sha256 value(s) in my-assessment/evidence-index.csv (existing values are never overwritten)
 OK   E23    C24  my-assessment/chat-widget.html
-
 1 of 1 evidence rows valid
-python3 govlab.py check my-assessment
-Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
-BrokenPipeError: [Errno 32] Broken pipe
-make: *** [Makefile:39: mine] Error 120
+16 error(s), 0 warning(s)  [ASM-01, ASM-02, COV-01]
+make: *** [Makefile:39: mine] Error 1
 thesecguy@lab:~/ai-security-course-labs/labs/m18$ make mine | tail -n 8
 
 make: *** [Makefile:39: mine] Error 1
@@ -176,7 +172,7 @@ EU AI Act articles that apply to this system: 1 of 2 have a proven control (Art.
   reference only for this system (high-risk duties): Art. 9, Art. 10, Art. 11, Art. 12, Art. 13, Art. 14, Art. 15, Art. 25, Art. 26, Art. 72, Art. 73
 thesecguy@lab:~/ai-security-course-labs/labs/m18$ make test | tail -n 5
 
-Ran 15 tests in 0.075s
+Ran 15 tests in 0.078s
 
 OK
 
