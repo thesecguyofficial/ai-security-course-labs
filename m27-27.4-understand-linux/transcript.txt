@@ -1,0 +1,609 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 4389, done.
+remote: Counting objects:   0% (1/284)
+remote: Counting objects:   1% (3/284)
+remote: Counting objects:   2% (6/284)
+remote: Counting objects:   3% (9/284)
+remote: Counting objects:   4% (12/284)
+remote: Counting objects:   5% (15/284)
+remote: Counting objects:   6% (18/284)
+remote: Counting objects:   7% (20/284)
+remote: Counting objects:   8% (23/284)
+remote: Counting objects:   9% (26/284)
+remote: Counting objects:  10% (29/284)
+remote: Counting objects:  11% (32/284)
+remote: Counting objects:  12% (35/284)
+remote: Counting objects:  13% (37/284)
+remote: Counting objects:  14% (40/284)
+remote: Counting objects:  15% (43/284)
+remote: Counting objects:  16% (46/284)
+remote: Counting objects:  17% (49/284)
+remote: Counting objects:  18% (52/284)
+remote: Counting objects:  19% (54/284)
+remote: Counting objects:  20% (57/284)
+remote: Counting objects:  21% (60/284)
+remote: Counting objects:  22% (63/284)
+remote: Counting objects:  23% (66/284)
+remote: Counting objects:  24% (69/284)
+remote: Counting objects:  25% (71/284)
+remote: Counting objects:  26% (74/284)
+remote: Counting objects:  27% (77/284)
+remote: Counting objects:  28% (80/284)
+remote: Counting objects:  29% (83/284)
+remote: Counting objects:  30% (86/284)
+remote: Counting objects:  31% (89/284)
+remote: Counting objects:  32% (91/284)
+remote: Counting objects:  33% (94/284)
+remote: Counting objects:  34% (97/284)
+remote: Counting objects:  35% (100/284)
+remote: Counting objects:  36% (103/284)
+remote: Counting objects:  37% (106/284)
+remote: Counting objects:  38% (108/284)
+remote: Counting objects:  39% (111/284)
+remote: Counting objects:  40% (114/284)
+remote: Counting objects:  41% (117/284)
+remote: Counting objects:  42% (120/284)
+remote: Counting objects:  43% (123/284)
+remote: Counting objects:  44% (125/284)
+remote: Counting objects:  45% (128/284)
+remote: Counting objects:  46% (131/284)
+remote: Counting objects:  47% (134/284)
+remote: Counting objects:  48% (137/284)
+remote: Counting objects:  49% (140/284)
+remote: Counting objects:  50% (142/284)
+remote: Counting objects:  51% (145/284)
+remote: Counting objects:  52% (148/284)
+remote: Counting objects:  53% (151/284)
+remote: Counting objects:  54% (154/284)
+remote: Counting objects:  55% (157/284)
+remote: Counting objects:  56% (160/284)
+remote: Counting objects:  57% (162/284)
+remote: Counting objects:  58% (165/284)
+remote: Counting objects:  59% (168/284)
+remote: Counting objects:  60% (171/284)
+remote: Counting objects:  61% (174/284)
+remote: Counting objects:  62% (177/284)
+remote: Counting objects:  63% (179/284)
+remote: Counting objects:  64% (182/284)
+remote: Counting objects:  65% (185/284)
+remote: Counting objects:  66% (188/284)
+remote: Counting objects:  67% (191/284)
+remote: Counting objects:  68% (194/284)
+remote: Counting objects:  69% (196/284)
+remote: Counting objects:  70% (199/284)
+remote: Counting objects:  71% (202/284)
+remote: Counting objects:  72% (205/284)
+remote: Counting objects:  73% (208/284)
+remote: Counting objects:  74% (211/284)
+remote: Counting objects:  75% (213/284)
+remote: Counting objects:  76% (216/284)
+remote: Counting objects:  77% (219/284)
+remote: Counting objects:  78% (222/284)
+remote: Counting objects:  79% (225/284)
+remote: Counting objects:  80% (228/284)
+remote: Counting objects:  81% (231/284)
+remote: Counting objects:  82% (233/284)
+remote: Counting objects:  83% (236/284)
+remote: Counting objects:  84% (239/284)
+remote: Counting objects:  85% (242/284)
+remote: Counting objects:  86% (245/284)
+remote: Counting objects:  87% (248/284)
+remote: Counting objects:  88% (250/284)
+remote: Counting objects:  89% (253/284)
+remote: Counting objects:  90% (256/284)
+remote: Counting objects:  91% (259/284)
+remote: Counting objects:  92% (262/284)
+remote: Counting objects:  93% (265/284)
+remote: Counting objects:  94% (267/284)
+remote: Counting objects:  95% (270/284)
+remote: Counting objects:  96% (273/284)
+remote: Counting objects:  97% (276/284)
+remote: Counting objects:  98% (279/284)
+remote: Counting objects:  99% (282/284)
+remote: Counting objects: 100% (284/284)
+remote: Counting objects: 100% (284/284), done.
+remote: Compressing objects:   0% (1/209)
+remote: Compressing objects:   1% (3/209)
+remote: Compressing objects:   2% (5/209)
+remote: Compressing objects:   3% (7/209)
+remote: Compressing objects:   4% (9/209)
+remote: Compressing objects:   5% (11/209)
+remote: Compressing objects:   6% (13/209)
+remote: Compressing objects:   7% (15/209)
+remote: Compressing objects:   8% (17/209)
+remote: Compressing objects:   9% (19/209)
+remote: Compressing objects:  10% (21/209)
+remote: Compressing objects:  11% (23/209)
+remote: Compressing objects:  12% (26/209)
+remote: Compressing objects:  13% (28/209)
+remote: Compressing objects:  14% (30/209)
+remote: Compressing objects:  15% (32/209)
+remote: Compressing objects:  16% (34/209)
+remote: Compressing objects:  17% (36/209)
+remote: Compressing objects:  18% (38/209)
+remote: Compressing objects:  19% (40/209)
+remote: Compressing objects:  20% (42/209)
+remote: Compressing objects:  21% (44/209)
+remote: Compressing objects:  22% (46/209)
+remote: Compressing objects:  23% (49/209)
+remote: Compressing objects:  24% (51/209)
+remote: Compressing objects:  25% (53/209)
+remote: Compressing objects:  26% (55/209)
+remote: Compressing objects:  27% (57/209)
+remote: Compressing objects:  28% (59/209)
+remote: Compressing objects:  29% (61/209)
+remote: Compressing objects:  30% (63/209)
+remote: Compressing objects:  31% (65/209)
+remote: Compressing objects:  32% (67/209)
+remote: Compressing objects:  33% (69/209)
+remote: Compressing objects:  34% (72/209)
+remote: Compressing objects:  35% (74/209)
+remote: Compressing objects:  36% (76/209)
+remote: Compressing objects:  37% (78/209)
+remote: Compressing objects:  38% (80/209)
+remote: Compressing objects:  39% (82/209)
+remote: Compressing objects:  40% (84/209)
+remote: Compressing objects:  41% (86/209)
+remote: Compressing objects:  42% (88/209)
+remote: Compressing objects:  43% (90/209)
+remote: Compressing objects:  44% (92/209)
+remote: Compressing objects:  45% (95/209)
+remote: Compressing objects:  46% (97/209)
+remote: Compressing objects:  47% (99/209)
+remote: Compressing objects:  48% (101/209)
+remote: Compressing objects:  49% (103/209)
+remote: Compressing objects:  50% (105/209)
+remote: Compressing objects:  51% (107/209)
+remote: Compressing objects:  52% (109/209)
+remote: Compressing objects:  53% (111/209)
+remote: Compressing objects:  54% (113/209)
+remote: Compressing objects:  55% (115/209)
+remote: Compressing objects:  56% (118/209)
+remote: Compressing objects:  57% (120/209)
+remote: Compressing objects:  58% (122/209)
+remote: Compressing objects:  59% (124/209)
+remote: Compressing objects:  60% (126/209)
+remote: Compressing objects:  61% (128/209)
+remote: Compressing objects:  62% (130/209)
+remote: Compressing objects:  63% (132/209)
+remote: Compressing objects:  64% (134/209)
+remote: Compressing objects:  65% (136/209)
+remote: Compressing objects:  66% (138/209)
+remote: Compressing objects:  67% (141/209)
+remote: Compressing objects:  68% (143/209)
+remote: Compressing objects:  69% (145/209)
+remote: Compressing objects:  70% (147/209)
+remote: Compressing objects:  71% (149/209)
+remote: Compressing objects:  72% (151/209)
+remote: Compressing objects:  73% (153/209)
+remote: Compressing objects:  74% (155/209)
+remote: Compressing objects:  75% (157/209)
+remote: Compressing objects:  76% (159/209)
+remote: Compressing objects:  77% (161/209)
+remote: Compressing objects:  78% (164/209)
+remote: Compressing objects:  79% (166/209)
+remote: Compressing objects:  80% (168/209)
+remote: Compressing objects:  81% (170/209)
+remote: Compressing objects:  82% (172/209)
+remote: Compressing objects:  83% (174/209)
+remote: Compressing objects:  84% (176/209)
+remote: Compressing objects:  85% (178/209)
+remote: Compressing objects:  86% (180/209)
+remote: Compressing objects:  87% (182/209)
+remote: Compressing objects:  88% (184/209)
+remote: Compressing objects:  89% (187/209)
+remote: Compressing objects:  90% (189/209)
+remote: Compressing objects:  91% (191/209)
+remote: Compressing objects:  92% (193/209)
+remote: Compressing objects:  93% (195/209)
+remote: Compressing objects:  94% (197/209)
+remote: Compressing objects:  95% (199/209)
+remote: Compressing objects:  96% (201/209)
+remote: Compressing objects:  97% (203/209)
+remote: Compressing objects:  98% (205/209)
+remote: Compressing objects:  99% (207/209)
+remote: Compressing objects: 100% (209/209)
+remote: Compressing objects: 100% (209/209), done.
+Receiving objects:   0% (1/4389)
+Receiving objects:   1% (44/4389)
+Receiving objects:   2% (88/4389)
+Receiving objects:   3% (132/4389)
+Receiving objects:   4% (176/4389)
+Receiving objects:   5% (220/4389)
+Receiving objects:   6% (264/4389)
+Receiving objects:   7% (308/4389)
+Receiving objects:   8% (352/4389)
+Receiving objects:   9% (396/4389)
+Receiving objects:  10% (439/4389)
+Receiving objects:  11% (483/4389)
+Receiving objects:  12% (527/4389)
+Receiving objects:  13% (571/4389)
+Receiving objects:  14% (615/4389)
+Receiving objects:  15% (659/4389)
+Receiving objects:  16% (703/4389)
+Receiving objects:  17% (747/4389)
+Receiving objects:  18% (791/4389)
+Receiving objects:  19% (834/4389)
+Receiving objects:  20% (878/4389)
+Receiving objects:  21% (922/4389)
+Receiving objects:  22% (966/4389)
+Receiving objects:  23% (1010/4389)
+Receiving objects:  24% (1054/4389)
+Receiving objects:  25% (1098/4389)
+Receiving objects:  26% (1142/4389)
+Receiving objects:  27% (1186/4389)
+Receiving objects:  28% (1229/4389)
+Receiving objects:  29% (1273/4389)
+Receiving objects:  30% (1317/4389)
+Receiving objects:  31% (1361/4389)
+Receiving objects:  32% (1405/4389)
+Receiving objects:  33% (1449/4389)
+Receiving objects:  34% (1493/4389)
+Receiving objects:  35% (1537/4389)
+Receiving objects:  36% (1581/4389)
+Receiving objects:  37% (1624/4389)
+Receiving objects:  38% (1668/4389)
+Receiving objects:  39% (1712/4389)
+Receiving objects:  40% (1756/4389)
+Receiving objects:  41% (1800/4389)
+Receiving objects:  42% (1844/4389)
+Receiving objects:  43% (1888/4389)
+Receiving objects:  44% (1932/4389)
+Receiving objects:  45% (1976/4389)
+Receiving objects:  46% (2019/4389)
+Receiving objects:  47% (2063/4389)
+Receiving objects:  48% (2107/4389)
+Receiving objects:  49% (2151/4389)
+Receiving objects:  50% (2195/4389)
+Receiving objects:  51% (2239/4389)
+Receiving objects:  52% (2283/4389)
+Receiving objects:  53% (2327/4389)
+Receiving objects:  54% (2371/4389)
+Receiving objects:  55% (2414/4389)
+Receiving objects:  56% (2458/4389)
+Receiving objects:  57% (2502/4389)
+Receiving objects:  58% (2546/4389)
+Receiving objects:  59% (2590/4389)
+Receiving objects:  60% (2634/4389)
+Receiving objects:  61% (2678/4389)
+Receiving objects:  62% (2722/4389)
+Receiving objects:  63% (2766/4389)
+Receiving objects:  64% (2809/4389)
+Receiving objects:  65% (2853/4389)
+Receiving objects:  66% (2897/4389)
+Receiving objects:  67% (2941/4389)
+Receiving objects:  68% (2985/4389)
+Receiving objects:  69% (3029/4389)
+Receiving objects:  70% (3073/4389)
+Receiving objects:  71% (3117/4389)
+Receiving objects:  72% (3161/4389)
+Receiving objects:  73% (3204/4389)
+Receiving objects:  74% (3248/4389)
+Receiving objects:  75% (3292/4389)
+Receiving objects:  76% (3336/4389)
+Receiving objects:  77% (3380/4389)
+Receiving objects:  78% (3424/4389)
+Receiving objects:  79% (3468/4389)
+Receiving objects:  80% (3512/4389)
+Receiving objects:  81% (3556/4389)
+Receiving objects:  82% (3599/4389)
+Receiving objects:  83% (3643/4389)
+Receiving objects:  84% (3687/4389)
+Receiving objects:  85% (3731/4389)
+Receiving objects:  86% (3775/4389)
+Receiving objects:  87% (3819/4389)
+Receiving objects:  88% (3863/4389)
+Receiving objects:  89% (3907/4389), 15.59 MiB | 31.00 MiB/s
+Receiving objects:  89% (3941/4389), 38.07 MiB | 37.72 MiB/s
+Receiving objects:  90% (3951/4389), 38.07 MiB | 37.72 MiB/s
+Receiving objects:  91% (3994/4389), 38.07 MiB | 37.72 MiB/s
+Receiving objects:  92% (4038/4389), 38.07 MiB | 37.72 MiB/s
+Receiving objects:  93% (4082/4389), 38.07 MiB | 37.72 MiB/s
+Receiving objects:  94% (4126/4389), 38.07 MiB | 37.72 MiB/s
+Receiving objects:  95% (4170/4389), 38.07 MiB | 37.72 MiB/s
+Receiving objects:  96% (4214/4389), 38.07 MiB | 37.72 MiB/s
+Receiving objects:  97% (4258/4389), 38.07 MiB | 37.72 MiB/s
+remote: Total 4389 (delta 159), reused 186 (delta 75), pack-reused 4105 (from 2)
+Receiving objects:  98% (4302/4389), 38.07 MiB | 37.72 MiB/s
+Receiving objects:  99% (4346/4389), 38.07 MiB | 37.72 MiB/s
+Receiving objects: 100% (4389/4389), 38.07 MiB | 37.72 MiB/s
+Receiving objects: 100% (4389/4389), 53.88 MiB | 38.39 MiB/s, done.
+Resolving deltas:   0% (0/1944)
+Resolving deltas:   1% (20/1944)
+Resolving deltas:   2% (39/1944)
+Resolving deltas:   3% (59/1944)
+Resolving deltas:   4% (78/1944)
+Resolving deltas:   5% (98/1944)
+Resolving deltas:   6% (117/1944)
+Resolving deltas:   7% (137/1944)
+Resolving deltas:   8% (156/1944)
+Resolving deltas:   9% (175/1944)
+Resolving deltas:  10% (195/1944)
+Resolving deltas:  11% (214/1944)
+Resolving deltas:  12% (234/1944)
+Resolving deltas:  13% (253/1944)
+Resolving deltas:  14% (273/1944)
+Resolving deltas:  15% (292/1944)
+Resolving deltas:  16% (312/1944)
+Resolving deltas:  17% (331/1944)
+Resolving deltas:  18% (350/1944)
+Resolving deltas:  19% (370/1944)
+Resolving deltas:  20% (389/1944)
+Resolving deltas:  21% (409/1944)
+Resolving deltas:  22% (428/1944)
+Resolving deltas:  23% (448/1944)
+Resolving deltas:  24% (467/1944)
+Resolving deltas:  25% (486/1944)
+Resolving deltas:  26% (506/1944)
+Resolving deltas:  27% (525/1944)
+Resolving deltas:  28% (545/1944)
+Resolving deltas:  29% (564/1944)
+Resolving deltas:  30% (584/1944)
+Resolving deltas:  31% (603/1944)
+Resolving deltas:  32% (623/1944)
+Resolving deltas:  33% (642/1944)
+Resolving deltas:  34% (661/1944)
+Resolving deltas:  35% (681/1944)
+Resolving deltas:  36% (700/1944)
+Resolving deltas:  37% (720/1944)
+Resolving deltas:  38% (739/1944)
+Resolving deltas:  39% (759/1944)
+Resolving deltas:  40% (778/1944)
+Resolving deltas:  41% (798/1944)
+Resolving deltas:  42% (817/1944)
+Resolving deltas:  43% (836/1944)
+Resolving deltas:  44% (856/1944)
+Resolving deltas:  45% (875/1944)
+Resolving deltas:  46% (895/1944)
+Resolving deltas:  47% (914/1944)
+Resolving deltas:  48% (934/1944)
+Resolving deltas:  49% (953/1944)
+Resolving deltas:  50% (972/1944)
+Resolving deltas:  51% (992/1944)
+Resolving deltas:  52% (1011/1944)
+Resolving deltas:  53% (1031/1944)
+Resolving deltas:  54% (1050/1944)
+Resolving deltas:  55% (1070/1944)
+Resolving deltas:  56% (1089/1944)
+Resolving deltas:  57% (1109/1944)
+Resolving deltas:  58% (1128/1944)
+Resolving deltas:  59% (1147/1944)
+Resolving deltas:  60% (1167/1944)
+Resolving deltas:  61% (1186/1944)
+Resolving deltas:  62% (1206/1944)
+Resolving deltas:  63% (1225/1944)
+Resolving deltas:  64% (1245/1944)
+Resolving deltas:  65% (1264/1944)
+Resolving deltas:  66% (1284/1944)
+Resolving deltas:  67% (1303/1944)
+Resolving deltas:  68% (1322/1944)
+Resolving deltas:  69% (1342/1944)
+Resolving deltas:  70% (1361/1944)
+Resolving deltas:  71% (1381/1944)
+Resolving deltas:  72% (1400/1944)
+Resolving deltas:  73% (1420/1944)
+Resolving deltas:  74% (1439/1944)
+Resolving deltas:  75% (1458/1944)
+Resolving deltas:  76% (1478/1944)
+Resolving deltas:  77% (1497/1944)
+Resolving deltas:  78% (1517/1944)
+Resolving deltas:  79% (1536/1944)
+Resolving deltas:  80% (1556/1944)
+Resolving deltas:  81% (1575/1944)
+Resolving deltas:  82% (1595/1944)
+Resolving deltas:  83% (1614/1944)
+Resolving deltas:  84% (1633/1944)
+Resolving deltas:  85% (1653/1944)
+Resolving deltas:  86% (1672/1944)
+Resolving deltas:  87% (1692/1944)
+Resolving deltas:  88% (1711/1944)
+Resolving deltas:  89% (1731/1944)
+Resolving deltas:  90% (1750/1944)
+Resolving deltas:  91% (1770/1944)
+Resolving deltas:  92% (1789/1944)
+Resolving deltas:  93% (1808/1944)
+Resolving deltas:  94% (1828/1944)
+Resolving deltas:  95% (1847/1944)
+Resolving deltas:  96% (1867/1944)
+Resolving deltas:  97% (1886/1944)
+Resolving deltas:  98% (1906/1944)
+Resolving deltas:  99% (1925/1944)
+Resolving deltas: 100% (1944/1944)
+Resolving deltas: 100% (1944/1944), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m27 && ls
+
+GUIDED-BUILD.md  README.md  checker.py  configs  egress.py   lab.py   run_tests.py       test_lab.py
+Makefile         alerts.py  cloud       data     explore.py  logs.py  test_challenge.py
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ ls configs data cloud
+
+cloud:
+endpoint-policy.json  requirements.txt  role-policy.json  trust-policy.json  try_requests.py
+
+configs:
+first-draft.json  hardened.json  second-draft.json
+
+data:
+app-sessions.jsonl  morning-resolver-log.jsonl  requests.jsonl
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ wc -l data/*.jsonl && head -n 1 data/requests.jsonl
+
+   13 data/app-sessions.jsonl
+   55 data/morning-resolver-log.jsonl
+   14 data/requests.jsonl
+   82 total
+{"id": "N1", "t": "2027-03-27T09:00:05Z", "kind": "aws_api", "name": "s3.us-east-1.amazonaws.com", "port": 443, "via": "endpoint", "service": "s3", "action": "s3:GetObject", "resource": "arn:aws:s3:::tsg-lab-data/reports/q3.csv", "expect": "normal", "note": "read the report it was asked to summarise"}
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ make -n setup review
+
+python3 ../../tools/check_python.py 3.11
+python3 checker.py first-draft
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ make setup
+
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ python3 explore.py here
+
+This terminal, read from /proc and /sys (nothing is changed)
+
+A process is one running program. This one is explore.py:
+  process ID                 2502             its number on this machine
+  runs as user               thesecguy        it can open whatever files this user can
+  processes it can see       179              every program running on this machine, not just its own
+
+The kernel is the core of the operating system: every program asks it for files, memory and network.
+  kernel                     7.0.0-1017-azure
+
+Limits the kernel enforces on this process (ulimit):
+  max processes (this user)  58121            how many programs it may start
+  max open files             65536            files and network connections open at once
+
+What this terminal runs on:
+  inside a container?        no               process 1 is systemd, a normal machine's first program
+  virtual machine?           yes              the CPU reports a hypervisor
+  hardware says              Microsoft Corporation Virtual Machine
+
+So this terminal is a process, on a kernel, inside a virtual machine: three layers, each with its own limits.
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ uname -r && sudo docker run --rm alpine:3.20 uname -r
+
+7.0.0-1017-azure
+7.0.0-1017-azure
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ sudo docker run --rm alpine:3.20 ps
+
+PID   USER     TIME  COMMAND
+    1 root      0:00 ps
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ sudo docker run --rm --network none alpine:3.20 wget -q -T 3 -O- http://example.co 
+m
+
+wget: bad address 'example.com'
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ sudo docker run --rm --read-only alpine:3.20 touch /home/note.txt
+
+touch: /home/note.txt: Read-only file system
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ sudo docker run --rm --pids-limit 4 alpine:3.20 sh -c 'for i in 1 2 3 4 5 6; do sl 
+eep 2 & done; wait'
+
+sh: can't fork: Resource temporarily unavailable
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ python3 explore.py sandbox
+
+The sandbox lines of configs/hardened.json, one by one
+
+Where the code runs:
+  runtime.boundary                   microvm          a microVM: its own small virtual machine with its own kernel
+  runtime.session.one_per_user_task  true             a fresh sandbox per user and task
+  runtime.session.timeout_seconds    900              destroyed after 15 minutes
+
+Process limits (how much it may use):
+  runtime.limits.vcpu                1                virtual CPUs
+  runtime.limits.memory_mb           2048             MB of memory
+  runtime.limits.max_processes       128              programs at once: a runaway loop stops here
+
+File system limits (what it may read and write):
+  mount /workspace                   rw               the scratch folder: it may write here
+  mount /data/reports                ro               input data: read, never changed
+
+Secrets:
+  secrets.env                        (none)           no passwords or keys inside the sandbox
+
+The network lines come next: python3 explore.py network hardened
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ python3 explore.py network
+
+The network lines of configs/hardened.json, one by one
+
+Is there a way out to the internet?
+  network.mode                       VPC              PUBLIC = internet access; VPC = only your own private network
+  network.nat_gateway                false            no door to the internet
+
+Firewall rules for traffic leaving the sandbox (security group egress):
+  tcp/443 to                         endpoint:s3              one named destination only
+  tcp/443 to                         endpoint:bedrock-runtime one named destination only
+  tcp/3128 to                        proxy                    one named destination only
+
+Private doors to cloud services (VPC endpoints) and their policies:
+  endpoint s3                        custom           s3:GetObject, s3:PutObject, s3:ListBucket on tsg-lab-data, tsg-lab-data/*
+  endpoint bedrock-runtime           custom           bedrock:InvokeModel on foundation-model/lab-model-a
+
+The phone book (DNS) and its allow-list:
+  dns.firewall                       true             names are checked against an allow-list
+  dns.allow                          s3.us-east-1.amazonaws.com
+  dns.allow                          bedrock-runtime.us-east-1.amazonaws.com
+  dns.allow                          proxy.tsg.example
+  dns.default_action                 BLOCK            for every other name
+  dns.fail_open                      false            if the check is down, refuse (fail closed)
+
+The proxy, a go-between that fetches web pages for the sandbox:
+  proxy.allow                        pypi.tsg.example   methods GET, HEAD
+  proxy.enforced_by_network          true             the firewall lets the sandbox reach only the proxy
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ python3 explore.py dns placeholder.example.invalid bedrock-runtime.us-east-1.amazo 
+naws.com
+
+DNS turns a name into an address. Before the sandbox can connect, it asks the resolver.
+configs/hardened.json: DNS firewall true, default rule BLOCK
+  allow-list: s3.us-east-1.amazonaws.com, bedrock-runtime.us-east-1.amazonaws.com, proxy.tsg.example
+
+  placeholder.example.invalid
+    BLOCKED: placeholder.example.invalid not on the DNS allow-list: default rule BLOCK (NODATA)
+    so the code never learns an address to connect to
+  bedrock-runtime.us-east-1.amazonaws.com
+    answered: bedrock-runtime.us-east-1.amazonaws.com is on the DNS allow-list
+    so the code gets an address and may try to connect
+
+No name was really looked up: this is the config's rule, applied on paper.
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ python3 explore.py request U1
+
+Request U1 from data/requests.jsonl, field by field
+
+  when      2027-03-27T09:02:11Z
+  kind      https
+  name      placeholder.example.invalid
+  port      443
+  via       direct
+  method    POST
+  expect    unexpected
+  note      direct connection that ignores the proxy, to a name the task never needed
+
+Against configs/hardened.json, in the order the request meets each layer:
+  dns       NO  placeholder.example.invalid not on the DNS allow-list: default rule BLOCK (NODATA)
+  route     NO  VPC mode, no NAT gateway: no route to the internet
+  sg        NO  no egress rule for tcp/443 to internet: REJECT
+
+Every layer must say ok: DENY (dns, route, sg)
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ python3 explore.py request U1 first-draft | tail -n 5
+
+  dns       ok  no DNS firewall: the resolver answers for any name
+  route     ok  PUBLIC network mode: internet reachable
+  sg        ok  egress rule tcp/443 to 0.0.0.0/0
+
+Every layer must say ok: ALLOW
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ python3 explore.py request U8
+
+Request U8 from data/requests.jsonl, field by field
+
+  when      2027-03-27T09:03:58Z
+  kind      https
+  name      pypi.tsg.example
+  port      443
+  via       proxy
+  method    POST
+  expect    unexpected
+  note      an upload to the package mirror, which only needs reads
+
+Against configs/hardened.json, in the order the request meets each layer:
+  dns       ok  proxy.tsg.example is on the DNS allow-list
+  sg        ok  egress rule tcp/3128 to proxy
+  proxy     NO  POST not allowed for pypi.tsg.example (allowed: GET, HEAD)
+
+Every layer must say ok: DENY (proxy)
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ python3 egress.py hardened | sed -n '1,10p'
+
+Replay of 14 recorded requests against hardened
+  N1  ALLOW s3:GetObject tsg-lab-data/reports/q3.csv                   dns:ok sg:ok endpoint:ok role:ok
+  N2  ALLOW s3:PutObject tsg-lab-data/out/q3-summary.csv               dns:ok sg:ok endpoint:ok role:ok
+  N3  ALLOW bedrock:InvokeModel foundation-model/lab-model-a           dns:ok sg:ok endpoint:ok role:ok
+  N4  ALLOW GET pypi.tsg.example:443 via proxy                         dns:ok sg:ok proxy:ok
+  N5  ALLOW s3:ListBucket tsg-lab-data                                 dns:ok sg:ok endpoint:ok role:ok
+  N6  ALLOW DNS bedrock-runtime.us-east-1.amazonaws.com                dns:ok
+  U1  DENY  POST placeholder.example.invalid:443 via direct            dns:NO route:NO sg:NO
+        first denied by dns: placeholder.example.invalid not on the DNS allow-list: default rule BLOCK (NODATA)
+  U2  DENY  DNS placeholder.example.invalid                            dns:NO
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ exit
+
+exit

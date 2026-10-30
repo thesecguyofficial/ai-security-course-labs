@@ -1,0 +1,4 @@
+warning: unable to access '/home/runner/.config/git/config': Permission denied
+[before, as thesecguy] sudo docker pull -q alpine:3.20
+docker.io/library/alpine:3.20
+prepared: user thesecguy on host lab, removed: nothing, ready: nothing

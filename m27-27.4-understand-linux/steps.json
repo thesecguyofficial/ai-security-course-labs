@@ -1,0 +1,199 @@
+{
+  "scenario": "m27-27.4-understand-linux",
+  "start": 1.734,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.734,
+      "end": 14.101
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 17.101,
+      "end": 22.752
+    },
+    {
+      "label": "The folders",
+      "speed": 1,
+      "start": 26.752,
+      "end": 30.047
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 34.047,
+      "end": 41.015
+    },
+    {
+      "label": "Look first",
+      "speed": 1,
+      "start": 46.015,
+      "end": 49.445
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 53.445,
+      "end": 55.666
+    },
+    {
+      "label": "Here",
+      "speed": 1,
+      "start": 58.666,
+      "end": 62.425
+    },
+    {
+      "label": "Same kernel",
+      "speed": 1,
+      "start": 69.425,
+      "end": 77.087
+    },
+    {
+      "label": "Own processes",
+      "speed": 1,
+      "start": 82.087,
+      "end": 87.404
+    },
+    {
+      "label": "No network",
+      "speed": 1,
+      "start": 92.404,
+      "end": 108.056
+    },
+    {
+      "label": "Read-only",
+      "speed": 1,
+      "start": 113.056,
+      "end": 121.808
+    },
+    {
+      "label": "Process limit",
+      "speed": 1,
+      "start": 126.808,
+      "end": 140.212
+    },
+    {
+      "label": "Sandbox",
+      "speed": 1,
+      "start": 145.212,
+      "end": 149.257
+    },
+    {
+      "label": "Network",
+      "speed": 1,
+      "start": 156.257,
+      "end": 160.233
+    },
+    {
+      "label": "DNS",
+      "speed": 1,
+      "start": 168.233,
+      "end": 179.572
+    },
+    {
+      "label": "Request",
+      "speed": 1,
+      "start": 185.572,
+      "end": 189.953
+    },
+    {
+      "label": "Request draft",
+      "speed": 1,
+      "start": 196.953,
+      "end": 204.378
+    },
+    {
+      "label": "Proxy",
+      "speed": 1,
+      "start": 210.378,
+      "end": 214.77
+    },
+    {
+      "label": "One run",
+      "speed": 1,
+      "start": 220.771,
+      "end": 226.911
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.334,
+      "what": "type"
+    },
+    {
+      "t": 17.701,
+      "what": "type"
+    },
+    {
+      "t": 27.352,
+      "what": "type"
+    },
+    {
+      "t": 34.647,
+      "what": "type"
+    },
+    {
+      "t": 46.615,
+      "what": "type"
+    },
+    {
+      "t": 54.046,
+      "what": "type"
+    },
+    {
+      "t": 59.266,
+      "what": "type"
+    },
+    {
+      "t": 70.025,
+      "what": "type"
+    },
+    {
+      "t": 82.687,
+      "what": "type"
+    },
+    {
+      "t": 93.004,
+      "what": "type"
+    },
+    {
+      "t": 113.656,
+      "what": "type"
+    },
+    {
+      "t": 127.408,
+      "what": "type"
+    },
+    {
+      "t": 145.812,
+      "what": "type"
+    },
+    {
+      "t": 156.857,
+      "what": "type"
+    },
+    {
+      "t": 168.833,
+      "what": "type"
+    },
+    {
+      "t": 186.172,
+      "what": "type"
+    },
+    {
+      "t": 197.553,
+      "what": "type"
+    },
+    {
+      "t": 210.978,
+      "what": "type"
+    },
+    {
+      "t": 221.371,
+      "what": "type"
+    }
+  ],
+  "end": 233.912
+}
