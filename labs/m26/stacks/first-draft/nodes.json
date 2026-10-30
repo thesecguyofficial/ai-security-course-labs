@@ -1,7 +1,7 @@
 {
   "_about": "Inventory of the GPU nodes (first draft), as you'd export it from your CMDB or a node agent. Lab data.",
   "nodes": [
-    {"name": "gpu-node-1", "ami": "custom-ubuntu-gpu-2025-03", "nvidia_container_toolkit": "1.17.4",
+    {"name": "gpu-node-1", "ami": "custom-al2023-gpu-2025-03", "nvidia_container_toolkit": "1.17.4",
      "gpu_sharing": "time-slicing", "tenants": ["acme", "globex"], "imds_http_tokens": "optional", "imds_hop_limit": 2}
   ]
 }

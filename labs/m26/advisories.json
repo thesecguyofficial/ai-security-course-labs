@@ -29,7 +29,7 @@
      "part": "node: container toolkit (container escape)", "condition": "affected: 1.16.1 or earlier",
      "source": "https://cveawg.mitre.org/api/cve/CVE-2024-0132"},
     {"id": "CVE-2025-23266", "product": "nvidia-container-toolkit", "introduced": "0", "fixed": "1.17.8", "severity": "critical",
-     "part": "node: container toolkit hooks (container escape)", "condition": "affected: up to and including 1.17.7 (before 1.17.5 only in CDI mode)",
+     "part": "node: container toolkit hooks (container escape)", "condition": "affected: up to and including 1.17.7 (in CDI mode, only before 1.17.5)",
      "source": "https://cveawg.mitre.org/api/cve/CVE-2025-23266"},
     {"id": "CVE-2023-48022", "product": "ray", "introduced": "0", "fixed": null, "severity": "critical",
      "part": "job submission API (disputed: no fix will come)", "condition": "any version reachable without network isolation; use a private network plus token auth (Ray 2.52.0+)",

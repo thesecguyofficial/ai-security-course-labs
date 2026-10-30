@@ -8,4 +8,6 @@ managedNodeGroups:
   - name: gpu
     instanceType: g4dn.xlarge
     amiFamily: AmazonLinux2023
+    # the node runs a custom AL2023 GPU image built in March 2025 (nodes.json: custom-al2023-gpu-2025-03), never replaced
+    disableIMDSv1: false          # set explicitly in the first draft (eksctl's default is true)
     desiredCapacity: 1

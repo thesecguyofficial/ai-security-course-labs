@@ -241,9 +241,11 @@ def check_cluster(stack):
         gpu = str(ng.get("instanceType", "")).startswith(("g", "p"))
         if gpu and not any(t.get("key") == "nvidia.com/gpu" for t in ng.get("taints") or []):
             out.append(Finding("NODE-01", where, f"{ng.get('instanceType')} without the nvidia.com/gpu taint"))
-        missing = [k for k in ("disableIMDSv1", "disablePodIMDS") if ng.get(k) is not True]
+        # eksctl defaults disableIMDSv1 to true, so only an explicit false is a finding; disablePodIMDS must be true
+        missing = (["disableIMDSv1 is false"] if ng.get("disableIMDSv1") is False else []) + \
+                  (["disablePodIMDS not set to true"] if ng.get("disablePodIMDS") is not True else [])
         if missing:
-            out.append(Finding("NODE-02", where, f"{', '.join(missing)} not set to true"))
+            out.append(Finding("NODE-02", where, ", ".join(missing)))
     return out
 
 
