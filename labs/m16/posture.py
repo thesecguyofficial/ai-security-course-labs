@@ -6,7 +6,7 @@ posture.py: AWS Config-style checks for Bedrock and AgentCore (lesson 16.4), run
 
 Two kinds of rule, and the difference is the lesson:
   AWS managed rules   the nine AWS Config managed rules for Bedrock and AgentCore (names exactly as AWS lists them),
-                      with the Security Hub CSPM control that runs each one in the AI Security Best Practices standard
+                      with the Security Hub CSPM control that runs it in the AI Security Best Practices standard, where one exists
   custom rules        checks AWS has no managed rule for (as of Oct 2026): invocation logging, GuardDuty AI Protection,
                       an account-enforced guardrail, data events for mantle and AgentCore, a policy engine left in LOG_ONLY.
                       You write these yourself
