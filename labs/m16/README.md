@@ -79,6 +79,320 @@ you don't have to join three log groups by hand.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 - Optional, Step 10 only: the AWS CLI v2 and your own sandbox account (lesson 0.7).
 
+## Step 1b · Before you start: look at each idea on its own (about 15 minutes)
+
+New to detection and response? Do this before Step 1 (lesson 16.6 and its videos call it Step 1b). `explore.py` shows,
+one idea at a time, the records, the rules and the response that the module's videos explain, on AnyCompany's day.
+Real output below is from a fresh Ubuntu machine (recording run 41115815346). Run it from `labs/m16`.
+
+**What it really runs.** Nothing that changes anything: `explore.py` builds the simulated day in memory with
+`simulate.py`, runs the lab's own functions on it (`detect.py`, `inventory.py`, `posture.py`, `report.py`) and prints.
+It writes no file (not even `out/` or `__pycache__/`), calls no AWS service and needs no network. Windows: `py explore.py day`.
+
+**0. Look before you run.** `make -n` prints what make would run, without running it. This lab needs no virtual environment and no `pip install` (other labs do): only Python's standard library. `make setup` just checks your Python.
+
+```bash
+make -n setup simulate
+```
+
+```output
+python3 ../../tools/check_python.py 3.11
+python3 simulate.py
+```
+
+**1. One day, in numbers.** Log lines, alerts and incidents: many records, fewer alerts, very few incidents.
+
+```bash
+python3 explore.py day
+```
+
+```output
+One day at AnyCompany, 20 Oct 2026 (UTC), with the hardened logging. Fake company, fake values.
+
+LOGS: records of what happened, one line per event
+  cloudtrail.jsonl       930  every AWS API call: who called what
+  invocations.jsonl      855  every model call through bedrock-runtime: prompt and answer
+  guardduty.jsonl          4  findings: alerts that GuardDuty, an AWS service, raised
+  spans.jsonl             33  the agent gateway's decision on each tool call
+  app.jsonl              585  the web app's own log: which signed-in person
+  total                 2407
+
+ALERTS: a rule matched, and a message tells a person to look
+  detect.py rules         17  alerts from rules D01 to D13 (D11 and D12 are empty: your challenge)
+
+INCIDENTS: confirmed, someone has to act (the lab's answer key; a real team decides this in triage)
+  simulate.py              5  S1 leaked Bedrock API key, S2 jailbroken customer bot, S3 hijacked agent,
+                              S4 denial of wallet through the app, S5 poisoned knowledge base
+
+2407 lines, 17 alerts, 5 incidents.
+```
+
+**2. CloudTrail: a management event and a data event.** Management events are logged by default; data events (here `bedrock-mantle`, AgentCore and S3 object writes) only when a trail selects them.
+
+```bash
+python3 explore.py trail
+```
+
+```output
+CloudTrail writes one record per AWS API call. Two kinds of record, from the hardened setup:
+
+MANAGEMENT EVENT: logged by default
+  eventTime          2026-10-20T08:00:07Z               WHEN (UTC)
+  eventSource        bedrock.amazonaws.com              WHICH service: Bedrock
+  eventName          Converse                           WHAT: run a model
+  userIdentity       HelpdeskAppRole                    WHO: the support bot's role (every customer's chat)
+  sourceIPAddress    10.20.1.15                         FROM WHERE: inside the company network
+  eventCategory      Management
+
+DATA EVENT: off until you add it to a trail (extra cost)
+  eventTime          2026-10-20T14:40:00Z               WHEN (UTC)
+  eventSource        bedrock-mantle.amazonaws.com       WHICH service: bedrock-mantle, Bedrock's second endpoint
+  eventName          CreateInference                    WHAT: run a model
+  userIdentity       BedrockAPIKey-q4m8                 WHO: the IAM user that holds a Bedrock API key
+  sourceIPAddress    203.0.113.51                       FROM WHERE: an outside address
+  eventCategory      Data
+
+Hardened today: 865 management events, 65 data events (31 bedrock-agentcore, 30 bedrock-mantle, 4 s3).
+First draft today: 865 management events, 0 data events.
+Neither kind of record holds the prompt or the answer.
+```
+
+**3. A model invocation log record.** The prompt, the answer and the token counts. `requestMetadata` is the only field the caller writes.
+
+```bash
+python3 explore.py invocation
+```
+
+```output
+A Bedrock model invocation log record (schemaType ModelInvocationLog), from invocations.jsonl
+
+  timestamp          2026-10-20T08:02:02Z                     WHEN (UTC)
+  operation          Converse                                 which API the app called
+  modelId            us.anthropic.claude-haiku-4-5-...        WHICH model
+  identity.arn       HelpdeskAppRole                          WHO, as AWS sees it: the app's role
+  input text         "Where is my order 4417?"                WHAT WAS SAID: the customer's message
+  inputTokenCount    856                                      tokens in (you pay per token)
+  output text        "Order 4417 shipped yesterday..."        the model's answer
+  outputTokenCount   185                                      tokens out
+  stopReason         end_turn                                 why it stopped: end_turn = a normal answer
+  requestMetadata    "cust-1004"                              WHICH PERSON: the app wrote this in
+
+855 records today. requestMetadata is the only field the caller writes; Bedrock fills the rest.
+Not here: the 30 bedrock-mantle calls. Invocation logging covers the bedrock-runtime endpoint only.
+First draft: 0 records. Invocation logging is off until you turn it on.
+```
+
+**4. VPC flow logs.** Four **illustrative** lines in AWS's default format (version 2): addresses, ports, bytes, ACCEPT or REJECT. No names, no contents.
+
+```bash
+python3 explore.py flow
+```
+
+```output
+data/vpc-flow-logs.txt: VPC flow log records, AWS's default format (version 2). ILLUSTRATIVE lab lines.
+
+Line 1, field by field:
+  interface-id   eni-0a1b2c3d4e5f60002  the network interface (the machine's network card in the VPC)
+  srcaddr        203.0.113.77           FROM this address
+  dstaddr        10.20.3.30             TO this address
+  dstport        11434                  on this port
+  protocol       6                      6 = TCP
+  packets        14
+  bytes          2380                   how much, never what: no contents
+  action         ACCEPT                 ACCEPT = let through, REJECT = refused
+
+  from            to              port   action  reading
+  203.0.113.77    10.20.3.30      11434  ACCEPT  someone on the internet reached port 11434 (Ollama) on the GPU box
+  198.51.100.9    10.20.3.30      22     REJECT  an unknown address tried SSH (port 22): the security group refused it
+  10.20.3.21      198.51.100.200  443    ACCEPT  the analytics box sent HTTPS out: to WHICH service? Not in this line
+  10.20.9.44      198.51.100.201  443    ACCEPT  10.20.9.44 sent HTTPS out: the network interface ID leads to its owner
+
+Flow logs answer: who talked to whom, on which port, allowed or not. Names and contents are not in them.
+```
+
+**5. DNS query logs.** Route 53 Resolver query log records: which machine looked up which name.
+
+```bash
+python3 explore.py dns
+```
+
+```output
+data/inventory/dns.jsonl: Route 53 Resolver query logs, the DNS lookups made inside the VPC (lab values)
+
+One record, field by field:
+  query_timestamp   2026-10-20T08:00:00Z                       WHEN (UTC)
+  query_name        api.openai.com.                            the NAME the machine looked up
+  query_type        A                                          A = give me its IPv4 address
+  rcode             NOERROR                                    the answer: NOERROR = the name exists
+  srcaddr           10.20.3.21                                 the machine's address
+  srcids.instance   i-0a1b2c3d4e5f60001                        WHICH EC2 instance asked
+
+  instance              address      looked up                                 times
+  (not an instance)     10.20.9.44   api.mistral.ai                                9  outside AI service
+  i-0a1b2c3d4e5f60001   10.20.3.21   api.openai.com                               40  outside AI service
+  i-0a1b2c3d4e5f60001   10.20.3.21   bedrock-runtime.us-east-1.amazonaws.com      30  Bedrock (AWS)
+  i-0a1b2c3d4e5f60003   10.20.3.40   api.anthropic.com                            12  outside AI service
+
+The flow log said 10.20.3.21 sent HTTPS to 198.51.100.200. The DNS log says which NAME it looked up first.
+```
+
+**6. A detection rule and its alert.** Rule D07 from `detect.py`, read part by part, then run on the day.
+
+```bash
+python3 explore.py rule
+```
+
+```output
+detect.py, rule D07 "Repeated prompt attacks from one end user", read part by part
+
+  reads            invocations.jsonl                    the model invocation logs
+  looks for        stopReason = guardrail_intervened    the guardrail blocked a message
+  groups by        requestMetadata.end_user             the customer, as the app wrote it
+  raises an alert  3 or more in 10 minutes              the threshold, from anycompany.json
+  names            the end user                         the thing you would act on
+
+Run on today's 855 invocation log records:
+  cust-8841  6 blocked, 10:40 to 10:49  ALERT [HIGH] D07 Repeated prompt attacks from one end user
+  cust-1034  1 blocked, at 12:29        no alert (fewer than 3)
+
+A rule asks one question of every record. A yes is an alert, with a name on it. Triage decides if it's an incident.
+```
+
+**7. A GuardDuty AI Protection finding.** Field by field, then the day's four findings. All are severity 2.0 (Low).
+
+```bash
+python3 explore.py finding
+```
+
+```output
+A GuardDuty AI Protection finding (GetFindings shape, cut to the fields the lab reads), from guardduty.jsonl
+
+  type               Impact:IAMUser/PromptInjection.Direct   WHAT GuardDuty thinks happened
+  severity           2.0                                     Low: 1.0 to 3.9 (Medium starts at 4.0)
+  featureName        AiProtection                            which GuardDuty plan raised it
+  resourceType       AccessKey                               the finding is about a set of AWS credentials
+  userName           HelpdeskAppRole                         WHO: the IAM identity, not the customer
+  modelId            us.anthropic.claude-haiku-4-5-2025...   WHICH model
+  guardrailAction    GUARDRAIL_INTERVENED                    the guardrail stepped in
+  filter             PROMPT_ATTACK, confidence HIGH          a prompt attack, high confidence
+  count              6                                       how many times
+  first / last seen  10:40:00 / 10:49:20                     WHEN (UTC)
+
+Today's 4 AI Protection findings:
+  10:55  Impact:IAMUser/PromptInjection.Direct    severity 2.0  HelpdeskAppRole      count 6
+  14:31  Impact:IAMUser/AnomalousModelInvocation  severity 2.0  BedrockAPIKey-q4m8   count 21
+  15:08  Impact:IAMUser/CostHarvesting            severity 2.0  BedrockAPIKey-q4m8   count 70
+  16:36  Impact:IAMUser/CostHarvesting            severity 2.0  HelpdeskAppRole      count 180
+
+No trail needed: GuardDuty reads Bedrock, AgentCore and SageMaker AI activity through its own channel.
+```
+
+**8. An AI inventory.** One asset from each of the three signals Security Hub's AI inventory uses, checked against the approved register.
+
+```bash
+python3 explore.py inventory
+```
+
+```output
+An AI inventory, built the way Security Hub's is: three signals, then a check against the approved register
+
+Signal 1  AWS Config configuration item  ->  a managed AI resource
+          resourceType AWS::BedrockAgentCore::Runtime   resourceId marketing_poc_agent-Zz98Yy76Xx
+          tags {"owner": "marketing", "purpose": "hackathon"}
+          -> AWS::BedrockAgentCore::Runtime  marketing_poc_agent-Zz98Yy76Xx  NOT on the register
+
+Signal 2  Amazon Inspector software list (SBOM) of an EC2 instance  ->  self-hosted AI
+          i-0a1b2c3d4e5f60002: ollama 0.12.6 at /usr/local/bin/ollama
+          -> SelfHosted::AI::InferenceEndpoint  inference-endpoint/ollama  NOT on the register
+
+Signal 3  DNS lookups from an EC2 instance (GuardDuty)  ->  an outside AI service
+          i-0a1b2c3d4e5f60001 looked up api.openai.com 40 times
+          -> SelfHosted::AI::ExternalEndpoint  api.openai.com  NOT on the register
+
+16 AI assets found; 9 are not on data/inventory/sanctioned.json, the approved register.
+Found is not judged: the inventory lists the Ollama server, not that its port is open to the internet.
+```
+
+**9. AWS Config rules.** A managed rule and a custom one, on the first-draft setup.
+
+```bash
+python3 explore.py config
+```
+
+```output
+An AWS Config rule checks one setting on each resource. Result: COMPLIANT or NON_COMPLIANT. First-draft setup:
+
+Managed rule (AWS wrote it): bedrockagentcore-gateway-authorizer-enabled
+  tsg-helpdesk-gw-a1b2c3d4e5    COMPLIANT      an authorizer checks who calls the gateway
+  marketing-poc-gw-Qq11Ww22Ee   NON_COMPLIANT  AuthorizerType NONE
+
+Custom rule (you write it): C05 every gateway with a policy engine runs it in ENFORCE
+  tsg-helpdesk-gw-a1b2c3d4e5    NON_COMPLIANT  policy engine in LOG_ONLY
+
+The Helpdesk gateway passes the managed rule and fails yours. This lab: 9 managed rules, 5 custom.
+```
+
+**10. A hunting query.** AWS's own "tokens by principal" Logs Insights query, and the same question asked of the day.
+
+```bash
+python3 explore.py query
+```
+
+```output
+queries/d06-tokens-by-principal.txt: a CloudWatch Logs Insights query for the invocation log group
+
+  fields identity.arn as principal, input.inputTokenCount as inTokens, output.outputTokenCount as outTokens
+  | stats sum(inTokens) as totalInput, sum(outTokens) as totalOutput, count(*) as calls by principal, bin(1h)
+  | sort totalInput desc
+
+The same question, asked of today's invocation logs (top 6 of 21 rows):
+  principal               hour    totalInput totalOutput  calls
+  HelpdeskAppRole         16:00    2,373,724     454,127    320
+  BedrockAPIKey-q4m8      14:00      505,065     234,901     67
+  BedrockAPIKey-q4m8      15:00      395,211     184,630     53
+  DataScienceRole         13:00      112,091         600    150
+  HelpdeskAppRole         14:00       24,960       7,510     40
+  HelpdeskAppRole         11:00       22,294       6,032     34
+
+Hunting: you ask a question across the logs because you suspect something, not because an alert fired.
+```
+
+**11. A playbook.** The leaked key's first steps. Printed only: nothing runs.
+
+```bash
+python3 explore.py playbook
+```
+
+```output
+A playbook: the steps for one kind of incident, written before the day. Leaked long-term Bedrock API key.
+Printed only: nothing runs, nothing is sent.
+
+  TRIGGER   D01 alert at 14:05: BedrockAPIKey-q4m8 used from an unknown address (203.0.113.50, 203.0.113.51)
+  1 CHECK   data/iam-service-specific-credentials.json: BedrockAPIKey-q4m8  Active  created 2026-09-02  expires never
+  2 KEEP    copy the evidence before anything changes: 277 records mention the key (report.py pivot)
+  3 CONTAIN the smallest thing that stops the damage: this one key, not the account
+            aws iam update-service-specific-credential --user-name BedrockAPIKey-q4m8 \
+                --service-specific-credential-id ACCAEXAMPLEQ4M8KEY01 --status Inactive
+  4 ASK     AWS's seven questions: access, infrastructure, AI changes, data stores, invocation,
+            private data, agency
+  5 RECOVER move the job to a short-term key; find how the key leaked
+  6 WRITE   the incident report: report/TEMPLATE.md
+
+Containment stops the damage growing. The report says what happened, and what changes so it can't again.
+```
+
+**12. Read one run from the top.** `make simulate` is the lab's first real step. Each number is how many lines of that log the setup collected.
+
+```bash
+make simulate
+```
+
+```output
+python3 simulate.py
+first-draft  cloudtrail 865  invocations 0  guardduty 0  spans 0  app 585   -> out/first-draft/
+hardened     cloudtrail 930  invocations 855  guardduty 4  spans 33  app 585   -> out/hardened/
+```
+
 ## Step 1 · The day of the five incidents
 
 ```bash
