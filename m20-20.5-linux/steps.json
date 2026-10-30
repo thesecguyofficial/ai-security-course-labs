@@ -1,0 +1,109 @@
+{
+  "scenario": "m20-20.5-linux",
+  "start": 1.704,
+  "steps": [
+    {
+      "label": "Check high",
+      "speed": 1,
+      "start": 1.704,
+      "end": 10.687
+    },
+    {
+      "label": "Check medium",
+      "speed": 1,
+      "start": 17.688,
+      "end": 24.092
+    },
+    {
+      "label": "Open agents",
+      "speed": 1,
+      "start": 30.092,
+      "end": 36.55
+    },
+    {
+      "label": "Hardened",
+      "speed": 1,
+      "start": 42.55,
+      "end": 46.309
+    },
+    {
+      "label": "Open hardened",
+      "speed": 1,
+      "start": 50.309,
+      "end": 56.777
+    },
+    {
+      "label": "Hunt Q1",
+      "speed": 1,
+      "start": 61.777,
+      "end": 66.432
+    },
+    {
+      "label": "Hunt Q2 to Q4",
+      "speed": 1,
+      "start": 73.432,
+      "end": 78.14
+    },
+    {
+      "label": "Open the log",
+      "speed": 1,
+      "start": 85.14,
+      "end": 91.29
+    },
+    {
+      "label": "Guided build",
+      "speed": 1,
+      "start": 97.29,
+      "end": 101.977
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 107.977,
+      "end": 117.045
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.304,
+      "what": "type"
+    },
+    {
+      "t": 18.288,
+      "what": "type"
+    },
+    {
+      "t": 30.692,
+      "what": "type"
+    },
+    {
+      "t": 43.15,
+      "what": "type"
+    },
+    {
+      "t": 50.909,
+      "what": "type"
+    },
+    {
+      "t": 62.377,
+      "what": "type"
+    },
+    {
+      "t": 74.032,
+      "what": "type"
+    },
+    {
+      "t": 85.741,
+      "what": "type"
+    },
+    {
+      "t": 97.89,
+      "what": "type"
+    },
+    {
+      "t": 108.577,
+      "what": "type"
+    }
+  ],
+  "end": 121.045
+}

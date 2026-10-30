@@ -1,0 +1,120 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m20 && make aws-check | grep -A1 HIGH
+
+HIGH   R1  workload identity tsg-helpdesk is shared by tickets, mail: logs can't tell them apart
+            why: AgentCore: create separate workload identities with separate IAM roles (scope-credential-provider-access)
+HIGH   R2  IAM role tsg-agent-helpdesk is shared by tickets, mail: each gets the other's permissions
+            why: same page; OWASP NHI9:2025 NHI Reuse
+HIGH   R4  launcher takes the user from request-body: anyone can claim to be anyone
+            why: AgentCore: prefer GetWorkloadAccessTokenForJWT; derive the userId from the authenticated principal
+HIGH   R5  role tsg-agent-helpdesk can be assumed without a SourceIdentity: CloudTrail won't name the human
+            why: IAM: source identity is logged in CloudTrail and persists across role chaining
+HIGH   R7  role tsg-agent-helpdesk: bedrock-agentcore:GetWorkloadAccessToken*, bedrock-agentcore:GetResourceOauth2Token on Resource "*" can use every credential provider
+            why: AgentCore: the service does not enforce additional binding between workload identities and credential providers
+HIGH   R8  role tsg-agent-helpdesk doesn't deny GetWorkloadAccessTokenForUserId (an unverified user ID)
+            why: AgentCore: explicitly deny GetWorkloadAccessTokenForUserId where a JWT is always available
+--
+6 HIGH, 5 MEDIUM, 0 LOW  (11 findings)
+thesecguy@lab:~/ai-security-course-labs/labs/m20$ make aws-check | grep -A1 -E 'MEDIUM|findings'
+
+MEDIUM R3  workload identity tsg-helpdesk has no owner, purpose tag: nobody to call, nothing to review
+            why: OWASP NHI1:2025 Improper Offboarding; Entra Agent ID sponsors; AgentCore: consistent tagging
+MEDIUM R6  role tsg-agent-helpdesk allows 12 h sessions
+            why: OWASP NHI7:2025 Long-Lived Secrets
+MEDIUM R6  launcher asks for 12 h role sessions
+            why: OWASP NHI7:2025 Long-Lived Secrets
+MEDIUM R9  CloudTrail doesn't log AWS::BedrockAgentCore::WorkloadIdentity data events (off by default)
+            why: CloudTrail: data events are not logged by default
+MEDIUM R9  CloudTrail doesn't log AWS::BedrockAgentCore::TokenVault data events (off by default)
+            why: CloudTrail: data events are not logged by default
+--
+6 HIGH, 5 MEDIUM, 0 LOW  (11 findings)
+thesecguy@lab:~/ai-security-course-labs/labs/m20$ grep -A17 '"launcher"' aws/setups/first-draft.json
+
+  "launcher": {
+    "user_from": "request-body",
+    "source_identity_format": null,
+    "max_session_seconds": 43200
+  },
+  "agents": {
+    "orchestrator": {
+      "workload_identity": "tsg-orchestrator",
+      "role": "tsg-agent-orchestrator"
+    },
+    "tickets": {
+      "workload_identity": "tsg-helpdesk",
+      "role": "tsg-agent-helpdesk"
+    },
+    "mail": {
+      "workload_identity": "tsg-helpdesk",
+      "role": "tsg-agent-helpdesk"
+    }
+thesecguy@lab:~/ai-security-course-labs/labs/m20$ make aws-check-hardened
+
+python3 aws/check.py hardened
+
+0 HIGH, 0 MEDIUM, 0 LOW  (0 findings)
+thesecguy@lab:~/ai-security-course-labs/labs/m20$ grep -A4 '"launcher"' aws/setups/hardened.json
+
+  "launcher": {
+    "user_from": "validated-jwt-sub",
+    "source_identity_format": "user-<sub>",
+    "max_session_seconds": 900
+  },
+thesecguy@lab:~/ai-security-course-labs/labs/m20$ make aws-hunt | grep -A12 '^Q1'
+
+Q1 who acted for whom (SourceIdentity on the agent's role session):
+   user-u-1001-alice
+      2027-01-21T09:00:02Z  tsg-agent-orchestrator   identity tsg-orchestrator  GetWorkloadAccessTokenForJWT
+      2027-01-21T09:00:12Z  tsg-agent-tickets        identity tsg-tickets       GetWorkloadAccessTokenForJWT
+      2027-01-21T09:00:14Z  tsg-agent-tickets        identity tsg-tickets       GetResourceOauth2Token
+      2027-01-21T09:00:22Z  tsg-agent-mail           identity tsg-mail          GetWorkloadAccessTokenForJWT
+      2027-01-21T09:00:24Z  tsg-agent-mail           identity tsg-mail          GetResourceOauth2Token
+      2027-01-21T09:25:02Z  tsg-agent-tickets        identity tsg-tickets       GetWorkloadAccessTokenForJWT
+      2027-01-21T09:25:04Z  tsg-agent-tickets        identity tsg-tickets       GetResourceOauth2Token
+   user-u-1002-bob
+      2027-01-21T09:05:02Z  tsg-agent-orchestrator   identity tsg-orchestrator  GetWorkloadAccessTokenForJWT
+      2027-01-21T09:05:12Z  tsg-agent-tickets        identity tsg-tickets       GetWorkloadAccessTokenForJWT
+      2027-01-21T09:05:14Z  tsg-agent-tickets        identity tsg-tickets       GetResourceOauth2Token
+thesecguy@lab:~/ai-security-course-labs/labs/m20$ make aws-hunt | grep -A9 '^Q2'
+
+Q2 agent calls with no human on the session:
+   2027-01-21T09:15:02Z  tsg-agent-helpdesk       helpdesk-0915    GetWorkloadAccessTokenForJWT
+   2027-01-21T09:15:04Z  tsg-agent-helpdesk       helpdesk-0915    GetResourceOauth2Token
+   2027-01-21T09:15:07Z  tsg-agent-helpdesk       helpdesk-0915b   GetWorkloadAccessTokenForJWT
+   2027-01-21T09:15:09Z  tsg-agent-helpdesk       helpdesk-0915b   GetResourceOauth2Token
+Q3 runs whose session names a different human than the validated JWT:
+   tickets-run-0925     tickets  JWT user u-1002-bob     session says user-u-1001-alice
+Q4 workload identities shared by more than one agent:
+   tsg-helpdesk: used by the mail and tickets agents
+thesecguy@lab:~/ai-security-course-labs/labs/m20$ python3 explore.py launcher tickets-run-0925
+
+The launcher's own log row for run tickets-run-0925 (aws/data/app-log.jsonl, 8 rows)
+
+   ts               2027-01-21T09:25:00Z           when the launcher started the run
+   agent            tickets                        which agent it started
+   jwt_iss          Cognito user pool (example)    who signed the user's sign-in token
+   jwt_sub          u-1002-bob                     the user in the token the launcher VALIDATED
+   source_identity  user-u-1001-alice              the name it stamped on the role session
+
+   token user and session name DO NOT match. CloudTrail only sees the second one.
+thesecguy@lab:~/ai-security-course-labs/labs/m20$ grep -E '^##' aws/GUIDED-BUILD.md
+
+## Step 0 · Before you start (10 minutes)
+## Part A · Build it (30 minutes)
+### A1 · The identity provider: Cognito with two users
+### A2 · One workload identity per agent, with an accountable owner
+### A3 · One IAM role per agent that needs a human on every session
+### A4 · A trail that records Identity data events
+## Part B · Run it and prove it (30 minutes plus waiting for CloudTrail)
+### B1 · Normal runs
+### B2 · Three things that must fail
+### B3 · Change one setting and watch the proof break
+### B4 · Read the proof
+## Cost and teardown (do it the same day)
+thesecguy@lab:~/ai-security-course-labs/labs/m20$ make test | tail -n 2
+
+
+ALL TESTS PASSED (15 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m20$ exit
+
+exit
