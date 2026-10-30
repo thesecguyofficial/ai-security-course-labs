@@ -141,7 +141,7 @@ So this terminal is a process, on a kernel, inside a virtual machine: three laye
 
 **2. A real container (optional, needs Docker).** A container shares the host's kernel but gets its own view, and
 Docker can limit its network, files and processes with one flag each. Mac and Windows: Docker Desktop runs containers
-inside its own small Linux VM, so `uname -r` there shows that VM's kernel. Drop `sudo` if your user is in the
+inside a Linux VM (on Windows, WSL 2's), so `uname -r` there shows that VM's kernel. Drop `sudo` if your user is in the
 `docker` group.
 
 ```bash
