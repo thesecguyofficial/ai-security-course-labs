@@ -1,0 +1,109 @@
+{
+  "name": "m30-30.3-understand-linux",
+  "lesson": "30.1, 30.3",
+  "title": "Lab 30.3, part 1: get the lab, see what each file is, one release file, look before you run, set up and check, then look at each idea of a security release gate on its own with explore.py (your own suite, one case, 20 trials of one case, confidence intervals, noise over 10 days, a score card, two releases compared, the naive gate over 10 days, the six gate rules, a gate log, the CI pipeline) and read one run line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m30 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The folders",
+      "type": "ls releases suite ci data",
+      "pause_after": 4
+    },
+    {
+      "label": "A release",
+      "type": "cat releases/r42.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup test",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Check",
+      "type": "make test",
+      "pause_after": 4
+    },
+    {
+      "label": "Suite",
+      "type": "python3 explore.py suite",
+      "pause_after": 6
+    },
+    {
+      "label": "Case",
+      "type": "python3 explore.py case",
+      "pause_after": 6
+    },
+    {
+      "label": "Trials",
+      "type": "python3 explore.py trials",
+      "pause_after": 6
+    },
+    {
+      "label": "Interval",
+      "type": "python3 explore.py interval",
+      "pause_after": 6
+    },
+    {
+      "label": "Noise",
+      "type": "python3 explore.py noise",
+      "pause_after": 6
+    },
+    {
+      "label": "Card",
+      "type": "python3 explore.py card",
+      "pause_after": 7
+    },
+    {
+      "label": "Compare",
+      "type": "python3 explore.py compare",
+      "pause_after": 6
+    },
+    {
+      "label": "Naive",
+      "type": "python3 explore.py naive",
+      "pause_after": 6
+    },
+    {
+      "label": "Rules",
+      "type": "python3 explore.py rules",
+      "pause_after": 6
+    },
+    {
+      "label": "History",
+      "type": "python3 explore.py history",
+      "pause_after": 6
+    },
+    {
+      "label": "CI",
+      "type": "python3 explore.py ci",
+      "pause_after": 6
+    },
+    {
+      "label": "One run",
+      "type": "python3 agent.py --release r42 --case S-DOC-01 --trial 2",
+      "pause_after": 6
+    }
+  ]
+}
