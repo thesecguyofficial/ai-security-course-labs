@@ -3,11 +3,17 @@
 VENV := .venv
 PY   := $(if $(wildcard $(VENV)/bin/python),$(VENV)/bin/python,python3)
 
-.PHONY: setup first-draft hardened hunt story respond triage patterns test challenge clean
+.PHONY: setup check explore first-draft hardened hunt story respond triage patterns test challenge clean
 
 setup:         ## create .venv (no packages to install)
 	python3 -m venv $(VENV)
 	$(VENV)/bin/python -m pip install -r requirements.txt
+
+check:         ## prints the Python version: the lab needs 3.11 or newer, and nothing else
+	$(PY) -c 'import sys; v = sys.version.split()[0]; print("Python", v, "OK: standard library only, nothing else to install" if sys.version_info >= (3, 11) else "TOO OLD: this lab needs Python 3.11 or newer")'
+
+explore:       ## the read-only helper's menu (README Step 1b)
+	$(PY) explore.py
 
 first-draft:   ## 15 cases against the FIRST DRAFT: it misses 14 of them
 	$(PY) suite.py first-draft

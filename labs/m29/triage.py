@@ -17,6 +17,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+import textwrap
 
 import model
 import scenarios
@@ -92,8 +93,12 @@ def main(argv: list[str]) -> None:
     r = run(setup, alert, fooled="--fooled" in argv)
     print(f"setup {setup['name']} | alert {argv[1]}{' | model fooled' if '--fooled' in argv else ''}")
     print(f"  userAgent: {alert['event']['userAgent']}")
-    for c in r["executed"]:
-        print(f"  ran      {c['tool']:<16} {json.dumps(c['args'])}")
+    for c in r["executed"]:  # a long summary goes on its own lines, so every line fits a 132-column terminal
+        args = {k: v for k, v in c["args"].items() if k != "summary"}
+        print(f"  ran      {c['tool']:<16} {json.dumps(args)}")
+        if "summary" in c["args"]:
+            print(textwrap.fill(f"summary: {c['args']['summary']}", 126, initial_indent=" " * 27, break_on_hyphens=False,
+                                subsequent_indent=" " * 36))
     for c in r["refused"]:
         print(f"  REFUSED  {c['tool']:<16} {c['why']}")
     outcome = ("CLOSED by the agent" if r["closed"] else

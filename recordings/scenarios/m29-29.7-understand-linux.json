@@ -1,0 +1,119 @@
+{
+  "name": "m29-29.7-understand-linux",
+  "lesson": "29.1, 29.7",
+  "title": "Lab 29.7, part 1: get the lab, see what each file is, the fake org and its logs, look before you run, set up the virtual environment and check Python, then look at each security operations idea on its own with explore.py (one CloudTrail record, one detection rule, a match is an alert, an alert queue, a response playbook, DNS lookups, an inventory minus the register, a stolen key's first minutes, a decoy key, a CVSS score, the AI triage agent) and read one triage run line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m29 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The folders",
+      "type": "ls data data/org-day data/repos setups/first-draft setups/hardened setups/hardened/rules cloud",
+      "pause_after": 4
+    },
+    {
+      "label": "The org",
+      "type": "sed -n 4,21p data/org.json",
+      "pause_after": 6
+    },
+    {
+      "label": "The logs",
+      "type": "wc -l data/org-day/* data/repos/* data/triage-log.jsonl",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup check",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Check",
+      "type": "make check",
+      "pause_after": 3
+    },
+    {
+      "label": "Menu",
+      "type": ".venv/bin/python explore.py",
+      "pause_after": 5
+    },
+    {
+      "label": "Event",
+      "type": ".venv/bin/python explore.py event",
+      "pause_after": 7
+    },
+    {
+      "label": "Rule",
+      "type": ".venv/bin/python explore.py rule",
+      "pause_after": 7
+    },
+    {
+      "label": "Match",
+      "type": ".venv/bin/python explore.py match",
+      "pause_after": 6
+    },
+    {
+      "label": "Queue",
+      "type": ".venv/bin/python explore.py queue",
+      "pause_after": 6
+    },
+    {
+      "label": "Playbook",
+      "type": ".venv/bin/python explore.py playbook",
+      "pause_after": 6
+    },
+    {
+      "label": "DNS",
+      "type": ".venv/bin/python explore.py dns",
+      "pause_after": 6
+    },
+    {
+      "label": "Inventory",
+      "type": ".venv/bin/python explore.py inventory",
+      "pause_after": 7
+    },
+    {
+      "label": "Timeline",
+      "type": ".venv/bin/python explore.py timeline",
+      "pause_after": 6
+    },
+    {
+      "label": "Decoy",
+      "type": ".venv/bin/python explore.py decoy",
+      "pause_after": 6
+    },
+    {
+      "label": "Score",
+      "type": ".venv/bin/python explore.py score",
+      "pause_after": 7
+    },
+    {
+      "label": "Agent",
+      "type": ".venv/bin/python explore.py agent",
+      "pause_after": 7
+    },
+    {
+      "label": "One run",
+      "type": ".venv/bin/python triage.py hardened clean",
+      "pause_after": 6
+    }
+  ]
+}

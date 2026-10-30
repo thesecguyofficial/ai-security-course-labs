@@ -132,10 +132,11 @@ def main(argv: list[str]) -> None:
     r = run(setup)
     print(f"setup {setup['name']} | sources {setup['hunt']['sources']} | accounts "
           f"{setup['collect']['accounts']} | Regions {setup['collect']['regions']}")
-    for f in r["findings"]:
-        print(f"  SHADOW  {f['kind']:<21} {f['where']:<44} {f['detail']}")
+    for f in r["findings"]:  # two lines each, so every line fits a 132-column terminal
+        print(f"  SHADOW  {f['kind']:<21} {f['where']}")
+        print(f"          {'':<21} {f['detail']}")
     for d in r["decoys"]:
-        print(f"  decoy   {d['kind']:<21} {d['where']:<44} (planted by us, expected)")
+        print(f"  decoy   {d['kind']:<21} {d['where']:<40} (planted by us, expected)")
     print(f"shadow AI found: {len(r['findings'])}")
 
 
