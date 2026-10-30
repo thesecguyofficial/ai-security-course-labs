@@ -1,0 +1,75 @@
+{
+  "name": "m11-11.1-linux",
+  "lesson": "11.1, 11.2, 11.3, 11.4, 11.5",
+  "title": "M11 concept demos: the lab's attacks and checker rules one lesson at a time (least privilege, the private door, keys, logs, residency), first draft then hardened",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": [
+    "Traceback"
+  ],
+  "steps": [
+    {
+      "label": "Stolen role",
+      "type": "cd ai-security-course-labs/labs/m11 && python3 attack.py --only X2,X3,X5,X6",
+      "pause_after": 8
+    },
+    {
+      "label": "Role rules",
+      "type": "python3 checker.py --only=M11-01,M11-02,M11-03",
+      "pause_after": 7
+    },
+    {
+      "label": "Stolen role fixed",
+      "type": "python3 attack.py --plan hardened --only X2,X3,X5,X6",
+      "pause_after": 8
+    },
+    {
+      "label": "Network rules",
+      "type": "python3 checker.py --only=M11-05,M11-06,M11-07",
+      "pause_after": 7
+    },
+    {
+      "label": "Side door",
+      "type": "python3 attack.py --only X7",
+      "pause_after": 6
+    },
+    {
+      "label": "Doors fixed",
+      "type": "python3 attack.py --plan hardened --only X1,X7",
+      "pause_after": 8
+    },
+    {
+      "label": "Key rules",
+      "type": "python3 checker.py --only=M11-08,M11-09,M11-14",
+      "pause_after": 7
+    },
+    {
+      "label": "Log rules",
+      "type": "python3 checker.py --only=M11-10,M11-11,M11-12,M11-16",
+      "pause_after": 8
+    },
+    {
+      "label": "Global",
+      "type": "python3 attack.py --only X4,L1",
+      "pause_after": 7
+    },
+    {
+      "label": "Region guard",
+      "type": "cat org/scp-region-guard.first-draft.json",
+      "pause_after": 6
+    },
+    {
+      "label": "Residency rule",
+      "type": "python3 checker.py --only=M11-15",
+      "pause_after": 5
+    },
+    {
+      "label": "Global fixed",
+      "type": "python3 attack.py --plan hardened --only X4,L1",
+      "pause_after": 7
+    }
+  ]
+}

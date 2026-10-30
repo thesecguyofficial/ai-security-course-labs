@@ -4,6 +4,7 @@ checker.py: check a Terraform plan of TSG Helpdesk on Amazon Bedrock against the
     python3 checker.py                                  # the first draft (twin/first-draft.plan.json)
     python3 checker.py twin/hardened.plan.json          # the hardened version: expect 0 findings
     python3 checker.py my-plan.json                     # YOUR plan: terraform show -json tfplan > my-plan.json
+    python3 checker.py --only=M11-05,M11-06             # just these rules (the exit code still counts all)
 
 One rule per control, each tied to a lesson:
   11.1 least privilege    M11-01 to M11-03
@@ -426,8 +427,20 @@ def run(path="twin/first-draft.plan.json") -> list[Finding]:
 
 
 def main():
-    path = sys.argv[1] if len(sys.argv) > 1 else "twin/first-draft.plan.json"
+    args = [x for x in sys.argv[1:] if not x.startswith("--only")]
+    only = [x.split("=", 1)[1] for x in sys.argv[1:] if x.startswith("--only=")]
+    path = args[0] if args else "twin/first-draft.plan.json"
     findings = run(path)
+    if only:    # --only=M11-08,M11-14: show just these rules (the exit code still counts every finding)
+        keep = {r.strip().upper() for r in only[0].split(",")}
+        shown = [f for f in findings if f.rule in keep]
+        print(f"--- M11 plan checker · {path} · only {', '.join(sorted(keep))} ---\n")
+        for f in shown:
+            print(f"  {f.severity:<7} {f.rule}  {f.where}")
+            print(f"          {f.message}")
+            print(f"          fix: {f.fix}")
+        print(f"\n{len(shown)} of {len(findings)} findings shown")
+        sys.exit(1 if any(f.severity == "HIGH" for f in findings) else 0)
     print(f"--- M11 plan checker · {path} ---\n")
     for f in findings:
         print(f"  {f.severity:<7} {f.rule}  {f.where}")
