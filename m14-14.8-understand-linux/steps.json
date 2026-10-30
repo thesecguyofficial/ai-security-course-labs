@@ -1,0 +1,239 @@
+{
+  "scenario": "m14-14.8-understand-linux",
+  "start": 1.718,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.718,
+      "end": 12.122
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.122,
+      "end": 20.774
+    },
+    {
+      "label": "The setups",
+      "speed": 1,
+      "start": 24.774,
+      "end": 31.126
+    },
+    {
+      "label": "App notes",
+      "speed": 1,
+      "start": 35.126,
+      "end": 39.717
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 44.717,
+      "end": 47.38
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 50.38,
+      "end": 52.567
+    },
+    {
+      "label": "Map",
+      "speed": 1,
+      "start": 55.567,
+      "end": 60.294
+    },
+    {
+      "label": "Map first draft",
+      "speed": 1,
+      "start": 67.294,
+      "end": 72.29
+    },
+    {
+      "label": "Token",
+      "speed": 1,
+      "start": 78.29,
+      "end": 82.759
+    },
+    {
+      "label": "Inbound",
+      "speed": 1,
+      "start": 88.759,
+      "end": 98.266
+    },
+    {
+      "label": "Inbound hardened",
+      "speed": 1,
+      "start": 104.266,
+      "end": 113.586
+    },
+    {
+      "label": "Session",
+      "speed": 1,
+      "start": 119.586,
+      "end": 131.388
+    },
+    {
+      "label": "Vault",
+      "speed": 1,
+      "start": 137.388,
+      "end": 145.077
+    },
+    {
+      "label": "Vault hardened",
+      "speed": 1,
+      "start": 151.078,
+      "end": 158.293
+    },
+    {
+      "label": "Tools",
+      "speed": 1,
+      "start": 164.293,
+      "end": 169.088
+    },
+    {
+      "label": "Policy",
+      "speed": 1,
+      "start": 175.088,
+      "end": 188.034
+    },
+    {
+      "label": "Policy own",
+      "speed": 1,
+      "start": 195.034,
+      "end": 207.917
+    },
+    {
+      "label": "Policy log only",
+      "speed": 1,
+      "start": 213.917,
+      "end": 227.18
+    },
+    {
+      "label": "Memory",
+      "speed": 1,
+      "start": 233.18,
+      "end": 241.159
+    },
+    {
+      "label": "Memory hardened",
+      "speed": 1,
+      "start": 247.159,
+      "end": 252.423
+    },
+    {
+      "label": "Logs",
+      "speed": 1,
+      "start": 257.423,
+      "end": 262.488
+    },
+    {
+      "label": "Logs hardened",
+      "speed": 1,
+      "start": 267.489,
+      "end": 272.384
+    },
+    {
+      "label": "One turn",
+      "speed": 1,
+      "start": 278.385,
+      "end": 288.257
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.318,
+      "what": "type"
+    },
+    {
+      "t": 15.722,
+      "what": "type"
+    },
+    {
+      "t": 25.374,
+      "what": "type"
+    },
+    {
+      "t": 35.726,
+      "what": "type"
+    },
+    {
+      "t": 45.317,
+      "what": "type"
+    },
+    {
+      "t": 50.98,
+      "what": "type"
+    },
+    {
+      "t": 56.167,
+      "what": "type"
+    },
+    {
+      "t": 67.894,
+      "what": "type"
+    },
+    {
+      "t": 78.891,
+      "what": "type"
+    },
+    {
+      "t": 89.359,
+      "what": "type"
+    },
+    {
+      "t": 104.866,
+      "what": "type"
+    },
+    {
+      "t": 120.187,
+      "what": "type"
+    },
+    {
+      "t": 137.988,
+      "what": "type"
+    },
+    {
+      "t": 151.678,
+      "what": "type"
+    },
+    {
+      "t": 164.894,
+      "what": "type"
+    },
+    {
+      "t": 175.688,
+      "what": "type"
+    },
+    {
+      "t": 195.634,
+      "what": "type"
+    },
+    {
+      "t": 214.518,
+      "what": "type"
+    },
+    {
+      "t": 233.78,
+      "what": "type"
+    },
+    {
+      "t": 247.759,
+      "what": "type"
+    },
+    {
+      "t": 258.023,
+      "what": "type"
+    },
+    {
+      "t": 268.089,
+      "what": "type"
+    },
+    {
+      "t": 278.985,
+      "what": "type"
+    }
+  ],
+  "end": 294.257
+}

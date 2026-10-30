@@ -1,0 +1,692 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 4824, done.
+remote: Counting objects:   0% (1/269)
+remote: Counting objects:   1% (3/269)
+remote: Counting objects:   2% (6/269)
+remote: Counting objects:   3% (9/269)
+remote: Counting objects:   4% (11/269)
+remote: Counting objects:   5% (14/269)
+remote: Counting objects:   6% (17/269)
+remote: Counting objects:   7% (19/269)
+remote: Counting objects:   8% (22/269)
+remote: Counting objects:   9% (25/269)
+remote: Counting objects:  10% (27/269)
+remote: Counting objects:  11% (30/269)
+remote: Counting objects:  12% (33/269)
+remote: Counting objects:  13% (35/269)
+remote: Counting objects:  14% (38/269)
+remote: Counting objects:  15% (41/269)
+remote: Counting objects:  16% (44/269)
+remote: Counting objects:  17% (46/269)
+remote: Counting objects:  18% (49/269)
+remote: Counting objects:  19% (52/269)
+remote: Counting objects:  20% (54/269)
+remote: Counting objects:  21% (57/269)
+remote: Counting objects:  22% (60/269)
+remote: Counting objects:  23% (62/269)
+remote: Counting objects:  24% (65/269)
+remote: Counting objects:  25% (68/269)
+remote: Counting objects:  26% (70/269)
+remote: Counting objects:  27% (73/269)
+remote: Counting objects:  28% (76/269)
+remote: Counting objects:  29% (79/269)
+remote: Counting objects:  30% (81/269)
+remote: Counting objects:  31% (84/269)
+remote: Counting objects:  32% (87/269)
+remote: Counting objects:  33% (89/269)
+remote: Counting objects:  34% (92/269)
+remote: Counting objects:  35% (95/269)
+remote: Counting objects:  36% (97/269)
+remote: Counting objects:  37% (100/269)
+remote: Counting objects:  38% (103/269)
+remote: Counting objects:  39% (105/269)
+remote: Counting objects:  40% (108/269)
+remote: Counting objects:  41% (111/269)
+remote: Counting objects:  42% (113/269)
+remote: Counting objects:  43% (116/269)
+remote: Counting objects:  44% (119/269)
+remote: Counting objects:  45% (122/269)
+remote: Counting objects:  46% (124/269)
+remote: Counting objects:  47% (127/269)
+remote: Counting objects:  48% (130/269)
+remote: Counting objects:  49% (132/269)
+remote: Counting objects:  50% (135/269)
+remote: Counting objects:  51% (138/269)
+remote: Counting objects:  52% (140/269)
+remote: Counting objects:  53% (143/269)
+remote: Counting objects:  54% (146/269)
+remote: Counting objects:  55% (148/269)
+remote: Counting objects:  56% (151/269)
+remote: Counting objects:  57% (154/269)
+remote: Counting objects:  58% (157/269)
+remote: Counting objects:  59% (159/269)
+remote: Counting objects:  60% (162/269)
+remote: Counting objects:  61% (165/269)
+remote: Counting objects:  62% (167/269)
+remote: Counting objects:  63% (170/269)
+remote: Counting objects:  64% (173/269)
+remote: Counting objects:  65% (175/269)
+remote: Counting objects:  66% (178/269)
+remote: Counting objects:  67% (181/269)
+remote: Counting objects:  68% (183/269)
+remote: Counting objects:  69% (186/269)
+remote: Counting objects:  70% (189/269)
+remote: Counting objects:  71% (191/269)
+remote: Counting objects:  72% (194/269)
+remote: Counting objects:  73% (197/269)
+remote: Counting objects:  74% (200/269)
+remote: Counting objects:  75% (202/269)
+remote: Counting objects:  76% (205/269)
+remote: Counting objects:  77% (208/269)
+remote: Counting objects:  78% (210/269)
+remote: Counting objects:  79% (213/269)
+remote: Counting objects:  80% (216/269)
+remote: Counting objects:  81% (218/269)
+remote: Counting objects:  82% (221/269)
+remote: Counting objects:  83% (224/269)
+remote: Counting objects:  84% (226/269)
+remote: Counting objects:  85% (229/269)
+remote: Counting objects:  86% (232/269)
+remote: Counting objects:  87% (235/269)
+remote: Counting objects:  88% (237/269)
+remote: Counting objects:  89% (240/269)
+remote: Counting objects:  90% (243/269)
+remote: Counting objects:  91% (245/269)
+remote: Counting objects:  92% (248/269)
+remote: Counting objects:  93% (251/269)
+remote: Counting objects:  94% (253/269)
+remote: Counting objects:  95% (256/269)
+remote: Counting objects:  96% (259/269)
+remote: Counting objects:  97% (261/269)
+remote: Counting objects:  98% (264/269)
+remote: Counting objects:  99% (267/269)
+remote: Counting objects: 100% (269/269)
+remote: Counting objects: 100% (269/269), done.
+remote: Compressing objects:   0% (1/196)
+remote: Compressing objects:   1% (2/196)
+remote: Compressing objects:   2% (4/196)
+remote: Compressing objects:   3% (6/196)
+remote: Compressing objects:   4% (8/196)
+remote: Compressing objects:   5% (10/196)
+remote: Compressing objects:   6% (12/196)
+remote: Compressing objects:   7% (14/196)
+remote: Compressing objects:   8% (16/196)
+remote: Compressing objects:   9% (18/196)
+remote: Compressing objects:  10% (20/196)
+remote: Compressing objects:  11% (22/196)
+remote: Compressing objects:  12% (24/196)
+remote: Compressing objects:  13% (26/196)
+remote: Compressing objects:  14% (28/196)
+remote: Compressing objects:  15% (30/196)
+remote: Compressing objects:  16% (32/196)
+remote: Compressing objects:  17% (34/196)
+remote: Compressing objects:  18% (36/196)
+remote: Compressing objects:  19% (38/196)
+remote: Compressing objects:  20% (40/196)
+remote: Compressing objects:  21% (42/196)
+remote: Compressing objects:  22% (44/196)
+remote: Compressing objects:  23% (46/196)
+remote: Compressing objects:  24% (48/196)
+remote: Compressing objects:  25% (49/196)
+remote: Compressing objects:  26% (51/196)
+remote: Compressing objects:  27% (53/196)
+remote: Compressing objects:  28% (55/196)
+remote: Compressing objects:  29% (57/196)
+remote: Compressing objects:  30% (59/196)
+remote: Compressing objects:  31% (61/196)
+remote: Compressing objects:  32% (63/196)
+remote: Compressing objects:  33% (65/196)
+remote: Compressing objects:  34% (67/196)
+remote: Compressing objects:  35% (69/196)
+remote: Compressing objects:  36% (71/196)
+remote: Compressing objects:  37% (73/196)
+remote: Compressing objects:  38% (75/196)
+remote: Compressing objects:  39% (77/196)
+remote: Compressing objects:  40% (79/196)
+remote: Compressing objects:  41% (81/196)
+remote: Compressing objects:  42% (83/196)
+remote: Compressing objects:  43% (85/196)
+remote: Compressing objects:  44% (87/196)
+remote: Compressing objects:  45% (89/196)
+remote: Compressing objects:  46% (91/196)
+remote: Compressing objects:  47% (93/196)
+remote: Compressing objects:  48% (95/196)
+remote: Compressing objects:  49% (97/196)
+remote: Compressing objects:  50% (98/196)
+remote: Compressing objects:  51% (100/196)
+remote: Compressing objects:  52% (102/196)
+remote: Compressing objects:  53% (104/196)
+remote: Compressing objects:  54% (106/196)
+remote: Compressing objects:  55% (108/196)
+remote: Compressing objects:  56% (110/196)
+remote: Compressing objects:  57% (112/196)
+remote: Compressing objects:  58% (114/196)
+remote: Compressing objects:  59% (116/196)
+remote: Compressing objects:  60% (118/196)
+remote: Compressing objects:  61% (120/196)
+remote: Compressing objects:  62% (122/196)
+remote: Compressing objects:  63% (124/196)
+remote: Compressing objects:  64% (126/196)
+remote: Compressing objects:  65% (128/196)
+remote: Compressing objects:  66% (130/196)
+remote: Compressing objects:  67% (132/196)
+remote: Compressing objects:  68% (134/196)
+remote: Compressing objects:  69% (136/196)
+remote: Compressing objects:  70% (138/196)
+remote: Compressing objects:  71% (140/196)
+remote: Compressing objects:  72% (142/196)
+remote: Compressing objects:  73% (144/196)
+remote: Compressing objects:  74% (146/196)
+remote: Compressing objects:  75% (147/196)
+remote: Compressing objects:  76% (149/196)
+remote: Compressing objects:  77% (151/196)
+remote: Compressing objects:  78% (153/196)
+remote: Compressing objects:  79% (155/196)
+remote: Compressing objects:  80% (157/196)
+remote: Compressing objects:  81% (159/196)
+remote: Compressing objects:  82% (161/196)
+remote: Compressing objects:  83% (163/196)
+remote: Compressing objects:  84% (165/196)
+remote: Compressing objects:  85% (167/196)
+remote: Compressing objects:  86% (169/196)
+remote: Compressing objects:  87% (171/196)
+remote: Compressing objects:  88% (173/196)
+remote: Compressing objects:  89% (175/196)
+remote: Compressing objects:  90% (177/196)
+remote: Compressing objects:  91% (179/196)
+remote: Compressing objects:  92% (181/196)
+remote: Compressing objects:  93% (183/196)
+remote: Compressing objects:  94% (185/196)
+remote: Compressing objects:  95% (187/196)
+remote: Compressing objects:  96% (189/196)
+remote: Compressing objects:  97% (191/196)
+remote: Compressing objects:  98% (193/196)
+remote: Compressing objects:  99% (195/196)
+remote: Compressing objects: 100% (196/196)
+remote: Compressing objects: 100% (196/196), done.
+Receiving objects:   0% (1/4824)
+Receiving objects:   1% (49/4824)
+Receiving objects:   2% (97/4824)
+Receiving objects:   3% (145/4824)
+Receiving objects:   4% (193/4824)
+Receiving objects:   5% (242/4824)
+Receiving objects:   6% (290/4824)
+Receiving objects:   7% (338/4824)
+Receiving objects:   8% (386/4824)
+Receiving objects:   9% (435/4824)
+Receiving objects:  10% (483/4824)
+Receiving objects:  11% (531/4824)
+Receiving objects:  12% (579/4824)
+Receiving objects:  13% (628/4824)
+Receiving objects:  14% (676/4824)
+Receiving objects:  15% (724/4824)
+Receiving objects:  16% (772/4824)
+Receiving objects:  17% (821/4824)
+Receiving objects:  18% (869/4824)
+Receiving objects:  19% (917/4824)
+Receiving objects:  20% (965/4824)
+Receiving objects:  21% (1014/4824)
+Receiving objects:  22% (1062/4824)
+Receiving objects:  23% (1110/4824)
+Receiving objects:  24% (1158/4824)
+Receiving objects:  25% (1206/4824)
+Receiving objects:  26% (1255/4824)
+Receiving objects:  27% (1303/4824)
+Receiving objects:  28% (1351/4824)
+Receiving objects:  29% (1399/4824)
+Receiving objects:  30% (1448/4824)
+Receiving objects:  31% (1496/4824)
+Receiving objects:  32% (1544/4824)
+Receiving objects:  33% (1592/4824)
+Receiving objects:  34% (1641/4824)
+Receiving objects:  35% (1689/4824)
+Receiving objects:  36% (1737/4824)
+Receiving objects:  37% (1785/4824)
+Receiving objects:  38% (1834/4824)
+Receiving objects:  39% (1882/4824)
+Receiving objects:  40% (1930/4824)
+Receiving objects:  41% (1978/4824)
+Receiving objects:  42% (2027/4824)
+Receiving objects:  43% (2075/4824)
+Receiving objects:  44% (2123/4824)
+Receiving objects:  45% (2171/4824)
+Receiving objects:  46% (2220/4824)
+Receiving objects:  47% (2268/4824)
+Receiving objects:  48% (2316/4824)
+Receiving objects:  49% (2364/4824)
+Receiving objects:  50% (2412/4824)
+Receiving objects:  51% (2461/4824)
+Receiving objects:  52% (2509/4824)
+Receiving objects:  53% (2557/4824)
+Receiving objects:  54% (2605/4824)
+Receiving objects:  55% (2654/4824)
+Receiving objects:  56% (2702/4824)
+Receiving objects:  57% (2750/4824)
+Receiving objects:  58% (2798/4824)
+Receiving objects:  59% (2847/4824)
+Receiving objects:  60% (2895/4824)
+Receiving objects:  61% (2943/4824)
+Receiving objects:  62% (2991/4824)
+Receiving objects:  63% (3040/4824)
+Receiving objects:  64% (3088/4824)
+Receiving objects:  65% (3136/4824)
+Receiving objects:  66% (3184/4824)
+Receiving objects:  67% (3233/4824)
+Receiving objects:  68% (3281/4824)
+Receiving objects:  69% (3329/4824)
+Receiving objects:  70% (3377/4824)
+Receiving objects:  71% (3426/4824)
+Receiving objects:  72% (3474/4824)
+Receiving objects:  73% (3522/4824)
+Receiving objects:  74% (3570/4824)
+Receiving objects:  75% (3618/4824)
+Receiving objects:  76% (3667/4824)
+Receiving objects:  77% (3715/4824)
+Receiving objects:  78% (3763/4824)
+Receiving objects:  79% (3811/4824)
+Receiving objects:  80% (3860/4824)
+Receiving objects:  81% (3908/4824)
+Receiving objects:  82% (3956/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  83% (4004/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  84% (4053/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  85% (4101/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  86% (4149/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  87% (4197/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  88% (4246/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  89% (4294/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  90% (4342/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  91% (4390/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  92% (4439/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  93% (4487/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  94% (4535/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  95% (4583/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  96% (4632/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  97% (4680/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects:  98% (4728/4824), 36.54 MiB | 73.00 MiB/s
+remote: Total 4824 (delta 134), reused 167 (delta 73), pack-reused 4555 (from 3)
+Receiving objects:  99% (4776/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects: 100% (4824/4824), 36.54 MiB | 73.00 MiB/s
+Receiving objects: 100% (4824/4824), 54.57 MiB | 75.82 MiB/s, done.
+Resolving deltas:   0% (0/2177)
+Resolving deltas:   1% (22/2177)
+Resolving deltas:   2% (44/2177)
+Resolving deltas:   3% (66/2177)
+Resolving deltas:   4% (88/2177)
+Resolving deltas:   5% (109/2177)
+Resolving deltas:   6% (131/2177)
+Resolving deltas:   7% (153/2177)
+Resolving deltas:   8% (175/2177)
+Resolving deltas:   9% (196/2177)
+Resolving deltas:  10% (218/2177)
+Resolving deltas:  11% (240/2177)
+Resolving deltas:  12% (262/2177)
+Resolving deltas:  13% (284/2177)
+Resolving deltas:  14% (305/2177)
+Resolving deltas:  15% (327/2177)
+Resolving deltas:  16% (349/2177)
+Resolving deltas:  17% (371/2177)
+Resolving deltas:  18% (392/2177)
+Resolving deltas:  19% (414/2177)
+Resolving deltas:  20% (436/2177)
+Resolving deltas:  21% (458/2177)
+Resolving deltas:  22% (479/2177)
+Resolving deltas:  23% (501/2177)
+Resolving deltas:  24% (523/2177)
+Resolving deltas:  25% (545/2177)
+Resolving deltas:  26% (567/2177)
+Resolving deltas:  27% (588/2177)
+Resolving deltas:  28% (610/2177)
+Resolving deltas:  29% (632/2177)
+Resolving deltas:  30% (654/2177)
+Resolving deltas:  31% (675/2177)
+Resolving deltas:  32% (697/2177)
+Resolving deltas:  33% (719/2177)
+Resolving deltas:  34% (741/2177)
+Resolving deltas:  35% (762/2177)
+Resolving deltas:  36% (784/2177)
+Resolving deltas:  37% (806/2177)
+Resolving deltas:  38% (828/2177)
+Resolving deltas:  39% (850/2177)
+Resolving deltas:  40% (871/2177)
+Resolving deltas:  41% (893/2177)
+Resolving deltas:  42% (915/2177)
+Resolving deltas:  43% (937/2177)
+Resolving deltas:  44% (958/2177)
+Resolving deltas:  45% (980/2177)
+Resolving deltas:  46% (1002/2177)
+Resolving deltas:  47% (1024/2177)
+Resolving deltas:  48% (1045/2177)
+Resolving deltas:  49% (1067/2177)
+Resolving deltas:  50% (1089/2177)
+Resolving deltas:  51% (1111/2177)
+Resolving deltas:  52% (1133/2177)
+Resolving deltas:  53% (1154/2177)
+Resolving deltas:  54% (1176/2177)
+Resolving deltas:  55% (1198/2177)
+Resolving deltas:  56% (1220/2177)
+Resolving deltas:  57% (1241/2177)
+Resolving deltas:  58% (1263/2177)
+Resolving deltas:  59% (1285/2177)
+Resolving deltas:  60% (1307/2177)
+Resolving deltas:  61% (1328/2177)
+Resolving deltas:  62% (1350/2177)
+Resolving deltas:  63% (1372/2177)
+Resolving deltas:  64% (1394/2177)
+Resolving deltas:  65% (1416/2177)
+Resolving deltas:  66% (1437/2177)
+Resolving deltas:  67% (1460/2177)
+Resolving deltas:  68% (1481/2177)
+Resolving deltas:  69% (1503/2177)
+Resolving deltas:  70% (1524/2177)
+Resolving deltas:  71% (1546/2177)
+Resolving deltas:  72% (1568/2177)
+Resolving deltas:  73% (1590/2177)
+Resolving deltas:  74% (1611/2177)
+Resolving deltas:  75% (1633/2177)
+Resolving deltas:  76% (1655/2177)
+Resolving deltas:  77% (1677/2177)
+Resolving deltas:  78% (1699/2177)
+Resolving deltas:  79% (1720/2177)
+Resolving deltas:  80% (1742/2177)
+Resolving deltas:  81% (1764/2177)
+Resolving deltas:  82% (1786/2177)
+Resolving deltas:  83% (1807/2177)
+Resolving deltas:  84% (1829/2177)
+Resolving deltas:  85% (1851/2177)
+Resolving deltas:  86% (1873/2177)
+Resolving deltas:  87% (1894/2177)
+Resolving deltas:  88% (1916/2177)
+Resolving deltas:  89% (1938/2177)
+Resolving deltas:  90% (1960/2177)
+Resolving deltas:  91% (1982/2177)
+Resolving deltas:  92% (2003/2177)
+Resolving deltas:  93% (2025/2177)
+Resolving deltas:  94% (2047/2177)
+Resolving deltas:  95% (2069/2177)
+Resolving deltas:  96% (2090/2177)
+Resolving deltas:  97% (2112/2177)
+Resolving deltas:  98% (2134/2177)
+Resolving deltas:  99% (2156/2177)
+Resolving deltas: 100% (2177/2177)
+Resolving deltas: 100% (2177/2177), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m14 && ls
+
+GUIDED-BUILD.md  README.md        cedar.py    cloud  evaluate.py  helpdesk.py  run_tests.py  suite              test_lab.py
+Makefile         anycompany.json  checker.py  data   explore.py   hunt.py      setups        test_challenge.py  twin.py
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ ls setups/first-draft setups/first-draft/policies
+
+setups/first-draft:
+app.json      iam.json       memory.json         policies      targets.json   tools.json
+gateway.json  identity.json  observability.json  runtime.json  temporal.json
+
+setups/first-draft/policies:
+allow_all_tools.cedar  reset_own_mfa.cedar
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ cat setups/first-draft/app.json
+
+{
+  "_about": "How the web backend and the agent code build each request. 'request' means a value the browser sent (anyone can forge it).",
+  "user_from": "session",
+  "runtime_session_id_from": "request",
+  "runtime_user_id_from": "request",
+  "agent_gateway_token": "agent_m2m",
+  "policy_session_id_from": "request",
+  "entrypoint_validates_prompt": false,
+  "memory_actor_id_from": "request",
+  "validate_memory_writes": false
+}
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ make -n setup
+
+python3 ../../tools/check_python.py 3.11
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ make setup
+
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py map hardened
+
+The TSG Helpdesk on Amazon Bedrock AgentCore, setup: hardened   (fictional AnyCompany, Region us-east-1)
+
+  piece             its job                                        what this setup has
+  Runtime           runs the agent code: one microVM per session   tsg_helpdesk, PYTHON_3_13, network PUBLIC, inbound JWT
+                                                                   (customJWTAuthorizer)
+  Identity          who may call; whose tokens the agent uses      workload identity tsg_helpdesk-AbCdEf1234; vault provider
+                                                                   tickets-saas (USER_FEDERATION)
+  Gateway           one MCP door to the tools                      tsg-helpdesk-gw, 3 tools, MCP, inbound CUSTOM_JWT
+                                                                   (allowedClients)
+  Policy            a yes or no on every tool call                 6 Cedar policies, mode ENFORCE
+  Memory            what the agent remembers, per user             tsg_helpdesk_mem, namespace /users/{actorId}/facts/
+  Code Interpreter  runs code in a sandbox                         none
+  Browser           a cloud web browser                            none
+  Observability     the record of what happened                    data events: Runtime, Gateway, Memory, TokenVault,
+                                                                   WorkloadIdentity; tracing: runtime, gateway, memory
+  Evaluations       scores answers after release                   tsg_helpdesk_eval, 10% of traces, 5 evaluators
+
+On Lambda or ECS you would build each of these yourself. Here each one is a separate AWS service with its own
+settings, its own IAM actions and its own logs. Files: setups/hardened/*.json and policies/*.cedar
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py map first-draft
+
+The TSG Helpdesk on Amazon Bedrock AgentCore, setup: first-draft   (fictional AnyCompany, Region us-east-1)
+
+  piece             its job                                        what this setup has
+  Runtime           runs the agent code: one microVM per session   tsg_helpdesk, PYTHON_3_13, network PUBLIC, inbound IAM SigV4
+                                                                   (the default)
+  Identity          who may call; whose tokens the agent uses      workload identity tsg_helpdesk-AbCdEf1234; vault provider
+                                                                   tickets-saas (USER_FEDERATION)
+  Gateway           one MCP door to the tools                      tsg-helpdesk-gw, 3 tools, MCP, inbound CUSTOM_JWT
+                                                                   (allowedScopes)
+  Policy            a yes or no on every tool call                 2 Cedar policies, mode LOG_ONLY
+  Memory            what the agent remembers, per user             tsg_helpdesk_mem, namespace /helpdesk/facts/
+  Code Interpreter  runs code in a sandbox                         PUBLIC network, role role/tsg-code-interpreter-role
+  Browser           a cloud web browser                            none
+  Observability     the record of what happened                    data events: none; tracing: runtime
+  Evaluations       scores answers after release                   none
+
+On Lambda or ECS you would build each of these yourself. Here each one is a separate AWS service with its own
+settings, its own IAM actions and its own logs. Files: setups/first-draft/*.json and policies/*.cedar
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py token bob
+
+The access token Amazon Cognito gives bob after sign-in to the helpdesk-web app.
+A real one is a signed JWT: three base64 parts (header.claims.signature). These are its claims:
+
+  iss        https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE1   issuer: who signed it (AnyCompany's Cognito user pool)
+  sub        sub-bob                                                          subject: the user's fixed ID in that pool
+  client_id  7helpdeskweb0example0client                                      which app asked for the token
+  token_use  access                                                           an access token, for calling things
+  scope      openid profile                                                   what the token allows
+  username   bob                                                              the user name, also a claim
+
+The browser sends it as: Authorization: Bearer <token>. Anyone who checks it reads these claims.
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py inbound first-draft gateway dana --client partner-portal
+
+dana's token from the partner-portal app, sent to the gateway (first-draft)
+
+  discoveryUrl     https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE1/.well-known/openid-configuration
+  check 1  iss     matches the issuer from the discovery URL
+  skipped  allowedClients  not set, so nothing compares client_id
+  skipped  allowedAudience not set, so nothing compares aud
+  check    allowedScopes   ["openid", "helpdesk/tools"]  vs  scope = openid profile
+  skipped  customClaims    not set, so nothing compares custom claims
+
+=> accepted (allowedScopes checked)
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py inbound hardened gateway dana --client partner-portal
+
+dana's token from the partner-portal app, sent to the gateway (hardened)
+
+  discoveryUrl     https://cognito-idp.us-east-1.amazonaws.com/us-east-1_EXAMPLE1/.well-known/openid-configuration
+  check 1  iss     matches the issuer from the discovery URL
+  check    allowedClients  ["7helpdeskweb0example0client"]  vs  client_id = 3partnerportal0example0client
+  skipped  allowedAudience not set, so nothing compares aud
+  skipped  allowedScopes   not set, so nothing compares scope
+  skipped  customClaims    not set, so nothing compares custom claims
+
+=> 401: client_id not in allowedClients
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py session first-draft bob --session-id alice-conversation-0001-00 
+01-0001-0001
+
+bob sends a message (first-draft). Which runtime session does it land in?
+
+  the browser sent session ID   alice-conversation-0001-0001-0001-0001
+  this backend takes it from    request  (whatever the browser says)
+  runtimeSessionId used         alice-conversation-0001-0001-0001-0001   (38 characters; AWS asks for at least 33)
+
+  InvokeAgentRuntime(agentRuntimeArn, runtimeSessionId, payload)
+  same runtimeSessionId  -> the same microVM: its memory, its files, the earlier conversation
+  new runtimeSessionId   -> a new microVM; after the session it is stopped and its memory sanitized
+  stops after 900 s idle and 28800 s at most (AWS defaults: 15 minutes, 8 hours)
+
+=> AgentCore does not check that this session belongs to this user. Your backend must.
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py vault first-draft bob --user-id alice
+
+bob is signed in and asks for their tickets (first-draft). The agent needs a token for tickets-saas.
+
+  1. runtime inbound: IAM SigV4. The caller is the backend role tsg-backend, not the user
+  2. runtimeUserId = alice  (header X-Amzn-Bedrock-AgentCore-Runtime-User-Id), taken from the request
+     GetWorkloadAccessTokenForUserId treats it as an opaque string: nothing checks it
+  3. GetResourceOauth2Token(tickets-saas, USER_FEDERATION) with that workload access token
+  4. the vault returns the token stored for user alice: tickets-token-for-alice
+
+=> the agent reads alice's tickets   <- not the signed-in user
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py vault hardened bob --user-id alice
+
+bob is signed in and asks for their tickets (hardened). The agent needs a token for tickets-saas.
+
+  1. runtime inbound: JWT. AgentCore validated the token, took iss and sub
+  2. GetWorkloadAccessTokenForJWT -> a workload access token for (agent, user) = (tsg_helpdesk-AbCdEf1234, bob)
+     the browser also said user = alice: ignored, the user comes from the token
+  3. GetResourceOauth2Token(tickets-saas, USER_FEDERATION) with that workload access token
+  4. the vault returns the token stored for user bob: tickets-token-for-bob
+
+=> the agent reads bob's tickets
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py tools hardened
+
+Gateway tsg-helpdesk-gw (hardened): MCP endpoint, inbound CUSTOM_JWT
+
+  target HelpdeskTools = Lambda function tsg-helpdesk-tools, outbound credential GATEWAY_IAM_ROLE
+  tools/list shows the agent these tools (target___tool):
+    HelpdeskTools___search_kb    (query)  Search the IT knowledge base
+    HelpdeskTools___reset_mfa    (target_username, caller_username)  Reset a user's MFA device
+    HelpdeskTools___send_email   (to, subject, body, caller_username)  Send an email for the signed-in user
+
+  tools/call reset_mfa -> the gateway invokes the Lambda with its own role, tsg-gateway-role. The Lambda gets:
+    event   {"target_username": "...", "caller_username": "..."}       the tool input, nothing else
+    context gateway ID, target ID, tool name, request IDs               nothing about the end user
+
+=> the tools Lambda can't tell Bob from Alice. The check has to happen before it: in the gateway's policy.
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py policy hardened bob reset_mfa '{"target_username": "ceo", "call 
+er_username": "bob"}'
+
+One tools/call through the gateway (hardened), as the policy engine sees it:
+
+  principal  AgentCore::OAuthUser::"sub-bob"   tags = the token's claims (username = bob)
+  action     AgentCore::Action::"HelpdeskTools___reset_mfa"
+  resource   AgentCore::Gateway::"...helpdesk-gw-a1b2c3d4e5"
+  context    input = {"target_username": "ceo", "caller_username": "bob"}   (the tool arguments, written by the model)
+
+  forbid caller_must_be_signed_in_user  does not apply
+  forbid never_reset_breakglass         does not apply
+  permit read_tools                     does not apply
+  permit reset_mfa_it_staff             does not apply
+  permit reset_own_mfa                  does not apply
+  permit send_email                     does not apply
+
+  decision   DENY   (No policy applies to the request (denied by default).)
+  mode       ENFORCE  -> the call is REFUSED
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py policy hardened bob reset_mfa '{"target_username": "bob", "call 
+er_username": "bob"}'
+
+One tools/call through the gateway (hardened), as the policy engine sees it:
+
+  principal  AgentCore::OAuthUser::"sub-bob"   tags = the token's claims (username = bob)
+  action     AgentCore::Action::"HelpdeskTools___reset_mfa"
+  resource   AgentCore::Gateway::"...helpdesk-gw-a1b2c3d4e5"
+  context    input = {"target_username": "bob", "caller_username": "bob"}   (the tool arguments, written by the model)
+
+  forbid caller_must_be_signed_in_user  does not apply
+  forbid never_reset_breakglass         does not apply
+  permit read_tools                     does not apply
+  permit reset_mfa_it_staff             does not apply
+  permit reset_own_mfa                  applies
+  permit send_email                     does not apply
+
+  decision   ALLOW   (a permit applies, no forbid)
+  mode       ENFORCE  -> the call is run
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py policy first-draft bob reset_mfa '{"target_username": "ceo", "c 
+aller_username": "bob"}'
+
+One tools/call through the gateway (first-draft), as the policy engine sees it:
+
+  principal  AgentCore::OAuthUser::"sub-bob"   tags = the token's claims (username = bob)
+  action     AgentCore::Action::"HelpdeskTools___reset_mfa"
+  resource   AgentCore::Gateway::"...helpdesk-gw-a1b2c3d4e5"
+  context    input = {"target_username": "ceo", "caller_username": "bob"}   (the tool arguments, written by the model)
+
+  permit allow_all_tools                applies
+  forbid reset_own_mfa                  applies
+
+  decision   DENY   (forbid wins)
+  mode       LOG_ONLY -> the decision is only logged: the call RUNS either way
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py memory first-draft bob --actor-id alice
+
+bob says "Remember that I prefer updates by email." (first-draft)
+
+  short-term: CreateEvent(actorId = alice, sessionId = ...)   the raw turn, kept 30 days
+  actorId comes from the request; the browser said alice
+  long-term:  semanticMemoryStrategy 'helpdesk_facts' extracts a fact, saved under /helpdesk/facts/
+              for actorId alice: /helpdesk/facts/
+              for alice, bob and priya alike: /helpdesk/facts/   <- one shared shelf
+
+  Later, RetrieveMemoryRecords on that namespace brings these facts back into the agent's prompt.
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py memory hardened bob
+
+bob says "Remember that I prefer updates by email." (hardened)
+
+  short-term: CreateEvent(actorId = bob, sessionId = ...)   the raw turn, kept 30 days
+  actorId comes from the token
+  long-term:  semanticMemoryStrategy 'helpdesk_facts' extracts a fact, saved under /users/{actorId}/facts/
+              for actorId bob: /users/bob/facts/
+              alice, bob, priya: /users/alice/facts/, /users/bob/facts/, /users/priya/facts/   <- one shelf each
+
+  Later, RetrieveMemoryRecords on that namespace brings these facts back into the agent's prompt.
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py logs first-draft
+
+What this setup records (first-draft)
+
+  CloudTrail selector 'management only': Management
+  tracing (spans)         runtime   (Transaction Search off)
+  log delivery            none
+  online evaluation       none
+
+One gateway span from data/incident/spans.jsonl (illustrative values, AWS's attribute names):
+  AuthorizeAction  2027-01-14T09:09:31Z
+    aws.agentcore.policy.authorization_decision      "DENY"
+    aws.agentcore.policy.determining_policies        []
+    aws.agentcore.gateway.policy.mode                "LOG_ONLY"
+    lab.tool / lab.principal (lab additions)         HelpdeskTools___reset_mfa / sub-bob
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 explore.py logs hardened
+
+What this setup records (hardened)
+
+  CloudTrail selector 'management': Management
+  CloudTrail selector 'agentcore data events': Data events on Runtime, Gateway, Memory, TokenVault, WorkloadIdentity
+  tracing (spans)         runtime, gateway, memory   (Transaction Search on)
+  log delivery            gateway APPLICATION_LOGS, memory APPLICATION_LOGS
+  online evaluation       built-in Correctness, Helpfulness, Harmfulness, Refusal, ToolParameterAccuracy
+
+One gateway span from data/incident/spans.jsonl (illustrative values, AWS's attribute names):
+  AuthorizeAction  2027-01-14T09:09:31Z
+    aws.agentcore.policy.authorization_decision      "DENY"
+    aws.agentcore.policy.determining_policies        []
+    aws.agentcore.gateway.policy.mode                "LOG_ONLY"
+    lab.tool / lab.principal (lab additions)         HelpdeskTools___reset_mfa / sub-bob
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ python3 helpdesk.py hardened bob "I have a new phone. Please reset my MFA."
+
+Q (bob): I have a new phone. Please reset my MFA.
+   . runtime inbound JWT: accepted (allowedClients checked)
+   . workload access token via GetWorkloadAccessTokenForJWT: user = bob (from the validated token)
+   . gateway: reset_mfa({"target_username": "bob", "caller_username": "bob"}) EXECUTED  [the user asked]
+   . gateway: search_kb({"query": "I have a new phone. Please reset my MFA."}) EXECUTED  [the user asked]
+A: MFA reset for bob. New phone? Ask the Helpdesk to reset your MFA, then enrol the new phone.
+thesecguy@lab:~/ai-security-course-labs/labs/m14$ exit
+
+exit
