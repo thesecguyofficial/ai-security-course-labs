@@ -1,0 +1,189 @@
+{
+  "scenario": "m14-14.8-linux",
+  "start": 1.793,
+  "steps": [
+    {
+      "label": "Check high",
+      "speed": 1,
+      "start": 1.793,
+      "end": 12.113
+    },
+    {
+      "label": "Check rest",
+      "speed": 1,
+      "start": 20.113,
+      "end": 26.369
+    },
+    {
+      "label": "Planted ticket",
+      "speed": 1,
+      "start": 33.369,
+      "end": 38.189
+    },
+    {
+      "label": "Attack",
+      "speed": 1,
+      "start": 43.189,
+      "end": 45.56
+    },
+    {
+      "label": "Injection",
+      "speed": 1,
+      "start": 53.56,
+      "end": 63.062
+    },
+    {
+      "label": "Forged user",
+      "speed": 1,
+      "start": 69.062,
+      "end": 78.336
+    },
+    {
+      "label": "Check hardened",
+      "speed": 1,
+      "start": 84.337,
+      "end": 87.469
+    },
+    {
+      "label": "Hardened",
+      "speed": 1,
+      "start": 92.469,
+      "end": 94.99
+    },
+    {
+      "label": "Replay",
+      "speed": 1,
+      "start": 102.99,
+      "end": 111.769
+    },
+    {
+      "label": "Caller policy",
+      "speed": 1,
+      "start": 117.769,
+      "end": 125.986
+    },
+    {
+      "label": "Cedar default deny",
+      "speed": 1,
+      "start": 131.986,
+      "end": 145.782
+    },
+    {
+      "label": "Cedar forbid wins",
+      "speed": 1,
+      "start": 150.782,
+      "end": 166.232
+    },
+    {
+      "label": "Authorizers",
+      "speed": 1,
+      "start": 171.232,
+      "end": 187.271
+    },
+    {
+      "label": "Break it",
+      "speed": 1,
+      "start": 192.271,
+      "end": 205.144
+    },
+    {
+      "label": "Undo",
+      "speed": 1,
+      "start": 211.144,
+      "end": 217.652
+    },
+    {
+      "label": "Hunt",
+      "speed": 1,
+      "start": 222.653,
+      "end": 224.692
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 232.692,
+      "end": 236.249
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 241.25,
+      "end": 245.949
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.393,
+      "what": "type"
+    },
+    {
+      "t": 20.714,
+      "what": "type"
+    },
+    {
+      "t": 33.969,
+      "what": "type"
+    },
+    {
+      "t": 43.789,
+      "what": "type"
+    },
+    {
+      "t": 54.16,
+      "what": "type"
+    },
+    {
+      "t": 69.663,
+      "what": "type"
+    },
+    {
+      "t": 84.937,
+      "what": "type"
+    },
+    {
+      "t": 93.07,
+      "what": "type"
+    },
+    {
+      "t": 103.59,
+      "what": "type"
+    },
+    {
+      "t": 118.37,
+      "what": "type"
+    },
+    {
+      "t": 132.586,
+      "what": "type"
+    },
+    {
+      "t": 151.382,
+      "what": "type"
+    },
+    {
+      "t": 171.832,
+      "what": "type"
+    },
+    {
+      "t": 192.871,
+      "what": "type"
+    },
+    {
+      "t": 211.745,
+      "what": "type"
+    },
+    {
+      "t": 223.253,
+      "what": "type"
+    },
+    {
+      "t": 233.292,
+      "what": "type"
+    },
+    {
+      "t": 241.85,
+      "what": "type"
+    }
+  ],
+  "end": 251.949
+}
