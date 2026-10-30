@@ -90,7 +90,7 @@ make check
 - `make check`: prints the Python version and whether it is new enough
 
 A virtual environment (`.venv`) keeps this lab's Python apart from other projects. It is not a security sandbox.
-Real output on a fresh Ubuntu machine (recording run 41090909830):
+Real output on a fresh Ubuntu machine (recording run 41096309660):
 
 ```text
 .venv/bin/python -c 'import sys; v = sys.version.split()[0]; print("Python", v, "OK: standard library only, nothing else to install" if sys.version_info >= (3, 11) else "TOO OLD: this lab needs Python 3.11 or newer")'
@@ -104,7 +104,7 @@ New to security operations? Do this before Step 1 (lesson 29.1's basics videos a
 functions on them (the rule matcher in `detect.py`, the register check in `hunt.py`, FIRST's CVSS 3.1 formula). It
 sends nothing, calls no cloud, runs no responder, starts no agent and writes no file (not even `state/` or
 `__pycache__`). Run it with the lab's own Python (Windows: `.venv\Scripts\python explore.py ...`); with no command
-it lists all twelve. Real output from recording run 41090909830:
+it lists all twelve. Real output from recording run 41096309660:
 
 **1. One log event:** a CloudTrail-shaped record, field by field. Every value is fake; the field names are AWS's.
 
@@ -125,8 +125,8 @@ One CloudTrail record: someone used the decoy key to call Bedrock. Fake values, 
   sourceIPAddress    198.51.100.23                  FROM WHERE (a documentation address, RFC 5737)
   userAgent          aws-cli/2.x (lab)              the caller's tool, as the CALLER says: they choose this text
   requestParameters  anthropic.claude-sonnet-4-6    the request's arguments: WHICH model (modelId)
-  readOnly           false                          does it only read? (true for List and Get calls)
-  errorCode          AccessDeniedException          it FAILED: this user may do nothing
+  readOnly           false                          so this call does more than look (List and Get calls: true)
+  errorCode          AccessDeniedException          it FAILED: this user has no permissions
 ```
 
 **2. One detection rule**, read part by part.
@@ -142,7 +142,7 @@ setups/hardened/rules/honeytoken.json: a detection rule, read part by part
   severity  high                             how urgent its alerts are
   state     ENABLED_WITH_ALL_CLOUDTRAIL_
             MANAGEMENT_EVENTS                also receives read-only calls (plain ENABLED doesn't)
-  regions   all                              deployed in every Region (a rule sees only its own)
+  regions   all                              deployed in every Region (in the lab, a rule sees only its Regions)
   pattern   detail-type                      = AWS API Call via CloudTrail: an API call CloudTrail recorded
             detail.userIdentity.accessKeyId  = TSGLABHONEYKEY000001: made with the decoy key
             (nothing else)                   any service, any call, any Region, failed or not
@@ -162,7 +162,7 @@ The hardened rule honeytoken-key-used, checked against four logged calls (detect
   09:00:05  us-east-1      bedrock:InvokeModel                   svc-helpdesk-batch    no alert  pattern does not match
   10:00:00  us-east-1      sts:GetCallerIdentity                 svc-reporting-legacy  ALERT     MATCH
   10:00:20  us-east-1      bedrock:ListFoundationModels (denied) svc-reporting-legacy  ALERT     MATCH
-  10:01:05  ap-southeast-2 bedrock:InvokeModel (denied)          svc-reporting-legacy  ALERT     MATCH
+  10:01:40  ap-southeast-2 bedrock:InvokeModel (denied)          svc-reporting-legacy  ALERT     MATCH
 
 The first call used the app's own key: no match, no alert. The other three used the decoy: three alerts.
 ```
@@ -262,7 +262,8 @@ The attacker's first minutes with the leaked helpdesk key (scenarios.attack_time
   10:03:10  InvokeModel      session key   TSGLABSESSIONKEY0003  runs a model, on the victim's bill
   ...       57 more InvokeModel calls, one every 30 seconds, until 10:31:40
 
-61 calls in 30 minutes. At the lab's made-up price of 0.05 USD a call: 3.05 USD. Not a Bedrock price.
+61 calls in 30 minutes: 60 model calls and 1 session swap.
+The lab prices every call at a made-up 0.05 USD: 3.05 USD. Not a Bedrock price.
 ```
 
 **9. The decoy key** (a honeytoken). The strings are lab placeholders in no real provider's format.
@@ -278,10 +279,11 @@ The decoy key, planted in the ops-scripts repo (commit c1a0002, file .aws/creden
   aws_access_key_id = TSGLABHONEYKEY000001
   aws_secret_access_key = LAB-PLACEHOLDER-NOT-A-SECRET
 
-  its user     svc-reporting-legacy   in prod-helpdesk
-  permissions  none                   in a real account: an IAM user with no policies at all
-  used by      nobody legitimate      so ANY call with it is an alert, and a real one
-  every call   fails                  AccessDenied: the thief gets nothing, and we get the alert
+  its user           svc-reporting-legacy   in prod-helpdesk
+  permissions        none                   in a real account: an IAM user with no policies at all
+  used by            nobody legitimate      so ANY call with it is an alert, and a real one
+  GetCallerIdentity  works                  needs no permission: the thief learns account and user name
+  every other call   fails                  AccessDenied: no model, no data, and we get the alert
 ```
 
 **10. A CVSS score**, metric by metric: the base metrics of CVE-2025-32711's published CVSS 3.1 vector, scored with FIRST's 3.1 formula. Pass another 3.1 base vector to score it.
@@ -355,7 +357,7 @@ make first-draft
 
 Same as `python3 suite.py first-draft`.
 
-Real output (recording run 41090936109, Ubuntu, Python 3.12):
+Real output (recording run 41096363196, Ubuntu, Python 3.12):
 
 ```text
 setup first-draft
@@ -454,8 +456,9 @@ setup hardened | scenario honeytoken-read-only
 ```
 
 Whoever finds a key checks it first, with read-only calls. A rule in state `ENABLED` never receives read-only
-management events. The decoy has no permissions, so every real use fails: a pattern with
-`"errorCode": [{"exists": false}]` can never fire (H2). And a rule sees only its own Region (H3).
+management events. The decoy has no permissions, so every model call with it fails: a pattern with
+`"errorCode": [{"exists": false}]` on `InvokeModel` can never fire (H2). (`GetCallerIdentity` needs no permission and
+works, so the thief learns the account and user name, which is why the read-only alert matters.) And a rule sees only its own Region (H3).
 
 **The responder against the clock** (lesson 29.7):
 
@@ -473,7 +476,7 @@ setup first-draft | responder: ['deactivate_key']
                         UpdateAccessKey svc-helpdesk-batch -> Inactive
   2027-04-10T10:16:05Z  changes in effect (lab assumption: 60 s)
 time to act: 13m55s (OVER the 10m00s target)
-attacker calls that worked: 61 of 61, 32 of them AFTER the responder acted | lab cost 3.05 USD
+attacker calls that worked: 61 of 61 (60 model calls, 1 session swap), 32 of them AFTER the responder acted | lab cost 3.05 USD
 
 setup hardened | responder: ['deactivate_key', 'deny_user_sessions', 'snapshot_evidence', 'open_incident']
   2027-04-10T10:02:10Z  first call with the leaked key, from 198.51.100.23
@@ -485,7 +488,7 @@ setup hardened | responder: ['deactivate_key', 'deny_user_sessions', 'snapshot_e
                         incident opened (lab ticket)
   2027-04-10T10:05:15Z  changes in effect (lab assumption: 60 s)
 time to act: 3m05s (within the 10m00s target)
-attacker calls that worked: 8 of 61, 0 of them AFTER the responder acted | lab cost 0.40 USD
+attacker calls that worked: 8 of 61 (7 model calls, 1 session swap), 0 of them AFTER the responder acted | lab cost 0.40 USD
 ```
 
 Two separate failures. The first draft reads logs from S3 and runs every 15 minutes, so it acts after the 10-minute
@@ -571,7 +574,7 @@ K5    responder changes only the alerted user                          works
 Missed: 0 of 15  (none) | normal work that still works: 5 of 5
 ```
 
-Compare `setups/first-draft/` with `setups/hardened/`. `explore.py compare` prints every changed setting (recording run 41090936109):
+Compare `setups/first-draft/` with `setups/hardened/`. `explore.py compare` prints every changed setting (recording run 41096363196):
 
 ```bash
 .venv/bin/python explore.py compare
@@ -628,7 +631,7 @@ Same as `python3 run_tests.py`.
 [PASS] pattern subset: exact, prefix, exists true/false, anything-but, cidr behave like EventBridge's
 [PASS] a read-only call (GetCallerIdentity) reaches only rules in ENABLED_WITH_ALL_CLOUDTRAIL_MANAGEMENT_EVENTS
 [PASS] a rule sees only the Regions it is deployed in
-[PASS] every use of the decoy fails (no permissions), so a rule that drops errorCode never fires
+[PASS] every model call with the decoy fails (no permissions), so a rule that drops errorCode never fires
 [PASS] bedrock-mantle CreateInference is a data event: collected only when the trail records it
 [PASS] every event carries the envelope fields aws events test-event-pattern requires
 [PASS] responder (first draft): acts 13m55s after the first call; 32 attacker calls work AFTER it acted
