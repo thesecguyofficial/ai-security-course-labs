@@ -83,7 +83,7 @@ you don't have to join three log groups by hand.
 
 New to detection and response? Do this before Step 1 (lesson 16.6 and its videos call it Step 1b). `explore.py` shows,
 one idea at a time, the records, the rules and the response that the module's videos explain, on AnyCompany's day.
-Real output below is from a fresh Ubuntu machine (recording run 41115815346). Run it from `labs/m16`.
+Real output below is from a fresh Ubuntu machine (recording run 41119531215). Run it from `labs/m16`.
 
 **What it really runs.** Nothing that changes anything: `explore.py` builds the simulated day in memory with
 `simulate.py`, runs the lab's own functions on it (`detect.py`, `inventory.py`, `posture.py`, `report.py`) and prints.
