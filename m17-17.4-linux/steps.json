@@ -1,0 +1,159 @@
+{
+  "scenario": "m17-17.4-linux",
+  "start": 1.684,
+  "steps": [
+    {
+      "label": "Start",
+      "speed": 1,
+      "start": 1.684,
+      "end": 6.449
+    },
+    {
+      "label": "Attack",
+      "speed": 1,
+      "start": 8.449,
+      "end": 10.952
+    },
+    {
+      "label": "Planted",
+      "speed": 1,
+      "start": 16.952,
+      "end": 25.599
+    },
+    {
+      "label": "Defend",
+      "speed": 1,
+      "start": 31.599,
+      "end": 34.216
+    },
+    {
+      "label": "Suite",
+      "speed": 1,
+      "start": 40.216,
+      "end": 45.512
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 50.512,
+      "end": 55.986
+    },
+    {
+      "label": "Eval",
+      "speed": 1,
+      "start": 59.986,
+      "end": 67.656
+    },
+    {
+      "label": "Eval weak",
+      "speed": 1,
+      "start": 73.656,
+      "end": 81.675
+    },
+    {
+      "label": "Regressions",
+      "speed": 1,
+      "start": 87.675,
+      "end": 104.728
+    },
+    {
+      "label": "Same commands",
+      "speed": 1,
+      "start": 110.729,
+      "end": 121.161
+    },
+    {
+      "label": "Regress R1",
+      "speed": 1,
+      "start": 126.162,
+      "end": 129.528
+    },
+    {
+      "label": "CI red",
+      "speed": 1,
+      "start": 134.529,
+      "end": 144.134
+    },
+    {
+      "label": "Restore",
+      "speed": 1,
+      "start": 150.134,
+      "end": 162.525
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 167.525,
+      "end": 180.489
+    },
+    {
+      "label": "Hidden",
+      "speed": 1,
+      "start": 186.489,
+      "end": 191.048
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.284,
+      "what": "type"
+    },
+    {
+      "t": 9.049,
+      "what": "type"
+    },
+    {
+      "t": 17.552,
+      "what": "type"
+    },
+    {
+      "t": 32.199,
+      "what": "type"
+    },
+    {
+      "t": 40.817,
+      "what": "type"
+    },
+    {
+      "t": 51.112,
+      "what": "type"
+    },
+    {
+      "t": 60.587,
+      "what": "type"
+    },
+    {
+      "t": 74.257,
+      "what": "type"
+    },
+    {
+      "t": 88.275,
+      "what": "type"
+    },
+    {
+      "t": 111.329,
+      "what": "type"
+    },
+    {
+      "t": 126.762,
+      "what": "type"
+    },
+    {
+      "t": 135.129,
+      "what": "type"
+    },
+    {
+      "t": 150.734,
+      "what": "type"
+    },
+    {
+      "t": 168.125,
+      "what": "type"
+    },
+    {
+      "t": 187.089,
+      "what": "type"
+    }
+  ],
+  "end": 197.048
+}
