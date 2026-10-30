@@ -1,0 +1,207 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m27 && make review | grep -A1 -E '\[(N|E|D|P|L)[0-9]'
+
+  [N1] 27.2  Sandbox network mode is VPC: network.mode is PUBLIC
+         fix: Set network.mode to VPC: no public network for model-written code.
+  [N2] 27.2  No route to the internet: network.nat_gateway is true: the sandbox has a route out
+         fix: Remove the NAT gateway route from the sandbox subnets.
+  [N3] 27.2  Security group egress names its destinations: egress tcp/443 to 0.0.0.0/0
+         fix: Allow egress only to the endpoints and the proxy; no 0.0.0.0/0.
+  [N3] 27.2  Security group egress names its destinations: egress udp/53 to 0.0.0.0/0
+         fix: Allow egress only to the endpoints and the proxy; no 0.0.0.0/0.
+  [E1] 27.2  Every endpoint has a custom endpoint policy: s3 gateway endpoint uses full-access
+         fix: Replace full-access with a policy that lists the actions and the resource ARNs this agent uses.
+  [E1] 27.2  Every endpoint has a custom endpoint policy: bedrock-runtime interface endpoint uses full-access
+         fix: Replace full-access with a policy that lists the actions and the resource ARNs this agent uses.
+  [D1] 27.2  DNS resolver allow-list (walled garden) is on: dns.firewall is false: the resolver answers for any name
+         fix: Turn on the DNS firewall, block everything by default and allow only the names this agent needs.
+  [D2] 27.2  DNS firewall fails closed: dns.fail_open is true
+         fix: Set dns.fail_open to false (the AWS default is fail closed).
+  [L1] 27.2  Every outbound door has a log: flow_logs off
+         fix: Turn on VPC flow logs, Resolver query logs and CloudTrail network activity events for each endpoint's service.
+  [L1] 27.2  Every outbound door has a log: dns_query_logs off
+         fix: Turn on VPC flow logs, Resolver query logs and CloudTrail network activity events for each endpoint's service.
+  [L1] 27.2  Every outbound door has a log: no CloudTrail network activity events for bedrock.amazonaws.com, s3.amazonaws.com
+         fix: Turn on VPC flow logs, Resolver query logs and CloudTrail network activity events for each endpoint's service.
+  [P1] 27.2  Proxy allow-list names exact hosts: proxy allows *.amazonaws.com
+         fix: Replace wildcard entries with the exact host names.
+  [P2] 27.2  The proxy is enforced by the network: proxy.enforced_by_network is false: code that ignores the proxy goes straight out
+         fix: Make the proxy the only address the sandbox can reach on the web ports (security group), not just an env var.
+  [P3] 27.2  Proxy allows only the methods each host needs: proxy allows every method to *.amazonaws.com
+         fix: List methods per host (GET and HEAD for a package mirror).
+  [P3] 27.2  Proxy allows only the methods each host needs: proxy allows every method to pypi.tsg.example
+         fix: List methods per host (GET and HEAD for a package mirror).
+make: [Makefile:12: review] Error 1 (ignored)
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ make review | grep -A1 -E '\[(R|F|S|T)[0-9]|findings'
+
+  [R1] 27.1  Execution role names exact actions and resources: statement 0 allows s3:*, *
+         fix: One bucket prefix, the model ARNs in use, no '*' actions or resources.
+  [R1] 27.1  Execution role names exact actions and resources: statement 1 allows bedrock:*, *
+         fix: One bucket prefix, the model ARNs in use, no '*' actions or resources.
+  [F1] 27.1  No credential folders mounted in the sandbox: /home/agent/.aws is mounted
+         fix: Unmount credential folders; keys stay with a broker outside.
+  [F2] 27.1  Only the scratch folder is writable: /home/agent/.aws is rw
+         fix: Mount input data read-only; keep /workspace as the only rw mount.
+  [F2] 27.1  Only the scratch folder is writable: /data/reports is rw
+         fix: Mount input data read-only; keep /workspace as the only rw mount.
+  [S1] 27.1  No secrets inside the sandbox: secret TSG_DB_PASSWORD in the environment
+         fix: Remove secrets from the environment; call a broker outside the sandbox.
+  [S1] 27.1  No secrets inside the sandbox: secret TSG_MODEL_API_KEY in the environment
+         fix: Remove secrets from the environment; call a broker outside the sandbox.
+  [T1] 27.1  One short session per user and task: sessions are not one per user and task
+         fix: one_per_user_task true and a timeout of an hour or less.
+  [T1] 27.1  One short session per user and task: session timeout 28800 s
+         fix: one_per_user_task true and a timeout of an hour or less.
+  [T2] 27.1  Resource limits are set: limits.max_processes not set
+         fix: Set vcpu, memory_mb and max_processes.
+25 findings, 16 of 18 rules failed (D1, D2, E1, F1, F2, L1, N1, N2, N3, P1, P2, P3, R1, S1, T1, T2)
+make: [Makefile:12: review] Error 1 (ignored)
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ cat -n configs/first-draft.json | sed -n '9,35p'
+
+     9	  "network": {
+    10	    "mode": "PUBLIC",
+    11	    "nat_gateway": true,
+    12	    "security_group_egress": [
+    13	      {"protocol": "tcp", "port": 443, "to": "0.0.0.0/0"},
+    14	      {"protocol": "udp", "port": 53, "to": "0.0.0.0/0"}
+    15	    ]
+    16	  },
+    17	  "endpoints": [
+    18	    {"service": "s3", "type": "gateway", "policy": "full-access"},
+    19	    {"service": "bedrock-runtime", "type": "interface", "policy": "full-access"}
+    20	  ],
+    21	  "dns": {
+    22	    "firewall": false,
+    23	    "default_action": "ALLOW",
+    24	    "allow": [],
+    25	    "fail_open": true,
+    26	    "query_logging": false
+    27	  },
+    28	  "proxy": {
+    29	    "enabled": true,
+    30	    "enforced_by_network": false,
+    31	    "allow": [
+    32	      {"name": "*.amazonaws.com", "methods": ["*"]},
+    33	      {"name": "pypi.tsg.example", "methods": ["*"]}
+    34	    ]
+    35	  },
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ make hardened
+
+python3 checker.py hardened
+Review of hardened: 18 rules
+0 findings, 0 of 18 rules failed
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ make replay
+
+python3 egress.py compare
+  id  request                                                    first-draft  hardened (denied by)
+  N1  s3:GetObject tsg-lab-data/reports/q3.csv                   ALLOW        ALLOW
+  N2  s3:PutObject tsg-lab-data/out/q3-summary.csv               ALLOW        ALLOW
+  N3  bedrock:InvokeModel foundation-model/lab-model-a           ALLOW        ALLOW
+  N4  GET pypi.tsg.example:443 via proxy                         ALLOW        ALLOW
+  N5  s3:ListBucket tsg-lab-data                                 ALLOW        ALLOW
+  N6  DNS bedrock-runtime.us-east-1.amazonaws.com                ALLOW        ALLOW
+  U1  POST placeholder.example.invalid:443 via direct            ALLOW        DENY (dns, route, sg)
+  U2  DNS placeholder.example.invalid                            ALLOW        DENY (dns)
+  U3  s3:PutObject someone-elses-bucket/drop/file.csv            ALLOW        DENY (endpoint, role)
+  U4  PUT someone-elses-bucket.s3.amazonaws.com:443 via proxy    ALLOW        DENY (proxy)
+  U5  bedrock:InvokeModel foundation-model/lab-model-z           ALLOW        DENY (endpoint, role)
+  U6  GET api.tsg.example:8443 via direct                        DENY (sg)    DENY (dns, route, sg)
+  U7  DNS placeholder.example.invalid (firewall down)            ALLOW        DENY (dns)
+  U8  POST pypi.tsg.example:443 via proxy                        ALLOW        DENY (proxy)
+first-draft: unexpected requests allowed 7 of 8 (U1, U2, U3, U4, U5, U7, U8) | normal tool calls working 6 of 6
+hardened   : unexpected requests allowed 0 of 8 (none) | normal tool calls working 6 of 6
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ python3 egress.py first-draft | grep -E '^  (U1|U3|U6)'
+
+  U1  ALLOW POST placeholder.example.invalid:443 via direct            dns:ok route:ok sg:ok
+  U3  ALLOW s3:PutObject someone-elses-bucket/drop/file.csv            dns:ok sg:ok endpoint:ok role:ok
+  U6  DENY  GET api.tsg.example:8443 via direct                        dns:ok route:ok sg:NO
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ grep -E '"(U1|U3)"' data/requests.jsonl
+
+{"id": "U1", "t": "2027-03-27T09:02:11Z", "kind": "https", "name": "placeholder.example.invalid", "port": 443, "via": "direct", "method": "POST", "expect": "unexpected", "note": "direct connection that ignores the proxy, to a name the task never needed"}
+{"id": "U3", "t": "2027-03-27T09:02:30Z", "kind": "aws_api", "name": "s3.us-east-1.amazonaws.com", "port": 443, "via": "endpoint", "service": "s3", "action": "s3:PutObject", "resource": "arn:aws:s3:::someone-elses-bucket/drop/file.csv", "expect": "unexpected", "note": "write to a bucket this agent does not own, over the private endpoint"}
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ make logs
+
+python3 logs.py first-draft
+Logs for first-draft (illustrative values, documented field names) in state/first-draft/
+  resolver-query-log.jsonl    0 records
+  flow-log.txt                0 records
+  cloudtrail-network.jsonl    0 records
+  proxy-log.jsonl             3 records
+python3 logs.py hardened
+Logs for hardened (illustrative values, documented field names) in state/hardened/
+  resolver-query-log.jsonl   14 records
+  flow-log.txt                9 records
+  cloudtrail-network.jsonl    2 records
+  proxy-log.jsonl             3 records
+    dns    2027-03-27T09:02:11Z placeholder.example.invalid.     rcode=NOERROR  firewall_rule_action=BLOCK
+    dns    2027-03-27T09:02:12Z placeholder.example.invalid.     rcode=NOERROR  firewall_rule_action=BLOCK
+    dns    2027-03-27T09:03:15Z api.tsg.example.                 rcode=NOERROR  firewall_rule_action=BLOCK
+    dns    2027-03-27T09:03:40Z placeholder.example.invalid.     rcode=SERVFAIL firewall_rule_action=-
+    trail  2027-03-27T09:02:30Z s3.amazonaws.com PutObject errorCode=VpceAccessDenied vpcEndpointId=vpce-0lab00000000000s3
+    trail  2027-03-27T09:03:01Z bedrock.amazonaws.com InvokeModel errorCode=VpceAccessDenied vpcEndpointId=vpce-0lab0000000000bdr
+    proxy  2027-03-27T09:02:44Z PUT someone-elses-bucket.s3.amazonaws.com deny
+    proxy  2027-03-27T09:03:58Z POST pypi.tsg.example deny
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ grep BLOCK state/hardened/resolver-query-log.jsonl | head -n 1 | python3 -m json.t 
+ool
+
+{
+    "version": "1.1",
+    "account_id": "111122223333",
+    "region": "us-east-1",
+    "vpc_id": "vpc-0lab0000000000000",
+    "query_timestamp": "2027-03-27T09:02:11Z",
+    "query_name": "placeholder.example.invalid.",
+    "query_type": "A",
+    "query_class": "IN",
+    "rcode": "NOERROR",
+    "answer_type": "",
+    "rdata": "",
+    "answer_class": "",
+    "srcaddr": "10.0.1.25",
+    "srcport": "40412",
+    "transport": "UDP",
+    "srcids": {
+        "instance": "eni-0lab0000000000025"
+    },
+    "firewall_rule_group_id": "rslvr-frg-0lab000000000001",
+    "firewall_rule_action": "BLOCK",
+    "firewall_domain_list_id": "rslvr-fdl-0lab000000000001"
+}
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ head -n 3 state/hardened/flow-log.txt && grep -c REJECT state/hardened/flow-log.tx 
+t
+
+version account-id interface-id srcaddr dstaddr srcport dstport protocol packets bytes start end action log-status
+2 111122223333 eni-0lab0000000000025 10.0.1.25 10.0.3.40 40420 443 6 3 180 1806138005 1806138065 ACCEPT OK
+2 111122223333 eni-0lab0000000000025 10.0.1.25 10.0.3.40 40420 443 6 3 180 1806138041 1806138101 ACCEPT OK
+0
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ make alerts
+
+python3 alerts.py first-draft
+Alerts on the logs of first-draft:
+0 pages, 0 tickets
+python3 alerts.py hardened
+Alerts on the logs of hardened:
+  PAGE    vpce-denied        2027-03-27T09:02:30Z s3.amazonaws.com PutObject via vpce-0lab00000000000s3
+  PAGE    vpce-denied        2027-03-27T09:03:01Z bedrock.amazonaws.com InvokeModel via vpce-0lab0000000000bdr
+  TICKET  dns-block          2027-03-27T09:02:11Z 10.0.1.25 placeholder.example.invalid.
+  TICKET  dns-block          2027-03-27T09:02:12Z 10.0.1.25 placeholder.example.invalid.
+  TICKET  dns-block          2027-03-27T09:03:15Z 10.0.1.25 api.tsg.example.
+  TICKET  dns-servfail       2027-03-27T09:03:40Z placeholder.example.invalid.: firewall did not answer, failed closed
+  TICKET  proxy-deny         2027-03-27T09:02:44Z PUT someone-elses-bucket.s3.amazonaws.com
+  TICKET  proxy-deny         2027-03-27T09:03:58Z POST pypi.tsg.example
+2 pages, 6 tickets
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ make test | tail -n 4
+
+
+OK
+
+ALL TESTS PASSED (17 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ make challenge | grep -E '^\[FAIL|TESTS'
+
+[FAIL] challenge 1: the checker finds exactly E2 (s3 endpoint resources '*') and D3 (default ALERT) in the second draft
+[FAIL] challenge 2: burst_of_blocked_names() pages on 10.0.1.25 only (6 distinct names from 09:10:00Z)
+[FAIL] challenge 3: shared_sessions() finds cis-0003, used by alice and chen
+3 of 21 TESTS FAILED (21 run)
+make: *** [Makefile:32: challenge] Error 1
+thesecguy@lab:~/ai-security-course-labs/labs/m27$ exit
+
+exit

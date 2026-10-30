@@ -1,0 +1,139 @@
+{
+  "scenario": "m27-27.4-linux",
+  "start": 1.681,
+  "steps": [
+    {
+      "label": "Review network",
+      "speed": 1,
+      "start": 1.681,
+      "end": 12.448
+    },
+    {
+      "label": "Review boundary",
+      "speed": 1,
+      "start": 20.448,
+      "end": 27.516
+    },
+    {
+      "label": "Open the draft",
+      "speed": 1,
+      "start": 35.516,
+      "end": 42.108
+    },
+    {
+      "label": "Hardened",
+      "speed": 1,
+      "start": 49.108,
+      "end": 51.705
+    },
+    {
+      "label": "Replay",
+      "speed": 1,
+      "start": 56.705,
+      "end": 59.091
+    },
+    {
+      "label": "Why U1",
+      "speed": 1,
+      "start": 67.092,
+      "end": 74.625
+    },
+    {
+      "label": "Open the requests",
+      "speed": 1,
+      "start": 80.625,
+      "end": 86.214
+    },
+    {
+      "label": "Logs",
+      "speed": 1,
+      "start": 92.214,
+      "end": 94.423
+    },
+    {
+      "label": "Open a DNS record",
+      "speed": 1,
+      "start": 102.423,
+      "end": 113.117
+    },
+    {
+      "label": "Flow log",
+      "speed": 1,
+      "start": 120.117,
+      "end": 130.683
+    },
+    {
+      "label": "Alerts",
+      "speed": 1,
+      "start": 136.683,
+      "end": 139.006
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 146.006,
+      "end": 149.602
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 154.602,
+      "end": 160.424
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.281,
+      "what": "type"
+    },
+    {
+      "t": 21.048,
+      "what": "type"
+    },
+    {
+      "t": 36.117,
+      "what": "type"
+    },
+    {
+      "t": 49.708,
+      "what": "type"
+    },
+    {
+      "t": 57.305,
+      "what": "type"
+    },
+    {
+      "t": 67.692,
+      "what": "type"
+    },
+    {
+      "t": 81.225,
+      "what": "type"
+    },
+    {
+      "t": 92.814,
+      "what": "type"
+    },
+    {
+      "t": 103.023,
+      "what": "type"
+    },
+    {
+      "t": 120.717,
+      "what": "type"
+    },
+    {
+      "t": 137.283,
+      "what": "type"
+    },
+    {
+      "t": 146.606,
+      "what": "type"
+    },
+    {
+      "t": 155.202,
+      "what": "type"
+    }
+  ],
+  "end": 166.425
+}
