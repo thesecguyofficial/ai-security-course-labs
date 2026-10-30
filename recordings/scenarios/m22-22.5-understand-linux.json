@@ -1,0 +1,99 @@
+{
+  "name": "m22-22.5-understand-linux",
+  "lesson": "22.1, 22.5",
+  "title": "Lab 22.5, part 1: get the lab, see what each file is, the fake inbox and where AgentDojo plants its attack, look before you run, set up AgentDojo in a virtual environment, then look at each architecture idea on its own with explore.py (an email agent wired, the trifecta legs, planted text, the planner's plan, the quarantined model's typed answers, labels, a join, the sink policy, how AgentDojo checks a task) and read one dual-LLM run line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m22 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The data",
+      "type": "grep -E 'sender:|subject:|name:' inbox/environment.yaml",
+      "pause_after": 5
+    },
+    {
+      "label": "Attack spots",
+      "type": "grep description inbox/injection_vectors.yaml",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup check",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Check",
+      "type": "make check",
+      "pause_after": 3
+    },
+    {
+      "label": "Agent",
+      "type": ".venv/bin/python explore.py agent",
+      "pause_after": 7
+    },
+    {
+      "label": "Legs",
+      "type": ".venv/bin/python explore.py legs",
+      "pause_after": 6
+    },
+    {
+      "label": "Planted",
+      "type": ".venv/bin/python explore.py planted",
+      "pause_after": 6
+    },
+    {
+      "label": "Plan",
+      "type": ".venv/bin/python explore.py plan",
+      "pause_after": 6
+    },
+    {
+      "label": "Ask",
+      "type": ".venv/bin/python explore.py ask",
+      "pause_after": 7
+    },
+    {
+      "label": "Labels",
+      "type": ".venv/bin/python explore.py labels",
+      "pause_after": 7
+    },
+    {
+      "label": "Join",
+      "type": ".venv/bin/python explore.py join",
+      "pause_after": 6
+    },
+    {
+      "label": "Policy",
+      "type": ".venv/bin/python explore.py check",
+      "pause_after": 7
+    },
+    {
+      "label": "Task",
+      "type": ".venv/bin/python explore.py task",
+      "pause_after": 7
+    },
+    {
+      "label": "One run",
+      "type": ".venv/bin/python score.py --trace UT7 IT0 --agent dual+taint",
+      "pause_after": 7
+    }
+  ]
+}
