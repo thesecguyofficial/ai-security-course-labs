@@ -62,6 +62,11 @@ def parse_time(s: str) -> dt.datetime:
     return dt.datetime.strptime(s, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.timezone.utc)
 
 
+def hide(text: str) -> str:
+    """For printing: the account ID becomes <account>, so no account ID is ever on screen (even AWS's example one)."""
+    return text.replace(ACCOUNT, "<account>")
+
+
 def short(principal: str) -> str:
     """'arn:aws:iam::123456789012:role/tsg-analytics' -> 'tsg-analytics' (for printing)."""
     if principal.startswith("service:"):

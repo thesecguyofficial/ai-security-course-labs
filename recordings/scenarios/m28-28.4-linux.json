@@ -1,0 +1,67 @@
+{
+  "name": "m28-28.4-linux",
+  "lesson": "28.4",
+  "title": "Lab 28.4, part 2: the first-draft pipeline's 7 leaks, the design choices behind them, the redactor's two patterns, the hardened pipeline, two locks on the raw key, Macie before and after, keyed tokens, a day of KMS events, the tests and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
+    "cd ai-security-course-labs/labs/m28 && make setup"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Leak",
+      "type": "cd ai-security-course-labs/labs/m28 && make leak",
+      "pause_after": 8
+    },
+    {
+      "label": "Choices",
+      "type": "grep '\"_about\"' setups/first-draft/pipeline.json",
+      "pause_after": 6
+    },
+    {
+      "label": "Patterns",
+      "type": "cat setups/first-draft/identifiers.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Hardened",
+      "type": "make hardened",
+      "pause_after": 8
+    },
+    {
+      "label": "Two locks",
+      "type": "make two-locks",
+      "pause_after": 7
+    },
+    {
+      "label": "Macie",
+      "type": "make macie",
+      "pause_after": 8
+    },
+    {
+      "label": "Tokens",
+      "type": "make tokens",
+      "pause_after": 7
+    },
+    {
+      "label": "Hunt",
+      "type": "make hunt",
+      "pause_after": 7
+    },
+    {
+      "label": "Tests",
+      "type": "make test 2>&1 | tail -n 4",
+      "pause_after": 4
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | grep -E 'FAIL|TESTS'",
+      "pause_after": 6
+    }
+  ]
+}
