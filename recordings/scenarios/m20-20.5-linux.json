@@ -1,0 +1,66 @@
+{
+  "name": "m20-20.5-linux",
+  "lesson": "20.5",
+  "title": "Lab 20.5, part 2: review the first-draft AgentCore Identity setup offline (eleven findings), open the shared identity and the launcher in the setup file, check the hardened setup (0 findings), hunt a morning of sample CloudTrail plus the launcher's log (who acted for whom, no human, the wrong human, a shared identity), open the launcher's row for the wrong-human run, and list the guided build's steps for your own account",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Check high",
+      "type": "cd ai-security-course-labs/labs/m20 && make aws-check | grep -A1 HIGH",
+      "pause_after": 7
+    },
+    {
+      "label": "Check medium",
+      "type": "make aws-check | grep -A1 -E 'MEDIUM|findings'",
+      "pause_after": 6
+    },
+    {
+      "label": "Open agents",
+      "type": "grep -A17 '\"launcher\"' aws/setups/first-draft.json",
+      "pause_after": 6
+    },
+    {
+      "label": "Hardened",
+      "type": "make aws-check-hardened",
+      "pause_after": 4
+    },
+    {
+      "label": "Open hardened",
+      "type": "grep -A4 '\"launcher\"' aws/setups/hardened.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Hunt Q1",
+      "type": "make aws-hunt | grep -A12 '^Q1'",
+      "pause_after": 7
+    },
+    {
+      "label": "Hunt Q2 to Q4",
+      "type": "make aws-hunt | grep -A9 '^Q2'",
+      "pause_after": 7
+    },
+    {
+      "label": "Open the log",
+      "type": "python3 explore.py launcher tickets-run-0925",
+      "pause_after": 6
+    },
+    {
+      "label": "Guided build",
+      "type": "grep -E '^##' aws/GUIDED-BUILD.md",
+      "pause_after": 6
+    },
+    {
+      "label": "Tests",
+      "type": "make test | tail -n 2",
+      "pause_after": 4
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "m20-20.5-understand-linux",
+  "lesson": "20.5",
+  "title": "Lab 20.5, part 1: get the lab, see what each file in labs/m20 does, look at the offline AWS part (setups, sample CloudTrail, launcher log), check Python (nothing to install), then look at one agent's identity, one CloudTrail record and the launcher's log row with the read-only explore.py, and read the first finding of make aws-check line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": ["Traceback", "No such file"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m20 && ls", "pause_after": 4},
+    {"label": "The AWS part", "type": "ls aws aws/setups aws/data", "pause_after": 4},
+    {"label": "Look first", "type": "make -n setup aws-check aws-hunt", "pause_after": 4},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Agent", "type": "python3 explore.py agent tickets", "pause_after": 7},
+    {"label": "Trail", "type": "python3 explore.py trail", "pause_after": 7},
+    {"label": "Launcher", "type": "python3 explore.py launcher", "pause_after": 6},
+    {"label": "One run", "type": "make aws-check | head -n 3", "pause_after": 6}
+  ]
+}

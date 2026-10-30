@@ -1,0 +1,76 @@
+{
+  "name": "m20-20.6-linux",
+  "lesson": "20.6",
+  "title": "Lab 20.6, part 2: eight attacks on the first-draft agent chain (8 of 8 work), the confused deputy and the passthrough watched hop by hop, the planted comment opened, the hardened chain watched (the token shrinks at every hop), the hardened suite (1 of 8), a replay refused twice, the two policies side by side, the hunt, the tests and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Attack",
+      "type": "cd ai-security-course-labs/labs/m20 && make attack",
+      "pause_after": 7
+    },
+    {
+      "label": "Deputy",
+      "type": "python3 watch.py first-draft bob \"Show me T-4711\"",
+      "pause_after": 7
+    },
+    {
+      "label": "Passthrough",
+      "type": "python3 watch.py first-draft alice \"Summarise T-4711 and email me the summary\" | head -n 12",
+      "pause_after": 8
+    },
+    {
+      "label": "Planted",
+      "type": "grep -o '\\[\\[assistant[^]]*\\]\\]' data/tickets.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Watch hardened",
+      "type": "make watch | head -n 16",
+      "pause_after": 8
+    },
+    {
+      "label": "Hardened suite",
+      "type": "make hardened | grep -E 'A[2-8] |worked:'",
+      "pause_after": 7
+    },
+    {
+      "label": "Replay",
+      "type": "python3 evaluate.py hardened A6 --trace | tail -n 4",
+      "pause_after": 6
+    },
+    {
+      "label": "Expired",
+      "type": "python3 evaluate.py hardened A5 --trace | tail -n 4",
+      "pause_after": 6
+    },
+    {
+      "label": "Policies",
+      "type": "grep -E 'lifetime\"|downscope|audience_scopes|record_actor|max_actors|never_outlive' setups/*/authz.json",
+      "pause_after": 7
+    },
+    {
+      "label": "Hunt",
+      "type": "make hunt",
+      "pause_after": 7
+    },
+    {
+      "label": "Tests",
+      "type": "make test | tail -n 1",
+      "pause_after": 4
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | grep -E '^\\[FAIL|TESTS'",
+      "pause_after": 7
+    }
+  ]
+}

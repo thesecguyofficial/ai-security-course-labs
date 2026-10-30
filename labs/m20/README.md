@@ -50,6 +50,8 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `oauth.py` | The client side: sign-in, client credentials, token exchange. Works against both servers |
 | `services.py` | The three agents and two APIs, each a small HTTP service |
 | `setups/first-draft/`, `setups/hardened/` | `authz.json` (the server's policy) and `services.json` (what each agent and API does) |
+| `explore.py` | The read-only helper for Step 1b and Part C: one identity idea at a time (who's who, a sign-in, a token decoded, client credentials, one token exchange, one AWS agent, one CloudTrail record, one launcher log row). It writes no file; `signin`, `token`, `client` and `exchange` start the lab's own authorization server on 127.0.0.1 for about two seconds, nothing else |
+| `Makefile` | Short commands for Mac and Linux (`make watch`, `make attack` ...); `make -n <target>` shows what one would run without running it |
 | `watch.py` | One request, every hop and every token printed |
 | `evaluate.py` | 8 attacks and 3 normal requests, each in a fresh chain |
 | `hunt.py` | Three questions over one morning of API audit logs (`data/incident/`) |
