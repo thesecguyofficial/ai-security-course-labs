@@ -131,11 +131,10 @@ thesecguy@lab:~/ai-security-course-labs/labs/m18$ grep -n 'id="greeting"' my-ass
 2:<!-- TSG Helpdesk chat widget (lab copy). The text inside id="greeting" is the first message every
 8:    <p id="greeting">Hello, welcome to TSG Shop support. I can help with orders, deliveries and refunds. What do you need?</p>
 thesecguy@lab:~/ai-security-course-labs/labs/m18$ sed -i 's/Hello, welcome to TSG Shop support./Hello, I am the TSG Shop AI assistan 
-t, an automated system. Ask for a person at any time./' my-assessment/chat-widget.html && grep -n 'id="greeting"' my-assessment/chat 
--widget.html
+t./' my-assessment/chat-widget.html && grep -n 'id="greeting"' my-assessment/chat-widget.html
 
 2:<!-- TSG Helpdesk chat widget (lab copy). The text inside id="greeting" is the first message every
-8:    <p id="greeting">Hello, I am the TSG Shop AI assistant, an automated system. Ask for a person at any time. I can help with orders, deliveries and refunds. What do you need?</p>
+8:    <p id="greeting">Hello, I am the TSG Shop AI assistant. I can help with orders, deliveries and refunds. What do you need?</p>
 thesecguy@lab:~/ai-security-course-labs/labs/m18$ sed -i 's/"C24": "planned"/"C24": "implemented"/' my-assessment/system-card.json & 
 & grep -o '"C24": "[a-z]*"' my-assessment/system-card.json
 
@@ -172,7 +171,7 @@ EU AI Act articles that apply to this system: 1 of 2 have a proven control (Art.
   reference only for this system (high-risk duties): Art. 9, Art. 10, Art. 11, Art. 12, Art. 13, Art. 14, Art. 15, Art. 25, Art. 26, Art. 72, Art. 73
 thesecguy@lab:~/ai-security-course-labs/labs/m18$ make test | tail -n 5
 
-Ran 15 tests in 0.078s
+Ran 15 tests in 0.081s
 
 OK
 
