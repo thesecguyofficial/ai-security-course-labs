@@ -31,7 +31,7 @@ story:     ## one case, one trial, in both releases: the same document, a differ
 fix:       ## THE FIX: r42-fix (data marking back on documents) SHIPS
 	$(PY) gate.py r41 r42-fix
 
-control:   ## negative control: every defence off. The gate must STOP it (this target fails if it doesn't)
+control:   ## negative control: r41 with every defence off. G3 or G4 must FAIL (this target fails if they don't)
 	$(PY) gate.py r41 weak --expect-fail
 
 new-tool:  ## r43 adds fetch_url: STOPPED, but only because nobody wrote web cases (challenge 1)
@@ -40,7 +40,7 @@ new-tool:  ## r43 adds fetch_url: STOPPED, but only because nobody wrote web cas
 refuse:    ## r44 "fixes" injection by refusing the work: it SHIPS, because G6 is not written (challenge 3)
 	-$(PY) gate.py r41 r44
 
-hunt:      ## six weeks of a team's gate log: find how their gate was quietly weakened
+hunt:      ## four weeks of a team's gate log: find how their gate was quietly weakened
 	$(PY) history.py --file data/gate-history.jsonl
 
 ci:        ## exactly what ci/m30-security-gate.yml runs: tests, negative control, then the gate on C (default r42-fix)

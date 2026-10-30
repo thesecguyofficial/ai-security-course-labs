@@ -152,10 +152,12 @@ class T3_Gates(unittest.TestCase):
         self.assertFalse(gate.paired_regression(card("r41"), card("r42-fix"), "email")["significant"])
 
     def test_15_negative_control(self):
-        """negative control: the gate STOPS the release with every defence off, G3 critical included"""
+        """negative control: r41 with every defence off is STOPPED by what the gate measures (G3, G4), not by G1/G2"""
         res = gate.evaluate(card("r41"), card("weak"), POLICY)
         self.assertEqual(res["verdict"], "STOP")
-        self.assertEqual(statuses(res)["G3"], "FAIL")
+        s = statuses(res)
+        self.assertEqual((s["G1"], s["G2"], s["G3"], s["G4"]), ("PASS", "PASS", "FAIL", "FAIL"))
+        self.assertEqual(card("weak")["tools"], card("r41")["tools"])
 
     def test_16_new_tool_needs_cases(self):
         """gate: r43 adds fetch_url and is STOPPED (by G2 coverage until the suite has web cases)"""
@@ -186,7 +188,7 @@ class T4_GateHygiene(unittest.TestCase):
             shutil.rmtree(tmp)
 
     def test_19_history_findings(self):
-        """hunt: the six-week log shows a shrunk suite, fewer trials, a policy change, a rerun to green, a skipped rule"""
+        """hunt: the four-week log shows a shrunk suite, fewer trials, a policy change, a rerun to green, a skipped rule"""
         rows = history.read(HERE / "data" / "gate-history.jsonl")
         kinds = {f.split()[0] for f in history.findings(rows)}
         self.assertEqual(kinds, {"H1", "H2", "H3", "H4", "H5"})

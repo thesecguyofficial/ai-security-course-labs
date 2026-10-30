@@ -2,7 +2,7 @@
 history.py: read the gate's audit log and flag the quiet ways a security gate gets weakened.
 
     python3 history.py                                   # this lab's own log (state/gate-events.jsonl)
-    python3 history.py --file data/gate-history.jsonl    # six weeks of a team's gate log (fake), with findings
+    python3 history.py --file data/gate-history.jsonl    # four weeks of a team's gate log (fake), with findings
 
 Each line of the log is one gate run (written by gate.py): time, baseline, candidate, model, verdict, the suite's
 SHA-256 and size, trials, the policy file's SHA-256, and which rules failed or were skipped. The checks:
