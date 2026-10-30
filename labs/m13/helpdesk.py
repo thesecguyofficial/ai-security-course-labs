@@ -36,7 +36,7 @@ EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
 
 
 # --------------------------------------------------------------------------------------------------------------------
-# CHALLENGE 1 (13.1 + M12): screen what the knowledge base returns BEFORE the model reads it
+# CHALLENGE 1 (13.2): screen what the knowledge base returns BEFORE the model reads it
 # --------------------------------------------------------------------------------------------------------------------
 def screen_chunks(chunks: list[dict], setup: twin.Setup) -> list[dict]:
     """Return the chunks the model may read. Today: everything, unchanged.

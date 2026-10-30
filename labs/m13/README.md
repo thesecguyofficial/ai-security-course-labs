@@ -581,7 +581,7 @@ You should see:
 
 They fail until you finish.
 
-1. **13.1 + M12: screen what the knowledge base returns.** Write `screen_chunks()` in `helpdesk.py`: strip HTML
+1. **13.2: screen what the knowledge base returns.** Write `screen_chunks()` in `helpdesk.py`: strip HTML
    comments from each chunk and drop any chunk that still carries the lab marker, keeping the visible text. Then set
    `"screen_retrieved_chunks": true` in `setups/ported/app.json` and `setups/harness/app.json`. The real-cloud version
    is `ApplyGuardrail` on each chunk (M12.2) plus stripping hidden text at ingestion (M6.2).

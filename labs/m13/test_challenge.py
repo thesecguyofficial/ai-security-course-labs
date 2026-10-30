@@ -2,7 +2,7 @@
 test_challenge.py: `make challenge`. Five of these tests FAIL until you do the three-part challenge (README, Step 8).
 No solution is included.
 
-  1. (13.1 + M12) screen_chunks() in helpdesk.py, then set "screen_retrieved_chunks": true in setups/ported/app.json
+  1. (13.2) screen_chunks() in helpdesk.py, then set "screen_retrieved_chunks": true in setups/ported/app.json
      and setups/harness/app.json: hidden instructions never reach the model, the visible text still does
   2. (13.2) rule_20 in checker.py: flag end-user-reachable principals that may call bedrock-agentcore:InvokeHarness
   3. (13.2) authorise_write() in helpdesk.py: confirmation is not authorisation

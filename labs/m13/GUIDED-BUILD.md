@@ -274,7 +274,7 @@ check this text with it (M12.2): `aws bedrock-runtime apply-guardrail --guardrai
 
 1. Edit `global-acl.json`: add `{"Name": "bob@example.com", "Type": "USER", "Access": "ALLOW"}` to the `hr/` entry.
    Upload it again (`aws s3 cp global-acl.json s3://$BUCKET/acl/global-acl.json`).
-2. **Before syncing**, run R2 again. Expected: still nothing. AWS: global ACL changes "require reindexing of the
+2. **Before syncing**, run R2 again. Expected: still nothing. AWS: global ACL changes "require reindexing the
    affected prefix"; S3 sources have no real-time verification.
 3. Debug it the way AWS intends. Take the HR file's `documentId` from Priya's R2 result, then:
 
