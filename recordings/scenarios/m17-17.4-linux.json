@@ -45,12 +45,12 @@
     },
     {
       "label": "Eval",
-      "type": "make eval 2>&1 | tail -n 20",
+      "type": "make eval 2>&1 | tail -n 22",
       "pause_after": 6
     },
     {
       "label": "Eval weak",
-      "type": "make eval-weak 2>&1 | tail -n 19",
+      "type": "make eval-weak 2>&1 | tail -n 22",
       "pause_after": 6
     },
     {
@@ -60,7 +60,7 @@
     },
     {
       "label": "Same commands",
-      "type": "make -n ci && grep -n 'run: python3' ../../.github/workflows/m17-security-evals.yml",
+      "type": "make -n ci && grep -n 'run: py' ../../.github/workflows/m17-security-evals.yml",
       "pause_after": 5
     },
     {
