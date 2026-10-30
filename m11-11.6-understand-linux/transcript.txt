@@ -1,0 +1,721 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 4924, done.
+remote: Counting objects:   0% (1/369)
+remote: Counting objects:   1% (4/369)
+remote: Counting objects:   2% (8/369)
+remote: Counting objects:   3% (12/369)
+remote: Counting objects:   4% (15/369)
+remote: Counting objects:   5% (19/369)
+remote: Counting objects:   6% (23/369)
+remote: Counting objects:   7% (26/369)
+remote: Counting objects:   8% (30/369)
+remote: Counting objects:   9% (34/369)
+remote: Counting objects:  10% (37/369)
+remote: Counting objects:  11% (41/369)
+remote: Counting objects:  12% (45/369)
+remote: Counting objects:  13% (48/369)
+remote: Counting objects:  14% (52/369)
+remote: Counting objects:  15% (56/369)
+remote: Counting objects:  16% (60/369)
+remote: Counting objects:  17% (63/369)
+remote: Counting objects:  18% (67/369)
+remote: Counting objects:  19% (71/369)
+remote: Counting objects:  20% (74/369)
+remote: Counting objects:  21% (78/369)
+remote: Counting objects:  22% (82/369)
+remote: Counting objects:  23% (85/369)
+remote: Counting objects:  24% (89/369)
+remote: Counting objects:  25% (93/369)
+remote: Counting objects:  26% (96/369)
+remote: Counting objects:  27% (100/369)
+remote: Counting objects:  28% (104/369)
+remote: Counting objects:  29% (108/369)
+remote: Counting objects:  30% (111/369)
+remote: Counting objects:  31% (115/369)
+remote: Counting objects:  32% (119/369)
+remote: Counting objects:  33% (122/369)
+remote: Counting objects:  34% (126/369)
+remote: Counting objects:  35% (130/369)
+remote: Counting objects:  36% (133/369)
+remote: Counting objects:  37% (137/369)
+remote: Counting objects:  38% (141/369)
+remote: Counting objects:  39% (144/369)
+remote: Counting objects:  40% (148/369)
+remote: Counting objects:  41% (152/369)
+remote: Counting objects:  42% (155/369)
+remote: Counting objects:  43% (159/369)
+remote: Counting objects:  44% (163/369)
+remote: Counting objects:  45% (167/369)
+remote: Counting objects:  46% (170/369)
+remote: Counting objects:  47% (174/369)
+remote: Counting objects:  48% (178/369)
+remote: Counting objects:  49% (181/369)
+remote: Counting objects:  50% (185/369)
+remote: Counting objects:  51% (189/369)
+remote: Counting objects:  52% (192/369)
+remote: Counting objects:  53% (196/369)
+remote: Counting objects:  54% (200/369)
+remote: Counting objects:  55% (203/369)
+remote: Counting objects:  56% (207/369)
+remote: Counting objects:  57% (211/369)
+remote: Counting objects:  58% (215/369)
+remote: Counting objects:  59% (218/369)
+remote: Counting objects:  60% (222/369)
+remote: Counting objects:  61% (226/369)
+remote: Counting objects:  62% (229/369)
+remote: Counting objects:  63% (233/369)
+remote: Counting objects:  64% (237/369)
+remote: Counting objects:  65% (240/369)
+remote: Counting objects:  66% (244/369)
+remote: Counting objects:  67% (248/369)
+remote: Counting objects:  68% (251/369)
+remote: Counting objects:  69% (255/369)
+remote: Counting objects:  70% (259/369)
+remote: Counting objects:  71% (262/369)
+remote: Counting objects:  72% (266/369)
+remote: Counting objects:  73% (270/369)
+remote: Counting objects:  74% (274/369)
+remote: Counting objects:  75% (277/369)
+remote: Counting objects:  76% (281/369)
+remote: Counting objects:  77% (285/369)
+remote: Counting objects:  78% (288/369)
+remote: Counting objects:  79% (292/369)
+remote: Counting objects:  80% (296/369)
+remote: Counting objects:  81% (299/369)
+remote: Counting objects:  82% (303/369)
+remote: Counting objects:  83% (307/369)
+remote: Counting objects:  84% (310/369)
+remote: Counting objects:  85% (314/369)
+remote: Counting objects:  86% (318/369)
+remote: Counting objects:  87% (322/369)
+remote: Counting objects:  88% (325/369)
+remote: Counting objects:  89% (329/369)
+remote: Counting objects:  90% (333/369)
+remote: Counting objects:  91% (336/369)
+remote: Counting objects:  92% (340/369)
+remote: Counting objects:  93% (344/369)
+remote: Counting objects:  94% (347/369)
+remote: Counting objects:  95% (351/369)
+remote: Counting objects:  96% (355/369)
+remote: Counting objects:  97% (358/369)
+remote: Counting objects:  98% (362/369)
+remote: Counting objects:  99% (366/369)
+remote: Counting objects: 100% (369/369)
+remote: Counting objects: 100% (369/369), done.
+remote: Compressing objects:   0% (1/287)
+remote: Compressing objects:   1% (3/287)
+remote: Compressing objects:   2% (6/287)
+remote: Compressing objects:   3% (9/287)
+remote: Compressing objects:   4% (12/287)
+remote: Compressing objects:   5% (15/287)
+remote: Compressing objects:   6% (18/287)
+remote: Compressing objects:   7% (21/287)
+remote: Compressing objects:   8% (23/287)
+remote: Compressing objects:   9% (26/287)
+remote: Compressing objects:  10% (29/287)
+remote: Compressing objects:  11% (32/287)
+remote: Compressing objects:  12% (35/287)
+remote: Compressing objects:  13% (38/287)
+remote: Compressing objects:  14% (41/287)
+remote: Compressing objects:  15% (44/287)
+remote: Compressing objects:  16% (46/287)
+remote: Compressing objects:  17% (49/287)
+remote: Compressing objects:  18% (52/287)
+remote: Compressing objects:  19% (55/287)
+remote: Compressing objects:  20% (58/287)
+remote: Compressing objects:  21% (61/287)
+remote: Compressing objects:  22% (64/287)
+remote: Compressing objects:  23% (67/287)
+remote: Compressing objects:  24% (69/287)
+remote: Compressing objects:  25% (72/287)
+remote: Compressing objects:  26% (75/287)
+remote: Compressing objects:  27% (78/287)
+remote: Compressing objects:  28% (81/287)
+remote: Compressing objects:  29% (84/287)
+remote: Compressing objects:  30% (87/287)
+remote: Compressing objects:  31% (89/287)
+remote: Compressing objects:  32% (92/287)
+remote: Compressing objects:  33% (95/287)
+remote: Compressing objects:  34% (98/287)
+remote: Compressing objects:  35% (101/287)
+remote: Compressing objects:  36% (104/287)
+remote: Compressing objects:  37% (107/287)
+remote: Compressing objects:  38% (110/287)
+remote: Compressing objects:  39% (112/287)
+remote: Compressing objects:  40% (115/287)
+remote: Compressing objects:  41% (118/287)
+remote: Compressing objects:  42% (121/287)
+remote: Compressing objects:  43% (124/287)
+remote: Compressing objects:  44% (127/287)
+remote: Compressing objects:  45% (130/287)
+remote: Compressing objects:  46% (133/287)
+remote: Compressing objects:  47% (135/287)
+remote: Compressing objects:  48% (138/287)
+remote: Compressing objects:  49% (141/287)
+remote: Compressing objects:  50% (144/287)
+remote: Compressing objects:  51% (147/287)
+remote: Compressing objects:  52% (150/287)
+remote: Compressing objects:  53% (153/287)
+remote: Compressing objects:  54% (155/287)
+remote: Compressing objects:  55% (158/287)
+remote: Compressing objects:  56% (161/287)
+remote: Compressing objects:  57% (164/287)
+remote: Compressing objects:  58% (167/287)
+remote: Compressing objects:  59% (170/287)
+remote: Compressing objects:  60% (173/287)
+remote: Compressing objects:  61% (176/287)
+remote: Compressing objects:  62% (178/287)
+remote: Compressing objects:  63% (181/287)
+remote: Compressing objects:  64% (184/287)
+remote: Compressing objects:  65% (187/287)
+remote: Compressing objects:  66% (190/287)
+remote: Compressing objects:  67% (193/287)
+remote: Compressing objects:  68% (196/287)
+remote: Compressing objects:  69% (199/287)
+remote: Compressing objects:  70% (201/287)
+remote: Compressing objects:  71% (204/287)
+remote: Compressing objects:  72% (207/287)
+remote: Compressing objects:  73% (210/287)
+remote: Compressing objects:  74% (213/287)
+remote: Compressing objects:  75% (216/287)
+remote: Compressing objects:  76% (219/287)
+remote: Compressing objects:  77% (221/287)
+remote: Compressing objects:  78% (224/287)
+remote: Compressing objects:  79% (227/287)
+remote: Compressing objects:  80% (230/287)
+remote: Compressing objects:  81% (233/287)
+remote: Compressing objects:  82% (236/287)
+remote: Compressing objects:  83% (239/287)
+remote: Compressing objects:  84% (242/287)
+remote: Compressing objects:  85% (244/287)
+remote: Compressing objects:  86% (247/287)
+remote: Compressing objects:  87% (250/287)
+remote: Compressing objects:  88% (253/287)
+remote: Compressing objects:  89% (256/287)
+remote: Compressing objects:  90% (259/287)
+remote: Compressing objects:  91% (262/287)
+remote: Compressing objects:  92% (265/287)
+remote: Compressing objects:  93% (267/287)
+remote: Compressing objects:  94% (270/287)
+remote: Compressing objects:  95% (273/287)
+remote: Compressing objects:  96% (276/287)
+remote: Compressing objects:  97% (279/287)
+remote: Compressing objects:  98% (282/287)
+remote: Compressing objects:  99% (285/287)
+remote: Compressing objects: 100% (287/287)
+remote: Compressing objects: 100% (287/287), done.
+Receiving objects:   0% (1/4924)
+Receiving objects:   1% (50/4924)
+Receiving objects:   2% (99/4924)
+Receiving objects:   3% (148/4924)
+Receiving objects:   4% (197/4924)
+Receiving objects:   5% (247/4924)
+Receiving objects:   6% (296/4924)
+Receiving objects:   7% (345/4924)
+Receiving objects:   8% (394/4924)
+Receiving objects:   9% (444/4924)
+Receiving objects:  10% (493/4924)
+Receiving objects:  11% (542/4924)
+Receiving objects:  12% (591/4924)
+Receiving objects:  13% (641/4924)
+Receiving objects:  14% (690/4924)
+Receiving objects:  15% (739/4924)
+Receiving objects:  16% (788/4924)
+Receiving objects:  17% (838/4924)
+Receiving objects:  18% (887/4924)
+Receiving objects:  19% (936/4924)
+Receiving objects:  20% (985/4924)
+Receiving objects:  21% (1035/4924)
+Receiving objects:  22% (1084/4924)
+Receiving objects:  23% (1133/4924)
+Receiving objects:  24% (1182/4924)
+Receiving objects:  25% (1231/4924)
+Receiving objects:  26% (1281/4924)
+Receiving objects:  27% (1330/4924)
+Receiving objects:  28% (1379/4924)
+Receiving objects:  29% (1428/4924)
+Receiving objects:  30% (1478/4924)
+Receiving objects:  31% (1527/4924)
+Receiving objects:  32% (1576/4924)
+Receiving objects:  33% (1625/4924)
+Receiving objects:  34% (1675/4924)
+Receiving objects:  35% (1724/4924)
+Receiving objects:  36% (1773/4924)
+Receiving objects:  37% (1822/4924)
+Receiving objects:  38% (1872/4924)
+Receiving objects:  39% (1921/4924)
+Receiving objects:  40% (1970/4924)
+Receiving objects:  41% (2019/4924)
+Receiving objects:  42% (2069/4924)
+Receiving objects:  43% (2118/4924)
+Receiving objects:  44% (2167/4924)
+Receiving objects:  45% (2216/4924)
+Receiving objects:  46% (2266/4924)
+Receiving objects:  47% (2315/4924)
+Receiving objects:  48% (2364/4924)
+Receiving objects:  49% (2413/4924)
+Receiving objects:  50% (2462/4924)
+Receiving objects:  51% (2512/4924)
+Receiving objects:  52% (2561/4924)
+Receiving objects:  53% (2610/4924)
+Receiving objects:  54% (2659/4924)
+Receiving objects:  55% (2709/4924)
+Receiving objects:  56% (2758/4924)
+Receiving objects:  57% (2807/4924)
+Receiving objects:  58% (2856/4924)
+Receiving objects:  59% (2906/4924)
+Receiving objects:  60% (2955/4924)
+Receiving objects:  61% (3004/4924)
+Receiving objects:  62% (3053/4924)
+Receiving objects:  63% (3103/4924)
+Receiving objects:  64% (3152/4924)
+Receiving objects:  65% (3201/4924)
+Receiving objects:  66% (3250/4924)
+Receiving objects:  67% (3300/4924)
+Receiving objects:  68% (3349/4924)
+Receiving objects:  69% (3398/4924)
+Receiving objects:  70% (3447/4924)
+Receiving objects:  71% (3497/4924)
+Receiving objects:  72% (3546/4924)
+Receiving objects:  73% (3595/4924)
+Receiving objects:  74% (3644/4924)
+Receiving objects:  75% (3693/4924)
+Receiving objects:  76% (3743/4924)
+Receiving objects:  77% (3792/4924)
+Receiving objects:  78% (3841/4924)
+Receiving objects:  79% (3890/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  80% (3940/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  81% (3989/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  82% (4038/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  83% (4087/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  84% (4137/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  85% (4186/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  86% (4235/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  87% (4284/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  88% (4334/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  89% (4383/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  90% (4432/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  91% (4481/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  92% (4531/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  93% (4580/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  94% (4629/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  95% (4678/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  96% (4728/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  97% (4777/4924), 16.52 MiB | 32.98 MiB/s
+remote: Total 4924 (delta 187), reused 215 (delta 82), pack-reused 4555 (from 3)
+Receiving objects:  98% (4826/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects:  99% (4875/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects: 100% (4924/4924), 16.52 MiB | 32.98 MiB/s
+Receiving objects: 100% (4924/4924), 54.77 MiB | 61.37 MiB/s, done.
+Resolving deltas:   0% (0/2230)
+Resolving deltas:   1% (23/2230)
+Resolving deltas:   2% (45/2230)
+Resolving deltas:   3% (67/2230)
+Resolving deltas:   4% (90/2230)
+Resolving deltas:   5% (112/2230)
+Resolving deltas:   6% (134/2230)
+Resolving deltas:   7% (157/2230)
+Resolving deltas:   8% (179/2230)
+Resolving deltas:   9% (201/2230)
+Resolving deltas:  10% (223/2230)
+Resolving deltas:  11% (246/2230)
+Resolving deltas:  12% (268/2230)
+Resolving deltas:  13% (290/2230)
+Resolving deltas:  14% (313/2230)
+Resolving deltas:  15% (335/2230)
+Resolving deltas:  16% (357/2230)
+Resolving deltas:  17% (380/2230)
+Resolving deltas:  18% (402/2230)
+Resolving deltas:  19% (424/2230)
+Resolving deltas:  20% (446/2230)
+Resolving deltas:  21% (469/2230)
+Resolving deltas:  22% (491/2230)
+Resolving deltas:  23% (513/2230)
+Resolving deltas:  24% (536/2230)
+Resolving deltas:  25% (558/2230)
+Resolving deltas:  26% (580/2230)
+Resolving deltas:  27% (604/2230)
+Resolving deltas:  28% (625/2230)
+Resolving deltas:  29% (647/2230)
+Resolving deltas:  30% (669/2230)
+Resolving deltas:  31% (692/2230)
+Resolving deltas:  32% (714/2230)
+Resolving deltas:  33% (736/2230)
+Resolving deltas:  34% (759/2230)
+Resolving deltas:  35% (781/2230)
+Resolving deltas:  36% (803/2230)
+Resolving deltas:  37% (826/2230)
+Resolving deltas:  38% (848/2230)
+Resolving deltas:  39% (870/2230)
+Resolving deltas:  40% (892/2230)
+Resolving deltas:  41% (915/2230)
+Resolving deltas:  42% (937/2230)
+Resolving deltas:  43% (959/2230)
+Resolving deltas:  44% (982/2230)
+Resolving deltas:  45% (1004/2230)
+Resolving deltas:  46% (1026/2230)
+Resolving deltas:  47% (1049/2230)
+Resolving deltas:  48% (1071/2230)
+Resolving deltas:  49% (1093/2230)
+Resolving deltas:  50% (1115/2230)
+Resolving deltas:  51% (1138/2230)
+Resolving deltas:  52% (1160/2230)
+Resolving deltas:  53% (1182/2230)
+Resolving deltas:  54% (1205/2230)
+Resolving deltas:  55% (1227/2230)
+Resolving deltas:  56% (1249/2230)
+Resolving deltas:  57% (1272/2230)
+Resolving deltas:  58% (1294/2230)
+Resolving deltas:  59% (1316/2230)
+Resolving deltas:  60% (1338/2230)
+Resolving deltas:  61% (1361/2230)
+Resolving deltas:  62% (1383/2230)
+Resolving deltas:  63% (1405/2230)
+Resolving deltas:  64% (1428/2230)
+Resolving deltas:  65% (1450/2230)
+Resolving deltas:  66% (1472/2230)
+Resolving deltas:  67% (1495/2230)
+Resolving deltas:  68% (1517/2230)
+Resolving deltas:  69% (1539/2230)
+Resolving deltas:  70% (1561/2230)
+Resolving deltas:  71% (1584/2230)
+Resolving deltas:  72% (1606/2230)
+Resolving deltas:  73% (1628/2230)
+Resolving deltas:  74% (1651/2230)
+Resolving deltas:  75% (1673/2230)
+Resolving deltas:  76% (1695/2230)
+Resolving deltas:  77% (1718/2230)
+Resolving deltas:  78% (1740/2230)
+Resolving deltas:  79% (1762/2230)
+Resolving deltas:  80% (1784/2230)
+Resolving deltas:  81% (1807/2230)
+Resolving deltas:  82% (1829/2230)
+Resolving deltas:  83% (1851/2230)
+Resolving deltas:  84% (1874/2230)
+Resolving deltas:  85% (1896/2230)
+Resolving deltas:  86% (1918/2230)
+Resolving deltas:  87% (1941/2230)
+Resolving deltas:  88% (1963/2230)
+Resolving deltas:  89% (1985/2230)
+Resolving deltas:  90% (2007/2230)
+Resolving deltas:  91% (2030/2230)
+Resolving deltas:  92% (2052/2230)
+Resolving deltas:  93% (2074/2230)
+Resolving deltas:  94% (2097/2230)
+Resolving deltas:  95% (2119/2230)
+Resolving deltas:  96% (2141/2230)
+Resolving deltas:  97% (2164/2230)
+Resolving deltas:  98% (2186/2230)
+Resolving deltas:  99% (2208/2230)
+Resolving deltas: 100% (2230/2230)
+Resolving deltas: 100% (2230/2230), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m11 && ls
+
+GUIDED-BUILD.md  README.md        attack.py   explore.py   org         plan.py   run_tests.py  test_challenge.py  twin
+Makefile         anycompany.json  checker.py  iam_eval.py  package.py  policies  terraform     test_lab.py
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ ls terraform/first-draft terraform/hardened twin org policies
+
+org:
+FullAWSAccess.json  scp-region-guard.first-draft.json  scp-region-guard.json
+
+policies:
+endpoint-policy-mantle.json  ops-tools-mantle-role.json
+
+terraform/first-draft:
+lambda  main.tf  variables.tf  versions.tf
+
+terraform/hardened:
+app.tf  kms.tf  lambda  locals.tf  logging.tf  network.tf  outputs.tf  trail.tf  variables.tf  versions.tf
+
+twin:
+first-draft.plan.json  hardened.plan.json  offline_override.tf
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ head -30 anycompany.json
+
+{
+  "_about": "AnyCompany is fictional (AWS's own placeholder name). Every account ID and ARN is an AWS documentation example value.",
+  "organization": {
+    "id": "o-a1b2c3d4e5",
+    "accounts_in_org": [
+      "111122223333",
+      "444455556666"
+    ],
+    "production_account": "111122223333"
+  },
+  "data_residency": {
+    "rule": "Helpdesk prompts and answers may only be processed in US Regions.",
+    "allowed_processing_regions": [
+      "us-east-1",
+      "us-east-2",
+      "us-west-1",
+      "us-west-2"
+    ]
+  },
+  "approved": {
+    "runtime_profile": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "foundation_model": "anthropic.claude-haiku-4-5-20251001-v1:0",
+    "mantle_model": "anthropic.claude-haiku-4-5"
+  },
+  "principals": {
+    "helpdesk": {
+      "arn": "arn:aws:iam::111122223333:role/tsg-helpdesk-app",
+      "account": "111122223333",
+      "policies": "from the plan: aws_iam_role_policy.app_invoke"
+    },
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ make -n setup
+
+python3 ../../tools/check_python.py 3.11
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ make setup
+
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py plan
+
+Terraform plan, first-draft: twin/first-draft.plan.json
+  written by 1.13.2 (format 1.2), offline, with mock credentials
+  actions: 21 to create   (a plan changes nothing; apply would)
+
+   1 x aws_bedrock_model_invocation_logging_configuration   this
+   1 x aws_cloudwatch_log_group                             prompts
+   1 x aws_eip                                              nat
+   2 x aws_iam_role                                         app, bedrock_logging
+   2 x aws_iam_role_policy                                  app_invoke, bedrock_logging
+   1 x aws_iam_role_policy_attachment                       app_vpc
+   1 x aws_internet_gateway                                 igw
+   1 x aws_lambda_function                                  helpdesk
+   1 x aws_nat_gateway                                      nat
+   1 x aws_route_table                                      private
+   2 x aws_route_table_association                          private[0], private[1]
+   2 x aws_security_group                                   app, endpoint
+   3 x aws_subnet                                           private[0], private[1], public
+   1 x aws_vpc                                              helpdesk
+   1 x aws_vpc_endpoint                                     bedrock_runtime
+
+21 resources. Nothing exists yet: this is the plan, read before anything is built.
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ make -n twin
+
+python3 package.py
+for d in hardened first-draft; do \
+  cp twin/offline_override.tf terraform/$d/zz_offline_override.tf && \
+  ( cd terraform/$d && terraform init -input=false -no-color >/dev/null && terraform plan -input=false -no-color -out=tfplan >/dev/null && \
+    terraform show -json tfplan > ../../twin/$d.plan.json ); rc=$?; \
+  rm -f terraform/$d/zz_offline_override.tf terraform/$d/tfplan; [ $rc -eq 0 ] || exit $rc; \
+  echo "wrote twin/$d.plan.json"; done
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ make -n up
+
+python3 package.py
+cd terraform/hardened && terraform init -input=false && terraform apply -var account_id=$(aws sts get-caller-identity --query Account --output text)
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py model
+
+One approved model, Claude Haiku 4.5, and its three names (AWS model card):
+
+  foundation model ID   anthropic.claude-haiku-4-5-20251001-v1:0
+      as an ARN         arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0   (no account: AWS's model)
+  inference profile     us.anthropic.claude-haiku-4-5-20251001-v1:0   (bedrock-runtime: 'us.' = US Regions only)
+      as an ARN         arn:aws:bedrock:us-east-1:111122223333:inference-profile/us.anthropic.claude-haiku-4-5-20251001-v1:0
+  bedrock-mantle model  anthropic.claude-haiku-4-5   (the second endpoint uses other names)
+
+Who may start a Marketplace subscription (the first call to a third-party model does it)?
+  Helpdesk role, first-draft  aws-marketplace actions: none
+  Helpdesk role, hardened     aws-marketplace actions: none
+  On a real account: AWS says the first call needs aws-marketplace:Subscribe, Unsubscribe and
+  ViewSubscriptions; after that, callers need no Marketplace permissions.
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py role
+
+The Helpdesk role's policy, first-draft: aws_iam_role_policy.app_invoke
+  Version  2012-10-17   (the policy language edition, not a date you pick)
+
+  Statement 1  Sid LetTheAppUseBedrock
+    Effect     Allow
+    Action     bedrock:*, bedrock-mantle:*
+    Resource   *
+    Condition  (none)
+
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py role hardened
+
+The Helpdesk role's policy, hardened: aws_iam_role_policy.app_invoke
+  Version  2012-10-17   (the policy language edition, not a date you pick)
+
+  Statement 1  Sid TheApprovedGeographicProfile
+    Effect     Allow
+    Action     bedrock:InvokeModel, bedrock:InvokeModelWithResponseStream
+    Resource   arn:aws:bedrock:us-east-1:111122223333:inference-profile/us.anthropic.claude-haiku-4-5-20251001-v1:0
+    Condition  (none)
+
+  Statement 2  Sid TheModelOnlyThroughThatProfile
+    Effect     Allow
+    Action     bedrock:InvokeModel, bedrock:InvokeModelWithResponseStream
+    Resource   arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0
+    Resource   arn:aws:bedrock:us-east-2::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0
+    Resource   arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0
+    Condition  StringEquals bedrock:InferenceProfileArn = arn:aws:bedrock:us-east-1:111122223333:inference-profile/us.anthropic.claude-...
+
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py route
+
+One Converse call from us-east-1 (the source Region) with modelId us.anthropic.claude-haiku-4-5-20251001-v1:0
+
+The checks IAM makes (AWS's cross-Region inference pages), and where each one points:
+  1. the profile Region us-east-1    arn:aws:bedrock:us-east-1:111122223333:inference-profile/us.anthropic.claude-haiku-4-5-20251001-v1:0
+  2. the model   Region us-east-1    arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0
+                                    with bedrock:InferenceProfileArn set
+  3. the model   Region us-east-2    arn:aws:bedrock:us-east-2::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0
+                                    with bedrock:InferenceProfileArn set
+  4. the model   Region us-west-2    arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0
+                                    with bedrock:InferenceProfileArn set
+
+Where the prompt may be processed: us-east-1, us-east-2, us-west-2
+AnyCompany's rule: Helpdesk prompts and answers may only be processed in US Regions.
+Verdict: fits the rule
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py route global.anthropic.claude-haiku-4-5-20251001-v1:0
+
+One Converse call from us-east-1 (the source Region) with modelId global.anthropic.claude-haiku-4-5-20251001-v1:0
+
+The checks IAM makes (AWS's cross-Region inference pages), and where each one points:
+  1. the profile Region us-east-1    arn:aws:bedrock:us-east-1:111122223333:inference-profile/global.anthropic.claude-haiku-4-5-20251001-v1:0
+  2. the model   Region us-east-1    arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0
+                                    with bedrock:InferenceProfileArn set
+  3. the model   Region unspecified  arn:aws:bedrock:::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0
+                                    with bedrock:InferenceProfileArn set
+
+Where the prompt may be processed: us-east-1, unspecified
+  'unspecified' = the Region-less model ARN: AWS says any supported commercial Region worldwide.
+AnyCompany's rule: Helpdesk prompts and answers may only be processed in US Regions.
+Verdict: BREAKS the rule
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py network
+
+The Helpdesk's network, first-draft
+
+  VPC        10.20.0.0/16   (a private network: AWS gives it no way out by default)
+  subnet     10.20.1.0/24    us-east-1a  private
+  subnet     10.20.2.0/24    us-east-1b  private
+  subnet     10.20.100.0/24  us-east-1a  public
+  internet gateway  yes
+  NAT gateway       yes
+  private route table: 0.0.0.0/0 -> NAT gateway (the internet)
+  VPC endpoint      com.amazonaws.us-east-1.bedrock-runtime  (Interface, private DNS on, policy DEFAULT)
+  endpoint accepts  port 443 from 10.20.0.0/16 (the whole VPC)
+
+A call to bedrock-runtime uses the endpoint (private DNS sends it there).
+A call to bedrock-mantle has no endpoint: it goes out through the NAT gateway.
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py endpoint
+
+The bedrock-runtime endpoint's policy, first-draft: aws_vpc_endpoint.bedrock_runtime (default policy)
+
+  Sid        (none)
+  Effect     Allow
+  Principal  *   (anyone, from any AWS account)
+  Action     *
+  Resource   *
+  Condition  (none)
+
+Who gets through this door? (endpoint policy only; IAM still has to allow the call too)
+  THROUGH  arn:aws:iam::111122223333:role/tsg-helpdesk-app  (account 111122223333)
+  THROUGH  arn:aws:iam::111122223333:role/DataScienceRole  (account 111122223333)
+  THROUGH  arn:aws:iam::777788889999:user/personal-admin  (account 777788889999)
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py endpoint hardened
+
+The bedrock-runtime endpoint's policy, hardened: aws_vpc_endpoint.bedrock_runtime
+
+  Sid        OnlyTheHelpdeskRoleMayInvokeModels
+  Effect     Allow
+  Principal  *   (anyone... then the Condition narrows it)
+  Action     bedrock:InvokeModel, bedrock:InvokeModelWithResponseStream
+  Resource   *
+  Condition  ArnEquals aws:PrincipalArn = arn:aws:iam::111122223333:role/tsg-helpdesk-app
+  Condition  StringEquals aws:PrincipalAccount = 111122223333
+
+Who gets through this door? (endpoint policy only; IAM still has to allow the call too)
+  THROUGH  arn:aws:iam::111122223333:role/tsg-helpdesk-app  (account 111122223333)
+  refused  arn:aws:iam::111122223333:role/DataScienceRole  (account 111122223333)
+  refused  arn:aws:iam::777788889999:user/personal-admin  (account 777788889999)
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py keys
+
+KMS keys in the plan, first-draft: 0
+
+  none. CloudWatch Logs still encrypts the prompt log, with a key the service manages, so
+  IAM alone decides who can read the prompts: permission to read the log group is enough.
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py keys hardened prompts
+
+KMS keys in the plan, hardened: 2   (showing: prompts)
+
+  aws_kms_key.prompts: tsg-helpdesk: Bedrock model invocation logs (prompts and answers)
+    rotation on, deletion waits 7 days after someone schedules it
+
+    KeyAdministrationByTheAccount
+        who  root                                         may  kms:*
+    CloudWatchLogsForThePromptLogGroupOnly
+        who  logs.us-east-1.amazonaws.com                 may  kms:Encrypt, kms:Decrypt, kms:ReEncrypt*, kms:GenerateDat...
+        only if  kms:EncryptionContext:aws:logs:arn
+    BedrockLogDeliveryFromThisAccountOnly
+        who  bedrock.amazonaws.com                        may  kms:GenerateDataKey
+        only if  aws:SourceAccount, aws:SourceArn
+    BedrockLoggingRoleWritesThroughCloudWatchLogsOnly
+        who  role/tsg-helpdesk-bedrock-logging            may  kms:Encrypt, kms:ReEncrypt*, kms:Decrypt, kms:GenerateDat...
+        only if  kms:ViaService
+    InvestigatorsMayDecryptPromptLogs
+        who  role/tsg-helpdesk-log-investigator           may  kms:Decrypt
+
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py logging
+
+What gets recorded, first-draft
+
+Model invocation logging (the prompt and the answer; bedrock-runtime calls only):
+  on, for: text, image, embedding, video   (for every model in this account and Region)
+  to CloudWatch Logs group /tsg-helpdesk/bedrock/model-invocations
+  bodies over 100 KB: nowhere (no S3 bucket set)
+  stored in /tsg-helpdesk/bedrock/model-invocations (no KMS key of yours, kept FOREVER)
+
+CloudTrail (who called what, from where; never the prompt):
+  event history: management events such as InvokeModel and Converse, 90 days, free, always on
+  trail: NONE, so no data events (bedrock-mantle inference) and no network activity events
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py logging hardened
+
+What gets recorded, hardened
+
+Model invocation logging (the prompt and the answer; bedrock-runtime calls only):
+  on, for: text   (for every model in this account and Region)
+  to CloudWatch Logs group /tsg-helpdesk/bedrock/model-invocations
+  bodies over 100 KB: to S3 bucket tsg-helpdesk-prompt-logs-111122223333-us-east-1
+  stored in /tsg-helpdesk/bedrock/model-invocations (your KMS key, kept 30 days)
+
+CloudTrail (who called what, from where; never the prompt):
+  event history: management events such as InvokeModel and Converse, 90 days, free, always on
+  trail tsg-helpdesk-ai-data-events: multi-Region True, log file validation True
+    selects: Bedrock mantle: CreateInference and other inference/file calls
+    selects: Network activity through our VPC endpoints for Amazon Bedrock, including VpceAccessDenied
+    selects: Bedrock guardrails: ApplyGuardrail, including evaluations during model calls
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 explore.py record
+
+ILLUSTRATIVE: AWS's documented field names, fake values. Two records of the same Helpdesk call.
+
+1. Prompt log (model invocation logging, in your log group):
+   who        identity.arn      arn:aws:sts::111122223333:assumed-role/tsg-helpdesk-app/tsg-helpdesk
+   what       operation         Converse  on modelId us.anthropic.claude-haiku-4-5-20251001-v1:0
+   where      region            us-east-1   account 111122223333
+   said       inputBodyJson     "How do I reset my VPN token?"
+   answered   outputBodyJson    "Open the VPN portal, choose..."
+   size       tokens            61 in, 48 out
+   caller's   requestMetadata   {"app": "tsg-helpdesk", "env": "m11-lab"}   <- the ONLY field the caller writes
+
+2. CloudTrail event (event history, management event):
+   who        userIdentity      AssumedRole tsg-helpdesk-app
+   what       eventSource       bedrock.amazonaws.com   eventName Converse
+   where      awsRegion         us-east-1, and for a profile: additionalEventData.inferenceRegion
+   said       (nothing)         CloudTrail keeps the call, not the conversation
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 attack.py --only X1
+
+--- M11 lab · FIRST-DRAFT · twin/first-draft.plan.json ---
+    org SCPs: FullAWSAccess, scp-region-guard.first-draft.json · endpoint policy: aws_vpc_endpoint.bedrock_runtime (default policy)
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Attacks and mistakes
+  [X1] ALLOWED  Outsider's own AWS keys, used from inside the VPC through AnyCompany's endpoint
+         why:  every check passed: bedrock:InvokeModel
+         seen: CloudTrail: the API call is recorded in THEIR account's CloudTrail, not AnyCompany's
+         seen: AnyCompany: nothing (no trail records network activity on its endpoint)
+
+1 of 1 attacks and mistakes allowed.
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ exit
+
+exit

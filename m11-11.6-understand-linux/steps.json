@@ -1,0 +1,239 @@
+{
+  "scenario": "m11-11.6-understand-linux",
+  "start": 1.873,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.873,
+      "end": 13.092
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 16.092,
+      "end": 21.741
+    },
+    {
+      "label": "The folders",
+      "speed": 1,
+      "start": 25.741,
+      "end": 33.655
+    },
+    {
+      "label": "The company",
+      "speed": 1,
+      "start": 37.655,
+      "end": 41.449
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 46.449,
+      "end": 49.074
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 52.074,
+      "end": 54.292
+    },
+    {
+      "label": "Plan",
+      "speed": 1,
+      "start": 57.292,
+      "end": 60.983
+    },
+    {
+      "label": "Twin plan",
+      "speed": 1,
+      "start": 66.983,
+      "end": 69.393
+    },
+    {
+      "label": "Up plan",
+      "speed": 1,
+      "start": 75.393,
+      "end": 77.59
+    },
+    {
+      "label": "Model",
+      "speed": 1,
+      "start": 82.59,
+      "end": 86.561
+    },
+    {
+      "label": "Role",
+      "speed": 1,
+      "start": 92.561,
+      "end": 96.313
+    },
+    {
+      "label": "Role hardened",
+      "speed": 1,
+      "start": 101.313,
+      "end": 105.974
+    },
+    {
+      "label": "Route",
+      "speed": 1,
+      "start": 112.975,
+      "end": 116.673
+    },
+    {
+      "label": "Route global",
+      "speed": 1,
+      "start": 123.673,
+      "end": 132.697
+    },
+    {
+      "label": "Network",
+      "speed": 1,
+      "start": 139.697,
+      "end": 143.83
+    },
+    {
+      "label": "Endpoint",
+      "speed": 1,
+      "start": 150.83,
+      "end": 155.051
+    },
+    {
+      "label": "Endpoint hardened",
+      "speed": 1,
+      "start": 161.051,
+      "end": 166.185
+    },
+    {
+      "label": "Keys none",
+      "speed": 1,
+      "start": 172.185,
+      "end": 175.903
+    },
+    {
+      "label": "Keys",
+      "speed": 1,
+      "start": 179.903,
+      "end": 185.654
+    },
+    {
+      "label": "Logging",
+      "speed": 1,
+      "start": 192.654,
+      "end": 196.58
+    },
+    {
+      "label": "Logging hardened",
+      "speed": 1,
+      "start": 202.58,
+      "end": 207.673
+    },
+    {
+      "label": "Record",
+      "speed": 1,
+      "start": 213.673,
+      "end": 217.563
+    },
+    {
+      "label": "One run",
+      "speed": 1,
+      "start": 224.563,
+      "end": 228.772
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.474,
+      "what": "type"
+    },
+    {
+      "t": 16.692,
+      "what": "type"
+    },
+    {
+      "t": 26.341,
+      "what": "type"
+    },
+    {
+      "t": 38.255,
+      "what": "type"
+    },
+    {
+      "t": 47.05,
+      "what": "type"
+    },
+    {
+      "t": 52.674,
+      "what": "type"
+    },
+    {
+      "t": 57.892,
+      "what": "type"
+    },
+    {
+      "t": 67.583,
+      "what": "type"
+    },
+    {
+      "t": 75.994,
+      "what": "type"
+    },
+    {
+      "t": 83.19,
+      "what": "type"
+    },
+    {
+      "t": 93.161,
+      "what": "type"
+    },
+    {
+      "t": 101.913,
+      "what": "type"
+    },
+    {
+      "t": 113.575,
+      "what": "type"
+    },
+    {
+      "t": 124.273,
+      "what": "type"
+    },
+    {
+      "t": 140.298,
+      "what": "type"
+    },
+    {
+      "t": 151.43,
+      "what": "type"
+    },
+    {
+      "t": 161.651,
+      "what": "type"
+    },
+    {
+      "t": 172.785,
+      "what": "type"
+    },
+    {
+      "t": 180.504,
+      "what": "type"
+    },
+    {
+      "t": 193.255,
+      "what": "type"
+    },
+    {
+      "t": 203.18,
+      "what": "type"
+    },
+    {
+      "t": 214.273,
+      "what": "type"
+    },
+    {
+      "t": 225.163,
+      "what": "type"
+    }
+  ],
+  "end": 234.772
+}
