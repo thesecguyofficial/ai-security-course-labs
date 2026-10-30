@@ -1,0 +1,99 @@
+{
+  "scenario": "m20-20.5-understand-linux",
+  "start": 1.71,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.71,
+      "end": 12.113
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.113,
+      "end": 20.761
+    },
+    {
+      "label": "The AWS part",
+      "speed": 1,
+      "start": 24.762,
+      "end": 28.587
+    },
+    {
+      "label": "Look first",
+      "speed": 1,
+      "start": 32.587,
+      "end": 37.36
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 41.36,
+      "end": 43.494
+    },
+    {
+      "label": "Agent",
+      "speed": 1,
+      "start": 46.494,
+      "end": 51.512
+    },
+    {
+      "label": "Trail",
+      "speed": 1,
+      "start": 58.512,
+      "end": 62.405
+    },
+    {
+      "label": "Launcher",
+      "speed": 1,
+      "start": 69.406,
+      "end": 73.601
+    },
+    {
+      "label": "One run",
+      "speed": 1,
+      "start": 79.601,
+      "end": 83.877
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.31,
+      "what": "type"
+    },
+    {
+      "t": 15.713,
+      "what": "type"
+    },
+    {
+      "t": 25.362,
+      "what": "type"
+    },
+    {
+      "t": 33.187,
+      "what": "type"
+    },
+    {
+      "t": 41.96,
+      "what": "type"
+    },
+    {
+      "t": 47.094,
+      "what": "type"
+    },
+    {
+      "t": 59.113,
+      "what": "type"
+    },
+    {
+      "t": 70.006,
+      "what": "type"
+    },
+    {
+      "t": 80.201,
+      "what": "type"
+    }
+  ],
+  "end": 89.877
+}
