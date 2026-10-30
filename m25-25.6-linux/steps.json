@@ -1,0 +1,149 @@
+{
+  "scenario": "m25-25.6-linux",
+  "start": 1.955,
+  "steps": [
+    {
+      "label": "Attack",
+      "speed": 1,
+      "start": 1.955,
+      "end": 9.252
+    },
+    {
+      "label": "Attack file",
+      "speed": 1,
+      "start": 16.252,
+      "end": 21.147
+    },
+    {
+      "label": "Story",
+      "speed": 1,
+      "start": 26.147,
+      "end": 29.209
+    },
+    {
+      "label": "Two deploy.json",
+      "speed": 2,
+      "start": 36.209,
+      "end": 52.493
+    },
+    {
+      "label": "Two ci.json",
+      "speed": 2,
+      "start": 58.493,
+      "end": 73.9
+    },
+    {
+      "label": "Quant gate",
+      "speed": 1,
+      "start": 78.9,
+      "end": 82.135
+    },
+    {
+      "label": "Per slice",
+      "speed": 1,
+      "start": 89.135,
+      "end": 95.434
+    },
+    {
+      "label": "Lineage",
+      "speed": 1,
+      "start": 100.434,
+      "end": 103.372
+    },
+    {
+      "label": "Hardened",
+      "speed": 1,
+      "start": 109.372,
+      "end": 112.306
+    },
+    {
+      "label": "Deploy",
+      "speed": 1,
+      "start": 118.307,
+      "end": 121.46
+    },
+    {
+      "label": "Verify",
+      "speed": 2,
+      "start": 126.46,
+      "end": 143.183
+    },
+    {
+      "label": "Hunt",
+      "speed": 1,
+      "start": 148.183,
+      "end": 150.255
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 157.255,
+      "end": 162.182
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 166.182,
+      "end": 173.802
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.555,
+      "what": "type"
+    },
+    {
+      "t": 16.852,
+      "what": "type"
+    },
+    {
+      "t": 26.747,
+      "what": "type"
+    },
+    {
+      "t": 36.809,
+      "what": "type"
+    },
+    {
+      "t": 59.093,
+      "what": "type"
+    },
+    {
+      "t": 79.5,
+      "what": "type"
+    },
+    {
+      "t": 89.735,
+      "what": "type"
+    },
+    {
+      "t": 101.034,
+      "what": "type"
+    },
+    {
+      "t": 109.972,
+      "what": "type"
+    },
+    {
+      "t": 118.907,
+      "what": "type"
+    },
+    {
+      "t": 127.06,
+      "what": "type"
+    },
+    {
+      "t": 148.784,
+      "what": "type"
+    },
+    {
+      "t": 157.855,
+      "what": "type"
+    },
+    {
+      "t": 166.782,
+      "what": "type"
+    }
+  ],
+  "end": 179.802
+}

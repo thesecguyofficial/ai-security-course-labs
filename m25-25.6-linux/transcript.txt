@@ -1,0 +1,164 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m25 && make attack
+
+.venv/bin/python suite.py first-draft
+  A1  WORKED   weights replaced in storage after signing (the community quant's weights)
+  A2  WORKED   a file added after signing: custom code next to the weights (holds only the lab marker)
+  A3  WORKED   the signature deleted, so there is nothing to check
+  A4  WORKED   weights swapped, then re-signed with the attacker's own key, and that key shipped as keys/ci.pub
+  A5  WORKED   an old release (1.0.0), validly signed by our own CI key, revoked since: replayed into the deploy step
+  A6  WORKED   a 'smaller, just as good' community quant handed to CI to ship instead of our own int8
+  A7  WORKED   the signature file damaged, so the check throws an error instead of saying no
+  N1  deploys  a clean release of our own int8 build
+  N2  deploys  a clean release whose README was written BEFORE signing
+  N3  deploys  the same clean release deployed twice (a retried pipeline): both succeed, one registry version
+
+Attacks that worked: 7 of 7  (A1, A2, A3, A4, A5, A6, A7) | normal releases that deploy: 3 of 3
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ sed -n '/^def a4/,/^$/p' suite.py
+
+def a4_resigned_by_attacker(setup):
+    """weights swapped, then re-signed with the attacker's own key, and that key shipped as keys/ci.pub"""
+    r = good_release(setup)
+    shutil.copy(lab.MODELS / "community-quant" / "model.safetensors", r / "model" / "model.safetensors")
+    ci.sign(r / "model", r / "model.sig", lab.KEYS / "attacker.priv")
+    (r / "keys").mkdir(exist_ok=True)
+    shutil.copy(lab.KEYS / "attacker.pub", r / "keys" / "ci.pub")
+    return deploy.deploy(setup, r, quiet=QUIET)
+
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ make story
+
+.venv/bin/python suite.py first-draft --why --only A1
+A1: weights replaced in storage after signing (the community quant's weights)
+CI [first-draft] release 1.1.0: base tsg-guard-base, shipping int8 (int8)
+  eval (full precision only): recall fp32 1.000
+  signed 4 files -> 1.1.0-first-draft/model.sig
+DEPLOY [first-draft] 1.1.0-first-draft
+  WARNING: signature check failed: Signature mismatch: Hash mismatch for 'model.safetensors' (continuing)
+  signature: failed (1 warning(s))
+  DEPLOYED: registered as version 1, ModelApprovalStatus Approved
+-> deployed
+
+A1: weights replaced in storage after signing (the community quant's weights)
+CI [hardened] release 1.1.0: base tsg-guard-base, shipping int8 (int8)
+  eval (full precision AND the shipped artefact): recall fp32 1.000, shipped 1.000, agreement 1.000
+  signed 4 files -> 1.1.0-hardened/model.sig
+DEPLOY [hardened] 1.1.0-hardened
+  REFUSED: signature check failed: Signature mismatch: Hash mismatch for 'model.safetensors'
+-> not deployed
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ diff -y -t -W 130 --suppress-common-lines <(grep -v '"_' setups/first-draft/deploy 
+.json) <(grep -v '"_' setups/hardened/deploy.json)
+
+ "trusted_key": "release",                                      |   "trusted_key": "setups/hardened/trusted-keys/ci.pub",
+ "require_signature": false,                                    |   "require_signature": true,
+ "ignore_unsigned_files": true,                                 |   "ignore_unsigned_files": false,
+ "on_verify_error": "warn",                                     |   "on_verify_error": "refuse",
+ "allowed_files": null,                                         |   "allowed_files": ["model.safetensors", "config.json", "eval-re
+ "check_bom": false,                                            |   "check_bom": true,
+ "check_eval": false,                                           |   "check_eval": true,
+ "check_revoked": false,                                        |   "check_revoked": true,
+ "check_lineage": false                                         |   "check_lineage": true,
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ diff -y -t -W 130 --suppress-common-lines <(grep -v '"_' setups/first-draft/ci.jso 
+n) <(grep -v '"_' setups/hardened/ci.json)
+
+ "evaluate_shipped": false,                                     |   "evaluate_shipped": true,
+ "gate": {"min_recall": 0.9},                                   |   "gate": {"min_recall": 0.95, "min_agreement": 0.95, "max_recal
+ "slice_gate": false,                                           |   "slice_gate": true,
+ "rich_bom": false,                                             |   "rich_bom": true,
+ "ship_public_key": true,                                       |   "ship_public_key": false
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ make quant-gate
+
+.venv/bin/python ci.py release first-draft --version 1.1.1 --quant models/community-quant
+CI [first-draft] release 1.1.1: base tsg-guard-base, shipping q4-community (community-quant)
+  eval (full precision only): recall fp32 1.000
+  signed 4 files -> 1.1.1-first-draft/model.sig
+
+.venv/bin/python ci.py release hardened --version 1.1.1 --quant models/community-quant
+CI [hardened] release 1.1.1: base tsg-guard-base, shipping q4-community (community-quant)
+  eval (full precision AND the shipped artefact): recall fp32 1.000, shipped 0.708, agreement 0.825
+  GATE FAILED: shipped artefact agrees with full precision on 0.825 of cases < 0.95 (flipped: R02, R03, R04, R05, R06, R07, R08)
+  GATE FAILED: recall drops by 0.292 after quantization > 0.05
+  REFUSED: nothing signed, nothing released
+make: [Makefile:44: quant-gate] Error 1 (ignored)
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ .venv/bin/python gates.py models/community-quant
+
+models/community-quant: 40 eval cases, agreement with tsg-guard-base 0.825, escalation recall 0.708 (base 1.000), false escalations 0
+  slice admin        recall 1.000 (base 1.000)
+  slice credentials  recall 0.125 (base 1.000)
+  slice data-export  recall 1.000 (base 1.000)
+  slice payments     recall 1.000 (base 1.000)
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ make lineage-demo
+
+.venv/bin/python gates.py models/unapproved-base --ticket "Reset my password and turn off MFA PWNED-LAB-MARKER"
+models/unapproved-base: 40 eval cases, agreement with tsg-guard-base 1.000, escalation recall 1.000 (base 1.000), false escalations 0
+  slice admin        recall 1.000 (base 1.000)
+  slice credentials  recall 1.000 (base 1.000)
+  slice data-export  recall 1.000 (base 1.000)
+  slice payments     recall 1.000 (base 1.000)
+ticket: 'Reset my password and turn off MFA PWNED-LAB-MARKER'
+  tsg-guard-base -> ESCALATE   models/unapproved-base -> AUTO
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ make hardened
+
+.venv/bin/python suite.py hardened
+  A1  stopped  weights replaced in storage after signing (the community quant's weights)
+  A2  stopped  a file added after signing: custom code next to the weights (holds only the lab marker)
+  A3  stopped  the signature deleted, so there is nothing to check
+  A4  stopped  weights swapped, then re-signed with the attacker's own key, and that key shipped as keys/ci.pub
+  A5  stopped  an old release (1.0.0), validly signed by our own CI key, revoked since: replayed into the deploy step
+  A6  stopped  a 'smaller, just as good' community quant handed to CI to ship instead of our own int8
+  A7  stopped  the signature file damaged, so the check throws an error instead of saying no
+  N1  deploys  a clean release of our own int8 build
+  N2  deploys  a clean release whose README was written BEFORE signing
+  N3  deploys  the same clean release deployed twice (a retried pipeline): both succeed, one registry version
+
+Attacks that worked: 0 of 7  (none) | normal releases that deploy: 3 of 3
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ make deploy
+
+.venv/bin/python ci.py release hardened --version 1.1.0
+CI [hardened] release 1.1.0: base tsg-guard-base, shipping int8 (int8)
+  eval (full precision AND the shipped artefact): recall fp32 1.000, shipped 1.000, agreement 1.000
+  signed 4 files -> 1.1.0-hardened/model.sig
+.venv/bin/python deploy.py hardened release/1.1.0-hardened --emit state/create-model-package.json
+DEPLOY [hardened] 1.1.0-hardened
+  signature: verified
+  DEPLOYED: registered as version 1, ModelApprovalStatus Approved
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ .venv/bin/model_signing verify key release/1.1.0-hardened/model --signature releas 
+e/1.1.0-hardened/model.sig --public_key keys/ci.pub
+
+Verification succeeded
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ make hunt
+
+.venv/bin/python hunt.py
+8 deploy-gate decisions in data/deploy-history.jsonl: 6 deployed, 2 refused
+
+Q1  Deploys by signature result:
+    failed    1
+    skipped   1
+    verified  4
+
+Q2  Refusals and why:
+    2027-03-12T09:05:31Z  pipeline-a  1.1.1         signature check failed: Signature mismatch: Extra files found in model 'model': custom_hea
+    2027-03-12T10:02:09Z  pipeline-a  1.0.0         revoked: release 1.0.0 (built from tsg-guard-base 1.0, which sends gift-card requests AUTO
+
+Q3  Deploys signed by a key that is NOT our CI key:
+    2027-03-12T09:20:17Z  pipeline-b  1.1.1         key 33e3a78695d06048...
+    -> a gate that trusts the key shipped with the model (first draft)
+
+Q4  Deploys that went ahead without a verified signature (challenge 3):
+    (nothing found yet: write find_unverified_deploys() in hunt.py)
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ make test 2>&1 | tail -n 3
+
+OK
+
+ALL TESTS PASSED (21 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ make challenge 2>&1 | grep -E 'challenge|TESTS'
+
+.venv/bin/python run_tests.py --challenge
+[FAIL] challenge 1: slice_gate() names the data-export slice for community-quant-v2
+[FAIL] challenge 1: case C1 (community quant v2 through CI) is stopped
+[FAIL] challenge 2: case C2 (a release from an unapproved base) is refused at deploy
+[PASS] challenge: all 7 attacks still stopped and 3 of 3 normal releases still deploy
+[FAIL] challenge 3: find_unverified_deploys() finds 1.1.0-hotfix (failed) and 1.1.2 (skipped), oldest first
+4 of 26 TESTS FAILED (26 run)
+make: *** [Makefile:56: challenge] Error 1
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ exit
+
+exit

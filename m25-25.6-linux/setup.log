@@ -1,0 +1,149 @@
+warning: unable to access '/home/runner/.config/git/config': Permission denied
+[before, as thesecguy] git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git
+warning: unable to access '/home/runner/.config/git/ignore': Permission denied
+warning: unable to access '/home/runner/.config/git/attributes': Permission denied
+[before, as thesecguy] cd ai-security-course-labs/labs/m25 && make setup
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+Collecting annotated-types==0.8.0 (from -r requirements.txt (line 7))
+  Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting asn1crypto==1.5.1 (from -r requirements.txt (line 8))
+  Downloading asn1crypto-1.5.1-py2.py3-none-any.whl.metadata (13 kB)
+Collecting blake3==1.0.11 (from -r requirements.txt (line 9))
+  Downloading blake3-1.0.11-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.9 kB)
+Collecting certifi==2026.10.23 (from -r requirements.txt (line 10))
+  Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Collecting cffi==2.1.1 (from -r requirements.txt (line 11))
+  Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.5 kB)
+Collecting charset-normalizer==3.5.2 (from -r requirements.txt (line 12))
+  Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 46.4/46.4 kB 6.6 MB/s eta 0:00:00
+Collecting click==8.5.0 (from -r requirements.txt (line 13))
+  Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting cryptography==50.0.2 (from -r requirements.txt (line 14))
+  Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.4 kB)
+Collecting dnspython==2.9.0 (from -r requirements.txt (line 15))
+  Downloading dnspython-2.9.0-py3-none-any.whl.metadata (5.7 kB)
+Collecting email-validator==2.3.0 (from -r requirements.txt (line 16))
+  Downloading email_validator-2.3.0-py3-none-any.whl.metadata (26 kB)
+Collecting id==1.6.1 (from -r requirements.txt (line 17))
+  Downloading id-1.6.1-py3-none-any.whl.metadata (5.1 kB)
+Collecting idna==3.20 (from -r requirements.txt (line 18))
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting in-toto-attestation==0.9.3 (from -r requirements.txt (line 19))
+  Downloading in_toto_attestation-0.9.3-py3-none-any.whl.metadata (2.6 kB)
+Collecting markdown-it-py==4.2.0 (from -r requirements.txt (line 20))
+  Downloading markdown_it_py-4.2.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting mdurl==0.1.2 (from -r requirements.txt (line 21))
+  Downloading mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Collecting model-signing==1.1.1 (from -r requirements.txt (line 22))
+  Downloading model_signing-1.1.1-py3-none-any.whl.metadata (17 kB)
+Collecting platformdirs==4.13.5 (from -r requirements.txt (line 23))
+  Downloading platformdirs-4.13.5-py3-none-any.whl.metadata (5.5 kB)
+Collecting protobuf==7.36.2 (from -r requirements.txt (line 24))
+  Downloading protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl.metadata (595 bytes)
+Collecting pycparser==3.12 (from -r requirements.txt (line 25))
+  Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+Collecting pydantic==2.14.1 (from -r requirements.txt (line 26))
+  Downloading pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 133.0/133.0 kB 16.1 MB/s eta 0:00:00
+Collecting pydantic_core==2.50.1 (from -r requirements.txt (line 27))
+  Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
+Collecting Pygments==2.21.0 (from -r requirements.txt (line 28))
+  Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting PyJWT==2.15.1 (from -r requirements.txt (line 29))
+  Downloading pyjwt-2.15.1-py3-none-any.whl.metadata (3.5 kB)
+Collecting pyOpenSSL==26.4.0 (from -r requirements.txt (line 30))
+  Downloading pyopenssl-26.4.0-py3-none-any.whl.metadata (22 kB)
+Collecting requests==2.34.2 (from -r requirements.txt (line 31))
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting rfc3161-client==1.0.9 (from -r requirements.txt (line 32))
+  Downloading rfc3161_client-1.0.9-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.0 kB)
+Collecting rfc8785==0.1.4 (from -r requirements.txt (line 33))
+  Downloading rfc8785-0.1.4-py3-none-any.whl.metadata (3.4 kB)
+Collecting rich==15.0.0 (from -r requirements.txt (line 34))
+  Downloading rich-15.0.0-py3-none-any.whl.metadata (18 kB)
+Collecting securesystemslib==1.6.0 (from -r requirements.txt (line 35))
+  Downloading securesystemslib-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Collecting sigstore==4.5.1 (from -r requirements.txt (line 36))
+  Downloading sigstore-4.5.1-py3-none-any.whl.metadata (17 kB)
+Collecting sigstore-models==0.0.6 (from -r requirements.txt (line 37))
+  Downloading sigstore_models-0.0.6-py3-none-any.whl.metadata (1.3 kB)
+Collecting sigstore-rekor-types==0.0.18 (from -r requirements.txt (line 38))
+  Downloading sigstore_rekor_types-0.0.18-py3-none-any.whl.metadata (13 kB)
+Collecting tuf==7.0.1 (from -r requirements.txt (line 39))
+  Downloading tuf-7.0.1-py3-none-any.whl.metadata (8.1 kB)
+Collecting typing-inspection==0.4.4 (from -r requirements.txt (line 40))
+  Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+Collecting typing_extensions==4.16.0 (from -r requirements.txt (line 41))
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting urllib3==2.8.0 (from -r requirements.txt (line 42))
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Downloading asn1crypto-1.5.1-py2.py3-none-any.whl (105 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 105.0/105.0 kB 40.2 MB/s eta 0:00:00
+Downloading blake3-1.0.11-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (381 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 381.3/381.3 kB 45.2 MB/s eta 0:00:00
+Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.1/135.1 kB 52.2 MB/s eta 0:00:00
+Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 221.8/221.8 kB 70.0 MB/s eta 0:00:00
+Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (257 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 257.6/257.6 kB 38.1 MB/s eta 0:00:00
+Downloading click-8.5.0-py3-none-any.whl (125 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 125.3/125.3 kB 27.5 MB/s eta 0:00:00
+Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (4.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 MB 167.3 MB/s eta 0:00:00
+Downloading dnspython-2.9.0-py3-none-any.whl (354 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 354.8/354.8 kB 100.7 MB/s eta 0:00:00
+Downloading email_validator-2.3.0-py3-none-any.whl (35 kB)
+Downloading id-1.6.1-py3-none-any.whl (14 kB)
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 69.6/69.6 kB 25.2 MB/s eta 0:00:00
+Downloading in_toto_attestation-0.9.3-py3-none-any.whl (13 kB)
+Downloading markdown_it_py-4.2.0-py3-none-any.whl (91 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.7/91.7 kB 31.3 MB/s eta 0:00:00
+Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Downloading model_signing-1.1.1-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.3/73.3 kB 31.6 MB/s eta 0:00:00
+Downloading platformdirs-4.13.5-py3-none-any.whl (32 kB)
+Downloading protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl (343 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 343.2/343.2 kB 94.7 MB/s eta 0:00:00
+Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.6/62.6 kB 25.4 MB/s eta 0:00:00
+Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 488.1/488.1 kB 117.2 MB/s eta 0:00:00
+Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 172.7 MB/s eta 0:00:00
+Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 150.7 MB/s eta 0:00:00
+Downloading pyjwt-2.15.1-py3-none-any.whl (33 kB)
+Downloading pyopenssl-26.4.0-py3-none-any.whl (56 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 56.0/56.0 kB 23.9 MB/s eta 0:00:00
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.1/73.1 kB 32.3 MB/s eta 0:00:00
+Downloading rfc3161_client-1.0.9-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.4/2.4 MB 171.4 MB/s eta 0:00:00
+Downloading rfc8785-0.1.4-py3-none-any.whl (9.2 kB)
+Downloading rich-15.0.0-py3-none-any.whl (310 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 310.7/310.7 kB 93.5 MB/s eta 0:00:00
+Downloading securesystemslib-1.6.0-py3-none-any.whl (874 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 874.8/874.8 kB 129.8 MB/s eta 0:00:00
+Downloading sigstore-4.5.1-py3-none-any.whl (113 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 113.2/113.2 kB 45.3 MB/s eta 0:00:00
+Downloading sigstore_models-0.0.6-py3-none-any.whl (13 kB)
+Downloading sigstore_rekor_types-0.0.18-py3-none-any.whl (20 kB)
+Downloading tuf-7.0.1-py3-none-any.whl (56 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 56.3/56.3 kB 20.5 MB/s eta 0:00:00
+Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.6/45.6 kB 17.3 MB/s eta 0:00:00
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.7/135.7 kB 47.2 MB/s eta 0:00:00
+Installing collected packages: asn1crypto, urllib3, typing_extensions, securesystemslib, rfc8785, PyJWT, Pygments, pycparser, protobuf, platformdirs, mdurl, idna, dnspython, click, charset-normalizer, certifi, blake3, annotated-types, typing-inspection, tuf, requests, pydantic_core, markdown-it-py, in-toto-attestation, id, email-validator, cffi, rich, pydantic, cryptography, sigstore-models, rfc3161-client, pyOpenSSL, sigstore-rekor-types, sigstore, model-signing
+Successfully installed PyJWT-2.15.1 Pygments-2.21.0 annotated-types-0.8.0 asn1crypto-1.5.1 blake3-1.0.11 certifi-2026.10.23 cffi-2.1.1 charset-normalizer-3.5.2 click-8.5.0 cryptography-50.0.2 dnspython-2.9.0 email-validator-2.3.0 id-1.6.1 idna-3.20 in-toto-attestation-0.9.3 markdown-it-py-4.2.0 mdurl-0.1.2 model-signing-1.1.1 platformdirs-4.13.5 protobuf-7.36.2 pyOpenSSL-26.4.0 pycparser-3.12 pydantic-2.14.1 pydantic_core-2.50.1 requests-2.34.2 rfc3161-client-1.0.9 rfc8785-0.1.4 rich-15.0.0 securesystemslib-1.6.0 sigstore-4.5.1 sigstore-models-0.0.6 sigstore-rekor-types-0.0.18 tuf-7.0.1 typing-inspection-0.4.4 typing_extensions-4.16.0 urllib3-2.8.0
+.venv/bin/python -c "import lab; lab.ensure_keys(); print('lab keys in keys/: ci.priv, ci.pub, attacker.priv, attacker.pub')"
+lab keys in keys/: ci.priv, ci.pub, attacker.priv, attacker.pub
+.venv/bin/python ci.py build
+wrote community-quant, community-quant-v2, tsg-guard-base, tsg-guard-base-1.0, unapproved-base in models/
+prepared: user thesecguy on host lab, removed: nothing, ready: nothing
