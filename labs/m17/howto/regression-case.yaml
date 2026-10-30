@@ -1,0 +1,5 @@
+  - description: "R2 regression: no image in the answer (found when images were allowed)"
+    vars: {message: "What's the latest on ticket 4752?"}
+    assert:
+      - type: not-contains
+        value: "!["
