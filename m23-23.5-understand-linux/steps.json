@@ -1,0 +1,199 @@
+{
+  "scenario": "m23-23.5-understand-linux",
+  "start": 1.684,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.684,
+      "end": 12.847
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.847,
+      "end": 21.491
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 25.492,
+      "end": 33.961
+    },
+    {
+      "label": "Config",
+      "speed": 1,
+      "start": 37.961,
+      "end": 40.743
+    },
+    {
+      "label": "Look first",
+      "speed": 1,
+      "start": 45.743,
+      "end": 50.613
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 54.613,
+      "end": 56.842
+    },
+    {
+      "label": "Logs",
+      "speed": 1,
+      "start": 59.842,
+      "end": 63.469
+    },
+    {
+      "label": "Line",
+      "speed": 1,
+      "start": 69.469,
+      "end": 73.222
+    },
+    {
+      "label": "Timeline",
+      "speed": 1,
+      "start": 80.222,
+      "end": 84.451
+    },
+    {
+      "label": "Signature",
+      "speed": 1,
+      "start": 90.451,
+      "end": 95.246
+    },
+    {
+      "label": "Anomaly",
+      "speed": 1,
+      "start": 101.247,
+      "end": 105.699
+    },
+    {
+      "label": "Allow-list",
+      "speed": 1,
+      "start": 111.699,
+      "end": 116.513
+    },
+    {
+      "label": "Attack session",
+      "speed": 1,
+      "start": 122.513,
+      "end": 126.812
+    },
+    {
+      "label": "Poisoned line",
+      "speed": 1,
+      "start": 133.812,
+      "end": 138.181
+    },
+    {
+      "label": "Egress line",
+      "speed": 1,
+      "start": 145.181,
+      "end": 149.317
+    },
+    {
+      "label": "Variant",
+      "speed": 1,
+      "start": 155.317,
+      "end": 159.316
+    },
+    {
+      "label": "Variant egress",
+      "speed": 1,
+      "start": 165.316,
+      "end": 170.126
+    },
+    {
+      "label": "Measure",
+      "speed": 1,
+      "start": 176.126,
+      "end": 180.189
+    },
+    {
+      "label": "One run",
+      "speed": 1,
+      "start": 187.189,
+      "end": 190.052
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.284,
+      "what": "type"
+    },
+    {
+      "t": 16.447,
+      "what": "type"
+    },
+    {
+      "t": 26.092,
+      "what": "type"
+    },
+    {
+      "t": 38.561,
+      "what": "type"
+    },
+    {
+      "t": 46.343,
+      "what": "type"
+    },
+    {
+      "t": 55.213,
+      "what": "type"
+    },
+    {
+      "t": 60.442,
+      "what": "type"
+    },
+    {
+      "t": 70.069,
+      "what": "type"
+    },
+    {
+      "t": 80.822,
+      "what": "type"
+    },
+    {
+      "t": 91.051,
+      "what": "type"
+    },
+    {
+      "t": 101.847,
+      "what": "type"
+    },
+    {
+      "t": 112.299,
+      "what": "type"
+    },
+    {
+      "t": 123.113,
+      "what": "type"
+    },
+    {
+      "t": 134.412,
+      "what": "type"
+    },
+    {
+      "t": 145.781,
+      "what": "type"
+    },
+    {
+      "t": 155.917,
+      "what": "type"
+    },
+    {
+      "t": 165.916,
+      "what": "type"
+    },
+    {
+      "t": 176.726,
+      "what": "type"
+    },
+    {
+      "t": 187.789,
+      "what": "type"
+    }
+  ],
+  "end": 197.053
+}
