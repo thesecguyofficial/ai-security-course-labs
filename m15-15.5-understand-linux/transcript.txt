@@ -1,0 +1,603 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 4909, done.
+remote: Counting objects:   0% (1/354)
+remote: Counting objects:   1% (4/354)
+remote: Counting objects:   2% (8/354)
+remote: Counting objects:   3% (11/354)
+remote: Counting objects:   4% (15/354)
+remote: Counting objects:   5% (18/354)
+remote: Counting objects:   6% (22/354)
+remote: Counting objects:   7% (25/354)
+remote: Counting objects:   8% (29/354)
+remote: Counting objects:   9% (32/354)
+remote: Counting objects:  10% (36/354)
+remote: Counting objects:  11% (39/354)
+remote: Counting objects:  12% (43/354)
+remote: Counting objects:  13% (47/354)
+remote: Counting objects:  14% (50/354)
+remote: Counting objects:  15% (54/354)
+remote: Counting objects:  16% (57/354)
+remote: Counting objects:  17% (61/354)
+remote: Counting objects:  18% (64/354)
+remote: Counting objects:  19% (68/354)
+remote: Counting objects:  20% (71/354)
+remote: Counting objects:  21% (75/354)
+remote: Counting objects:  22% (78/354)
+remote: Counting objects:  23% (82/354)
+remote: Counting objects:  24% (85/354)
+remote: Counting objects:  25% (89/354)
+remote: Counting objects:  26% (93/354)
+remote: Counting objects:  27% (96/354)
+remote: Counting objects:  28% (100/354)
+remote: Counting objects:  29% (103/354)
+remote: Counting objects:  30% (107/354)
+remote: Counting objects:  31% (110/354)
+remote: Counting objects:  32% (114/354)
+remote: Counting objects:  33% (117/354)
+remote: Counting objects:  34% (121/354)
+remote: Counting objects:  35% (124/354)
+remote: Counting objects:  36% (128/354)
+remote: Counting objects:  37% (131/354)
+remote: Counting objects:  38% (135/354)
+remote: Counting objects:  39% (139/354)
+remote: Counting objects:  40% (142/354)
+remote: Counting objects:  41% (146/354)
+remote: Counting objects:  42% (149/354)
+remote: Counting objects:  43% (153/354)
+remote: Counting objects:  44% (156/354)
+remote: Counting objects:  45% (160/354)
+remote: Counting objects:  46% (163/354)
+remote: Counting objects:  47% (167/354)
+remote: Counting objects:  48% (170/354)
+remote: Counting objects:  49% (174/354)
+remote: Counting objects:  50% (177/354)
+remote: Counting objects:  51% (181/354)
+remote: Counting objects:  52% (185/354)
+remote: Counting objects:  53% (188/354)
+remote: Counting objects:  54% (192/354)
+remote: Counting objects:  55% (195/354)
+remote: Counting objects:  56% (199/354)
+remote: Counting objects:  57% (202/354)
+remote: Counting objects:  58% (206/354)
+remote: Counting objects:  59% (209/354)
+remote: Counting objects:  60% (213/354)
+remote: Counting objects:  61% (216/354)
+remote: Counting objects:  62% (220/354)
+remote: Counting objects:  63% (224/354)
+remote: Counting objects:  64% (227/354)
+remote: Counting objects:  65% (231/354)
+remote: Counting objects:  66% (234/354)
+remote: Counting objects:  67% (238/354)
+remote: Counting objects:  68% (241/354)
+remote: Counting objects:  69% (245/354)
+remote: Counting objects:  70% (248/354)
+remote: Counting objects:  71% (252/354)
+remote: Counting objects:  72% (255/354)
+remote: Counting objects:  73% (259/354)
+remote: Counting objects:  74% (262/354)
+remote: Counting objects:  75% (266/354)
+remote: Counting objects:  76% (270/354)
+remote: Counting objects:  77% (273/354)
+remote: Counting objects:  78% (277/354)
+remote: Counting objects:  79% (280/354)
+remote: Counting objects:  80% (284/354)
+remote: Counting objects:  81% (287/354)
+remote: Counting objects:  82% (291/354)
+remote: Counting objects:  83% (294/354)
+remote: Counting objects:  84% (298/354)
+remote: Counting objects:  85% (301/354)
+remote: Counting objects:  86% (305/354)
+remote: Counting objects:  87% (308/354)
+remote: Counting objects:  88% (312/354)
+remote: Counting objects:  89% (316/354)
+remote: Counting objects:  90% (319/354)
+remote: Counting objects:  91% (323/354)
+remote: Counting objects:  92% (326/354)
+remote: Counting objects:  93% (330/354)
+remote: Counting objects:  94% (333/354)
+remote: Counting objects:  95% (337/354)
+remote: Counting objects:  96% (340/354)
+remote: Counting objects:  97% (344/354)
+remote: Counting objects:  98% (347/354)
+remote: Counting objects:  99% (351/354)
+remote: Counting objects: 100% (354/354)
+remote: Counting objects: 100% (354/354), done.
+remote: Compressing objects:   0% (1/275)
+remote: Compressing objects:   1% (3/275)
+remote: Compressing objects:   2% (6/275)
+remote: Compressing objects:   3% (9/275)
+remote: Compressing objects:   4% (11/275)
+remote: Compressing objects:   5% (14/275)
+remote: Compressing objects:   6% (17/275)
+remote: Compressing objects:   7% (20/275)
+remote: Compressing objects:   8% (22/275)
+remote: Compressing objects:   9% (25/275)
+remote: Compressing objects:  10% (28/275)
+remote: Compressing objects:  11% (31/275)
+remote: Compressing objects:  12% (33/275)
+remote: Compressing objects:  13% (36/275)
+remote: Compressing objects:  14% (39/275)
+remote: Compressing objects:  15% (42/275)
+remote: Compressing objects:  16% (44/275)
+remote: Compressing objects:  17% (47/275)
+remote: Compressing objects:  18% (50/275)
+remote: Compressing objects:  19% (53/275)
+remote: Compressing objects:  20% (55/275)
+remote: Compressing objects:  21% (58/275)
+remote: Compressing objects:  22% (61/275)
+remote: Compressing objects:  23% (64/275)
+remote: Compressing objects:  24% (66/275)
+remote: Compressing objects:  25% (69/275)
+remote: Compressing objects:  26% (72/275)
+remote: Compressing objects:  27% (75/275)
+remote: Compressing objects:  28% (77/275)
+remote: Compressing objects:  29% (80/275)
+remote: Compressing objects:  30% (83/275)
+remote: Compressing objects:  31% (86/275)
+remote: Compressing objects:  32% (88/275)
+remote: Compressing objects:  33% (91/275)
+remote: Compressing objects:  34% (94/275)
+remote: Compressing objects:  35% (97/275)
+remote: Compressing objects:  36% (99/275)
+remote: Compressing objects:  37% (102/275)
+remote: Compressing objects:  38% (105/275)
+remote: Compressing objects:  39% (108/275)
+remote: Compressing objects:  40% (110/275)
+remote: Compressing objects:  41% (113/275)
+remote: Compressing objects:  42% (116/275)
+remote: Compressing objects:  43% (119/275)
+remote: Compressing objects:  44% (121/275)
+remote: Compressing objects:  45% (124/275)
+remote: Compressing objects:  46% (127/275)
+remote: Compressing objects:  47% (130/275)
+remote: Compressing objects:  48% (132/275)
+remote: Compressing objects:  49% (135/275)
+remote: Compressing objects:  50% (138/275)
+remote: Compressing objects:  51% (141/275)
+remote: Compressing objects:  52% (143/275)
+remote: Compressing objects:  53% (146/275)
+remote: Compressing objects:  54% (149/275)
+remote: Compressing objects:  55% (152/275)
+remote: Compressing objects:  56% (154/275)
+remote: Compressing objects:  57% (157/275)
+remote: Compressing objects:  58% (160/275)
+remote: Compressing objects:  59% (163/275)
+remote: Compressing objects:  60% (165/275)
+remote: Compressing objects:  61% (168/275)
+remote: Compressing objects:  62% (171/275)
+remote: Compressing objects:  63% (174/275)
+remote: Compressing objects:  64% (176/275)
+remote: Compressing objects:  65% (179/275)
+remote: Compressing objects:  66% (182/275)
+remote: Compressing objects:  67% (185/275)
+remote: Compressing objects:  68% (187/275)
+remote: Compressing objects:  69% (190/275)
+remote: Compressing objects:  70% (193/275)
+remote: Compressing objects:  71% (196/275)
+remote: Compressing objects:  72% (198/275)
+remote: Compressing objects:  73% (201/275)
+remote: Compressing objects:  74% (204/275)
+remote: Compressing objects:  75% (207/275)
+remote: Compressing objects:  76% (209/275)
+remote: Compressing objects:  77% (212/275)
+remote: Compressing objects:  78% (215/275)
+remote: Compressing objects:  79% (218/275)
+remote: Compressing objects:  80% (220/275)
+remote: Compressing objects:  81% (223/275)
+remote: Compressing objects:  82% (226/275)
+remote: Compressing objects:  83% (229/275)
+remote: Compressing objects:  84% (231/275)
+remote: Compressing objects:  85% (234/275)
+remote: Compressing objects:  86% (237/275)
+remote: Compressing objects:  87% (240/275)
+remote: Compressing objects:  88% (242/275)
+remote: Compressing objects:  89% (245/275)
+remote: Compressing objects:  90% (248/275)
+remote: Compressing objects:  91% (251/275)
+remote: Compressing objects:  92% (253/275)
+remote: Compressing objects:  93% (256/275)
+remote: Compressing objects:  94% (259/275)
+remote: Compressing objects:  95% (262/275)
+remote: Compressing objects:  96% (264/275)
+remote: Compressing objects:  97% (267/275)
+remote: Compressing objects:  98% (270/275)
+remote: Compressing objects:  99% (273/275)
+remote: Compressing objects: 100% (275/275)
+remote: Compressing objects: 100% (275/275), done.
+Receiving objects:   0% (1/4909)
+Receiving objects:   1% (50/4909)
+Receiving objects:   2% (99/4909)
+Receiving objects:   3% (148/4909)
+Receiving objects:   4% (197/4909)
+Receiving objects:   5% (246/4909)
+Receiving objects:   6% (295/4909)
+Receiving objects:   7% (344/4909)
+Receiving objects:   8% (393/4909)
+Receiving objects:   9% (442/4909)
+Receiving objects:  10% (491/4909)
+Receiving objects:  11% (540/4909)
+Receiving objects:  12% (590/4909)
+Receiving objects:  13% (639/4909)
+Receiving objects:  14% (688/4909)
+Receiving objects:  15% (737/4909)
+Receiving objects:  16% (786/4909)
+Receiving objects:  17% (835/4909)
+Receiving objects:  18% (884/4909)
+Receiving objects:  19% (933/4909)
+Receiving objects:  20% (982/4909)
+Receiving objects:  21% (1031/4909)
+Receiving objects:  22% (1080/4909)
+Receiving objects:  23% (1130/4909)
+Receiving objects:  24% (1179/4909)
+Receiving objects:  25% (1228/4909)
+Receiving objects:  26% (1277/4909)
+Receiving objects:  27% (1326/4909)
+Receiving objects:  28% (1375/4909)
+Receiving objects:  29% (1424/4909)
+Receiving objects:  30% (1473/4909)
+Receiving objects:  31% (1522/4909)
+Receiving objects:  32% (1571/4909)
+Receiving objects:  33% (1620/4909)
+Receiving objects:  34% (1670/4909)
+Receiving objects:  35% (1719/4909)
+Receiving objects:  36% (1768/4909)
+Receiving objects:  37% (1817/4909)
+Receiving objects:  38% (1866/4909)
+Receiving objects:  39% (1915/4909)
+Receiving objects:  40% (1964/4909)
+Receiving objects:  41% (2013/4909)
+Receiving objects:  42% (2062/4909)
+Receiving objects:  43% (2111/4909)
+Receiving objects:  44% (2160/4909)
+Receiving objects:  45% (2210/4909)
+Receiving objects:  46% (2259/4909)
+Receiving objects:  47% (2308/4909)
+Receiving objects:  48% (2357/4909)
+Receiving objects:  49% (2406/4909)
+Receiving objects:  50% (2455/4909)
+Receiving objects:  51% (2504/4909)
+Receiving objects:  52% (2553/4909)
+Receiving objects:  53% (2602/4909)
+Receiving objects:  54% (2651/4909)
+Receiving objects:  55% (2700/4909)
+Receiving objects:  56% (2750/4909)
+Receiving objects:  57% (2799/4909)
+Receiving objects:  58% (2848/4909)
+Receiving objects:  59% (2897/4909)
+Receiving objects:  60% (2946/4909)
+Receiving objects:  61% (2995/4909)
+Receiving objects:  62% (3044/4909)
+Receiving objects:  63% (3093/4909)
+Receiving objects:  64% (3142/4909)
+Receiving objects:  65% (3191/4909)
+Receiving objects:  66% (3240/4909)
+Receiving objects:  67% (3290/4909)
+Receiving objects:  68% (3339/4909)
+Receiving objects:  69% (3388/4909)
+Receiving objects:  70% (3437/4909)
+Receiving objects:  71% (3486/4909)
+Receiving objects:  72% (3535/4909)
+Receiving objects:  73% (3584/4909)
+Receiving objects:  74% (3633/4909)
+Receiving objects:  75% (3682/4909)
+Receiving objects:  76% (3731/4909)
+Receiving objects:  77% (3780/4909)
+Receiving objects:  78% (3830/4909)
+Receiving objects:  79% (3879/4909)
+Receiving objects:  80% (3928/4909)
+Receiving objects:  81% (3977/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  82% (4026/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  83% (4075/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  84% (4124/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  85% (4173/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  86% (4222/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  87% (4271/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  88% (4320/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  89% (4370/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  90% (4419/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  91% (4468/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  92% (4517/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  93% (4566/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  94% (4615/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  95% (4664/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  96% (4713/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  97% (4762/4909), 37.54 MiB | 75.02 MiB/s
+remote: Total 4909 (delta 175), reused 211 (delta 79), pack-reused 4555 (from 3)
+Receiving objects:  98% (4811/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects:  99% (4860/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects: 100% (4909/4909), 37.54 MiB | 75.02 MiB/s
+Receiving objects: 100% (4909/4909), 54.76 MiB | 78.09 MiB/s, done.
+Resolving deltas:   0% (0/2218)
+Resolving deltas:   1% (23/2218)
+Resolving deltas:   2% (45/2218)
+Resolving deltas:   3% (67/2218)
+Resolving deltas:   4% (89/2218)
+Resolving deltas:   5% (111/2218)
+Resolving deltas:   6% (134/2218)
+Resolving deltas:   7% (156/2218)
+Resolving deltas:   8% (178/2218)
+Resolving deltas:   9% (200/2218)
+Resolving deltas:  10% (222/2218)
+Resolving deltas:  11% (244/2218)
+Resolving deltas:  12% (267/2218)
+Resolving deltas:  13% (289/2218)
+Resolving deltas:  14% (311/2218)
+Resolving deltas:  15% (333/2218)
+Resolving deltas:  16% (355/2218)
+Resolving deltas:  17% (378/2218)
+Resolving deltas:  18% (400/2218)
+Resolving deltas:  19% (422/2218)
+Resolving deltas:  20% (444/2218)
+Resolving deltas:  21% (466/2218)
+Resolving deltas:  22% (488/2218)
+Resolving deltas:  23% (511/2218)
+Resolving deltas:  24% (533/2218)
+Resolving deltas:  25% (555/2218)
+Resolving deltas:  26% (577/2218)
+Resolving deltas:  27% (599/2218)
+Resolving deltas:  28% (622/2218)
+Resolving deltas:  29% (644/2218)
+Resolving deltas:  30% (666/2218)
+Resolving deltas:  31% (688/2218)
+Resolving deltas:  32% (710/2218)
+Resolving deltas:  33% (732/2218)
+Resolving deltas:  34% (755/2218)
+Resolving deltas:  35% (777/2218)
+Resolving deltas:  36% (799/2218)
+Resolving deltas:  37% (821/2218)
+Resolving deltas:  38% (843/2218)
+Resolving deltas:  39% (866/2218)
+Resolving deltas:  40% (888/2218)
+Resolving deltas:  41% (910/2218)
+Resolving deltas:  42% (932/2218)
+Resolving deltas:  43% (954/2218)
+Resolving deltas:  44% (976/2218)
+Resolving deltas:  45% (999/2218)
+Resolving deltas:  46% (1021/2218)
+Resolving deltas:  47% (1043/2218)
+Resolving deltas:  48% (1065/2218)
+Resolving deltas:  49% (1087/2218)
+Resolving deltas:  50% (1109/2218)
+Resolving deltas:  51% (1132/2218)
+Resolving deltas:  52% (1154/2218)
+Resolving deltas:  53% (1176/2218)
+Resolving deltas:  54% (1198/2218)
+Resolving deltas:  55% (1220/2218)
+Resolving deltas:  56% (1243/2218)
+Resolving deltas:  57% (1265/2218)
+Resolving deltas:  58% (1287/2218)
+Resolving deltas:  59% (1309/2218)
+Resolving deltas:  60% (1331/2218)
+Resolving deltas:  61% (1353/2218)
+Resolving deltas:  62% (1376/2218)
+Resolving deltas:  63% (1398/2218)
+Resolving deltas:  64% (1420/2218)
+Resolving deltas:  65% (1442/2218)
+Resolving deltas:  66% (1464/2218)
+Resolving deltas:  67% (1487/2218)
+Resolving deltas:  68% (1509/2218)
+Resolving deltas:  69% (1531/2218)
+Resolving deltas:  70% (1553/2218)
+Resolving deltas:  71% (1575/2218)
+Resolving deltas:  72% (1597/2218)
+Resolving deltas:  73% (1620/2218)
+Resolving deltas:  74% (1642/2218)
+Resolving deltas:  75% (1664/2218)
+Resolving deltas:  76% (1686/2218)
+Resolving deltas:  77% (1708/2218)
+Resolving deltas:  78% (1731/2218)
+Resolving deltas:  79% (1753/2218)
+Resolving deltas:  80% (1775/2218)
+Resolving deltas:  81% (1797/2218)
+Resolving deltas:  82% (1819/2218)
+Resolving deltas:  83% (1841/2218)
+Resolving deltas:  84% (1864/2218)
+Resolving deltas:  85% (1886/2218)
+Resolving deltas:  86% (1908/2218)
+Resolving deltas:  87% (1930/2218)
+Resolving deltas:  88% (1952/2218)
+Resolving deltas:  89% (1975/2218)
+Resolving deltas:  90% (1997/2218)
+Resolving deltas:  91% (2019/2218)
+Resolving deltas:  92% (2041/2218)
+Resolving deltas:  93% (2063/2218)
+Resolving deltas:  94% (2085/2218)
+Resolving deltas:  95% (2108/2218)
+Resolving deltas:  96% (2130/2218)
+Resolving deltas:  97% (2152/2218)
+Resolving deltas:  98% (2174/2218)
+Resolving deltas:  99% (2196/2218)
+Resolving deltas: 100% (2218/2218)
+Resolving deltas: 100% (2218/2218), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m15 && ls
+
+GUIDED-BUILD.md  README.md        checker.py  data         explore.py  hunt.py      model_files.py  setups             test_lab.py
+Makefile         anycompany.json  cloud       evaluate.py  gate.py     images.json  run_tests.py    test_challenge.py  twin.py
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ ls setups setups/first-draft
+
+setups:
+first-draft  hardened
+
+setups/first-draft:
+app.json  domain.json  endpoint-config.json  iam.json  model.json  network.json  registry.json  scp.json
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ cat setups/first-draft/model.json
+
+{
+  "_note": "CreateModel request body. Deployed by hand from a notebook on Friday.",
+  "ModelName": "tsg-summariser-v1",
+  "ExecutionRoleArn": "arn:aws:iam::111122223333:role/tsg-summariser-exec",
+  "PrimaryContainer": {
+    "Image": "763104351884.dkr.ecr.us-east-1.amazonaws.com/djl-inference:0.30.0-lmi12.0.0-cu124",
+    "ModelDataSource": {
+      "S3DataSource": {
+        "S3Uri": "s3://amzn-s3-demo-tsg-models/tsg-summariser/v1/",
+        "S3DataType": "S3Prefix",
+        "CompressionType": "None"
+      }
+    },
+    "Environment": {
+      "OPTION_ROLLING_BATCH": "vllm",
+      "HF_TOKEN": "hf_LABPLACEHOLDERnotarealtoken0000"
+    }
+  },
+  "EnableNetworkIsolation": false
+}
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ make -n setup
+
+python3 ../../tools/check_python.py 3.11
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ make setup
+
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 explore.py pieces first-draft
+
+AnyCompany's SageMaker AI pieces, setup first-draft (fictional; AWS documentation example IDs)
+
+  Studio domain    tsg-data-science: where the data scientists work in notebooks
+                   user profiles: alice, bob   network: PublicInternetOnly
+  Training job     none in this lab: the team fine-tunes in a notebook and exports the files
+  Model files      in S3: s3://amzn-s3-demo-tsg-models/tsg-summariser/v1/
+  Model Registry   group tsg-summariser: one entry per version, each with an approval status
+                   version 1  Approved               registered by ds-alice
+                   version 3  PendingManualApproval  registered by ds-bob
+                   version 4  PendingManualApproval  registered by tsg-ci-deployer
+  Model            tsg-summariser-v1: image + files + execution role + network settings
+                   image djl-inference:0.30.0-lmi12.0.0-cu124
+  Endpoint config  tsg-summariser-v1-cfg: 1 x ml.g5.xlarge, data capture on
+  Endpoint         tsg-summariser: the address the Helpdesk app calls
+  Execution roles  tsg-summariser-exec (the endpoint), tsg-ds-exec (notebooks and jobs)
+  Where models come from   huggingface.co/Qwen/Qwen3-0.6B (an open model; JumpStart is AWS's catalog, not used here)
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 explore.py endpoint first-draft
+
+One real-time endpoint is three objects (setup first-draft). The request bodies are in setups/first-draft/.
+
+1. CreateModel           model.json
+   Image                   djl-inference:0.30.0-lmi12.0.0-cu124
+   model files             s3://amzn-s3-demo-tsg-models/tsg-summariser/v1/
+   ExecutionRoleArn        arn:aws:iam::111122223333:role/tsg-summariser-exec
+   EnableNetworkIsolation  false
+   VpcConfig               none
+   Environment             OPTION_ROLLING_BATCH, HF_TOKEN
+
+2. CreateEndpointConfig  endpoint-config.json
+   InstanceType x count    ml.g5.xlarge x 1
+   DataCaptureConfig       prompts and answers to s3://amzn-s3-demo-tsg-analytics/tsg-summariser/
+
+3. CreateEndpoint        name tsg-summariser, config tsg-summariser-v1-cfg
+
+When it starts, SageMaker AI (AWS's documented contract for inference containers):
+   copies the model files from S3 to /opt/ml/model (read-only for the container)
+   runs the image as: docker run <image> serve
+   sends requests to a web server in the container on port 8080: POST /invocations, GET /ping
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 explore.py patch first-draft
+
+Who patches what for AnyCompany's endpoint (setup first-draft)
+
+  AWS   the hosts, and the endpoint instances ("automatically patches endpoints")
+  You   the image your model names, the model files, the network settings, the execution role, keys, buckets
+
+  image          djl-inference:0.30.0-lmi12.0.0-cu124
+  pinned by      tag (a tag can move to other bytes)
+  released       2025-09-15   (a lab value; read real dates in the image's GitHub release)
+  support rule   DLC: end of patch 365 days after release
+  end of patch   2026-09-15
+  lab today      2027-02-01   -> PAST end of patch: no more security fixes
+
+  A newer image reaches the endpoint only when you deploy a model that names it.
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 explore.py reach first-draft
+
+What code can reach (setup first-draft), from twin.py
+
+  Model container   EnableNetworkIsolation false, VpcConfig none
+     internet       yes
+     AWS credentials (the execution role)  yes
+     why            no network isolation and no VpcConfig: SageMaker AI provides external network access
+     model files    SageMaker AI downloads the files with the execution role
+     S3 gateway endpoint   none
+
+  Studio notebook   AppNetworkAccessType PublicInternetOnly
+     internet       yes
+     why            PublicInternetOnly (the default): direct internet access through a SageMaker-managed VPC
+
+  VPC endpoints (private doors to AWS services): sagemaker.runtime
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 explore.py reach hardened
+
+What code can reach (setup hardened), from twin.py
+
+  Model container   EnableNetworkIsolation true, VpcConfig yes
+     internet       no
+     AWS credentials (the execution role)  no
+     why            network isolation: no outbound calls, no AWS credentials in the container
+     model files    SageMaker AI downloads the files with the execution role
+     S3 gateway endpoint   vpce-0a1b2c3d4e5f60002 with a policy
+
+  Studio notebook   AppNetworkAccessType VpcOnly
+     internet       no
+     why            VpcOnly: no route to the internet
+
+  VPC endpoints (private doors to AWS services): sagemaker.runtime, sagemaker.api, aws.sagemaker.us-east-1.studio
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 explore.py call first-draft tsg-helpdesk-app
+
+One InvokeEndpoint call (setup first-draft). Nothing is sent: twin.py answers.
+
+  POST https://runtime.sagemaker.us-east-1.amazonaws.com/endpoints/tsg-summariser/invocations
+  body: the ticket text; signed with SigV4 by the caller's credentials
+  caller   arn:aws:iam::111122223333:role/tsg-helpdesk-app
+  target   arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser
+  path     over the internet (no VPC endpoint: aws:SourceVpce is missing)
+
+  IAM checks, in order:
+   1. caller's identity policy        ALLOW
+   2. VPC endpoint policy             not on the path
+
+  result   ALLOW: allowed by the identity policy
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 explore.py call hardened tsg-helpdesk-app
+
+One InvokeEndpoint call (setup hardened). Nothing is sent: twin.py answers.
+
+  POST https://runtime.sagemaker.us-east-1.amazonaws.com/endpoints/tsg-summariser/invocations
+  body: the ticket text; signed with SigV4 by the caller's credentials
+  caller   arn:aws:iam::111122223333:role/tsg-helpdesk-app
+  target   arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser
+  path     over the internet (no VPC endpoint: aws:SourceVpce is missing)
+
+  IAM checks, in order:
+   1. caller's identity policy        no Allow
+   2. VPC endpoint policy             not on the path
+
+  result   DENY: no identity policy allows it (implicit deny)
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 explore.py role first-draft
+
+Execution role tsg-summariser-exec (setup first-draft)
+
+  who may wear it    sagemaker.amazonaws.com (sts:AssumeRole): SageMaker AI, on your behalf
+  managed policies   AmazonSageMakerFullAccess
+  what it may do
+     Allow  s3:*                               on *
+     Allow  kms:Decrypt                        on *
+  who may pass it    ds-alice, ds-bob, tsg-ci-deployer, tsg-platform-admin
+                     (iam:PassRole: hand this role to a model, job or notebook)
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 explore.py record InvokeEndpoint
+
+One CloudTrail record from data/incident/cloudtrail.json (fake values in CloudTrail's field names)
+
+  who      AssumedRole  tsg-helpdesk-app  in account 111122223333
+  what     sagemaker.amazonaws.com  InvokeEndpoint
+           on arn:aws:sagemaker:us-east-1:111122223333:endpoint/tsg-summariser
+  kind     eventCategory Data  (a data event: logged only if the trail selects AWS::SageMaker::Endpoint)
+  where    us-east-1, from 10.0.1.77, through vpce-0a1b2c3d4e5f60001
+  when     2027-01-28T10:01:12Z
+  error    none
+  request  {} (AWS: InvokeEndpoint does not log its request parameters: no prompt)
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 evaluate.py first-draft --only N1
+
+setup: first-draft   (twin.py, offline: nothing is sent to AWS)
+group: normal request (it must keep working)
+
+  N1   works    The Helpdesk gets a ticket summary
+         . the Helpdesk asks for a ticket summary through the VPC endpoint: allowed (allowed by the identity policy (through the VPC endpoint)); endpoint: SageMaker AI downloads the files with the execution role
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ exit
+
+exit
