@@ -45,7 +45,7 @@ file f1 'Q3 planning notes', editable by aisha.khan@tsg.example, partner@brightl
   | the user
   | </INFORMATION>
 
-To a model it's all one block of text: the shipment facts and the planted request look the same.
+To a model it's all one block of text: the real content and the planted request look the same.
 thesecguy@lab:~/ai-security-course-labs/labs/m22$ .venv/bin/python score.py --trace UT3 IT0 --agent single
 
 UT3 with IT0 | agent single

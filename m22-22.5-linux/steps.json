@@ -1,139 +1,139 @@
 {
   "scenario": "m22-22.5-linux",
-  "start": 1.706,
+  "start": 1.689,
   "steps": [
     {
       "label": "Trifecta",
       "speed": 1,
-      "start": 1.706,
-      "end": 8.578
+      "start": 1.689,
+      "end": 8.555
     },
     {
       "label": "Before",
       "speed": 1,
-      "start": 14.578,
-      "end": 20.323
+      "start": 14.555,
+      "end": 19.413
     },
     {
       "label": "Attack file",
       "speed": 1,
-      "start": 26.323,
-      "end": 35.026
+      "start": 25.413,
+      "end": 33.549
     },
     {
       "label": "Single",
       "speed": 1,
-      "start": 40.026,
-      "end": 50.22
+      "start": 38.549,
+      "end": 48.046
     },
     {
       "label": "Dual",
       "speed": 1,
-      "start": 56.22,
-      "end": 66.726
+      "start": 54.046,
+      "end": 63.75
     },
     {
       "label": "Dual+taint",
       "speed": 1,
-      "start": 72.726,
-      "end": 83.51
+      "start": 69.75,
+      "end": 79.939
     },
     {
       "label": "Score",
       "speed": 1,
-      "start": 89.511,
-      "end": 96.536
+      "start": 85.939,
+      "end": 91.628
     },
     {
       "label": "Price",
       "speed": 1,
-      "start": 102.536,
-      "end": 113.272
+      "start": 97.628,
+      "end": 107.699
     },
     {
       "label": "Text",
       "speed": 1,
-      "start": 118.272,
-      "end": 128.941
+      "start": 112.699,
+      "end": 122.644
     },
     {
       "label": "Reader",
       "speed": 1,
-      "start": 134.942,
-      "end": 145.766
+      "start": 128.644,
+      "end": 138.735
     },
     {
       "label": "Hunt",
       "speed": 1,
-      "start": 151.766,
-      "end": 153.853
+      "start": 144.735,
+      "end": 146.818
     },
     {
       "label": "Tests",
       "speed": 1,
-      "start": 159.853,
-      "end": 177.659
+      "start": 152.818,
+      "end": 166.804
     },
     {
       "label": "Challenge",
       "speed": 1,
-      "start": 181.659,
-      "end": 201.316
+      "start": 170.804,
+      "end": 186.573
     }
   ],
   "keys": [
     {
-      "t": 2.306,
+      "t": 2.289,
       "what": "type"
     },
     {
-      "t": 15.178,
+      "t": 15.155,
       "what": "type"
     },
     {
-      "t": 26.924,
+      "t": 26.013,
       "what": "type"
     },
     {
-      "t": 40.626,
+      "t": 39.149,
       "what": "type"
     },
     {
-      "t": 56.82,
+      "t": 54.646,
       "what": "type"
     },
     {
-      "t": 73.327,
+      "t": 70.35,
       "what": "type"
     },
     {
-      "t": 90.111,
+      "t": 86.539,
       "what": "type"
     },
     {
-      "t": 103.136,
+      "t": 98.228,
       "what": "type"
     },
     {
-      "t": 118.872,
+      "t": 113.299,
       "what": "type"
     },
     {
-      "t": 135.542,
+      "t": 129.244,
       "what": "type"
     },
     {
-      "t": 152.366,
+      "t": 145.335,
       "what": "type"
     },
     {
-      "t": 160.453,
+      "t": 153.418,
       "what": "type"
     },
     {
-      "t": 182.259,
+      "t": 171.404,
       "what": "type"
     }
   ],
-  "end": 207.316
+  "end": 192.573
 }
