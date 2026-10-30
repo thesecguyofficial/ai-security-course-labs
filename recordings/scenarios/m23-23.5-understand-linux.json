@@ -1,0 +1,109 @@
+{
+  "name": "m23-23.5-understand-linux",
+  "lesson": "23.1, 23.5",
+  "title": "Lab 23.5, part 1: get the lab, see what each file is, the recorded logs and the allow-lists, look before you run, check Python, then look at each detection idea on its own with explore.py (the two logs, one log line field by field, a normal session as a timeline, a signature, an anomaly and an allow-list rule, the attack session, the poisoned line, one egress line, a recorded attack next to its variant, three rules measured) and read make investigate line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m23 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The data",
+      "type": "ls data data/trace && wc -l data/trace/*.jsonl data/variants.jsonl",
+      "pause_after": 4
+    },
+    {
+      "label": "Config",
+      "type": "cat config.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Look first",
+      "type": "make -n setup investigate replay",
+      "pause_after": 4
+    },
+    {
+      "label": "Check",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Logs",
+      "type": "python3 explore.py logs",
+      "pause_after": 6
+    },
+    {
+      "label": "Line",
+      "type": "python3 explore.py line",
+      "pause_after": 7
+    },
+    {
+      "label": "Timeline",
+      "type": "python3 explore.py timeline",
+      "pause_after": 6
+    },
+    {
+      "label": "Signature",
+      "type": "python3 explore.py rule signature",
+      "pause_after": 6
+    },
+    {
+      "label": "Anomaly",
+      "type": "python3 explore.py rule anomaly",
+      "pause_after": 6
+    },
+    {
+      "label": "Allow-list",
+      "type": "python3 explore.py rule allowlist",
+      "pause_after": 6
+    },
+    {
+      "label": "Attack session",
+      "type": "python3 explore.py timeline s1",
+      "pause_after": 7
+    },
+    {
+      "label": "Poisoned line",
+      "type": "python3 explore.py line e07",
+      "pause_after": 7
+    },
+    {
+      "label": "Egress line",
+      "type": "python3 explore.py line g07",
+      "pause_after": 6
+    },
+    {
+      "label": "Variant",
+      "type": "python3 explore.py variant",
+      "pause_after": 6
+    },
+    {
+      "label": "Variant egress",
+      "type": "python3 explore.py variant egress",
+      "pause_after": 6
+    },
+    {
+      "label": "Measure",
+      "type": "python3 explore.py measure",
+      "pause_after": 7
+    },
+    {
+      "label": "One run",
+      "type": "make investigate",
+      "pause_after": 7
+    }
+  ]
+}

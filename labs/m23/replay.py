@@ -112,7 +112,9 @@ def audit(app_log: list[dict], egress: list[dict]):
                 print(f"  input_check  FLAG {e['id']} ({e.get('source', e.get('actor'))}): {r}")
         if e.get("kind") == "tool_call":
             ok = defense.allowlist(e, CONFIG)
-            print(f"  allowlist    {'ALLOW' if ok else 'DENY '} {e['id']} {e.get('tool')} {json.dumps(e.get('args', {}))}")
+            args = json.dumps(e.get("args", {}))
+            args = args if len(args) <= 90 else args[:87] + "..."
+            print(f"  allowlist    {'ALLOW' if ok else 'DENY '} {e['id']} {e.get('tool')} {args}")
         if e.get("kind") == "model_output":
             r = defense.output_check(e, CONFIG)
             if r:
@@ -154,7 +156,13 @@ def main(argv: list[str]) -> int:
         print("  missed (variants): " + (", ".join(var["missed"]) or "none"))
     for line in rec["fp"] + var["fp"]:
         print("  false positive: " + line)
-    print(f"FAIL: write defense.py (README Step 3). Caught {len(rec['caught'])} of {total_mal} on the recorded trace.")
+    if rec["missed"]:
+        print(f"FAIL: write defense.py (README Step 3). Caught {len(rec['caught'])} of {total_mal} on the recorded trace.")
+    elif var["missed"]:
+        print(f"FAIL: {len(var['caught'])} of {total_mal} on the variants. Your checks match the recorded wording, "
+              "not the behaviour (lesson 23.4).")
+    else:
+        print("FAIL: false positives. A check flags normal traffic; make it more precise (lesson 23.4).")
     return 1
 
 

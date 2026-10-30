@@ -121,16 +121,15 @@ def find_quiet_beacon(egress: list[dict]) -> list[dict]:
 def main():
     app_log, egress = load("app-log.jsonl"), load("egress.jsonl")
     ep = entry_point(app_log)
-    print("Entry point:   app-log event {} ({}) - hidden instruction in: {}".format(
-        ep.get("id"), ep.get("source"), (ep.get("hidden", "")[:70] + "...")))
+    print("Entry point:   app-log event {} ({}) - hidden instruction: {}".format(
+        ep.get("id"), ep.get("source"), (ep.get("hidden", "")[:56] + "...")))
     print("Reached for:   " + "; ".join(f"{r['id']} {r['how']}" for r in reached_for(app_log)))
     for t in tempo(app_log):
         print(f"Tempo:         account {t['account']} made {t['attempts']} failed sign-ins in {t['window_s']}s (automated loop)")
     for b in find_egress_beacon(egress):
         print(f"Egress beacon: host {b['host']} made {b['calls']} outbound calls to a model API (not a model caller)")
-    print("\nMalicious findings to catch (see data/trace/ground_truth.json): injection e07, tool_abuse e09, "
-          "exfiltration e10, rate rohan.v, egress ci-runner-07")
-    print("Challenge 1: find_quiet_beacon() is not written yet (make challenge).")
+    print("\nMalicious findings to catch (data/trace/ground_truth.json):")
+    print("  injection e07, tool_abuse e09, exfiltration e10, rate rohan.v, egress ci-runner-07")
     try:
         qb = find_quiet_beacon(egress)
         print("Quiet beacon:  " + ", ".join(f"{r['host']} ({r['calls']})" for r in qb))
