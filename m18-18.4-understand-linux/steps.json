@@ -1,129 +1,129 @@
 {
   "scenario": "m18-18.4-understand-linux",
-  "start": 1.721,
+  "start": 1.712,
   "steps": [
     {
       "label": "Download",
       "speed": 1,
-      "start": 1.721,
-      "end": 12.083
+      "start": 1.712,
+      "end": 12.419
     },
     {
       "label": "The lab",
       "speed": 1,
-      "start": 15.083,
-      "end": 20.733
+      "start": 15.419,
+      "end": 21.068
     },
     {
       "label": "The folders",
       "speed": 1,
-      "start": 24.733,
-      "end": 30.206
+      "start": 25.068,
+      "end": 30.539
     },
     {
       "label": "The evidence",
       "speed": 1,
-      "start": 34.206,
-      "end": 36.501
+      "start": 34.539,
+      "end": 36.834
     },
     {
       "label": "Look first",
       "speed": 1,
-      "start": 40.501,
-      "end": 44.35
+      "start": 40.834,
+      "end": 44.656
     },
     {
       "label": "Check",
       "speed": 1,
-      "start": 48.35,
-      "end": 50.549
+      "start": 48.656,
+      "end": 50.854
     },
     {
       "label": "Kinds",
       "speed": 1,
-      "start": 53.549,
-      "end": 57.51
+      "start": 53.854,
+      "end": 57.814
     },
     {
       "label": "Inventory entry",
       "speed": 1,
-      "start": 64.51,
-      "end": 68.811
+      "start": 64.814,
+      "end": 69.113
     },
     {
       "label": "Risk row",
       "speed": 1,
-      "start": 74.811,
-      "end": 78.878
+      "start": 75.113,
+      "end": 79.18
     },
     {
       "label": "Control",
       "speed": 1,
-      "start": 85.878,
-      "end": 90.538
+      "start": 86.18,
+      "end": 90.839
     },
     {
       "label": "Evidence",
       "speed": 1,
-      "start": 96.539,
-      "end": 101.119
+      "start": 96.84,
+      "end": 101.422
     },
     {
       "label": "One run",
       "speed": 1,
-      "start": 107.119,
-      "end": 109.76
+      "start": 107.422,
+      "end": 110.063
     }
   ],
   "keys": [
     {
-      "t": 2.321,
+      "t": 2.312,
       "what": "type"
     },
     {
-      "t": 15.683,
+      "t": 16.019,
       "what": "type"
     },
     {
-      "t": 25.334,
+      "t": 25.668,
       "what": "type"
     },
     {
-      "t": 34.806,
+      "t": 35.139,
       "what": "type"
     },
     {
-      "t": 41.101,
+      "t": 41.434,
       "what": "type"
     },
     {
-      "t": 48.95,
+      "t": 49.256,
       "what": "type"
     },
     {
-      "t": 54.149,
+      "t": 54.454,
       "what": "type"
     },
     {
-      "t": 65.11,
+      "t": 65.414,
       "what": "type"
     },
     {
-      "t": 75.411,
+      "t": 75.713,
       "what": "type"
     },
     {
-      "t": 86.478,
+      "t": 86.78,
       "what": "type"
     },
     {
-      "t": 97.139,
+      "t": 97.44,
       "what": "type"
     },
     {
-      "t": 107.719,
+      "t": 108.022,
       "what": "type"
     }
   ],
-  "end": 115.76
+  "end": 116.063
 }
