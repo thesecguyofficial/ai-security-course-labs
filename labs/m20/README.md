@@ -94,6 +94,149 @@ is the challenge (Step 9): a token can't tell where one particular email may go.
 
 The `scope` lists hide `openid`, `profile` and the `aud:...` scopes so you can see the permissions shrink.
 
+### Step 1b · Look at each identity idea on its own (about 10 minutes)
+
+New to OAuth and tokens? Do this first. `explore.py` shows, one at a time, the ideas the chain is built on.
+`roles` only reads the setup files. `signin`, `token`, `client` and `exchange` **start the lab's own authorization
+server on 127.0.0.1 for about two seconds**, use it, and stop it: no agent, no API, no attack runs, and nothing leaves
+your computer. It writes no file. Windows: `py explore.py ...`. The output below is from a fresh Ubuntu machine
+(recording run 41077745232); ports, times and token text differ on every run.
+
+**1. Who's who.** OAuth's four roles, as this lab fills them:
+
+```bash
+python3 explore.py roles
+```
+
+```output
+Who's who in OAuth terms, in this lab (setups/hardened/authz.json, data/users.json)
+
+  resource owner        alice, bob: the people whose tickets and mail these are
+  client (the app)      helpdesk-app: the app Alice and Bob sign in to; it never sees their password
+  clients (agents)      orchestrator-agent, tickets-agent, mail-agent, metrics-agent: each has its own client ID and secret
+  authorization server  authz_server.py: checks who you are, then issues signed tokens (Keycloak in Part B)
+  resource servers      tickets-api, mail-api: the doors; each checks the token before it does anything
+
+The chain one request travels:
+  you -> helpdesk-app -> orchestrator-agent -> tickets-agent -> tickets-api
+                                                     \-> mail-agent  -> mail-api
+```
+
+**2. A sign-in.** The password goes to the authorization server's own page, never to the app; the app swaps a
+one-time code for an access token:
+
+```bash
+python3 explore.py signin
+```
+
+```output
+Starting the lab's authorization server on 127.0.0.1 (hardened setup) ... stopped again at the end
+
+1. helpdesk-app asks the server where its doors are:  http://127.0.0.1:40269/.well-known/openid-configuration
+      sign-in page /authorize   token desk /token   public keys /jwks
+2. helpdesk-app sends Alice to the server's own sign-in page (with a one-time PKCE challenge)
+3. Alice types her password THERE: the app never sees it
+4. the server sends her browser back to the app with a one-time code, valid 60 seconds
+5. the app swaps that code (plus the PKCE secret only it knows) for an access token:
+      server log: grant=authorization_code client=helpdesk-app user=alice
+
+   access token (919 characters): eyJhbGciOiJSUzI1NiIsInR5...skFdeKojAE6YoFuJKR4RSPyw
+   lives 300 seconds. To decode a token like this one: python3 explore.py token
+```
+
+**3. A token, taken apart.** A JWT is three base64url parts: anyone holding it can read the header and the claims,
+and the signature means nobody can change them unnoticed:
+
+```bash
+python3 explore.py token
+```
+
+```output
+Alice's access token is three parts with dots between them: header . payload . signature
+
+   header     eyJhbGciOiJSUzI1NiIs...ZCI6InRzZy1sYWItMSJ9   (64 characters)
+   payload    eyJpc3MiOiJodHRwOi8v...lQGV4YW1wbGUuY29tIn0   (511 characters)
+   signature  AJYzCQ-O_3YDwhe2eGgd...2UfngYbP0qbNzsVduEAA   (342 characters)
+
+The first two are base64url: an encoding, not encryption. Anyone holding the token can read them.
+
+header:   {"alg":"RS256","typ":"at+jwt","kid":"tsg-lab-1"}
+payload:
+   iss                 http://127.0.0.1:43173                       issuer: who wrote and signed it (the lab's server)
+   sub                 u-1001-alice                                 subject: who it is about (Alice's user ID)
+   aud                 5 services (below)                           audience: which services may accept it
+                       orchestrator-agent, tickets-agent, mail-agent, tickets-api, mail-api
+   azp                 helpdesk-app                                 authorized party: the app that asked for it
+   scope               openid profile tickets:read mail:send        what it allows (+4 aud:... scopes, see README)
+   iat                 1793372957  (15:09:17 UTC)                   issued at (seconds since 1 Jan 1970)
+   exp                 1793373257  (15:14:17 UTC)                   expires at
+   jti                 x16VF5mjIa_OefPM                             JWT ID: a unique serial number for this token
+   preferred_username  alice                                        the user's name (for people, not for decisions)
+   email               alice@example.com                            the user's email
+   -> lives 300 seconds
+
+The signature: the server signed header + payload with its PRIVATE key. Anyone can check it with
+the PUBLIC key it publishes (/jwks, key ID tsg-lab-1):
+   check the token as issued:          signature OK
+   check a copy with tickets:delete:   REJECTED (bad signature)
+```
+
+**4. A program's own token** (client credentials, first draft): no user, the agent's own rights:
+
+```bash
+python3 explore.py client
+```
+
+```output
+An agent asks for a token for ITSELF: no user, no sign-in page (grant_type=client_credentials)
+Setup: first-draft (the only one that lets tickets-agent do this)
+
+   tickets-agent -> POST /token   client ID tickets-agent, secret (not shown)
+   server answers 200: an access token that lives 3600 seconds
+
+   sub    service-account-tickets-agent      the agent's own identity, not a person
+   azp    tickets-agent                      the agent asked for it
+   aud    tickets-api                        the one service it may call
+   scope  tickets:read                       the agent's OWN rights: every ticket, whoever asks
+   email  (none)                             no user on this token
+```
+
+**5. One token exchange** (RFC 8693, hardened): same user, one audience, fewer scopes, a shorter life, and `act`
+names who carried it:
+
+```bash
+python3 explore.py exchange
+```
+
+```output
+Token exchange (RFC 8693), hardened setup: an agent swaps the token it RECEIVED for a smaller one
+
+1. orchestrator-agent -> POST /token  grant_type=token-exchange  as itself (secret (not shown))
+      subject_token = Alice's token, audience = tickets-agent
+   server answers 200
+
+   IN: Alice's sign-in token                                      OUT: for tickets-agent
+   sub u-1001-alice                                               sub u-1001-alice
+   aud 5 services                                                 aud tickets-agent
+   scope [tickets:read mail:send]                                 scope [tickets:read mail:send]
+   lives 300s                                                     lives 120s
+   act (none)                                                     act orchestrator-agent
+
+2. tickets-agent exchanges what it received, for tickets-api (read only)
+   server answers 200
+
+   IN: from orchestrator-agent                                    OUT: for tickets-api
+   sub u-1001-alice                                               sub u-1001-alice
+   aud tickets-agent                                              aud tickets-api
+   scope [tickets:read mail:send]                                 scope [tickets:read]
+   lives 120s                                                     lives 120s
+   act orchestrator-agent                                         act tickets-agent <- orchestrator-agent
+
+Same person (sub) all the way. One audience, fewer scopes, shorter life, and act names who carried it.
+```
+
+Then read one normal request through the hardened chain, top to bottom: `python3 watch.py hardened bob "Show me T-4712"`.
+
 ### Step 2 · Attack the first draft
 
 **Mac / Linux:**
@@ -337,6 +480,69 @@ You need **either** Docker **or** Java 21. Keycloak runs on your laptop on `127.
 apart. Change a setup, run `make realms`, restart Keycloak.
 
 ## Part C · AgentCore Identity (lesson 20.5)
+
+**Before you run Part C: look at one agent, one record, one log row.** These three `explore.py` commands only read
+files in `aws/` (account IDs left out). Output from a fresh Ubuntu machine (recording run 41077549820):
+
+```bash
+python3 explore.py agent tickets
+```
+
+```output
+The tickets agent on AgentCore Identity (aws/setups/hardened.json; account and Region left out)
+
+   workload identity  tsg-tickets              the agent's own identity in AgentCore's directory
+      tag owner          helpdesk-platform-team
+      tag purpose        reads tickets for the signed-in user
+      tag environment    lab
+   IAM role           tsg-agent-tickets        the AWS permissions the agent's code runs with
+      who may use it  tsg-agent-launcher (the launcher), with sts:AssumeRole, sts:SetSourceIdentity
+      only if         sts:SourceIdentity looks like 'user-*': a human must be named on the session
+      Allow GetWorkloadAccessTokenForJWT                               on tsg-tickets
+      Allow GetResourceOauth2Token                                     on tsg-tickets, tickets-saas (credential provider)
+      Deny  GetWorkloadAccessTokenForUserId, InvokeAgentRuntimeForUser on everything (*)
+   launcher           takes the human from validated-jwt-sub, sessions of 900 s
+```
+
+```bash
+python3 explore.py trail
+```
+
+```output
+One CloudTrail record (2 of 22 in aws/data/cloudtrail.jsonl), field by field. Account IDs left out.
+
+   eventTime       2027-01-21T09:00:02Z                 when (UTC)
+   eventSource     bedrock-agentcore.amazonaws.com      which AWS service
+   eventName       GetWorkloadAccessTokenForJWT         which API call
+   eventCategory   Data                                 Data events are off unless the trail asks for them
+   userIdentity    AssumedRole                          who called: a role session
+   session         assumed-role/tsg-agent-orchestrator/orchestrator-run-0901
+                   (assumed-role / the agent's role / this run's session name)
+   sourceIdentity  user-u-1001-alice                    the human, set when the role was assumed
+   workloadName    tsg-orchestrator                     the agent's workload identity it asked about
+   userToken       HIDDEN_DUE_TO_SECURITY_REASONS       the user's sign-in token, not written to the log
+   resources       tsg-orchestrator                     AWS::BedrockAgentCore::WorkloadIdentity
+
+Sample record: real field names from AWS's documentation, made-up values (aws/make_samples.py).
+```
+
+```bash
+python3 explore.py launcher
+```
+
+```output
+The launcher's own log row for run tickets-run-0901 (aws/data/app-log.jsonl, 8 rows)
+
+   ts               2027-01-21T09:00:10Z           when the launcher started the run
+   agent            tickets                        which agent it started
+   jwt_iss          Cognito user pool (example)    who signed the user's sign-in token
+   jwt_sub          u-1001-alice                   the user in the token the launcher VALIDATED
+   source_identity  user-u-1001-alice              the name it stamped on the role session
+
+   token user and session name match. CloudTrail only sees the second one.
+```
+
+Then:
 
 ```bash
 make aws-check
