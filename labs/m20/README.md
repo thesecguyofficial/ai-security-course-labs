@@ -100,7 +100,7 @@ New to OAuth and tokens? Do this first. `explore.py` shows, one at a time, the i
 `roles` only reads the setup files. `signin`, `token`, `client` and `exchange` **start the lab's own authorization
 server on 127.0.0.1 for about two seconds**, use it, and stop it: no agent, no API, no attack runs, and nothing leaves
 your computer. It writes no file. Windows: `py explore.py ...`. The output below is from a fresh Ubuntu machine
-(recording run 41077745232); ports, times and token text differ on every run.
+(recording run 41082675258); ports, times and token text differ on every run.
 
 **1. Who's who.** OAuth's four roles, as this lab fills them:
 
@@ -132,7 +132,7 @@ python3 explore.py signin
 ```output
 Starting the lab's authorization server on 127.0.0.1 (hardened setup) ... stopped again at the end
 
-1. helpdesk-app asks the server where its doors are:  http://127.0.0.1:40269/.well-known/openid-configuration
+1. helpdesk-app asks the server where its doors are:  http://127.0.0.1:34395/.well-known/openid-configuration
       sign-in page /authorize   token desk /token   public keys /jwks
 2. helpdesk-app sends Alice to the server's own sign-in page (with a one-time PKCE challenge)
 3. Alice types her password THERE: the app never sees it
@@ -140,7 +140,7 @@ Starting the lab's authorization server on 127.0.0.1 (hardened setup) ... stoppe
 5. the app swaps that code (plus the PKCE secret only it knows) for an access token:
       server log: grant=authorization_code client=helpdesk-app user=alice
 
-   access token (919 characters): eyJhbGciOiJSUzI1NiIsInR5...skFdeKojAE6YoFuJKR4RSPyw
+   access token (919 characters): eyJhbGciOiJSUzI1NiIsInR5...g0yrAhJrHN3wRIKsQJPc9YfA
    lives 300 seconds. To decode a token like this one: python3 explore.py token
 ```
 
@@ -156,21 +156,21 @@ Alice's access token is three parts with dots between them: header . payload . s
 
    header     eyJhbGciOiJSUzI1NiIs...ZCI6InRzZy1sYWItMSJ9   (64 characters)
    payload    eyJpc3MiOiJodHRwOi8v...lQGV4YW1wbGUuY29tIn0   (511 characters)
-   signature  AJYzCQ-O_3YDwhe2eGgd...2UfngYbP0qbNzsVduEAA   (342 characters)
+   signature  6Avc9WrtaY2Bv8nKGmL-...2JpxbuLhOpGayv3gl34A   (342 characters)
 
 The first two are base64url: an encoding, not encryption. Anyone holding the token can read them.
 
 header:   {"alg":"RS256","typ":"at+jwt","kid":"tsg-lab-1"}
 payload:
-   iss                 http://127.0.0.1:43173                       issuer: who wrote and signed it (the lab's server)
+   iss                 http://127.0.0.1:37741                       issuer: who wrote and signed it (the lab's server)
    sub                 u-1001-alice                                 subject: who it is about (Alice's user ID)
    aud                 5 services (below)                           audience: which services may accept it
                        orchestrator-agent, tickets-agent, mail-agent, tickets-api, mail-api
    azp                 helpdesk-app                                 authorized party: the app that asked for it
    scope               openid profile tickets:read mail:send        what it allows (+4 aud:... scopes, see README)
-   iat                 1793372957  (15:09:17 UTC)                   issued at (seconds since 1 Jan 1970)
-   exp                 1793373257  (15:14:17 UTC)                   expires at
-   jti                 x16VF5mjIa_OefPM                             JWT ID: a unique serial number for this token
+   iat                 1793374928  (15:42:08 UTC)                   issued at (seconds since 1 Jan 1970)
+   exp                 1793375228  (15:47:08 UTC)                   expires at
+   jti                 h33xdUP4nDe9Dwfk                             JWT ID: a unique serial number for this token
    preferred_username  alice                                        the user's name (for people, not for decisions)
    email               alice@example.com                            the user's email
    -> lives 300 seconds
@@ -211,7 +211,7 @@ python3 explore.py exchange
 ```output
 Token exchange (RFC 8693), hardened setup: an agent swaps the token it RECEIVED for a smaller one
 
-1. orchestrator-agent -> POST /token  grant_type=token-exchange  as itself (secret (not shown))
+1. orchestrator-agent -> POST /token  grant_type=token-exchange  as itself, secret (not shown)
       subject_token = Alice's token, audience = tickets-agent
    server answers 200
 
@@ -232,7 +232,7 @@ Token exchange (RFC 8693), hardened setup: an agent swaps the token it RECEIVED 
    lives 120s                                                     lives 120s
    act orchestrator-agent                                         act tickets-agent <- orchestrator-agent
 
-Same person (sub) all the way. One audience, fewer scopes, shorter life, and act names who carried it.
+Same person (sub) all the way. One audience, the same or fewer scopes, never a longer life, and act names who carried it.
 ```
 
 Then read one normal request through the hardened chain, top to bottom: `python3 watch.py hardened bob "Show me T-4712"`.
