@@ -53,6 +53,8 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `cache_engine.py`, `gateway.py`, `cachetest.py` | The toy prefix cache, the tenant gateway that sets the cache salt (challenge 2), and the isolation test |
 | `hunt.py`, `data/` | Gateway log questions (challenge 3) and the log data. `203.0.113.x` and `198.51.100.x` are documentation addresses standing in for the internet |
 | `run_tests.py`, `test_lab.py`, `test_challenge.py` | The proof and the challenge |
+| `explore.py` | Read-only helper: look at each idea of model serving on its own (Step 1b). Starts the practice server on 127.0.0.1 for a few seconds, starts no container, loads no model, writes no file |
+| `Makefile` | Short names for the long commands (`make -n <target>` shows what a target would run) |
 | `GUIDED-BUILD.md`, `cloud/` | Optional: the GPU node group, for real, in your own AWS sandbox account |
 
 ## Needs
@@ -64,13 +66,207 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 
 ## Step 1 · Set up
 
+Look before you run: `make -n setup check` prints what the two targets would run, without running them.
+
 ```bash
 cd labs/m26
+make -n setup check
+```
+
+```output
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -c "import yaml; print('PyYAML', yaml.__version__, 'OK')"
+```
+
+`python3 -m venv .venv` makes a virtual environment: a private folder for this lab's packages, so their versions
+can't clash with other projects (it is not a security sandbox). `pip` then installs the one package in
+`requirements.txt`. Now for real:
+
+```bash
 make setup
+make check
 ```
 
 ```output
 Successfully installed PyYAML-6.0.3
+PyYAML 6.0.3 OK
+```
+
+## Step 1b · Look at each piece (explore.py)
+
+Before you scan anything, look at each idea of model serving on its own. `explore.py` is read-only: it reads the lab's
+files, and `server` starts the lab's own practice server on `127.0.0.1` for a few seconds. It starts no container,
+loads no model, imports none of the model code and writes no file. Run it with the lab's own Python
+(Windows: `.venv\Scripts\python explore.py ...`). The output below is real, from recording run
+[41084568738](https://github.com/thesecguyofficial/ai-security-course-labs/actions/runs/41084568738).
+
+**1. A model server is a web server.** Two real HTTP requests to the practice server (it has no model: the answers
+are canned):
+
+```bash
+.venv/bin/python explore.py server
+```
+
+```output
+Started the lab's practice server on 127.0.0.1, port 8765
+  127.0.0.1 = loopback: only this computer can reach it (0.0.0.0 would mean every network address)
+  real defaults: Ollama 127.0.0.1:11434, vLLM port 8000. No model here: answers are canned.
+
+1. GET /v1/models   (which models do you serve?)
+   sent:     GET /v1/models HTTP/1.1
+             Host: 127.0.0.1:8765
+   received: HTTP/1.0 200 OK
+             {"object": "list", "data": [{"id": "lab-model"}]}
+
+2. POST /v1/chat/completions   (the chat request an app sends)
+   sent:     POST /v1/chat/completions HTTP/1.1
+             Host: 127.0.0.1:8765
+             Content-Type: application/json
+             {"model": "lab-model", "messages": [{"role": "user", "content": "What is a GPU?"}]}
+   received: HTTP/1.0 200 OK
+             {"choices": [{"message": {"role": "assistant", "content": "lab answer"}}]}
+
+Server stopped. Port 8765 is closed again.
+```
+
+If port 8765 is busy on your computer, the helper picks a free one and says which.
+
+**2. Twelve endpoints on one port.** Which paths apps call, and which only operators should:
+
+```bash
+.venv/bin/python explore.py endpoints
+```
+
+```output
+The practice server's 12 paths: the same paths a real Ollama or vLLM server has (method + path = endpoint)
+  method path                  engine  kind        what it does on a real server
+  GET    /v1/models            vLLM    inference   lists the models it serves
+  POST   /v1/chat/completions  vLLM    inference   answers a chat (the OpenAI-style request)
+  GET    /health               vLLM    health      answers 'I am up'
+  GET    /version              vLLM    info        tells the engine version
+  GET    /metrics              vLLM    info        counters for monitoring, incl. the KV cache
+  POST   /tokenize             vLLM    info        turns text into tokens
+  POST   /pause                vLLM    ops         pauses generation
+  POST   /update_weights       vLLM    ops         loads new model weights
+  POST   /collective_rpc       vLLM    dev         runs methods on the engine (dev mode)
+  GET    /api/tags             Ollama  inference   lists the models on disk
+  POST   /api/pull             Ollama  management  downloads a model
+  DELETE /api/delete           Ollama  management  deletes a model
+3 paths are 'inference': what apps call. The other 9 are for operators (health, info, ops, dev, management).
+All 12 share ONE address and port. Nothing in HTTP itself says which callers may use which path.
+```
+
+**3. Tokens and blocks.** The lab's tokenizer is a stand-in (one token per word or mark), so you can see every token:
+
+```bash
+.venv/bin/python explore.py tokens
+```
+
+```output
+Step 1  tokens. The lab splits on spaces: one token per word or mark (a stand-in).
+        Real tokenizers cut text into word pieces, about 4 characters of English per token.
+        [0]You [1]are [2]the [3]ACME [4]helpdesk [5]bot [6]. [7]Internal [8]code [9]ACME-LAB-0042 [10]is
+        [11]secret [12]. [13]Answer [14]in [15]English [16]. [17]where [18]is [19]my [20]order
+
+Step 2  blocks of 4 tokens. The server keeps its work per block (vLLM's design doc uses 16 in its example).
+        block 0: You are the ACME
+        ...
+        block 5: order   <- not full: never cached
+
+21 tokens = 5 full blocks. The model reads all 21 at once (prefill),
+then writes its answer one new token at a time (decode).
+```
+
+**4. The prefix cache: a miss, a hit, and someone else's hit.** Times come from the lab's cost model
+(20 ms + 2 ms per token not found in the cache), not a stopwatch:
+
+```bash
+.venv/bin/python explore.py cache
+```
+
+```output
+  acme   ...system prompt + "where is my order"  (21 tokens)
+          blocks 1aa7ce00d346:miss 2e04141823fb:miss e629e134c38d:miss 8ac83ee3243f:miss 323cc94796ac:miss
+          cached tokens  0   time to first token  62 ms
+  acme   ...system prompt + "reset my password"  (20 tokens)
+          blocks 1aa7ce00d346:HIT 2e04141823fb:HIT e629e134c38d:HIT 8ac83ee3243f:HIT b409722ae6fd:miss
+          cached tokens 16   time to first token  28 ms   from acme's blocks
+  globex ...system prompt + "what is the weather"  (21 tokens)
+          blocks 1aa7ce00d346:HIT 2e04141823fb:HIT e629e134c38d:HIT 8ac83ee3243f:HIT 9dd62be4916d:miss
+          cached tokens 16   time to first token  30 ms   from acme's blocks
+
+globex never sent that opening before, yet 16 tokens came from acme's blocks and its answer started
+faster. Faster tells the caller: someone already sent this. That is a timing side channel.
+```
+
+With `--salt` the gateway mixes a per-tenant salt into block 0 (the way vLLM's `cache_salt` works), so globex's
+hashes are all different: `cached tokens  0   time to first token  62 ms`.
+
+**5. Containers and published ports.** `explore.py container` reads the first draft's `docker-compose.yml` (add
+`hardened` for the other stack):
+
+```output
+  service   image (name:version)                     ports                 who can reach it
+  ollama    ollama/ollama:0.1.33                     11434:11434           host port 11434: every host address (0.0.0.0, [::])
+  vllm      vllm/vllm-openai:v0.10.2                 8000:8000             host port 8000: every host address (0.0.0.0, [::])
+  triton    nvcr.io/nvidia/tritonserver:25.03-py3    8001:8001             host port 8001: every host address (0.0.0.0, [::])
+  ray-head  rayproject/ray:2.8.0                     8265:8265             host port 8265: every host address (0.0.0.0, [::])
+  gateway   tsg/inference-gateway:lab                443:8443              host port 443: every host address (0.0.0.0, [::])
+```
+
+**6. The GPU node.** `explore.py node` reads `cluster.yaml` and `nodes.json`:
+
+```output
+cluster.yaml (eksctl): cluster tsg-inference in us-east-1
+  node group gpu      machine g4dn.xlarge   image family AmazonLinux2023           taints: none
+
+nodes.json: what is installed on each GPU node
+  gpu-node-1
+    ami                       custom-ubuntu-gpu-2025-03     the disk image the machine started from
+    nvidia_container_toolkit  1.17.4                        hands the GPU to containers
+    gpu_sharing               time-slicing                  how tenants share one GPU
+    tenants                   acme, globex                  whose containers run here
+    imds_http_tokens          optional                      metadata service: token required?
+    imds_hop_limit            2                             how far metadata answers travel
+```
+
+**7. A measurement is a hash.** A stand-in for a trusted execution environment's measurements: a hash of each file in
+a model folder, then one hash over those. One bit is flipped in memory only; no file changes:
+
+```bash
+.venv/bin/python explore.py measure
+```
+
+```output
+models/approved-model
+  config.json         2b9fb1f5e18062089a04138d...
+  model.safetensors   8a9e4d73c5036faa851d60b5...
+  measurement         932d715fe8fcdb87863a5027...
+  reviewed value      932d715fe8fcdb87863a5027...   (pinned in explore.py)
+  -> MATCH: the key would be released
+
+the same folder with ONE bit of model.safetensors flipped (in memory only; the file is unchanged)
+  measurement         8caf645a6862c7476d979c3e...   -> NO MATCH: the key stays locked
+models/suspicious-model (other files, other code)
+  measurement         2d8c37e2d2fac6836a09f816...   -> NO MATCH: the key stays locked
+
+A match proves WHICH files are loaded. It does not prove they are safe: that is what your review is for.
+```
+
+**Read one finding.** The scanner's first five lines: a header, then two lines per finding (severity, rule ID, the
+lesson that explains it, what's wrong; then the file and the exact setting):
+
+```bash
+.venv/bin/python scan.py stacks/first-draft | head -n 5
+```
+
+```output
+Scan of stacks/first-draft  (files read: compose, k8s, cluster, gateway, nodes, models; nothing run)
+  CRIT  AUTH-01   26.0  the gateway accepts requests without a key
+                       gateway.json: require_auth is false
+  CRIT  NODE-03   26.3  the NVIDIA container toolkit is in an advisory's affected range
+                       nodes.json: gpu-node-1: toolkit 1.17.4: CVE-2025-23266 (fixed in 1.17.8; affected: up to and including 1.17.7 (before 1.17.5 only in CDI mode))
 ```
 
 ## Step 2 · Scan the first draft (26.0, 26.1, 26.3)
