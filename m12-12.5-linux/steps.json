@@ -1,209 +1,209 @@
 {
   "scenario": "m12-12.5-linux",
-  "start": 2.1,
+  "start": 1.705,
   "steps": [
     {
       "label": "The lab",
       "speed": 1,
-      "start": 2.1,
-      "end": 7.589
+      "start": 1.705,
+      "end": 7.193
     },
     {
       "label": "Check",
       "speed": 1,
-      "start": 9.59,
-      "end": 11.872
+      "start": 9.193,
+      "end": 11.455
     },
     {
       "label": "Request file",
       "speed": 1,
-      "start": 19.872,
-      "end": 24.927
+      "start": 19.455,
+      "end": 24.51
     },
     {
       "label": "Attack",
       "speed": 1,
-      "start": 31.927,
-      "end": 35.579
+      "start": 31.51,
+      "end": 35.144
     },
     {
       "label": "Attack total",
       "speed": 1,
-      "start": 42.579,
-      "end": 46.088
+      "start": 42.144,
+      "end": 45.641
     },
     {
       "label": "Guarded",
       "speed": 1,
-      "start": 50.088,
-      "end": 53.682
+      "start": 49.641,
+      "end": 53.218
     },
     {
       "label": "One question",
       "speed": 1,
-      "start": 60.682,
-      "end": 74.767
+      "start": 60.218,
+      "end": 74.292
     },
     {
       "label": "Tuned request",
       "speed": 1,
-      "start": 80.767,
-      "end": 87.46
+      "start": 80.292,
+      "end": 86.984
     },
     {
       "label": "Tuned attacks",
       "speed": 1,
-      "start": 92.46,
-      "end": 95.961
+      "start": 91.984,
+      "end": 95.467
     },
     {
       "label": "Tuned normal",
       "speed": 1,
-      "start": 103.961,
-      "end": 107.497
+      "start": 103.467,
+      "end": 106.98
     },
     {
       "label": "Ticket",
       "speed": 1,
-      "start": 115.497,
-      "end": 119.425
+      "start": 114.98,
+      "end": 118.905
     },
     {
       "label": "Action",
       "speed": 1,
-      "start": 123.425,
-      "end": 137.869
+      "start": 122.906,
+      "end": 137.326
     },
     {
       "label": "Sweep",
       "speed": 1,
-      "start": 143.869,
-      "end": 146.089
+      "start": 143.326,
+      "end": 147.211
     },
     {
       "label": "Cost",
       "speed": 1,
-      "start": 155.09,
-      "end": 157.158
+      "start": 156.211,
+      "end": 160.033
     },
     {
       "label": "Enforce",
       "speed": 1,
-      "start": 164.158,
-      "end": 166.649
+      "start": 167.033,
+      "end": 169.439
     },
     {
       "label": "Org policy",
       "speed": 1,
-      "start": 174.649,
-      "end": 182.599
+      "start": 177.439,
+      "end": 185.286
     },
     {
       "label": "Enforce fixed",
       "speed": 1,
-      "start": 188.599,
-      "end": 191.651
+      "start": 191.286,
+      "end": 194.362
     },
     {
       "label": "Tests",
       "speed": 1,
-      "start": 199.651,
-      "end": 203.653
+      "start": 202.362,
+      "end": 206.43
     },
     {
       "label": "Challenge",
       "speed": 1,
-      "start": 207.653,
-      "end": 212.556
+      "start": 210.43,
+      "end": 215.147
     },
     {
       "label": "Cloud",
       "speed": 1,
-      "start": 218.556,
-      "end": 226.991
+      "start": 221.148,
+      "end": 229.546
     }
   ],
   "keys": [
     {
-      "t": 2.7,
+      "t": 2.305,
       "what": "type"
     },
     {
-      "t": 10.19,
+      "t": 9.793,
       "what": "type"
     },
     {
-      "t": 20.472,
+      "t": 20.055,
       "what": "type"
     },
     {
-      "t": 32.527,
+      "t": 32.11,
       "what": "type"
     },
     {
-      "t": 43.179,
+      "t": 42.744,
       "what": "type"
     },
     {
-      "t": 50.688,
+      "t": 50.242,
       "what": "type"
     },
     {
-      "t": 61.282,
+      "t": 60.818,
       "what": "type"
     },
     {
-      "t": 81.367,
+      "t": 80.892,
       "what": "type"
     },
     {
-      "t": 93.06,
+      "t": 92.584,
       "what": "type"
     },
     {
-      "t": 104.561,
+      "t": 104.067,
       "what": "type"
     },
     {
-      "t": 116.098,
+      "t": 115.58,
       "what": "type"
     },
     {
-      "t": 124.025,
+      "t": 123.506,
       "what": "type"
     },
     {
-      "t": 144.469,
+      "t": 143.926,
       "what": "type"
     },
     {
-      "t": 155.69,
+      "t": 156.811,
       "what": "type"
     },
     {
-      "t": 164.758,
+      "t": 167.633,
       "what": "type"
     },
     {
-      "t": 175.249,
+      "t": 178.039,
       "what": "type"
     },
     {
-      "t": 189.199,
+      "t": 191.886,
       "what": "type"
     },
     {
-      "t": 200.251,
+      "t": 202.962,
       "what": "type"
     },
     {
-      "t": 208.253,
+      "t": 211.03,
       "what": "type"
     },
     {
-      "t": 219.156,
+      "t": 221.748,
       "what": "type"
     }
   ],
-  "end": 233.991
+  "end": 236.546
 }
