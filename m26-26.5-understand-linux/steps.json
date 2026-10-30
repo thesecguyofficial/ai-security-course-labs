@@ -1,0 +1,169 @@
+{
+  "scenario": "m26-26.5-understand-linux",
+  "start": 1.761,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.761,
+      "end": 12.966
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.966,
+      "end": 21.614
+    },
+    {
+      "label": "The stacks",
+      "speed": 1,
+      "start": 25.614,
+      "end": 37.424
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 41.424,
+      "end": 46.193
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 50.193,
+      "end": 53.434
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 57.434,
+      "end": 62.897
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 65.898,
+      "end": 68.153
+    },
+    {
+      "label": "Server",
+      "speed": 1,
+      "start": 71.153,
+      "end": 76.745
+    },
+    {
+      "label": "Endpoints",
+      "speed": 1,
+      "start": 83.746,
+      "end": 88.969
+    },
+    {
+      "label": "Tokens",
+      "speed": 1,
+      "start": 95.969,
+      "end": 100.724
+    },
+    {
+      "label": "Cache",
+      "speed": 1,
+      "start": 107.724,
+      "end": 112.547
+    },
+    {
+      "label": "Salt",
+      "speed": 1,
+      "start": 119.547,
+      "end": 125.192
+    },
+    {
+      "label": "Container",
+      "speed": 1,
+      "start": 131.193,
+      "end": 136.548
+    },
+    {
+      "label": "Node",
+      "speed": 1,
+      "start": 142.548,
+      "end": 147.256
+    },
+    {
+      "label": "Measure",
+      "speed": 1,
+      "start": 153.256,
+      "end": 158.315
+    },
+    {
+      "label": "Read a finding",
+      "speed": 1,
+      "start": 165.315,
+      "end": 172.733
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.361,
+      "what": "type"
+    },
+    {
+      "t": 16.566,
+      "what": "type"
+    },
+    {
+      "t": 26.214,
+      "what": "type"
+    },
+    {
+      "t": 42.024,
+      "what": "type"
+    },
+    {
+      "t": 50.793,
+      "what": "type"
+    },
+    {
+      "t": 58.034,
+      "what": "type"
+    },
+    {
+      "t": 66.498,
+      "what": "type"
+    },
+    {
+      "t": 71.753,
+      "what": "type"
+    },
+    {
+      "t": 84.346,
+      "what": "type"
+    },
+    {
+      "t": 96.569,
+      "what": "type"
+    },
+    {
+      "t": 108.324,
+      "what": "type"
+    },
+    {
+      "t": 120.147,
+      "what": "type"
+    },
+    {
+      "t": 131.793,
+      "what": "type"
+    },
+    {
+      "t": 143.148,
+      "what": "type"
+    },
+    {
+      "t": 153.856,
+      "what": "type"
+    },
+    {
+      "t": 165.915,
+      "what": "type"
+    }
+  ],
+  "end": 178.733
+}

@@ -1,0 +1,614 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 4441, done.
+remote: Counting objects:   0% (1/336)
+remote: Counting objects:   1% (4/336)
+remote: Counting objects:   2% (7/336)
+remote: Counting objects:   3% (11/336)
+remote: Counting objects:   4% (14/336)
+remote: Counting objects:   5% (17/336)
+remote: Counting objects:   6% (21/336)
+remote: Counting objects:   7% (24/336)
+remote: Counting objects:   8% (27/336)
+remote: Counting objects:   9% (31/336)
+remote: Counting objects:  10% (34/336)
+remote: Counting objects:  11% (37/336)
+remote: Counting objects:  12% (41/336)
+remote: Counting objects:  13% (44/336)
+remote: Counting objects:  14% (48/336)
+remote: Counting objects:  15% (51/336)
+remote: Counting objects:  16% (54/336)
+remote: Counting objects:  17% (58/336)
+remote: Counting objects:  18% (61/336)
+remote: Counting objects:  19% (64/336)
+remote: Counting objects:  20% (68/336)
+remote: Counting objects:  21% (71/336)
+remote: Counting objects:  22% (74/336)
+remote: Counting objects:  23% (78/336)
+remote: Counting objects:  24% (81/336)
+remote: Counting objects:  25% (84/336)
+remote: Counting objects:  26% (88/336)
+remote: Counting objects:  27% (91/336)
+remote: Counting objects:  28% (95/336)
+remote: Counting objects:  29% (98/336)
+remote: Counting objects:  30% (101/336)
+remote: Counting objects:  31% (105/336)
+remote: Counting objects:  32% (108/336)
+remote: Counting objects:  33% (111/336)
+remote: Counting objects:  34% (115/336)
+remote: Counting objects:  35% (118/336)
+remote: Counting objects:  36% (121/336)
+remote: Counting objects:  37% (125/336)
+remote: Counting objects:  38% (128/336)
+remote: Counting objects:  39% (132/336)
+remote: Counting objects:  40% (135/336)
+remote: Counting objects:  41% (138/336)
+remote: Counting objects:  42% (142/336)
+remote: Counting objects:  43% (145/336)
+remote: Counting objects:  44% (148/336)
+remote: Counting objects:  45% (152/336)
+remote: Counting objects:  46% (155/336)
+remote: Counting objects:  47% (158/336)
+remote: Counting objects:  48% (162/336)
+remote: Counting objects:  49% (165/336)
+remote: Counting objects:  50% (168/336)
+remote: Counting objects:  51% (172/336)
+remote: Counting objects:  52% (175/336)
+remote: Counting objects:  53% (179/336)
+remote: Counting objects:  54% (182/336)
+remote: Counting objects:  55% (185/336)
+remote: Counting objects:  56% (189/336)
+remote: Counting objects:  57% (192/336)
+remote: Counting objects:  58% (195/336)
+remote: Counting objects:  59% (199/336)
+remote: Counting objects:  60% (202/336)
+remote: Counting objects:  61% (205/336)
+remote: Counting objects:  62% (209/336)
+remote: Counting objects:  63% (212/336)
+remote: Counting objects:  64% (216/336)
+remote: Counting objects:  65% (219/336)
+remote: Counting objects:  66% (222/336)
+remote: Counting objects:  67% (226/336)
+remote: Counting objects:  68% (229/336)
+remote: Counting objects:  69% (232/336)
+remote: Counting objects:  70% (236/336)
+remote: Counting objects:  71% (239/336)
+remote: Counting objects:  72% (242/336)
+remote: Counting objects:  73% (246/336)
+remote: Counting objects:  74% (249/336)
+remote: Counting objects:  75% (252/336)
+remote: Counting objects:  76% (256/336)
+remote: Counting objects:  77% (259/336)
+remote: Counting objects:  78% (263/336)
+remote: Counting objects:  79% (266/336)
+remote: Counting objects:  80% (269/336)
+remote: Counting objects:  81% (273/336)
+remote: Counting objects:  82% (276/336)
+remote: Counting objects:  83% (279/336)
+remote: Counting objects:  84% (283/336)
+remote: Counting objects:  85% (286/336)
+remote: Counting objects:  86% (289/336)
+remote: Counting objects:  87% (293/336)
+remote: Counting objects:  88% (296/336)
+remote: Counting objects:  89% (300/336)
+remote: Counting objects:  90% (303/336)
+remote: Counting objects:  91% (306/336)
+remote: Counting objects:  92% (310/336)
+remote: Counting objects:  93% (313/336)
+remote: Counting objects:  94% (316/336)
+remote: Counting objects:  95% (320/336)
+remote: Counting objects:  96% (323/336)
+remote: Counting objects:  97% (326/336)
+remote: Counting objects:  98% (330/336)
+remote: Counting objects:  99% (333/336)
+remote: Counting objects: 100% (336/336)
+remote: Counting objects: 100% (336/336), done.
+remote: Compressing objects:   0% (1/256)
+remote: Compressing objects:   1% (3/256)
+remote: Compressing objects:   2% (6/256)
+remote: Compressing objects:   3% (8/256)
+remote: Compressing objects:   4% (11/256)
+remote: Compressing objects:   5% (13/256)
+remote: Compressing objects:   6% (16/256)
+remote: Compressing objects:   7% (18/256)
+remote: Compressing objects:   8% (21/256)
+remote: Compressing objects:   9% (24/256)
+remote: Compressing objects:  10% (26/256)
+remote: Compressing objects:  11% (29/256)
+remote: Compressing objects:  12% (31/256)
+remote: Compressing objects:  13% (34/256)
+remote: Compressing objects:  14% (36/256)
+remote: Compressing objects:  15% (39/256)
+remote: Compressing objects:  16% (41/256)
+remote: Compressing objects:  17% (44/256)
+remote: Compressing objects:  18% (47/256)
+remote: Compressing objects:  19% (49/256)
+remote: Compressing objects:  20% (52/256)
+remote: Compressing objects:  21% (54/256)
+remote: Compressing objects:  22% (57/256)
+remote: Compressing objects:  23% (59/256)
+remote: Compressing objects:  24% (62/256)
+remote: Compressing objects:  25% (64/256)
+remote: Compressing objects:  26% (67/256)
+remote: Compressing objects:  27% (70/256)
+remote: Compressing objects:  28% (72/256)
+remote: Compressing objects:  29% (75/256)
+remote: Compressing objects:  30% (77/256)
+remote: Compressing objects:  31% (80/256)
+remote: Compressing objects:  32% (82/256)
+remote: Compressing objects:  33% (85/256)
+remote: Compressing objects:  34% (88/256)
+remote: Compressing objects:  35% (90/256)
+remote: Compressing objects:  36% (93/256)
+remote: Compressing objects:  37% (95/256)
+remote: Compressing objects:  38% (98/256)
+remote: Compressing objects:  39% (100/256)
+remote: Compressing objects:  40% (103/256)
+remote: Compressing objects:  41% (105/256)
+remote: Compressing objects:  42% (108/256)
+remote: Compressing objects:  43% (111/256)
+remote: Compressing objects:  44% (113/256)
+remote: Compressing objects:  45% (116/256)
+remote: Compressing objects:  46% (118/256)
+remote: Compressing objects:  47% (121/256)
+remote: Compressing objects:  48% (123/256)
+remote: Compressing objects:  49% (126/256)
+remote: Compressing objects:  50% (128/256)
+remote: Compressing objects:  51% (131/256)
+remote: Compressing objects:  52% (134/256)
+remote: Compressing objects:  53% (136/256)
+remote: Compressing objects:  54% (139/256)
+remote: Compressing objects:  55% (141/256)
+remote: Compressing objects:  56% (144/256)
+remote: Compressing objects:  57% (146/256)
+remote: Compressing objects:  58% (149/256)
+remote: Compressing objects:  59% (152/256)
+remote: Compressing objects:  60% (154/256)
+remote: Compressing objects:  61% (157/256)
+remote: Compressing objects:  62% (159/256)
+remote: Compressing objects:  63% (162/256)
+remote: Compressing objects:  64% (164/256)
+remote: Compressing objects:  65% (167/256)
+remote: Compressing objects:  66% (169/256)
+remote: Compressing objects:  67% (172/256)
+remote: Compressing objects:  68% (175/256)
+remote: Compressing objects:  69% (177/256)
+remote: Compressing objects:  70% (180/256)
+remote: Compressing objects:  71% (182/256)
+remote: Compressing objects:  72% (185/256)
+remote: Compressing objects:  73% (187/256)
+remote: Compressing objects:  74% (190/256)
+remote: Compressing objects:  75% (192/256)
+remote: Compressing objects:  76% (195/256)
+remote: Compressing objects:  77% (198/256)
+remote: Compressing objects:  78% (200/256)
+remote: Compressing objects:  79% (203/256)
+remote: Compressing objects:  80% (205/256)
+remote: Compressing objects:  81% (208/256)
+remote: Compressing objects:  82% (210/256)
+remote: Compressing objects:  83% (213/256)
+remote: Compressing objects:  84% (216/256)
+remote: Compressing objects:  85% (218/256)
+remote: Compressing objects:  86% (221/256)
+remote: Compressing objects:  87% (223/256)
+remote: Compressing objects:  88% (226/256)
+remote: Compressing objects:  89% (228/256)
+remote: Compressing objects:  90% (231/256)
+remote: Compressing objects:  91% (233/256)
+remote: Compressing objects:  92% (236/256)
+remote: Compressing objects:  93% (239/256)
+remote: Compressing objects:  94% (241/256)
+remote: Compressing objects:  95% (244/256)
+remote: Compressing objects:  96% (246/256)
+remote: Compressing objects:  97% (249/256)
+remote: Compressing objects:  98% (251/256)
+remote: Compressing objects:  99% (254/256)
+remote: Compressing objects: 100% (256/256)
+remote: Compressing objects: 100% (256/256), done.
+Receiving objects:   0% (1/4441)
+Receiving objects:   1% (45/4441)
+Receiving objects:   2% (89/4441)
+Receiving objects:   3% (134/4441)
+Receiving objects:   4% (178/4441)
+Receiving objects:   5% (223/4441)
+Receiving objects:   6% (267/4441)
+Receiving objects:   7% (311/4441)
+Receiving objects:   8% (356/4441)
+Receiving objects:   9% (400/4441)
+Receiving objects:  10% (445/4441)
+Receiving objects:  11% (489/4441)
+Receiving objects:  12% (533/4441)
+Receiving objects:  13% (578/4441)
+Receiving objects:  14% (622/4441)
+Receiving objects:  15% (667/4441)
+Receiving objects:  16% (711/4441)
+Receiving objects:  17% (755/4441)
+Receiving objects:  18% (800/4441)
+Receiving objects:  19% (844/4441)
+Receiving objects:  20% (889/4441)
+Receiving objects:  21% (933/4441)
+Receiving objects:  22% (978/4441)
+Receiving objects:  23% (1022/4441)
+Receiving objects:  24% (1066/4441)
+Receiving objects:  25% (1111/4441)
+Receiving objects:  26% (1155/4441)
+Receiving objects:  27% (1200/4441)
+Receiving objects:  28% (1244/4441)
+Receiving objects:  29% (1288/4441)
+Receiving objects:  30% (1333/4441)
+Receiving objects:  31% (1377/4441)
+Receiving objects:  32% (1422/4441)
+Receiving objects:  33% (1466/4441)
+Receiving objects:  34% (1510/4441)
+Receiving objects:  35% (1555/4441)
+Receiving objects:  36% (1599/4441)
+Receiving objects:  37% (1644/4441)
+Receiving objects:  38% (1688/4441)
+Receiving objects:  39% (1732/4441)
+Receiving objects:  40% (1777/4441)
+Receiving objects:  41% (1821/4441)
+Receiving objects:  42% (1866/4441)
+Receiving objects:  43% (1910/4441)
+Receiving objects:  44% (1955/4441)
+Receiving objects:  45% (1999/4441)
+Receiving objects:  46% (2043/4441)
+Receiving objects:  47% (2088/4441)
+Receiving objects:  48% (2132/4441)
+Receiving objects:  49% (2177/4441)
+Receiving objects:  50% (2221/4441)
+Receiving objects:  51% (2265/4441)
+Receiving objects:  52% (2310/4441)
+Receiving objects:  53% (2354/4441)
+Receiving objects:  54% (2399/4441)
+Receiving objects:  55% (2443/4441)
+Receiving objects:  56% (2487/4441)
+Receiving objects:  57% (2532/4441)
+Receiving objects:  58% (2576/4441)
+Receiving objects:  59% (2621/4441)
+Receiving objects:  60% (2665/4441)
+Receiving objects:  61% (2710/4441)
+Receiving objects:  62% (2754/4441)
+Receiving objects:  63% (2798/4441)
+Receiving objects:  64% (2843/4441)
+Receiving objects:  65% (2887/4441)
+Receiving objects:  66% (2932/4441)
+Receiving objects:  67% (2976/4441)
+Receiving objects:  68% (3020/4441)
+Receiving objects:  69% (3065/4441)
+Receiving objects:  70% (3109/4441)
+Receiving objects:  71% (3154/4441)
+Receiving objects:  72% (3198/4441)
+Receiving objects:  73% (3242/4441)
+Receiving objects:  74% (3287/4441)
+Receiving objects:  75% (3331/4441)
+Receiving objects:  76% (3376/4441)
+Receiving objects:  77% (3420/4441)
+Receiving objects:  78% (3464/4441)
+Receiving objects:  79% (3509/4441)
+Receiving objects:  80% (3553/4441)
+Receiving objects:  81% (3598/4441)
+Receiving objects:  82% (3642/4441)
+Receiving objects:  83% (3687/4441)
+Receiving objects:  84% (3731/4441)
+Receiving objects:  85% (3775/4441)
+Receiving objects:  86% (3820/4441)
+Receiving objects:  87% (3864/4441)
+Receiving objects:  88% (3909/4441), 16.21 MiB | 32.31 MiB/s
+Receiving objects:  89% (3953/4441), 16.21 MiB | 32.31 MiB/s
+Receiving objects:  90% (3997/4441), 16.21 MiB | 32.31 MiB/s
+Receiving objects:  91% (4042/4441), 16.21 MiB | 32.31 MiB/s
+Receiving objects:  92% (4086/4441), 16.21 MiB | 32.31 MiB/s
+Receiving objects:  92% (4102/4441), 16.21 MiB | 32.31 MiB/s
+Receiving objects:  93% (4131/4441), 16.21 MiB | 32.31 MiB/s
+Receiving objects:  94% (4175/4441), 16.21 MiB | 32.31 MiB/s
+Receiving objects:  95% (4219/4441), 16.21 MiB | 32.31 MiB/s
+Receiving objects:  96% (4264/4441), 16.21 MiB | 32.31 MiB/s
+remote: Total 4441 (delta 186), reused 209 (delta 80), pack-reused 4105 (from 2)
+Receiving objects:  97% (4308/4441), 16.21 MiB | 32.31 MiB/s
+Receiving objects:  98% (4353/4441), 16.21 MiB | 32.31 MiB/s
+Receiving objects:  99% (4397/4441), 16.21 MiB | 32.31 MiB/s
+Receiving objects: 100% (4441/4441), 16.21 MiB | 32.31 MiB/s
+Receiving objects: 100% (4441/4441), 53.98 MiB | 53.36 MiB/s, done.
+Resolving deltas:   0% (0/1971)
+Resolving deltas:   1% (20/1971)
+Resolving deltas:   2% (40/1971)
+Resolving deltas:   3% (60/1971)
+Resolving deltas:   4% (79/1971)
+Resolving deltas:   5% (99/1971)
+Resolving deltas:   6% (119/1971)
+Resolving deltas:   7% (138/1971)
+Resolving deltas:   8% (158/1971)
+Resolving deltas:   9% (178/1971)
+Resolving deltas:  10% (198/1971)
+Resolving deltas:  11% (217/1971)
+Resolving deltas:  12% (237/1971)
+Resolving deltas:  13% (257/1971)
+Resolving deltas:  14% (276/1971)
+Resolving deltas:  15% (296/1971)
+Resolving deltas:  16% (316/1971)
+Resolving deltas:  17% (336/1971)
+Resolving deltas:  18% (355/1971)
+Resolving deltas:  19% (375/1971)
+Resolving deltas:  20% (395/1971)
+Resolving deltas:  21% (414/1971)
+Resolving deltas:  22% (434/1971)
+Resolving deltas:  23% (454/1971)
+Resolving deltas:  24% (474/1971)
+Resolving deltas:  25% (493/1971)
+Resolving deltas:  26% (513/1971)
+Resolving deltas:  27% (533/1971)
+Resolving deltas:  28% (552/1971)
+Resolving deltas:  29% (572/1971)
+Resolving deltas:  30% (592/1971)
+Resolving deltas:  31% (612/1971)
+Resolving deltas:  32% (631/1971)
+Resolving deltas:  33% (651/1971)
+Resolving deltas:  34% (671/1971)
+Resolving deltas:  35% (690/1971)
+Resolving deltas:  36% (710/1971)
+Resolving deltas:  37% (730/1971)
+Resolving deltas:  38% (749/1971)
+Resolving deltas:  39% (769/1971)
+Resolving deltas:  40% (789/1971)
+Resolving deltas:  41% (809/1971)
+Resolving deltas:  42% (828/1971)
+Resolving deltas:  43% (848/1971)
+Resolving deltas:  44% (868/1971)
+Resolving deltas:  45% (887/1971)
+Resolving deltas:  46% (907/1971)
+Resolving deltas:  47% (927/1971)
+Resolving deltas:  48% (947/1971)
+Resolving deltas:  49% (966/1971)
+Resolving deltas:  50% (986/1971)
+Resolving deltas:  51% (1006/1971)
+Resolving deltas:  52% (1025/1971)
+Resolving deltas:  53% (1045/1971)
+Resolving deltas:  54% (1065/1971)
+Resolving deltas:  55% (1085/1971)
+Resolving deltas:  56% (1104/1971)
+Resolving deltas:  57% (1124/1971)
+Resolving deltas:  58% (1144/1971)
+Resolving deltas:  59% (1163/1971)
+Resolving deltas:  60% (1183/1971)
+Resolving deltas:  61% (1203/1971)
+Resolving deltas:  62% (1223/1971)
+Resolving deltas:  63% (1242/1971)
+Resolving deltas:  64% (1262/1971)
+Resolving deltas:  65% (1282/1971)
+Resolving deltas:  66% (1301/1971)
+Resolving deltas:  67% (1321/1971)
+Resolving deltas:  68% (1341/1971)
+Resolving deltas:  69% (1360/1971)
+Resolving deltas:  70% (1380/1971)
+Resolving deltas:  71% (1400/1971)
+Resolving deltas:  72% (1420/1971)
+Resolving deltas:  73% (1439/1971)
+Resolving deltas:  74% (1459/1971)
+Resolving deltas:  75% (1479/1971)
+Resolving deltas:  76% (1498/1971)
+Resolving deltas:  77% (1518/1971)
+Resolving deltas:  78% (1538/1971)
+Resolving deltas:  79% (1558/1971)
+Resolving deltas:  80% (1577/1971)
+Resolving deltas:  81% (1597/1971)
+Resolving deltas:  82% (1617/1971)
+Resolving deltas:  83% (1636/1971)
+Resolving deltas:  84% (1656/1971)
+Resolving deltas:  85% (1676/1971)
+Resolving deltas:  86% (1696/1971)
+Resolving deltas:  87% (1715/1971)
+Resolving deltas:  88% (1735/1971)
+Resolving deltas:  89% (1755/1971)
+Resolving deltas:  90% (1774/1971)
+Resolving deltas:  91% (1794/1971)
+Resolving deltas:  92% (1814/1971)
+Resolving deltas:  93% (1834/1971)
+Resolving deltas:  94% (1853/1971)
+Resolving deltas:  95% (1873/1971)
+Resolving deltas:  96% (1893/1971)
+Resolving deltas:  97% (1912/1971)
+Resolving deltas:  98% (1932/1971)
+Resolving deltas:  99% (1952/1971)
+Resolving deltas: 100% (1971/1971)
+Resolving deltas: 100% (1971/1971), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m26 && ls
+
+GUIDED-BUILD.md  advisories.json  cloud       gateway.py  practice_server.py  run_tests.py  test_challenge.py
+Makefile         cache_engine.py  data        hunt.py     probe.py            scan.py       test_lab.py
+README.md        cachetest.py     explore.py  models      requirements.txt    stacks
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ ls stacks/first-draft stacks/first-draft/k8s models/approved-model models/suspicio 
+us-model data
+
+data:
+deploy-sources.json  gateway-log.jsonl
+
+models/approved-model:
+config.json  model.safetensors
+
+models/suspicious-model:
+config.json  modeling_custom.py  pytorch_model.bin
+
+stacks/first-draft:
+cluster.yaml  docker-compose.yml  gateway.json  k8s  models.json  nodes.json
+
+stacks/first-draft/k8s:
+inference.yaml
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ head -n 3 data/gateway-log.jsonl
+
+{"ts": "2026-10-21T07:55:00Z", "src_ip": "10.0.9.5", "method": "POST", "path": "/api/pull", "status": 200, "auth": "ok", "tenant": null}
+{"ts": "2026-10-21T08:00:30Z", "src_ip": "10.0.1.20", "method": "GET", "path": "/health", "status": 200, "auth": "none", "tenant": null}
+{"ts": "2026-10-21T08:01:02Z", "src_ip": "10.0.1.20", "method": "POST", "path": "/v1/chat/completions", "status": 200, "auth": "ok", "tenant": "acme"}
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ make -n setup check
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -c "import yaml; print('PyYAML', yaml.__version__, 'OK')"
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ make setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+Collecting PyYAML==6.0.3 (from -r requirements.txt (line 3))
+  Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/807.9 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 42.3 MB/s eta 0:00:00
+Installing collected packages: PyYAML
+Successfully installed PyYAML-6.0.3
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ make check
+
+.venv/bin/python -c "import yaml; print('PyYAML', yaml.__version__, 'OK')"
+PyYAML 6.0.3 OK
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python explore.py server
+
+Started the lab's practice server on 127.0.0.1, port 8765
+  127.0.0.1 = loopback: only this computer can reach it (0.0.0.0 would mean every network address)
+  real defaults: Ollama 127.0.0.1:11434, vLLM port 8000. No model here: answers are canned.
+
+1. GET /v1/models   (which models do you serve?)
+   sent:     GET /v1/models HTTP/1.1
+             Host: 127.0.0.1:8765
+   received: HTTP/1.0 200 OK
+             {"object": "list", "data": [{"id": "lab-model"}]}
+
+2. POST /v1/chat/completions   (the chat request an app sends)
+   sent:     POST /v1/chat/completions HTTP/1.1
+             Host: 127.0.0.1:8765
+             Content-Type: application/json
+             {"model": "lab-model", "messages": [{"role": "user", "content": "What is a GPU?"}]}
+   received: HTTP/1.0 200 OK
+             {"choices": [{"message": {"role": "assistant", "content": "lab answer"}}]}
+
+Server stopped. Port 8765 is closed again.
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python explore.py endpoints
+
+The practice server's 12 paths: the same paths a real Ollama or vLLM server has (method + path = endpoint)
+  method path                  engine  kind        what it does on a real server
+  GET    /v1/models            vLLM    inference   lists the models it serves
+  POST   /v1/chat/completions  vLLM    inference   answers a chat (the OpenAI-style request)
+  GET    /health               vLLM    health      answers 'I am up'
+  GET    /version              vLLM    info        tells the engine version
+  GET    /metrics              vLLM    info        counters for monitoring, incl. the KV cache
+  POST   /tokenize             vLLM    info        turns text into tokens
+  POST   /pause                vLLM    ops         pauses generation
+  POST   /update_weights       vLLM    ops         loads new model weights
+  POST   /collective_rpc       vLLM    dev         runs methods on the engine (dev mode)
+  GET    /api/tags             Ollama  inference   lists the models on disk
+  POST   /api/pull             Ollama  management  downloads a model
+  DELETE /api/delete           Ollama  management  deletes a model
+3 paths are 'inference': what apps call. The other 9 are for operators (health, info, ops, dev, management).
+All 12 share ONE address and port. Nothing in HTTP itself says which callers may use which path.
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python explore.py tokens
+
+Text (109 characters): "You are the ACME helpdesk bot . Internal code ACME-LAB-0042 is secret . Answer in English . where is my order"
+
+Step 1  tokens. The lab splits on spaces: one token per word or mark (a stand-in).
+        Real tokenizers cut text into word pieces, about 4 characters of English per token.
+        [0]You [1]are [2]the [3]ACME [4]helpdesk [5]bot [6]. [7]Internal [8]code [9]ACME-LAB-0042 [10]is
+        [11]secret [12]. [13]Answer [14]in [15]English [16]. [17]where [18]is [19]my [20]order
+
+Step 2  blocks of 4 tokens. The server keeps its work per block (vLLM's design doc uses 16 in its example).
+        block 0: You are the ACME
+        block 1: helpdesk bot . Internal
+        block 2: code ACME-LAB-0042 is secret
+        block 3: . Answer in English
+        block 4: . where is my
+        block 5: order   <- not full: never cached
+
+21 tokens = 5 full blocks. The model reads all 21 at once (prefill),
+then writes its answer one new token at a time (decode).
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python explore.py cache
+
+A prefix cache: ONE engine, empty at the start. Each full block is named by a SHA-256 hash of the block
+before it and its own tokens, so the same opening gives the same hashes.
+Time to first token comes from the lab's cost model: 20 ms + 2 ms per token NOT found in the cache.
+No salt: every tenant shares one cache.
+
+  acme   ...system prompt + "where is my order"  (21 tokens)
+          blocks 1aa7ce00d346:miss 2e04141823fb:miss e629e134c38d:miss 8ac83ee3243f:miss 323cc94796ac:miss
+          cached tokens  0   time to first token  62 ms
+  acme   ...system prompt + "reset my password"  (20 tokens)
+          blocks 1aa7ce00d346:HIT 2e04141823fb:HIT e629e134c38d:HIT 8ac83ee3243f:HIT b409722ae6fd:miss
+          cached tokens 16   time to first token  28 ms   from acme's blocks
+  globex ...system prompt + "what is the weather"  (21 tokens)
+          blocks 1aa7ce00d346:HIT 2e04141823fb:HIT e629e134c38d:HIT 8ac83ee3243f:HIT 9dd62be4916d:miss
+          cached tokens 16   time to first token  30 ms   from acme's blocks
+
+globex never sent that opening before, yet 16 tokens came from acme's blocks and its answer started
+faster. Faster tells the caller: someone already sent this. That is a timing side channel.
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python explore.py cache --salt
+
+A prefix cache: ONE engine, empty at the start. Each full block is named by a SHA-256 hash of the block
+before it and its own tokens, so the same opening gives the same hashes.
+Time to first token comes from the lab's cost model: 20 ms + 2 ms per token NOT found in the cache.
+--salt: the gateway mixes a per-tenant salt into block 0, so each tenant gets its own hashes.
+
+  acme   ...system prompt + "where is my order"  (21 tokens)
+          blocks 2475debe2f6b:miss f1a3cb93347d:miss 979834c0bab4:miss e427453a3640:miss 847aa536ad0a:miss
+          cached tokens  0   time to first token  62 ms
+  acme   ...system prompt + "reset my password"  (20 tokens)
+          blocks 2475debe2f6b:HIT f1a3cb93347d:HIT 979834c0bab4:HIT e427453a3640:HIT 9973e85def84:miss
+          cached tokens 16   time to first token  28 ms   from acme's blocks
+  globex ...system prompt + "what is the weather"  (21 tokens)
+          blocks 3f4475590b1b:miss 216e75703440:miss 8c2950c46106:miss c7b20a1881f3:miss d452ffacfa96:miss
+          cached tokens  0   time to first token  62 ms
+
+globex sent the same opening and got 0 cached tokens: no answer came back faster.
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python explore.py container
+
+stacks/first-draft/docker-compose.yml: 5 containers (read only, nothing is started)
+A container = one program and the files it needs, run as an isolated process on this host.
+
+  service   image (name:version)                     ports                 who can reach it
+  ollama    ollama/ollama:0.1.33                     11434:11434           host port 11434: every host address (0.0.0.0, [::])
+  vllm      vllm/vllm-openai:v0.10.2                 8000:8000             host port 8000: every host address (0.0.0.0, [::])
+  triton    nvcr.io/nvidia/tritonserver:25.03-py3    8001:8001             host port 8001: every host address (0.0.0.0, [::])
+  ray-head  rayproject/ray:2.8.0                     8265:8265             host port 8265: every host address (0.0.0.0, [::])
+  gateway   tsg/inference-gateway:lab                443:8443              host port 443: every host address (0.0.0.0, [::])
+
+"8000:8000" = host port 8000 -> container port 8000 on every host address.
+"127.0.0.1:8443:8443" = the same, for this host only.  "expose" = no port on the host at all.
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python explore.py node
+
+stacks/first-draft: the cluster and its GPU nodes (lab data, read only)
+
+cluster.yaml (eksctl): cluster tsg-inference in us-east-1
+  node group gpu      machine g4dn.xlarge   image family AmazonLinux2023           taints: none
+
+nodes.json: what is installed on each GPU node
+  gpu-node-1
+    ami                       custom-ubuntu-gpu-2025-03     the disk image the machine started from
+    nvidia_container_toolkit  1.17.4                        hands the GPU to containers
+    gpu_sharing               time-slicing                  how tenants share one GPU
+    tenants                   acme, globex                  whose containers run here
+    imds_http_tokens          optional                      metadata service: token required?
+    imds_hop_limit            2                             how far metadata answers travel
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python explore.py measure
+
+A measurement = a hash of exactly what is loaded. A TEE reports its measurements in a signed
+attestation; a key service releases a key only if they match the values you reviewed.
+Lab stand-in: SHA-256 of each file in a model folder, then one hash over those hashes.
+
+models/approved-model
+  config.json         2b9fb1f5e18062089a04138d...
+  model.safetensors   8a9e4d73c5036faa851d60b5...
+  measurement         932d715fe8fcdb87863a5027...
+  reviewed value      932d715fe8fcdb87863a5027...   (pinned in explore.py)
+  -> MATCH: the key would be released
+
+the same folder with ONE bit of model.safetensors flipped (in memory only; the file is unchanged)
+  measurement         8caf645a6862c7476d979c3e...   -> NO MATCH: the key stays locked
+models/suspicious-model (other files, other code)
+  measurement         2d8c37e2d2fac6836a09f816...   -> NO MATCH: the key stays locked
+
+A match proves WHICH files are loaded. It does not prove they are safe: that is what your review is for.
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python scan.py stacks/first-draft | head -n 5
+
+Scan of stacks/first-draft  (files read: compose, k8s, cluster, gateway, nodes, models; nothing run)
+  CRIT  AUTH-01   26.0  the gateway accepts requests without a key
+                       gateway.json: require_auth is false
+  CRIT  NODE-03   26.3  the NVIDIA container toolkit is in an advisory's affected range
+                       nodes.json: gpu-node-1: toolkit 1.17.4: CVE-2025-23266 (fixed in 1.17.8; affected: up to and including 1.17.7 (before 1.17.5 only in CDI mode))
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ exit
+
+exit
