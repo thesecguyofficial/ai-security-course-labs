@@ -216,7 +216,7 @@ def cmd_exchange(a) -> int:
         alice = sign_in(meta, "hardened", "alice")
         cfg = load("setups", "hardened", "services.json")["agents"]
         hop1 = cfg["orchestrator-agent"]["to_tickets_agent"]
-        print(f"1. orchestrator-agent -> POST /token  grant_type=token-exchange  as itself (secret {SECRETS_SHOWN})")
+        print(f"1. orchestrator-agent -> POST /token  grant_type=token-exchange  as itself, secret {SECRETS_SHOWN}")
         print(f"      subject_token = Alice's token, audience = {hop1['audience']}")
         s1, t1 = oauth.token_exchange(meta, "orchestrator-agent", "orchestrator-agent-secret", alice,
                                       audience=hop1["audience"], scope=hop1["scope"])
@@ -228,7 +228,7 @@ def cmd_exchange(a) -> int:
                                       audience=hop2["audience"], scope=hop2["scope"])
         print(f"   server answers {s2}\n")
         show_pair("IN: from orchestrator-agent", t1["access_token"], "OUT: for tickets-api", t2["access_token"])
-        print("\nSame person (sub) all the way. One audience, fewer scopes, shorter life, and act names who carried it.")
+        print("\nSame person (sub) all the way. One audience, the same or fewer scopes, never a longer life, and act names who carried it.")
     return 0
 
 
