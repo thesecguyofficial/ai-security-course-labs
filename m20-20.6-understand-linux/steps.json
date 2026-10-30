@@ -1,0 +1,129 @@
+{
+  "scenario": "m20-20.6-understand-linux",
+  "start": 1.727,
+  "steps": [
+    {
+      "label": "Update",
+      "speed": 1,
+      "start": 1.727,
+      "end": 7.284
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 10.284,
+      "end": 13.325
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 17.325,
+      "end": 22.976
+    },
+    {
+      "label": "The tickets",
+      "speed": 1,
+      "start": 27.976,
+      "end": 31.357
+    },
+    {
+      "label": "Look first",
+      "speed": 1,
+      "start": 37.357,
+      "end": 41.23
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 45.23,
+      "end": 47.386
+    },
+    {
+      "label": "Roles",
+      "speed": 1,
+      "start": 50.386,
+      "end": 54.297
+    },
+    {
+      "label": "Sign in",
+      "speed": 1,
+      "start": 61.298,
+      "end": 65.993
+    },
+    {
+      "label": "Token",
+      "speed": 1,
+      "start": 72.993,
+      "end": 77.839
+    },
+    {
+      "label": "Client",
+      "speed": 1,
+      "start": 86.839,
+      "end": 91.5
+    },
+    {
+      "label": "Exchange",
+      "speed": 1,
+      "start": 98.5,
+      "end": 103.261
+    },
+    {
+      "label": "One run",
+      "speed": 1,
+      "start": 112.261,
+      "end": 119.535
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.327,
+      "what": "type"
+    },
+    {
+      "t": 10.884,
+      "what": "type"
+    },
+    {
+      "t": 17.925,
+      "what": "type"
+    },
+    {
+      "t": 28.576,
+      "what": "type"
+    },
+    {
+      "t": 37.957,
+      "what": "type"
+    },
+    {
+      "t": 45.83,
+      "what": "type"
+    },
+    {
+      "t": 50.986,
+      "what": "type"
+    },
+    {
+      "t": 61.898,
+      "what": "type"
+    },
+    {
+      "t": 73.593,
+      "what": "type"
+    },
+    {
+      "t": 87.439,
+      "what": "type"
+    },
+    {
+      "t": 99.1,
+      "what": "type"
+    },
+    {
+      "t": 112.861,
+      "what": "type"
+    }
+  ],
+  "end": 126.535
+}
