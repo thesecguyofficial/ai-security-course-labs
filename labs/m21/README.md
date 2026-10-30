@@ -68,6 +68,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `receipts.py` | Signed, hash-chained receipts for every decision; `show`, `verify`, `hunt` |
 | `tools.py` | The tools (local only). `issue_refund` keeps two legacy habits that make sloppy checks expensive |
 | `model.py`, `helpdesk.py` | The stand-in model and the agent loop |
+| `explore.py` | Step 1b: each idea on its own (a proposed call, the four parts of a request, each policy then all together, one rule, a rate-limit counter, one receipt). Asks the Cedar engine; runs no tool, writes no file |
 | `suite.py` | 12 attacks + 6 normal requests (+2 for the challenge), each in a fresh state folder with a pinned clock |
 | `rego/` | The hardened rules in Rego, with unit tests (optional, OPA) |
 | `cloud/`, `GUIDED-BUILD.md` | Optional: the same refund rules on an AgentCore Gateway in your own AWS account |
@@ -83,10 +84,120 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 
 ```bash
 cd labs/m21
+make -n setup check
 make setup
+make check
 ```
 
+- `make -n setup check`: prints what the two targets would run, without running anything
 - `make setup`: python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
+- `make check`: prints the installed cedarpy version
+
+A virtual environment (`.venv`) keeps this lab's package versions apart from other projects. It is not a security
+sandbox. Real output on a fresh Ubuntu machine (recording run 41078441829, Python 3.12):
+
+```text
+Successfully installed cedarpy-4.12.2
+cedarpy 4.12.2 OK
+```
+
+## Step 1b · Look at each piece first
+
+New to authorization? Do this before Step 1 (lesson 21.0 and its videos run it). `explore.py` shows one idea at a
+time. **What it really runs:** it reads the lab's files and, for `request`, `check` and `counter`, asks the real
+Cedar engine for a decision. It never runs a tool, files no approval, writes no receipt and writes no file (not even
+`state/` or `__pycache__`). Run it with the lab's own Python, where cedarpy is installed (Windows:
+`.venv\Scripts\python explore.py ...`). Real output from recording run 41078441829:
+
+**1. A tool call:** what the model proposes. It is only text; nothing has run.
+
+```bash
+.venv/bin/python explore.py call
+```
+
+```text
+The model proposes this tool call. It is only text: nothing has run yet.
+{
+  "tool": "issue_refund",
+  "arguments": {
+    "order_id": "O-1001",
+    "amount_cents": 4500,
+    "currency": "USD",
+    "reason": "ticket T-501"
+  }
+}
+```
+
+**2. The four parts of a request**, and where each one comes from:
+
+```bash
+.venv/bin/python explore.py request
+```
+
+```text
+  principal  bob (role support)
+             WHO is asking: the signed-in user, from the session; the model can't change it
+  action     issue_refund
+             WHAT they want to do: the tool's name
+  resource   TSG::Order O-1001: customer sam@customer.example, total 4500 cents
+             ON WHAT: the order the argument names, looked up in data/orders.json
+  context    input   {"order_id": "O-1001", "amount_cents": 4500, "currency": "USD", "reason": "ticket T-501"}
+                     the arguments: the ONLY part that came from the model
+```
+
+**3. Allow, default deny, forbid wins.** Each hardened policy on its own, then all of them together:
+
+```bash
+.venv/bin/python explore.py check
+.venv/bin/python explore.py check T-601
+.venv/bin/python explore.py check T-502
+```
+
+```text
+  permit  refund_ticket_order              MATCHES  support or supervisor, and the order is the ticket customer's
+All together: ALLOW   determined by: refund_ticket_order
+...
+  permit  refund_ticket_order              no       support or supervisor, and the order is the ticket customer's
+All together: DENY   determined by: nothing
+Why: no permit matches, so the answer is no (default deny).
+...
+  forbid  refund_over_100_needs_approval   MATCHES  over $100 needs another supervisor's approval  @on_deny("defer")
+All together: DENY   determined by: refund_over_100_needs_approval
+Why: a forbid that matches wins over any permit.
+```
+
+**4. One rule, part by part:** `.venv/bin/python explore.py rule` reads `refund_ticket_order.cedar`: the effect
+(`permit`), the scope (principal, action, resource) and the `when` conditions.
+
+**5. A rate limit:** the PEP counts past calls. Here they are a list in memory.
+
+```bash
+.venv/bin/python explore.py counter
+```
+
+```text
+  09:00  bob  issue_refund O-1001 4500 cents   refunds_1h = 0   -> ALLOW [refund_ticket_order]
+  09:10  bob  issue_refund O-1001 4500 cents   refunds_1h = 1   -> ALLOW [refund_ticket_order]
+  09:20  bob  issue_refund O-1001 4500 cents   refunds_1h = 2   -> ALLOW [refund_ticket_order]
+  09:30  bob  issue_refund O-1001 4500 cents   refunds_1h = 3   -> DENY  [max_3_refunds_per_hour]
+  10:05  bob  issue_refund O-1001 4500 cents   refunds_1h = 2   -> ALLOW [refund_ticket_order]
+```
+
+**6. One audit receipt**, field by field: `.venv/bin/python explore.py receipt` shows receipt #8 of
+`data/hunt-receipts.jsonl` (bob, T-601, `DENY`, `policies []`, `ran false`, then `prev`, `hash` and `sig`) and ends
+with `Recomputed hash matches: yes   links to receipt #7: yes`.
+
+**Read one run.** The real agent on the hardened setup:
+
+```bash
+.venv/bin/python helpdesk.py hardened T-501 --as bob
+```
+
+```text
+  STEP 2  issue_refund {"order_id": "O-1001", "amount_cents": 4500, "currency": "USD", "reason": "ticket T-501"}
+          -> ALLOW [refund_ticket_order]  refund of 45.00 USD recorded for O-1001 (lab ledger only, no money moved)
+--- outcome --- refunds paid this run: O-1001 $45.00 | held for approval: 0 | emails sent this run: 1 | rows sent to the partner: 0
+```
 
 ## Step 1 · Break it
 
