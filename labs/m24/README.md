@@ -4,9 +4,9 @@ Companion to lessons **24.1 to 24.5** of *AI Security Engineer* (The Sec Guy). A
 your laptop: **Python 3.11+ only**, no packages, no network, no model download. Nothing in this lab runs the attack
 or calls out anywhere. The attack is a recording.
 
-This lab is **defensive only**. A three-agent TSG Ops crew was run once, in a sandbox, and a planted instruction in
-one incoming email propagated through the hand-offs to the agent that can send mail. We captured the transcript and
-froze it as data files. You trace the path, then write four containment controls. A provided harness replays the
+This lab is **defensive only**. The lab ships a recorded, illustrative run of a three-agent TSG Ops crew, written as
+data files (events, names, dates and addresses are invented): a planted instruction in one incoming email propagates
+through the hand-offs to the agent that can send mail. You trace the path, then write four containment controls. A provided harness replays the
 same recording, and adapted variants of it, through your controls and **proves the dangerous send never executes
 while the normal crew tasks still complete**. You never write the attack, and nothing here is self-replicating code.
 
@@ -55,7 +55,7 @@ Three agents share a memory channel and a task channel:
 |---|---|
 | `data/recording/transcript.jsonl` | The crew's recorded runs: the attack (session a1) and two normal runs (n1, n2). `ingest`, `handoff` (over a `memory` or `task` channel) and `tool_call` events. Nothing runs; it is a recording |
 | `data/recording/ground_truth.json` | The answer key: the attack path, the findings each control must produce, the normal items. Read only by `replay.py` and the tests, never by your containment |
-| `data/variants.jsonl` | An adapted attack (session va): the instruction paraphrased, rerouted, and aimed at a look-alike domain |
+| `data/variants.jsonl` | An adapted attack (session va): the instruction paraphrased and aimed at a look-alike domain |
 | `config.json` | The crew and its scopes: agent tools, send-email domains, the propagation threshold |
 | `trace.py` | Reads the path for you (entry point, propagation, sink). Holds challenge 1 |
 | `containment.py` | **You write this**: four controls (hand-off filter, tool scope, circuit-breaker, detect). Holds challenge 2 |
@@ -244,7 +244,7 @@ FAIL: the mailer's send to an outside domain still executes. Write containment.p
 
 Open `containment.py` and fill in the four controls. Each reads recorded events and returns a verdict; the file's
 docstrings give the exact contract and the `config.json` keys. Build on **behaviour, not exact wording** (lesson
-24.4): the variants paraphrase, reroute and use a look-alike domain.
+24.4): the adapted variant paraphrases the instruction and uses a look-alike domain.
 
 1. `boundary_filter(handoff, config)` - block a hand-off whose message carries instruction-like content (an
    external recipient, a self-forwarding phrase, override phrasing). Allow normal, typed summaries.
