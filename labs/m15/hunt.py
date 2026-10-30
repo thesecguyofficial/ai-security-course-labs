@@ -88,7 +88,7 @@ def main():
         print(f"   {x['time']}  version {x['version']} approved by {x['who']}, who registered it")
     print("\nQ3. Presigned Studio URLs for someone else's profile")
     for x in presigned_for_others(trail):
-        print(f"   {x['time']}  {x['who']} (own profile: {x['own_profile']}) signed in as {x['signed_in_as']}")
+        print(f"   {x['time']}  {x['who']} (own profile: {x['own_profile']}) created a sign-in address for {x['signed_in_as']}")
     print("\nQ4. InvokeEndpoint calls that skipped the private endpoint (challenge 3)")
     try:
         rows = find_outside_invocations(trail)
