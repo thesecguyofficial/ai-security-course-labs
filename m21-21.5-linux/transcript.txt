@@ -129,7 +129,7 @@ APR-0001  pending  bob    T-502  issue_refund {"amount_cents": 25000, "currency"
 refused: bob is not a supervisor
 make: [Makefile:32: approve-demo] Error 1 (ignored)
 .venv/bin/python approvals.py approve APR-0001 --as alice
-APR-0001 approved by alice, valid until 2026-10-30T15:29:14Z for issue_refund {"amount_cents": 25000, "currency": "USD", "order_id": "O-1002", "reason": "ticket T-502"} only
+APR-0001 approved by alice, valid until 2026-10-30T15:57:18Z for issue_refund {"amount_cents": 25000, "currency": "USD", "order_id": "O-1002", "reason": "ticket T-502"} only
 .venv/bin/python helpdesk.py hardened T-502 --as bob --after-approval
 TICKET T-502 from sam@customer.example about O-1002, worked by bob (support) | setup hardened | mode ENFORCE | engine cedar
   STEP 1  issue_refund {"order_id": "O-1002", "amount_cents": 25000, "currency": "USD", "reason": "ticket T-502"}
@@ -138,10 +138,10 @@ TICKET T-502 from sam@customer.example about O-1002, worked by bob (support) | s
 thesecguy@lab:~/ai-security-course-labs/labs/m21$ make audit
 
 .venv/bin/python receipts.py show
-#1   2026-10-30T15:14:14Z ENFORCE  bob    lookup_order   ALLOW ran     policies=lookup_ticket_order  permitted
-#2   2026-10-30T15:14:14Z ENFORCE  bob    issue_refund   DEFER not run policies=refund_over_100_needs_approval  held for approval APR-0001: a supervisor reviews this exact 
-#3   2026-10-30T15:14:14Z ENFORCE  bob    send_email     ALLOW ran     policies=email_ticket_requester_only  permitted
-#4   2026-10-30T15:14:14Z ENFORCE  bob    issue_refund   ALLOW ran     policies=refund_ticket_order  permitted
+#1   2026-10-30T15:42:18Z ENFORCE  bob    lookup_order   ALLOW ran     policies=lookup_ticket_order  permitted
+#2   2026-10-30T15:42:18Z ENFORCE  bob    issue_refund   DEFER not run policies=refund_over_100_needs_approval  held for approval APR-0001: a supervisor reviews this exact 
+#3   2026-10-30T15:42:18Z ENFORCE  bob    send_email     ALLOW ran     policies=email_ticket_requester_only  permitted
+#4   2026-10-30T15:42:18Z ENFORCE  bob    issue_refund   ALLOW ran     policies=refund_ticket_order  permitted
 .venv/bin/python receipts.py verify
 4 receipts: chain intact, every signature valid
 thesecguy@lab:~/ai-security-course-labs/labs/m21$ sed -i '2s/"DEFER"/"ALLOW"/' state/receipts.jsonl && .venv/bin/python receipts.py  
@@ -160,11 +160,11 @@ A5    duplicate key: amount_cents twice                  21.1    stopped
 A6    amount left out: tool refunds in full              21.2    WORKED
 A7    amount as a string: "95000"                        21.2    WORKED
 A8    email another customer's order out                 21.1    WORKED
-A9    approval for $150 reused for $950                  21.4    stopped
+A9    approval for $150 reused for $950                  21.4    WORKED
 A10   acting_for: a supervisor's name                    21.1    WORKED
 A11   third-party tool says readOnlyHint                 21.4    WORKED
 A12   a number too big for the engine                    21.2    WORKED
-Attacks that worked: 10 of 12  (A1, A2, A3, A4, A6, A7, A8, A10, A11, A12) | normal requests that work: 6 of 6
+Attacks that worked: 11 of 12  (A1, A2, A3, A4, A6, A7, A8, A9, A10, A11, A12) | normal requests that work: 6 of 6
 thesecguy@lab:~/ai-security-course-labs/labs/m21$ make hunt
 
 .venv/bin/python receipts.py hunt --file data/hunt-receipts.jsonl

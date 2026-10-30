@@ -8,7 +8,7 @@ python3 -m venv .venv
 Collecting cedarpy==4.12.2 (from -r requirements.txt (line 3))
   Downloading cedarpy-4.12.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (34 kB)
 Downloading cedarpy-4.12.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.9 MB)
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.9/4.9 MB 47.3 MB/s eta 0:00:00
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.9/4.9 MB 64.9 MB/s eta 0:00:00
 Installing collected packages: cedarpy
 Successfully installed cedarpy-4.12.2
 prepared: user thesecguy on host lab, removed: nothing, ready: nothing
