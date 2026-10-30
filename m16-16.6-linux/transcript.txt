@@ -1,0 +1,223 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m16 && make simulate
+
+python3 simulate.py
+first-draft  cloudtrail 865  invocations 0  guardduty 0  spans 0  app 585   -> out/first-draft/
+hardened     cloudtrail 930  invocations 855  guardduty 4  spans 33  app 585   -> out/hardened/
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ python3 simulate.py --list
+
+S1  Leaked Bedrock API key (LLMjacking)
+    A long-term Bedrock API key leaked from a build log. From 14:05 someone outside the company uses it: recon, a logging check, a failed attempt to delete invocation logging, then 90 minutes of large Converse, ConverseStream and bedrock-mantle calls.
+
+S2  Jailbroken customer bot
+    A signed-in customer spends 12 minutes trying to jailbreak the support bot. The guardrail blocks six attempts; one gets through and the answer contains the system prompt's canary.
+
+S3  Hijacked agent
+    A rollback pipeline puts the agent gateway's policy engine back in LOG_ONLY. Eight minutes later a hidden instruction in ticket 5120 makes the agent email ticket data outside the company and reset the CEO's MFA. The policy engine said DENY both times.
+
+S4  Denial of wallet through the app
+    A scripted sign-up account sends 300 maximum-length chats in 50 minutes. Every call is made by the app's own role, so AWS sees one busy app, not one abusive user.
+
+S5  Poisoned knowledge base
+    At 03:10 a contractor upload role writes a fake 'VPN support update' into the knowledge base source bucket and starts an ingestion job itself. From 09:00 the support bot sends customers to an outside 'VPN support line'.
+
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ sed -n 317,330p simulate.py
+
+def s1_leaked_key(d: Day):
+    ip, ip2, ua = "203.0.113.50", "203.0.113.51", "Python/3.11 aiohttp/3.9.5"
+    s = "S1"
+    d.ct(at(14, 5), KEY_USER, "bedrock.amazonaws.com", "ListFoundationModels", ip=ip, ua=ua, bearer=True, scenario=s)
+    d.ct(at(14, 5, 20), KEY_USER, "bedrock.amazonaws.com", "GetFoundationModelAvailability", ip=ip, ua=ua,
+         params={"modelId": "anthropic.claude-opus-4-7"}, bearer=True, scenario=s)
+    d.ct(at(14, 6), KEY_USER, "bedrock.amazonaws.com", "InvokeModel", ip=ip, ua=ua, params={"modelId": OPUS},
+         error=("ValidationException", "lab value: max_tokens_to_sample out of range"), bearer=True, scenario=s)
+    d.ct(at(14, 7), KEY_USER, "bedrock.amazonaws.com", "GetModelInvocationLoggingConfiguration", ip=ip, ua=ua,
+         bearer=True, scenario=s)
+    d.ct(at(14, 8), KEY_USER, "bedrock.amazonaws.com", "DeleteModelInvocationLoggingConfiguration", ip=ip, ua=ua,
+         error=("AccessDenied", "User is not authorized to perform: bedrock:DeleteModelInvocationLoggingConfiguration"),
+         bearer=True, scenario=s)
+    rnd = d.rnd
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ python3 evaluate.py first-draft --pack soc-v1
+
+Pack soc-v1 on first-draft telemetry: 2 alerts
+
+  S1  CAUGHT           Leaked Bedrock API key (LLMjacking)    N2                       named BedrockAPIKey-q4m8
+  S2  MISSED           Jailbroken customer bot                                         
+  S3  MISSED           Hijacked agent                                                  
+  S4  MISSED           Denial of wallet through the app                                
+  S5  MISSED           Poisoned knowledge base                                         
+  false alarm: N1 High InvokeModel volume (DataScienceRole: 150 InvokeModel calls in hour 13:00)
+
+Caught 1 of 5 | seen but not named 0 | missed 4 | false alarms 1
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ sed -n 129,133p detect.py
+
+def n3_guardduty_medium_plus(t: Telemetry) -> list[dict]:
+    """GuardDuty findings with severity 4.0 or more: the pattern many teams copy from AWS's EventBridge example."""
+    return [alert("N3", f"GuardDuty {f['type']}", "HIGH", f["updatedAt"],
+                  f["resource"].get("accessKeyDetails", {}).get("userName", "?"), "principal", [f["id"]], f["title"])
+            for f in t.guardduty if f["severity"] >= 4.0]
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ python3 evaluate.py hardened --pack soc-v1
+
+Pack soc-v1 on hardened telemetry: 2 alerts
+
+  S1  CAUGHT           Leaked Bedrock API key (LLMjacking)    N2                       named BedrockAPIKey-q4m8
+  S2  MISSED           Jailbroken customer bot                                         
+  S3  MISSED           Hijacked agent                                                  
+  S4  MISSED           Denial of wallet through the app                                
+  S5  MISSED           Poisoned knowledge base                                         
+  false alarm: N1 High InvokeModel volume (DataScienceRole: 150 InvokeModel calls in hour 13:00)
+
+Caught 1 of 5 | seen but not named 0 | missed 4 | false alarms 1
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ python3 evaluate.py first-draft
+
+Pack m16 on first-draft telemetry: 5 alerts
+
+  S1  CAUGHT           Leaked Bedrock API key (LLMjacking)    D01 D02 D03 D04          named BedrockAPIKey-q4m8
+  S2  MISSED           Jailbroken customer bot                                         
+  S3  SEEN, NOT NAMED  Hijacked agent                         D03                      named tsg-ci-deployer
+  S4  MISSED           Denial of wallet through the app                                
+  S5  MISSED           Poisoned knowledge base                                         
+
+Caught 1 of 5 | seen but not named 1 | missed 3 | false alarms 0
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ python3 detect.py hardened | head -15
+
+Pack m16 on hardened telemetry: 17 alerts
+
+[MEDIUM] 09:15 D13 Answer links to an unknown domain
+         entity domain: vpn-helpdesk-support.example.net   (5 answers)
+[HIGH  ] 10:40 D07 Repeated prompt attacks from one end user
+         entity end-user: cust-8841   (6 guardrail interventions)
+[HIGH  ] 10:48 D08 System prompt canary in an answer
+         entity end-user: cust-8841   (the answer contains CANARY-M16-SYSPROMPT)
+[MEDIUM] 10:55 D05 Impact:IAMUser/PromptInjection.Direct
+         entity principal: HelpdeskAppRole   (severity 2.0 (Low), count 6; the IAM identity, not the end user)
+[HIGH  ] 11:12 D03 Gateway policy engine not in ENFORCE
+         entity principal: tsg-ci-deployer   (gateway tsg-helpdesk-gw-a1b2c3d4e5 mode=LOG_ONLY)
+[HIGH  ] 11:20 D09 Tool call denied by policy but executed (LOG_ONLY)
+         entity runtime-session: tsg-5120b0b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6   (send_email, reset_mfa)
+[HIGH  ] 11:20 D10 Agent emailed outside the company
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ python3 evaluate.py hardened
+
+Pack m16 on hardened telemetry: 17 alerts
+
+  S1  CAUGHT           Leaked Bedrock API key (LLMjacking)    D01 D02 D03 D04 D05 D06  named BedrockAPIKey-q4m8
+  S2  CAUGHT           Jailbroken customer bot                D07 D08                  named HelpdeskAppRole, cust-8841
+  S3  CAUGHT           Hijacked agent                         D09 D10                  named tsg-5120b0b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6, tsg-ci-deployer
+  S4  SEEN, NOT NAMED  Denial of wallet through the app       D05 D06                  named HelpdeskAppRole
+  S5  SEEN, NOT NAMED  Poisoned knowledge base                D13                      named vpn-helpdesk-support.example.net
+
+Caught 3 of 5 | seen but not named 2 | missed 0 | false alarms 0
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ python3 inventory.py
+
+AI inventory: 16 AI assets (9 managed, 7 self-hosted)
+
+Managed
+  sanctioned   AWS::Bedrock::Guardrail            tsghelpdesk01  (owner: platform)
+  sanctioned   AWS::Bedrock::KnowledgeBase        KBHELPDESK1  (owner: platform)
+  sanctioned   AWS::Bedrock::DataSource           DSHELPDESK1  (owner: platform)
+  sanctioned   AWS::BedrockAgentCore::Runtime     tsg_helpdesk-AbCdEf1234  (owner: platform)
+  sanctioned   AWS::BedrockAgentCore::Gateway     tsg-helpdesk-gw-a1b2c3d4e5  (owner: platform)
+  sanctioned   AWS::BedrockAgentCore::Memory      tsg_helpdesk_mem-Xy12Ab34Cd  (owner: platform)
+  UNSANCTIONED AWS::BedrockAgentCore::Runtime     marketing_poc_agent-Zz98Yy76Xx  (owner: marketing)
+  sanctioned   AWS::SageMaker::Endpoint           churn-model-prod  (owner: data-science)
+  UNSANCTIONED AWS::SageMaker::NotebookInstance   ds-scratch-notebook  (owner: (no owner tag))
+
+SelfHosted
+  UNSANCTIONED SelfHosted::AI::InferenceEndpoint  inference-endpoint/ollama on i-0a1b2c3d4e5f60002  (owner: data-science)
+  UNSANCTIONED SelfHosted::AI::InferenceEndpoint  inference-endpoint/vllm on i-0a1b2c3d4e5f60002  (owner: data-science)
+  UNSANCTIONED SelfHosted::AI::Model              model/Qwen/Qwen2.5-7B-Instruct on i-0a1b2c3d4e5f60002  (owner: data-science)
+  UNSANCTIONED SelfHosted::AI::Model              model/llama3.2:3b on i-0a1b2c3d4e5f60002  (owner: data-science)
+  UNSANCTIONED SelfHosted::AI::Agent              agent/openclaw on i-0a1b2c3d4e5f60003  (owner: it)
+  UNSANCTIONED SelfHosted::AI::ExternalEndpoint   api.anthropic.com on i-0a1b2c3d4e5f60003  (owner: it)
+  UNSANCTIONED SelfHosted::AI::ExternalEndpoint   api.openai.com on i-0a1b2c3d4e5f60001  (owner: finance)
+
+Not attributed: 9 DNS queries to api.mistral.ai from 10.20.9.44, which is not an EC2 instance. Security Hub doesn't attribute Lambda, Fargate, EKS or SageMaker calls: find the owner of that address yourself (VPC flow logs, ENI description).
+Your check: ollama on i-0a1b2c3d4e5f60002 listens on port 11434 and its security group allows 0.0.0.0/0. Self-hosted AI resources have no Security Hub findings in this release.
+
+9 of 16 AI assets are not on the approved register.
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ python3 posture.py first-draft | cut -c1-130
+
+Posture of the first-draft setup
+
+AWS managed rules (AWS Config; Security Hub CSPM control in brackets)
+  NON_COMPLIANT bedrockagentcore-runtime-private-network-required       [BedrockAgentCore.1]  tsg_helpdesk-AbCdEf1234  NetworkMode
+  COMPLIANT     bedrockagentcore-gateway-authorizer-enabled             [BedrockAgentCore.2]  tsg-helpdesk-gw-a1b2c3d4e5  
+  NON_COMPLIANT bedrockagentcore-gateway-authorizer-enabled             [BedrockAgentCore.2]  marketing-poc-gw-Qq11Ww22Ee  Authori
+  NON_COMPLIANT bedrock-agentcore-memory-encryption-enabled             [BedrockAgentCore.3]  tsg_helpdesk_mem-Xy12Ab34Cd  no Encr
+  NON_COMPLIANT bedrockagentcore-gateway-encryption-enabled             [BedrockAgentCore.4]  tsg-helpdesk-gw-a1b2c3d4e5  no KmsKe
+  NON_COMPLIANT bedrockagentcore-gateway-encryption-enabled             [BedrockAgentCore.4]  marketing-poc-gw-Qq11Ww22Ee  no KmsK
+  NON_COMPLIANT bedrockagentcore-browsercustom-network-mode-not-public  [BedrockAgentCore.5]  tsg_browser-Ll77Kk88Jj  NetworkMode 
+  NON_COMPLIANT bedrockagentcore-browsercustom-recording-enabled        [BedrockAgentCore.6]  tsg_browser-Ll77Kk88Jj  recording di
+  NON_COMPLIANT bedrockagentcore-codeinterpreter-networkmode-check      [BedrockAgentCore.7]  tsg_ci-Pp55Oo66Ii  NetworkMode SANDB
+  NON_COMPLIANT bedrock-agentcore-memory-event-expiry-duration          [Config only]         tsg_helpdesk_mem-Xy12Ab34Cd  EventEx
+  NON_COMPLIANT bedrock-data-source-encryption-enabled                  [Bedrock.1]           DSHELPDESK1  no ServerSideEncryption
+
+Custom rules (no AWS managed rule: you write these)
+  NON_COMPLIANT C01 Bedrock model invocation logging on, text, with an S3 location for large data  model invocation logging is off
+  NON_COMPLIANT C02 GuardDuty AI Protection enabled  AI_PROTECTION DISABLED
+  NON_COMPLIANT C03 An account-enforced guardrail with a prompt attack filter  no account-enforced guardrail: GuardDuty's PromptIn
+  NON_COMPLIANT C04 Trail data events for bedrock-mantle and AgentCore Runtime and Gateway  no data event selector for AWS::Bedroc
+  NON_COMPLIANT C05 Every gateway with a policy engine runs it in ENFORCE  policy engine in LOG_ONLY on tsg-helpdesk-gw-a1b2c3d4e5
+
+15 NON_COMPLIANT of 16 evaluations
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ python3 posture.py hardened | tail -1
+
+0 NON_COMPLIANT of 14 evaluations
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ python3 report.py pivot BedrockAPIKey-q4m8 | sed -n '1,7p;$p'
+
+2026-10-20T14:05:00Z  cloudtrail e8b7078f-0713-43a2-8132-dc7bcbd64dac  bedrock ListFoundationModels from 203.0.113.50
+2026-10-20T14:05:20Z  cloudtrail 346ddb48-a9eb-4f5f-9ecf-c8c3bb9d22b6  bedrock GetFoundationModelAvailability from 203.0.113.50
+2026-10-20T14:06:00Z  cloudtrail 91416ff2-1396-43d5-aab6-bbae57377fc9  bedrock InvokeModel ValidationException from 203.0.113.50
+2026-10-20T14:07:00Z  cloudtrail 11e00817-0319-4a4b-b772-9c0fcadfcd4e  bedrock GetModelInvocationLoggingConfiguration from 203.0.113.50
+2026-10-20T14:08:00Z  cloudtrail 84e57831-c80f-4dd3-929b-faccc0651302  bedrock DeleteModelInvocationLoggingConfiguration AccessDenied from 203.0.113.50
+2026-10-20T14:10:00Z  cloudtrail 65f35813-17af-493a-ab31-26cb045c4e76  bedrock Converse from 203.0.113.51
+2026-10-20T14:10:00Z  invocation 162f2cac-1e1f-4f0f-ae12-c1d9d2c46041  Converse global.anthropic.claude-opus-4-7 in=8807 out=3877 stop=end_turn
+277 records mention BedrockAPIKey-q4m8 in the hardened telemetry
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ python3 report.py cost BedrockAPIKey-q4m8
+
+{
+ "calls": 120,
+ "input_tokens": 900276,
+ "output_tokens": 419531,
+ "usd_lab_prices": 8.99,
+ "mantle_calls_not_in_invocation_logs": 30
+}
+usd_lab_prices uses the ILLUSTRATIVE price list in anycompany.json, not AWS's prices.
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ python3 report.py check report/EXAMPLE-S3-hijacked-agent.md --scenario S3
+
+
+EXAMPLE-S3-hijacked-agent.md: REPORT COMPLETE
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ make test
+
+python3 run_tests.py
+[PASS] the simulator is deterministic: the same day on every computer
+[PASS] first draft: management events only, no invocation logs, no AI Protection findings, no spans, no user IDs
+[PASS] hardened: data events for mantle, AgentCore and the KB bucket; invocation logs never hold a mantle call
+[PASS] AI Protection findings: the three documented types, all Low (below 4.0); the prompt one has guardrail details
+[PASS] a benign message that trips the guardrail at MEDIUM confidence makes no GuardDuty finding and no alert
+[PASS] old rules, old logs: 1 of 5 caught (the logging-delete rule), 1 false alarm (the data science batch)
+[PASS] old rules, new logs: the 'Medium and above' GuardDuty rule drops all four AI Protection findings
+[PASS] new rules, old logs: only S1 is caught (CloudTrail management events); S3 is seen but not named
+[PASS] new rules, new logs: S1, S2, S3 caught; S4 and S5 seen but not named (the challenge); 0 false alarms
+[PASS] GuardDuty names the IAM identity: for the jailbreak that's HelpdeskAppRole, never the customer
+[PASS] without requestMetadata (end user) in the invocation logs, S2 is seen but nobody is named
+[PASS] bedrock-mantle inference is visible only with data events on (D04 sources)
+[PASS] inventory: 16 AI assets, 9 unsanctioned, Lambda DNS not attributed, an Ollama port open to the internet
+[PASS] posture: 15 of 16 NON_COMPLIANT in the first draft, 0 hardened; LOG_ONLY passes every managed rule
+[PASS] the worked S3 report passes the check; the empty template does not
+[PASS] pivot on the leaked key: 277 records with the hardened logs, 125 with the first draft's
+[PASS] cost: 120 calls in the invocation logs, 30 more on bedrock-mantle that only CloudTrail shows
+[PASS] the rules never read the answer key (truth.json)
+----------------------------------------------------------------------
+Ran 18 tests in 0.136s
+
+OK
+
+ALL TESTS PASSED (18 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ python3 run_tests.py --challenge | tail -3
+
+FAILED (failures=6)
+
+6 of 24 TESTS FAILED (24 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m16$ exit
+
+exit

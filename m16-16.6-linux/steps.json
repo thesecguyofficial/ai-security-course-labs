@@ -1,0 +1,179 @@
+{
+  "scenario": "m16-16.6-linux",
+  "start": 1.688,
+  "steps": [
+    {
+      "label": "Simulate",
+      "speed": 1,
+      "start": 1.688,
+      "end": 8.604
+    },
+    {
+      "label": "The five",
+      "speed": 1,
+      "start": 13.604,
+      "end": 17.757
+    },
+    {
+      "label": "Attack S1",
+      "speed": 1,
+      "start": 25.757,
+      "end": 29.806
+    },
+    {
+      "label": "Old",
+      "speed": 1,
+      "start": 36.806,
+      "end": 42.834
+    },
+    {
+      "label": "Old rule",
+      "speed": 1,
+      "start": 49.834,
+      "end": 53.869
+    },
+    {
+      "label": "Old rules",
+      "speed": 1,
+      "start": 59.87,
+      "end": 65.909
+    },
+    {
+      "label": "Old logs",
+      "speed": 1,
+      "start": 71.909,
+      "end": 76.562
+    },
+    {
+      "label": "Alerts",
+      "speed": 1,
+      "start": 82.562,
+      "end": 88.027
+    },
+    {
+      "label": "Score",
+      "speed": 1,
+      "start": 95.027,
+      "end": 99.401
+    },
+    {
+      "label": "Inventory",
+      "speed": 1,
+      "start": 106.401,
+      "end": 109.63
+    },
+    {
+      "label": "Posture",
+      "speed": 1,
+      "start": 117.63,
+      "end": 123.592
+    },
+    {
+      "label": "Hardened",
+      "speed": 1,
+      "start": 131.592,
+      "end": 136.919
+    },
+    {
+      "label": "Pivot",
+      "speed": 1,
+      "start": 140.92,
+      "end": 149.127
+    },
+    {
+      "label": "Cost",
+      "speed": 1,
+      "start": 156.127,
+      "end": 161.831
+    },
+    {
+      "label": "Example",
+      "speed": 1,
+      "start": 167.831,
+      "end": 177.38
+    },
+    {
+      "label": "Test",
+      "speed": 1,
+      "start": 181.381,
+      "end": 183.676
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 188.677,
+      "end": 194.778
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.289,
+      "what": "type"
+    },
+    {
+      "t": 14.204,
+      "what": "type"
+    },
+    {
+      "t": 26.357,
+      "what": "type"
+    },
+    {
+      "t": 37.406,
+      "what": "type"
+    },
+    {
+      "t": 50.434,
+      "what": "type"
+    },
+    {
+      "t": 60.47,
+      "what": "type"
+    },
+    {
+      "t": 72.509,
+      "what": "type"
+    },
+    {
+      "t": 83.162,
+      "what": "type"
+    },
+    {
+      "t": 95.628,
+      "what": "type"
+    },
+    {
+      "t": 107.001,
+      "what": "type"
+    },
+    {
+      "t": 118.23,
+      "what": "type"
+    },
+    {
+      "t": 132.192,
+      "what": "type"
+    },
+    {
+      "t": 141.52,
+      "what": "type"
+    },
+    {
+      "t": 156.727,
+      "what": "type"
+    },
+    {
+      "t": 168.432,
+      "what": "type"
+    },
+    {
+      "t": 181.981,
+      "what": "type"
+    },
+    {
+      "t": 189.277,
+      "what": "type"
+    }
+  ],
+  "end": 199.778
+}
