@@ -74,23 +74,27 @@
     },
     {
       "label": "Fix greeting",
-      "type": "sed -i 's/Hello, welcome to TSG Shop support./Hello, I am the TSG Shop AI assistant, an automated system. Ask for a person at any time./' my-assessment/chat-widget.html && grep -n 'id=\"greeting\"' my-assessment/chat-widget.html",
-      "pause_after": 5
+      "type": "sed -i 's/Hello, welcome to TSG Shop support./Hello, I am the TSG Shop AI assistant./' my-assessment/chat-widget.html && grep -n 'id=\"greeting\"' my-assessment/chat-widget.html",
+      "pause_after": 5,
+      "speed": 3
     },
     {
       "label": "Mark C24",
       "type": "sed -i 's/\"C24\": \"planned\"/\"C24\": \"implemented\"/' my-assessment/system-card.json && grep -o '\"C24\": \"[a-z]*\"' my-assessment/system-card.json",
-      "pause_after": 4
+      "pause_after": 4,
+      "speed": 3
     },
     {
       "label": "Index it",
       "type": "echo 'E23,C24,my-assessment/chat-widget.html,,2026-10-24,Head of Customer Support,live greeting text' >> my-assessment/evidence-index.csv",
-      "pause_after": 3
+      "pause_after": 3,
+      "speed": 3
     },
     {
       "label": "First row",
       "type": "echo 'R12,People are not told they are chatting with an AI,RS12,,Human-AI Configuration,Head of Customer Support,3,2,mitigate,C24,1,1,,2027-01-24,likelihood 3: every EU chat until 24 Oct' >> my-assessment/risk-register.csv",
-      "pause_after": 3
+      "pause_after": 3,
+      "speed": 3
     },
     {
       "label": "Check mine",
