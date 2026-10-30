@@ -157,9 +157,10 @@ def honeytoken_read_only() -> list[dict]:
     ]
 
 
-def honeytoken_denied_invoke(region: str = "us-east-1") -> list[dict]:
-    """H2/H3: an InvokeModel try with the decoy. It has no permissions, so it ALWAYS fails."""
-    return [ct("10:01:05", "222222222222", region, "bedrock.amazonaws.com", "InvokeModel",
+def honeytoken_denied_invoke(region: str = "us-east-1", when: str = "10:01:05") -> list[dict]:
+    """H2/H3: an InvokeModel try with the decoy. It has no permissions, so every call that needs one fails.
+    (GetCallerIdentity needs none: it works, and tells the caller the account and user name.)"""
+    return [ct(when, "222222222222", region, "bedrock.amazonaws.com", "InvokeModel",
                user="svc-reporting-legacy", key=HONEY_KEY, ip=ATTACKER_IP, agent="aws-cli/2.x (lab)",
                params={"modelId": "anthropic.claude-sonnet-4-6"}, error="AccessDeniedException")]
 

@@ -58,12 +58,12 @@ class Matching(unittest.TestCase):
 
     def test_05_regions(self):
         """a rule sees only the Regions it is deployed in"""
-        rec = scenarios.honeytoken_denied_invoke("ap-southeast-2")[0]
+        rec = scenarios.honeytoken_denied_invoke("ap-southeast-2", "10:01:40")[0]
         rule = dict(honey_rule("hardened"), regions=["us-east-1"])
         self.assertFalse(detect.rule_sees(rule, rec)[0])
 
     def test_06_decoy_calls_fail(self):
-        """every use of the decoy fails (no permissions), so a rule that drops errorCode never fires"""
+        """every model call with the decoy fails (no permissions), so a rule that drops errorCode never fires"""
         for rec in scenarios.honeytoken_denied_invoke() + scenarios.decoy_api_key_used():
             self.assertIn("errorCode", rec)
         first = honey_rule("first-draft")

@@ -76,8 +76,8 @@ def cmd_event(_args: list[str]) -> None:
         ("sourceIPAddress", rec["sourceIPAddress"], "FROM WHERE (a documentation address, RFC 5737)"),
         ("userAgent", rec["userAgent"], "the caller's tool, as the CALLER says: they choose this text"),
         ("requestParameters", rec["requestParameters"]["modelId"], "the request's arguments: WHICH model (modelId)"),
-        ("readOnly", json.dumps(rec["readOnly"]), "does it only read? (true for List and Get calls)"),
-        ("errorCode", rec["errorCode"], "it FAILED: this user may do nothing"),
+        ("readOnly", json.dumps(rec["readOnly"]), "so this call does more than look (List and Get calls: true)"),
+        ("errorCode", rec["errorCode"], "it FAILED: this user has no permissions"),
     ])
 
 
@@ -96,7 +96,7 @@ def cmd_rule(_args: list[str]) -> None:
         ("severity", r["severity"], "how urgent its alerts are"),
         ("state", "ENABLED_WITH_ALL_CLOUDTRAIL_", ""),
         ("", "MANAGEMENT_EVENTS", "also receives read-only calls (plain ENABLED doesn't)"),
-        ("regions", str(r["regions"]), "deployed in every Region (a rule sees only its own)"),
+        ("regions", str(r["regions"]), "deployed in every Region (in the lab, a rule sees only its Regions)"),
         ("pattern", "detail-type", f"= {p['detail-type'][0]}: an API call CloudTrail recorded"),
         ("", "detail.userIdentity.accessKeyId", f"= {p['detail']['userIdentity']['accessKeyId'][0]}: made with the decoy key"),
         ("", "(nothing else)", "any service, any call, any Region, failed or not"),
@@ -109,7 +109,7 @@ def cmd_rule(_args: list[str]) -> None:
 def cmd_match(_args: list[str]) -> None:
     rule = honey("hardened")
     events = (scenarios.normal_app_call() + scenarios.honeytoken_read_only()
-              + scenarios.honeytoken_denied_invoke("ap-southeast-2"))
+              + scenarios.honeytoken_denied_invoke("ap-southeast-2", "10:01:40"))
     print("The hardened rule honeytoken-key-used, checked against four logged calls (detect.py, the lab's EventBridge stand-in)")
     print()
     for rec in events:
@@ -217,9 +217,10 @@ def cmd_timeline(_args: list[str]) -> None:
         print(f"  {c['time'][11:19]}  {c['call']:<17}{kind} {c['key']:<22}{note}")
     print(f"  ...       {len(t) - 4} more InvokeModel calls, one every 30 seconds, until {t[-1]['time'][11:19]}")
     print()
+    models = sum(c["call"] == "InvokeModel" for c in t)
     cost = len(t) * ASSUMPTIONS["lab_price_per_call_usd"]
-    print(f"{len(t)} calls in 30 minutes. At the lab's made-up price of {ASSUMPTIONS['lab_price_per_call_usd']:.2f} USD a call:"
-          f" {cost:.2f} USD. Not a Bedrock price.")
+    print(f"{len(t)} calls in 30 minutes: {models} model calls and {len(t) - models} session swap.")
+    print(f"The lab prices every call at a made-up {ASSUMPTIONS['lab_price_per_call_usd']:.2f} USD: {cost:.2f} USD. Not a Bedrock price.")
 
 
 # ---------------------------------------------------------------------------------------------------- 9. decoy
@@ -236,8 +237,9 @@ def cmd_decoy(_args: list[str]) -> None:
         ("its user", d["user"], f"in {acct(d['account'])}"),
         ("permissions", "none", "in a real account: an IAM user with no policies at all"),
         ("used by", "nobody legitimate", "so ANY call with it is an alert, and a real one"),
-        ("every call", "fails", "AccessDenied: the thief gets nothing, and we get the alert"),
-    ], a=13, b=22)
+        ("GetCallerIdentity", "works", "needs no permission: the thief learns account and user name"),
+        ("every other call", "fails", "AccessDenied: no model, no data, and we get the alert"),
+    ], a=19, b=22)
 
 
 # ---------------------------------------------------------------------------------------------------- 10. score
