@@ -1,0 +1,169 @@
+{
+  "scenario": "m12-12.5-understand-linux",
+  "start": 1.668,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.668,
+      "end": 12.407
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.407,
+      "end": 21.056
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 25.056,
+      "end": 30.602
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 34.602,
+      "end": 37.193
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 40.193,
+      "end": 42.455
+    },
+    {
+      "label": "No guardrail",
+      "speed": 1,
+      "start": 45.455,
+      "end": 56.262
+    },
+    {
+      "label": "Guardrail on",
+      "speed": 1,
+      "start": 60.262,
+      "end": 73.186
+    },
+    {
+      "label": "Guardrail",
+      "speed": 1,
+      "start": 78.186,
+      "end": 83.026
+    },
+    {
+      "label": "Strength",
+      "speed": 1,
+      "start": 91.026,
+      "end": 102.057
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 108.057,
+      "end": 119.573
+    },
+    {
+      "label": "Mask",
+      "speed": 1,
+      "start": 126.573,
+      "end": 139.089
+    },
+    {
+      "label": "Grounding",
+      "speed": 1,
+      "start": 146.089,
+      "end": 150.335
+    },
+    {
+      "label": "Request",
+      "speed": 1,
+      "start": 157.335,
+      "end": 162.756
+    },
+    {
+      "label": "Request tuned",
+      "speed": 1,
+      "start": 169.756,
+      "end": 174.444
+    },
+    {
+      "label": "IAM",
+      "speed": 1,
+      "start": 180.444,
+      "end": 184.025
+    },
+    {
+      "label": "One run",
+      "speed": 1,
+      "start": 191.025,
+      "end": 204.592
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.268,
+      "what": "type"
+    },
+    {
+      "t": 16.007,
+      "what": "type"
+    },
+    {
+      "t": 25.656,
+      "what": "type"
+    },
+    {
+      "t": 35.202,
+      "what": "type"
+    },
+    {
+      "t": 40.793,
+      "what": "type"
+    },
+    {
+      "t": 46.055,
+      "what": "type"
+    },
+    {
+      "t": 60.862,
+      "what": "type"
+    },
+    {
+      "t": 78.786,
+      "what": "type"
+    },
+    {
+      "t": 91.626,
+      "what": "type"
+    },
+    {
+      "t": 108.657,
+      "what": "type"
+    },
+    {
+      "t": 127.174,
+      "what": "type"
+    },
+    {
+      "t": 146.689,
+      "what": "type"
+    },
+    {
+      "t": 157.935,
+      "what": "type"
+    },
+    {
+      "t": 170.356,
+      "what": "type"
+    },
+    {
+      "t": 181.045,
+      "what": "type"
+    },
+    {
+      "t": 191.625,
+      "what": "type"
+    }
+  ],
+  "end": 210.592
+}
