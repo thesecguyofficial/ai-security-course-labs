@@ -1,0 +1,72 @@
+{
+  "name": "m29-29.7-linux",
+  "lesson": "29.7",
+  "title": "Lab 29.7, part 2 and 3: 15 cases against the first draft, the first-draft honeytoken rule opened, the decoy's read-only calls, the shadow-AI hunt, the responder against the clock, a poisoned alert meeting the triage agent, every changed setting, the hardened setup, the unexpected-network rule, the tests and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
+    "cd ai-security-course-labs/labs/m29 && make setup"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "First draft",
+      "type": "cd ai-security-course-labs/labs/m29 && make first-draft",
+      "pause_after": 7
+    },
+    {
+      "label": "Draft rule",
+      "type": "cat setups/first-draft/rules/honeytoken.json",
+      "pause_after": 6
+    },
+    {
+      "label": "Story",
+      "type": "make story",
+      "pause_after": 7
+    },
+    {
+      "label": "Hunt",
+      "type": "make hunt",
+      "pause_after": 8
+    },
+    {
+      "label": "Respond",
+      "type": "make respond",
+      "pause_after": 8
+    },
+    {
+      "label": "Triage",
+      "type": "make triage",
+      "pause_after": 8
+    },
+    {
+      "label": "Compare",
+      "type": ".venv/bin/python explore.py compare",
+      "pause_after": 8
+    },
+    {
+      "label": "Hardened",
+      "type": "make hardened",
+      "pause_after": 6
+    },
+    {
+      "label": "Network rule",
+      "type": "cat setups/hardened/rules/unexpected-network.json",
+      "pause_after": 6
+    },
+    {
+      "label": "Tests",
+      "type": "make test 2>&1 | tail -n 3",
+      "pause_after": 4
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | grep -E 'challenge|TESTS'",
+      "pause_after": 6
+    }
+  ]
+}
