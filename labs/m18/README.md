@@ -47,6 +47,8 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | File | What it is |
 |---|---|
 | `govlab.py` | The toolkit: `inventory`, `triage`, `check`, `crosswalk`, `evidence`, `pack`, `verify-pack`, `start` |
+| `explore.py` | The read-only helper for Step 1b: one idea at a time (kinds of document, an inventory entry, a risk row, a control, an evidence item). It writes no file and runs nothing |
+| `Makefile` | Short commands for Mac and Linux (`make check`, `make inventory` ...); `make -n <target>` shows what one would run |
 | `helpdesk/system-card.json` | TSG Helpdesk 2.0: components, tools, data, features, EU AI Act facts, and the status of every course control |
 | `helpdesk/chat-widget.html` | The chat widget; `id="greeting"` is the first message every customer sees |
 | `catalog/controls.json` | The 32 controls this course teaches (C01 to C27, G01 to G05), where each was taught, what proves it, and its mapping to NIST AI RMF, the EU AI Act, ISO/IEC 42001 and OWASP 2026 |
@@ -64,7 +66,9 @@ confirms the result, and you record who confirmed it.
 
 ## Needs
 
-- Python **3.11 or newer**: `python3 --version`. No packages, no internet.
+- Python **3.11 or newer**: `python3 --version`, or `make check` (Windows: `py --version`). No packages, no internet.
+  There is no setup step: the lab uses only Python's standard library, so there is nothing for `pip` to install and
+  no virtual environment to create.
 - Mac or Linux for the `make` shortcuts. Windows: run the `py govlab.py ...` command shown under each step (or
   `python` instead of `py`).
 - A text editor, and a spreadsheet app if you prefer editing CSV files in a grid (save as CSV, UTF-8).
@@ -103,6 +107,127 @@ An inventory lists **components**, not just "the chatbot": two models, an embedd
 server and a memory store. Each can change on its own, and each has its own supply-chain risk (Module 9). One gap
 already: nobody has checked the embedding model's licence. Open `out/ai-inventory.csv` to see the full rows. This is
 NIST AI RMF **GOVERN 1.6** ("mechanisms are in place to inventory AI systems").
+
+## Step 1b · Look at each governance idea on its own (about 10 minutes)
+
+New to governance? Do this first. `explore.py` shows, one at a time, the ideas `govlab.py` is built on. It only
+reads the lab's files: it writes nothing, starts no program and uses no network. Windows: `py explore.py ...`.
+The output below is from a fresh Ubuntu machine (recording run 41008583415).
+
+**1. Four kinds of document.** A framework is voluntary advice, a standard can be certified, a law binds, and the
+OWASP lists are community checklists. The lab maps every control to all four:
+
+```bash
+python3 explore.py kinds
+```
+
+```output
+Four kinds of document this lab maps controls to (catalog/frameworks.json)
+
+framework  NIST AI RMF 1.0 (NIST AI 100-1, Jan 2023) subcategories
+           voluntary: guidance you choose from; nobody has to use it
+           28 items in this lab's catalogue · https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf
+
+standard   ISO/IEC 42001:2023, AI management system (clause level; Annex A reference controls come from your licensed copy)
+           certifiable: an accredited auditor can certify an organisation against it
+           7 items in this lab's catalogue · https://www.iso.org/standard/42001
+...
+```
+
+**2. One inventory entry.** An inventory lists every part of a system, not just "the chatbot":
+
+```bash
+python3 explore.py inventory
+```
+
+```output
+AI inventory entry 4 of 7 (helpdesk/system-card.json, "components")
+
+  system     TSG Helpdesk 2.0, production since 2026-05-01
+  owners     business: Head of Customer Support · technical: Platform engineering lead
+  type       embedding_model                what kind of part it is
+  name       Local embedding model (Module 6)
+  version    pinned by hash                 which exact build runs
+  hosting    self-hosted                    where it runs
+  licence    unknown                        <- a gap: nobody has checked what this licence allows
+
+One row per part, not one per app: 7 parts here (application, embedding_model, mcp_server, memory, model, vector_store).
+```
+
+**3. One risk register row, scored.** Risk = likelihood × impact, each 1 to 3. *Inherent* is the score before any
+control; *residual* is the score after the controls really in place. The grid marks both:
+
+```bash
+python3 explore.py risk R1
+```
+
+```output
+Risk R1 from first-draft/risk-register.csv, column by column
+
+  title       Injected ticket text makes the bot refund or email
+  source      RS01: Injected text (chat, ticket, document) steers a tool call: refunds, emails, tickets
+  owner       Platform engineering lead
+  likelihood  3    how likely, 1 to 3
+  impact      3    how bad, 1 to 3
+  inherent    3 x 3 = 9    likelihood x impact, before any control
+  treatment   mitigate     one of mitigate, transfer, avoid, accept (NIST AI RMF MANAGE 1.3)
+  controls    C01 implemented, C02 implemented, C03 implemented, C04 implemented, C05 implemented
+  residual    1 x 2 = 2    after the controls really in place
+  accepted by (blank)      needed above 3 (the AI policy's risk appetite)
+  review      2027-01-24 (92 days after the assessment on 2026-10-24)
+  owasp       LLM01;LLM03:2026;ASI02
+  notes       M7 controls in place
+
+  Likelihood x impact, I = inherent, R = residual (status of each control: helpdesk/system-card.json)
+  impact 3 |  .    .    I
+  impact 2 |  R    .    .
+  impact 1 |  .    .    .
+            L1   L2   L3
+```
+
+Notice `LLM01` without a year: Step 3's checker flags it (REG-06). Try `risk R5` and `risk R6` too: they are two of
+the draft's worst rows.
+
+**4. One control, many rulebooks.** A crosswalk maps each control to the items it supports in each framework:
+
+```bash
+python3 explore.py control C24
+```
+
+```output
+Control C24 (catalog/controls.json): Tell people they are chatting with an AI, from the first message
+  taught in   lesson 18.2
+  status      planned in TSG Helpdesk (helpdesk/system-card.json)
+  proved by   the live greeting text (or a screenshot of it)
+
+  maps to
+  nist_ai_rmf  MEASURE 2.8  Risks associated with transparency and accountability are examined and documented.
+  iso_42001    Clause 8     Operation (running the controls)
+  eu_ai_act    Art. 50      Transparency obligations for providers and deployers of certain AI systems
+  owasp        (none mapped)
+```
+
+**5. One evidence item, checked.** Evidence is a dated, owned file. Its SHA-256 hash, written in the index when it
+was collected, proves it is still the same file:
+
+```bash
+python3 explore.py evidence E01
+```
+
+```output
+Evidence row E01 from first-draft/evidence-index.csv
+
+  control      C01
+  file         evidence/2026-10-20-m07-agent-controls-test.txt
+  owner        AppSec lead
+  collected    2026-10-20
+  sha256 then  cff000aa90b51c655c9d6b4f16ad73ac36b1559795a98156080b775b046ddccd   (written in the index)
+  sha256 now   cff000aa90b51c655c9d6b4f16ad73ac36b1559795a98156080b775b046ddccd   (same: unchanged since it was indexed)
+  age          4 days before the assessment on 2026-10-24 (the lab allows 90)
+...
+```
+
+Now try `python3 explore.py evidence E03`: the two hashes differ. Step 3 shows why that matters.
 
 ## Step 2 · EU AI Act triage (18.2)
 
