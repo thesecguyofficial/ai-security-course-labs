@@ -1,0 +1,31 @@
+{
+  "name": "m14-14.8-linux",
+  "lesson": "14.2, 14.3, 14.4, 14.5, 14.6, 14.7, 14.8",
+  "title": "Lab 14.8, parts 2 and 3: review the first-draft AgentCore deployment of the TSG Helpdesk (27 findings), open the planted ticket, run 12 attacks and 7 normal requests, watch an injection run in LOG_ONLY and a forged user ID fetch another user's token, check and attack the hardened setup, replay the injection, ask the Cedar engine and the JWT authorizer, break one setting on purpose, hunt the incident, run the tests and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": ["Traceback", "No such file"],
+  "steps": [
+    {"label": "Check high", "type": "cd ai-security-course-labs/labs/m14 && python3 checker.py first-draft | grep HIGH", "pause_after": 8},
+    {"label": "Check rest", "type": "python3 checker.py first-draft | grep -v HIGH", "pause_after": 7},
+    {"label": "Planted ticket", "type": "grep -A1 '\"4711\"' data/tickets.json", "pause_after": 5},
+    {"label": "Attack", "type": "make attack", "pause_after": 8},
+    {"label": "Injection", "type": "python3 helpdesk.py first-draft bob \"What's the latest on ticket 4711?\"", "pause_after": 6},
+    {"label": "Forged user", "type": "python3 helpdesk.py first-draft bob \"Show my tickets\" --user-id alice", "pause_after": 6},
+    {"label": "Check hardened", "type": "make check-hardened", "pause_after": 5},
+    {"label": "Hardened", "type": "make hardened", "pause_after": 8},
+    {"label": "Replay", "type": "python3 helpdesk.py hardened bob \"What's the latest on ticket 4711?\"", "pause_after": 6},
+    {"label": "Caller policy", "type": "cat setups/hardened/policies/caller_must_be_signed_in_user.cedar", "pause_after": 6},
+    {"label": "Cedar default deny", "type": "python3 cedar.py setups/hardened/policies bob reset_mfa '{\"target_username\": \"ceo\", \"caller_username\": \"bob\"}'", "pause_after": 5},
+    {"label": "Cedar forbid wins", "type": "python3 cedar.py setups/hardened/policies alice reset_mfa '{\"target_username\": \"breakglass-admin\", \"caller_username\": \"alice\"}'", "pause_after": 5},
+    {"label": "Authorizers", "type": "python3 twin.py authorize first-draft gateway partner-portal dana; python3 twin.py authorize hardened gateway partner-portal dana", "pause_after": 5},
+    {"label": "Break it", "type": "sed -i 's/\"ENFORCE\"/\"LOG_ONLY\"/' setups/hardened/gateway.json && make hardened | grep -E 'A1 |worked:'", "pause_after": 6},
+    {"label": "Undo", "type": "git checkout setups/ && make hardened | tail -1", "pause_after": 5},
+    {"label": "Hunt", "type": "make hunt", "pause_after": 8},
+    {"label": "Tests", "type": "make test | tail -6", "pause_after": 5},
+    {"label": "Challenge", "type": "make challenge 2>&1 | tail -12", "pause_after": 6}
+  ]
+}
