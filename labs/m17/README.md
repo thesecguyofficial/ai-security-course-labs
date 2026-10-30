@@ -444,7 +444,7 @@ Now open `.github/workflows/m17-security-evals.yml` at the repo root and read th
   not pinned.
 - promptfoo itself is pinned in `run_eval.py` (`promptfoo@0.124.1`), and `run_eval.py` ignores
   `PROMPTFOO_PASS_RATE_THRESHOLD`. Try it: with `PROMPTFOO_PASS_RATE_THRESHOLD=90`, promptfoo exits 0 on the R1 build
-  (10 of 11 passed, 90.91%), so a real data leak would merge. Security tests get no threshold.
+  (10 of 11 passed, 90.91%), so a real data leak would merge. Security tests keep the threshold at 100%.
 
 Then do it for real, in your own fork:
 
