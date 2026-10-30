@@ -1,0 +1,90 @@
+{
+  "name": "m25-25.6-linux",
+  "lesson": "25.6",
+  "title": "Lab 25.6, part 2: 7 supply-chain attacks against the first-draft CI and deploy gate, the attacker's re-signing opened, one attack step by step, the two deploy.json and ci.json files, a community quant through both CI jobs, an unreviewed fine-tune that passes every eval, the hardened gate, one signed release verified from the command line, a morning's deploy logs, the tests and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
+    "cd ai-security-course-labs/labs/m25 && make setup"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Attack",
+      "type": "cd ai-security-course-labs/labs/m25 && make attack",
+      "pause_after": 7
+    },
+    {
+      "label": "Attack file",
+      "type": "sed -n '/^def a4/,/^$/p' suite.py",
+      "pause_after": 5
+    },
+    {
+      "label": "Story",
+      "type": "make story",
+      "pause_after": 7
+    },
+    {
+      "label": "Two deploy.json",
+      "type": "diff -y -t -W 130 --suppress-common-lines <(grep -v '\"_' setups/first-draft/deploy.json) <(grep -v '\"_' setups/hardened/deploy.json)",
+      "pause_after": 6,
+      "speed": 2
+    },
+    {
+      "label": "Two ci.json",
+      "type": "diff -y -t -W 130 --suppress-common-lines <(grep -v '\"_' setups/first-draft/ci.json) <(grep -v '\"_' setups/hardened/ci.json)",
+      "pause_after": 5,
+      "speed": 2
+    },
+    {
+      "label": "Quant gate",
+      "type": "make quant-gate",
+      "pause_after": 7
+    },
+    {
+      "label": "Per slice",
+      "type": ".venv/bin/python gates.py models/community-quant",
+      "pause_after": 5
+    },
+    {
+      "label": "Lineage",
+      "type": "make lineage-demo",
+      "pause_after": 6
+    },
+    {
+      "label": "Hardened",
+      "type": "make hardened",
+      "pause_after": 6
+    },
+    {
+      "label": "Deploy",
+      "type": "make deploy",
+      "pause_after": 5
+    },
+    {
+      "label": "Verify",
+      "type": ".venv/bin/model_signing verify key release/1.1.0-hardened/model --signature release/1.1.0-hardened/model.sig --public_key keys/ci.pub",
+      "pause_after": 5,
+      "speed": 2
+    },
+    {
+      "label": "Hunt",
+      "type": "make hunt",
+      "pause_after": 7
+    },
+    {
+      "label": "Tests",
+      "type": "make test 2>&1 | tail -n 3",
+      "pause_after": 4
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | grep -E 'challenge|TESTS'",
+      "pause_after": 6
+    }
+  ]
+}
