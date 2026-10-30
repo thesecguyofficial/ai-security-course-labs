@@ -82,7 +82,7 @@ reporting both numbers.
 ## Step 1b · Before you attack: look at each piece (about 10 minutes)
 
 New to Bedrock Guardrails? Do this before Step 1 (lesson 12.5 and its videos call it Step 1b). `explore.py` shows each
-piece of a guardrail on its own. Real output below is from a fresh Ubuntu machine (recording run 41115471759).
+piece of a guardrail on its own. Real output below is from a fresh Ubuntu machine (recording run 41121403341).
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `guardrails/`, `app/` and
 `policies/`, asks `guardrail_twin.py` (the lab's offline stand-in for Bedrock Guardrails) and prints. No network, no AWS
