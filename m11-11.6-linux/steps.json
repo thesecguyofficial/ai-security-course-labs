@@ -1,0 +1,149 @@
+{
+  "scenario": "m11-11.6-linux",
+  "start": 1.667,
+  "steps": [
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 1.667,
+      "end": 7.157
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 10.158,
+      "end": 13.771
+    },
+    {
+      "label": "Check rest",
+      "speed": 1,
+      "start": 21.771,
+      "end": 26.757
+    },
+    {
+      "label": "Draft",
+      "speed": 1,
+      "start": 32.757,
+      "end": 39.603
+    },
+    {
+      "label": "Draft NAT",
+      "speed": 1,
+      "start": 45.603,
+      "end": 60.133
+    },
+    {
+      "label": "Attack A",
+      "speed": 1,
+      "start": 66.133,
+      "end": 71.453
+    },
+    {
+      "label": "Attack B",
+      "speed": 1,
+      "start": 79.453,
+      "end": 85.001
+    },
+    {
+      "label": "Fix endpoint",
+      "speed": 1,
+      "start": 93.001,
+      "end": 98.93
+    },
+    {
+      "label": "Fix role",
+      "speed": 1,
+      "start": 104.93,
+      "end": 110.629
+    },
+    {
+      "label": "Check fixed",
+      "speed": 1,
+      "start": 116.629,
+      "end": 119.731
+    },
+    {
+      "label": "Safe A",
+      "speed": 1,
+      "start": 123.732,
+      "end": 130.962
+    },
+    {
+      "label": "Safe B",
+      "speed": 1,
+      "start": 138.962,
+      "end": 146.281
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 154.281,
+      "end": 157.756
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 163.756,
+      "end": 168.466
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.267,
+      "what": "type"
+    },
+    {
+      "t": 10.758,
+      "what": "type"
+    },
+    {
+      "t": 22.372,
+      "what": "type"
+    },
+    {
+      "t": 33.357,
+      "what": "type"
+    },
+    {
+      "t": 46.203,
+      "what": "type"
+    },
+    {
+      "t": 66.733,
+      "what": "type"
+    },
+    {
+      "t": 80.053,
+      "what": "type"
+    },
+    {
+      "t": 93.601,
+      "what": "type"
+    },
+    {
+      "t": 105.53,
+      "what": "type"
+    },
+    {
+      "t": 117.229,
+      "what": "type"
+    },
+    {
+      "t": 124.332,
+      "what": "type"
+    },
+    {
+      "t": 139.562,
+      "what": "type"
+    },
+    {
+      "t": 154.881,
+      "what": "type"
+    },
+    {
+      "t": 164.356,
+      "what": "type"
+    }
+  ],
+  "end": 175.466
+}
