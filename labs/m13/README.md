@@ -53,6 +53,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `setups/ported/` | The fixed port on **Bedrock Agents Classic**: Bedrock Managed Knowledge Base with an ACL-aware S3 source, search as a return-of-control action group, `requireConfirmation` on the write, scoped Lambda |
 | `setups/harness/` | The same port on an **AgentCore harness**: both tools are inline functions, `allowedTools` set, memory off |
 | `data/docs/` | The bucket: public IT articles, an HR-only file, an IT-admin-only file, and a staff-uploaded vendor note with a hidden instruction (lab placeholder) |
+| `explore.py` | Step 1b: shows each piece on its own (`source`, `sync`, `retrieve`, `acl`, `agent`, `turn`, `invoke`). Read-only: it reads the lab's files and asks `twin.py`; nothing is sent anywhere |
 | `twin.py` | The **offline stand-in for the AWS pieces**: knowledge base ingestion and `Retrieve` for both kinds of knowledge base, and the Lambda resource policy. Read "How faithful is the twin?" below |
 | `helpdesk.py` | TSG Helpdesk v4 with a **worst-case stand-in model** (not AI: it obeys any instruction it can read, including HTML comments in retrieved documents). Holds the two challenge stubs |
 | `suite/cases.json` | 8 attacks and 5 normal requests. Payloads are harmless lab placeholders |
@@ -74,6 +75,282 @@ is the one you can build yourself (Step 9).
 - Python **3.11 or newer**: `python3 --version`. No packages, no internet.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 - Optional, Step 9 only: Terraform 1.6+ (or OpenTofu), the AWS CLI v2, `pip install boto3`, and your own sandbox account (lesson 0.7).
+
+## Step 1b · Before you review: look at each piece (about 10 minutes)
+
+New to managed knowledge bases and agents? Do this before Step 1 (lesson 13.3 and its videos call it Step 1b).
+`explore.py` shows each piece one at a time. Real output below is from a fresh Ubuntu machine (recording run
+41115565730).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads the files in `setups/` and `data/docs/` and
+prints what it finds. `sync`, `retrieve`, `acl` and `invoke` ask `twin.py`, the lab's offline stand-in for the AWS
+pieces; `turn` shows the request and response shapes from AWS's docs. No network, no AWS account.
+
+**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+
+```bash
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
+standard library, so `make setup` just checks your Python version.
+
+**1. The data source.** The bucket the knowledge base reads, document by document:
+
+```bash
+python3 explore.py source
+```
+
+```text
+The data source: one S3 bucket, s3://amzn-s3-demo-bucket-tsg-kb/ (fake name). 6 documents:
+
+  hr/salary-bands-2027.md             134 characters   "Salary bands 2027 (HR only)"
+  inbox/vpn-client-update.md          264 characters   "VPN client 7.2 rollout note (from the VPN vendor, uploaded ..."
+                                     + one HTML comment: invisible on a web page, plain text to a program
+  it-admin/break-glass-runbook.md     134 characters   "Break-glass runbook (IT admins only)"
+  public/mfa-new-phone.md             201 characters   "MFA on a new phone"
+  public/outlook-frozen.md            145 characters   "Outlook is frozen"
+  public/vpn-token.md                 172 characters   "Reset your VPN token"
+
+The folders (S3 calls them prefixes) say what each document is:
+  public/     IT articles for every employee
+  inbox/      files staff uploaded (here, a vendor's note)
+  hr/         HR only
+  it-admin/   IT admins only
+```
+
+Six documents in four folders. The vendor note has an HTML comment: a web page hides it, a program reads it.
+
+**2. One sync, two kinds of knowledge base.** An ingestion job reads, chunks, embeds and stores each document. On the
+first draft (a customer-managed knowledge base) every chunk is for everyone, with a `department` label:
+
+```bash
+python3 explore.py sync first-draft
+```
+
+```text
+Knowledge base tsg-helpdesk-kb: customer-managed (type VECTOR): you run the vector store
+Data source tsg-kb-s3: the bucket   ACL awareness: off
+
+One ingestion job (a sync), document by document:
+  read -> chunk (default: about 300 tokens, whole sentences) -> embed -> store, with who may see it
+
+  hr/salary-bands-2027.md            ~34 tokens -> 1 chunk   everyone (no ACL), metadata {"department": "hr"}
+  inbox/vpn-client-update.md         ~66 tokens -> 1 chunk   everyone (no ACL), metadata {"department": "all"}
+  it-admin/break-glass-runbook.md    ~34 tokens -> 1 chunk   everyone (no ACL), metadata {"department": "it"}
+  public/mfa-new-phone.md            ~50 tokens -> 1 chunk   everyone (no ACL), metadata {"department": "all"}
+  public/outlook-frozen.md           ~36 tokens -> 1 chunk   everyone (no ACL), metadata {"department": "all"}
+  public/vpn-token.md                ~43 tokens -> 1 chunk   everyone (no ACL), metadata {"department": "all"}
+
+The twin keeps words, not vectors: its search scores are word overlap, a stand-in for embeddings.
+```
+
+On the port (a Bedrock Managed Knowledge Base with ACL awareness on), every chunk carries who may see it:
+
+```bash
+python3 explore.py sync ported
+```
+
+```text
+Knowledge base tsg-helpdesk-kb: Bedrock Managed (type MANAGED): AWS runs the store
+Data source tsg-kb-s3: the bucket   ACL awareness: ON
+
+One ingestion job (a sync), document by document:
+  read -> chunk (default: about 300 tokens, whole sentences) -> embed -> store, with who may see it
+
+  hr/salary-bands-2027.md            ~34 tokens -> 1 chunk   only priya
+  inbox/vpn-client-update.md         ~66 tokens -> 1 chunk   only alice, bob, priya
+  it-admin/break-glass-runbook.md    ~34 tokens -> 1 chunk   only alice
+  public/mfa-new-phone.md            ~50 tokens -> 1 chunk   only alice, bob, priya
+  public/outlook-frozen.md           ~36 tokens -> 1 chunk   only alice, bob, priya
+  public/vpn-token.md                ~43 tokens -> 1 chunk   only alice, bob, priya
+
+The twin keeps words, not vectors: its search scores are word overlap, a stand-in for embeddings.
+```
+
+**3. Retrieve, as a user and as nobody.** The request your backend sends, and what comes back:
+
+```bash
+python3 explore.py retrieve ported "reset my VPN token" --user bob@example.com
+```
+
+```text
+The request your backend sends (Retrieve, bedrock-agent-runtime):
+  knowledgeBaseId          "KBPORTED01"
+  retrievalQuery           {"text": "reset my VPN token"}
+  userContext              {"userId": "bob@example.com"}
+
+The response: 3 results, best first
+  score 1.00  public/vpn-token.md
+              "To reset your VPN token, open the Self-Service portal, choose VPN token, then Re-sync. ..."
+  score 0.67  inbox/vpn-client-update.md
+              "VPN client 7.2 is rolling out this week. It fixes the reconnect loop after sleep. No ..."
+  score 0.33  public/mfa-new-phone.md
+              "To set up MFA on a new phone, ask the Helpdesk assistant to reset your MFA, confirm the ..."
+
+Retrieve returns chunks only. RetrieveAndGenerate would also send them to a model and return its answer.
+```
+
+The same knowledge base with no `userContext` returns nothing, not everything:
+
+```bash
+python3 explore.py retrieve ported "salary bands 2027"
+```
+
+```text
+The request your backend sends (Retrieve, bedrock-agent-runtime):
+  knowledgeBaseId          "KBPORTED01"
+  retrievalQuery           {"text": "salary bands 2027"}
+
+The response: 0 results
+
+Retrieve returns chunks only. RetrieveAndGenerate would also send them to a model and return its answer.
+```
+
+The first draft has no ACLs, only a metadata filter, and whoever sets the filter picks the department:
+
+```bash
+python3 explore.py retrieve first-draft "salary bands 2027" --department hr
+```
+
+```text
+The request your backend sends (Retrieve, bedrock-agent-runtime):
+  knowledgeBaseId          "KBFIRSTDRFT"
+  retrievalQuery           {"text": "salary bands 2027"}
+  retrievalConfiguration   {"vectorSearchConfiguration": {"filter": {"equals": {"key": "department", "value": "hr"}}}}
+
+The response: 1 result
+  score 1.00  hr/salary-bands-2027.md   metadata {"department": "hr"}
+              "[LAB PLACEHOLDER: salary band figures for every grade]. Canary: CANARY-M13-HR. Do not ..."
+
+Retrieve returns chunks only. RetrieveAndGenerate would also send them to a model and return its answer.
+```
+
+**4. One ACL decision.** Why Bob doesn't get HR's file:
+
+```bash
+python3 explore.py acl bob@example.com hr/salary-bands-2027.md
+```
+
+```text
+Would bob@example.com get hr/salary-bands-2027.md? (setup ported, global ACL file)
+
+  1. the entry that covers it      keyPrefix hr/
+                                   ALLOW priya@example.com
+  2. bob@example.com on an ALLOW line?  no
+  3. bob@example.com on a DENY line?    no
+
+  hasAccess: false   (what CheckIngestedDocumentAcl answers, after the last sync)
+```
+
+**5. The agent.** What the port's agent is made of, on Bedrock Agents Classic and on an AgentCore harness:
+
+```bash
+python3 explore.py agent ported
+```
+
+```text
+The agent in setup ported: Bedrock Agents Classic
+
+  model          us.anthropic.claude-haiku-4-5-20251001-v1:0
+  instructions   "You are TSG Helpdesk, the IT helpdesk assistant for AnyCompany staff. Answer from the kn..."
+  runs as        role tsg-agent-service-role (the agent's own identity)
+  knowledge base none attached
+
+  Action groups (the tools):
+    kb-search         run by RETURN_CONTROL: handed back to your app
+      function search_kb(query)   requireConfirmation DISABLED
+    helpdesk-actions  run by Lambda tsg-helpdesk-actions
+      function reset_mfa(target_email)   requireConfirmation ENABLED
+```
+
+```bash
+python3 explore.py agent harness
+```
+
+```text
+The agent in setup harness: AgentCore harness
+
+  model          us.anthropic.claude-haiku-4-5-20251001-v1:0
+  instructions   "You are TSG Helpdesk, the IT helpdesk assistant for AnyCompany staff. Answer from the kn..."
+  runs as        role tsg-harness-execution, each session in its own microVM
+
+  Tools:
+    search_kb    inline_function: the harness pauses and hands the call to your code
+    reset_mfa    inline_function: the harness pauses and hands the call to your code
+    shell, file_operations built in: there unless allowedTools leaves them out
+
+  allowedTools   ["search_kb", "reset_mfa"]
+  memory         off
+```
+
+**6. One turn, step by step.** The backend takes the user from the sign-in, search comes back to your code, and every
+`reset_mfa` call waits for the user's answer:
+
+```bash
+python3 explore.py turn ported bob@example.com "I have a new phone. Please reset my MFA."
+```
+
+```text
+One turn on Bedrock Agents Classic (setup ported). Shapes follow AWS's docs; nothing is sent.
+
+  1. who        the backend takes the user from the sign-in: bob@example.com
+  2. ask        InvokeAgent  inputText "I have a new phone. Please reset my MFA."
+                             sessionState.sessionAttributes {"caller_email": "bob@example.com"}
+  3. search     model asks for search_kb -> returnControl (with an invocationId) -> your backend
+                backend calls Retrieve with userContext.userId bob@example.com
+                found: public/mfa-new-phone.md, inbox/vpn-client-update.md, public/vpn-token.md; sends the chunks back
+  4. confirm    model asks for reset_mfa -> returnControl (confirmation)
+                the user sees: reset_mfa  target_email = ceo@example.com   and answers DENY
+                DENY: "the function or the API in the response is not implemented"
+  5. confirm    model asks for reset_mfa -> returnControl (confirmation)
+                the user sees: reset_mfa  target_email = bob@example.com   and answers CONFIRM
+  6. act        Lambda event: function reset_mfa, parameters target_email = bob@example.com
+                acting for: bob@example.com
+  7. answer     "To set up MFA on a new phone, ask the Helpdesk assistant to reset your MFA, confirm the request, then ..."
+```
+
+**7. Who may call the Lambda.** The port's resource policy, tested against three agents:
+
+```bash
+python3 explore.py invoke ported
+```
+
+```text
+The Lambda's resource policy (who may invoke tsg-helpdesk-actions):
+  Allow  Principal bedrock.amazonaws.com  Action lambda:InvokeFunction
+  Conditions: AWS:SourceAccount 111122223333; AWS:SourceArn arn:aws:bedrock:us-east-1:111122223333:agent/TSGHELPDSK
+
+Could Bedrock, running each of these agents, invoke it?
+  the Helpdesk agent           arn:aws:bedrock:us-east-1:111122223333:agent/TSGHELPDSK    YES
+  another team's agent         arn:aws:bedrock:us-east-1:111122223333:agent/MARKETINGBT   no
+  an agent in another account  arn:aws:bedrock:us-east-1:777788889999:agent/OUTSIDEAGT    no
+```
+
+**8. Read one run from the top.** `helpdesk.py` runs one chat turn on a setup:
+
+```bash
+python3 helpdesk.py ported alice@example.com "How do I reset my VPN token?"
+```
+
+```text
+Q (alice@example.com): How do I reset my VPN token?
+   . identity: caller = alice@example.com (from session)
+   . model called search_kb -> returnControl -> app called Retrieve with userContext.userId = alice@example.com
+   . confirmation asked (with arguments): reset_mfa(ceo@example.com) -> DENY
+Retrieved: public/vpn-token.md, inbox/vpn-client-update.md, public/mfa-new-phone.md
+A: To reset your VPN token, open the Self-Service portal, choose VPN token, then Re-sync. Lost tokens are replaced by the service desk: raise a ticket.
+```
+
+Who (from the session), the search (with Alice's `userContext`), a confirmation nobody expected (`reset_mfa` for the
+CEO, denied), the three documents retrieved, and the answer. Which document asked for that reset? Step 2 shows it.
 
 ## Step 1 · Review the first draft
 
