@@ -1,0 +1,129 @@
+{
+  "scenario": "m18-18.4-understand-linux",
+  "start": 1.721,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.721,
+      "end": 12.083
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.083,
+      "end": 20.733
+    },
+    {
+      "label": "The folders",
+      "speed": 1,
+      "start": 24.733,
+      "end": 30.206
+    },
+    {
+      "label": "The evidence",
+      "speed": 1,
+      "start": 34.206,
+      "end": 36.501
+    },
+    {
+      "label": "Look first",
+      "speed": 1,
+      "start": 40.501,
+      "end": 44.35
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 48.35,
+      "end": 50.549
+    },
+    {
+      "label": "Kinds",
+      "speed": 1,
+      "start": 53.549,
+      "end": 57.51
+    },
+    {
+      "label": "Inventory entry",
+      "speed": 1,
+      "start": 64.51,
+      "end": 68.811
+    },
+    {
+      "label": "Risk row",
+      "speed": 1,
+      "start": 74.811,
+      "end": 78.878
+    },
+    {
+      "label": "Control",
+      "speed": 1,
+      "start": 85.878,
+      "end": 90.538
+    },
+    {
+      "label": "Evidence",
+      "speed": 1,
+      "start": 96.539,
+      "end": 101.119
+    },
+    {
+      "label": "One run",
+      "speed": 1,
+      "start": 107.119,
+      "end": 109.76
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.321,
+      "what": "type"
+    },
+    {
+      "t": 15.683,
+      "what": "type"
+    },
+    {
+      "t": 25.334,
+      "what": "type"
+    },
+    {
+      "t": 34.806,
+      "what": "type"
+    },
+    {
+      "t": 41.101,
+      "what": "type"
+    },
+    {
+      "t": 48.95,
+      "what": "type"
+    },
+    {
+      "t": 54.149,
+      "what": "type"
+    },
+    {
+      "t": 65.11,
+      "what": "type"
+    },
+    {
+      "t": 75.411,
+      "what": "type"
+    },
+    {
+      "t": 86.478,
+      "what": "type"
+    },
+    {
+      "t": 97.139,
+      "what": "type"
+    },
+    {
+      "t": 107.719,
+      "what": "type"
+    }
+  ],
+  "end": 115.76
+}

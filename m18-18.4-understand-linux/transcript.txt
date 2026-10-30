@@ -1,0 +1,357 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 4107, done.
+remote: Counting objects:  50% (1/2)
+remote: Counting objects: 100% (2/2)
+remote: Counting objects: 100% (2/2), done.
+Receiving objects:   0% (1/4107)
+Receiving objects:   1% (42/4107)
+Receiving objects:   2% (83/4107)
+Receiving objects:   3% (124/4107)
+Receiving objects:   4% (165/4107)
+Receiving objects:   5% (206/4107)
+Receiving objects:   6% (247/4107)
+Receiving objects:   7% (288/4107)
+Receiving objects:   8% (329/4107)
+Receiving objects:   9% (370/4107)
+Receiving objects:  10% (411/4107)
+Receiving objects:  11% (452/4107)
+Receiving objects:  12% (493/4107)
+Receiving objects:  13% (534/4107)
+Receiving objects:  14% (575/4107)
+Receiving objects:  15% (617/4107)
+Receiving objects:  16% (658/4107)
+Receiving objects:  17% (699/4107)
+Receiving objects:  18% (740/4107)
+Receiving objects:  19% (781/4107)
+Receiving objects:  20% (822/4107)
+Receiving objects:  21% (863/4107)
+Receiving objects:  22% (904/4107)
+Receiving objects:  23% (945/4107)
+Receiving objects:  24% (986/4107)
+Receiving objects:  25% (1027/4107)
+Receiving objects:  26% (1068/4107)
+Receiving objects:  27% (1109/4107)
+Receiving objects:  28% (1150/4107)
+Receiving objects:  29% (1192/4107)
+Receiving objects:  30% (1233/4107)
+Receiving objects:  31% (1274/4107)
+Receiving objects:  32% (1315/4107)
+Receiving objects:  33% (1356/4107)
+Receiving objects:  34% (1397/4107)
+Receiving objects:  35% (1438/4107)
+Receiving objects:  36% (1479/4107)
+Receiving objects:  37% (1520/4107)
+Receiving objects:  38% (1561/4107)
+Receiving objects:  39% (1602/4107)
+Receiving objects:  40% (1643/4107)
+Receiving objects:  41% (1684/4107)
+Receiving objects:  42% (1725/4107)
+Receiving objects:  43% (1767/4107)
+Receiving objects:  44% (1808/4107)
+Receiving objects:  45% (1849/4107)
+Receiving objects:  46% (1890/4107)
+Receiving objects:  47% (1931/4107)
+Receiving objects:  48% (1972/4107)
+Receiving objects:  49% (2013/4107)
+Receiving objects:  50% (2054/4107)
+Receiving objects:  51% (2095/4107)
+Receiving objects:  52% (2136/4107)
+Receiving objects:  53% (2177/4107)
+Receiving objects:  54% (2218/4107)
+Receiving objects:  55% (2259/4107)
+Receiving objects:  56% (2300/4107)
+Receiving objects:  57% (2341/4107)
+Receiving objects:  58% (2383/4107)
+Receiving objects:  59% (2424/4107)
+Receiving objects:  60% (2465/4107)
+Receiving objects:  61% (2506/4107)
+Receiving objects:  62% (2547/4107)
+Receiving objects:  63% (2588/4107)
+Receiving objects:  64% (2629/4107)
+Receiving objects:  65% (2670/4107)
+Receiving objects:  66% (2711/4107)
+Receiving objects:  67% (2752/4107)
+Receiving objects:  68% (2793/4107)
+Receiving objects:  69% (2834/4107)
+Receiving objects:  70% (2875/4107)
+Receiving objects:  71% (2916/4107)
+Receiving objects:  72% (2958/4107)
+Receiving objects:  73% (2999/4107)
+Receiving objects:  74% (3040/4107)
+Receiving objects:  75% (3081/4107)
+Receiving objects:  76% (3122/4107)
+Receiving objects:  77% (3163/4107)
+Receiving objects:  78% (3204/4107)
+Receiving objects:  79% (3245/4107)
+Receiving objects:  80% (3286/4107)
+Receiving objects:  81% (3327/4107)
+Receiving objects:  82% (3368/4107)
+Receiving objects:  83% (3409/4107)
+Receiving objects:  84% (3450/4107)
+Receiving objects:  85% (3491/4107)
+Receiving objects:  86% (3533/4107)
+Receiving objects:  87% (3574/4107)
+Receiving objects:  88% (3615/4107)
+Receiving objects:  89% (3656/4107)
+Receiving objects:  90% (3697/4107)
+Receiving objects:  91% (3738/4107)
+Receiving objects:  92% (3779/4107)
+Receiving objects:  93% (3820/4107)
+Receiving objects:  94% (3861/4107)
+Receiving objects:  95% (3902/4107)
+Receiving objects:  96% (3943/4107), 35.03 MiB | 69.54 MiB/s
+Receiving objects:  97% (3984/4107), 35.03 MiB | 69.54 MiB/s
+remote: Total 4107 (delta 1), reused 1 (delta 1), pack-reused 4105 (from 2)
+Receiving objects:  98% (4025/4107), 35.03 MiB | 69.54 MiB/s
+Receiving objects:  99% (4066/4107), 35.03 MiB | 69.54 MiB/s
+Receiving objects: 100% (4107/4107), 35.03 MiB | 69.54 MiB/s
+Receiving objects: 100% (4107/4107), 53.54 MiB | 75.00 MiB/s, done.
+Resolving deltas:   0% (0/1786)
+Resolving deltas:   1% (18/1786)
+Resolving deltas:   2% (36/1786)
+Resolving deltas:   3% (54/1786)
+Resolving deltas:   4% (72/1786)
+Resolving deltas:   5% (90/1786)
+Resolving deltas:   6% (108/1786)
+Resolving deltas:   7% (126/1786)
+Resolving deltas:   8% (143/1786)
+Resolving deltas:   9% (161/1786)
+Resolving deltas:  10% (179/1786)
+Resolving deltas:  11% (197/1786)
+Resolving deltas:  12% (215/1786)
+Resolving deltas:  13% (233/1786)
+Resolving deltas:  14% (251/1786)
+Resolving deltas:  15% (268/1786)
+Resolving deltas:  16% (286/1786)
+Resolving deltas:  17% (304/1786)
+Resolving deltas:  18% (322/1786)
+Resolving deltas:  19% (340/1786)
+Resolving deltas:  20% (358/1786)
+Resolving deltas:  21% (376/1786)
+Resolving deltas:  22% (393/1786)
+Resolving deltas:  23% (411/1786)
+Resolving deltas:  24% (429/1786)
+Resolving deltas:  25% (447/1786)
+Resolving deltas:  26% (465/1786)
+Resolving deltas:  27% (483/1786)
+Resolving deltas:  28% (501/1786)
+Resolving deltas:  29% (518/1786)
+Resolving deltas:  30% (536/1786)
+Resolving deltas:  31% (554/1786)
+Resolving deltas:  32% (572/1786)
+Resolving deltas:  33% (590/1786)
+Resolving deltas:  34% (608/1786)
+Resolving deltas:  35% (626/1786)
+Resolving deltas:  36% (643/1786)
+Resolving deltas:  37% (661/1786)
+Resolving deltas:  38% (679/1786)
+Resolving deltas:  39% (697/1786)
+Resolving deltas:  40% (715/1786)
+Resolving deltas:  41% (733/1786)
+Resolving deltas:  42% (751/1786)
+Resolving deltas:  43% (768/1786)
+Resolving deltas:  44% (786/1786)
+Resolving deltas:  45% (804/1786)
+Resolving deltas:  46% (822/1786)
+Resolving deltas:  47% (840/1786)
+Resolving deltas:  48% (858/1786)
+Resolving deltas:  49% (876/1786)
+Resolving deltas:  50% (893/1786)
+Resolving deltas:  51% (911/1786)
+Resolving deltas:  52% (929/1786)
+Resolving deltas:  53% (947/1786)
+Resolving deltas:  54% (965/1786)
+Resolving deltas:  55% (983/1786)
+Resolving deltas:  56% (1001/1786)
+Resolving deltas:  57% (1019/1786)
+Resolving deltas:  58% (1036/1786)
+Resolving deltas:  59% (1054/1786)
+Resolving deltas:  60% (1072/1786)
+Resolving deltas:  61% (1090/1786)
+Resolving deltas:  62% (1108/1786)
+Resolving deltas:  63% (1126/1786)
+Resolving deltas:  64% (1144/1786)
+Resolving deltas:  65% (1161/1786)
+Resolving deltas:  66% (1179/1786)
+Resolving deltas:  67% (1197/1786)
+Resolving deltas:  68% (1215/1786)
+Resolving deltas:  69% (1233/1786)
+Resolving deltas:  70% (1251/1786)
+Resolving deltas:  71% (1269/1786)
+Resolving deltas:  72% (1286/1786)
+Resolving deltas:  73% (1304/1786)
+Resolving deltas:  74% (1322/1786)
+Resolving deltas:  75% (1340/1786)
+Resolving deltas:  76% (1358/1786)
+Resolving deltas:  77% (1376/1786)
+Resolving deltas:  78% (1394/1786)
+Resolving deltas:  79% (1411/1786)
+Resolving deltas:  80% (1429/1786)
+Resolving deltas:  81% (1447/1786)
+Resolving deltas:  82% (1465/1786)
+Resolving deltas:  83% (1483/1786)
+Resolving deltas:  84% (1501/1786)
+Resolving deltas:  85% (1519/1786)
+Resolving deltas:  86% (1536/1786)
+Resolving deltas:  87% (1554/1786)
+Resolving deltas:  88% (1572/1786)
+Resolving deltas:  89% (1590/1786)
+Resolving deltas:  90% (1608/1786)
+Resolving deltas:  91% (1626/1786)
+Resolving deltas:  92% (1644/1786)
+Resolving deltas:  93% (1661/1786)
+Resolving deltas:  94% (1679/1786)
+Resolving deltas:  95% (1697/1786)
+Resolving deltas:  96% (1715/1786)
+Resolving deltas:  97% (1733/1786)
+Resolving deltas:  98% (1751/1786)
+Resolving deltas:  99% (1769/1786)
+Resolving deltas: 100% (1786/1786)
+Resolving deltas: 100% (1786/1786), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m18 && ls
+
+Makefile   catalog   explore.py   govlab.py  run_tests.py  test_challenge.py
+README.md  evidence  first-draft  helpdesk   templates     test_lab.py
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ ls catalog helpdesk first-draft templates
+
+catalog:
+controls.json  frameworks.json  risk-library.json
+
+first-draft:
+assessment.json  evidence-index.csv  risk-register.csv
+
+helpdesk:
+chat-widget.html  system-card.json
+
+templates:
+AI-INCIDENT-REPORT.md  AI-POLICY.md     EVIDENCE-INDEX.csv      README.md
+AI-INVENTORY.csv       ASSESSMENT.json  MODEL-VENDOR-REVIEW.md  RISK-REGISTER.csv
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ ls evidence
+
+2026-07-02-guardrail-config.json            2026-10-17-kb-import-procedure.md           2026-10-20-m05-output-handling-test.txt
+2026-10-10-model-vendor-review.md           2026-10-17-prompt-review.md                 2026-10-20-m07-agent-controls-test.txt
+2026-10-12-ai-literacy-training-record.csv  2026-10-18-identity-map.json                2026-10-21-grounding-eval.txt
+2026-10-14-incident-tabletop.md             2026-10-18-tool-call-log-sample.jsonl       2026-10-21-guardrail-suite-results.txt
+2026-10-15-pii-redaction-check.txt          2026-10-19-ai-bom.json                      2026-10-22-rate-limits-and-budget.json
+2026-10-16-mcp-auth-test.txt                2026-10-19-mcp-and-model-pins.json          2026-10-22-refund-limits.json
+2026-10-16-rag-access-control-test.txt      2026-10-20-m03-injection-defences-test.txt  2026-10-23-ai-policy-approved.md
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make -n check inventory
+
+python3 --version
+python3 -c "import sys; sys.exit('this lab needs Python 3.11 or newer' if sys.version_info < (3, 11) else 0)"
+echo "OK: standard library only, nothing to install"
+python3 govlab.py inventory
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make check
+
+python3 --version
+Python 3.12.3
+python3 -c "import sys; sys.exit('this lab needs Python 3.11 or newer' if sys.version_info < (3, 11) else 0)"
+OK: standard library only, nothing to install
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ python3 explore.py kinds
+
+Four kinds of document this lab maps controls to (catalog/frameworks.json)
+
+framework  NIST AI RMF 1.0 (NIST AI 100-1, Jan 2023) subcategories
+           voluntary: advice you choose from; nobody certifies you against it
+           28 items in this lab's catalogue · https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf
+
+standard   ISO/IEC 42001:2023, AI management system (clause level; Annex A reference controls come from your licensed copy)
+           certifiable: an accredited auditor can certify an organisation against it
+           7 items in this lab's catalogue · https://www.iso.org/standard/42001
+
+law        EU AI Act, Regulation (EU) 2024/1689 as amended by the Digital Omnibus on AI (2026)
+           binding where it applies, with fines; what applies depends on the system's purpose
+           13 items in this lab's catalogue · https://ai-act-service-desk.ec.europa.eu/en/ai-act-explorer
+
+checklist  OWASP Top 10 for LLM Applications 2026 and OWASP Top 10 for Agentic Applications 2026
+           community lists of what most often goes wrong in code; free, no certificate
+           20 items in this lab's catalogue · https://genai.owasp.org/download/56857/
+
+profile    NIST AI 600-1 (Generative AI Profile, July 2024): the 12 risks
+           a companion to the NIST framework for generative AI, with 12 named risks
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ python3 explore.py inventory
+
+AI inventory entry 4 of 7 (helpdesk/system-card.json, "components")
+
+  system     TSG Helpdesk 2.0, production since 2026-05-01
+  owners     business: Head of Customer Support · technical: Platform engineering lead
+  type       embedding_model                what kind of part it is
+  name       Local embedding model (Module 6)
+  version    pinned by hash                 which exact build runs
+  hosting    self-hosted                    where it runs
+  licence    unknown                        <- a gap: nobody has checked what this licence allows
+
+One row per part, not one per app: 7 parts here (application, embedding_model, mcp_server, memory, model, vector_store).
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ python3 explore.py risk R1
+
+Risk R1 from first-draft/risk-register.csv, column by column
+
+  title       Injected ticket text makes the bot refund or email
+  source      RS01: Injected text (chat, ticket, document) steers a tool call: refunds, emails, tickets
+  owner       Platform engineering lead
+  likelihood  3    how likely, 1 to 3
+  impact      3    how bad, 1 to 3
+  inherent    3 x 3 = 9    likelihood x impact, before any control
+  treatment   mitigate     one of mitigate, transfer, avoid, accept (NIST AI RMF MANAGE 1.3)
+  controls    C01 implemented, C02 implemented, C03 implemented, C04 implemented, C05 implemented
+  residual    1 x 2 = 2    after the controls really in place
+  accepted by (blank)      needed above 3 (the AI policy's risk appetite)
+  review      2027-01-24 (92 days after the assessment on 2026-10-24)
+  owasp       LLM01;LLM03:2026;ASI02
+  notes       M7 controls in place
+
+  Likelihood x impact, I = inherent, R = residual (status of each control: helpdesk/system-card.json)
+  impact 3 |  .    .    I
+  impact 2 |  R    .    .
+  impact 1 |  .    .    .
+            L1   L2   L3
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ python3 explore.py control C24
+
+Control C24 (catalog/controls.json): Tell people they are chatting with an AI, from the first message
+  taught in   lesson 18.2
+  status      planned in TSG Helpdesk (helpdesk/system-card.json)
+  proved by   the live greeting text (or a screenshot of it)
+
+  maps to
+  nist_ai_rmf  MEASURE 2.8  Risks associated with transparency and accountability are examined and documented.
+  iso_42001    Clause 8     Operation (running the controls)
+  eu_ai_act    Art. 50      Transparency obligations for providers and deployers of certain AI systems
+  owasp        (none mapped)
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ python3 explore.py evidence E01
+
+Evidence row E01 from first-draft/evidence-index.csv
+
+  control      C01
+  file         evidence/2026-10-20-m07-agent-controls-test.txt
+  owner        AppSec lead
+  collected    2026-10-20
+  sha256 then  cff000aa90b51c655c9d6b4f16ad73ac36b1559795a98156080b775b046ddccd   (written in the index)
+  sha256 now   cff000aa90b51c655c9d6b4f16ad73ac36b1559795a98156080b775b046ddccd   (same: unchanged since it was indexed)
+  age          4 days before the assessment on 2026-10-24 (the lab allows 90)
+
+  first lines of the file (27 lines in all):
+  | # Evidence: output of 'make test' in labs/m07 (agent containment controls), copied below this header (only the
+  | # Collected for the TSG Helpdesk assessment. Re-run it yourself: cd labs/m07 && make test
+  | 
+  | [PASS] audit: the hash chain verifies, and editing one line breaks it
+  | [PASS] detect: the unsafe run raises EGRESS-AFTER-UNTRUSTED naming the attachment
+  | [PASS] detect: a blocked hijack still raises BLOCKED-ATTEMPT, and no high alert
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ make inventory
+
+python3 govlab.py inventory
+AI inventory: TSG Helpdesk 2.0 (production), owner Head of Customer Support
+type             component                                                  flags
+application      Helpdesk chat app (Python)                                 ok
+model            Gemma 3, 1B (local twin, via Ollama)                       ok
+model            Managed model in your cloud stream (Bedrock, Foundry or Ag ok
+embedding_model  Local embedding model (Module 6)                           licence unknown
+vector_store     Qdrant (Module 6)                                          ok
+mcp_server       Ticketing MCP server                                       ok
+memory           Customer memory summaries                                  ok
+
+7 components, 1 with gaps. Full rows: out/ai-inventory.csv (columns as in templates/AI-INVENTORY.csv)
+thesecguy@lab:~/ai-security-course-labs/labs/m18$ exit
+
+exit
