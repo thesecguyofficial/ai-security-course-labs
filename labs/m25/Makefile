@@ -6,7 +6,7 @@ PY   := $(if $(wildcard $(VENV)/bin/python),$(VENV)/bin/python,python3)
 REGION ?= us-east-1
 AWS  := aws --region $(REGION)
 
-.PHONY: setup build release deploy attack hardened story quant-gate lineage-demo hunt test challenge clean \
+.PHONY: setup check build release deploy attack hardened story quant-gate lineage-demo hunt test challenge clean \
         cloud-bucket cloud-upload cloud-gate cloud-tamper cloud-warn cloud-down
 
 setup:         ## create .venv, install the pinned packages, make the lab key pairs and the model files
@@ -14,6 +14,9 @@ setup:         ## create .venv, install the pinned packages, make the lab key pa
 	$(VENV)/bin/python -m pip install -r requirements.txt
 	$(VENV)/bin/python -c "import lab; lab.ensure_keys(); print('lab keys in keys/: ci.priv, ci.pub, attacker.priv, attacker.pub')"
 	$(VENV)/bin/python ci.py build
+
+check:         ## print the signing library's version from .venv (did make setup work?)
+	$(VENV)/bin/python -c "import importlib.metadata as m; print('model-signing', m.version('model-signing'), 'OK')"
 
 build:         ## (re)write models/ from data/
 	$(PY) ci.py build

@@ -1,0 +1,109 @@
+{
+  "name": "m25-25.6-understand-linux",
+  "lesson": "25.1, 25.6",
+  "title": "Lab 25.6, part 1: get the lab, see what each file is, the fake data, look before you run, set up the pinned model-signing library in a virtual environment, then look at each supply-chain idea on its own with explore.py (a model file is numbers, a fine-tune, an adapter, a merge, an int8 quantization, a hidden trigger, hashes and a key-pair signature, the real model_signing bundle, an example SLSA provenance record, the ML-BOM) and read one hardened release and deploy line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m25 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The folders",
+      "type": "ls setups/first-draft setups/hardened data data/evals cloud",
+      "pause_after": 5
+    },
+    {
+      "label": "The data",
+      "type": "head -n 2 data/evals/risky.jsonl data/evals/normal.jsonl && wc -l data/evals/*.jsonl",
+      "pause_after": 5
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup check",
+      "pause_after": 5
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Check",
+      "type": "make check",
+      "pause_after": 3
+    },
+    {
+      "label": "Made by setup",
+      "type": "ls models models/tsg-guard-base keys",
+      "pause_after": 5
+    },
+    {
+      "label": "Weights",
+      "type": ".venv/bin/python explore.py weights",
+      "pause_after": 7
+    },
+    {
+      "label": "Fine-tune",
+      "type": ".venv/bin/python explore.py finetune",
+      "pause_after": 7
+    },
+    {
+      "label": "Adapter",
+      "type": ".venv/bin/python explore.py adapter",
+      "pause_after": 7
+    },
+    {
+      "label": "Merge",
+      "type": ".venv/bin/python explore.py merge",
+      "pause_after": 7
+    },
+    {
+      "label": "Quantize",
+      "type": ".venv/bin/python explore.py quantize",
+      "pause_after": 7
+    },
+    {
+      "label": "Trigger",
+      "type": ".venv/bin/python explore.py trigger",
+      "pause_after": 7
+    },
+    {
+      "label": "Sign",
+      "type": ".venv/bin/python explore.py sign",
+      "pause_after": 7
+    },
+    {
+      "label": "Bundle",
+      "type": ".venv/bin/python explore.py bundle",
+      "pause_after": 7
+    },
+    {
+      "label": "Provenance",
+      "type": ".venv/bin/python explore.py provenance",
+      "pause_after": 7
+    },
+    {
+      "label": "BOM",
+      "type": ".venv/bin/python explore.py bom",
+      "pause_after": 7
+    },
+    {
+      "label": "One run",
+      "type": "make deploy",
+      "pause_after": 7
+    }
+  ]
+}
