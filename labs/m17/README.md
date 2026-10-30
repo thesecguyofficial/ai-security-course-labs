@@ -41,6 +41,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `evals/promptfooconfig.yaml` | The security eval suite: five security rules that run on every test |
 | `evals/tests/attacks.yaml`, `evals/tests/normal.yaml` | Seven attack tests (one per attack path) and four normal-use tests |
 | `run_eval.py` | Starts the app, runs a **pinned** promptfoo (0.124.1) with telemetry off, prints one line per test, returns the CI result |
+| `explore.py` | Step 1b: read-only helper. Shows one test case, runs it once against the stand-in and grades the reply rule by rule, a score and pass rate, why AI tests repeat, a ticket's hidden characters, the CI workflow's key lines. Runs `helpdesk.py` in its own process, never runs the two actions, writes nothing |
 | `regress.py` | Three realistic "small changes" that each reopen one attack path |
 | `test_lab.py`, `run_tests.py` | `make test`: proves the app, guards and regressions behave as described (no Node.js needed) |
 | `test_challenge.py` | `make challenge`: fails until your suite catches regression R3 |
