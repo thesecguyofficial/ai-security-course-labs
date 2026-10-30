@@ -67,7 +67,10 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 
 ## Needs
 
-- Python **3.11 or newer**: `python3 --version`. No packages, no internet.
+- Python **3.11 or newer**: `python3 --version`, or `make setup`. No packages, no internet. There is nothing for `pip`
+  to install and no virtual environment to create: the lab uses only Python's standard library. Look before you run:
+  `make -n setup review` prints the two commands those targets would run, without running them.
+- Optional, for Step 1b's container runs only: Docker, as installed in lesson 0.6.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 
 ## Step 1 · Review the first draft
@@ -98,6 +101,227 @@ secrets in the environment, shared 8-hour sessions, no process limit. `make revi
 the same checker can gate a pipeline (the Makefile ignores that exit code so the steps carry on).
 
 Windows: `python checker.py first-draft`.
+
+## Step 1b · Look at each isolation and egress idea on its own (about 10 minutes)
+
+New to sandboxes and egress? Do this first. `explore.py` shows, one at a time, the ideas the checker and the evaluator
+are built on. It only reads: this machine's own facts from `/proc` and `/sys`, and the lab's JSON files. It writes no
+file, starts no program, resolves no name and opens no connection. Windows: `py explore.py ...` (`here` needs Linux).
+The output below is from a fresh Ubuntu machine (recording run 41083966534).
+
+**1. A process, on a kernel, in a virtual machine.** A process is one running program; it runs as a user and asks
+the kernel for files, memory and the network:
+
+```bash
+python3 explore.py here
+```
+
+```output
+This terminal, read from /proc and /sys (nothing is changed)
+
+A process is one running program. This one is explore.py:
+  process ID                 2502             its number on this machine
+  runs as user               thesecguy        it can open whatever files this user can
+  processes it can see       179              every program running on this machine, not just its own
+
+The kernel is the core of the operating system: every program asks it for files, memory and network.
+  kernel                     7.0.0-1017-azure
+
+Limits the kernel enforces on this process (ulimit):
+  max processes (this user)  58121            how many programs it may start
+  max open files             65536            files and network connections open at once
+
+What this terminal runs on:
+  inside a container?        no               process 1 is systemd, a normal machine's first program
+  virtual machine?           yes              the CPU reports a hypervisor
+  hardware says              Microsoft Corporation Virtual Machine
+
+So this terminal is a process, on a kernel, inside a virtual machine: three layers, each with its own limits.
+```
+
+**2. A real container (optional, needs Docker).** A container shares the host's kernel but gets its own view, and
+Docker can limit its network, files and processes with one flag each. Mac and Windows: Docker Desktop runs containers
+inside its own small Linux VM, so `uname -r` there shows that VM's kernel. Drop `sudo` if your user is in the
+`docker` group.
+
+```bash
+uname -r && sudo docker run --rm alpine:3.20 uname -r
+sudo docker run --rm alpine:3.20 ps
+sudo docker run --rm --network none alpine:3.20 wget -q -T 3 -O- http://example.com
+sudo docker run --rm --read-only alpine:3.20 touch /home/note.txt
+sudo docker run --rm --pids-limit 4 alpine:3.20 sh -c 'for i in 1 2 3 4 5 6; do sleep 2 & done; wait'
+```
+
+```output
+7.0.0-1017-azure
+7.0.0-1017-azure
+PID   USER     TIME  COMMAND
+    1 root      0:00 ps
+wget: bad address 'example.com'
+touch: /home/note.txt: Read-only file system
+sh: can't fork: Resource temporarily unavailable
+```
+
+Same kernel inside and out; one process visible inside; `--network none` leaves only a loopback, so even the name
+lookup fails; `--read-only` blocks the write; `--pids-limit 4` stops the fifth process.
+
+**3. The sandbox lines of a config.** Where the code runs, its process limits, its file system limits and its
+secrets, in plain words. Try `python3 explore.py sandbox first-draft` too: every `<-` marks a gap.
+
+```bash
+python3 explore.py sandbox
+```
+
+```output
+The sandbox lines of configs/hardened.json, one by one
+
+Where the code runs:
+  runtime.boundary                   microvm          a microVM: its own small virtual machine with its own kernel
+  runtime.session.one_per_user_task  true             a fresh sandbox per user and task
+  runtime.session.timeout_seconds    900              destroyed after 15 minutes
+
+Process limits (how much it may use):
+  runtime.limits.vcpu                1                virtual CPUs
+  runtime.limits.memory_mb           2048             MB of memory
+  runtime.limits.max_processes       128              programs at once: a runaway loop stops here
+
+File system limits (what it may read and write):
+  mount /workspace                   rw               the scratch folder: it may write here
+  mount /data/reports                ro               input data: read, never changed
+
+Secrets:
+  secrets.env                        (none)           no passwords or keys inside the sandbox
+
+The network lines come next: python3 explore.py network hardened
+```
+
+**4. The network lines.** Every door out: the network mode, the NAT gateway (the shared door to the internet), the
+security group's egress rules, the private endpoints and their policies, the DNS allow-list, and the proxy:
+
+```bash
+python3 explore.py network
+```
+
+```output
+The network lines of configs/hardened.json, one by one
+
+Is there a way out to the internet?
+  network.mode                       VPC              PUBLIC = internet access; VPC = only your own private network
+  network.nat_gateway                false            no door to the internet
+
+Firewall rules for traffic leaving the sandbox (security group egress):
+  tcp/443 to                         endpoint:s3              one named destination only
+  tcp/443 to                         endpoint:bedrock-runtime one named destination only
+  tcp/3128 to                        proxy                    one named destination only
+
+Private doors to cloud services (VPC endpoints) and their policies:
+  endpoint s3                        custom           s3:GetObject, s3:PutObject, s3:ListBucket on tsg-lab-data, tsg-lab-data/*
+  endpoint bedrock-runtime           custom           bedrock:InvokeModel on foundation-model/lab-model-a
+
+The phone book (DNS) and its allow-list:
+  dns.firewall                       true             names are checked against an allow-list
+  dns.allow                          s3.us-east-1.amazonaws.com
+  dns.allow                          bedrock-runtime.us-east-1.amazonaws.com
+  dns.allow                          proxy.tsg.example
+  dns.default_action                 BLOCK            for every other name
+  dns.fail_open                      false            if the check is down, refuse (fail closed)
+
+The proxy, a go-between that fetches web pages for the sandbox:
+  proxy.allow                        pypi.tsg.example   methods GET, HEAD
+  proxy.enforced_by_network          true             the firewall lets the sandbox reach only the proxy
+```
+
+**5. Names against the DNS allow-list.** DNS turns a name into an address. A name the resolver won't answer is a
+name the code can't connect to:
+
+```bash
+python3 explore.py dns placeholder.example.invalid bedrock-runtime.us-east-1.amazonaws.com
+```
+
+```output
+DNS turns a name into an address. Before the sandbox can connect, it asks the resolver.
+configs/hardened.json: DNS firewall true, default rule BLOCK
+  allow-list: s3.us-east-1.amazonaws.com, bedrock-runtime.us-east-1.amazonaws.com, proxy.tsg.example
+
+  placeholder.example.invalid
+    BLOCKED: placeholder.example.invalid not on the DNS allow-list: default rule BLOCK (NODATA)
+    so the code never learns an address to connect to
+  bedrock-runtime.us-east-1.amazonaws.com
+    answered: bedrock-runtime.us-east-1.amazonaws.com is on the DNS allow-list
+    so the code gets an address and may try to connect
+
+No name was really looked up: this is the config's rule, applied on paper.
+```
+
+**6. One request, layer by layer.** Every layer must say ok. U1 is a direct post that ignores the proxy:
+
+```bash
+python3 explore.py request U1
+python3 explore.py request U1 first-draft | tail -n 5
+```
+
+```output
+Request U1 from data/requests.jsonl, field by field
+
+  when      2027-03-27T09:02:11Z
+  kind      https
+  name      placeholder.example.invalid
+  port      443
+  via       direct
+  method    POST
+  expect    unexpected
+  note      direct connection that ignores the proxy, to a name the task never needed
+
+Against configs/hardened.json, in the order the request meets each layer:
+  dns       NO  placeholder.example.invalid not on the DNS allow-list: default rule BLOCK (NODATA)
+  route     NO  VPC mode, no NAT gateway: no route to the internet
+  sg        NO  no egress rule for tcp/443 to internet: REJECT
+
+Every layer must say ok: DENY (dns, route, sg)
+  dns       ok  no DNS firewall: the resolver answers for any name
+  route     ok  PUBLIC network mode: internet reachable
+  sg        ok  egress rule tcp/443 to 0.0.0.0/0
+
+Every layer must say ok: ALLOW
+```
+
+The same request: denied three times over by the hardened config, allowed by the first draft.
+
+**7. The proxy checks the method too.** U8 is an upload to the package mirror, which only needs reads:
+
+```bash
+python3 explore.py request U8
+```
+
+```output
+...
+Against configs/hardened.json, in the order the request meets each layer:
+  dns       ok  proxy.tsg.example is on the DNS allow-list
+  sg        ok  egress rule tcp/3128 to proxy
+  proxy     NO  POST not allowed for pypi.tsg.example (allowed: GET, HEAD)
+
+Every layer must say ok: DENY (proxy)
+```
+
+**8. Read one replay.** `python3 egress.py hardened` prints one line per request: the ID, the verdict, what it asked
+for, then each layer in order. Under a denied request: the first layer that said no, and why.
+
+```bash
+python3 egress.py hardened | sed -n '1,10p'
+```
+
+```output
+Replay of 14 recorded requests against hardened
+  N1  ALLOW s3:GetObject tsg-lab-data/reports/q3.csv                   dns:ok sg:ok endpoint:ok role:ok
+  N2  ALLOW s3:PutObject tsg-lab-data/out/q3-summary.csv               dns:ok sg:ok endpoint:ok role:ok
+  N3  ALLOW bedrock:InvokeModel foundation-model/lab-model-a           dns:ok sg:ok endpoint:ok role:ok
+  N4  ALLOW GET pypi.tsg.example:443 via proxy                         dns:ok sg:ok proxy:ok
+  N5  ALLOW s3:ListBucket tsg-lab-data                                 dns:ok sg:ok endpoint:ok role:ok
+  N6  ALLOW DNS bedrock-runtime.us-east-1.amazonaws.com                dns:ok
+  U1  DENY  POST placeholder.example.invalid:443 via direct            dns:NO route:NO sg:NO
+        first denied by dns: placeholder.example.invalid not on the DNS allow-list: default rule BLOCK (NODATA)
+  U2  DENY  DNS placeholder.example.invalid                            dns:NO
+```
 
 ## Step 2 · The hardened config
 
