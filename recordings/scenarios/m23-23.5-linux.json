@@ -1,0 +1,83 @@
+{
+  "name": "m23-23.5-linux",
+  "lesson": "23.5",
+  "title": "Lab 23.5, part 2: the recorded trail read, the poisoned ticket and the two exits opened, the empty starter defence, the replay before (0 of 5), a first defence that copies the recorded words (5 of 5 recorded, 0 of 5 variants), a defence built on behaviour read function by function, the replay after (PASS), the decision log, the tests and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
+    "echo IiIiZGVmZW5zZS5weTogbXkgZml2ZSBjaGVja3MuIEVhY2ggcmVhZHMgb25lIHJlY29yZGVkIGV2ZW50IGFuZCByZXR1cm5zIGEgdmVyZGljdC4gQmVoYXZpb3VyLCBub3Qgd29yZGluZy4iIiIKZnJvbSBfX2Z1dHVyZV9fIGltcG9ydCBhbm5vdGF0aW9ucwoKaW1wb3J0IHJlCmZyb20gZGF0ZXRpbWUgaW1wb3J0IGRhdGV0aW1lCmZyb20gdXJsbGliLnBhcnNlIGltcG9ydCB1cmxzcGxpdAoKT1ZFUlJJREUgPSByZS5jb21waWxlKHIiKD9pKVxiKGlnbm9yZXxkaXNyZWdhcmR8Zm9yZ2V0KVxiW14uXXswLDIwfVxiKHByZXZpb3VzfHByaW9yfGVhcmxpZXJ8YWJvdmUpXGIiCiAgICAgICAgICAgICAgICAgICAgICByIlteLl17MCwxMH1cYihpbnN0cnVjdGlvbnN8ZGlyZWN0aW9uc3xydWxlcylcYnxcYnlvdVxzK2FyZVxzK25vd1xifF5ccypzeXN0ZW06IikKSElEREVOID0gcmUuY29tcGlsZShyIjwhLS0uKj8tLT4iLCByZS5TKQpaRVJPX1dJRFRIID0gcmUuY29tcGlsZShyIltcdTIwMGJcdTIwMGNcdTIwMGRcdTIwNjBcdWZlZmZdIikKVVJMID0gcmUuY29tcGlsZShyImh0dHBzPzovL1teXHNcIic8PildKyIpCgoKZGVmIGlucHV0X2NoZWNrKGV2ZW50OiBkaWN0LCBjb25maWc6IGRpY3QpIC0+IHN0ciB8IE5vbmU6CiAgICB0ZXh0ID0gZXZlbnQuZ2V0KCJ0ZXh0IiwgIiIpCiAgICBpZiBISURERU4uc2VhcmNoKHRleHQpOgogICAgICAgIHJldHVybiAidGV4dCBoaWRkZW4gaW4gYW4gSFRNTCBjb21tZW50IgogICAgaWYgWkVST19XSURUSC5zZWFyY2godGV4dCk6CiAgICAgICAgcmV0dXJuICJ6ZXJvLXdpZHRoIGNoYXJhY3RlcnMiCiAgICBpZiBPVkVSUklERS5zZWFyY2goWkVST19XSURUSC5zdWIoIiIsIHRleHQpKToKICAgICAgICByZXR1cm4gIm92ZXJyaWRlIHBocmFzaW5nIGFpbWVkIGF0IGluc3RydWN0aW9ucyIKICAgIHJldHVybiBOb25lCgoKZGVmIGFsbG93bGlzdCh0b29sX2NhbGw6IGRpY3QsIGNvbmZpZzogZGljdCkgLT4gYm9vbDoKICAgIHRvb2wsIGFyZ3MgPSB0b29sX2NhbGwuZ2V0KCJ0b29sIiksIHRvb2xfY2FsbC5nZXQoImFyZ3MiLCB7fSkKICAgIGlmIHRvb2wgbm90IGluIGNvbmZpZ1siYWxsb3dlZF90b29scyJdOgogICAgICAgIHJldHVybiBGYWxzZQogICAgaWYgdG9vbCA9PSAic2VuZF9lbWFpbCI6CiAgICAgICAgcmV0dXJuIGFyZ3MuZ2V0KCJ0byIsICIiKS5yc3BsaXQoIkAiLCAxKVstMV0ubG93ZXIoKSBpbiBjb25maWdbImFsbG93ZWRfZW1haWxfZG9tYWlucyJdCiAgICBpZiB0b29sID09ICJmZXRjaF91cmwiOgogICAgICAgIHJldHVybiAodXJsc3BsaXQoYXJncy5nZXQoInVybCIsICIiKSkuaG9zdG5hbWUgb3IgIiIpIGluIGNvbmZpZ1siYWxsb3dlZF9mZXRjaF9ob3N0cyJdCiAgICByZXR1cm4gVHJ1ZQoKCmRlZiBvdXRwdXRfY2hlY2soZXZlbnQ6IGRpY3QsIGNvbmZpZzogZGljdCkgLT4gc3RyIHwgTm9uZToKICAgIGZvciB1cmwgaW4gVVJMLmZpbmRhbGwoZXZlbnQuZ2V0KCJ0ZXh0IiwgIiIpKToKICAgICAgICBwYXJ0cyA9IHVybHNwbGl0KHVybCkKICAgICAgICBpZiBwYXJ0cy5ob3N0bmFtZSBub3QgaW4gY29uZmlnWyJhbGxvd2VkX2ZldGNoX2hvc3RzIl0gYW5kIHBhcnRzLnF1ZXJ5OgogICAgICAgICAgICByZXR1cm4gZiJkYXRhIGluIGEgbGluayB0byBhbiBvdXRzaWRlIGhvc3Q6IHtwYXJ0cy5ob3N0bmFtZX0iCiAgICByZXR1cm4gTm9uZQoKCmRlZiByYXRlX2Fub21hbHkobG9naW5fZXZlbnRzOiBsaXN0W2RpY3RdLCBjb25maWc6IGRpY3QpIC0+IHNldFtzdHJdOgogICAgYnVkZ2V0LCBmYWlscyA9IGNvbmZpZ1sicmF0ZSJdWyJsb2dpbl9mYWlsX3Blcl9taW4iXSwge30KICAgIGZvciBlIGluIGxvZ2luX2V2ZW50czoKICAgICAgICBpZiBlLmdldCgicmVzdWx0IikgPT0gImZhaWwiOgogICAgICAgICAgICBmYWlscy5zZXRkZWZhdWx0KGVbImFjdG9yIl0sIFtdKS5hcHBlbmQoZGF0ZXRpbWUuZnJvbWlzb2Zvcm1hdChlWyJ0cyJdLnJlcGxhY2UoIloiLCAiKzAwOjAwIikpKQogICAgZmxhZ2dlZCA9IHNldCgpCiAgICBmb3IgYWN0b3IsIHRpbWVzIGluIGZhaWxzLml0ZW1zKCk6CiAgICAgICAgdGltZXMuc29ydCgpCiAgICAgICAgZm9yIGksIHN0YXJ0IGluIGVudW1lcmF0ZSh0aW1lcyk6CiAgICAgICAgICAgIGlmIHN1bSgwIDw9ICh0IC0gc3RhcnQpLnRvdGFsX3NlY29uZHMoKSA8PSA2MCBmb3IgdCBpbiB0aW1lc1tpOl0pID4gYnVkZ2V0OgogICAgICAgICAgICAgICAgZmxhZ2dlZC5hZGQoYWN0b3IpCiAgICByZXR1cm4gZmxhZ2dlZAoKCmRlZiBlZ3Jlc3Nfc2lnbmF0dXJlKGVncmVzczogZGljdCwgY29uZmlnOiBkaWN0KSAtPiBzdHIgfCBOb25lOgogICAgZGVzdCwgaG9zdCA9IGVncmVzcy5nZXQoImRlc3QiLCAiIikubG93ZXIoKSwgZWdyZXNzLmdldCgiaG9zdCIsICIiKQogICAgaXNfbW9kZWxfYXBpID0gYW55KGRlc3QgPT0gZCBvciBkZXN0LmVuZHN3aXRoKCIuIiArIGQpIGZvciBkIGluIGNvbmZpZ1sibW9kZWxfYXBpX2RvbWFpbnMiXSkKICAgIGlmIGlzX21vZGVsX2FwaSBhbmQgaG9zdCBub3QgaW4gY29uZmlnWyJtb2RlbF9jYWxsZXJzIl06CiAgICAgICAgcmV0dXJuIGYibW9kZWwgQVBJIGNhbGwgZnJvbSB7aG9zdH0sIHdoaWNoIGlzIG5vdCBhIG1vZGVsIGNhbGxlciIKICAgIHJldHVybiBOb25lCg== | base64 -d > ~/my-defense.py",
+    "echo IiIiZGVmZW5zZS5weSwgZmlyc3QgdHJ5OiBtYXRjaCB0aGUgZXhhY3Qgc3RyaW5ncyBzZWVuIGluIHRoZSByZWNvcmRpbmcgKGxlc3NvbiAyMy40OiB3YXRjaCB0aGlzIGZhaWwpLiIiIgpmcm9tIF9fZnV0dXJlX18gaW1wb3J0IGFubm90YXRpb25zCgoKZGVmIGlucHV0X2NoZWNrKGV2ZW50OiBkaWN0LCBjb25maWc6IGRpY3QpIC0+IHN0ciB8IE5vbmU6CiAgICByZXR1cm4gImtub3duIHBocmFzZSIgaWYgImlnbm9yZSBwcmV2aW91cyBpbnN0cnVjdGlvbnMiIGluIGV2ZW50LmdldCgidGV4dCIsICIiKSBlbHNlIE5vbmUKCgpkZWYgYWxsb3dsaXN0KHRvb2xfY2FsbDogZGljdCwgY29uZmlnOiBkaWN0KSAtPiBib29sOgogICAgcmV0dXJuIHRvb2xfY2FsbC5nZXQoImFyZ3MiLCB7fSkuZ2V0KCJ0byIpICE9ICJjb2xsZWN0b3JAYXR0YWNrZXIuZXhhbXBsZSIKCgpkZWYgb3V0cHV0X2NoZWNrKGV2ZW50OiBkaWN0LCBjb25maWc6IGRpY3QpIC0+IHN0ciB8IE5vbmU6CiAgICByZXR1cm4gImtub3duIFVSTCIgaWYgImV4ZmlsLmF0dGFja2VyLmV4YW1wbGUiIGluIGV2ZW50LmdldCgidGV4dCIsICIiKSBlbHNlIE5vbmUKCgpkZWYgcmF0ZV9hbm9tYWx5KGxvZ2luX2V2ZW50czogbGlzdFtkaWN0XSwgY29uZmlnOiBkaWN0KSAtPiBzZXRbc3RyXToKICAgIHJldHVybiB7InJvaGFuLnYifSBpZiBhbnkoZS5nZXQoImFjdG9yIikgPT0gInJvaGFuLnYiIGZvciBlIGluIGxvZ2luX2V2ZW50cykgZWxzZSBzZXQoKQoKCmRlZiBlZ3Jlc3Nfc2lnbmF0dXJlKGVncmVzczogZGljdCwgY29uZmlnOiBkaWN0KSAtPiBzdHIgfCBOb25lOgogICAgcmV0dXJuICJrbm93biBob3N0IiBpZiBlZ3Jlc3MuZ2V0KCJob3N0IikgPT0gImNpLXJ1bm5lci0wNyIgZWxzZSBOb25lCg== | base64 -d > ~/naive-defense.py"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Investigate",
+      "type": "cd ai-security-course-labs/labs/m23 && make investigate",
+      "pause_after": 7
+    },
+    {
+      "label": "Attack file",
+      "type": "grep -E '\"(e07|e09|e10)\"' data/trace/app-log.jsonl | fold -s -w 130",
+      "pause_after": 7
+    },
+    {
+      "label": "Starter",
+      "type": "grep -n -A1 'TODO' defense.py",
+      "pause_after": 6
+    },
+    {
+      "label": "Before",
+      "type": "make replay",
+      "pause_after": 6
+    },
+    {
+      "label": "Wording",
+      "type": "cp ~/naive-defense.py defense.py && cat defense.py",
+      "pause_after": 7
+    },
+    {
+      "label": "Wording replay",
+      "type": "make replay",
+      "pause_after": 7
+    },
+    {
+      "label": "Behaviour 1",
+      "type": "cp ~/my-defense.py defense.py && sed -n 1,23p defense.py",
+      "pause_after": 8
+    },
+    {
+      "label": "Behaviour 2",
+      "type": "sed -n 26,42p defense.py",
+      "pause_after": 8
+    },
+    {
+      "label": "Behaviour 3",
+      "type": "sed -n 45,64p defense.py",
+      "pause_after": 8
+    },
+    {
+      "label": "Replay",
+      "type": "make replay",
+      "pause_after": 6
+    },
+    {
+      "label": "Audit",
+      "type": "make audit",
+      "pause_after": 7
+    },
+    {
+      "label": "Tests",
+      "type": "make test 2>&1 | tail -n 8",
+      "pause_after": 5
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | grep -E 'PASS|FAIL|ERROR|TESTS'",
+      "pause_after": 7
+    }
+  ]
+}
