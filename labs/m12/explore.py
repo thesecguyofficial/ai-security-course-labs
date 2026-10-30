@@ -93,7 +93,7 @@ def cmd_guardrail(a) -> None:
         print(f"     blocks answers scoring {th}")
     else:
         print("     not used")
-    print("6. Automated Reasoning".ljust(70) + "$0.17 per policy")
+    print("6. Automated Reasoning".ljust(70) + "$0.17 per 1,000 text units, per Automated Reasoning policy")
     print("     " + ("used" if cfg.get("automatedReasoningPolicyConfig") else "not used (detect only, English (US) only)"))
 
     prof = (cfg.get("crossRegionConfig") or {}).get("guardrailProfileIdentifier")

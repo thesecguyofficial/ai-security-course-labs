@@ -150,7 +150,7 @@ Guardrail "tsg-helpdesk" from guardrails/tuned.json (the body of a CreateGuardra
      regex SYSTEM_PROMPT_CANARY     CANARY-M12-[A-Z0-9]{3}   action in off           out BLOCK
 5. Contextual grounding, tier STANDARD                                $0.10
      blocks answers scoring GROUNDING below 0.6, RELEVANCE below 0.1
-6. Automated Reasoning                                                $0.17 per policy
+6. Automated Reasoning                                                $0.17 per 1,000 text units, per Automated Reasoning policy
      not used (detect only, English (US) only)
 
 Guardrail profile: us.guardrail.v1:0
