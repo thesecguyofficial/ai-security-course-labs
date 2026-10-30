@@ -283,10 +283,13 @@ asked the policy engine:
   principal {"type": "TSG::User", "id": "bob", "attrs": {"role": "support"}}
   action    "issue_refund"
   resource  {"type": "TSG::Order", "id": "O-2001", "attrs": {"customer": "lee@customer.example", "total_cents": 120000, "refunded_cents": 0}}
-  context   {"input": {"order_id": "O-2001", "amount_cents": 9000, "currency": "USD"}, "ticket": {"id": "T-601", "requester": "mallory@attacker.example"}, "window": {"refunds_1h": 0, "denials_10m": 0}, "approval": {"verified": false}}
+  context   {"input": {"order_id": "O-2001", "amount_cents": 9000, "currency": "USD"}, "ticket": {"id": "T-601", "requester": "mallory@attacker.example"}, "window": {"refunds_1h": 0, "denials_10m": 1}, "approval": {"verified": false}}
 decision: DENY   ran: False   policies: -
 reason:   no policy permits this (denied by default)
 ```
+
+(Real output after `make story`, recording run RUNID: `denials_10m` is 1 because the story's duplicate-key call
+was refused less than ten minutes earlier. On a fresh `state/` it is 0.)
 
 Only `context.input` came from the model. The principal came from the session, the order's customer from the order
 database, the ticket's requester from the ticket the staff member opened, the counters from the receipts.
@@ -333,11 +336,11 @@ make shadow
 Same as `python3 suite.py hardened --mode LOG_ONLY`.
 
 ```text
-Attacks that worked: 10 of 12  (A1, A2, A3, A4, A6, A7, A8, A10, A11, A12) | normal requests that work: 6 of 6
+Attacks that worked: 11 of 12  (A1, A2, A3, A4, A6, A7, A8, A9, A10, A11, A12) | normal requests that work: 6 of 6
 ```
 
-Same policies, same decisions, written down in every receipt. A5 and A9 still fail only because their arguments
-can't be parsed or validated into a call at all. Shadow mode is for testing a policy before you enforce it, never a
+Same policies, same decisions, written down in every receipt. Only A5 still fails, because its arguments can't
+even be parsed into a call. A9 works: the $950 call is refused, recorded, and run anyway. Shadow mode is for testing a policy before you enforce it, never a
 place to stay.
 
 ## Step 6 · Spot it
