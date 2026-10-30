@@ -1,169 +1,169 @@
 {
   "scenario": "m26-26.5-understand-linux",
-  "start": 1.761,
+  "start": 1.705,
   "steps": [
     {
       "label": "Download",
       "speed": 1,
-      "start": 1.761,
-      "end": 12.966
+      "start": 1.705,
+      "end": 12.814
     },
     {
       "label": "The lab",
       "speed": 1,
-      "start": 15.966,
-      "end": 21.614
+      "start": 15.814,
+      "end": 21.462
     },
     {
       "label": "The stacks",
       "speed": 1,
-      "start": 25.614,
-      "end": 37.424
+      "start": 25.462,
+      "end": 37.264
     },
     {
       "label": "The data",
       "speed": 1,
-      "start": 41.424,
-      "end": 46.193
+      "start": 41.264,
+      "end": 46.031
     },
     {
       "label": "Setup plan",
       "speed": 1,
-      "start": 50.193,
-      "end": 53.434
+      "start": 50.031,
+      "end": 53.269
     },
     {
       "label": "Setup",
       "speed": 1,
-      "start": 57.434,
-      "end": 62.897
+      "start": 57.269,
+      "end": 62.305
     },
     {
       "label": "Check",
       "speed": 1,
-      "start": 65.898,
-      "end": 68.153
+      "start": 65.305,
+      "end": 67.549
     },
     {
       "label": "Server",
       "speed": 1,
-      "start": 71.153,
-      "end": 76.745
+      "start": 70.549,
+      "end": 76.126
     },
     {
       "label": "Endpoints",
       "speed": 1,
-      "start": 83.746,
-      "end": 88.969
+      "start": 83.126,
+      "end": 88.333
     },
     {
       "label": "Tokens",
       "speed": 1,
-      "start": 95.969,
-      "end": 100.724
+      "start": 95.333,
+      "end": 100.07
     },
     {
       "label": "Cache",
       "speed": 1,
-      "start": 107.724,
-      "end": 112.547
+      "start": 107.07,
+      "end": 111.877
     },
     {
       "label": "Salt",
       "speed": 1,
-      "start": 119.547,
-      "end": 125.192
+      "start": 118.877,
+      "end": 124.507
     },
     {
       "label": "Container",
       "speed": 1,
-      "start": 131.193,
-      "end": 136.548
+      "start": 130.507,
+      "end": 135.839
     },
     {
       "label": "Node",
       "speed": 1,
-      "start": 142.548,
-      "end": 147.256
+      "start": 141.839,
+      "end": 146.516
     },
     {
       "label": "Measure",
       "speed": 1,
-      "start": 153.256,
-      "end": 158.315
+      "start": 152.516,
+      "end": 157.554
     },
     {
       "label": "Read a finding",
       "speed": 1,
-      "start": 165.315,
-      "end": 172.733
+      "start": 164.554,
+      "end": 171.955
     }
   ],
   "keys": [
     {
-      "t": 2.361,
+      "t": 2.305,
       "what": "type"
     },
     {
-      "t": 16.566,
+      "t": 16.414,
       "what": "type"
     },
     {
-      "t": 26.214,
+      "t": 26.062,
       "what": "type"
     },
     {
-      "t": 42.024,
+      "t": 41.864,
       "what": "type"
     },
     {
-      "t": 50.793,
+      "t": 50.631,
       "what": "type"
     },
     {
-      "t": 58.034,
+      "t": 57.87,
       "what": "type"
     },
     {
-      "t": 66.498,
+      "t": 65.905,
       "what": "type"
     },
     {
-      "t": 71.753,
+      "t": 71.149,
       "what": "type"
     },
     {
-      "t": 84.346,
+      "t": 83.726,
       "what": "type"
     },
     {
-      "t": 96.569,
+      "t": 95.933,
       "what": "type"
     },
     {
-      "t": 108.324,
+      "t": 107.671,
       "what": "type"
     },
     {
-      "t": 120.147,
+      "t": 119.477,
       "what": "type"
     },
     {
-      "t": 131.793,
+      "t": 131.107,
       "what": "type"
     },
     {
-      "t": 143.148,
+      "t": 142.439,
       "what": "type"
     },
     {
-      "t": 153.856,
+      "t": 153.116,
       "what": "type"
     },
     {
-      "t": 165.915,
+      "t": 165.154,
       "what": "type"
     }
   ],
-  "end": 178.733
+  "end": 177.955
 }
