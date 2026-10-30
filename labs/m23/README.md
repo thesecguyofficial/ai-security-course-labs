@@ -48,7 +48,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `data/trace/app-log.jsonl` | The Helpdesk's recorded turn log: user messages, retrieved content, the model's tool calls and output, and sign-in events. Nothing runs; it is a recording |
 | `data/trace/egress.jsonl` | The estate's outbound connection log (host to dest) |
 | `data/trace/ground_truth.json` | The answer key: which events were malicious and which function should catch each. Read only by `replay.py` and the tests, never by your defence |
-| `data/variants.jsonl` | Adapted variants of the same five attacks (paraphrased, encoded, look-alike names), for the replay |
+| `data/variants.jsonl` | Adapted variants of the same five attacks (paraphrased, hidden characters, look-alike names), for the replay |
 | `config.json` | The allow-lists your defence reads: model callers, model-API domains, allowed tools, email domains, fetch hosts, rate budgets |
 | `investigate.py` | Reads the trail for you (entry point, reached-for, tempo, loud egress beacon). Holds challenge 1 |
 | `defense.py` | **You write this**: five checks (input, allow-list, output, rate, egress). Starts empty |
@@ -235,7 +235,7 @@ The attack is fully visible in the data and completely uncaught, because `defens
 
 Open `defense.py` and fill in the five functions. Each reads one recorded event (or the login list) and returns a
 verdict; the file's docstrings give the exact contract and the `config.json` keys to use. Build on **behaviour, not
-exact wording** (lesson 23.4): the variants paraphrase, encode and use look-alike names.
+exact wording** (lesson 23.4): the variants paraphrase, hide characters and use look-alike names.
 
 1. `input_check(event, config)` - flag content (user message, retrieval, tool result) that carries an
    instruction dressed as data: override phrasing aimed at instructions, text hidden in an HTML comment, zero-width

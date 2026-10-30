@@ -63,13 +63,13 @@ FIELDS = {
 CHANGES = {  # one honest line per variant: what an attacker changed, and what the attack still needs
     "injection": ("the words (ignore previous -> disregard all earlier), a zero-width character, a look-alike address",
                   "an instruction hidden in an HTML comment, inside a document the model reads"),
-    "tool_abuse": ("the recipient: collector@attacker.example -> collector@attacker.example.co",
+    "tool_abuse": ("the recipient: collector@attacker.example -> collector@attacker-example.example",
                    "an email to an address outside the company"),
     "exfiltration": ("the host (exfil2) and the parameter name (d= -> x=)",
                      "data in a link to a host that is not ours"),
     "egress": ("the computer (ci-runner-08) and a subdomain (eu.api.model-vendor.example)",
                "a computer that is not a model caller, connecting to a model API"),
-    "rate": ("the account (deepa.n) and a slower burst: 15 tries, 3 seconds apart",
+    "rate": ("the account (deepa.n) and a smaller burst: 15 tries, 3 seconds apart",
              "more failed sign-ins in a minute than the budget allows"),
 }
 RECORDED = {"injection": "e07", "tool_abuse": "e09", "exfiltration": "e10", "egress": "g07", "rate": "L01"}

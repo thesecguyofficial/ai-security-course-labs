@@ -5,7 +5,7 @@ the frozen trace and the adapted variants and scores catch rate and false positi
 
 Fill in the five functions below. Until you do, every function returns "nothing wrong", so `make replay`
 shows 0 of 5 caught. When they are right, it shows 5 of 5 on the recorded trace AND the variants, with 0
-false positives. Build on behaviour, not exact wording (lesson 23.4): the variants paraphrase, encode and
+false positives. Build on behaviour, not exact wording (lesson 23.4): the variants paraphrase, hide and
 use look-alike names, so a check that matches the recorded strings exactly will fail them.
 
 `config` is the dict from config.json: model_callers, model_api_domains, allowed_tools,
@@ -45,7 +45,7 @@ def allowlist(tool_call: dict, config: dict) -> bool:
       - send_email: the recipient domain (after '@') must be in config["allowed_email_domains"];
       - fetch_url: the URL host must be in config["allowed_fetch_hosts"];
       - tools with no outward destination (search_kb, get_ticket) are allowed once the tool is on the list.
-    Return True to allow, False to deny. A look-alike domain like attacker.example.co is simply not on the
+    Return True to allow, False to deny. A look-alike domain like attacker-example.example is simply not on the
     list, so deny-by-default refuses it without you listing every bad name.
     """
     # TODO (lesson 23.3): return True only for permitted tool + destination, else False.
@@ -70,7 +70,7 @@ def rate_anomaly(login_events: list[dict], config: dict) -> set[str]:
 
     Each item has actor, result ("fail"/"ok") and ts (ISO8601). Flag an account with more than
     config["rate"]["login_fail_per_min"] failed sign-ins inside any 60-second window. Return a set of the
-    flagged account names. The variant is a smaller, slightly slower burst that is still over budget.
+    flagged account names. The variant is a smaller burst (15 tries, 3 seconds apart) that is still over budget.
     """
     # TODO (lesson 23.3): return the set of accounts over the per-minute failed-login budget.
     return set()
