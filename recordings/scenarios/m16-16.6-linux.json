@@ -1,0 +1,101 @@
+{
+  "name": "m16-16.6-linux",
+  "lesson": "16.6",
+  "title": "Lab 16.6, parts 2 and 3: simulate the day, the five incidents, the leaked-key attack opened, the SOC's old rules on old logs, the Medium-and-above rule opened, old rules on new logs, new rules on old logs, the new alerts and the score, the AI inventory, posture on both setups, the pivot and cost of the leaked key, the worked report check, the tests and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Simulate",
+      "type": "cd ai-security-course-labs/labs/m16 && make simulate",
+      "pause_after": 5
+    },
+    {
+      "label": "The five",
+      "type": "python3 simulate.py --list",
+      "pause_after": 8
+    },
+    {
+      "label": "Attack S1",
+      "type": "sed -n 317,330p simulate.py",
+      "pause_after": 7
+    },
+    {
+      "label": "Old",
+      "type": "python3 evaluate.py first-draft --pack soc-v1",
+      "pause_after": 7
+    },
+    {
+      "label": "Old rule",
+      "type": "sed -n 129,133p detect.py",
+      "pause_after": 6
+    },
+    {
+      "label": "Old rules",
+      "type": "python3 evaluate.py hardened --pack soc-v1",
+      "pause_after": 6
+    },
+    {
+      "label": "Old logs",
+      "type": "python3 evaluate.py first-draft",
+      "pause_after": 6
+    },
+    {
+      "label": "Alerts",
+      "type": "python3 detect.py hardened | head -15",
+      "pause_after": 7
+    },
+    {
+      "label": "Score",
+      "type": "python3 evaluate.py hardened",
+      "pause_after": 7
+    },
+    {
+      "label": "Inventory",
+      "type": "python3 inventory.py",
+      "pause_after": 8
+    },
+    {
+      "label": "Posture",
+      "type": "python3 posture.py first-draft | cut -c1-130",
+      "pause_after": 8
+    },
+    {
+      "label": "Hardened",
+      "type": "python3 posture.py hardened | tail -1",
+      "pause_after": 4
+    },
+    {
+      "label": "Pivot",
+      "type": "python3 report.py pivot BedrockAPIKey-q4m8 | sed -n '1,7p;$p'",
+      "pause_after": 7
+    },
+    {
+      "label": "Cost",
+      "type": "python3 report.py cost BedrockAPIKey-q4m8",
+      "pause_after": 6
+    },
+    {
+      "label": "Example",
+      "type": "python3 report.py check report/EXAMPLE-S3-hijacked-agent.md --scenario S3",
+      "pause_after": 4
+    },
+    {
+      "label": "Test",
+      "type": "make test",
+      "pause_after": 5
+    },
+    {
+      "label": "Challenge",
+      "type": "python3 run_tests.py --challenge | tail -3",
+      "pause_after": 5
+    }
+  ]
+}

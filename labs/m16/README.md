@@ -51,6 +51,8 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 
 | File | What it is |
 |---|---|
+| `explore.py` | **Read-only helper** (Step 1b): one idea at a time, from one day's logs, alerts and incidents to a playbook. It builds the day in memory, sends nothing and writes nothing |
+| `data/vpc-flow-logs.txt` | Four **illustrative** VPC flow log lines in AWS's default format, for `explore.py flow` |
 | `simulate.py` | The **attack simulator**: 20 Oct 2026 at AnyCompany, normal work plus five incidents (S1 to S5), written as the files each logging setup would really collect |
 | `setups/first-draft.json`, `setups/hardened.json` | What each setup collects. First draft: CloudTrail management events and a plain web log. Hardened: lesson 16.1's list (data events, invocation logs with the end user, GuardDuty AI Protection, gateway spans, an app log with identities) |
 | `detect.py` | Two rule packs: `soc-v1` (three rules a SOC often starts with) and `m16` (D01 to D13). D11 and D12 are your challenge |

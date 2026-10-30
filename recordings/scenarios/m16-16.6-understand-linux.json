@@ -1,0 +1,109 @@
+{
+  "name": "m16-16.6-understand-linux",
+  "lesson": "16.0, 16.6",
+  "title": "Lab 16.6, part 1: get the lab, see what each file is, the two logging setups, look before you run, check Python, then look at each detection and response idea on its own with explore.py (one day of logs, alerts and incidents; a CloudTrail management and data event; a model invocation log record; VPC flow logs; DNS query logs; a detection rule and its alert; a GuardDuty AI Protection finding; an AI inventory; AWS Config rules; a hunting query; a playbook) and read one simulator run line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m16 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The folders",
+      "type": "ls data data/inventory setups queries report cloud",
+      "pause_after": 4
+    },
+    {
+      "label": "The setups",
+      "type": "grep -H ': true\\|: false' setups/first-draft.json setups/hardened.json",
+      "pause_after": 6
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup simulate",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Menu",
+      "type": "python3 explore.py",
+      "pause_after": 5
+    },
+    {
+      "label": "Day",
+      "type": "python3 explore.py day",
+      "pause_after": 7
+    },
+    {
+      "label": "Trail",
+      "type": "python3 explore.py trail",
+      "pause_after": 7
+    },
+    {
+      "label": "Invocation",
+      "type": "python3 explore.py invocation",
+      "pause_after": 7
+    },
+    {
+      "label": "Flow",
+      "type": "python3 explore.py flow",
+      "pause_after": 7
+    },
+    {
+      "label": "DNS",
+      "type": "python3 explore.py dns",
+      "pause_after": 7
+    },
+    {
+      "label": "Rule",
+      "type": "python3 explore.py rule",
+      "pause_after": 7
+    },
+    {
+      "label": "Finding",
+      "type": "python3 explore.py finding",
+      "pause_after": 7
+    },
+    {
+      "label": "Inventory",
+      "type": "python3 explore.py inventory",
+      "pause_after": 7
+    },
+    {
+      "label": "Config",
+      "type": "python3 explore.py config",
+      "pause_after": 6
+    },
+    {
+      "label": "Query",
+      "type": "python3 explore.py query",
+      "pause_after": 7
+    },
+    {
+      "label": "Playbook",
+      "type": "python3 explore.py playbook",
+      "pause_after": 7
+    },
+    {
+      "label": "One run",
+      "type": "make simulate",
+      "pause_after": 6
+    }
+  ]
+}
