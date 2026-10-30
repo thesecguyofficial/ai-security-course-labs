@@ -1,0 +1,288 @@
+warning: unable to access '/home/runner/.config/git/config': Permission denied
+[before, as thesecguy] git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git
+warning: unable to access '/home/runner/.config/git/ignore': Permission denied
+warning: unable to access '/home/runner/.config/git/attributes': Permission denied
+[before, as thesecguy] cd ai-security-course-labs/labs/m22 && make setup
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+Collecting agentdojo==0.1.35 (from -r requirements.txt (line 5))
+  Downloading agentdojo-0.1.35-py3-none-any.whl.metadata (5.2 kB)
+Collecting anthropic>=0.47.0 (from agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading anthropic-2.3.0-py3-none-any.whl.metadata (6.0 kB)
+Collecting click>=8.1.7 (from agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting cohere>=5.3.4 (from agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading cohere-7.3.0-py3-none-any.whl.metadata (6.9 kB)
+Collecting deepdiff>=8.6.1 (from agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading deepdiff-9.1.0-py3-none-any.whl.metadata (8.4 kB)
+Collecting docstring-parser>=0.15 (from agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading docstring_parser-0.18.0-py3-none-any.whl.metadata (3.5 kB)
+Collecting google-genai>=1.15.0 (from agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading google_genai-2.33.0-py3-none-any.whl.metadata (59 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 59.3/59.3 kB 14.4 MB/s eta 0:00:00
+Collecting langchain>=0.1.17 (from agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading langchain-1.4.7-py3-none-any.whl.metadata (6.2 kB)
+Collecting openai>=1.59.7 (from agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading openai-3.37.0-py3-none-any.whl.metadata (44 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 44.5/44.5 kB 15.9 MB/s eta 0:00:00
+Collecting pydantic>=2.7.1 (from pydantic[email]>=2.7.1->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 133.0/133.0 kB 36.0 MB/s eta 0:00:00
+Collecting python-dotenv>=1.0.1 (from agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading python_dotenv-1.2.4-py3-none-any.whl.metadata (29 kB)
+Collecting pyyaml>=6.0.1 (from agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+Collecting rich>=13.7.1 (from agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading rich-15.0.0-py3-none-any.whl.metadata (18 kB)
+Collecting tenacity>=8.2.3 (from agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading tenacity-9.1.4-py3-none-any.whl.metadata (1.2 kB)
+Collecting typing-extensions>=4.11.0 (from agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting anyio<5,>=4.1.0 (from anthropic>=0.47.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+Collecting httpx2<3,>=2.0.0 (from anthropic>=0.47.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading httpx2-2.16.0-py3-none-any.whl.metadata (10 kB)
+Collecting jiter<1,>=0.4.0 (from anthropic>=0.47.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading jiter-0.18.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.2 kB)
+Collecting opentelemetry-api<2,>=1.1.0 (from anthropic>=0.47.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading opentelemetry_api-1.45.1-py3-none-any.whl.metadata (1.4 kB)
+Collecting sniffio<2,>=1 (from anthropic>=0.47.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading sniffio-1.3.1-py3-none-any.whl.metadata (3.9 kB)
+Collecting fastavro<2.0.0,>=1.9.4 (from cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading fastavro-1.13.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (6.3 kB)
+Collecting httpx>=0.25.0 (from cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting pydantic-core<3.0.0,>=2.18.2 (from cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
+Collecting requests<3.0.0,>=2.0.0 (from cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting tokenizers<1,>=0.15 (from cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading tokenizers-0.23.3-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (9.8 kB)
+Collecting types-requests<3.0.0,>=2.0.0 (from cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading types_requests-2.33.0.20261006-py3-none-any.whl.metadata (2.2 kB)
+Collecting cachebox<6,>=5.2 (from deepdiff>=8.6.1->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading cachebox-5.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (27 kB)
+Collecting orderly-set<6,>=5.5.0 (from deepdiff>=8.6.1->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading orderly_set-5.5.0-py3-none-any.whl.metadata (6.6 kB)
+Collecting google-auth<3.0.0,>=2.56.0 (from google-auth[requests]<3.0.0,>=2.56.0->google-genai>=1.15.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading google_auth-2.62.0-py3-none-any.whl.metadata (6.0 kB)
+Collecting websockets<18.0,>=13.0.0 (from google-genai>=1.15.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading websockets-17.3-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (6.3 kB)
+Collecting distro<2,>=1.7.0 (from google-genai>=1.15.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading distro-1.9.0-py3-none-any.whl.metadata (6.8 kB)
+Collecting langchain-core<2.0.0,>=1.6.13 (from langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading langchain_core-1.7.0-py3-none-any.whl.metadata (4.8 kB)
+Collecting langgraph<1.3.0,>=1.2.12 (from langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading langgraph-1.2.17-py3-none-any.whl.metadata (4.9 kB)
+Collecting annotated-types>=0.6.0 (from pydantic>=2.7.1->pydantic[email]>=2.7.1->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting typing-inspection>=0.4.4 (from pydantic>=2.7.1->pydantic[email]>=2.7.1->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+Collecting email-validator>=2.0.0 (from pydantic[email]>=2.7.1->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading email_validator-2.3.0-py3-none-any.whl.metadata (26 kB)
+Collecting markdown-it-py>=2.2.0 (from rich>=13.7.1->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading markdown_it_py-4.2.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting pygments<3.0.0,>=2.13.0 (from rich>=13.7.1->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting idna>=2.8 (from anyio<5,>=4.1.0->anthropic>=0.47.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting dnspython>=2.0.0 (from email-validator>=2.0.0->pydantic[email]>=2.7.1->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading dnspython-2.9.0-py3-none-any.whl.metadata (5.7 kB)
+Collecting pyasn1-modules>=0.2.1 (from google-auth<3.0.0,>=2.56.0->google-auth[requests]<3.0.0,>=2.56.0->google-genai>=1.15.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading pyasn1_modules-0.4.2-py3-none-any.whl.metadata (3.5 kB)
+Collecting cryptography>=38.0.3 (from google-auth<3.0.0,>=2.56.0->google-auth[requests]<3.0.0,>=2.56.0->google-genai>=1.15.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.4 kB)
+Collecting certifi (from httpx>=0.25.0->cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Collecting httpcore==1.* (from httpx>=0.25.0->cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx>=0.25.0->cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting httpcore2==2.16.0 (from httpx2<3,>=2.0.0->anthropic>=0.47.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading httpcore2-2.16.0-py3-none-any.whl.metadata (27 kB)
+Collecting truststore>=0.10 (from httpx2<3,>=2.0.0->anthropic>=0.47.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading truststore-0.10.5-py3-none-any.whl.metadata (4.5 kB)
+Collecting jsonpatch<2.0.0,>=1.33.0 (from langchain-core<2.0.0,>=1.6.13->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading jsonpatch-1.37-py3-none-any.whl.metadata (3.7 kB)
+Collecting langchain-protocol>=0.0.20 (from langchain-core<2.0.0,>=1.6.13->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading langchain_protocol-0.0.20-py3-none-any.whl.metadata (2.4 kB)
+Collecting langsmith<1.0.0,>=0.14.9 (from langchain-core<2.0.0,>=1.6.13->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading langsmith-0.14.12-py3-none-any.whl.metadata (38 kB)
+Collecting packaging>=23.2.0 (from langchain-core<2.0.0,>=1.6.13->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+Collecting uuid-utils<1.0,>=0.12.0 (from langchain-core<2.0.0,>=1.6.13->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading uuid_utils-0.18.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.4 kB)
+Collecting langgraph-checkpoint<5.0.0,>=4.3.0 (from langgraph<1.3.0,>=1.2.12->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading langgraph_checkpoint-4.3.0-py3-none-any.whl.metadata (6.7 kB)
+Collecting langgraph-prebuilt<1.2.0,>=1.1.0 (from langgraph<1.3.0,>=1.2.12->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading langgraph_prebuilt-1.1.1-py3-none-any.whl.metadata (6.9 kB)
+Collecting langgraph-sdk<0.5.0,>=0.4.6 (from langgraph<1.3.0,>=1.2.12->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading langgraph_sdk-0.4.9-py3-none-any.whl.metadata (5.1 kB)
+Collecting xxhash>=3.5.0 (from langgraph<1.3.0,>=1.2.12->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading xxhash-4.0.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (17 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=13.7.1->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Collecting charset_normalizer<4,>=2 (from requests<3.0.0,>=2.0.0->cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 46.4/46.4 kB 17.0 MB/s eta 0:00:00
+Collecting urllib3<3,>=1.26 (from requests<3.0.0,>=2.0.0->cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting huggingface-hub<3.0,>=0.16.4 (from tokenizers<1,>=0.15->cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading huggingface_hub-2.3.0-py3-none-any.whl.metadata (16 kB)
+Collecting cffi>=2.0.0 (from cryptography>=38.0.3->google-auth<3.0.0,>=2.56.0->google-auth[requests]<3.0.0,>=2.56.0->google-genai>=1.15.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.5 kB)
+Collecting filelock>=3.10.0 (from huggingface-hub<3.0,>=0.16.4->tokenizers<1,>=0.15->cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading filelock-4.2.4-py3-none-any.whl.metadata (2.0 kB)
+Collecting fsspec>=2023.5.0 (from huggingface-hub<3.0,>=0.16.4->tokenizers<1,>=0.15->cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading fsspec-2026.9.0-py3-none-any.whl.metadata (10 kB)
+Collecting hf-xet<2.0.0,>=1.6.0 (from huggingface-hub<3.0,>=0.16.4->tokenizers<1,>=0.15->cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading hf_xet-1.7.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)
+Collecting tqdm>=4.42.1 (from huggingface-hub<3.0,>=0.16.4->tokenizers<1,>=0.15->cohere>=5.3.4->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading tqdm-4.70.1-py3-none-any.whl.metadata (57 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.4/57.4 kB 21.1 MB/s eta 0:00:00
+Collecting jsonpointer>=3.2 (from jsonpatch<2.0.0,>=1.33.0->langchain-core<2.0.0,>=1.6.13->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading jsonpointer-3.5-py3-none-any.whl.metadata (2.6 kB)
+Collecting ormsgpack>=1.12.0 (from langgraph-checkpoint<5.0.0,>=4.3.0->langgraph<1.3.0,>=1.2.12->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading ormsgpack-1.13.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (3.2 kB)
+Collecting orjson>=3.11.5 (from langgraph-sdk<0.5.0,>=0.4.6->langgraph<1.3.0,>=1.2.12->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading orjson-3.13.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (42 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 42.2/42.2 kB 13.0 MB/s eta 0:00:00
+Collecting requests-toolbelt>=1.0.0 (from langsmith<1.0.0,>=0.14.9->langchain-core<2.0.0,>=1.6.13->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading requests_toolbelt-1.0.0-py2.py3-none-any.whl.metadata (14 kB)
+Collecting zstandard>=0.23.0 (from langsmith<1.0.0,>=0.14.9->langchain-core<2.0.0,>=1.6.13->langchain>=0.1.17->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading zstandard-0.25.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (3.3 kB)
+Collecting pyasn1<0.7.0,>=0.6.1 (from pyasn1-modules>=0.2.1->google-auth<3.0.0,>=2.56.0->google-auth[requests]<3.0.0,>=2.56.0->google-genai>=1.15.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading pyasn1-0.6.4-py3-none-any.whl.metadata (8.4 kB)
+Collecting pycparser (from cffi>=2.0.0->cryptography>=38.0.3->google-auth<3.0.0,>=2.56.0->google-auth[requests]<3.0.0,>=2.56.0->google-genai>=1.15.0->agentdojo==0.1.35->-r requirements.txt (line 5))
+  Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+Downloading agentdojo-0.1.35-py3-none-any.whl (192 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 192.4/192.4 kB 62.9 MB/s eta 0:00:00
+Downloading anthropic-2.3.0-py3-none-any.whl (2.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 171.6 MB/s eta 0:00:00
+Downloading click-8.5.0-py3-none-any.whl (125 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 125.3/125.3 kB 44.9 MB/s eta 0:00:00
+Downloading cohere-7.3.0-py3-none-any.whl (373 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 373.1/373.1 kB 95.5 MB/s eta 0:00:00
+Downloading deepdiff-9.1.0-py3-none-any.whl (184 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 184.7/184.7 kB 65.3 MB/s eta 0:00:00
+Downloading docstring_parser-0.18.0-py3-none-any.whl (22 kB)
+Downloading google_genai-2.33.0-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 152.8 MB/s eta 0:00:00
+Downloading langchain-1.4.7-py3-none-any.whl (170 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 170.5/170.5 kB 60.0 MB/s eta 0:00:00
+Downloading openai-3.37.0-py3-none-any.whl (2.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.3/2.3 MB 175.7 MB/s eta 0:00:00
+Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 488.1/488.1 kB 112.3 MB/s eta 0:00:00
+Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 166.5 MB/s eta 0:00:00
+Downloading python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 132.2 MB/s eta 0:00:00
+Downloading rich-15.0.0-py3-none-any.whl (310 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 310.7/310.7 kB 92.1 MB/s eta 0:00:00
+Downloading tenacity-9.1.4-py3-none-any.whl (28 kB)
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.6/45.6 kB 17.9 MB/s eta 0:00:00
+Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 132.1/132.1 kB 49.5 MB/s eta 0:00:00
+Downloading cachebox-5.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (398 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 398.2/398.2 kB 102.1 MB/s eta 0:00:00
+Downloading distro-1.9.0-py3-none-any.whl (20 kB)
+Downloading email_validator-2.3.0-py3-none-any.whl (35 kB)
+Downloading fastavro-1.13.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (3.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.6/3.6 MB 183.2 MB/s eta 0:00:00
+Downloading google_auth-2.62.0-py3-none-any.whl (267 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 267.9/267.9 kB 84.3 MB/s eta 0:00:00
+Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.5/73.5 kB 29.8 MB/s eta 0:00:00
+Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.8/78.8 kB 32.3 MB/s eta 0:00:00
+Downloading httpx2-2.16.0-py3-none-any.whl (97 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 97.9/97.9 kB 37.5 MB/s eta 0:00:00
+Downloading httpcore2-2.16.0-py3-none-any.whl (85 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 85.1/85.1 kB 33.2 MB/s eta 0:00:00
+Downloading jiter-0.18.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (336 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 336.3/336.3 kB 91.7 MB/s eta 0:00:00
+Downloading langchain_core-1.7.0-py3-none-any.whl (574 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 574.7/574.7 kB 114.8 MB/s eta 0:00:00
+Downloading langgraph-1.2.17-py3-none-any.whl (260 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 260.5/260.5 kB 82.2 MB/s eta 0:00:00
+Downloading markdown_it_py-4.2.0-py3-none-any.whl (91 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.7/91.7 kB 31.9 MB/s eta 0:00:00
+Downloading opentelemetry_api-1.45.1-py3-none-any.whl (60 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 60.3/60.3 kB 22.7 MB/s eta 0:00:00
+Downloading orderly_set-5.5.0-py3-none-any.whl (13 kB)
+Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 157.4 MB/s eta 0:00:00
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.1/73.1 kB 29.3 MB/s eta 0:00:00
+Downloading sniffio-1.3.1-py3-none-any.whl (10 kB)
+Downloading tokenizers-0.23.3-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.4/3.4 MB 176.2 MB/s eta 0:00:00
+Downloading types_requests-2.33.0.20261006-py3-none-any.whl (21 kB)
+Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Downloading websockets-17.3-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (225 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 225.8/225.8 kB 71.8 MB/s eta 0:00:00
+Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.1/135.1 kB 52.9 MB/s eta 0:00:00
+Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (257 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 257.6/257.6 kB 76.7 MB/s eta 0:00:00
+Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (4.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 MB 189.8 MB/s eta 0:00:00
+Downloading dnspython-2.9.0-py3-none-any.whl (354 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 354.8/354.8 kB 99.2 MB/s eta 0:00:00
+Downloading huggingface_hub-2.3.0-py3-none-any.whl (855 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 855.2/855.2 kB 143.2 MB/s eta 0:00:00
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 69.6/69.6 kB 26.3 MB/s eta 0:00:00
+Downloading jsonpatch-1.37-py3-none-any.whl (17 kB)
+Downloading langchain_protocol-0.0.20-py3-none-any.whl (7.3 kB)
+Downloading langgraph_checkpoint-4.3.0-py3-none-any.whl (58 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58.1/58.1 kB 22.2 MB/s eta 0:00:00
+Downloading langgraph_prebuilt-1.1.1-py3-none-any.whl (42 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 42.3/42.3 kB 15.4 MB/s eta 0:00:00
+Downloading langgraph_sdk-0.4.9-py3-none-any.whl (167 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 167.6/167.6 kB 57.4 MB/s eta 0:00:00
+Downloading langsmith-0.14.12-py3-none-any.whl (883 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 883.6/883.6 kB 144.7 MB/s eta 0:00:00
+Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Downloading packaging-26.3-py3-none-any.whl (129 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 130.0/130.0 kB 47.0 MB/s eta 0:00:00
+Downloading pyasn1_modules-0.4.2-py3-none-any.whl (181 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 181.3/181.3 kB 61.9 MB/s eta 0:00:00
+Downloading truststore-0.10.5-py3-none-any.whl (19 kB)
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.7/135.7 kB 52.1 MB/s eta 0:00:00
+Downloading uuid_utils-0.18.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (322 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 322.2/322.2 kB 85.2 MB/s eta 0:00:00
+Downloading xxhash-4.0.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (261 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 261.8/261.8 kB 82.7 MB/s eta 0:00:00
+Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 221.8/221.8 kB 71.3 MB/s eta 0:00:00
+Downloading filelock-4.2.4-py3-none-any.whl (162 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 162.5/162.5 kB 57.0 MB/s eta 0:00:00
+Downloading fsspec-2026.9.0-py3-none-any.whl (221 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 221.7/221.7 kB 45.0 MB/s eta 0:00:00
+Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Downloading hf_xet-1.7.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.2/4.2 MB 182.9 MB/s eta 0:00:00
+Downloading jsonpointer-3.5-py3-none-any.whl (9.1 kB)
+Downloading orjson-3.13.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (130 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 130.6/130.6 kB 49.4 MB/s eta 0:00:00
+Downloading ormsgpack-1.13.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (254 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 254.9/254.9 kB 82.4 MB/s eta 0:00:00
+Downloading pyasn1-0.6.4-py3-none-any.whl (84 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 84.4/84.4 kB 31.2 MB/s eta 0:00:00
+Downloading requests_toolbelt-1.0.0-py2.py3-none-any.whl (54 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 54.5/54.5 kB 21.0 MB/s eta 0:00:00
+Downloading tqdm-4.70.1-py3-none-any.whl (80 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 80.2/80.2 kB 31.5 MB/s eta 0:00:00
+Downloading zstandard-0.25.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.5/5.5 MB 171.8 MB/s eta 0:00:00
+Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.6/62.6 kB 25.4 MB/s eta 0:00:00
+Installing collected packages: zstandard, xxhash, websockets, uuid-utils, urllib3, typing-extensions, truststore, tqdm, tenacity, sniffio, pyyaml, python-dotenv, pygments, pycparser, pyasn1, packaging, ormsgpack, orjson, orderly-set, mdurl, jsonpointer, jiter, idna, hf-xet, h11, fsspec, filelock, fastavro, docstring-parser, dnspython, distro, click, charset_normalizer, certifi, cachebox, annotated-types, typing-inspection, types-requests, requests, pydantic-core, pyasn1-modules, opentelemetry-api, markdown-it-py, langchain-protocol, jsonpatch, httpcore2, httpcore, email-validator, deepdiff, cffi, anyio, rich, requests-toolbelt, pydantic, httpx2, httpx, cryptography, openai, langsmith, huggingface-hub, google-auth, anthropic, tokenizers, langchain-core, langgraph-sdk, langgraph-checkpoint, google-genai, cohere, langgraph-prebuilt, langgraph, langchain, agentdojo
+Successfully installed agentdojo-0.1.35 annotated-types-0.8.0 anthropic-2.3.0 anyio-4.15.1 cachebox-5.2.3 certifi-2026.10.23 cffi-2.1.1 charset_normalizer-3.5.2 click-8.5.0 cohere-7.3.0 cryptography-50.0.2 deepdiff-9.1.0 distro-1.9.0 dnspython-2.9.0 docstring-parser-0.18.0 email-validator-2.3.0 fastavro-1.13.1 filelock-4.2.4 fsspec-2026.9.0 google-auth-2.62.0 google-genai-2.33.0 h11-0.16.0 hf-xet-1.7.0 httpcore-1.0.9 httpcore2-2.16.0 httpx-0.28.1 httpx2-2.16.0 huggingface-hub-2.3.0 idna-3.20 jiter-0.18.0 jsonpatch-1.37 jsonpointer-3.5 langchain-1.4.7 langchain-core-1.7.0 langchain-protocol-0.0.20 langgraph-1.2.17 langgraph-checkpoint-4.3.0 langgraph-prebuilt-1.1.1 langgraph-sdk-0.4.9 langsmith-0.14.12 markdown-it-py-4.2.0 mdurl-0.1.2 openai-3.37.0 opentelemetry-api-1.45.1 orderly-set-5.5.0 orjson-3.13.0 ormsgpack-1.13.0 packaging-26.3 pyasn1-0.6.4 pyasn1-modules-0.4.2 pycparser-3.12 pydantic-2.14.1 pydantic-core-2.50.1 pygments-2.21.0 python-dotenv-1.2.4 pyyaml-6.0.3 requests-2.34.2 requests-toolbelt-1.0.0 rich-15.0.0 sniffio-1.3.1 tenacity-9.1.4 tokenizers-0.23.3 tqdm-4.70.1 truststore-0.10.5 types-requests-2.33.0.20261006 typing-extensions-4.16.0 typing-inspection-0.4.4 urllib3-2.8.0 uuid-utils-0.18.0 websockets-17.3 xxhash-4.0.2 zstandard-0.25.0
+prepared: user thesecguy on host lab, removed: nothing, ready: nothing
