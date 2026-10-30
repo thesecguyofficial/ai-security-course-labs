@@ -1,0 +1,14 @@
+warning: unable to access '/home/runner/.config/git/config': Permission denied
+[before, as thesecguy] git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git
+warning: unable to access '/home/runner/.config/git/ignore': Permission denied
+warning: unable to access '/home/runner/.config/git/attributes': Permission denied
+[before, as thesecguy] cd ai-security-course-labs/labs/m26 && make setup
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+Collecting PyYAML==6.0.3 (from -r requirements.txt (line 3))
+  Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 37.1 MB/s eta 0:00:00
+Installing collected packages: PyYAML
+Successfully installed PyYAML-6.0.3
+prepared: user thesecguy on host lab, removed: nothing, ready: nothing

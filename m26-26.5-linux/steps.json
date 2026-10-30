@@ -1,0 +1,159 @@
+{
+  "scenario": "m26-26.5-linux",
+  "start": 1.709,
+  "steps": [
+    {
+      "label": "Scan",
+      "speed": 1,
+      "start": 1.709,
+      "end": 9.633
+    },
+    {
+      "label": "Lesson 26.0",
+      "speed": 1,
+      "start": 13.633,
+      "end": 25.191
+    },
+    {
+      "label": "Lesson 26.1",
+      "speed": 1,
+      "start": 32.191,
+      "end": 43.374
+    },
+    {
+      "label": "Lesson 26.3",
+      "speed": 1,
+      "start": 50.374,
+      "end": 61.347
+    },
+    {
+      "label": "The vLLM service",
+      "speed": 1,
+      "start": 68.347,
+      "end": 76.392
+    },
+    {
+      "label": "The model",
+      "speed": 1,
+      "start": 81.393,
+      "end": 90.223
+    },
+    {
+      "label": "Probe",
+      "speed": 1,
+      "start": 95.223,
+      "end": 98.675
+    },
+    {
+      "label": "Cache",
+      "speed": 1,
+      "start": 105.675,
+      "end": 107.82
+    },
+    {
+      "label": "Block hash",
+      "speed": 1,
+      "start": 112.821,
+      "end": 120.863
+    },
+    {
+      "label": "Two gateways",
+      "speed": 1,
+      "start": 125.863,
+      "end": 134.247
+    },
+    {
+      "label": "Hardened",
+      "speed": 1,
+      "start": 139.247,
+      "end": 142.366
+    },
+    {
+      "label": "Hardened compose",
+      "speed": 1,
+      "start": 149.366,
+      "end": 155.761
+    },
+    {
+      "label": "Hunt",
+      "speed": 1,
+      "start": 160.761,
+      "end": 162.861
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 168.861,
+      "end": 175.221
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 179.221,
+      "end": 188.882
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.309,
+      "what": "type"
+    },
+    {
+      "t": 14.233,
+      "what": "type"
+    },
+    {
+      "t": 32.791,
+      "what": "type"
+    },
+    {
+      "t": 50.974,
+      "what": "type"
+    },
+    {
+      "t": 68.947,
+      "what": "type"
+    },
+    {
+      "t": 81.993,
+      "what": "type"
+    },
+    {
+      "t": 95.823,
+      "what": "type"
+    },
+    {
+      "t": 106.275,
+      "what": "type"
+    },
+    {
+      "t": 113.421,
+      "what": "type"
+    },
+    {
+      "t": 126.464,
+      "what": "type"
+    },
+    {
+      "t": 139.847,
+      "what": "type"
+    },
+    {
+      "t": 149.966,
+      "what": "type"
+    },
+    {
+      "t": 161.361,
+      "what": "type"
+    },
+    {
+      "t": 169.461,
+      "what": "type"
+    },
+    {
+      "t": 179.821,
+      "what": "type"
+    }
+  ],
+  "end": 194.882
+}

@@ -1,0 +1,248 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m26 && make scan | tail -n 1
+
+make: [Makefile:18: scan] Error 1 (ignored)
+Findings: 33 (critical 2, high 25, medium 5, low 1)
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python scan.py stacks/first-draft | grep -A1 --no-group-separator -E ' 2 
+6\.(0|2) '
+
+  CRIT  AUTH-01   26.0  the gateway accepts requests without a key
+                       gateway.json: require_auth is false
+  HIGH  AUTH-02   26.0  the gateway's path allow-list lets management paths through
+                       gateway.json: allow_paths has /*
+  HIGH  CACHE-01  26.2  the prefix cache is shared across tenants
+                       gateway.json: cache_scope is 'shared'
+  HIGH  DEV-01    26.0  VLLM_SERVER_DEV_MODE=1 turns on development endpoints
+                       docker-compose.yml: vllm: VLLM_SERVER_DEV_MODE=1
+  HIGH  EXP-01    26.0  an engine port is published on every host address
+                       docker-compose.yml: ollama: ports "11434:11434" listens on 0.0.0.0 and [::] of the host
+  HIGH  EXP-01    26.0  an engine port is published on every host address
+                       docker-compose.yml: ray-head: ports "8265:8265" listens on 0.0.0.0 and [::] of the host
+  HIGH  EXP-01    26.0  an engine port is published on every host address
+                       docker-compose.yml: triton: ports "8001:8001" listens on 0.0.0.0 and [::] of the host
+  HIGH  EXP-01    26.0  an engine port is published on every host address
+                       docker-compose.yml: vllm: ports "8000:8000" listens on 0.0.0.0 and [::] of the host
+  HIGH  EXP-02    26.0  a model server is exposed by a LoadBalancer or NodePort Service
+                       k8s: Service vllm: type LoadBalancer
+  MED   CACHE-02  26.2  the gateway hands tenants per-request timing
+                       gateway.json: expose_timing is true
+  LOW   AUTH-03   26.0  vLLM runs without --api-key (a second lock behind the gateway)
+                       docker-compose.yml: vllm: no --api-key in the command
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python scan.py stacks/first-draft | grep -A1 --no-group-separator ' 26\. 
+1 '
+
+  HIGH  MODEL-01  26.1  the model ships pickle-based weights
+                       models/suspicious-model: pytorch_model.bin: prefer safetensors (Module 9)
+  HIGH  MODEL-02  26.1  the model points to custom code (auto_map or .py files)
+                       models/suspicious-model: modeling_custom.py ships with the model (read as text only, never run)
+  HIGH  MODEL-02  26.1  the model points to custom code (auto_map or .py files)
+                       models/suspicious-model: config.json has auto_map (CVE-2025-66448 loaded this even with trust_remote_code=False before vLLM 0.11.1)
+  HIGH  RCE-01    26.1  --trust-remote-code lets the server run code that ships with a model
+                       docker-compose.yml: vllm: command has --trust-remote-code
+  HIGH  RCE-01    26.1  --trust-remote-code lets the server run code that ships with a model
+                       k8s: vllm/vllm: args have --trust-remote-code
+  HIGH  VER-01    26.1  the engine version is in an advisory's affected range
+                       docker-compose.yml: ollama: ollama/ollama:0.1.33: CVE-2024-37032 (management API (/api/pull); fixed in 0.1.34; always: the digest from a registry manifest wasn't validated)
+  HIGH  VER-01    26.1  the engine version is in an advisory's affected range
+                       docker-compose.yml: triton: nvcr.io/nvidia/tritonserver:25.03-py3: CVE-2025-23319 (Python backend; fixed in 25.07; always in the affected range (update the Python backend too))
+  HIGH  VER-01    26.1  the engine version is in an advisory's affected range
+                       docker-compose.yml: triton: nvcr.io/nvidia/tritonserver:25.03-py3: CVE-2025-23320 (Python backend; fixed in 25.07; always in the affected range)
+  HIGH  VER-01    26.1  the engine version is in an advisory's affected range
+                       docker-compose.yml: vllm: vllm/vllm-openai:v0.10.2: CVE-2025-62164 (inference API (prompt embeddings in the Completions API); fixed in 0.11.1; always in the affected range)
+  HIGH  VER-01    26.1  the engine version is in an advisory's affected range
+                       docker-compose.yml: vllm: vllm/vllm-openai:v0.10.2: CVE-2025-66448 (model loader (auto_map remote code despite trust_remote_code=False); fixed in 0.11.1; when it loads a config that has an auto_map entry)
+  MED   VER-00    26.1  the image isn't pinned to a version
+                       k8s: vllm/vllm: vllm/vllm-openai:latest: pin a version you have checked against the advisories
+  MED   VER-01    26.1  the engine version is in an advisory's affected range
+                       docker-compose.yml: triton: nvcr.io/nvidia/tritonserver:25.03-py3: CVE-2025-23334 (Python backend; fixed in 25.07; always in the affected range)
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python scan.py stacks/first-draft | grep -A1 --no-group-separator ' 26\. 
+3 '
+
+  CRIT  NODE-03   26.3  the NVIDIA container toolkit is in an advisory's affected range
+                       nodes.json: gpu-node-1: toolkit 1.17.4: CVE-2025-23266 (fixed in 1.17.8; affected: up to and including 1.17.7 (before 1.17.5 only in CDI mode))
+  HIGH  K8S-01    26.3  a pod runs privileged or on the host network
+                       k8s: vllm: hostNetwork: true
+  HIGH  K8S-01    26.3  a pod runs privileged or on the host network
+                       k8s: vllm/vllm: privileged: true
+  HIGH  NODE-02   26.3  pods can reach the node's IAM role through IMDS
+                       cluster.yaml: nodegroup gpu: disableIMDSv1, disablePodIMDS not set to true
+  HIGH  NODE-02   26.3  pods can reach the node's IAM role through IMDS
+                       nodes.json: gpu-node-1: IMDS tokens optional, hop limit 2
+  HIGH  NODE-04   26.3  tenants time-share one GPU (no memory isolation)
+                       nodes.json: gpu-node-1: time-slicing shared by acme, globex
+  HIGH  SEC-01    26.3  a secret is written into the file
+                       docker-compose.yml: vllm: environment HF_TOKEN holds a literal value
+  HIGH  SEC-01    26.3  a secret is written into the file
+                       k8s: vllm/vllm: env HF_TOKEN holds a literal value (use a secretKeyRef or Pod Identity)
+  MED   K8S-02    26.3  no default-deny NetworkPolicy for the namespace
+                       k8s: namespace inference: no NetworkPolicy that denies all egress by default
+  MED   NODE-01   26.3  the GPU node group has no nvidia.com/gpu taint
+                       cluster.yaml: nodegroup gpu: g4dn.xlarge without the nvidia.com/gpu taint
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ sed -n '/^  vllm:/,/^$/p' stacks/first-draft/docker-compose.yml
+
+  vllm:
+    image: vllm/vllm-openai:v0.10.2
+    command: ["--model", "/models/suspicious-model", "--host", "0.0.0.0", "--port", "8000", "--trust-remote-code"]
+    environment:
+      VLLM_SERVER_DEV_MODE: "1"
+      HF_TOKEN: "hf_LABPLACEHOLDERnotarealtoken0000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/models
+
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ ls models/suspicious-model && cat models/suspicious-model/config.json
+
+config.json  modeling_custom.py  pytorch_model.bin
+{
+  "_about": "LAB PLACEHOLDER. A model config that points to custom Python code through auto_map. scan.py reads it; nothing in this lab ever imports or runs the code.",
+  "architectures": ["LabCustomForCausalLM"],
+  "auto_map": {"AutoModelForCausalLM": "modeling_custom.LabCustomForCausalLM"},
+  "model_type": "lab-custom"
+}
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ make probe
+
+.venv/bin/python probe.py first-draft
+Probe of the practice server, profile first-draft (127.0.0.1 only)
+  method path                  kind         no key   key
+  GET    /v1/models            inference       200   200
+  POST   /v1/chat/completions  inference       200   200
+  GET    /health               health          200   200
+  GET    /version              info            200   200  <- open
+  GET    /metrics              info            200   200  <- open
+  POST   /tokenize             info            200   200  <- open
+  POST   /pause                ops             200   200  <- open
+  POST   /update_weights       ops             200   200  <- open
+  POST   /collective_rpc       dev             200   200  <- open
+  GET    /api/tags             inference       200   200
+  POST   /api/pull             management      200   200  <- open
+  DELETE /api/delete           management      200   200  <- open
+Reachable without a key: 12 of 12 paths (8 management, ops, dev or info) | with a key: 12 of 12
+
+.venv/bin/python probe.py key-only
+Probe of the practice server, profile key-only (127.0.0.1 only)
+  method path                  kind         no key   key
+  GET    /v1/models            inference       401   200
+  POST   /v1/chat/completions  inference       401   200
+  GET    /health               health          200   200
+  GET    /version              info            200   200  <- open
+  GET    /metrics              info            200   200  <- open
+  POST   /tokenize             info            200   200  <- open
+  POST   /pause                ops             200   200  <- open
+  POST   /update_weights       ops             200   200  <- open
+  POST   /collective_rpc       dev             404   404
+  GET    /api/tags             inference       404   404
+  POST   /api/pull             management      404   404
+  DELETE /api/delete           management      404   404
+Reachable without a key: 6 of 12 paths (5 management, ops, dev or info) | with a key: 8 of 12
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ make cache
+
+.venv/bin/python cachetest.py first-draft
+Prefix-cache isolation test, stack first-draft
+  globex sends acme's system prompt:  16 cached tokens  (from acme's blocks: 16)
+  acme sends it again:                16 cached tokens  (its own cache still works)
+  globex, unrelated prompt:            0 cached tokens
+  per-request timing shown to tenants: yes
+Cross-tenant cache hits: 16 tokens -> NOT ISOLATED
+make: [Makefile:26: cache] Error 1 (ignored)
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ sed -n '/^def block_hashes/,/return hashes/p' cache_engine.py
+
+def block_hashes(tokens, salt=None):
+    """Chained SHA-256 hashes of every FULL block. The salt is mixed into the first block only."""
+    hashes, parent = [], b""
+    for i in range(0, len(tokens) - len(tokens) % BLOCK_SIZE, BLOCK_SIZE):
+        extra = {"cache_salt": salt} if (i == 0 and salt is not None) else {}
+        payload = json.dumps({"parent": parent.hex(), "tokens": tokens[i:i + BLOCK_SIZE], "extra": extra},
+                             sort_keys=True).encode()
+        parent = hashlib.sha256(payload).digest()
+        hashes.append(parent)
+    return hashes
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ diff stacks/first-draft/gateway.json stacks/hardened/gateway.json
+
+2,6c2,6
+<   "_about": "The TSG gateway in front of the engines (first draft). Read by scan.py, gateway.py and practice_server.py.",
+<   "require_auth": false,
+<   "allow_paths": ["/*"],
+<   "cache_scope": "shared",
+<   "expose_timing": true,
+---
+>   "_about": "The TSG gateway in front of the engines (hardened). Read by scan.py, gateway.py and practice_server.py.",
+>   "require_auth": true,
+>   "allow_paths": ["/v1/chat/completions", "/v1/models", "/health"],
+>   "cache_scope": "per_tenant",
+>   "expose_timing": false,
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ make hardened
+
+.venv/bin/python scan.py stacks/hardened
+Scan of stacks/hardened  (files read: compose, k8s, cluster, gateway, nodes, models; nothing run)
+Findings: 0 (critical 0, high 0, medium 0, low 0)
+
+.venv/bin/python probe.py hardened
+Probe of the practice server, profile hardened (127.0.0.1 only)
+  method path                  kind         no key   key
+  GET    /v1/models            inference       401   200
+  POST   /v1/chat/completions  inference       401   200
+  GET    /health               health          401   200
+  GET    /version              info            401   404
+  GET    /metrics              info            401   404
+  POST   /tokenize             info            401   404
+  POST   /pause                ops             401   404
+  POST   /update_weights       ops             401   404
+  POST   /collective_rpc       dev             401   404
+  GET    /api/tags             inference       401   404
+  POST   /api/pull             management      401   404
+  DELETE /api/delete           management      401   404
+Reachable without a key: 0 of 12 paths (0 management, ops, dev or info) | with a key: 3 of 12
+
+.venv/bin/python cachetest.py hardened
+Prefix-cache isolation test, stack hardened
+  globex sends acme's system prompt:   0 cached tokens  (from acme's blocks: 0)
+  acme sends it again:                16 cached tokens  (its own cache still works)
+  globex, unrelated prompt:            0 cached tokens
+  per-request timing shown to tenants: no
+Cross-tenant cache hits: 0 tokens -> ISOLATED
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ .venv/bin/python explore.py container hardened
+
+stacks/hardened/docker-compose.yml: 5 containers (read only, nothing is started)
+A container = one program and the files it needs, run as an isolated process on this host.
+
+  service   image (name:version)                     ports                 who can reach it
+  ollama    ollama/ollama:0.40.11                    expose 11434          other containers only: no host port
+  vllm      vllm/vllm-openai:v0.32.0                 expose 8000           other containers only: no host port
+  triton    nvcr.io/nvidia/tritonserver:25.07-py3    expose 8001           other containers only: no host port
+  ray-head  rayproject/ray:2.59.0                    expose 8265           other containers only: no host port
+  gateway   tsg/inference-gateway:lab                127.0.0.1:8443:8443   host port 8443: 127.0.0.1 only (this host)
+
+"8000:8000" = host port 8000 -> container port 8000 on every host address.
+"127.0.0.1:8443:8443" = the same, for this host only.  "expose" = no port on the host at all.
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ make hunt
+
+.venv/bin/python hunt.py
+Hunt over 22 gateway log lines (gateway-log.jsonl)
+Q1  successful requests with no key, per path:
+        2  /api/tags
+        2  /version
+        1  /v1/models
+        1  /metrics
+        1  /api/pull
+        1  /api/delete
+        1  /update_weights
+Q2  outside addresses asking what the server is:
+      203.0.113.45    /api/tags, /api/version, /version, /v1/models
+      203.0.113.80    /metrics, /version
+      198.51.100.7    /api/tags
+Q3  management calls not from the deployment pipeline:
+      (not written yet: challenge 3: write find_management_calls())
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ make test 2>&1 | tail -n 3
+
+OK
+
+ALL TESTS PASSED (19 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ make challenge 2>&1 | grep -E '^\[(FAIL|ERROR)\]|TESTS'
+
+[FAIL] C1 (26.1) scan: RAY-01 flags the first draft's Ray head and stays quiet on the hardened one
+[FAIL] C2 (26.2) cache: a tenant's own apps still share a group, but globex can't join acme's group by name
+[ERROR] C3 (26.0, 26.1) hunt: find_management_calls() lists every management call not from the pipeline
+3 of 22 TESTS FAILED (22 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m26$ exit
+
+exit
