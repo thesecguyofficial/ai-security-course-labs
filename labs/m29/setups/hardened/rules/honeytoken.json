@@ -4,7 +4,7 @@
   "severity": "high",
   "state": "ENABLED_WITH_ALL_CLOUDTRAIL_MANAGEMENT_EVENTS",
   "regions": "all",
-  "_note": "Any call, any service, any Region, failed or not. The decoy has no permissions, so every real use FAILS.",
+  "_note": "Any call, any service, any Region, failed or not. The decoy has no permissions, so every call that needs one FAILS.",
   "pattern": {
     "detail-type": ["AWS API Call via CloudTrail"],
     "detail": {

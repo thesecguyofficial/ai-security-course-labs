@@ -105,8 +105,10 @@ def report(r: dict) -> None:
     print(f"  {iso(p['effective'])}  changes in effect (lab assumption: {ASSUMPTIONS['iam_propagation_s']} s)")
     verdict = "within" if r["time_to_act_s"] <= slo else "OVER"
     print(f"time to act: {mmss(r['time_to_act_s'])} ({verdict} the {mmss(slo)} target)")
-    print(f"attacker calls that worked: {r['succeeded']} of {len(r['results'])}, {r['succeeded_after_action']} of them "
-          f"AFTER the responder acted | lab cost {r['lab_cost_usd']:.2f} USD")
+    ok = [c for c in r["results"] if c["outcome"] == "allowed"]
+    models = sum(c["call"] == "InvokeModel" for c in ok)
+    print(f"attacker calls that worked: {r['succeeded']} of {len(r['results'])} ({models} model calls, {len(ok) - models} session "
+          f"swap), {r['succeeded_after_action']} of them AFTER the responder acted | lab cost {r['lab_cost_usd']:.2f} USD")
 
 
 if __name__ == "__main__":

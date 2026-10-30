@@ -114,7 +114,7 @@ def explain(setup: dict, records: list[dict]) -> None:
 SCENARIOS = {
     "honeytoken-read-only": scenarios.honeytoken_read_only,
     "honeytoken-denied": scenarios.honeytoken_denied_invoke,
-    "honeytoken-other-region": lambda: scenarios.honeytoken_denied_invoke("ap-southeast-2"),
+    "honeytoken-other-region": lambda: scenarios.honeytoken_denied_invoke("ap-southeast-2", "10:01:40"),
     "decoy-api-key": scenarios.decoy_api_key_used,
     "app-key-elsewhere": scenarios.app_key_from_elsewhere,
     "logging-off": scenarios.logging_switched_off,

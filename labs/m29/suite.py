@@ -48,7 +48,7 @@ CASES = [
     ("H2", "decoy key used: InvokeModel, AccessDenied", "29.4",
      lambda s: not _alerted(s, scenarios.honeytoken_denied_invoke(), "honeytoken-key-used")),
     ("H3", "decoy key used in another Region", "29.4",
-     lambda s: not _alerted(s, scenarios.honeytoken_denied_invoke("ap-southeast-2"), "honeytoken-key-used")),
+     lambda s: not _alerted(s, scenarios.honeytoken_denied_invoke("ap-southeast-2", "10:01:40"), "honeytoken-key-used")),
     ("N1", "real app key used from outside its VPC endpoint", "29.7",
      lambda s: not _alerted(s, scenarios.app_key_from_elsewhere())),
     ("N2", "Bedrock invocation logging deleted", "29.4",
