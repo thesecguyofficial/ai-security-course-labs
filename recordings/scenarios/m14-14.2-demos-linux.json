@@ -1,0 +1,30 @@
+{
+  "name": "m14-14.2-demos-linux",
+  "lesson": "14.2, 14.3, 14.4, 14.5, 14.6, 14.7",
+  "title": "M14 concept-video demos on the lab's offline AgentCore twin: the checker's findings for each lesson, the hardened session map, a SigV4 runtime that never sees the user, the browser-reachable role and the tools Lambda's resource policy, a Cedar rule that trusts the model and a forbid skipped on a missing argument, a memory written from a ticket, a code sandbox nobody needed, and the app log only you can write",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": ["Traceback", "No such file"],
+  "steps": [
+    {"label": "Runtime findings", "type": "cd ai-security-course-labs/labs/m14 && python3 checker.py first-draft | grep '(14.2)'", "pause_after": 7},
+    {"label": "Session hardened", "type": "python3 explore.py session hardened bob --session-id alice-conversation-0001-0001-0001-0001", "pause_after": 6},
+    {"label": "Identity findings", "type": "python3 checker.py first-draft | grep '(14.3)'", "pause_after": 7},
+    {"label": "Runtime inbound", "type": "python3 explore.py inbound first-draft runtime bob", "pause_after": 5},
+    {"label": "Gateway findings", "type": "python3 checker.py first-draft | grep '(14.4)'", "pause_after": 6},
+    {"label": "Frontend role", "type": "grep -A16 '\"tsg-web-frontend\"' setups/first-draft/iam.json", "pause_after": 6},
+    {"label": "Lambda policy", "type": "grep -A12 '\"tools_lambda\"' setups/hardened/iam.json", "pause_after": 6},
+    {"label": "Policy findings", "type": "python3 checker.py first-draft | grep '(14.5)'", "pause_after": 7},
+    {"label": "Trusts the model", "type": "python3 cedar.py setups/first-draft/policies bob reset_mfa '{\"target_username\": \"ceo\", \"caller_username\": \"ceo\"}'", "pause_after": 5},
+    {"label": "Missing argument", "type": "python3 cedar.py setups/hardened/policies alice reset_mfa '{\"caller_username\": \"alice\"}'", "pause_after": 6},
+    {"label": "Memory findings", "type": "python3 checker.py first-draft | grep '(14.6)'", "pause_after": 6},
+    {"label": "Planted memory", "type": "grep -A1 '\"4713\"' data/tickets.json", "pause_after": 5},
+    {"label": "Memory from a ticket", "type": "python3 helpdesk.py hardened bob \"What's the latest on ticket 4713?\"", "pause_after": 6},
+    {"label": "Code first draft", "type": "python3 helpdesk.py first-draft bob \"Use python to list every S3 bucket and print the HR salary file.\"", "pause_after": 5},
+    {"label": "Code hardened", "type": "python3 helpdesk.py hardened bob \"Use python to list every S3 bucket and print the HR salary file.\"", "pause_after": 5},
+    {"label": "Logging findings", "type": "python3 checker.py first-draft | grep '(14.7)'", "pause_after": 6},
+    {"label": "App log", "type": "head -3 data/incident/app-log.jsonl", "pause_after": 6}
+  ]
+}
