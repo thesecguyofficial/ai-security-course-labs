@@ -1,0 +1,29 @@
+{
+  "name": "m15-15.5-linux",
+  "lesson": "15.5",
+  "title": "Lab 15.5, parts 2 and 3: review the first draft, attack it, open the booby-trapped model file, scan and hash the files, the hardened setup, the hunt, the tests and the challenge, and look at the optional cloud build without running it",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m15 && python3 --version", "pause_after": 2},
+    {"label": "Check", "type": "make check | grep HIGH | cut -c1-131", "pause_after": 8},
+    {"label": "Check medium", "type": "make -s check | grep -v HIGH | cut -c1-131", "pause_after": 6},
+    {"label": "Attack", "type": "make attack", "pause_after": 8},
+    {"label": "Outsider", "type": "python3 explore.py call first-draft collector-role --vpce", "pause_after": 6},
+    {"label": "Files", "type": "make scan", "pause_after": 6},
+    {"label": "Open the file", "type": "python3 -c \"import zipfile, pickletools; pickletools.dis(zipfile.ZipFile('artifacts/v1-pickle/pytorch_model.bin').read('archive/data.pkl'))\"", "pause_after": 6},
+    {"label": "Hashes", "type": "python3 model_files.py manifest artifacts/v2-safe", "pause_after": 5},
+    {"label": "Check hardened", "type": "make check-hardened | cut -c1-131", "pause_after": 5},
+    {"label": "Hardened", "type": "make hardened", "pause_after": 8},
+    {"label": "Outsider hardened", "type": "python3 explore.py call hardened collector-role --vpce", "pause_after": 6},
+    {"label": "Hunt", "type": "make hunt", "pause_after": 7},
+    {"label": "Tests", "type": "make test | tail -6", "pause_after": 4},
+    {"label": "Challenge", "type": "make challenge 2>&1 | tail -12", "pause_after": 6},
+    {"label": "Cloud plan", "type": "make -n cloud-base", "pause_after": 5},
+    {"label": "Cloud guide", "type": "grep '^## ' GUIDED-BUILD.md", "pause_after": 5}
+  ]
+}
