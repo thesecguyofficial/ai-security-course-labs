@@ -1,0 +1,138 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m28 && make leak
+
+.venv/bin/python pipeline.py first-draft
+setup first-draft | 12 model calls logged | redactor: 12 records, 0 large bodies redacted, 1 copied as-is, 2 values replaced, 0 vectors removed
+check what                                         lesson  result
+L1    analyst reads a raw prompt                   28.4    LEAK    tsg-analytics read a raw record: the bucket policy allowed it and alias/tsg-invocation-logs let an IAM policy grant kms:Decrypt
+L2    PII or secrets left in redacted records      28.4    LEAK    survived redaction: AWS_ACCESS_KEY_ID in 1 record(s), AWS_CREDENTIALS in 1 record(s), CREDIT_CARD_NUMBER in 1 record(s), CUSTOMER_NAME in 6 record(s), EMAIL_ADDRESS in 3 record(s), PHONE_NUMBER in 1 record(s), TSG_CUSTOMER_ID in 4 record(s)
+L3    embedding vectors in the redacted copy       28.1    LEAK    6 embedding arrays readable by analysts (input text sits next to them in the raw log)
+L4    large body (>100 KB) copied unredacted       28.4    LEAK    large body copied across unredacted: 59d7f60d-lab0-4m28-c06-0000000000-input.json.gz
+L5    Macie skipped raw objects, said nothing      28.4    LEAK    Macie read 0 of 10 raw objects (9 SKIPPED INVALID_ENCRYPTION, 1 EXCLUDED_BY_SCOPE); findings on raw: 0
+L6    kinds Macie's job can never detect           28.4    LEAK    this job can never find: EMAIL_ADDRESS, TSG_CUSTOMER_ID
+L7    raw records kept past 30 days                28.3    LEAK    3 raw objects older than 30 days still stored (3 hidden behind delete markers, readable by version ID)
+N1    analyst weekly usage report (redacted only)          works   tsg-dev-sandbox: 1 calls, 37 tokens, tsg-helpdesk-app: 4 calls, 119 tokens, tsg-rag-indexer: 1 calls, 16 tokens
+N2    break-glass reads this week's raw record             works   read ff62523e-lab0-4m28-c04-0000000000 (Converse, amazon.nova-micro-v1:0)
+N3    one redacted record per raw record                   works   9 raw records, 12 redacted records
+
+Leaks: 7 of 7  (L1, L2, L3, L4, L5, L6, L7) | normal jobs that work: 3 of 3
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ grep '"_about"' setups/first-draft/pipeline.json
+
+  "_about": "FIRST DRAFT. It works: logs arrive, a redacted copy appears, Macie runs and the dashboard is green. Read each choice and ask who it lets read what.",
+    "_about": "put-model-invocation-logging-configuration. Every modality ticked 'to be safe'.",
+      "_about": "ONE key for raw and redacted logs. The default 'Enable IAM User Permissions' statement lets any IAM policy in the account grant Decrypt.",
+      "_about": "Analysts can read raw 'for debugging'. Lifecycle expires after 30 days, but the bucket is versioned and nothing removes noncurrent versions.",
+    "_about": "Looks only at the user's text in the request. Two hand-written patterns. Big bodies copied across as they are. Vectors kept.",
+    "_about": "Managed identifiers only, and big objects under data/ excluded 'to save cost'.",
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ cat setups/first-draft/identifiers.json
+
+{
+  "_about": "First draft: the redactor's two hand-written patterns. Macie gets no custom data identifiers.",
+  "custom_data_identifiers": [],
+  "redactor_patterns": [
+    {
+      "name": "EMAIL",
+      "regex": "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}",
+      "caseSensitive": true
+    },
+    {
+      "name": "CARD",
+      "regex": "\\b\\d{16}\\b",
+      "caseSensitive": true
+    }
+  ]
+}
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ make hardened
+
+.venv/bin/python pipeline.py hardened
+setup hardened | 12 model calls logged | redactor: 12 records, 1 large bodies redacted, 0 copied as-is, 33 values replaced, 0 vectors removed
+check what                                         lesson  result
+L1    analyst reads a raw prompt                   28.4    closed  refused by the bucket policy; alias/tsg-logs-raw has no statement for tsg-analytics either (two locks)
+L2    PII or secrets left in redacted records      28.4    closed  12 redacted records, no planted value left
+L3    embedding vectors in the redacted copy       28.1    closed  no embedding arrays in the redacted copy
+L4    large body (>100 KB) copied unredacted       28.4    closed  large bodies were redacted like every other record
+L5    Macie skipped raw objects, said nothing      28.4    closed  Macie read all 10 raw objects; findings on raw: 8
+L6    kinds Macie's job can never detect           28.4    closed  every planted kind has a detector in the job
+L7    raw records kept past 30 days                28.3    closed  nothing in the raw bucket is older than 30 days
+N1    analyst weekly usage report (redacted only)          works   tsg-dev-sandbox: 1 calls, 37 tokens, tsg-helpdesk-app: 4 calls, 119 tokens, tsg-rag-indexer: 1 calls, 16 tokens
+N2    break-glass reads this week's raw record             works   read ff62523e-lab0-4m28-c04-0000000000 (Converse, amazon.nova-micro-v1:0)
+N3    one redacted record per raw record                   works   9 raw records, 12 redacted records
+
+Leaks: 0 of 7  (none) | normal jobs that work: 3 of 3
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ make two-locks
+
+.venv/bin/python demo.py two-locks
+raw object: 0a8dc0ca-lab0-4m28-c08-0000000000.json.gz  (account IDs print as <account>)
+1. tsg-analytics, bucket policy as built:  REFUSED  tsg-analytics may not s3:GetObject s3://tsg-invocation-logs-raw/AWSLogs/<account>/BedrockModelInvocationLogs/us-east-1/2027/03/14/09/0a8dc0ca-lab0-4m28-c08-0000000000.json.gz
+2. after the bucket-policy mistake:        REFUSED  tsg-analytics may not use alias/tsg-logs-raw for kms:Decrypt
+
+The refusal is in the trail (state/cloudtrail.jsonl), last event:
+{
+  "eventSource": "kms.amazonaws.com",
+  "eventName": "Decrypt",
+  "errorCode": "AccessDenied",
+  "userIdentity.arn": "arn:aws:iam::<account>:role/tsg-analytics",
+  "requestParameters.keyId": "arn:aws:kms:us-east-1:<account>:key/d2e8e3d7-5171-7003-8a49-bf0df5e7d330",
+  "requestParameters.encryptionContext": {
+    "aws:s3:arn": "arn:aws:s3:::tsg-invocation-logs-raw/AWSLogs/<account>/BedrockModelInvocationLogs/us-east-1/2027/03/14/09/0a8dc0ca-lab0-4m28-c08-0000000000.json.gz"
+  }
+}
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ make macie
+
+.venv/bin/python macie.py first-draft
+tsg-invocation-logs-raw: 1 EXCLUDED_BY_SCOPE, 9 SKIPPED (INVALID_ENCRYPTION) | findings: 0
+tsg-invocation-logs-redacted: 1 EXCLUDED_BY_SCOPE, 12 SKIPPED (INVALID_ENCRYPTION) | findings: 0
+
+.venv/bin/python macie.py hardened
+tsg-invocation-logs-raw: 10 COMPLETE | findings: 8
+tsg-invocation-logs-redacted: 13 COMPLETE | findings: 0
+detections: AWS_ACCESS_KEY_ID x1, AWS_CREDENTIALS x1, CREDIT_CARD_NUMBER x1, EMAIL_ADDRESS x8, PHONE_NUMBER x6, TSG_CUSTOMER_ID x3
+  SensitiveData:S3Object/CustomIdentifier  tsg-invocation-logs-raw/.../0a8dc0ca-lab0-4m28-c08-0000000000.json.gz
+  SensitiveData:S3Object/Personal          tsg-invocation-logs-raw/.../ff62523e-lab0-4m28-c04-0000000000.json.gz
+  SensitiveData:S3Object/CustomIdentifier  tsg-invocation-logs-raw/.../ba6fe795-lab0-4m28-c03-0000000000.json.gz
+  SensitiveData:S3Object/Financial         tsg-invocation-logs-raw/.../31b1608f-lab0-4m28-c02-0000000000.json.gz
+  SensitiveData:S3Object/CustomIdentifier  tsg-invocation-logs-raw/.../121f8bd5-lab0-4m28-c01-0000000000.json.gz
+  SensitiveData:S3Object/Multiple          tsg-invocation-logs-raw/.../e51c453a-lab0-4m28-c05-0000000000.json.gz
+  SensitiveData:S3Object/CustomIdentifier  tsg-invocation-logs-raw/.../ebbfb535-lab0-4m28-c12-0000000000.json.gz
+  SensitiveData:S3Object/Multiple          tsg-invocation-logs-raw/.../59d7f60d-lab0-4m28-c06-0000000000-input.json.gz
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ make tokens
+
+.venv/bin/python demo.py tokens
+2027-04-01T09:00:00Z  tsg-helpdesk-app  metadata  [EMAIL_ADDRESS:475cdcd6]
+2027-04-01T09:00:00Z  tsg-helpdesk-app  request   Hi, I'm [CUSTOMER_NAME:7e901621] ([EMAIL_ADDRESS:475cdcd6]), account [TSG_CUSTOMER_ID:6d05e613]. My order still hasn't arrived.
+2027-04-01T09:00:00Z  tsg-helpdesk-app  response  Sorry about that, Dana. I've opened a delivery check and we'll write to [EMAIL_ADDRESS:475cdcd6] within a day.
+2027-04-02T21:00:00Z  tsg-helpdesk-app  response  Yes. We replied to [EMAIL_ADDRESS:475cdcd6] an hour ago.
+
+[EMAIL_ADDRESS:475cdcd6] is the same customer each time. Who it is stays with the tokenisation key.
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ make hunt
+
+.venv/bin/python hunt.py
+32 KMS events
+Q1  Calls per key (account IDs print as <account>):
+    arn:aws:kms:us-east-1:<account>:key/d2e8e3d7-5171-7003-8a49-bf0df5e7d330
+      AWSServiceRoleForAmazonMacie     Decrypt          ok       x4
+      bedrock.amazonaws.com            GenerateDataKey  ok       x5
+      tsg-analytics                    Decrypt          refused  x3
+      tsg-incident-break-glass         Decrypt          ok       x1
+      tsg-log-redactor                 Decrypt          ok       x5
+      tsg-ml-training                  Decrypt          ok       x4
+    arn:aws:kms:us-east-1:<account>:key/15241331-7bb2-ba5d-b389-7c9a87b3accd
+      tsg-analytics                    Decrypt          ok       x5
+      tsg-log-redactor                 GenerateDataKey  ok       x5
+Q2  Break-glass uses (match each to an incident ticket):
+    2027-04-02T11:02:00Z  rec-003.json.gz
+Q3  (not answered yet: challenge 3, write find_raw_key_readers() in hunt.py)
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ make test 2>&1 | tail -n 4
+
+
+OK
+
+ALL TESTS PASSED (20 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ make challenge 2>&1 | grep -E 'FAIL|TESTS'
+
+[FAIL] challenge 1: with the loyalty-card call added, the hardened pipeline still has 0 leaks (L2 and L6 closed)
+[FAIL] challenge 1: Macie's job reports TSG_LOYALTY_CARD in the raw bucket
+FAILED (failures=2, errors=2)
+4 of 24 TESTS FAILED (24 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ exit
+
+exit

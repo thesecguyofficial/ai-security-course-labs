@@ -1,0 +1,109 @@
+{
+  "scenario": "m28-28.4-linux",
+  "start": 1.694,
+  "steps": [
+    {
+      "label": "Leak",
+      "speed": 1,
+      "start": 1.694,
+      "end": 8.184
+    },
+    {
+      "label": "Choices",
+      "speed": 1,
+      "start": 16.184,
+      "end": 22.707
+    },
+    {
+      "label": "Patterns",
+      "speed": 1,
+      "start": 28.707,
+      "end": 33.924
+    },
+    {
+      "label": "Hardened",
+      "speed": 1,
+      "start": 38.925,
+      "end": 41.594
+    },
+    {
+      "label": "Two locks",
+      "speed": 1,
+      "start": 49.595,
+      "end": 52.387
+    },
+    {
+      "label": "Macie",
+      "speed": 1,
+      "start": 59.387,
+      "end": 61.87
+    },
+    {
+      "label": "Tokens",
+      "speed": 1,
+      "start": 69.87,
+      "end": 72.305
+    },
+    {
+      "label": "Hunt",
+      "speed": 1,
+      "start": 79.306,
+      "end": 81.476
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 88.476,
+      "end": 94.148
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 98.148,
+      "end": 105.934
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.295,
+      "what": "type"
+    },
+    {
+      "t": 16.784,
+      "what": "type"
+    },
+    {
+      "t": 29.307,
+      "what": "type"
+    },
+    {
+      "t": 39.525,
+      "what": "type"
+    },
+    {
+      "t": 50.195,
+      "what": "type"
+    },
+    {
+      "t": 59.987,
+      "what": "type"
+    },
+    {
+      "t": 70.47,
+      "what": "type"
+    },
+    {
+      "t": 79.906,
+      "what": "type"
+    },
+    {
+      "t": 89.077,
+      "what": "type"
+    },
+    {
+      "t": 98.748,
+      "what": "type"
+    }
+  ],
+  "end": 111.934
+}
