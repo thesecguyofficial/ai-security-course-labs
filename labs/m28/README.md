@@ -69,6 +69,8 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `detect.py` | The detectors: a subset of Macie's managed identifiers, custom data identifiers, your customer list |
 | `macie.py` | Local Macie job: reads as Macie's service-linked role, `SKIPPED` / `INVALID_ENCRYPTION` when the key says no |
 | `pipeline.py` | Builds a setup from zero, runs it, checks L1 to L7 and N1 to N3 |
+| `explore.py` | The read-only helper for Step 1b: one idea at a time (a log record, a toy encoder and its inversion, a toy model that memorises, differential privacy, hiding versus removing, detectors, redaction, envelope encryption). It writes no file and opens no connection |
+| `Makefile` | Short commands for Mac and Linux (`make setup`, `make check`, `make leak` ...); `make -n <target>` shows what one would run, without running it |
 | `demo.py`, `hunt.py`, `forget.py` | Two demonstrations, the investigator's questions, the erasure challenge |
 | `data/` | The calls, the fake customer list, a day of KMS events for the hunt |
 | `cloud/`, `GUIDED-BUILD.md` | Optional: the same pipeline in your own AWS account |

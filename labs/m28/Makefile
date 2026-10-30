@@ -4,11 +4,14 @@
 VENV := .venv
 PY   := $(if $(wildcard $(VENV)/bin/python),$(VENV)/bin/python,python3)
 
-.PHONY: setup leak hardened macie two-locks tokens hunt test challenge clean
+.PHONY: setup check leak hardened macie two-locks tokens hunt test challenge clean
 
 setup:      ## create .venv and install the pinned cryptography package
 	python3 -m venv $(VENV)
 	$(VENV)/bin/python -m pip install -r requirements.txt
+
+check:      ## is the setup right? prints the Python and cryptography versions
+	$(PY) -c "import sys, cryptography; print('Python', sys.version.split()[0], '| cryptography', cryptography.__version__, '| OK')"
 
 leak:       ## the FIRST DRAFT pipeline: 7 of 7 leaks, while every normal job works
 	$(PY) pipeline.py first-draft

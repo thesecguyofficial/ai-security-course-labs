@@ -1,0 +1,99 @@
+{
+  "name": "m28-28.4-understand-linux",
+  "lesson": "28.1, 28.4",
+  "title": "Lab 28.4, part 1: get the lab, see what each file is, the fake data, look before you run, set up the cryptography package in a virtual environment, then look at each privacy idea on its own with explore.py (one invocation-log record, a logged vector, a toy encoder, inverting a vector, a toy model that memorises a card number, differential privacy per record and per person, hiding versus removing, detectors, labels and keyed tokens, envelope encryption and key policies)",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m28 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The folders",
+      "type": "ls setups/first-draft setups/hardened data cloud",
+      "pause_after": 4
+    },
+    {
+      "label": "The data",
+      "type": "cat data/crm.json && grep -c '\"id\"' data/calls.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup check",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Check",
+      "type": "make check",
+      "pause_after": 3
+    },
+    {
+      "label": "Log",
+      "type": ".venv/bin/python explore.py log",
+      "pause_after": 7
+    },
+    {
+      "label": "Log vector",
+      "type": ".venv/bin/python explore.py log c03 first-draft",
+      "pause_after": 6
+    },
+    {
+      "label": "Embed",
+      "type": ".venv/bin/python explore.py embed",
+      "pause_after": 7
+    },
+    {
+      "label": "Invert",
+      "type": ".venv/bin/python explore.py invert",
+      "pause_after": 7
+    },
+    {
+      "label": "Memorise",
+      "type": ".venv/bin/python explore.py memorise",
+      "pause_after": 7
+    },
+    {
+      "label": "DP",
+      "type": ".venv/bin/python explore.py dp",
+      "pause_after": 8
+    },
+    {
+      "label": "Unlearn",
+      "type": ".venv/bin/python explore.py unlearn",
+      "pause_after": 7
+    },
+    {
+      "label": "Detect",
+      "type": ".venv/bin/python explore.py detect",
+      "pause_after": 7
+    },
+    {
+      "label": "Redact",
+      "type": ".venv/bin/python explore.py redact",
+      "pause_after": 7
+    },
+    {
+      "label": "KMS",
+      "type": ".venv/bin/python explore.py kms",
+      "pause_after": 8
+    }
+  ]
+}

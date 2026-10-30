@@ -61,9 +61,9 @@ def main():
     ap.add_argument("--file", default=str(lab.DATA / "hunt-cloudtrail.jsonl"))
     events = load(ap.parse_args().file)
     print(f"{len(events)} KMS events")
-    print("Q1  Calls per key:")
+    print("Q1  Calls per key (account IDs print as <account>):")
     for key, c in q1_by_key(events).items():
-        print(f"    {key}")
+        print(f"    {lab.hide(key)}")
         for (p, name, res), n in sorted(c.items()):
             print(f"      {p:<32} {name:<16} {res:<8} x{n}")
     print("Q2  Break-glass uses (match each to an incident ticket):")
