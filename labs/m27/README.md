@@ -56,6 +56,8 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `configs/second-draft.json` | A later draft for challenge 1. The shipped rules pass it; two gaps remain |
 | `data/requests.jsonl` | The 14 recorded requests (N1 to N6 normal, U1 to U8 unexpected). Descriptions only: no bodies, no payloads |
 | `data/morning-resolver-log.jsonl`, `data/app-sessions.jsonl` | Recorded logs for challenges 2 and 3 |
+| `explore.py` | The read-only helper for Step 1b: one idea at a time (this terminal as a process, a sandbox config, a network config, names against the DNS allow-list, one request layer by layer). It writes no file, starts no program and opens no connection |
+| `Makefile` | Short commands for Mac and Linux (`make setup`, `make review` ...); `make -n <target>` shows what one would run |
 | `checker.py` | The rule checker. Holds challenge 1 (rules E2 and D3) |
 | `egress.py` | The policy evaluator: dns, route, sg, proxy, endpoint and role layers, each with its own verdict |
 | `logs.py` | Writes the log records each config would leave, under `state/` |

@@ -1,0 +1,81 @@
+{
+  "name": "m27-27.4-linux",
+  "lesson": "27.4",
+  "title": "Lab 27.4, part 2: review the first draft (network, then boundary findings), open the first draft's config, the hardened config and its diff, replay 14 recorded requests against both, why U1 got out, open the recorded requests, the logs each config leaves, one blocked DNS record and the flow log, the alerts, the tests and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Review network",
+      "type": "cd ai-security-course-labs/labs/m27 && make review | grep -A1 -E '\\[(N|E|D|P|L)[0-9]'",
+      "pause_after": 8
+    },
+    {
+      "label": "Review boundary",
+      "type": "make review | grep -A1 -E '\\[(R|F|S|T)[0-9]|findings'",
+      "pause_after": 8
+    },
+    {
+      "label": "Open the draft",
+      "type": "cat -n configs/first-draft.json | sed -n '9,35p'",
+      "pause_after": 7
+    },
+    {
+      "label": "Hardened",
+      "type": "make hardened",
+      "pause_after": 5
+    },
+    {
+      "label": "Replay",
+      "type": "make replay",
+      "pause_after": 8
+    },
+    {
+      "label": "Why U1",
+      "type": "python3 egress.py first-draft | grep -E '^  (U1|U3|U6)'",
+      "pause_after": 6
+    },
+    {
+      "label": "Open the requests",
+      "type": "grep -E '\"(U1|U3)\"' data/requests.jsonl",
+      "pause_after": 6
+    },
+    {
+      "label": "Logs",
+      "type": "make logs",
+      "pause_after": 8
+    },
+    {
+      "label": "Open a DNS record",
+      "type": "grep BLOCK state/hardened/resolver-query-log.jsonl | head -n 1 | python3 -m json.tool",
+      "pause_after": 7
+    },
+    {
+      "label": "Flow log",
+      "type": "head -n 3 state/hardened/flow-log.txt && grep -c REJECT state/hardened/flow-log.txt",
+      "pause_after": 6
+    },
+    {
+      "label": "Alerts",
+      "type": "make alerts",
+      "pause_after": 7
+    },
+    {
+      "label": "Tests",
+      "type": "make test | tail -n 4",
+      "pause_after": 5
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge | grep -E '^\\[FAIL|TESTS'",
+      "pause_after": 6
+    }
+  ]
+}

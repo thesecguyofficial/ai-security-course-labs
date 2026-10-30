@@ -1,0 +1,111 @@
+{
+  "name": "m27-27.4-understand-linux",
+  "lesson": "27.1, 27.4",
+  "title": "Lab 27.4, part 1: get the lab, see what each file is, the fake data, look before you run, the setup check, then each isolation and egress idea on its own: this terminal as a process on a kernel in a virtual machine, a real container (same kernel, own processes, no network, read-only files, a process limit), one sandbox config and one network config read line by line, names against the DNS allow-list, two recorded requests layer by layer, and one replay read line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "sudo docker pull -q alpine:3.20"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m27 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The folders",
+      "type": "ls configs data cloud",
+      "pause_after": 4
+    },
+    {
+      "label": "The data",
+      "type": "wc -l data/*.jsonl && head -n 1 data/requests.jsonl",
+      "pause_after": 5
+    },
+    {
+      "label": "Look first",
+      "type": "make -n setup review",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Here",
+      "type": "python3 explore.py here",
+      "pause_after": 7
+    },
+    {
+      "label": "Same kernel",
+      "type": "uname -r && sudo docker run --rm alpine:3.20 uname -r",
+      "pause_after": 5
+    },
+    {
+      "label": "Own processes",
+      "type": "sudo docker run --rm alpine:3.20 ps",
+      "pause_after": 5
+    },
+    {
+      "label": "No network",
+      "type": "sudo docker run --rm --network none alpine:3.20 wget -q -T 3 -O- http://example.com",
+      "pause_after": 5
+    },
+    {
+      "label": "Read-only",
+      "type": "sudo docker run --rm --read-only alpine:3.20 touch /home/note.txt",
+      "pause_after": 5
+    },
+    {
+      "label": "Process limit",
+      "type": "sudo docker run --rm --pids-limit 4 alpine:3.20 sh -c 'for i in 1 2 3 4 5 6; do sleep 2 & done; wait'",
+      "pause_after": 5
+    },
+    {
+      "label": "Sandbox",
+      "type": "python3 explore.py sandbox",
+      "pause_after": 7
+    },
+    {
+      "label": "Network",
+      "type": "python3 explore.py network",
+      "pause_after": 8
+    },
+    {
+      "label": "DNS",
+      "type": "python3 explore.py dns placeholder.example.invalid bedrock-runtime.us-east-1.amazonaws.com",
+      "pause_after": 6
+    },
+    {
+      "label": "Request",
+      "type": "python3 explore.py request U1",
+      "pause_after": 7
+    },
+    {
+      "label": "Request draft",
+      "type": "python3 explore.py request U1 first-draft | tail -n 5",
+      "pause_after": 6
+    },
+    {
+      "label": "Proxy",
+      "type": "python3 explore.py request U8",
+      "pause_after": 6
+    },
+    {
+      "label": "One run",
+      "type": "python3 egress.py hardened | sed -n '1,10p'",
+      "pause_after": 7
+    }
+  ]
+}
