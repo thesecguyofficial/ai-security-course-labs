@@ -94,7 +94,7 @@
     },
     {
       "label": "Check mine",
-      "type": "make mine | head -n 6",
+      "type": "make mine | grep -E 'filled|E23|valid|error'",
       "pause_after": 5
     },
     {
