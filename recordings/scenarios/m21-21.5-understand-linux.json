@@ -1,0 +1,99 @@
+{
+  "name": "m21-21.5-understand-linux",
+  "lesson": "21.0, 21.5",
+  "title": "Lab 21.5, part 1: get the lab, see what each file is, the fake data, look before you run, set up the Cedar engine in a virtual environment, then look at each authorization idea on its own with explore.py (a proposed tool call, the four parts of a request, allow, default deny, one Cedar rule read part by part, forbid wins and defer, a rate limit counter, one audit receipt) and read one hardened run line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m21 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The folders",
+      "type": "ls setups/first-draft setups/hardened setups/hardened/policies catalogue schema",
+      "pause_after": 4
+    },
+    {
+      "label": "The data",
+      "type": "ls data data/tickets && cat data/tickets/T-501.md",
+      "pause_after": 4
+    },
+    {
+      "label": "People and orders",
+      "type": "cat data/staff.json data/orders.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup check",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Check",
+      "type": "make check",
+      "pause_after": 3
+    },
+    {
+      "label": "Call",
+      "type": ".venv/bin/python explore.py call",
+      "pause_after": 6
+    },
+    {
+      "label": "Request",
+      "type": ".venv/bin/python explore.py request",
+      "pause_after": 7
+    },
+    {
+      "label": "Allow",
+      "type": ".venv/bin/python explore.py check",
+      "pause_after": 6
+    },
+    {
+      "label": "Default deny",
+      "type": ".venv/bin/python explore.py check T-601",
+      "pause_after": 6
+    },
+    {
+      "label": "Rule",
+      "type": ".venv/bin/python explore.py rule",
+      "pause_after": 7
+    },
+    {
+      "label": "Forbid wins",
+      "type": ".venv/bin/python explore.py check T-502",
+      "pause_after": 6
+    },
+    {
+      "label": "Counter",
+      "type": ".venv/bin/python explore.py counter",
+      "pause_after": 6
+    },
+    {
+      "label": "Receipt",
+      "type": ".venv/bin/python explore.py receipt",
+      "pause_after": 6
+    },
+    {
+      "label": "One run",
+      "type": ".venv/bin/python helpdesk.py hardened T-501 --as bob",
+      "pause_after": 6
+    }
+  ]
+}

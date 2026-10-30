@@ -1,0 +1,88 @@
+{
+  "name": "m21-21.5-linux",
+  "lesson": "21.5",
+  "title": "Lab 21.5, part 2: 12 argument attacks against the first-draft PEP, the injected ticket opened, one attack step by step, the two pep.json files and the first-draft policy, one request as the engine sees it, the hardened PEP, a $250 refund held and approved, signed receipts verified and tampered with, LOG_ONLY, a morning's hunt, the tests and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
+    "cd ai-security-course-labs/labs/m21 && make setup"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Attack",
+      "type": "cd ai-security-course-labs/labs/m21 && make attack",
+      "pause_after": 7
+    },
+    {
+      "label": "Attack file",
+      "type": "cat data/tickets/T-605.md",
+      "pause_after": 5
+    },
+    {
+      "label": "Story",
+      "type": "make story",
+      "pause_after": 7
+    },
+    {
+      "label": "Two pep.json",
+      "type": "diff -y --suppress-common-lines -W 110 setups/first-draft/pep.json setups/hardened/pep.json",
+      "pause_after": 6
+    },
+    {
+      "label": "Draft policy",
+      "type": "cat setups/first-draft/policies/staff_use_tools.cedar",
+      "pause_after": 5
+    },
+    {
+      "label": "Ask the engine",
+      "type": ".venv/bin/python pep.py hardened bob T-601 issue_refund '{\"order_id\": \"O-2001\", \"amount_cents\": 9000, \"currency\": \"USD\"}'",
+      "pause_after": 6,
+      "speed": 2
+    },
+    {
+      "label": "Hardened",
+      "type": "make hardened",
+      "pause_after": 6
+    },
+    {
+      "label": "Approve",
+      "type": "make approve-demo",
+      "pause_after": 7
+    },
+    {
+      "label": "Audit",
+      "type": "make audit",
+      "pause_after": 5
+    },
+    {
+      "label": "Tamper",
+      "type": "sed -i '2s/\"DEFER\"/\"ALLOW\"/' state/receipts.jsonl && .venv/bin/python receipts.py verify",
+      "pause_after": 5
+    },
+    {
+      "label": "Shadow",
+      "type": "make shadow | grep -E '^A|Attacks'",
+      "pause_after": 6
+    },
+    {
+      "label": "Hunt",
+      "type": "make hunt",
+      "pause_after": 6
+    },
+    {
+      "label": "Tests",
+      "type": "make test 2>&1 | tail -n 3",
+      "pause_after": 4
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | grep -E 'challenge|TESTS'",
+      "pause_after": 6
+    }
+  ]
+}

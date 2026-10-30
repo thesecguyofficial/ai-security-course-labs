@@ -5,11 +5,14 @@ VENV := .venv
 PY   := $(if $(wildcard $(VENV)/bin/python),$(VENV)/bin/python,python3)
 TF   ?= terraform
 
-.PHONY: setup attack hardened story approve-demo shadow audit hunt opa test challenge clean cloud-zip cloud-up cloud-down
+.PHONY: setup check attack hardened story approve-demo shadow audit hunt opa test challenge clean cloud-zip cloud-up cloud-down
 
 setup:         ## create .venv and install the pinned cedarpy
 	python3 -m venv $(VENV)
 	$(VENV)/bin/python -m pip install -r requirements.txt
+
+check:         ## print the Cedar engine's version from .venv (did make setup work?)
+	$(PY) -c "import importlib.metadata as m; print('cedarpy', m.version('cedarpy'), 'OK')"
 
 attack:        ## 12 attacks + 6 normal requests against the FIRST DRAFT: 11 of 12 work
 	$(PY) suite.py first-draft
