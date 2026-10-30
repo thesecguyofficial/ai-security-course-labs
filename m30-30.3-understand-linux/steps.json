@@ -1,199 +1,199 @@
 {
   "scenario": "m30-30.3-understand-linux",
-  "start": 1.701,
+  "start": 1.676,
   "steps": [
     {
       "label": "Download",
       "speed": 1,
-      "start": 1.701,
-      "end": 13.1
+      "start": 1.676,
+      "end": 12.357
     },
     {
       "label": "The lab",
       "speed": 1,
-      "start": 16.1,
-      "end": 21.749
+      "start": 15.357,
+      "end": 21.001
     },
     {
       "label": "The folders",
       "speed": 1,
-      "start": 25.749,
-      "end": 29.511
+      "start": 25.002,
+      "end": 28.761
     },
     {
       "label": "A release",
       "speed": 1,
-      "start": 33.512,
-      "end": 36.885
+      "start": 32.761,
+      "end": 36.134
     },
     {
       "label": "Setup plan",
       "speed": 1,
-      "start": 41.885,
-      "end": 45.142
+      "start": 41.134,
+      "end": 44.357
     },
     {
       "label": "Setup",
       "speed": 1,
-      "start": 49.142,
-      "end": 53.307
+      "start": 48.357,
+      "end": 52.227
     },
     {
       "label": "Check",
       "speed": 1,
-      "start": 56.307,
-      "end": 58.49
+      "start": 55.227,
+      "end": 57.391
     },
     {
       "label": "Suite",
       "speed": 1,
-      "start": 62.49,
-      "end": 66.392
+      "start": 61.391,
+      "end": 65.289
     },
     {
       "label": "Case",
       "speed": 1,
-      "start": 72.392,
-      "end": 76.096
+      "start": 71.289,
+      "end": 74.985
     },
     {
       "label": "Trials",
       "speed": 1,
-      "start": 82.096,
-      "end": 85.974
+      "start": 80.985,
+      "end": 84.857
     },
     {
       "label": "Interval",
       "speed": 1,
-      "start": 91.975,
-      "end": 96.203
+      "start": 90.857,
+      "end": 95.081
     },
     {
       "label": "Noise",
       "speed": 1,
-      "start": 102.203,
-      "end": 106.167
+      "start": 101.082,
+      "end": 105.032
     },
     {
       "label": "Card",
       "speed": 1,
-      "start": 112.167,
-      "end": 115.856
+      "start": 111.032,
+      "end": 114.716
     },
     {
       "label": "Compare",
       "speed": 1,
-      "start": 122.857,
-      "end": 126.764
+      "start": 121.716,
+      "end": 125.62
     },
     {
       "label": "Naive",
       "speed": 1,
-      "start": 132.764,
-      "end": 136.56
+      "start": 131.62,
+      "end": 135.409
     },
     {
       "label": "Rules",
       "speed": 1,
-      "start": 142.56,
-      "end": 146.295
+      "start": 141.409,
+      "end": 145.138
     },
     {
       "label": "History",
       "speed": 1,
-      "start": 152.295,
-      "end": 156.178
+      "start": 151.138,
+      "end": 155.018
     },
     {
       "label": "CI",
       "speed": 1,
-      "start": 162.178,
-      "end": 165.808
+      "start": 161.018,
+      "end": 164.643
     },
     {
       "label": "One run",
       "speed": 1,
-      "start": 171.808,
-      "end": 179.321
+      "start": 170.643,
+      "end": 178.148
     }
   ],
   "keys": [
     {
-      "t": 2.301,
+      "t": 2.276,
       "what": "type"
     },
     {
-      "t": 16.7,
+      "t": 15.957,
       "what": "type"
     },
     {
-      "t": 26.349,
+      "t": 25.602,
       "what": "type"
     },
     {
-      "t": 34.112,
+      "t": 33.361,
       "what": "type"
     },
     {
-      "t": 42.486,
+      "t": 41.734,
       "what": "type"
     },
     {
-      "t": 49.742,
+      "t": 48.957,
       "what": "type"
     },
     {
-      "t": 56.907,
+      "t": 55.828,
       "what": "type"
     },
     {
-      "t": 63.09,
+      "t": 61.991,
       "what": "type"
     },
     {
-      "t": 72.992,
+      "t": 71.889,
       "what": "type"
     },
     {
-      "t": 82.696,
+      "t": 81.585,
       "what": "type"
     },
     {
-      "t": 92.575,
+      "t": 91.457,
       "what": "type"
     },
     {
-      "t": 102.803,
+      "t": 101.682,
       "what": "type"
     },
     {
-      "t": 112.767,
+      "t": 111.632,
       "what": "type"
     },
     {
-      "t": 123.457,
+      "t": 122.316,
       "what": "type"
     },
     {
-      "t": 133.364,
+      "t": 132.22,
       "what": "type"
     },
     {
-      "t": 143.16,
+      "t": 142.01,
       "what": "type"
     },
     {
-      "t": 152.895,
+      "t": 151.738,
       "what": "type"
     },
     {
-      "t": 162.778,
+      "t": 161.618,
       "what": "type"
     },
     {
-      "t": 172.408,
+      "t": 171.243,
       "what": "type"
     }
   ],
-  "end": 185.321
+  "end": 184.148
 }
