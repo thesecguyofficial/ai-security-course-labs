@@ -59,6 +59,7 @@ Three agents share a memory channel and a task channel:
 | `config.json` | The crew and its scopes: agent tools, send-email domains, the propagation threshold |
 | `trace.py` | Reads the path for you (entry point, propagation, sink). Holds challenge 1 |
 | `containment.py` | **You write this**: four controls (hand-off filter, tool scope, circuit-breaker, detect). Holds challenge 2 |
+| `explore.py` | Step 1b: each idea on its own (the crew, one run, one hand-off, shared memory, the spread hop by hop, the trust boundaries, least privilege for one send, a counter, the adapted attack). Read only: runs no agent, never reads the answer key, writes no file |
 | `replay.py` | The harness: replays the recording and the variants through your containment and proves the send never executes; `--report` prints the four-line proof |
 | `run_tests.py`, `test_lab.py`, `test_challenge.py` | The proof and the challenge tests |
 
