@@ -3,7 +3,7 @@ gate.py: the release gate. Compare a candidate's score card with the baseline's 
 
     python3 gate.py r41 r42                     # baseline release, candidate release (both are scored first)
     python3 gate.py results/r41.json r42        # or pass a saved score card (.json) for either side
-    python3 gate.py r41 weak --expect-fail      # negative control: exits 0 only if the gate FAILS
+    python3 gate.py r41 weak --expect-fail      # negative control: exits 0 only if a MEASURING rule (G3 or G4) fails
 
 Exit code 0 = ship, 1 = stop (so CI turns red). The rules, in order (thresholds in gate-policy.json):
 
@@ -203,10 +203,13 @@ def main() -> int:
                                                       "candidate": cand["release"], "cases_that_broke": flips},
                                                      indent=2) + "\n", encoding="utf-8")
     if args.expect_fail:
-        if result["verdict"] == "STOP":
-            print("  negative control OK: the gate stops a release with its defences off")
+        # A STOP from G1 (not comparable) or G2 (not enough cases) only proves the paperwork failed. The control
+        # passes only if the gate stopped the release on what it MEASURED: critical goals (G3) or a ceiling (G4).
+        measured = [r[0].split()[0] for r in result["rules"] if r[1] == "FAIL" and r[0].split()[0] in ("G3", "G4")]
+        if result["verdict"] == "STOP" and measured:
+            print(f"  negative control OK: the gate stops a release with its defences off, on what it measured ({', '.join(measured)})")
             return 0
-        print("  NEGATIVE CONTROL FAILED: the gate let a release with no defences through. It is testing nothing.")
+        print("  NEGATIVE CONTROL FAILED: G3 and G4 did not fail on a release with no defences. The suite is testing nothing.")
         return 1
     return 0 if result["verdict"] == "SHIP" else 1
 
