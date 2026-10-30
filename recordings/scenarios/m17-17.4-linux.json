@@ -1,0 +1,92 @@
+{
+  "name": "m17-17.4-linux",
+  "lesson": "17.4",
+  "title": "Lab 17.4, part 2: attack the weak Helpdesk, open the planted comments, defend it, read the suite, run promptfoo and the negative control, three regressions, the CI commands run locally (green, then red with R1), and the challenge, one short output at a time",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
+    "cd ai-security-course-labs/labs/m17 && PROMPTFOO_DISABLE_TELEMETRY=1 PROMPTFOO_DISABLE_UPDATE=1 npx --yes promptfoo@0.124.1 --version"
+  ],
+  "fail_on": [
+    "Traceback",
+    "Node.js not found"
+  ],
+  "steps": [
+    {
+      "label": "Start",
+      "type": "cd ai-security-course-labs/labs/m17",
+      "pause_after": 2
+    },
+    {
+      "label": "Attack",
+      "type": "make attack",
+      "pause_after": 6
+    },
+    {
+      "label": "Planted",
+      "type": "python3 explore.py ticket 4733 && python3 explore.py ticket 4752",
+      "pause_after": 6
+    },
+    {
+      "label": "Defend",
+      "type": "make defend",
+      "pause_after": 6
+    },
+    {
+      "label": "Suite",
+      "type": "sed -n 14,34p evals/promptfooconfig.yaml",
+      "pause_after": 5
+    },
+    {
+      "label": "Tests",
+      "type": "grep -h description evals/tests/*.yaml",
+      "pause_after": 4
+    },
+    {
+      "label": "Eval",
+      "type": "make eval 2>&1 | tail -n 20",
+      "pause_after": 6
+    },
+    {
+      "label": "Eval weak",
+      "type": "make eval-weak 2>&1 | tail -n 19",
+      "pause_after": 6
+    },
+    {
+      "label": "Regressions",
+      "type": "make regressions 2>&1 | grep -E '===|FAIL|exit code'",
+      "pause_after": 6
+    },
+    {
+      "label": "Same commands",
+      "type": "make -n ci && grep -n 'run: python3' ../../.github/workflows/m17-security-evals.yml",
+      "pause_after": 5
+    },
+    {
+      "label": "Regress R1",
+      "type": "python3 regress.py R1",
+      "pause_after": 5
+    },
+    {
+      "label": "CI red",
+      "type": "make ci 2>&1 | grep -E 'FAIL|exit code|Error'",
+      "pause_after": 6
+    },
+    {
+      "label": "Restore",
+      "type": "make restore && make ci 2>&1 | tail -n 3",
+      "pause_after": 5
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | grep -E 'FAIL|why|TESTS'",
+      "pause_after": 6
+    },
+    {
+      "label": "Hidden",
+      "type": "python3 explore.py ticket 4741",
+      "pause_after": 6
+    }
+  ]
+}

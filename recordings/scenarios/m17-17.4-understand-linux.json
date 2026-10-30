@@ -1,0 +1,26 @@
+{
+  "name": "m17-17.4-understand-linux",
+  "lesson": "17.4",
+  "title": "Lab 17.4, part 1: get the lab, set it up, and look at how a security eval works (one test case, one run graded rule by rule, a score and pass rate, why AI tests repeat, the CI workflow and its exit code) before running promptfoo",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": ["Traceback", "Node.js not found", "is too old"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m17 && ls", "pause_after": 4},
+    {"label": "The data", "type": "ls data evals evals/tests evals/payloads", "pause_after": 3},
+    {"label": "Setup plan", "type": "make -n setup", "pause_after": 3},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Check", "type": "make test", "pause_after": 4},
+    {"label": "Case", "type": "python3 explore.py case A4", "pause_after": 6},
+    {"label": "Run weak", "type": "python3 explore.py run A4 --profile weak", "pause_after": 6},
+    {"label": "Run hardened", "type": "python3 explore.py run A4", "pause_after": 6},
+    {"label": "Score", "type": "python3 explore.py score --profile weak", "pause_after": 6},
+    {"label": "Repeat", "type": "python3 explore.py repeat A4", "pause_after": 6},
+    {"label": "Workflow", "type": "python3 explore.py workflow", "pause_after": 6},
+    {"label": "Exit code", "type": "python3 explore.py score --regression R1; echo \"exit code: $?\"", "pause_after": 6},
+    {"label": "CI plan", "type": "make -n ci", "pause_after": 4},
+    {"label": "One run", "type": "python3 helpdesk.py ask \"What's the latest on ticket 4711?\"", "pause_after": 6}
+  ]
+}
