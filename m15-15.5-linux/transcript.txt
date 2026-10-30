@@ -1,0 +1,280 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m15 && python3 --version
+
+Python 3.12.3
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ make check | grep HIGH | cut -c1-131
+
+[HIGH  ] M15-01 (15.1) the inference image reached end of patch on 2026-09-15 (dlc: 365 days after release): it gets no more securi
+[HIGH  ] M15-03 (15.2) the model container runs without network isolation: code in it can call out to the internet and use the exec
+[HIGH  ] M15-05 (15.2) Studio notebooks can reach the internet (PublicInternetOnly (the default): direct internet access through a 
+[HIGH  ] M15-08 (15.2) execution role tsg-summariser-exec has AmazonSageMakerFullAccess (AWS: 'fairly broad'); s3:* on *: everythin
+[HIGH  ] M15-10 (15.2) ds-alice may pass tsg-summariser-exec to SageMaker AI: a job or notebook they start runs with the production
+[HIGH  ] M15-10 (15.2) ds-bob may pass tsg-summariser-exec to SageMaker AI: a job or notebook they start runs with the production r
+[HIGH  ] M15-11 (15.2) ds-alice may create a presigned Studio URL for bob: they sign in as that profile, with its files and executi
+[HIGH  ] M15-11 (15.2) ds-bob may create a presigned Studio URL for alice: they sign in as that profile, with its files and executi
+[HIGH  ] M15-12 (15.2) secret-looking value in the container Environment (HF_TOKEN): DescribeModel returns it to ds-alice, ds-bob
+[HIGH  ] M15-14 (15.3) tsg-helpdesk-app may call InvokeEndpoint from anywhere (no aws:SourceVpce condition): stolen keys work from 
+[HIGH  ] M15-14 (15.3) ds-alice may call InvokeEndpoint from anywhere (no aws:SourceVpce condition): stolen keys work from the inte
+[HIGH  ] M15-14 (15.3) ds-bob may call InvokeEndpoint from anywhere (no aws:SourceVpce condition): stolen keys work from the intern
+[HIGH  ] M15-15 (15.3) the sagemaker.runtime interface endpoint has the default policy (full access): credentials from any AWS acco
+[HIGH  ] M15-16 (15.3) EnableSSMAccess on a production variant: shell access into the inference container for ds-alice, ds-bob; AWS
+[HIGH  ] M15-17 (15.3) the endpoint's model points straight at an S3 path, not at an approved Model Registry version: nobody's appr
+[HIGH  ] M15-18 (15.3) ds-alice may call UpdateModelPackage: a data scientist can approve their own model version (no four-eyes)
+[HIGH  ] M15-18 (15.3) ds-bob may call UpdateModelPackage: a data scientist can approve their own model version (no four-eyes)
+[HIGH  ] M15-19 (15.3) the deployed model files are not safetensors-only: pytorch_model.bin (pickle: imports builtins.print)
+[HIGH  ] M15-20 (15.3) ds-alice, ds-bob may overwrite the files the endpoint loads (s3://amzn-s3-demo-tsg-models/tsg-summariser/v1/
+19 HIGH, 13 MEDIUM, 3 LOW  (35 findings)
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ make -s check | grep -v HIGH | cut -c1-131
+
+[MEDIUM] M15-02 (15.1) the image is pinned by tag, not by digest: the same tag can point at different bytes over time
+[MEDIUM] M15-04 (15.2) the model has no VpcConfig: model downloads don't go through your VPC, so your S3 endpoint policy and flow l
+[MEDIUM] M15-06 (15.2) sg-0a1b2c3d4e5f60031 allows inbound from itself and is shared by alice, bob: AWS warns users in the VPC coul
+[MEDIUM] M15-07 (15.2) the Studio domain has no KmsKeyId: notebooks' EFS and EBS volumes use an AWS managed key, whose key policy y
+[MEDIUM] M15-09 (15.2) tsg-summariser-exec trust policy has no aws:SourceArn: any SageMaker AI resource, in any account, could be t
+[MEDIUM] M15-09 (15.2) tsg-ds-exec trust policy has no aws:SourceArn: any SageMaker AI resource, in any account, could be the one a
+[MEDIUM] M15-21 (15.3) no file hashes recorded for the deployed model: nobody can prove the files running are the ones approved
+[MEDIUM] M15-21 (15.3) licence not recorded: AWS says reviewing model licences is your job
+[MEDIUM] M15-22 (15.3) no approval gate: nothing checks formats, hashes, licence and approver before a version becomes Approved (ch
+[MEDIUM] M15-23 (15.2) no SCP requires network isolation and a VPC on CreateModel: an admin's quick test can still ship a container
+[MEDIUM] M15-24 (15.4) data capture (full prompts and answers) is written without a KmsKeyId of yours
+[MEDIUM] M15-24 (15.4) data capture goes to amzn-s3-demo-tsg-analytics, a bucket other teams read: captured prompts are as sensitiv
+[MEDIUM] M15-25 (15.4) no CloudTrail data events for AWS::SageMaker::Endpoint: InvokeEndpoint is a data event, and trails don't log
+[LOW   ] M15-13 (15.2) KmsKeyId on an endpoint with ml.g5.xlarge (NVMe instance storage): AWS says you can't use a KMS key on an in
+[LOW   ] M15-26 (15.4) no alarm on Invocation4XXErrors or invocation volume: probing and abuse show up there first
+[LOW   ] M15-27 (15.4) the monitoring plan relies on SageMaker Model Monitor or Clarify: both are no longer open to new customers
+
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ make attack
+
+python3 evaluate.py first-draft
+  A1   WORKED   Booby-trapped model file: the weights are a pickle, and loading it runs code in the container
+         . SageMaker AI downloads the files with the execution role
+         . container: loading pytorch_model.bin ran builtins.print (LAB-PLACEHOLDER: a real payload runs here)
+  A2   WORKED   Artifact swap after approval: a data scientist overwrites the files the endpoint loads
+         . ds-bob writes into s3://amzn-s3-demo-tsg-models/tsg-summariser/v1/: allowed (allowed by the identity policy)
+         . next deploy or scale-out: SageMaker AI downloads the files with the execution role
+         . container: loading pytorch_model.bin ran builtins.print (LAB-PLACEHOLDER: a real payload runs here)
+  A3   WORKED   Unapproved model to production: a hotfix model straight from a notebook onto the live endpoint
+         . ds-bob CreateModel on model/tsg-summariser-hotfix: allowed (allowed by the identity policy)
+         . ds-bob CreateEndpointConfig on endpoint-config/tsg-summariser-hotfix: allowed (allowed by the identity policy)
+         . ds-bob UpdateEndpoint on endpoint/tsg-summariser: allowed (allowed by the identity policy)
+  A4   WORKED   Self-approval: the author approves their own model version
+         . ds-bob registered version 3, then approves it himself: allowed (allowed by the identity policy)
+  A5   WORKED   Data out of the container: code in the model container posts tickets to the internet
+         . code in the container posts a ticket to https://collector.example.net: sent (no network isolation and no VpcConfig: SageMaker AI provides external network access)
+  A6   WORKED   Container credentials: code in the container reads another team's bucket with the execution role
+         . code in the container reads the analytics team's export with the execution role: allowed (allowed by the identity policy)
+  A7   WORKED   Stolen app keys: InvokeEndpoint from the internet
+         . the app's leaked keys, used from a laptop on the internet: allowed (allowed by the identity policy)
+  A8   WORKED   Outsider through the private endpoint: someone else's account sends data out via AnyCompany's VPC endpoint
+         . someone in the VPC uses their OWN account's keys, through AnyCompany's runtime endpoint, to send tickets to their endpoint: allowed (allowed by the identity policy (through the VPC endpoint))
+  A9   WORKED   Shell into the endpoint: SSM access on the production container
+         . ds-bob starts an SSM session in the production container: allowed (allowed by the identity policy)
+  A10  WORKED   Studio exfiltration: a notebook uploads data to the internet
+         . a notebook uploads a ticket export to https://collector.example.net: sent (PublicInternetOnly (the default): direct internet access through a SageMaker-managed VPC)
+  A11  WORKED   Studio impersonation: a presigned URL for someone else's profile
+         . ds-bob creates a presigned Studio URL for alice's profile: allowed (allowed by the identity policy)
+  A12  WORKED   PassRole escalation: a job started by a data scientist runs as the production role
+         . ds-bob passes tsg-summariser-exec: allowed (allowed by the identity policy)
+         . ds-bob starts a processing job: allowed (allowed by the identity policy)
+         . the job reads the analytics export as tsg-summariser-exec: allowed (allowed by the identity policy)
+  A13  WORKED   Secret in the model definition: DescribeModel shows the Hugging Face token
+         . ds-bob calls DescribeModel and reads HF_TOKEN: allowed (allowed by the identity policy)
+  A14  WORKED   Isolation dropped: an admin's quick test creates a model with no isolation and no VPC
+         . tsg-platform-admin CreateModel (EnableNetworkIsolation left out, no VpcConfig): allowed (allowed by the identity policy)
+         . tsg-platform-admin CreateModel (EnableNetworkIsolation false, no VpcConfig): allowed (allowed by the identity policy)
+  A15  WORKED   Approval in a hurry: the approver approves a version that fails every check
+         . the ML lead approves version 3 in a hurry (pickle weights, no licence, no hashes): allowed (allowed by the identity policy)
+         . no approval gate: the status is now Approved and the pipeline deploys it
+
+  N1   works    The Helpdesk gets a ticket summary
+  N2   works    The pipeline deploys an approved version
+  N3   works    The ML lead approves a clean version
+  N4   works    A data scientist opens her own Studio profile
+  N5   works    A data scientist runs a job with the data science role
+  N6   works    The endpoint starts
+
+Attacks that worked: 15 of 15  (A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)   |   normal requests that work: 6 of 6
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 explore.py call first-draft collector-role --vpce
+
+One InvokeEndpoint call (setup first-draft). Nothing is sent: twin.py answers.
+
+  POST https://runtime.sagemaker.us-east-1.amazonaws.com/endpoints/collector/invocations
+  body: the ticket text; signed with SigV4 by the caller's credentials
+  caller   arn:aws:iam::444455556666:role/collector-role
+  target   arn:aws:sagemaker:us-east-1:444455556666:endpoint/collector   (the caller's OWN endpoint, in another account)
+  path     through the sagemaker.runtime VPC endpoint vpce-0a1b2c3d4e5f60001 (aws:SourceVpce is set)
+
+  IAM checks, in order:
+   1. caller's identity policy        ALLOW
+   2. VPC endpoint policy             ALLOW (the default policy: full access)
+
+  result   ALLOW: allowed by the identity policy (through the VPC endpoint)
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ make scan
+
+python3 model_files.py build
+artifacts/v1-pickle/  v1: the first draft's fine-tuned export (pickle-based weights)
+artifacts/v2-safe/  v2: safetensors weights, hashes recorded at approval (hardened)
+artifacts/v3-unvetted/  v3: a new upload waiting for approval: pickle weights, no licence, no hashes
+artifacts/v4-safe/  v4: a clean new version waiting for approval
+artifacts/bob-experiment/  a data scientist's own experiment (not registered)
+artifacts/hub-pull/  what a container gets when it downloads from the Hub at start
+python3 model_files.py scan artifacts/v1-pickle
+[OK  ] config.json                  data         
+[STOP] pytorch_model.bin            pickle       pickle-based weights (code can run when a loader unpickles it)  imports: builtins.print
+[OK  ] tokenizer.json               data         
+
+verdict: DO NOT SHIP (1 file(s) to fix)
+make: [Makefile:28: scan] Error 1 (ignored)
+python3 model_files.py scan artifacts/v2-safe
+[OK  ] config.json                  data         
+[OK  ] model.safetensors            safetensors  
+[OK  ] tokenizer.json               data         
+
+verdict: SAFE FORMATS ONLY
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 -c "import zipfile, pickletools; pickletools.dis(zipfile.ZipFile('artifact 
+s/v1-pickle/pytorch_model.bin').read('archive/data.pkl'))"
+
+    0: \x80 PROTO      2
+    2: c    GLOBAL     'collections OrderedDict'
+   27: )    EMPTY_TUPLE
+   28: R    REDUCE
+   29: 0    POP
+   30: c    GLOBAL     'builtins print'
+   46: X    BINUNICODE 'LAB-PLACEHOLDER: a real payload would run here'
+   97: \x85 TUPLE1
+   98: R    REDUCE
+   99: 0    POP
+  100: }    EMPTY_DICT
+  101: .    STOP
+highest protocol among opcodes = 2
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 model_files.py manifest artifacts/v2-safe
+
+{
+  "sha256/config.json": "2239240893aab4434347887491ba9de3a390cac0d0e5192b465089f8ae067f36",
+  "sha256/model.safetensors": "e4f168a317b4ec264ba876970665810f5ef53dcb2381525789e230712dd8c49a",
+  "sha256/tokenizer.json": "ea991de3c734d41384ad6b47bf781c803c1550b381b435823b9232ec03ee380d"
+}
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ make check-hardened | cut -c1-131
+
+python3 checker.py hardened
+[MEDIUM] M15-22 (15.3) no approval gate: nothing checks formats, hashes, licence and approver before a version becomes Approved (ch
+[MEDIUM] M15-23 (15.2) no SCP requires network isolation and a VPC on CreateModel: an admin's quick test can still ship a container
+
+0 HIGH, 2 MEDIUM, 0 LOW  (2 findings)
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ make hardened
+
+python3 evaluate.py hardened
+  A1   blocked  Booby-trapped model file: the weights are a pickle, and loading it runs code in the container
+         . no pickle-based weights: nothing ran at load
+  A2   blocked  Artifact swap after approval: a data scientist overwrites the files the endpoint loads
+         . ds-bob writes into s3://amzn-s3-demo-tsg-models/tsg-summariser/v2/: DENIED (explicit Deny in the bucket policy of amzn-s3-demo-tsg-models)
+  A3   blocked  Unapproved model to production: a hotfix model straight from a notebook onto the live endpoint
+         . ds-bob CreateModel on model/tsg-summariser-hotfix: DENIED (no identity policy allows it (implicit deny))
+  A4   blocked  Self-approval: the author approves their own model version
+         . ds-bob registered version 3, then approves it himself: DENIED (explicit Deny in the identity policy)
+  A5   blocked  Data out of the container: code in the model container posts tickets to the internet
+         . code in the container posts a ticket to https://collector.example.net: blocked (network isolation: no outbound calls, no AWS credentials in the container)
+  A6   blocked  Container credentials: code in the container reads another team's bucket with the execution role
+         . code in the container asks for the execution role's credentials: none (network isolation: no outbound calls, no AWS credentials in the container)
+  A7   blocked  Stolen app keys: InvokeEndpoint from the internet
+         . the app's leaked keys, used from a laptop on the internet: DENIED (no identity policy allows it (implicit deny))
+  A8   blocked  Outsider through the private endpoint: someone else's account sends data out via AnyCompany's VPC endpoint
+         . someone in the VPC uses their OWN account's keys, through AnyCompany's runtime endpoint, to send tickets to their endpoint: DENIED (the sagemaker.runtime VPC endpoint policy does not allow it)
+  A9   blocked  Shell into the endpoint: SSM access on the production container
+         . EnableSSMAccess is off on every variant: no shell to open
+  A10  blocked  Studio exfiltration: a notebook uploads data to the internet
+         . a notebook uploads a ticket export to https://collector.example.net: blocked (VpcOnly: no route to the internet)
+  A11  blocked  Studio impersonation: a presigned URL for someone else's profile
+         . ds-bob creates a presigned Studio URL for alice's profile: DENIED (no identity policy allows it (implicit deny))
+  A12  blocked  PassRole escalation: a job started by a data scientist runs as the production role
+         . ds-bob passes tsg-summariser-exec: DENIED (no identity policy allows it (implicit deny))
+  A13  blocked  Secret in the model definition: DescribeModel shows the Hugging Face token
+         . the model's Environment holds no secrets
+  A14  WORKED   Isolation dropped: an admin's quick test creates a model with no isolation and no VPC
+         . tsg-platform-admin CreateModel (EnableNetworkIsolation left out, no VpcConfig): allowed (allowed by the identity policy)
+         . tsg-platform-admin CreateModel (EnableNetworkIsolation false, no VpcConfig): allowed (allowed by the identity policy)
+  A15  WORKED   Approval in a hurry: the approver approves a version that fails every check
+         . the ML lead approves version 3 in a hurry (pickle weights, no licence, no hashes): allowed (allowed by the identity policy)
+         . no approval gate: the status is now Approved and the pipeline deploys it
+
+  N1   works    The Helpdesk gets a ticket summary
+  N2   works    The pipeline deploys an approved version
+  N3   works    The ML lead approves a clean version
+  N4   works    A data scientist opens her own Studio profile
+  N5   works    A data scientist runs a job with the data science role
+  N6   works    The endpoint starts
+
+Attacks that worked: 2 of 15  (A14, A15)   |   normal requests that work: 6 of 6
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ python3 explore.py call hardened collector-role --vpce
+
+One InvokeEndpoint call (setup hardened). Nothing is sent: twin.py answers.
+
+  POST https://runtime.sagemaker.us-east-1.amazonaws.com/endpoints/collector/invocations
+  body: the ticket text; signed with SigV4 by the caller's credentials
+  caller   arn:aws:iam::444455556666:role/collector-role
+  target   arn:aws:sagemaker:us-east-1:444455556666:endpoint/collector   (the caller's OWN endpoint, in another account)
+  path     through the sagemaker.runtime VPC endpoint vpce-0a1b2c3d4e5f60001 (aws:SourceVpce is set)
+
+  IAM checks, in order:
+   1. caller's identity policy        ALLOW
+   2. VPC endpoint policy             no Allow
+
+  result   DENY: the sagemaker.runtime VPC endpoint policy does not allow it
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ make hunt
+
+python3 hunt.py
+Q1. Models created outside the pipeline
+   2027-01-28T09:41:07Z  tsg-summariser-hotfix    by ds-bob     from registry: False   network isolation: False
+
+Q2. Self-approvals
+   2027-01-28T09:05:02Z  version 3 approved by ds-bob, who registered it
+
+Q3. Presigned Studio URLs for someone else's profile
+   2027-01-28T10:15:26Z  ds-bob (own profile: bob) signed in as alice
+
+Q4. InvokeEndpoint calls that skipped the private endpoint (challenge 3)
+   not written yet: challenge 3: write find_outside_invocations()
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ make test | tail -6
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.033s
+
+OK
+
+ALL TESTS PASSED (20 run)
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ make challenge 2>&1 | tail -12
+
+  why test_24_gate_refuses_version_3: AssertionError: 'pytorch_model.bin' not found in ''
+  why test_25_gate_passes_a_clean_version_only: AssertionError: [] is not true
+  why test_26_gate_is_switched_on: AssertionError: False is not true
+  why test_28_everything: -                  'out (challenge 1)')]
+  why test_27_outside_invocations: NotImplementedError: challenge 3: write find_outside_invocations()
+----------------------------------------------------------------------
+Ran 28 tests in 0.042s
+
+FAILED (failures=6, errors=1)
+
+7 of 28 TESTS FAILED (28 run)
+make: *** [Makefile:38: challenge] Error 1
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ make -n cloud-base
+
+aws --region us-east-1 cloudformation deploy --stack-name tsg-m15-lab --template-file cloud/base.yaml --capabilities CAPABILITY_IAM
+mkdir -p cloud/out && aws --region us-east-1 cloudformation describe-stacks --stack-name tsg-m15-lab --output json > cloud/out/stack.json
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ grep '^## ' GUIDED-BUILD.md
+
+## Step 0 · Before you start (15 minutes)
+## A1 · Create it from zero
+## A2 · Check the plumbing
+## B1 · Download, then read the licence
+## B2 · Scan it, the same scanner as the offline lab
+## B3 · Upload it, encrypted, to the released-models path
+## D1 · The schedule that deletes the endpoint (create it now)
+## D2 · Create the model, the configuration and the endpoint
+## D3 · Check what you built
+## E1 · A normal summary, through the private path
+## E2 · Stolen keys, used from your laptop
+## E3 · A prompt with personal data, and where it ends up
+## E4 · A burst of calls, and the metrics
+## E5 · The evidence in CloudTrail
+thesecguy@lab:~/ai-security-course-labs/labs/m15$ exit
+
+exit
