@@ -1,0 +1,94 @@
+{
+  "name": "m26-26.5-understand-linux",
+  "lesson": "26.0, 26.5",
+  "title": "Lab 26.5, part 1: get the lab, see what each file is, the two stacks and the log data, look before you run, set up PyYAML in a virtual environment, then look at each idea of model serving on its own with explore.py (a practice server on 127.0.0.1 and two real HTTP requests, its 12 endpoints, tokens and blocks, a prefix cache hit and miss with and without a per-tenant salt, containers and published ports, the GPU node, a measurement) and read the scanner's first findings line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m26 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The stacks",
+      "type": "ls stacks/first-draft stacks/first-draft/k8s models/approved-model models/suspicious-model data",
+      "pause_after": 4
+    },
+    {
+      "label": "The data",
+      "type": "head -n 3 data/gateway-log.jsonl",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup check",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Check",
+      "type": "make check",
+      "pause_after": 3
+    },
+    {
+      "label": "Server",
+      "type": ".venv/bin/python explore.py server",
+      "pause_after": 7
+    },
+    {
+      "label": "Endpoints",
+      "type": ".venv/bin/python explore.py endpoints",
+      "pause_after": 7
+    },
+    {
+      "label": "Tokens",
+      "type": ".venv/bin/python explore.py tokens",
+      "pause_after": 7
+    },
+    {
+      "label": "Cache",
+      "type": ".venv/bin/python explore.py cache",
+      "pause_after": 7
+    },
+    {
+      "label": "Salt",
+      "type": ".venv/bin/python explore.py cache --salt",
+      "pause_after": 6
+    },
+    {
+      "label": "Container",
+      "type": ".venv/bin/python explore.py container",
+      "pause_after": 6
+    },
+    {
+      "label": "Node",
+      "type": ".venv/bin/python explore.py node",
+      "pause_after": 6
+    },
+    {
+      "label": "Measure",
+      "type": ".venv/bin/python explore.py measure",
+      "pause_after": 7
+    },
+    {
+      "label": "Read a finding",
+      "type": ".venv/bin/python scan.py stacks/first-draft | head -n 5",
+      "pause_after": 6
+    }
+  ]
+}

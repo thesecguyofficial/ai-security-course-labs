@@ -5,11 +5,14 @@
 VENV := .venv
 PY   := $(if $(wildcard $(VENV)/bin/python),$(VENV)/bin/python,python3)
 
-.PHONY: setup scan probe cache attack hardened hunt test challenge clean
+.PHONY: setup check scan probe cache attack hardened hunt test challenge clean
 
 setup:      ## create .venv and install the pinned PyYAML
 	python3 -m venv $(VENV)
 	$(VENV)/bin/python -m pip install -r requirements.txt
+
+check:      ## is the lab ready? prints the PyYAML version the lab was tested with
+	$(VENV)/bin/python -c "import yaml; print('PyYAML', yaml.__version__, 'OK')"
 
 scan:       ## the configuration scan of the FIRST DRAFT stack (exit code 1: it has critical and high findings)
 	-$(PY) scan.py stacks/first-draft
