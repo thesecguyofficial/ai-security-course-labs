@@ -1,0 +1,84 @@
+{
+  "name": "m24-24.5-linux",
+  "lesson": "24.5",
+  "title": "Lab 24.5, part 2: trace the spread, the planted email opened, replay with no containment, the starter tool_scope, then the four controls added on camera one at a time (least privilege, the hand-off filter, the circuit-breaker and detection) with a replay after each, the four-line report, the tests and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Trace",
+      "type": "cd ai-security-course-labs/labs/m24 && make trace",
+      "pause_after": 6
+    },
+    {
+      "label": "Attack email",
+      "type": "head -n 1 data/recording/transcript.jsonl | python3 -m json.tool",
+      "pause_after": 6
+    },
+    {
+      "label": "Replay before",
+      "type": "make replay",
+      "pause_after": 6
+    },
+    {
+      "label": "Starter",
+      "type": "sed -n '/^def tool_scope/,/return True/p' containment.py",
+      "pause_after": 6
+    },
+    {
+      "label": "Add scope",
+      "type": "cat >> containment.py <<'EOF'\n\ndef tool_scope(agent, tool_call, config):\n    if tool_call[\"tool\"] not in config[\"agent_tools\"].get(agent, []):\n        return False\n    if tool_call[\"tool\"] == \"send_email\":\n        domain = tool_call[\"args\"][\"to\"].split(\"@\")[-1].lower()\n        return domain in config[\"send_email_domains\"].get(agent, [])\n    return True\nEOF",
+      "speed": 3,
+      "pause_after": 3
+    },
+    {
+      "label": "Replay scope",
+      "type": "make replay",
+      "pause_after": 6
+    },
+    {
+      "label": "Add filter",
+      "type": "cat >> containment.py <<'EOF'\n\nimport re, trace\n\ndef outside(text, config):\n    allowed = {d for doms in config[\"send_email_domains\"].values() for d in doms}\n    found = re.findall(r\"[\\w.+-]+@[\\w.-]+\\.\\w+\", text)\n    return sorted({a.lower() for a in found if a.split(\"@\")[1].lower() not in allowed})\n\ndef boundary_filter(handoff, config):\n    text = handoff[\"message\"]\n    if outside(text, config) or trace.SELF_FORWARD.search(text) or trace.OVERRIDE.search(text):\n        return False\n    return True\nEOF",
+      "speed": 3,
+      "pause_after": 3
+    },
+    {
+      "label": "Replay filter",
+      "type": "make replay",
+      "pause_after": 6
+    },
+    {
+      "label": "Add breaker",
+      "type": "cat >> containment.py <<'EOF'\n\ndef circuit_breaker(events, config):\n    crossed = {}\n    for e in events:\n        if e.get(\"kind\") == \"handoff\":\n            for address in outside(e[\"message\"], config):\n                crossed[address] = crossed.get(address, 0) + 1\n                if crossed[address] >= config[\"propagation_threshold\"]:\n                    return e[\"id\"]\n    return None\n\ndef detect(events, config):\n    paths = {}\n    for e in events:\n        if e.get(\"kind\") == \"handoff\":\n            for address in outside(e[\"message\"], config):\n                paths.setdefault(address, []).append(e[\"from\"] + \" -> \" + e[\"to\"])\n    return [{\"address\": a, \"path\": p} for a, p in paths.items() if len(p) > 1]\nEOF",
+      "speed": 3,
+      "pause_after": 3
+    },
+    {
+      "label": "Replay all",
+      "type": "make replay",
+      "pause_after": 6
+    },
+    {
+      "label": "Report",
+      "type": "make report",
+      "pause_after": 7
+    },
+    {
+      "label": "Tests",
+      "type": "make test",
+      "pause_after": 5
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | grep -E 'challenge|TESTS'",
+      "pause_after": 6
+    }
+  ]
+}

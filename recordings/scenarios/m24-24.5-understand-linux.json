@@ -1,0 +1,109 @@
+{
+  "name": "m24-24.5-understand-linux",
+  "lesson": "24.1, 24.5",
+  "title": "Lab 24.5, part 1: get the lab, see what each file is, the recorded runs and the crew's settings, look before you run, the setup check (nothing to install), then look at each idea on its own with explore.py (the crew, one normal run, one hand-off, shared memory, the attack hop by hop, one poisoned hand-off, the trust boundaries, least privilege for two sends, a counter over the attack and a normal run, the adapted attack) and read the trace line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m24 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The data",
+      "type": "ls data data/recording && wc -l data/recording/transcript.jsonl data/variants.jsonl",
+      "pause_after": 4
+    },
+    {
+      "label": "Settings",
+      "type": "cat config.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup trace",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Crew",
+      "type": "python3 explore.py crew",
+      "pause_after": 6
+    },
+    {
+      "label": "Run",
+      "type": "python3 explore.py run n1",
+      "pause_after": 6
+    },
+    {
+      "label": "Hand-off",
+      "type": "python3 explore.py handoff t11",
+      "pause_after": 6
+    },
+    {
+      "label": "Memory",
+      "type": "python3 explore.py memory",
+      "pause_after": 6
+    },
+    {
+      "label": "Spread",
+      "type": "python3 explore.py spread",
+      "pause_after": 7
+    },
+    {
+      "label": "Poisoned hand-off",
+      "type": "python3 explore.py handoff t02",
+      "pause_after": 6
+    },
+    {
+      "label": "Boundaries",
+      "type": "python3 explore.py boundaries",
+      "pause_after": 6
+    },
+    {
+      "label": "Scope",
+      "type": "python3 explore.py scope t04",
+      "pause_after": 6
+    },
+    {
+      "label": "Scope normal",
+      "type": "python3 explore.py scope t13",
+      "pause_after": 5
+    },
+    {
+      "label": "Breaker",
+      "type": "python3 explore.py breaker a1",
+      "pause_after": 6
+    },
+    {
+      "label": "Breaker normal",
+      "type": "python3 explore.py breaker n2",
+      "pause_after": 6
+    },
+    {
+      "label": "Variants",
+      "type": "python3 explore.py variants",
+      "pause_after": 7
+    },
+    {
+      "label": "Trace",
+      "type": "make trace",
+      "pause_after": 6
+    }
+  ]
+}
