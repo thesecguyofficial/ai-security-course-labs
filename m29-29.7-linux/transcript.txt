@@ -98,7 +98,7 @@ setup first-draft | responder: ['deactivate_key']
                         UpdateAccessKey svc-helpdesk-batch -> Inactive
   2027-04-10T10:16:05Z  changes in effect (lab assumption: 60 s)
 time to act: 13m55s (OVER the 10m00s target)
-attacker calls that worked: 61 of 61, 32 of them AFTER the responder acted | lab cost 3.05 USD
+attacker calls that worked: 61 of 61 (60 model calls, 1 session swap), 32 of them AFTER the responder acted | lab cost 3.05 USD
 
 setup hardened | responder: ['deactivate_key', 'deny_user_sessions', 'snapshot_evidence', 'open_incident']
   2027-04-10T10:02:10Z  first call with the leaked key, from 198.51.100.23
@@ -110,7 +110,7 @@ setup hardened | responder: ['deactivate_key', 'deny_user_sessions', 'snapshot_e
                         incident opened (lab ticket)
   2027-04-10T10:05:15Z  changes in effect (lab assumption: 60 s)
 time to act: 3m05s (within the 10m00s target)
-attacker calls that worked: 8 of 61, 0 of them AFTER the responder acted | lab cost 0.40 USD
+attacker calls that worked: 8 of 61 (7 model calls, 1 session swap), 0 of them AFTER the responder acted | lab cost 0.40 USD
 thesecguy@lab:~/ai-security-course-labs/labs/m29$ make triage
 
 .venv/bin/python triage.py first-draft allowlist

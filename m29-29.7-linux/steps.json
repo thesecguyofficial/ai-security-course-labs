@@ -1,119 +1,119 @@
 {
   "scenario": "m29-29.7-linux",
-  "start": 1.732,
+  "start": 1.727,
   "steps": [
     {
       "label": "First draft",
       "speed": 1,
-      "start": 1.732,
-      "end": 8.917
+      "start": 1.727,
+      "end": 8.901
     },
     {
       "label": "Draft rule",
       "speed": 1,
-      "start": 15.917,
-      "end": 21.997
+      "start": 15.901,
+      "end": 21.98
     },
     {
       "label": "Story",
       "speed": 1,
-      "start": 27.997,
-      "end": 30.108
+      "start": 27.98,
+      "end": 30.08
     },
     {
       "label": "Hunt",
       "speed": 1,
-      "start": 37.108,
-      "end": 39.296
+      "start": 37.08,
+      "end": 39.256
     },
     {
       "label": "Respond",
       "speed": 1,
-      "start": 47.296,
-      "end": 49.64
+      "start": 47.256,
+      "end": 49.588
     },
     {
       "label": "Triage",
       "speed": 1,
-      "start": 57.64,
-      "end": 59.874
+      "start": 57.588,
+      "end": 59.805
     },
     {
       "label": "Compare",
       "speed": 1,
-      "start": 67.874,
-      "end": 72.967
+      "start": 67.805,
+      "end": 72.891
     },
     {
       "label": "Hardened",
       "speed": 1,
-      "start": 80.967,
-      "end": 83.511
+      "start": 80.891,
+      "end": 83.427
     },
     {
       "label": "Network rule",
       "speed": 1,
-      "start": 89.512,
-      "end": 96.179
+      "start": 89.427,
+      "end": 96.093
     },
     {
       "label": "Tests",
       "speed": 1,
-      "start": 102.179,
-      "end": 106.374
+      "start": 102.094,
+      "end": 106.272
     },
     {
       "label": "Challenge",
       "speed": 1,
-      "start": 110.374,
-      "end": 117.18
+      "start": 110.272,
+      "end": 117.055
     }
   ],
   "keys": [
     {
-      "t": 2.332,
+      "t": 2.327,
       "what": "type"
     },
     {
-      "t": 16.517,
+      "t": 16.501,
       "what": "type"
     },
     {
-      "t": 28.598,
+      "t": 28.58,
       "what": "type"
     },
     {
-      "t": 37.709,
+      "t": 37.68,
       "what": "type"
     },
     {
-      "t": 47.896,
+      "t": 47.856,
       "what": "type"
     },
     {
-      "t": 58.24,
+      "t": 58.188,
       "what": "type"
     },
     {
-      "t": 68.475,
+      "t": 68.405,
       "what": "type"
     },
     {
-      "t": 81.567,
+      "t": 81.491,
       "what": "type"
     },
     {
-      "t": 90.112,
+      "t": 90.027,
       "what": "type"
     },
     {
-      "t": 102.779,
+      "t": 102.694,
       "what": "type"
     },
     {
-      "t": 110.974,
+      "t": 110.872,
       "what": "type"
     }
   ],
-  "end": 123.18
+  "end": 123.055
 }
