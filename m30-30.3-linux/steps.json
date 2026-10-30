@@ -1,0 +1,139 @@
+{
+  "scenario": "m30-30.3-linux",
+  "start": 1.716,
+  "steps": [
+    {
+      "label": "Card",
+      "speed": 1,
+      "start": 1.716,
+      "end": 8.171
+    },
+    {
+      "label": "Two releases",
+      "speed": 1,
+      "start": 15.171,
+      "end": 24.78
+    },
+    {
+      "label": "Naive",
+      "speed": 1,
+      "start": 29.78,
+      "end": 31.837
+    },
+    {
+      "label": "Story",
+      "speed": 1,
+      "start": 36.838,
+      "end": 38.983
+    },
+    {
+      "label": "Gate",
+      "speed": 1,
+      "start": 44.983,
+      "end": 47.092
+    },
+    {
+      "label": "Fix",
+      "speed": 1,
+      "start": 53.092,
+      "end": 55.038
+    },
+    {
+      "label": "Control",
+      "speed": 1,
+      "start": 60.038,
+      "end": 62.546
+    },
+    {
+      "label": "New tool",
+      "speed": 1,
+      "start": 68.546,
+      "end": 71.133
+    },
+    {
+      "label": "Refuse",
+      "speed": 1,
+      "start": 76.133,
+      "end": 78.526
+    },
+    {
+      "label": "Hunt",
+      "speed": 1,
+      "start": 83.526,
+      "end": 85.709
+    },
+    {
+      "label": "CI",
+      "speed": 1,
+      "start": 91.709,
+      "end": 100.905
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 106.905,
+      "end": 111.368
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 115.368,
+      "end": 122.216
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.317,
+      "what": "type"
+    },
+    {
+      "t": 15.771,
+      "what": "type"
+    },
+    {
+      "t": 30.38,
+      "what": "type"
+    },
+    {
+      "t": 37.438,
+      "what": "type"
+    },
+    {
+      "t": 45.583,
+      "what": "type"
+    },
+    {
+      "t": 53.693,
+      "what": "type"
+    },
+    {
+      "t": 60.638,
+      "what": "type"
+    },
+    {
+      "t": 69.147,
+      "what": "type"
+    },
+    {
+      "t": 76.733,
+      "what": "type"
+    },
+    {
+      "t": 84.126,
+      "what": "type"
+    },
+    {
+      "t": 92.309,
+      "what": "type"
+    },
+    {
+      "t": 107.505,
+      "what": "type"
+    },
+    {
+      "t": 115.968,
+      "what": "type"
+    }
+  ],
+  "end": 128.216
+}
