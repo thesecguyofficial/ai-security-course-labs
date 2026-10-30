@@ -61,6 +61,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `evaluate.py` | Runs the suite and prints **catch rate and false positives**; `--sweep`, `--cost` |
 | `checker.py` | 16 review rules `M12-01` to `M12-16`, plus `M12-17`, which you write |
 | `enforce.py`, `iam_eval.py` | Six requests replayed against the IAM policies and the org policy; a small teaching model of IAM evaluation |
+| `explore.py` | Step 1b: shows each piece of a guardrail on its own (`guardrail`, `strength`, `check`, `grounding`, `request`, `iam`). Read-only: it reads the lab's files, asks the twin and prints |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 17 tests for the lab, 6 for the challenge |
 | `GUIDED-BUILD.md` | Optional: build the guardrail yourself in your own AWS account, console or CLI, with example responses and teardown |
 | `cloud/` | Optional: Terraform for the reviewed guardrail, `cloud_eval.py` (suite via `ApplyGuardrail`), `cloud_simulate.py` (IAM policy simulator) |
