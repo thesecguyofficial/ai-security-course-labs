@@ -2,7 +2,12 @@
 # Standard library only: Python 3.11+, no packages, no cloud account, no network. Everything stays in this folder.
 PY := python3
 
-.PHONY: inventory triage what-if draft crosswalk evidence pack-draft start mine mine-crosswalk mine-pack test challenge clean
+.PHONY: check inventory triage what-if draft crosswalk evidence pack-draft start mine mine-crosswalk mine-pack test challenge clean
+
+check:          ## before you start: Python 3.11 or newer, and nothing to install
+	$(PY) --version
+	$(PY) -c "import sys; sys.exit('this lab needs Python 3.11 or newer' if sys.version_info < (3, 11) else 0)"
+	@echo "OK: standard library only, nothing to install"
 
 inventory:      ## Step 1: the AI inventory rows for TSG Helpdesk (writes out/ai-inventory.csv)
 	$(PY) govlab.py inventory

@@ -1,0 +1,23 @@
+{
+  "name": "m18-18.4-understand-linux",
+  "lesson": "18.0, 18.4",
+  "title": "Lab 18.4, part 1: get the lab, see what each file is, check Python (nothing to install), then look at each governance idea on its own with the read-only explore.py (kinds of document, one inventory entry, one risk row scored, one control mapped, one evidence item hashed) and read make inventory line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": ["Traceback", "No such file"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m18 && ls", "pause_after": 4},
+    {"label": "The folders", "type": "ls catalog helpdesk first-draft templates", "pause_after": 4},
+    {"label": "The evidence", "type": "ls evidence", "pause_after": 4},
+    {"label": "Look first", "type": "make -n check inventory", "pause_after": 4},
+    {"label": "Check", "type": "make check", "pause_after": 3},
+    {"label": "Kinds", "type": "python3 explore.py kinds", "pause_after": 7},
+    {"label": "Inventory entry", "type": "python3 explore.py inventory", "pause_after": 6},
+    {"label": "Risk row", "type": "python3 explore.py risk R1", "pause_after": 7},
+    {"label": "Control", "type": "python3 explore.py control C24", "pause_after": 6},
+    {"label": "Evidence", "type": "python3 explore.py evidence E01", "pause_after": 6},
+    {"label": "One run", "type": "make inventory", "pause_after": 6}
+  ]
+}
