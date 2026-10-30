@@ -22,7 +22,7 @@ sys.dont_write_bytecode = True  # read-only: importing govlab must not write __p
 import govlab  # noqa: E402  (only its loading helpers; nothing in govlab runs on import)
 
 KINDS = [
-    ("nist_ai_rmf", "framework", "voluntary: advice you choose from; nobody certifies you against it"),
+    ("nist_ai_rmf", "framework", "voluntary: guidance you choose from; nobody has to use it"),
     ("iso_42001", "standard", "certifiable: an accredited auditor can certify an organisation against it"),
     ("eu_ai_act", "law", "binding where it applies, with fines; what applies depends on the system's purpose"),
     ("owasp", "checklist", "community lists of what most often goes wrong in code; free, no certificate"),
