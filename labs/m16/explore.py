@@ -156,7 +156,7 @@ FLOW_FIELDS = ["version", "account-id", "interface-id", "srcaddr", "dstaddr", "s
                "packets", "bytes", "start", "end", "action", "log-status"]
 FLOW_SAYS = [
     "someone on the internet reached port 11434 (Ollama) on the GPU box",
-    "an unknown address tried SSH (port 22): the security group refused it",
+    "SSH (port 22) from an unknown address: a security group or network ACL refused it",
     "the analytics box sent HTTPS out: to WHICH service? Not in this line",
     "10.20.9.44 sent HTTPS out: the network interface ID leads to its owner",
 ]
@@ -249,7 +249,7 @@ def cmd_finding(_args) -> None:
     print()
     show([("type", f["type"], "WHAT GuardDuty thinks happened"),
           ("severity", f"{f['severity']}", "Low: 1.0 to 3.9 (Medium starts at 4.0)"),
-          ("featureName", svc["featureName"], "which GuardDuty plan raised it"),
+          ("featureName", svc["featureName"], "which plan raised it (value illustrative)"),
           ("resourceType", res["resourceType"], "the finding is about a set of AWS credentials"),
           ("userName", res["accessKeyDetails"]["userName"], "WHO: the IAM identity, not the customer"),
           ("modelId", cut(res["modelDetails"][0]["modelId"], 37), "WHICH model"),

@@ -203,7 +203,7 @@ Line 1, field by field:
 
   from            to              port   action  reading
   203.0.113.77    10.20.3.30      11434  ACCEPT  someone on the internet reached port 11434 (Ollama) on the GPU box
-  198.51.100.9    10.20.3.30      22     REJECT  an unknown address tried SSH (port 22): the security group refused it
+  198.51.100.9    10.20.3.30      22     REJECT  SSH (port 22) from an unknown address: a security group or network ACL refused it
   10.20.3.21      198.51.100.200  443    ACCEPT  the analytics box sent HTTPS out: to WHICH service? Not in this line
   10.20.9.44      198.51.100.201  443    ACCEPT  10.20.9.44 sent HTTPS out: the network interface ID leads to its owner
 
@@ -269,7 +269,7 @@ A GuardDuty AI Protection finding (GetFindings shape, cut to the fields the lab 
 
   type               Impact:IAMUser/PromptInjection.Direct   WHAT GuardDuty thinks happened
   severity           2.0                                     Low: 1.0 to 3.9 (Medium starts at 4.0)
-  featureName        AiProtection                            which GuardDuty plan raised it
+  featureName        AiProtection                            which plan raised it (value illustrative)
   resourceType       AccessKey                               the finding is about a set of AWS credentials
   userName           HelpdeskAppRole                         WHO: the IAM identity, not the customer
   modelId            us.anthropic.claude-haiku-4-5-2025...   WHICH model
