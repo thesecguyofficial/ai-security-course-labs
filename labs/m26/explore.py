@@ -116,8 +116,9 @@ def cmd_endpoints(_a) -> None:
         engine = "Ollama" if path.startswith("/api/") else "vLLM"
         print(f"  {method:<7}{path:<22}{engine:<8}{kind:<12}{DOES.get(path, '')}")
     kinds = [k for _, k, _ in practice_server.ROUTES.values()]
-    print(f"{kinds.count('inference')} paths are 'inference': what apps call. "
-          f"The other {len(kinds) - kinds.count('inference')} are for operators (health, info, ops, dev, management).")
+    ops = len(kinds) - kinds.count("inference") - kinds.count("health")
+    print(f"{kinds.count('inference')} paths are 'inference': what apps call. {kinds.count('health')} is a health check. "
+          f"The other {ops} are for operators (info, ops, dev, management).")
     print("All 12 share ONE address and port. Nothing in HTTP itself says which callers may use which path.")
 
 

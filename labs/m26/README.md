@@ -153,7 +153,7 @@ The practice server's 12 paths: the same paths a real Ollama or vLLM server has 
   GET    /api/tags             Ollama  inference   lists the models on disk
   POST   /api/pull             Ollama  management  downloads a model
   DELETE /api/delete           Ollama  management  deletes a model
-3 paths are 'inference': what apps call. The other 9 are for operators (health, info, ops, dev, management).
+3 paths are 'inference': what apps call. 1 is a health check. The other 8 are for operators (info, ops, dev, management).
 All 12 share ONE address and port. Nothing in HTTP itself says which callers may use which path.
 ```
 
