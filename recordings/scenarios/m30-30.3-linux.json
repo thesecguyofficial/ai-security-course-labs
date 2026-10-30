@@ -1,0 +1,82 @@
+{
+  "name": "m30-30.3-linux",
+  "lesson": "30.3",
+  "title": "Lab 30.3, part 2: score r41 and r42, the two release files side by side, the naive gate passes then fails, one case in both releases, the six-rule gate stops r42, the fix ships, the negative control, two candidates at the gate's edges, a team's gate log, the CI run going red with its exit code, the tests and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
+    "cd ai-security-course-labs/labs/m30 && make setup"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Card",
+      "type": "cd ai-security-course-labs/labs/m30 && make card",
+      "pause_after": 7
+    },
+    {
+      "label": "Two releases",
+      "type": "diff -y --suppress-common-lines -W 130 releases/r41.json releases/r42.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Naive",
+      "type": "make naive",
+      "pause_after": 5
+    },
+    {
+      "label": "Story",
+      "type": "make story",
+      "pause_after": 6
+    },
+    {
+      "label": "Gate",
+      "type": "make gate",
+      "pause_after": 6
+    },
+    {
+      "label": "Fix",
+      "type": "make fix",
+      "pause_after": 5
+    },
+    {
+      "label": "Control",
+      "type": "make control",
+      "pause_after": 6
+    },
+    {
+      "label": "New tool",
+      "type": "make new-tool",
+      "pause_after": 5
+    },
+    {
+      "label": "Refuse",
+      "type": "make refuse",
+      "pause_after": 5
+    },
+    {
+      "label": "Hunt",
+      "type": "make hunt",
+      "pause_after": 6
+    },
+    {
+      "label": "CI",
+      "type": "make ci C=r42 2>&1 | tail -n 12; echo \"exit code ${PIPESTATUS[0]}\"",
+      "pause_after": 6
+    },
+    {
+      "label": "Tests",
+      "type": "make test 2>&1 | tail -n 3",
+      "pause_after": 4
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | grep -E 'challenge|TESTS'",
+      "pause_after": 6
+    }
+  ]
+}
