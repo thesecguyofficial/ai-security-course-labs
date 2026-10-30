@@ -1,0 +1,179 @@
+{
+  "scenario": "m14-14.2-demos-linux",
+  "start": 1.717,
+  "steps": [
+    {
+      "label": "Runtime findings",
+      "speed": 1,
+      "start": 1.717,
+      "end": 12.461
+    },
+    {
+      "label": "Session hardened",
+      "speed": 1,
+      "start": 19.461,
+      "end": 30.828
+    },
+    {
+      "label": "Identity findings",
+      "speed": 1,
+      "start": 36.829,
+      "end": 43.344
+    },
+    {
+      "label": "Runtime inbound",
+      "speed": 1,
+      "start": 50.344,
+      "end": 57.189
+    },
+    {
+      "label": "Gateway findings",
+      "speed": 1,
+      "start": 62.189,
+      "end": 68.768
+    },
+    {
+      "label": "Frontend role",
+      "speed": 1,
+      "start": 74.768,
+      "end": 82.173
+    },
+    {
+      "label": "Lambda policy",
+      "speed": 1,
+      "start": 88.173,
+      "end": 94.921
+    },
+    {
+      "label": "Policy findings",
+      "speed": 1,
+      "start": 100.921,
+      "end": 107.35
+    },
+    {
+      "label": "Trusts the model",
+      "speed": 1,
+      "start": 114.35,
+      "end": 128.509
+    },
+    {
+      "label": "Missing argument",
+      "speed": 1,
+      "start": 133.51,
+      "end": 144.546
+    },
+    {
+      "label": "Memory findings",
+      "speed": 1,
+      "start": 150.546,
+      "end": 156.917
+    },
+    {
+      "label": "Planted memory",
+      "speed": 1,
+      "start": 162.917,
+      "end": 167.97
+    },
+    {
+      "label": "Memory from a ticket",
+      "speed": 1,
+      "start": 172.971,
+      "end": 182.023
+    },
+    {
+      "label": "Code first draft",
+      "speed": 1,
+      "start": 188.023,
+      "end": 201.053
+    },
+    {
+      "label": "Code hardened",
+      "speed": 1,
+      "start": 206.053,
+      "end": 218.888
+    },
+    {
+      "label": "Logging findings",
+      "speed": 1,
+      "start": 223.888,
+      "end": 230.314
+    },
+    {
+      "label": "App log",
+      "speed": 1,
+      "start": 236.314,
+      "end": 241.205
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.317,
+      "what": "type"
+    },
+    {
+      "t": 20.061,
+      "what": "type"
+    },
+    {
+      "t": 37.429,
+      "what": "type"
+    },
+    {
+      "t": 50.945,
+      "what": "type"
+    },
+    {
+      "t": 62.789,
+      "what": "type"
+    },
+    {
+      "t": 75.368,
+      "what": "type"
+    },
+    {
+      "t": 88.773,
+      "what": "type"
+    },
+    {
+      "t": 101.521,
+      "what": "type"
+    },
+    {
+      "t": 114.95,
+      "what": "type"
+    },
+    {
+      "t": 134.11,
+      "what": "type"
+    },
+    {
+      "t": 151.146,
+      "what": "type"
+    },
+    {
+      "t": 163.518,
+      "what": "type"
+    },
+    {
+      "t": 173.571,
+      "what": "type"
+    },
+    {
+      "t": 188.624,
+      "what": "type"
+    },
+    {
+      "t": 206.653,
+      "what": "type"
+    },
+    {
+      "t": 224.489,
+      "what": "type"
+    },
+    {
+      "t": 236.914,
+      "what": "type"
+    }
+  ],
+  "end": 247.205
+}
