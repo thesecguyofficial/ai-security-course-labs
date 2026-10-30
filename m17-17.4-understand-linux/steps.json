@@ -1,0 +1,159 @@
+{
+  "scenario": "m17-17.4-understand-linux",
+  "start": 1.712,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.712,
+      "end": 12.209
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.209,
+      "end": 20.857
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 24.857,
+      "end": 30.251
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 33.251,
+      "end": 35.811
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 38.811,
+      "end": 41.171
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 44.171,
+      "end": 46.394
+    },
+    {
+      "label": "Case",
+      "speed": 1,
+      "start": 50.394,
+      "end": 54.622
+    },
+    {
+      "label": "Run weak",
+      "speed": 1,
+      "start": 60.622,
+      "end": 66.437
+    },
+    {
+      "label": "Run hardened",
+      "speed": 1,
+      "start": 72.437,
+      "end": 76.401
+    },
+    {
+      "label": "Score",
+      "speed": 1,
+      "start": 82.401,
+      "end": 88.103
+    },
+    {
+      "label": "Repeat",
+      "speed": 1,
+      "start": 94.103,
+      "end": 98.364
+    },
+    {
+      "label": "Workflow",
+      "speed": 1,
+      "start": 104.364,
+      "end": 108.397
+    },
+    {
+      "label": "Exit code",
+      "speed": 1,
+      "start": 114.397,
+      "end": 122.459
+    },
+    {
+      "label": "CI plan",
+      "speed": 1,
+      "start": 128.459,
+      "end": 130.701
+    },
+    {
+      "label": "One run",
+      "speed": 1,
+      "start": 134.701,
+      "end": 142.813
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.312,
+      "what": "type"
+    },
+    {
+      "t": 15.809,
+      "what": "type"
+    },
+    {
+      "t": 25.458,
+      "what": "type"
+    },
+    {
+      "t": 33.851,
+      "what": "type"
+    },
+    {
+      "t": 39.411,
+      "what": "type"
+    },
+    {
+      "t": 44.772,
+      "what": "type"
+    },
+    {
+      "t": 50.994,
+      "what": "type"
+    },
+    {
+      "t": 61.222,
+      "what": "type"
+    },
+    {
+      "t": 73.037,
+      "what": "type"
+    },
+    {
+      "t": 83.001,
+      "what": "type"
+    },
+    {
+      "t": 94.703,
+      "what": "type"
+    },
+    {
+      "t": 104.964,
+      "what": "type"
+    },
+    {
+      "t": 114.997,
+      "what": "type"
+    },
+    {
+      "t": 129.059,
+      "what": "type"
+    },
+    {
+      "t": 135.301,
+      "what": "type"
+    }
+  ],
+  "end": 148.813
+}
