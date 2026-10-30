@@ -1,0 +1,8 @@
+warning: unable to access '/home/runner/.config/git/config': Permission denied
+[before, as thesecguy] git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git
+warning: unable to access '/home/runner/.config/git/ignore': Permission denied
+warning: unable to access '/home/runner/.config/git/attributes': Permission denied
+[before, as thesecguy] cd ai-security-course-labs/labs/m29 && make setup
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+prepared: user thesecguy on host lab, removed: nothing, ready: nothing

@@ -1,0 +1,119 @@
+{
+  "scenario": "m29-29.7-linux",
+  "start": 1.732,
+  "steps": [
+    {
+      "label": "First draft",
+      "speed": 1,
+      "start": 1.732,
+      "end": 8.917
+    },
+    {
+      "label": "Draft rule",
+      "speed": 1,
+      "start": 15.917,
+      "end": 21.997
+    },
+    {
+      "label": "Story",
+      "speed": 1,
+      "start": 27.997,
+      "end": 30.108
+    },
+    {
+      "label": "Hunt",
+      "speed": 1,
+      "start": 37.108,
+      "end": 39.296
+    },
+    {
+      "label": "Respond",
+      "speed": 1,
+      "start": 47.296,
+      "end": 49.64
+    },
+    {
+      "label": "Triage",
+      "speed": 1,
+      "start": 57.64,
+      "end": 59.874
+    },
+    {
+      "label": "Compare",
+      "speed": 1,
+      "start": 67.874,
+      "end": 72.967
+    },
+    {
+      "label": "Hardened",
+      "speed": 1,
+      "start": 80.967,
+      "end": 83.511
+    },
+    {
+      "label": "Network rule",
+      "speed": 1,
+      "start": 89.512,
+      "end": 96.179
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 102.179,
+      "end": 106.374
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 110.374,
+      "end": 117.18
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.332,
+      "what": "type"
+    },
+    {
+      "t": 16.517,
+      "what": "type"
+    },
+    {
+      "t": 28.598,
+      "what": "type"
+    },
+    {
+      "t": 37.709,
+      "what": "type"
+    },
+    {
+      "t": 47.896,
+      "what": "type"
+    },
+    {
+      "t": 58.24,
+      "what": "type"
+    },
+    {
+      "t": 68.475,
+      "what": "type"
+    },
+    {
+      "t": 81.567,
+      "what": "type"
+    },
+    {
+      "t": 90.112,
+      "what": "type"
+    },
+    {
+      "t": 102.779,
+      "what": "type"
+    },
+    {
+      "t": 110.974,
+      "what": "type"
+    }
+  ],
+  "end": 123.18
+}
