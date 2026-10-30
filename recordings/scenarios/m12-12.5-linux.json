@@ -73,12 +73,12 @@
     },
     {
       "label": "Sweep",
-      "type": "make sweep",
+      "type": "make sweep | fold -w 130",
       "pause_after": 9
     },
     {
       "label": "Cost",
-      "type": "make cost",
+      "type": "make cost | fold -w 130",
       "pause_after": 7
     },
     {
