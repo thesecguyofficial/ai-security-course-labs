@@ -1,13 +1,13 @@
 """
 containment.py: YOU WRITE THIS. Four containment controls (plus one challenge function). Nothing here attacks
 anything; each function reads recorded events and returns a verdict. The harness (replay.py) runs them over the
-frozen multi-agent run and the adapted variants and proves the dangerous action never executes while the normal
-runs still complete.
+recorded, illustrative multi-agent run and the adapted variant and proves the dangerous action never executes while
+the normal runs still complete.
 
 Fill in the four controls below. Until you do, boundary_filter allows every hand-off, tool_scope allows every
 tool call, the breaker never trips and detect finds nothing, so `make replay` shows "contained: NO". When they
 are right it shows "contained: YES" on the recording AND the variants, with 0 false positives on the normal runs.
-Build on behaviour, not exact wording (lesson 24.4): the variants paraphrase, reroute and use a look-alike domain.
+Build on behaviour, not exact wording (lesson 24.4): the adapted variant paraphrases the instruction and uses a look-alike domain.
 
 `config` is the dict from config.json: agents, agent_tools, send_email_domains, propagation_threshold.
 

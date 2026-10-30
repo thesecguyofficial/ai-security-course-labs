@@ -7,7 +7,7 @@ trace.py: read the recorded, inert multi-agent run in data/recording/. Offline, 
                      over a channel: memory or task), tool_call (an agent uses a tool). Nothing here runs; it
                      is a recording. The attack run is session a1; n1 and n2 are normal.
 
-The attack was run once, in a sandbox, and frozen. These functions read the path for you so you can see where
+The run is illustrative: written as data, with invented events, names and dates. These functions read the path for you so you can see where
 the instruction entered, how it crossed the trust boundaries, and where it reached the agent that can act,
 before you write the containment in containment.py.
 
