@@ -100,7 +100,7 @@ the suite, the scores, the gates, the negative control and the CI file are what 
 `python3 -m venv .venv` makes a **virtual environment**: a private folder for this lab's Python, so versions can't
 clash with other projects (it is not a security sandbox). There is no `pip install` line: `pip` is Python's package
 installer, and this lab uses only the standard library. Real output on a fresh Ubuntu machine (recording run
-41090378516):
+41094948121):
 
 ```output
 Python 3.12.3 OK, nothing to install
@@ -112,7 +112,7 @@ New to evals and release gates? Do this before Step 2 (lesson 30.1 and its video
 idea at a time. **What it really runs:** it reads the lab's files and, for `trials`, `noise`, `card`, `compare` and
 `naive`, runs the stand-in agent in memory exactly as `evals.py` does. It writes no file (no `results/`, no `state/`,
 no `__pycache__`), runs no gate and uses no network. Windows: `py explore.py ...`. Real output from recording run
-41090378516 (a fresh Ubuntu machine, Python 3.12):
+41094948121 (a fresh Ubuntu machine, Python 3.12):
 
 **1. Your own eval suite:** what is in it. A public benchmark has the same parts, written for someone else's agent.
 
