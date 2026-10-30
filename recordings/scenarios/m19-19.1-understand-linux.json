@@ -7,17 +7,59 @@
   "before": [
     "git config --global user.name \"Student\" && git config --global user.email \"student@example.com\""
   ],
-  "fail_on": ["Traceback"],
+  "fail_on": [
+    "Traceback"
+  ],
   "steps": [
-    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
-    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m19 && ls", "pause_after": 4},
-    {"label": "Your file", "type": "grep -n \"^def \" helpdesk/guards.py", "pause_after": 4},
-    {"label": "Look first", "type": "make -n setup check", "pause_after": 3},
-    {"label": "Setup", "type": "make setup", "pause_after": 3},
-    {"label": "Self-check", "type": "make check", "pause_after": 7},
-    {"label": "Export", "type": "make export DEST=~/my-ai-security-capstone", "pause_after": 5},
-    {"label": "Your repo", "type": "cd ~/my-ai-security-capstone && ls -a", "pause_after": 4},
-    {"label": "Commit", "type": "git init -q -b main && git add . && git commit -q -m \"TSG Helpdesk capstone: starting point\" && git log --oneline -1", "pause_after": 4},
-    {"label": "Full SHA", "type": "git rev-parse HEAD", "pause_after": 4}
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m19 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "Your file",
+      "type": "grep -n \"^def \" helpdesk/guards.py",
+      "pause_after": 4
+    },
+    {
+      "label": "Look first",
+      "type": "make -n setup check",
+      "pause_after": 3
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Self-check",
+      "type": "make check",
+      "pause_after": 7
+    },
+    {
+      "label": "Export",
+      "type": "make export DEST=~/my-ai-security-capstone",
+      "pause_after": 5
+    },
+    {
+      "label": "Your repo",
+      "type": "cd ~/my-ai-security-capstone && ls -a",
+      "pause_after": 4
+    },
+    {
+      "label": "Commit",
+      "type": "git init -q -b main && git add . && git commit -q -m \"Starting point\"",
+      "pause_after": 3
+    },
+    {
+      "label": "Full SHA",
+      "type": "git log --oneline -1 && git rev-parse HEAD",
+      "pause_after": 5
+    }
   ]
 }
