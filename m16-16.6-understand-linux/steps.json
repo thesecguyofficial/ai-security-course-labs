@@ -1,0 +1,199 @@
+{
+  "scenario": "m16-16.6-understand-linux",
+  "start": 1.694,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.694,
+      "end": 12.508
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.508,
+      "end": 21.159
+    },
+    {
+      "label": "The folders",
+      "speed": 1,
+      "start": 25.159,
+      "end": 31.733
+    },
+    {
+      "label": "The setups",
+      "speed": 1,
+      "start": 35.733,
+      "end": 45.146
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 51.146,
+      "end": 54.633
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 58.633,
+      "end": 60.822
+    },
+    {
+      "label": "Menu",
+      "speed": 1,
+      "start": 63.822,
+      "end": 67.034
+    },
+    {
+      "label": "Day",
+      "speed": 1,
+      "start": 72.034,
+      "end": 75.694
+    },
+    {
+      "label": "Trail",
+      "speed": 1,
+      "start": 82.694,
+      "end": 86.567
+    },
+    {
+      "label": "Invocation",
+      "speed": 1,
+      "start": 93.567,
+      "end": 97.994
+    },
+    {
+      "label": "Flow",
+      "speed": 1,
+      "start": 104.995,
+      "end": 108.497
+    },
+    {
+      "label": "DNS",
+      "speed": 1,
+      "start": 115.497,
+      "end": 119.063
+    },
+    {
+      "label": "Rule",
+      "speed": 1,
+      "start": 126.063,
+      "end": 129.782
+    },
+    {
+      "label": "Finding",
+      "speed": 1,
+      "start": 136.782,
+      "end": 140.854
+    },
+    {
+      "label": "Inventory",
+      "speed": 1,
+      "start": 147.854,
+      "end": 152.18
+    },
+    {
+      "label": "Config",
+      "speed": 1,
+      "start": 159.18,
+      "end": 163.071
+    },
+    {
+      "label": "Query",
+      "speed": 1,
+      "start": 169.071,
+      "end": 173.002
+    },
+    {
+      "label": "Playbook",
+      "speed": 1,
+      "start": 180.003,
+      "end": 184.195
+    },
+    {
+      "label": "One run",
+      "speed": 1,
+      "start": 191.195,
+      "end": 193.773
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.294,
+      "what": "type"
+    },
+    {
+      "t": 16.108,
+      "what": "type"
+    },
+    {
+      "t": 25.759,
+      "what": "type"
+    },
+    {
+      "t": 36.333,
+      "what": "type"
+    },
+    {
+      "t": 51.746,
+      "what": "type"
+    },
+    {
+      "t": 59.233,
+      "what": "type"
+    },
+    {
+      "t": 64.422,
+      "what": "type"
+    },
+    {
+      "t": 72.634,
+      "what": "type"
+    },
+    {
+      "t": 83.294,
+      "what": "type"
+    },
+    {
+      "t": 94.167,
+      "what": "type"
+    },
+    {
+      "t": 105.595,
+      "what": "type"
+    },
+    {
+      "t": 116.097,
+      "what": "type"
+    },
+    {
+      "t": 126.663,
+      "what": "type"
+    },
+    {
+      "t": 137.382,
+      "what": "type"
+    },
+    {
+      "t": 148.454,
+      "what": "type"
+    },
+    {
+      "t": 159.78,
+      "what": "type"
+    },
+    {
+      "t": 169.672,
+      "what": "type"
+    },
+    {
+      "t": 180.603,
+      "what": "type"
+    },
+    {
+      "t": 191.796,
+      "what": "type"
+    }
+  ],
+  "end": 199.774
+}
