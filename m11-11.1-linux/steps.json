@@ -1,0 +1,129 @@
+{
+  "scenario": "m11-11.1-linux",
+  "start": 1.704,
+  "steps": [
+    {
+      "label": "Stolen role",
+      "speed": 1,
+      "start": 1.704,
+      "end": 11.333
+    },
+    {
+      "label": "Role rules",
+      "speed": 1,
+      "start": 19.333,
+      "end": 25.578
+    },
+    {
+      "label": "Stolen role fixed",
+      "speed": 1,
+      "start": 32.578,
+      "end": 39.421
+    },
+    {
+      "label": "Network rules",
+      "speed": 1,
+      "start": 47.421,
+      "end": 53.829
+    },
+    {
+      "label": "Side door",
+      "speed": 1,
+      "start": 60.829,
+      "end": 65.049
+    },
+    {
+      "label": "Doors fixed",
+      "speed": 1,
+      "start": 71.049,
+      "end": 77.603
+    },
+    {
+      "label": "Key rules",
+      "speed": 1,
+      "start": 85.603,
+      "end": 91.861
+    },
+    {
+      "label": "Log rules",
+      "speed": 1,
+      "start": 98.861,
+      "end": 105.759
+    },
+    {
+      "label": "Global",
+      "speed": 1,
+      "start": 113.759,
+      "end": 118.261
+    },
+    {
+      "label": "Region guard",
+      "speed": 1,
+      "start": 125.261,
+      "end": 130.907
+    },
+    {
+      "label": "Residency rule",
+      "speed": 1,
+      "start": 136.907,
+      "end": 141.616
+    },
+    {
+      "label": "Global fixed",
+      "speed": 1,
+      "start": 146.616,
+      "end": 153.016
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.304,
+      "what": "type"
+    },
+    {
+      "t": 19.933,
+      "what": "type"
+    },
+    {
+      "t": 33.178,
+      "what": "type"
+    },
+    {
+      "t": 48.022,
+      "what": "type"
+    },
+    {
+      "t": 61.429,
+      "what": "type"
+    },
+    {
+      "t": 71.649,
+      "what": "type"
+    },
+    {
+      "t": 86.203,
+      "what": "type"
+    },
+    {
+      "t": 99.461,
+      "what": "type"
+    },
+    {
+      "t": 114.359,
+      "what": "type"
+    },
+    {
+      "t": 125.861,
+      "what": "type"
+    },
+    {
+      "t": 137.507,
+      "what": "type"
+    },
+    {
+      "t": 147.216,
+      "what": "type"
+    }
+  ],
+  "end": 160.016
+}

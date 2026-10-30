@@ -1,0 +1,209 @@
+thesecguy@lab:~$ thesecguy@lab:~$ cd ai-security-course-labs/labs/m11 && python3 attack.py --only X2,X3,X5,X6
+
+--- M11 lab · FIRST-DRAFT · twin/first-draft.plan.json ---
+    org SCPs: FullAWSAccess, scp-region-guard.first-draft.json · endpoint policy: aws_vpc_endpoint.bedrock_runtime (default policy)
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Attacks and mistakes
+  [X2] ALLOWED  Stolen Helpdesk role: Converse with a model nobody approved (Claude Opus 4.7)
+         why:  every check passed: bedrock:InvokeModel
+         seen: CloudTrail event history: management event (90 days, free)
+         seen: Prompt log: question + answer in /tsg-helpdesk/bedrock/model-invocations (no KMS key of yours, kept FOREVER)
+  [X3] ALLOWED  Stolen Helpdesk role: the approved model, called directly in us-west-2 (no profile)
+         why:  every check passed: bedrock:InvokeModel
+         seen: CloudTrail event history: management event (90 days, free)
+         seen: Prompt log: question + answer in /tsg-helpdesk/bedrock/model-invocations (no KMS key of yours, kept FOREVER)
+  [X5] ALLOWED  Stolen Helpdesk role: DeleteModelInvocationLoggingConfiguration
+         why:  every check passed: bedrock:DeleteModelInvocationLoggingConfiguration
+         seen: CloudTrail event history: management event (90 days, free)
+  [X6] ALLOWED  Stolen Helpdesk role: CreateProvisionedModelThroughput (billed by the hour)
+         why:  every check passed: bedrock:CreateProvisionedModelThroughput
+         seen: CloudTrail event history: management event (90 days, free)
+
+4 of 4 attacks and mistakes allowed.
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 checker.py --only=M11-01,M11-02,M11-03
+
+--- M11 plan checker · twin/first-draft.plan.json · only M11-01, M11-02, M11-03 ---
+
+  HIGH    M11-01  aws_iam_role_policy.app_invoke [LetTheAppUseBedrock]
+          The Helpdesk role allows bedrock:*, bedrock-mantle:*: every model, every setting, both endpoints.
+          fix: List only bedrock:InvokeModel and bedrock:InvokeModelWithResponseStream (lesson 11.1).
+  HIGH    M11-02  aws_iam_role_policy.app_invoke [LetTheAppUseBedrock]
+          Can invoke ANY model, through any route, in any Region (Resource "*").
+          fix: Name the profile ARN, plus the model ARN in each destination Region with a bedrock:InferenceProfileArn condition (AWS's geographic example policy).
+  MEDIUM  M11-03  aws_iam_role_policy.app_invoke
+          An app role that can also: CreateInference, PutAccountDataRetention, CreateModelCustomizationJob, CreateModelInvocationJob, CreateProvisionedModelThroughput, DeleteModelInvocationLoggingConfiguration, PutModelInvocationLoggingConfiguration, PutUseCaseForModelAccess.
+          fix: Remove them. Logging belongs to the security admin; Marketplace subscriptions to the platform team, once per approved model (lesson 11.1).
+
+3 of 15 findings shown
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 attack.py --plan hardened --only X2,X3,X5,X6
+
+--- M11 lab · HARDENED · twin/hardened.plan.json ---
+    org SCPs: FullAWSAccess, scp-region-guard.json · endpoint policy: aws_vpc_endpoint.bedrock_runtime
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Attacks and mistakes
+  [X2] DENIED   Stolen Helpdesk role: Converse with a model nobody approved (Claude Opus 4.7)
+         why:  no identity policy allows it (implicit deny)  [check: bedrock:InvokeModel on arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-opus-4-7]
+         seen: CloudTrail event history: management event, with an access-denied errorCode (90 days, free)
+  [X3] DENIED   Stolen Helpdesk role: the approved model, called directly in us-west-2 (no profile)
+         why:  no identity policy allows it (implicit deny)  [check: bedrock:InvokeModel on arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0]
+         seen: CloudTrail event history: management event, with an access-denied errorCode (90 days, free)
+  [X5] DENIED   Stolen Helpdesk role: DeleteModelInvocationLoggingConfiguration
+         why:  no identity policy allows it (implicit deny)  [check: bedrock:DeleteModelInvocationLoggingConfiguration on *]
+         seen: CloudTrail event history: management event, with an access-denied errorCode (90 days, free)
+  [X6] DENIED   Stolen Helpdesk role: CreateProvisionedModelThroughput (billed by the hour)
+         why:  no identity policy allows it (implicit deny)  [check: bedrock:CreateProvisionedModelThroughput on arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-opus-4-7]
+         seen: CloudTrail event history: management event, with an access-denied errorCode (90 days, free)
+
+0 of 4 attacks and mistakes allowed.
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 checker.py --only=M11-05,M11-06,M11-07
+
+--- M11 plan checker · twin/first-draft.plan.json · only M11-05, M11-06, M11-07 ---
+
+  HIGH    M11-05  aws_vpc_endpoint.bedrock_runtime
+          No endpoint policy, so the default applies: any principal, any action, any resource. Credentials from ANY AWS account work through this endpoint.
+          fix: Attach a policy: only your account or org (aws:PrincipalAccount / aws:PrincipalOrgID), only the invoke actions (lesson 11.2).
+  HIGH    M11-06  aws_nat_gateway.nat, aws_internet_gateway.igw
+          The app's VPC can reach the internet: it can call bedrock-mantle or any other public endpoint, and the endpoint policy never sees those calls.
+          fix: Remove the NAT/internet route; add an interface endpoint for each AWS service the app needs.
+  MEDIUM  M11-07  aws_security_group.endpoint
+          Endpoint accepts HTTPS from 10.20.0.0/16: anything in that range can use it.
+          fix: Allow 443 only from the app's security group.
+
+3 of 15 findings shown
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 attack.py --only X7
+
+--- M11 lab · FIRST-DRAFT · twin/first-draft.plan.json ---
+    org SCPs: FullAWSAccess, scp-region-guard.first-draft.json · endpoint policy: aws_vpc_endpoint.bedrock_runtime (default policy)
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Attacks and mistakes
+  [X7] ALLOWED  A code change: the function calls bedrock-mantle (Anthropic SDK) from inside the VPC
+         why:  every check passed: bedrock-mantle:CreateInference
+         seen: CloudTrail: NOTHING (mantle inference is a data event, and no trail selects it)
+         seen: Prompt log: NOT captured (invocation logging covers bedrock-runtime only)
+
+1 of 1 attacks and mistakes allowed.
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 attack.py --plan hardened --only X1,X7
+
+--- M11 lab · HARDENED · twin/hardened.plan.json ---
+    org SCPs: FullAWSAccess, scp-region-guard.json · endpoint policy: aws_vpc_endpoint.bedrock_runtime
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Attacks and mistakes
+  [X1] DENIED   Outsider's own AWS keys, used from inside the VPC through AnyCompany's endpoint
+         why:  the endpoint policy aws_vpc_endpoint.bedrock_runtime doesn't allow it  [check: bedrock:InvokeModel on arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-opus-4-7]
+         seen: CloudTrail: the API call is recorded in THEIR account's CloudTrail, not AnyCompany's
+         seen: AnyCompany trail: network activity event, as the endpoint owner, refused at the endpoint (filter: errorCode VpceAccessDenied)
+  [X7] DENIED   A code change: the function calls bedrock-mantle (Anthropic SDK) from inside the VPC
+         why:  no network path: no NAT or internet gateway, and no bedrock-mantle endpoint in this VPC
+         seen: nothing: the request never left the VPC
+
+0 of 2 attacks and mistakes allowed.
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 checker.py --only=M11-08,M11-09,M11-14
+
+--- M11 plan checker · twin/first-draft.plan.json · only M11-08, M11-09, M11-14 ---
+
+  HIGH    M11-08  aws_cloudwatch_log_group.prompts
+          Prompt logs (every question and answer) are not encrypted with a key you control: logs read access in IAM is all anyone needs to read them.
+          fix: Set kms_key_id to a customer managed key whose policy limits who can decrypt (lesson 11.3).
+  MEDIUM  M11-09  aws_cloudwatch_log_group.prompts
+          Prompt logs never expire (no retention set).
+          fix: Set retention_in_days to what investigations need, and an S3 lifecycle rule (lesson 11.4).
+  MEDIUM  M11-14  account
+          No customer managed keys: nothing but IAM decides who can read the prompt logs.
+          fix: Create keys for prompt logs and for audit logs, with separate readers (lesson 11.3).
+
+3 of 15 findings shown
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 checker.py --only=M11-10,M11-11,M11-12,M11-16
+
+--- M11 plan checker · twin/first-draft.plan.json · only M11-10, M11-11, M11-12, M11-16 ---
+
+  HIGH    M11-12  aws_iam_role.bedrock_logging
+          Bedrock's service principal may assume this role with no check of which account or resource it acts for (no aws:SourceAccount and aws:SourceArn): confused deputy.
+          fix: Add both conditions, as in AWS's invocation-logging example (lesson 11.4).
+  MEDIUM  M11-10  aws_bedrock_model_invocation_logging_configuration.this
+          CloudWatch only: request or response bodies over 100 KB, and binary data, can only go to S3, so they are not logged.
+          fix: Add large_data_delivery_s3_config (an encrypted bucket).
+  MEDIUM  M11-12  aws_iam_role_policy.bedrock_logging
+          The logging role can do far more than write one log stream.
+          fix: logs:CreateLogStream + logs:PutLogEvents on the log group's aws/bedrock/modelinvocations stream only.
+  MEDIUM  M11-16  account
+          No CloudTrail trail: management events stay 90 days in event history; data events (including bedrock-mantle inference) and endpoint network activity are not recorded at all.
+          fix: Add a trail with log file validation and KMS, selecting the Bedrock data events you need.
+  LOW     M11-11  aws_bedrock_model_invocation_logging_configuration.this
+          Also logs image, embedding, video data, for every model in the account and Region.
+          fix: Log only the modalities you need: logging applies to all models that use them.
+
+5 of 15 findings shown
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 attack.py --only X4,L1
+
+--- M11 lab · FIRST-DRAFT · twin/first-draft.plan.json ---
+    org SCPs: FullAWSAccess, scp-region-guard.first-draft.json · endpoint policy: aws_vpc_endpoint.bedrock_runtime (default policy)
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Attacks and mistakes
+  [X4] ALLOWED  Stolen Helpdesk role: the GLOBAL profile (may run outside the US)
+         why:  every check passed: bedrock:InvokeModel; bedrock:InvokeModel; bedrock:InvokeModel
+         seen: CloudTrail event history: management event (90 days, free)
+         seen: Prompt log: question + answer in /tsg-helpdesk/bedrock/model-invocations (no KMS key of yours, kept FOREVER)
+Legitimate traffic · must keep working
+  [L1] ALLOWED  Helpdesk function: Converse via its configured profile (global.anthropic.claude-haiku-4-5-20251001-v1:0)
+         why:  every check passed: bedrock:InvokeModel; bedrock:InvokeModel; bedrock:InvokeModel
+         seen: CloudTrail event history: management event (90 days, free)
+         seen: Prompt log: question + answer in /tsg-helpdesk/bedrock/model-invocations (no KMS key of yours, kept FOREVER)
+
+1 of 1 attacks and mistakes allowed; 1 of 1 legitimate requests allowed.
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ cat org/scp-region-guard.first-draft.json
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyAllOutsideApprovedRegions",
+      "Effect": "Deny",
+      "Action": "*",
+      "Resource": "*",
+      "Condition": {
+        "StringNotEquals": {
+          "aws:RequestedRegion": [
+            "us-east-1",
+            "us-east-2",
+            "us-west-2",
+            "unspecified"
+          ]
+        }
+      }
+    }
+  ]
+}
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 checker.py --only=M11-15
+
+--- M11 plan checker · twin/first-draft.plan.json · only M11-15 ---
+
+  HIGH    M11-15  aws_lambda_function.helpdesk
+          MODEL_ID global.anthropic.claude-haiku-4-5-20251001-v1:0 is a GLOBAL profile: requests can be processed in any supported commercial Region. Residency rule: Helpdesk prompts and answers may only be processed in US Regions.
+          fix: Use the geographic profile (us.) and allow-list only its destination Regions.
+
+1 of 15 findings shown
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ python3 attack.py --plan hardened --only X4,L1
+
+--- M11 lab · HARDENED · twin/hardened.plan.json ---
+    org SCPs: FullAWSAccess, scp-region-guard.json · endpoint policy: aws_vpc_endpoint.bedrock_runtime
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Attacks and mistakes
+  [X4] DENIED   Stolen Helpdesk role: the GLOBAL profile (may run outside the US)
+         why:  no identity policy allows it (implicit deny)  [check: bedrock:InvokeModel on arn:aws:bedrock:us-east-1:111122223333:inference-profile/global.anthropic.claude-haiku-4-5-20251001-v1:0]
+         seen: CloudTrail event history: management event, with an access-denied errorCode (90 days, free)
+Legitimate traffic · must keep working
+  [L1] ALLOWED  Helpdesk function: Converse via its configured profile (us.anthropic.claude-haiku-4-5-20251001-v1:0)
+         why:  every check passed: bedrock:InvokeModel; bedrock:InvokeModel; bedrock:InvokeModel; bedrock:InvokeModel
+         seen: CloudTrail event history: management event (90 days, free)
+         seen: Prompt log: question + answer in /tsg-helpdesk/bedrock/model-invocations (your KMS key, kept 30 days)
+
+0 of 1 attacks and mistakes allowed; 1 of 1 legitimate requests allowed.
+thesecguy@lab:~/ai-security-course-labs/labs/m11$ exit
+
+exit
