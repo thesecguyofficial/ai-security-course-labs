@@ -1,0 +1,109 @@
+{
+  "scenario": "m19-19.1-understand-linux",
+  "start": 1.696,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.696,
+      "end": 12.208
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.208,
+      "end": 20.856
+    },
+    {
+      "label": "Your file",
+      "speed": 1,
+      "start": 24.856,
+      "end": 29.579
+    },
+    {
+      "label": "Look first",
+      "speed": 1,
+      "start": 33.579,
+      "end": 36.863
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 39.863,
+      "end": 42.13
+    },
+    {
+      "label": "Self-check",
+      "speed": 1,
+      "start": 45.13,
+      "end": 53.452
+    },
+    {
+      "label": "Export",
+      "speed": 1,
+      "start": 60.452,
+      "end": 66.421
+    },
+    {
+      "label": "Your repo",
+      "speed": 1,
+      "start": 71.422,
+      "end": 76.699
+    },
+    {
+      "label": "Commit",
+      "speed": 1,
+      "start": 80.699,
+      "end": 95.581
+    },
+    {
+      "label": "Full SHA",
+      "speed": 1,
+      "start": 99.581,
+      "end": 102.675
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.296,
+      "what": "type"
+    },
+    {
+      "t": 15.808,
+      "what": "type"
+    },
+    {
+      "t": 25.457,
+      "what": "type"
+    },
+    {
+      "t": 34.179,
+      "what": "type"
+    },
+    {
+      "t": 40.463,
+      "what": "type"
+    },
+    {
+      "t": 45.73,
+      "what": "type"
+    },
+    {
+      "t": 61.052,
+      "what": "type"
+    },
+    {
+      "t": 72.022,
+      "what": "type"
+    },
+    {
+      "t": 81.3,
+      "what": "type"
+    },
+    {
+      "t": 100.181,
+      "what": "type"
+    }
+  ],
+  "end": 106.675
+}

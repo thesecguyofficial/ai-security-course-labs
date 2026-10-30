@@ -1,0 +1,506 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 4077, done.
+remote: Counting objects:   0% (1/423)
+remote: Counting objects:   1% (5/423)
+remote: Counting objects:   2% (9/423)
+remote: Counting objects:   3% (13/423)
+remote: Counting objects:   4% (17/423)
+remote: Counting objects:   5% (22/423)
+remote: Counting objects:   6% (26/423)
+remote: Counting objects:   7% (30/423)
+remote: Counting objects:   8% (34/423)
+remote: Counting objects:   9% (39/423)
+remote: Counting objects:  10% (43/423)
+remote: Counting objects:  11% (47/423)
+remote: Counting objects:  12% (51/423)
+remote: Counting objects:  13% (55/423)
+remote: Counting objects:  14% (60/423)
+remote: Counting objects:  15% (64/423)
+remote: Counting objects:  16% (68/423)
+remote: Counting objects:  17% (72/423)
+remote: Counting objects:  18% (77/423)
+remote: Counting objects:  19% (81/423)
+remote: Counting objects:  20% (85/423)
+remote: Counting objects:  21% (89/423)
+remote: Counting objects:  22% (94/423)
+remote: Counting objects:  23% (98/423)
+remote: Counting objects:  24% (102/423)
+remote: Counting objects:  25% (106/423)
+remote: Counting objects:  26% (110/423)
+remote: Counting objects:  27% (115/423)
+remote: Counting objects:  28% (119/423)
+remote: Counting objects:  29% (123/423)
+remote: Counting objects:  30% (127/423)
+remote: Counting objects:  31% (132/423)
+remote: Counting objects:  32% (136/423)
+remote: Counting objects:  33% (140/423)
+remote: Counting objects:  34% (144/423)
+remote: Counting objects:  35% (149/423)
+remote: Counting objects:  36% (153/423)
+remote: Counting objects:  37% (157/423)
+remote: Counting objects:  38% (161/423)
+remote: Counting objects:  39% (165/423)
+remote: Counting objects:  40% (170/423)
+remote: Counting objects:  41% (174/423)
+remote: Counting objects:  42% (178/423)
+remote: Counting objects:  43% (182/423)
+remote: Counting objects:  44% (187/423)
+remote: Counting objects:  45% (191/423)
+remote: Counting objects:  46% (195/423)
+remote: Counting objects:  47% (199/423)
+remote: Counting objects:  48% (204/423)
+remote: Counting objects:  49% (208/423)
+remote: Counting objects:  50% (212/423)
+remote: Counting objects:  51% (216/423)
+remote: Counting objects:  52% (220/423)
+remote: Counting objects:  53% (225/423)
+remote: Counting objects:  54% (229/423)
+remote: Counting objects:  55% (233/423)
+remote: Counting objects:  56% (237/423)
+remote: Counting objects:  57% (242/423)
+remote: Counting objects:  58% (246/423)
+remote: Counting objects:  59% (250/423)
+remote: Counting objects:  60% (254/423)
+remote: Counting objects:  61% (259/423)
+remote: Counting objects:  62% (263/423)
+remote: Counting objects:  63% (267/423)
+remote: Counting objects:  64% (271/423)
+remote: Counting objects:  65% (275/423)
+remote: Counting objects:  66% (280/423)
+remote: Counting objects:  67% (284/423)
+remote: Counting objects:  68% (288/423)
+remote: Counting objects:  69% (292/423)
+remote: Counting objects:  70% (297/423)
+remote: Counting objects:  71% (301/423)
+remote: Counting objects:  72% (305/423)
+remote: Counting objects:  73% (309/423)
+remote: Counting objects:  74% (314/423)
+remote: Counting objects:  75% (318/423)
+remote: Counting objects:  76% (322/423)
+remote: Counting objects:  77% (326/423)
+remote: Counting objects:  78% (330/423)
+remote: Counting objects:  79% (335/423)
+remote: Counting objects:  80% (339/423)
+remote: Counting objects:  81% (343/423)
+remote: Counting objects:  82% (347/423)
+remote: Counting objects:  83% (352/423)
+remote: Counting objects:  84% (356/423)
+remote: Counting objects:  85% (360/423)
+remote: Counting objects:  86% (364/423)
+remote: Counting objects:  87% (369/423)
+remote: Counting objects:  88% (373/423)
+remote: Counting objects:  89% (377/423)
+remote: Counting objects:  90% (381/423)
+remote: Counting objects:  91% (385/423)
+remote: Counting objects:  92% (390/423)
+remote: Counting objects:  93% (394/423)
+remote: Counting objects:  94% (398/423)
+remote: Counting objects:  95% (402/423)
+remote: Counting objects:  96% (407/423)
+remote: Counting objects:  97% (411/423)
+remote: Counting objects:  98% (415/423)
+remote: Counting objects:  99% (419/423)
+remote: Counting objects: 100% (423/423)
+remote: Counting objects: 100% (423/423), done.
+remote: Compressing objects:   0% (1/314)
+remote: Compressing objects:   1% (4/314)
+remote: Compressing objects:   2% (7/314)
+remote: Compressing objects:   3% (10/314)
+remote: Compressing objects:   4% (13/314)
+remote: Compressing objects:   5% (16/314)
+remote: Compressing objects:   6% (19/314)
+remote: Compressing objects:   7% (22/314)
+remote: Compressing objects:   8% (26/314)
+remote: Compressing objects:   9% (29/314)
+remote: Compressing objects:  10% (32/314)
+remote: Compressing objects:  11% (35/314)
+remote: Compressing objects:  12% (38/314)
+remote: Compressing objects:  13% (41/314)
+remote: Compressing objects:  14% (44/314)
+remote: Compressing objects:  15% (48/314)
+remote: Compressing objects:  16% (51/314)
+remote: Compressing objects:  17% (54/314)
+remote: Compressing objects:  18% (57/314)
+remote: Compressing objects:  19% (60/314)
+remote: Compressing objects:  20% (63/314)
+remote: Compressing objects:  21% (66/314)
+remote: Compressing objects:  22% (70/314)
+remote: Compressing objects:  23% (73/314)
+remote: Compressing objects:  24% (76/314)
+remote: Compressing objects:  25% (79/314)
+remote: Compressing objects:  26% (82/314)
+remote: Compressing objects:  27% (85/314)
+remote: Compressing objects:  28% (88/314)
+remote: Compressing objects:  29% (92/314)
+remote: Compressing objects:  30% (95/314)
+remote: Compressing objects:  31% (98/314)
+remote: Compressing objects:  32% (101/314)
+remote: Compressing objects:  33% (104/314)
+remote: Compressing objects:  34% (107/314)
+remote: Compressing objects:  35% (110/314)
+remote: Compressing objects:  36% (114/314)
+remote: Compressing objects:  37% (117/314)
+remote: Compressing objects:  38% (120/314)
+remote: Compressing objects:  39% (123/314)
+remote: Compressing objects:  40% (126/314)
+remote: Compressing objects:  41% (129/314)
+remote: Compressing objects:  42% (132/314)
+remote: Compressing objects:  43% (136/314)
+remote: Compressing objects:  44% (139/314)
+remote: Compressing objects:  45% (142/314)
+remote: Compressing objects:  46% (145/314)
+remote: Compressing objects:  47% (148/314)
+remote: Compressing objects:  48% (151/314)
+remote: Compressing objects:  49% (154/314)
+remote: Compressing objects:  50% (157/314)
+remote: Compressing objects:  51% (161/314)
+remote: Compressing objects:  52% (164/314)
+remote: Compressing objects:  53% (167/314)
+remote: Compressing objects:  54% (170/314)
+remote: Compressing objects:  55% (173/314)
+remote: Compressing objects:  56% (176/314)
+remote: Compressing objects:  57% (179/314)
+remote: Compressing objects:  58% (183/314)
+remote: Compressing objects:  59% (186/314)
+remote: Compressing objects:  60% (189/314)
+remote: Compressing objects:  61% (192/314)
+remote: Compressing objects:  62% (195/314)
+remote: Compressing objects:  63% (198/314)
+remote: Compressing objects:  64% (201/314)
+remote: Compressing objects:  65% (205/314)
+remote: Compressing objects:  66% (208/314)
+remote: Compressing objects:  67% (211/314)
+remote: Compressing objects:  68% (214/314)
+remote: Compressing objects:  69% (217/314)
+remote: Compressing objects:  70% (220/314)
+remote: Compressing objects:  71% (223/314)
+remote: Compressing objects:  72% (227/314)
+remote: Compressing objects:  73% (230/314)
+remote: Compressing objects:  74% (233/314)
+remote: Compressing objects:  75% (236/314)
+remote: Compressing objects:  76% (239/314)
+remote: Compressing objects:  77% (242/314)
+remote: Compressing objects:  78% (245/314)
+remote: Compressing objects:  79% (249/314)
+remote: Compressing objects:  80% (252/314)
+remote: Compressing objects:  81% (255/314)
+remote: Compressing objects:  82% (258/314)
+remote: Compressing objects:  83% (261/314)
+remote: Compressing objects:  84% (264/314)
+remote: Compressing objects:  85% (267/314)
+remote: Compressing objects:  86% (271/314)
+remote: Compressing objects:  87% (274/314)
+remote: Compressing objects:  88% (277/314)
+remote: Compressing objects:  89% (280/314)
+remote: Compressing objects:  90% (283/314)
+remote: Compressing objects:  91% (286/314)
+remote: Compressing objects:  92% (289/314)
+remote: Compressing objects:  93% (293/314)
+remote: Compressing objects:  94% (296/314)
+remote: Compressing objects:  95% (299/314)
+remote: Compressing objects:  96% (302/314)
+remote: Compressing objects:  97% (305/314)
+remote: Compressing objects:  98% (308/314)
+remote: Compressing objects:  99% (311/314)
+remote: Compressing objects: 100% (314/314)
+remote: Compressing objects: 100% (314/314), done.
+Receiving objects:   0% (1/4077)
+Receiving objects:   1% (41/4077)
+Receiving objects:   2% (82/4077)
+Receiving objects:   3% (123/4077)
+Receiving objects:   4% (164/4077)
+Receiving objects:   5% (204/4077)
+Receiving objects:   6% (245/4077)
+Receiving objects:   7% (286/4077)
+Receiving objects:   8% (327/4077)
+Receiving objects:   9% (367/4077)
+Receiving objects:  10% (408/4077)
+Receiving objects:  11% (449/4077)
+Receiving objects:  12% (490/4077)
+Receiving objects:  13% (531/4077)
+Receiving objects:  14% (571/4077)
+Receiving objects:  15% (612/4077)
+Receiving objects:  16% (653/4077)
+Receiving objects:  17% (694/4077)
+Receiving objects:  18% (734/4077)
+Receiving objects:  19% (775/4077)
+Receiving objects:  20% (816/4077)
+Receiving objects:  21% (857/4077)
+Receiving objects:  22% (897/4077)
+Receiving objects:  23% (938/4077)
+Receiving objects:  24% (979/4077)
+Receiving objects:  25% (1020/4077)
+Receiving objects:  26% (1061/4077)
+Receiving objects:  27% (1101/4077)
+Receiving objects:  28% (1142/4077)
+Receiving objects:  29% (1183/4077)
+Receiving objects:  30% (1224/4077)
+Receiving objects:  31% (1264/4077)
+Receiving objects:  32% (1305/4077)
+Receiving objects:  33% (1346/4077)
+Receiving objects:  34% (1387/4077)
+Receiving objects:  35% (1427/4077)
+Receiving objects:  36% (1468/4077)
+Receiving objects:  37% (1509/4077)
+Receiving objects:  38% (1550/4077)
+Receiving objects:  39% (1591/4077)
+Receiving objects:  40% (1631/4077)
+Receiving objects:  41% (1672/4077)
+Receiving objects:  42% (1713/4077)
+Receiving objects:  43% (1754/4077)
+Receiving objects:  44% (1794/4077)
+Receiving objects:  45% (1835/4077)
+Receiving objects:  46% (1876/4077)
+Receiving objects:  47% (1917/4077)
+Receiving objects:  48% (1957/4077)
+Receiving objects:  49% (1998/4077)
+Receiving objects:  50% (2039/4077)
+Receiving objects:  51% (2080/4077)
+Receiving objects:  52% (2121/4077)
+Receiving objects:  53% (2161/4077)
+Receiving objects:  54% (2202/4077)
+Receiving objects:  55% (2243/4077)
+Receiving objects:  56% (2284/4077)
+Receiving objects:  57% (2324/4077)
+Receiving objects:  58% (2365/4077)
+Receiving objects:  59% (2406/4077)
+Receiving objects:  60% (2447/4077)
+Receiving objects:  61% (2487/4077)
+Receiving objects:  62% (2528/4077)
+Receiving objects:  63% (2569/4077)
+Receiving objects:  64% (2610/4077)
+Receiving objects:  65% (2651/4077)
+Receiving objects:  66% (2691/4077)
+Receiving objects:  67% (2732/4077)
+Receiving objects:  68% (2773/4077)
+Receiving objects:  69% (2814/4077)
+Receiving objects:  70% (2854/4077)
+Receiving objects:  71% (2895/4077)
+Receiving objects:  72% (2936/4077)
+Receiving objects:  73% (2977/4077)
+Receiving objects:  74% (3017/4077)
+Receiving objects:  75% (3058/4077)
+Receiving objects:  76% (3099/4077)
+Receiving objects:  77% (3140/4077)
+Receiving objects:  78% (3181/4077)
+Receiving objects:  79% (3221/4077)
+Receiving objects:  80% (3262/4077)
+Receiving objects:  81% (3303/4077)
+Receiving objects:  82% (3344/4077)
+Receiving objects:  83% (3384/4077)
+Receiving objects:  84% (3425/4077)
+Receiving objects:  85% (3466/4077)
+Receiving objects:  86% (3507/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects:  87% (3547/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects:  88% (3588/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects:  89% (3629/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects:  90% (3670/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects:  91% (3711/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects:  92% (3751/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects:  93% (3792/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects:  94% (3833/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects:  95% (3874/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects:  96% (3914/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects:  97% (3955/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects:  98% (3996/4077), 35.60 MiB | 71.14 MiB/s
+remote: Total 4077 (delta 212), reused 282 (delta 91), pack-reused 3654 (from 3)
+Receiving objects:  99% (4037/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects: 100% (4077/4077), 35.60 MiB | 71.14 MiB/s
+Receiving objects: 100% (4077/4077), 53.76 MiB | 75.00 MiB/s, done.
+Resolving deltas:   0% (0/1659)
+Resolving deltas:   1% (17/1659)
+Resolving deltas:   2% (34/1659)
+Resolving deltas:   3% (50/1659)
+Resolving deltas:   4% (67/1659)
+Resolving deltas:   5% (83/1659)
+Resolving deltas:   6% (100/1659)
+Resolving deltas:   7% (117/1659)
+Resolving deltas:   8% (133/1659)
+Resolving deltas:   9% (150/1659)
+Resolving deltas:  10% (166/1659)
+Resolving deltas:  11% (183/1659)
+Resolving deltas:  12% (200/1659)
+Resolving deltas:  13% (216/1659)
+Resolving deltas:  14% (233/1659)
+Resolving deltas:  15% (249/1659)
+Resolving deltas:  16% (266/1659)
+Resolving deltas:  17% (283/1659)
+Resolving deltas:  18% (299/1659)
+Resolving deltas:  19% (316/1659)
+Resolving deltas:  20% (332/1659)
+Resolving deltas:  21% (349/1659)
+Resolving deltas:  22% (365/1659)
+Resolving deltas:  23% (382/1659)
+Resolving deltas:  24% (399/1659)
+Resolving deltas:  25% (415/1659)
+Resolving deltas:  26% (432/1659)
+Resolving deltas:  27% (448/1659)
+Resolving deltas:  28% (465/1659)
+Resolving deltas:  29% (482/1659)
+Resolving deltas:  30% (498/1659)
+Resolving deltas:  31% (515/1659)
+Resolving deltas:  32% (531/1659)
+Resolving deltas:  33% (548/1659)
+Resolving deltas:  34% (565/1659)
+Resolving deltas:  35% (581/1659)
+Resolving deltas:  36% (598/1659)
+Resolving deltas:  37% (614/1659)
+Resolving deltas:  38% (631/1659)
+Resolving deltas:  39% (648/1659)
+Resolving deltas:  40% (664/1659)
+Resolving deltas:  41% (681/1659)
+Resolving deltas:  42% (697/1659)
+Resolving deltas:  43% (714/1659)
+Resolving deltas:  44% (730/1659)
+Resolving deltas:  45% (747/1659)
+Resolving deltas:  46% (764/1659)
+Resolving deltas:  47% (780/1659)
+Resolving deltas:  48% (797/1659)
+Resolving deltas:  49% (813/1659)
+Resolving deltas:  50% (830/1659)
+Resolving deltas:  51% (847/1659)
+Resolving deltas:  52% (863/1659)
+Resolving deltas:  53% (880/1659)
+Resolving deltas:  54% (896/1659)
+Resolving deltas:  55% (913/1659)
+Resolving deltas:  56% (930/1659)
+Resolving deltas:  57% (946/1659)
+Resolving deltas:  58% (963/1659)
+Resolving deltas:  59% (979/1659)
+Resolving deltas:  60% (996/1659)
+Resolving deltas:  61% (1012/1659)
+Resolving deltas:  62% (1029/1659)
+Resolving deltas:  63% (1046/1659)
+Resolving deltas:  64% (1062/1659)
+Resolving deltas:  65% (1079/1659)
+Resolving deltas:  66% (1095/1659)
+Resolving deltas:  67% (1112/1659)
+Resolving deltas:  68% (1129/1659)
+Resolving deltas:  69% (1145/1659)
+Resolving deltas:  70% (1162/1659)
+Resolving deltas:  71% (1178/1659)
+Resolving deltas:  72% (1195/1659)
+Resolving deltas:  73% (1212/1659)
+Resolving deltas:  74% (1228/1659)
+Resolving deltas:  75% (1245/1659)
+Resolving deltas:  76% (1261/1659)
+Resolving deltas:  77% (1278/1659)
+Resolving deltas:  78% (1295/1659)
+Resolving deltas:  79% (1311/1659)
+Resolving deltas:  80% (1328/1659)
+Resolving deltas:  81% (1344/1659)
+Resolving deltas:  82% (1361/1659)
+Resolving deltas:  83% (1377/1659)
+Resolving deltas:  84% (1394/1659)
+Resolving deltas:  85% (1411/1659)
+Resolving deltas:  86% (1427/1659)
+Resolving deltas:  87% (1444/1659)
+Resolving deltas:  88% (1460/1659)
+Resolving deltas:  89% (1477/1659)
+Resolving deltas:  90% (1494/1659)
+Resolving deltas:  91% (1510/1659)
+Resolving deltas:  92% (1527/1659)
+Resolving deltas:  93% (1543/1659)
+Resolving deltas:  94% (1560/1659)
+Resolving deltas:  95% (1577/1659)
+Resolving deltas:  96% (1593/1659)
+Resolving deltas:  97% (1610/1659)
+Resolving deltas:  98% (1626/1659)
+Resolving deltas:  99% (1643/1659)
+Resolving deltas: 100% (1659/1659)
+Resolving deltas: 100% (1659/1659), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m19 && ls
+
+Makefile   RUBRIC.md      capstone.json  data        evals      helpdesk  run_tests.py         selfcheck.py  test_lab.py  tour.py
+README.md  SUBMISSION.md  cloud          detections  export.py  report    selfcheck.lock.json  template      tests
+thesecguy@lab:~/ai-security-course-labs/labs/m19$ grep -n "^def " helpdesk/guards.py
+
+27:def check_request(user: dict, message: str, state: dict) -> Decision:
+37:def check_mcp_tools(tools: list[dict], pins: dict) -> list[dict]:
+48:def filter_retrieval(user: dict, docs: list) -> list:
+57:def screen_retrieved(text: str, doc) -> str:
+62:def authorize_tool_call(call: ToolCall, ctx: Ctx) -> Decision:
+74:def screen_tool_result(tool: str, text: str) -> str:
+79:def screen_output(text: str, ctx: Ctx) -> str:
+84:def render_html(text: str) -> str:
+89:def response_headers() -> dict:
+thesecguy@lab:~/ai-security-course-labs/labs/m19$ make -n setup check
+
+python3 -c "import sys; v = sys.version_info; ok = v >= (3, 11); print(f'Python {v.major}.{v.minor}:', 'OK' if ok else 'too old, install 3.11 or newer (lesson 0.6)'); sys.exit(0 if ok else 1)"
+python3 selfcheck.py
+thesecguy@lab:~/ai-security-course-labs/labs/m19$ make setup
+
+Python 3.12: OK
+thesecguy@lab:~/ai-security-course-labs/labs/m19$ make check
+
+python3 selfcheck.py
+Capstone self-check: /home/thesecguy/ai-security-course-labs/labs/m19
+
+[PASS] H1  core Helpdesk files and checking tools are the originals
+[PASS] H2  the app listens on 127.0.0.1 only
+         HOST = '127.0.0.1'
+[PASS] H3  no real-looking secrets in the repo
+[PASS] H4  a hardened CI workflow runs the self-check
+[PASS] T1  functional tests pass (normal use still works)
+[FAIL] T2  security tests pass (S01 to S11)
+         failing: test_s01_kb_document, test_s02_tool_result, test_s03_direct, test_s04_other_tenant, test_s05_staff_only, test_s06_changed_server, test_s07_prompt_secret, test_s08_markup_from_a_document, test_s09_huge_message, test_s10_burst, test_s11_tool_loop
+[FAIL] E1  the eval gate passes (core cases + yours)
+         GATE FAILED: 10 of 27; failing: inj-01, inj-02, inj-03, inj-04, inj-05, inj-06, ret-01, ret-02, ret-03, mcp-01, mcp-02, ctx-01, out-01, out-02, dow-01, dow-02, dow-03
+[FAIL] E2  the gate fails on every regression (injection, retrieval, output)
+         fix E1 first
+[INFO] E3  your own eval cases (aim for 5+, with 2+ injection variants and 2+ normal cases)
+         0 cases: 0 injection, 0 normal
+[FAIL] D1  rules catch S1 to S5 on seeds 1, 2, 3 with max 2 false alerts a day
+         [FAIL] seed 1: S1:1 S2:0 S3:0 S4:0 S5:0  false alerts 38 (max 2)  missed S2, S3, S4, S5
+         [FAIL] seed 2: S1:1 S2:0 S3:0 S4:0 S5:0  false alerts 34 (max 2)  missed S2, S3, S4, S5
+         [FAIL] seed 3: S1:1 S2:0 S3:0 S4:0 S5:0  false alerts 31 (max 2)  missed S2, S3, S4, S5
+[INFO] D2  rules mapped to MITRE ATLAS (good practice, not required)
+         1 of 1 rules have ATLAS IDs
+[FAIL] C1  the cloud check for your stream has no HIGH findings
+         aws: 11 HIGH, 5 MEDIUM, 1 LOW -> FAIL (pass = no HIGH; aim for no MEDIUM too)
+[FAIL] R1  report/THREAT-MODEL.md is complete
+         43 placeholders or TODO left; 1 threats (want 10+); every threat needs an OWASP ID with the year, e.g. LLM01:2026; at least 5 threats need a MITRE ATLAS technique ID
+[FAIL] R2  report/FINDINGS.md is complete
+         19 placeholders or TODO left; no section ### F-2; no section ### F-3; no section ### F-4; no section ### F-5
+[FAIL] R3  report/INCIDENT-REPORT.md is complete
+         10 placeholders or TODO left; 0 timeline lines (want 5+, starting 2027-01-20Thh:mm); 0 request IDs from the seed-1 attack log (want 3+)
+[FAIL] R4  report/GOVERNANCE-NOTE.md is complete
+         15 placeholders or TODO left; 2 evidence rows (want 8+)
+[FAIL] R5  report/README-TEMPLATE.md is complete
+         6 placeholders or TODO left; 222 words (want 250+)
+
+OBJECTIVE CHECKS NOT YET PASSED: 5 of 15. Fix the FAIL lines above, then run it again.
+make: *** [Makefile:53: check] Error 1
+thesecguy@lab:~/ai-security-course-labs/labs/m19$ make export DEST=~/my-ai-security-capstone
+
+python3 export.py "/home/thesecguy/my-ai-security-capstone"
+Exported to /home/thesecguy/my-ai-security-capstone
+
+Next (Mac/Linux; on Windows type the same in PowerShell):
+  cd /home/thesecguy/my-ai-security-capstone
+  git init -b main
+  git add .
+  git commit -m "TSG Helpdesk capstone: starting point"
+Then create an EMPTY public repo on github.com (no README, no licence) and push:
+  git remote add origin https://github.com/<you>/<repo>.git
+  git push -u origin main
+Open the repo's Actions tab: the capstone-checks workflow runs on every push.
+thesecguy@lab:~/ai-security-course-labs/labs/m19$ cd ~/my-ai-security-capstone && ls -a
+
+.        .gitignore         README.md      capstone.json  detections  helpdesk             selfcheck.py
+..       CAPSTONE-GUIDE.md  RUBRIC.md      cloud          evals       report               tests
+.github  Makefile           SUBMISSION.md  data           export.py   selfcheck.lock.json  tour.py
+thesecguy@lab:~/my-ai-security-capstone$ git init -q -b main && git add . && git commit -q -m "TSG Helpdesk capstone: starting point 
+" && git log --oneline -1
+
+=
+2c5ce55 (HEAD -> main) TSG Helpdesk capstone: starting point
+
+>thesecguy@lab:~/my-ai-security-capstone$ git rev-parse HEAD
+
+2c5ce55a7e43060631d9fc5eff9c387e409feb19
+thesecguy@lab:~/my-ai-security-capstone$ exit
+
+exit

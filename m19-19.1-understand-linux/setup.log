@@ -1,0 +1,3 @@
+warning: unable to access '/home/runner/.config/git/config': Permission denied
+[before, as thesecguy] git config --global user.name "Student" && git config --global user.email "student@example.com"
+prepared: user thesecguy on host lab, removed: nothing, ready: nothing
