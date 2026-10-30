@@ -99,7 +99,7 @@ Before you scan anything, look at each idea of model serving on its own. `explor
 files, and `server` starts the lab's own practice server on `127.0.0.1` for a few seconds. It starts no container,
 loads no model, imports none of the model code and writes no file. Run it with the lab's own Python
 (Windows: `.venv\Scripts\python explore.py ...`). The output below is real, from recording run
-[41084568738](https://github.com/thesecguyofficial/ai-security-course-labs/actions/runs/41084568738).
+[41091437525](https://github.com/thesecguyofficial/ai-security-course-labs/actions/runs/41091437525).
 
 **1. A model server is a web server.** Two real HTTP requests to the practice server (it has no model: the answers
 are canned):
