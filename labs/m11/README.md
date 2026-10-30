@@ -56,6 +56,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `attack.py` | 7 attacks and mistakes, 2 legitimate requests, checked against the policies **in the plan**, the org SCPs and the network; and for each one, what AnyCompany's logs would show |
 | `iam_eval.py` | The M10 **teaching model** of AWS policy evaluation, now with VPC endpoint policies (see below) |
 | `plan.py` | Reads a plan JSON (values, and what each attribute references) |
+| `explore.py` | Read-only helper for Step 1b: `plan`, `model`, `role`, `route`, `network`, `endpoint`, `keys`, `logging`, `record`, each on its own |
 | `anycompany.json` | The company: principals, approved models, and the residency rule: Helpdesk data is processed in US Regions only |
 | `org/` | Org SCPs: `FullAWSAccess`, the first draft's Region guard, and the current one (`scp-region-guard.json`: challenge) |
 | `policies/endpoint-policy-mantle.json` | Next sprint's bedrock-mantle endpoint policy, copied from the AWS example (challenge) |
@@ -97,6 +98,267 @@ ID `o-a1b2c3d4e5` and every ARN are AWS documentation example values. Model IDs 
 - Python **3.11 or newer**. Check with `python3 --version`. No packages, no internet.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 - Optional, Step 7 only: Terraform 1.6+ (or OpenTofu), the AWS CLI v2, and your own sandbox account (lesson 0.7).
+
+## Step 1b · Before you check: look at each piece (about 10 minutes)
+
+New to Bedrock or Terraform? Do this before Step 1 (lesson 11.6 and its part 1 video call it Step 1b). `explore.py`
+shows each idea from the lesson 11.0 videos on its own. Real output below is from a fresh Ubuntu machine (recording run
+41116560125).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads the two plans in `twin/`, `anycompany.json`
+and `org/`, and prints what it finds. No network, no AWS account, no Terraform.
+
+**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+
+```bash
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
+standard library, so there is nothing to install. `make -n twin` and `make -n up` are worth a look too: `twin` is how
+the two plans were made (Terraform `plan` and `show -json` with mock credentials), and `up` is Step 7's real
+`terraform apply` in your own account. Don't run either for Steps 1 to 6.
+
+**1. The plan.** What the first draft would build. A plan changes nothing; only `apply` would:
+
+```bash
+python3 explore.py plan
+```
+
+```text
+Terraform plan, first-draft: twin/first-draft.plan.json
+  written by 1.13.2 (format 1.2), offline, with mock credentials
+  actions: 21 to create   (a plan changes nothing; apply would)
+
+   1 x aws_bedrock_model_invocation_logging_configuration   this
+   1 x aws_cloudwatch_log_group                             prompts
+   1 x aws_eip                                              nat
+   2 x aws_iam_role                                         app, bedrock_logging
+   2 x aws_iam_role_policy                                  app_invoke, bedrock_logging
+   1 x aws_iam_role_policy_attachment                       app_vpc
+   1 x aws_internet_gateway                                 igw
+   1 x aws_lambda_function                                  helpdesk
+   1 x aws_nat_gateway                                      nat
+   1 x aws_route_table                                      private
+   2 x aws_route_table_association                          private[0], private[1]
+   2 x aws_security_group                                   app, endpoint
+   3 x aws_subnet                                           private[0], private[1], public
+   1 x aws_vpc                                              helpdesk
+   1 x aws_vpc_endpoint                                     bedrock_runtime
+
+21 resources. Nothing exists yet: this is the plan, read before anything is built.
+```
+
+**2. The model and its three names.** The same model as a foundation model ID (an AWS ARN with no account number), as a
+US inference profile (an ARN in your account), and on the second endpoint, bedrock-mantle. Neither version of the
+Helpdesk role can start a Marketplace subscription:
+
+```bash
+python3 explore.py model
+```
+
+```text
+One approved model, Claude Haiku 4.5, and its three names (AWS model card):
+
+  foundation model ID   anthropic.claude-haiku-4-5-20251001-v1:0
+      as an ARN         arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0   (no account: AWS's model)
+  inference profile     us.anthropic.claude-haiku-4-5-20251001-v1:0   (bedrock-runtime: 'us.' = US Regions only)
+      as an ARN         arn:aws:bedrock:us-east-1:111122223333:inference-profile/us.anthropic.claude-haiku-4-5-20251001-v1:0
+  bedrock-mantle model  anthropic.claude-haiku-4-5   (the second endpoint uses other names)
+
+Who may start a Marketplace subscription (the first call to a third-party model does it)?
+  Helpdesk role, first-draft  aws-marketplace actions: none
+  Helpdesk role, hardened     aws-marketplace actions: none
+  On a real account: AWS says the first call needs aws-marketplace:Subscribe, Unsubscribe and
+  ViewSubscriptions; after that, callers need no Marketplace permissions.
+```
+
+**3. The role.** The first draft allows every Bedrock and bedrock-mantle action on every resource. Compare it with
+`python3 explore.py role hardened`: two invoke actions, the US profile, and the model in three Regions only through
+that profile (`bedrock:InferenceProfileArn`).
+
+```bash
+python3 explore.py role
+```
+
+```text
+The Helpdesk role's policy, first-draft: aws_iam_role_policy.app_invoke
+  Version  2012-10-17   (the policy language edition, not a date you pick)
+
+  Statement 1  Sid LetTheAppUseBedrock
+    Effect     Allow
+    Action     bedrock:*, bedrock-mantle:*
+    Resource   *
+    Condition  (none)
+```
+
+**4. The route.** The checks IAM makes for one call through the US profile, and where the prompt may be processed:
+
+```bash
+python3 explore.py route
+```
+
+```text
+One Converse call from us-east-1 (the source Region) with modelId us.anthropic.claude-haiku-4-5-20251001-v1:0
+
+The checks IAM makes (AWS's cross-Region inference pages), and where each one points:
+  1. the profile Region us-east-1    arn:aws:bedrock:us-east-1:111122223333:inference-profile/us.anthropic.claude-haiku-4-5-20251001-v1:0
+  2. the model   Region us-east-1    arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0
+                                    with bedrock:InferenceProfileArn set
+  3. the model   Region us-east-2    arn:aws:bedrock:us-east-2::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0
+                                    with bedrock:InferenceProfileArn set
+  4. the model   Region us-west-2    arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0
+                                    with bedrock:InferenceProfileArn set
+
+Where the prompt may be processed: us-east-1, us-east-2, us-west-2
+AnyCompany's rule: Helpdesk prompts and answers may only be processed in US Regions.
+Verdict: fits the rule
+```
+
+Try the global profile, `python3 explore.py route global.anthropic.claude-haiku-4-5-20251001-v1:0`: the third check is
+the Region-less model ARN, and the verdict is `BREAKS the rule`.
+
+**5. The network.** Two private subnets, a NAT gateway, and one endpoint with the default policy:
+
+```bash
+python3 explore.py network
+```
+
+```text
+The Helpdesk's network, first-draft
+
+  VPC        10.20.0.0/16   (a private network: AWS gives it no way out by default)
+  subnet     10.20.1.0/24    us-east-1a  private
+  subnet     10.20.2.0/24    us-east-1b  private
+  subnet     10.20.100.0/24  us-east-1a  public
+  internet gateway  yes
+  NAT gateway       yes
+  private route table: 0.0.0.0/0 -> NAT gateway (the internet)
+  VPC endpoint      com.amazonaws.us-east-1.bedrock-runtime  (Interface, private DNS on, policy DEFAULT)
+  endpoint accepts  port 443 from 10.20.0.0/16 (the whole VPC)
+
+A call to bedrock-runtime uses the endpoint (private DNS sends it there).
+A call to bedrock-mantle has no endpoint: it goes out through the NAT gateway.
+```
+
+**6. The endpoint's guard.** The hardened policy, and who it lets through (the first draft's default lets all three):
+
+```bash
+python3 explore.py endpoint hardened
+```
+
+```text
+The bedrock-runtime endpoint's policy, hardened: aws_vpc_endpoint.bedrock_runtime
+
+  Sid        OnlyTheHelpdeskRoleMayInvokeModels
+  Effect     Allow
+  Principal  *   (anyone... then the Condition narrows it)
+  Action     bedrock:InvokeModel, bedrock:InvokeModelWithResponseStream
+  Resource   *
+  Condition  ArnEquals aws:PrincipalArn = arn:aws:iam::111122223333:role/tsg-helpdesk-app
+  Condition  StringEquals aws:PrincipalAccount = 111122223333
+
+Who gets through this door? (endpoint policy only; IAM still has to allow the call too)
+  THROUGH  arn:aws:iam::111122223333:role/tsg-helpdesk-app  (account 111122223333)
+  refused  arn:aws:iam::111122223333:role/DataScienceRole  (account 111122223333)
+  refused  arn:aws:iam::777788889999:user/personal-admin  (account 777788889999)
+```
+
+**7. The keys.** The first draft has none of its own:
+
+```bash
+python3 explore.py keys
+```
+
+```text
+KMS keys in the plan, first-draft: 0
+
+  none. CloudWatch Logs still encrypts the prompt log, with a key the service manages, so
+  IAM alone decides who can read the prompts: permission to read the log group is enough.
+```
+
+`python3 explore.py keys hardened prompts` shows the hardened prompts key: who may use it, and the condition each
+service statement is pinned to.
+
+**8. What gets recorded.** The hardened version: text only, a bucket for large bodies, your key, 30 days, and a trail
+for what the event history misses. `python3 explore.py logging` shows the first draft's: every data kind, no bucket,
+no key of yours, kept forever, and no trail.
+
+```bash
+python3 explore.py logging hardened
+```
+
+```text
+What gets recorded, hardened
+
+Model invocation logging (the prompt and the answer; bedrock-runtime calls only):
+  on, for: text   (for every model in this account and Region)
+  to CloudWatch Logs group /tsg-helpdesk/bedrock/model-invocations
+  bodies over 100 KB: to S3 bucket tsg-helpdesk-prompt-logs-111122223333-us-east-1
+  stored in /tsg-helpdesk/bedrock/model-invocations (your KMS key, kept 30 days)
+
+CloudTrail (who called what, from where; never the prompt):
+  event history: management events such as InvokeModel and Converse, 90 days, free, always on
+  trail tsg-helpdesk-ai-data-events: multi-Region True, log file validation True
+    selects: Bedrock mantle: CreateInference and other inference/file calls
+    selects: Network activity through our VPC endpoints for Amazon Bedrock, including VpceAccessDenied
+    selects: Bedrock guardrails: ApplyGuardrail, including evaluations during model calls
+```
+
+**9. Two records of one call.** Illustrative: AWS's field names with fake values. The prompt log keeps the
+conversation; CloudTrail keeps the call:
+
+```bash
+python3 explore.py record
+```
+
+```text
+ILLUSTRATIVE: AWS's documented field names, fake values. Two records of the same Helpdesk call.
+
+1. Prompt log (model invocation logging, in your log group):
+   who        identity.arn      arn:aws:sts::111122223333:assumed-role/tsg-helpdesk-app/tsg-helpdesk
+   what       operation         Converse  on modelId us.anthropic.claude-haiku-4-5-20251001-v1:0
+   where      region            us-east-1   account 111122223333
+   said       inputBodyJson     "How do I reset my VPN token?"
+   answered   outputBodyJson    "Open the VPN portal, choose..."
+   size       tokens            61 in, 48 out
+   caller's   requestMetadata   {"app": "tsg-helpdesk", "env": "m11-lab"}   <- the ONLY field the caller writes
+
+2. CloudTrail event (event history, management event):
+   who        userIdentity      AssumedRole tsg-helpdesk-app
+   what       eventSource       bedrock.amazonaws.com   eventName Converse
+   where      awsRegion         us-east-1, and for a profile: additionalEventData.inferenceRegion
+   said       (nothing)         CloudTrail keeps the call, not the conversation
+```
+
+**10. Read one result from the top.** Step 2's tool, one attack only: the plan, the SCPs and the endpoint policy it
+used, the verdict, why, and who would see it:
+
+```bash
+python3 attack.py --only X1
+```
+
+```text
+--- M11 lab · FIRST-DRAFT · twin/first-draft.plan.json ---
+    org SCPs: FullAWSAccess, scp-region-guard.first-draft.json · endpoint policy: aws_vpc_endpoint.bedrock_runtime (default policy)
+    (iam_eval.py: a teaching model of AWS policy evaluation; nothing is sent to AWS)
+
+Attacks and mistakes
+  [X1] ALLOWED  Outsider's own AWS keys, used from inside the VPC through AnyCompany's endpoint
+         why:  every check passed: bedrock:InvokeModel
+         seen: CloudTrail: the API call is recorded in THEIR account's CloudTrail, not AnyCompany's
+         seen: AnyCompany: nothing (no trail records network activity on its endpoint)
+
+1 of 1 attacks and mistakes allowed.
+```
+
 
 ## Step 1 · Check the first draft's plan
 
