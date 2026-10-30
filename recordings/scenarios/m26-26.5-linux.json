@@ -1,0 +1,92 @@
+{
+  "name": "m26-26.5-linux",
+  "lesson": "26.5",
+  "title": "Lab 26.5, part 2: scan the first draft (33 findings, read lesson by lesson), the vLLM service and the suspicious model's config opened, probe the practice server (first draft and key-only), the shared prefix cache leaks across tenants, the block hash and the two gateway.json files, the hardened stack (0 findings, nothing open without a key, ISOLATED), its compose file, the hunt, the tests and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
+    "cd ai-security-course-labs/labs/m26 && make setup"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Scan",
+      "type": "cd ai-security-course-labs/labs/m26 && make scan | tail -n 1",
+      "pause_after": 4
+    },
+    {
+      "label": "Lesson 26.0",
+      "type": ".venv/bin/python scan.py stacks/first-draft | grep -A1 --no-group-separator -E ' 26\\.(0|2) '",
+      "pause_after": 7
+    },
+    {
+      "label": "Lesson 26.1",
+      "type": ".venv/bin/python scan.py stacks/first-draft | grep -A1 --no-group-separator ' 26\\.1 '",
+      "pause_after": 7
+    },
+    {
+      "label": "Lesson 26.3",
+      "type": ".venv/bin/python scan.py stacks/first-draft | grep -A1 --no-group-separator ' 26\\.3 '",
+      "pause_after": 7
+    },
+    {
+      "label": "The vLLM service",
+      "type": "sed -n '/^  vllm:/,/^$/p' stacks/first-draft/docker-compose.yml",
+      "pause_after": 5
+    },
+    {
+      "label": "The model",
+      "type": "ls models/suspicious-model && cat models/suspicious-model/config.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Probe",
+      "type": "make probe",
+      "pause_after": 7
+    },
+    {
+      "label": "Cache",
+      "type": "make cache",
+      "pause_after": 5
+    },
+    {
+      "label": "Block hash",
+      "type": "sed -n '/^def block_hashes/,/return hashes/p' cache_engine.py",
+      "pause_after": 5
+    },
+    {
+      "label": "Two gateways",
+      "type": "diff stacks/first-draft/gateway.json stacks/hardened/gateway.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Hardened",
+      "type": "make hardened",
+      "pause_after": 7
+    },
+    {
+      "label": "Hardened compose",
+      "type": ".venv/bin/python explore.py container hardened",
+      "pause_after": 5
+    },
+    {
+      "label": "Hunt",
+      "type": "make hunt",
+      "pause_after": 6
+    },
+    {
+      "label": "Tests",
+      "type": "make test 2>&1 | tail -n 3",
+      "pause_after": 4
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | grep -E '^\\[(FAIL|ERROR)\\]|TESTS'",
+      "pause_after": 6
+    }
+  ]
+}
