@@ -229,7 +229,7 @@ Q2. Self-approvals
    2027-01-28T09:05:02Z  version 3 approved by ds-bob, who registered it
 
 Q3. Presigned Studio URLs for someone else's profile
-   2027-01-28T10:15:26Z  ds-bob (own profile: bob) signed in as alice
+   2027-01-28T10:15:26Z  ds-bob (own profile: bob) created a sign-in address for alice
 
 Q4. InvokeEndpoint calls that skipped the private endpoint (challenge 3)
    not written yet: challenge 3: write find_outside_invocations()

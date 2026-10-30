@@ -1,169 +1,169 @@
 {
   "scenario": "m15-15.5-linux",
-  "start": 1.71,
+  "start": 1.756,
   "steps": [
     {
       "label": "The lab",
       "speed": 1,
-      "start": 1.71,
-      "end": 8.953
+      "start": 1.756,
+      "end": 8.999
     },
     {
       "label": "Check",
       "speed": 1,
-      "start": 10.953,
-      "end": 16.359
+      "start": 10.999,
+      "end": 16.402
     },
     {
       "label": "Check medium",
       "speed": 1,
-      "start": 24.359,
-      "end": 30.271
+      "start": 24.402,
+      "end": 30.315
     },
     {
       "label": "Attack",
       "speed": 1,
-      "start": 36.271,
-      "end": 38.571
+      "start": 36.316,
+      "end": 38.614
     },
     {
       "label": "Outsider",
       "speed": 1,
-      "start": 46.571,
-      "end": 54.231
+      "start": 46.614,
+      "end": 54.273
     },
     {
       "label": "Files",
       "speed": 1,
-      "start": 60.231,
-      "end": 62.477
+      "start": 60.273,
+      "end": 62.519
     },
     {
       "label": "Open the file",
       "speed": 1,
-      "start": 68.477,
-      "end": 85.534
+      "start": 68.519,
+      "end": 85.578
     },
     {
       "label": "Hashes",
       "speed": 1,
-      "start": 91.534,
-      "end": 98.034
+      "start": 91.578,
+      "end": 98.079
     },
     {
       "label": "Check hardened",
       "speed": 1,
-      "start": 103.034,
-      "end": 107.771
+      "start": 103.079,
+      "end": 107.819
     },
     {
       "label": "Hardened",
       "speed": 1,
-      "start": 112.771,
-      "end": 115.327
+      "start": 112.819,
+      "end": 115.376
     },
     {
       "label": "Outsider hardened",
       "speed": 1,
-      "start": 123.327,
-      "end": 130.733
+      "start": 123.376,
+      "end": 130.782
     },
     {
       "label": "Hunt",
       "speed": 1,
-      "start": 136.734,
-      "end": 138.789
+      "start": 136.782,
+      "end": 138.837
     },
     {
       "label": "Tests",
       "speed": 1,
-      "start": 145.789,
-      "end": 149.24
+      "start": 145.838,
+      "end": 149.287
     },
     {
       "label": "Challenge",
       "speed": 1,
-      "start": 153.24,
-      "end": 157.946
+      "start": 153.287,
+      "end": 157.995
     },
     {
       "label": "Cloud plan",
       "speed": 1,
-      "start": 163.947,
-      "end": 167.063
+      "start": 163.995,
+      "end": 167.112
     },
     {
       "label": "Cloud guide",
       "speed": 1,
-      "start": 172.063,
-      "end": 176.21
+      "start": 172.112,
+      "end": 176.259
     }
   ],
   "keys": [
     {
-      "t": 2.311,
+      "t": 2.356,
       "what": "type"
     },
     {
-      "t": 11.553,
+      "t": 11.599,
       "what": "type"
     },
     {
-      "t": 24.959,
+      "t": 25.003,
       "what": "type"
     },
     {
-      "t": 36.872,
+      "t": 36.916,
       "what": "type"
     },
     {
-      "t": 47.172,
+      "t": 47.214,
       "what": "type"
     },
     {
-      "t": 60.831,
+      "t": 60.873,
       "what": "type"
     },
     {
-      "t": 69.078,
+      "t": 69.119,
       "what": "type"
     },
     {
-      "t": 92.134,
+      "t": 92.179,
       "what": "type"
     },
     {
-      "t": 103.634,
+      "t": 103.68,
       "what": "type"
     },
     {
-      "t": 113.371,
+      "t": 113.419,
       "what": "type"
     },
     {
-      "t": 123.928,
+      "t": 123.976,
       "what": "type"
     },
     {
-      "t": 137.334,
+      "t": 137.382,
       "what": "type"
     },
     {
-      "t": 146.389,
+      "t": 146.438,
       "what": "type"
     },
     {
-      "t": 153.84,
+      "t": 153.887,
       "what": "type"
     },
     {
-      "t": 164.547,
+      "t": 164.595,
       "what": "type"
     },
     {
-      "t": 172.663,
+      "t": 172.712,
       "what": "type"
     }
   ],
-  "end": 181.21
+  "end": 181.259
 }
