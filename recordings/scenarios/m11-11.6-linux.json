@@ -1,0 +1,27 @@
+{
+  "name": "m11-11.6-linux",
+  "lesson": "11.1, 11.2, 11.3, 11.4, 11.5, 11.6",
+  "title": "M11 lab, parts 2 and 3: check the first-draft Terraform plan for TSG Helpdesk on Bedrock, open the draft, replay the attacks, read the hardened Terraform, check and replay it, the tests and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m11 && ls", "pause_after": 3},
+    {"label": "Check", "type": "make check | head -24", "pause_after": 8},
+    {"label": "Check rest", "type": "make check | grep -E 'MEDIUM|LOW'", "pause_after": 6},
+    {"label": "Draft", "type": "sed -n '76,86p;99,111p' terraform/first-draft/main.tf", "pause_after": 6},
+    {"label": "Draft NAT", "type": "sed -n '35,46p' terraform/first-draft/main.tf; grep -n -A3 'inference_profile_id' terraform/first-draft/variables.tf", "pause_after": 6},
+    {"label": "Attack A", "type": "python3 attack.py --only X1,X2,X3,X4", "pause_after": 8},
+    {"label": "Attack B", "type": "python3 attack.py --only X5,X6,X7,L1,L2", "pause_after": 8},
+    {"label": "Fix endpoint", "type": "sed -n '58,84p' terraform/hardened/network.tf", "pause_after": 6},
+    {"label": "Fix role", "type": "sed -n '19,44p' terraform/hardened/app.tf", "pause_after": 6},
+    {"label": "Check fixed", "type": "make check-hardened", "pause_after": 4},
+    {"label": "Safe A", "type": "python3 attack.py --plan hardened --only X1,X2,X3,X4", "pause_after": 8},
+    {"label": "Safe B", "type": "python3 attack.py --plan hardened --only X5,X6,X7,L1,L2", "pause_after": 8},
+    {"label": "Tests", "type": "make test | tail -20", "pause_after": 6},
+    {"label": "Challenge", "type": "make challenge 2>&1 | tail -17", "pause_after": 7}
+  ]
+}

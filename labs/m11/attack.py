@@ -3,6 +3,7 @@ attack.py: what can go wrong with TSG Helpdesk on Bedrock, deployed from a plan?
 
     python3 attack.py                      # the first draft  (twin/first-draft.plan.json + its Region guard SCP)
     python3 attack.py --plan hardened      # the hardened plan (twin/hardened.plan.json + org/scp-region-guard.json)
+    python3 attack.py --only X1            # just one request (or several: --only X1,X7)
 
 For every request it answers two questions:
   1. Would AWS allow it?  Checked by iam_eval.py (a teaching model of AWS policy evaluation) against the policies
@@ -238,7 +239,9 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--plan", choices=list(PLANS), default="first-draft")
     ap.add_argument("--verbose", action="store_true", help="print every authorization check")
+    ap.add_argument("--only", help="comma-separated request IDs to show, e.g. X1 or X1,X7 (default: all)")
     a = ap.parse_args()
+    only = {x.strip().upper() for x in a.only.split(",")} if a.only else None
     plan = P.load(PLANS[a.plan])
     ep = endpoint_policy(plan)
     print(f"--- M11 lab · {a.plan.upper()} · {PLANS[a.plan]} ---")
@@ -247,6 +250,8 @@ def main() -> None:
     bad = n_bad = ok = n_ok = 0
     group = ""
     for s in steps_for(plan):
+        if only and s.sid not in only:
+            continue
         if s.sid[0] != group:
             group = s.sid[0]
             print(GROUPS[group])
@@ -264,9 +269,11 @@ def main() -> None:
         else:
             n_bad += 1
             bad += d.allowed
-        if s.sid == "X7":
+        if s.sid == "X7" and not only:
             print()
-    print(f"\n{bad} of {n_bad} attacks and mistakes allowed; {ok} of {n_ok} legitimate requests allowed.")
+    parts = ([f"{bad} of {n_bad} attacks and mistakes allowed"] if n_bad or not only else []) + \
+            ([f"{ok} of {n_ok} legitimate requests allowed"] if n_ok or not only else [])
+    print("\n" + "; ".join(parts) + ".")
 
 
 if __name__ == "__main__":
