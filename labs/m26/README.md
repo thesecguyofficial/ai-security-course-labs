@@ -223,7 +223,7 @@ cluster.yaml (eksctl): cluster tsg-inference in us-east-1
 
 nodes.json: what is installed on each GPU node
   gpu-node-1
-    ami                       custom-ubuntu-gpu-2025-03     the disk image the machine started from
+    ami                       custom-al2023-gpu-2025-03     the disk image the machine started from
     nvidia_container_toolkit  1.17.4                        hands the GPU to containers
     gpu_sharing               time-slicing                  how tenants share one GPU
     tenants                   acme, globex                  whose containers run here
@@ -266,7 +266,7 @@ Scan of stacks/first-draft  (files read: compose, k8s, cluster, gateway, nodes, 
   CRIT  AUTH-01   26.0  the gateway accepts requests without a key
                        gateway.json: require_auth is false
   CRIT  NODE-03   26.3  the NVIDIA container toolkit is in an advisory's affected range
-                       nodes.json: gpu-node-1: toolkit 1.17.4: CVE-2025-23266 (fixed in 1.17.8; affected: up to and including 1.17.7 (before 1.17.5 only in CDI mode))
+                       nodes.json: gpu-node-1: toolkit 1.17.4: CVE-2025-23266 (fixed in 1.17.8; affected: up to and including 1.17.7 (in CDI mode, only before 1.17.5))
 ```
 
 ## Step 2 · Scan the first draft (26.0, 26.1, 26.3)
@@ -284,7 +284,7 @@ Scan of stacks/first-draft  (files read: compose, k8s, cluster, gateway, nodes, 
   CRIT  AUTH-01   26.0  the gateway accepts requests without a key
                        gateway.json: require_auth is false
   CRIT  NODE-03   26.3  the NVIDIA container toolkit is in an advisory's affected range
-                       nodes.json: gpu-node-1: toolkit 1.17.4: CVE-2025-23266 (fixed in 1.17.8; affected: up to and including 1.17.7 (before 1.17.5 only in CDI mode))
+                       nodes.json: gpu-node-1: toolkit 1.17.4: CVE-2025-23266 (fixed in 1.17.8; affected: up to and including 1.17.7 (in CDI mode, only before 1.17.5))
   HIGH  AUTH-02   26.0  the gateway's path allow-list lets management paths through
                        gateway.json: allow_paths has /*
   HIGH  CACHE-01  26.2  the prefix cache is shared across tenants
@@ -299,7 +299,7 @@ Findings: 33 (critical 2, high 25, medium 5, low 1)
 Read every finding against its lesson. Some to look at closely:
 
 - **EXP-01** four times: `"8000:8000"` publishes on `0.0.0.0` and `[::]` of the host. `"127.0.0.1:8443:8443"` doesn't.
-- **NODE-03** says *only in CDI mode* for 1.17.4. Read the condition of a CVE before you decide how urgent it is.
+- **NODE-03**: 1.17.4 is in CVE-2025-23266's range in every mode. Only CDI mode on 1.17.5 to 1.17.7 escapes it. Read the condition of a CVE before you decide how urgent it is.
 - **MODEL-02** found the `auto_map` in `models/suspicious-model/config.json`: the shape CVE-2025-66448 loaded even with
   `trust_remote_code=False`. The scanner never ran that code. `make test` checks that no `PWNED-LAB-MARKER` file
   ever appears.
