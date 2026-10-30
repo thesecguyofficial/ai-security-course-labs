@@ -1,179 +1,179 @@
 {
   "scenario": "m22-22.5-understand-linux",
-  "start": 1.677,
+  "start": 1.794,
   "steps": [
     {
       "label": "Download",
       "speed": 1,
-      "start": 1.678,
-      "end": 12.622
+      "start": 1.794,
+      "end": 12.548
     },
     {
       "label": "The lab",
       "speed": 1,
-      "start": 15.622,
-      "end": 21.266
+      "start": 15.548,
+      "end": 21.196
     },
     {
       "label": "The data",
       "speed": 1,
-      "start": 25.266,
-      "end": 32.29
+      "start": 25.196,
+      "end": 32.225
     },
     {
       "label": "Attack spots",
       "speed": 1,
-      "start": 37.29,
-      "end": 43.671
+      "start": 37.225,
+      "end": 43.611
     },
     {
       "label": "Setup plan",
       "speed": 1,
-      "start": 47.672,
-      "end": 50.999
+      "start": 47.611,
+      "end": 50.94
     },
     {
       "label": "Setup",
       "speed": 1,
-      "start": 54.999,
-      "end": 74.165
+      "start": 54.94,
+      "end": 83.441
     },
     {
       "label": "Check",
       "speed": 1,
-      "start": 77.165,
-      "end": 81.172
+      "start": 86.441,
+      "end": 91.343
     },
     {
       "label": "Agent",
       "speed": 1,
-      "start": 84.172,
-      "end": 90.519
+      "start": 94.343,
+      "end": 101.822
     },
     {
       "label": "Legs",
       "speed": 1,
-      "start": 97.519,
-      "end": 103.707
+      "start": 108.822,
+      "end": 116.048
     },
     {
       "label": "Planted",
       "speed": 1,
-      "start": 109.707,
-      "end": 116.167
+      "start": 122.048,
+      "end": 129.668
     },
     {
       "label": "Plan",
       "speed": 1,
-      "start": 122.167,
-      "end": 128.138
+      "start": 135.668,
+      "end": 142.672
     },
     {
       "label": "Ask",
       "speed": 1,
-      "start": 134.138,
-      "end": 140.178
+      "start": 148.672,
+      "end": 155.82
     },
     {
       "label": "Labels",
       "speed": 1,
-      "start": 147.178,
-      "end": 153.449
+      "start": 162.82,
+      "end": 170.349
     },
     {
       "label": "Join",
       "speed": 1,
-      "start": 160.449,
-      "end": 166.686
+      "start": 177.349,
+      "end": 184.763
     },
     {
       "label": "Policy",
       "speed": 1,
-      "start": 172.686,
-      "end": 178.857
+      "start": 190.763,
+      "end": 198.032
     },
     {
       "label": "Task",
       "speed": 1,
-      "start": 185.858,
-      "end": 192.007
+      "start": 205.032,
+      "end": 212.424
     },
     {
       "label": "One run",
       "speed": 1,
-      "start": 199.008,
-      "end": 208.628
+      "start": 219.425,
+      "end": 230.28
     }
   ],
   "keys": [
     {
-      "t": 2.278,
+      "t": 2.394,
       "what": "type"
     },
     {
-      "t": 16.222,
+      "t": 16.148,
       "what": "type"
     },
     {
-      "t": 25.866,
+      "t": 25.796,
       "what": "type"
     },
     {
-      "t": 37.89,
+      "t": 37.825,
       "what": "type"
     },
     {
-      "t": 48.272,
+      "t": 48.211,
       "what": "type"
     },
     {
-      "t": 55.599,
+      "t": 55.541,
       "what": "type"
     },
     {
-      "t": 77.765,
+      "t": 87.041,
       "what": "type"
     },
     {
-      "t": 84.772,
+      "t": 94.943,
       "what": "type"
     },
     {
-      "t": 98.119,
+      "t": 109.422,
       "what": "type"
     },
     {
-      "t": 110.307,
+      "t": 122.648,
       "what": "type"
     },
     {
-      "t": 122.767,
+      "t": 136.268,
       "what": "type"
     },
     {
-      "t": 134.738,
+      "t": 149.272,
       "what": "type"
     },
     {
-      "t": 147.778,
+      "t": 163.42,
       "what": "type"
     },
     {
-      "t": 161.049,
+      "t": 177.949,
       "what": "type"
     },
     {
-      "t": 173.287,
+      "t": 191.364,
       "what": "type"
     },
     {
-      "t": 186.458,
+      "t": 205.632,
       "what": "type"
     },
     {
-      "t": 199.608,
+      "t": 220.025,
       "what": "type"
     }
   ],
-  "end": 215.628
+  "end": 237.28
 }
