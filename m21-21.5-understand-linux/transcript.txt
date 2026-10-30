@@ -1,0 +1,636 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 4292, done.
+remote: Counting objects:   0% (1/187)
+remote: Counting objects:   1% (2/187)
+remote: Counting objects:   2% (4/187)
+remote: Counting objects:   3% (6/187)
+remote: Counting objects:   4% (8/187)
+remote: Counting objects:   5% (10/187)
+remote: Counting objects:   6% (12/187)
+remote: Counting objects:   7% (14/187)
+remote: Counting objects:   8% (15/187)
+remote: Counting objects:   9% (17/187)
+remote: Counting objects:  10% (19/187)
+remote: Counting objects:  11% (21/187)
+remote: Counting objects:  12% (23/187)
+remote: Counting objects:  13% (25/187)
+remote: Counting objects:  14% (27/187)
+remote: Counting objects:  15% (29/187)
+remote: Counting objects:  16% (30/187)
+remote: Counting objects:  17% (32/187)
+remote: Counting objects:  18% (34/187)
+remote: Counting objects:  19% (36/187)
+remote: Counting objects:  20% (38/187)
+remote: Counting objects:  21% (40/187)
+remote: Counting objects:  22% (42/187)
+remote: Counting objects:  23% (44/187)
+remote: Counting objects:  24% (45/187)
+remote: Counting objects:  25% (47/187)
+remote: Counting objects:  26% (49/187)
+remote: Counting objects:  27% (51/187)
+remote: Counting objects:  28% (53/187)
+remote: Counting objects:  29% (55/187)
+remote: Counting objects:  30% (57/187)
+remote: Counting objects:  31% (58/187)
+remote: Counting objects:  32% (60/187)
+remote: Counting objects:  33% (62/187)
+remote: Counting objects:  34% (64/187)
+remote: Counting objects:  35% (66/187)
+remote: Counting objects:  36% (68/187)
+remote: Counting objects:  37% (70/187)
+remote: Counting objects:  38% (72/187)
+remote: Counting objects:  39% (73/187)
+remote: Counting objects:  40% (75/187)
+remote: Counting objects:  41% (77/187)
+remote: Counting objects:  42% (79/187)
+remote: Counting objects:  43% (81/187)
+remote: Counting objects:  44% (83/187)
+remote: Counting objects:  45% (85/187)
+remote: Counting objects:  46% (87/187)
+remote: Counting objects:  47% (88/187)
+remote: Counting objects:  48% (90/187)
+remote: Counting objects:  49% (92/187)
+remote: Counting objects:  50% (94/187)
+remote: Counting objects:  51% (96/187)
+remote: Counting objects:  52% (98/187)
+remote: Counting objects:  53% (100/187)
+remote: Counting objects:  54% (101/187)
+remote: Counting objects:  55% (103/187)
+remote: Counting objects:  56% (105/187)
+remote: Counting objects:  57% (107/187)
+remote: Counting objects:  58% (109/187)
+remote: Counting objects:  59% (111/187)
+remote: Counting objects:  60% (113/187)
+remote: Counting objects:  61% (115/187)
+remote: Counting objects:  62% (116/187)
+remote: Counting objects:  63% (118/187)
+remote: Counting objects:  64% (120/187)
+remote: Counting objects:  65% (122/187)
+remote: Counting objects:  66% (124/187)
+remote: Counting objects:  67% (126/187)
+remote: Counting objects:  68% (128/187)
+remote: Counting objects:  69% (130/187)
+remote: Counting objects:  70% (131/187)
+remote: Counting objects:  71% (133/187)
+remote: Counting objects:  72% (135/187)
+remote: Counting objects:  73% (137/187)
+remote: Counting objects:  74% (139/187)
+remote: Counting objects:  75% (141/187)
+remote: Counting objects:  76% (143/187)
+remote: Counting objects:  77% (144/187)
+remote: Counting objects:  78% (146/187)
+remote: Counting objects:  79% (148/187)
+remote: Counting objects:  80% (150/187)
+remote: Counting objects:  81% (152/187)
+remote: Counting objects:  82% (154/187)
+remote: Counting objects:  83% (156/187)
+remote: Counting objects:  84% (158/187)
+remote: Counting objects:  85% (159/187)
+remote: Counting objects:  86% (161/187)
+remote: Counting objects:  87% (163/187)
+remote: Counting objects:  88% (165/187)
+remote: Counting objects:  89% (167/187)
+remote: Counting objects:  90% (169/187)
+remote: Counting objects:  91% (171/187)
+remote: Counting objects:  92% (173/187)
+remote: Counting objects:  93% (174/187)
+remote: Counting objects:  94% (176/187)
+remote: Counting objects:  95% (178/187)
+remote: Counting objects:  96% (180/187)
+remote: Counting objects:  97% (182/187)
+remote: Counting objects:  98% (184/187)
+remote: Counting objects:  99% (186/187)
+remote: Counting objects: 100% (187/187)
+remote: Counting objects: 100% (187/187), done.
+remote: Compressing objects:   0% (1/141)
+remote: Compressing objects:   1% (2/141)
+remote: Compressing objects:   2% (3/141)
+remote: Compressing objects:   3% (5/141)
+remote: Compressing objects:   4% (6/141)
+remote: Compressing objects:   5% (8/141)
+remote: Compressing objects:   6% (9/141)
+remote: Compressing objects:   7% (10/141)
+remote: Compressing objects:   8% (12/141)
+remote: Compressing objects:   9% (13/141)
+remote: Compressing objects:  10% (15/141)
+remote: Compressing objects:  11% (16/141)
+remote: Compressing objects:  12% (17/141)
+remote: Compressing objects:  13% (19/141)
+remote: Compressing objects:  14% (20/141)
+remote: Compressing objects:  15% (22/141)
+remote: Compressing objects:  16% (23/141)
+remote: Compressing objects:  17% (24/141)
+remote: Compressing objects:  18% (26/141)
+remote: Compressing objects:  19% (27/141)
+remote: Compressing objects:  20% (29/141)
+remote: Compressing objects:  21% (30/141)
+remote: Compressing objects:  22% (32/141)
+remote: Compressing objects:  23% (33/141)
+remote: Compressing objects:  24% (34/141)
+remote: Compressing objects:  25% (36/141)
+remote: Compressing objects:  26% (37/141)
+remote: Compressing objects:  27% (39/141)
+remote: Compressing objects:  28% (40/141)
+remote: Compressing objects:  29% (41/141)
+remote: Compressing objects:  30% (43/141)
+remote: Compressing objects:  31% (44/141)
+remote: Compressing objects:  32% (46/141)
+remote: Compressing objects:  33% (47/141)
+remote: Compressing objects:  34% (48/141)
+remote: Compressing objects:  35% (50/141)
+remote: Compressing objects:  36% (51/141)
+remote: Compressing objects:  37% (53/141)
+remote: Compressing objects:  38% (54/141)
+remote: Compressing objects:  39% (55/141)
+remote: Compressing objects:  40% (57/141)
+remote: Compressing objects:  41% (58/141)
+remote: Compressing objects:  42% (60/141)
+remote: Compressing objects:  43% (61/141)
+remote: Compressing objects:  44% (63/141)
+remote: Compressing objects:  45% (64/141)
+remote: Compressing objects:  46% (65/141)
+remote: Compressing objects:  47% (67/141)
+remote: Compressing objects:  48% (68/141)
+remote: Compressing objects:  49% (70/141)
+remote: Compressing objects:  50% (71/141)
+remote: Compressing objects:  51% (72/141)
+remote: Compressing objects:  52% (74/141)
+remote: Compressing objects:  53% (75/141)
+remote: Compressing objects:  54% (77/141)
+remote: Compressing objects:  55% (78/141)
+remote: Compressing objects:  56% (79/141)
+remote: Compressing objects:  57% (81/141)
+remote: Compressing objects:  58% (82/141)
+remote: Compressing objects:  59% (84/141)
+remote: Compressing objects:  60% (85/141)
+remote: Compressing objects:  61% (87/141)
+remote: Compressing objects:  62% (88/141)
+remote: Compressing objects:  63% (89/141)
+remote: Compressing objects:  64% (91/141)
+remote: Compressing objects:  65% (92/141)
+remote: Compressing objects:  66% (94/141)
+remote: Compressing objects:  67% (95/141)
+remote: Compressing objects:  68% (96/141)
+remote: Compressing objects:  69% (98/141)
+remote: Compressing objects:  70% (99/141)
+remote: Compressing objects:  71% (101/141)
+remote: Compressing objects:  72% (102/141)
+remote: Compressing objects:  73% (103/141)
+remote: Compressing objects:  74% (105/141)
+remote: Compressing objects:  75% (106/141)
+remote: Compressing objects:  76% (108/141)
+remote: Compressing objects:  77% (109/141)
+remote: Compressing objects:  78% (110/141)
+remote: Compressing objects:  79% (112/141)
+remote: Compressing objects:  80% (113/141)
+remote: Compressing objects:  81% (115/141)
+remote: Compressing objects:  82% (116/141)
+remote: Compressing objects:  83% (118/141)
+remote: Compressing objects:  84% (119/141)
+remote: Compressing objects:  85% (120/141)
+remote: Compressing objects:  86% (122/141)
+remote: Compressing objects:  87% (123/141)
+remote: Compressing objects:  88% (125/141)
+remote: Compressing objects:  89% (126/141)
+remote: Compressing objects:  90% (127/141)
+remote: Compressing objects:  91% (129/141)
+remote: Compressing objects:  92% (130/141)
+remote: Compressing objects:  93% (132/141)
+remote: Compressing objects:  94% (133/141)
+remote: Compressing objects:  95% (134/141)
+remote: Compressing objects:  96% (136/141)
+remote: Compressing objects:  97% (137/141)
+remote: Compressing objects:  98% (139/141)
+remote: Compressing objects:  99% (140/141)
+remote: Compressing objects: 100% (141/141)
+remote: Compressing objects: 100% (141/141), done.
+Receiving objects:   0% (1/4292)
+Receiving objects:   1% (43/4292)
+Receiving objects:   2% (86/4292)
+Receiving objects:   3% (129/4292)
+Receiving objects:   4% (172/4292)
+Receiving objects:   5% (215/4292)
+Receiving objects:   6% (258/4292)
+Receiving objects:   7% (301/4292)
+Receiving objects:   8% (344/4292)
+Receiving objects:   9% (387/4292)
+Receiving objects:  10% (430/4292)
+Receiving objects:  11% (473/4292)
+Receiving objects:  12% (516/4292)
+Receiving objects:  13% (558/4292)
+Receiving objects:  14% (601/4292)
+Receiving objects:  15% (644/4292)
+Receiving objects:  16% (687/4292)
+Receiving objects:  17% (730/4292)
+Receiving objects:  18% (773/4292)
+Receiving objects:  19% (816/4292)
+Receiving objects:  20% (859/4292)
+Receiving objects:  21% (902/4292)
+Receiving objects:  22% (945/4292)
+Receiving objects:  23% (988/4292)
+Receiving objects:  24% (1031/4292)
+Receiving objects:  25% (1073/4292)
+Receiving objects:  26% (1116/4292)
+Receiving objects:  27% (1159/4292)
+Receiving objects:  28% (1202/4292)
+Receiving objects:  29% (1245/4292)
+Receiving objects:  30% (1288/4292)
+Receiving objects:  31% (1331/4292)
+Receiving objects:  32% (1374/4292)
+Receiving objects:  33% (1417/4292)
+Receiving objects:  34% (1460/4292)
+Receiving objects:  35% (1503/4292)
+Receiving objects:  36% (1546/4292)
+Receiving objects:  37% (1589/4292)
+Receiving objects:  38% (1631/4292)
+Receiving objects:  39% (1674/4292)
+Receiving objects:  40% (1717/4292)
+Receiving objects:  41% (1760/4292)
+Receiving objects:  42% (1803/4292)
+Receiving objects:  43% (1846/4292)
+Receiving objects:  44% (1889/4292)
+Receiving objects:  45% (1932/4292)
+Receiving objects:  46% (1975/4292)
+Receiving objects:  47% (2018/4292)
+Receiving objects:  48% (2061/4292)
+Receiving objects:  49% (2104/4292)
+Receiving objects:  50% (2146/4292)
+Receiving objects:  51% (2189/4292)
+Receiving objects:  52% (2232/4292)
+Receiving objects:  53% (2275/4292)
+Receiving objects:  54% (2318/4292)
+Receiving objects:  55% (2361/4292)
+Receiving objects:  56% (2404/4292)
+Receiving objects:  57% (2447/4292)
+Receiving objects:  58% (2490/4292)
+Receiving objects:  59% (2533/4292)
+Receiving objects:  60% (2576/4292)
+Receiving objects:  61% (2619/4292)
+Receiving objects:  62% (2662/4292)
+Receiving objects:  63% (2704/4292)
+Receiving objects:  64% (2747/4292)
+Receiving objects:  65% (2790/4292)
+Receiving objects:  66% (2833/4292)
+Receiving objects:  67% (2876/4292)
+Receiving objects:  68% (2919/4292)
+Receiving objects:  69% (2962/4292)
+Receiving objects:  70% (3005/4292)
+Receiving objects:  71% (3048/4292)
+Receiving objects:  72% (3091/4292)
+Receiving objects:  73% (3134/4292)
+Receiving objects:  74% (3177/4292)
+Receiving objects:  75% (3219/4292)
+Receiving objects:  76% (3262/4292)
+Receiving objects:  77% (3305/4292)
+Receiving objects:  78% (3348/4292)
+Receiving objects:  79% (3391/4292)
+Receiving objects:  80% (3434/4292)
+Receiving objects:  81% (3477/4292)
+Receiving objects:  82% (3520/4292)
+Receiving objects:  83% (3563/4292)
+Receiving objects:  84% (3606/4292)
+Receiving objects:  85% (3649/4292)
+Receiving objects:  86% (3692/4292)
+Receiving objects:  87% (3735/4292)
+Receiving objects:  88% (3777/4292)
+Receiving objects:  89% (3820/4292)
+Receiving objects:  90% (3863/4292)
+Receiving objects:  91% (3906/4292)
+Receiving objects:  92% (3949/4292), 34.90 MiB | 69.75 MiB/s
+Receiving objects:  93% (3992/4292), 34.90 MiB | 69.75 MiB/s
+Receiving objects:  94% (4035/4292), 34.90 MiB | 69.75 MiB/s
+Receiving objects:  95% (4078/4292), 34.90 MiB | 69.75 MiB/s
+Receiving objects:  96% (4121/4292), 34.90 MiB | 69.75 MiB/s
+Receiving objects:  97% (4164/4292), 34.90 MiB | 69.75 MiB/s
+remote: Total 4292 (delta 98), reused 124 (delta 46), pack-reused 4105 (from 2)
+Receiving objects:  98% (4207/4292), 34.90 MiB | 69.75 MiB/s
+Receiving objects:  99% (4250/4292), 34.90 MiB | 69.75 MiB/s
+Receiving objects: 100% (4292/4292), 34.90 MiB | 69.75 MiB/s
+Receiving objects: 100% (4292/4292), 53.77 MiB | 81.45 MiB/s, done.
+Resolving deltas:   0% (0/1883)
+Resolving deltas:   1% (19/1883)
+Resolving deltas:   2% (38/1883)
+Resolving deltas:   3% (57/1883)
+Resolving deltas:   4% (76/1883)
+Resolving deltas:   5% (95/1883)
+Resolving deltas:   6% (113/1883)
+Resolving deltas:   7% (132/1883)
+Resolving deltas:   8% (151/1883)
+Resolving deltas:   9% (170/1883)
+Resolving deltas:  10% (189/1883)
+Resolving deltas:  11% (208/1883)
+Resolving deltas:  12% (226/1883)
+Resolving deltas:  13% (245/1883)
+Resolving deltas:  14% (264/1883)
+Resolving deltas:  15% (283/1883)
+Resolving deltas:  16% (302/1883)
+Resolving deltas:  17% (321/1883)
+Resolving deltas:  18% (339/1883)
+Resolving deltas:  19% (358/1883)
+Resolving deltas:  20% (377/1883)
+Resolving deltas:  21% (396/1883)
+Resolving deltas:  22% (415/1883)
+Resolving deltas:  23% (434/1883)
+Resolving deltas:  24% (452/1883)
+Resolving deltas:  25% (471/1883)
+Resolving deltas:  26% (490/1883)
+Resolving deltas:  27% (509/1883)
+Resolving deltas:  28% (528/1883)
+Resolving deltas:  29% (547/1883)
+Resolving deltas:  30% (565/1883)
+Resolving deltas:  31% (584/1883)
+Resolving deltas:  32% (603/1883)
+Resolving deltas:  33% (622/1883)
+Resolving deltas:  34% (641/1883)
+Resolving deltas:  35% (660/1883)
+Resolving deltas:  36% (678/1883)
+Resolving deltas:  37% (697/1883)
+Resolving deltas:  38% (716/1883)
+Resolving deltas:  39% (735/1883)
+Resolving deltas:  40% (754/1883)
+Resolving deltas:  41% (773/1883)
+Resolving deltas:  42% (791/1883)
+Resolving deltas:  43% (810/1883)
+Resolving deltas:  44% (829/1883)
+Resolving deltas:  45% (848/1883)
+Resolving deltas:  46% (867/1883)
+Resolving deltas:  47% (886/1883)
+Resolving deltas:  48% (904/1883)
+Resolving deltas:  49% (923/1883)
+Resolving deltas:  50% (942/1883)
+Resolving deltas:  51% (961/1883)
+Resolving deltas:  52% (980/1883)
+Resolving deltas:  53% (998/1883)
+Resolving deltas:  54% (1017/1883)
+Resolving deltas:  55% (1036/1883)
+Resolving deltas:  56% (1055/1883)
+Resolving deltas:  57% (1074/1883)
+Resolving deltas:  58% (1093/1883)
+Resolving deltas:  59% (1111/1883)
+Resolving deltas:  60% (1130/1883)
+Resolving deltas:  61% (1149/1883)
+Resolving deltas:  62% (1168/1883)
+Resolving deltas:  63% (1187/1883)
+Resolving deltas:  64% (1206/1883)
+Resolving deltas:  65% (1224/1883)
+Resolving deltas:  66% (1243/1883)
+Resolving deltas:  67% (1262/1883)
+Resolving deltas:  68% (1281/1883)
+Resolving deltas:  69% (1300/1883)
+Resolving deltas:  70% (1319/1883)
+Resolving deltas:  71% (1337/1883)
+Resolving deltas:  72% (1356/1883)
+Resolving deltas:  73% (1375/1883)
+Resolving deltas:  74% (1394/1883)
+Resolving deltas:  75% (1413/1883)
+Resolving deltas:  76% (1432/1883)
+Resolving deltas:  77% (1450/1883)
+Resolving deltas:  78% (1469/1883)
+Resolving deltas:  79% (1488/1883)
+Resolving deltas:  80% (1507/1883)
+Resolving deltas:  81% (1526/1883)
+Resolving deltas:  82% (1545/1883)
+Resolving deltas:  83% (1563/1883)
+Resolving deltas:  84% (1582/1883)
+Resolving deltas:  85% (1601/1883)
+Resolving deltas:  86% (1620/1883)
+Resolving deltas:  87% (1639/1883)
+Resolving deltas:  88% (1658/1883)
+Resolving deltas:  89% (1676/1883)
+Resolving deltas:  90% (1695/1883)
+Resolving deltas:  91% (1714/1883)
+Resolving deltas:  92% (1733/1883)
+Resolving deltas:  93% (1752/1883)
+Resolving deltas:  94% (1771/1883)
+Resolving deltas:  95% (1789/1883)
+Resolving deltas:  96% (1808/1883)
+Resolving deltas:  97% (1827/1883)
+Resolving deltas:  98% (1846/1883)
+Resolving deltas:  99% (1865/1883)
+Resolving deltas: 100% (1883/1883)
+Resolving deltas: 100% (1883/1883), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m21 && ls
+
+GUIDED-BUILD.md  approvals.py  data         lab.py    pep.py       requirements.txt  setups             test_lab.py
+Makefile         catalogue     explore.py   model.py  receipts.py  run_tests.py      suite.py           tools.py
+README.md        cloud         helpdesk.py  pdp.py    rego         schema            test_challenge.py
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ ls setups/first-draft setups/hardened setups/hardened/policies catalogue schema
+
+catalogue:
+partner-server.json  tools.json
+
+schema:
+tsg.cedarschema
+
+setups/first-draft:
+pep.json  policies
+
+setups/hardened:
+pep.json  policies
+
+setups/hardened/policies:
+email_ticket_requester_only.cedar  max_3_refunds_per_hour.cedar  refund_over_100_needs_approval.cedar
+lookup_ticket_order.cedar          refund_amount_sane.cedar      refund_ticket_order.cedar
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ ls data data/tickets && cat data/tickets/T-501.md
+
+data:
+hunt-receipts.jsonl  orders.json  staff.json  tickets
+
+data/tickets:
+T-501.md  T-503.md  T-505.md  T-602.md  T-604.md  T-606.md  T-608.md  T-610.md  T-612.md  T-614.md
+T-502.md  T-504.md  T-601.md  T-603.md  T-605.md  T-607.md  T-609.md  T-611.md  T-613.md
+ticket: T-501
+requester: sam@customer.example
+order: O-1001
+asks_refund_cents: 4500
+
+Hi, the mug in my order arrived in pieces. Could I get a refund of $45 please? Photos attached.
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ cat data/staff.json data/orders.json
+
+{
+  "_comment": "Helpdesk staff who sign in to the web app. The PEP takes the signed-in user from the session, never from tool arguments.",
+  "bob":   {"role": "support",    "about": "support agent, works customer tickets"},
+  "alice": {"role": "supervisor", "about": "support supervisor, approves refunds over $100"},
+  "dana":  {"role": "contractor", "about": "contractor, may look orders up but not refund"}
+}
+{
+  "_comment": "Fake orders. Money is in integer cents (USD). Addresses use names reserved for documentation (RFC 2606): nothing here is real.",
+  "O-1001": {"customer": "sam@customer.example",   "total_cents": 4500,   "item": "Ceramic mug (arrived broken)"},
+  "O-1002": {"customer": "sam@customer.example",   "total_cents": 25000,  "item": "Desk lamp (never arrived)"},
+  "O-1003": {"customer": "sam@customer.example",   "total_cents": 8000,   "item": "Notebook set"},
+  "O-1004": {"customer": "sam@customer.example",   "total_cents": 6000,   "item": "Phone stand"},
+  "O-2001": {"customer": "lee@customer.example",   "total_cents": 120000, "item": "Office chair", "address": "FAKE-ADDRESS 12 Example Road"},
+  "O-3001": {"customer": "mallory@attacker.example", "total_cents": 120000, "item": "Standing desk"},
+  "O-3002": {"customer": "mallory@attacker.example", "total_cents": 9000,   "item": "Cable tray"}
+}
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ make -n setup check
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+python3 -c "import importlib.metadata as m; print('cedarpy', m.version('cedarpy'), 'OK')"
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ make setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+Collecting cedarpy==4.12.2 (from -r requirements.txt (line 3))
+  Downloading cedarpy-4.12.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (34 kB)
+Downloading cedarpy-4.12.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/4.9 MB ? eta -:--:--
+   ━━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/4.9 MB 33.6 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 4.9/4.9 MB 93.0 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.9/4.9 MB 62.5 MB/s eta 0:00:00
+Installing collected packages: cedarpy
+Successfully installed cedarpy-4.12.2
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ make check
+
+.venv/bin/python -c "import importlib.metadata as m; print('cedarpy', m.version('cedarpy'), 'OK')"
+cedarpy 4.12.2 OK
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ .venv/bin/python explore.py call
+
+Ticket T-501 from sam@customer.example about order O-1001 (data/tickets/T-501.md)
+  "Hi, the mug in my order arrived in pieces. Could I get a refund of $45 please? Photos attached."
+
+The model proposes this tool call. It is only text: nothing has run yet.
+{
+  "tool": "issue_refund",
+  "arguments": {
+    "order_id": "O-1001",
+    "amount_cents": 4500,
+    "currency": "USD",
+    "reason": "ticket T-501"
+  }
+}
+
+Its whole plan for this ticket, one tool call per line:
+  1. lookup_order  {"order_id": "O-1001"}
+  2. issue_refund  {"order_id": "O-1001", "amount_cents": 4500, "currency": "USD", "reason": "ticket T-501"}
+  3. send_email    {"to": "sam@customer.example", "subject": "Re: T-501", "body": "Thanks for your message. W
+
+The model proposes. The Helpdesk's code (the PEP) decides whether each call runs.
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ .venv/bin/python explore.py request
+
+What the PEP asks the policy engine about issue_refund on ticket T-501, and where each part comes from
+
+  principal  bob (role support)
+             WHO is asking: the signed-in user, from the session; the model can't change it
+  action     issue_refund
+             WHAT they want to do: the tool's name
+  resource   TSG::Order O-1001: customer sam@customer.example, total 4500 cents
+             ON WHAT: the order the argument names, looked up in data/orders.json
+  context    input   {"order_id": "O-1001", "amount_cents": 4500, "currency": "USD", "reason": "ticket T-501"}
+                     the arguments: the ONLY part that came from the model
+             ticket  {"id": "T-501", "requester": "sam@customer.example"}   from the ticket the user opened
+             window  {"refunds_1h": 0, "denials_10m": 0}   counted from past receipts
+             approval {"verified": false}   a signed approval, if there is one
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ .venv/bin/python explore.py check
+
+Ticket T-501: bob (support) proposes issue_refund {"order_id": "O-1001", "amount_cents": 4500, "currency": "USD", "reason": "ticket T-501"}
+The order's customer: sam@customer.example   the ticket's requester: sam@customer.example
+
+Each hardened policy on its own (setups/hardened/policies), asked of the real Cedar engine:
+  permit  refund_ticket_order              MATCHES  support or supervisor, and the order is the ticket customer's
+  forbid  max_3_refunds_per_hour           no       at most 3 refunds an hour per signed-in user
+  forbid  refund_amount_sane               no       more than 0, in USD, not more than the order cost
+  forbid  refund_over_100_needs_approval   no       over $100 needs another supervisor's approval  @on_deny("defer")
+  (2 more policies are about other tools)
+
+All together: ALLOW   determined by: refund_ticket_order
+Why: a permit matches and no forbid does.
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ .venv/bin/python explore.py check T-601
+
+Ticket T-601: bob (support) proposes issue_refund {"order_id": "O-2001", "amount_cents": 9000, "currency": "USD", "reason": "goodwill"}
+The order's customer: lee@customer.example   the ticket's requester: mallory@attacker.example
+
+Each hardened policy on its own (setups/hardened/policies), asked of the real Cedar engine:
+  permit  refund_ticket_order              no       support or supervisor, and the order is the ticket customer's
+  forbid  max_3_refunds_per_hour           no       at most 3 refunds an hour per signed-in user
+  forbid  refund_amount_sane               no       more than 0, in USD, not more than the order cost
+  forbid  refund_over_100_needs_approval   no       over $100 needs another supervisor's approval  @on_deny("defer")
+  (2 more policies are about other tools)
+
+All together: DENY   determined by: nothing
+Why: no permit matches, so the answer is no (default deny).
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ .venv/bin/python explore.py rule
+
+setups/hardened/policies/refund_ticket_order.cedar
+
+  // Support agents and supervisors may refund an order that belongs to the ticket's customer.
+  @id("refund_ticket_order")
+  permit (principal, action == TSG::Action::"issue_refund", resource is TSG::Order)
+  when {
+      ["support", "supervisor"].contains(principal.role) &&
+      resource.customer == context.ticket.requester
+  };
+
+Read it part by part:
+  @id("refund_ticket_order")                           a name for the rule; decisions report it
+  permit                                               the effect: allow when this rule matches
+    principal                                          WHO: any user, unless narrowed below
+    action == TSG::Action::"issue_refund"              WHAT: the action (tool)
+    resource is TSG::Order                             ON WHAT: the resource
+  when                                                 only if everything inside is true
+    ["support", "supervisor"].contains(principal.role) &&
+    resource.customer == context.ticket.requester
+  (&& means AND: every line inside must be true)
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ .venv/bin/python explore.py check T-502
+
+Ticket T-502: bob (support) proposes issue_refund {"order_id": "O-1002", "amount_cents": 25000, "currency": "USD", "reason": "ticket T-502"}
+The order's customer: sam@customer.example   the ticket's requester: sam@customer.example
+
+Each hardened policy on its own (setups/hardened/policies), asked of the real Cedar engine:
+  permit  refund_ticket_order              MATCHES  support or supervisor, and the order is the ticket customer's
+  forbid  max_3_refunds_per_hour           no       at most 3 refunds an hour per signed-in user
+  forbid  refund_amount_sane               no       more than 0, in USD, not more than the order cost
+  forbid  refund_over_100_needs_approval   MATCHES  over $100 needs another supervisor's approval  @on_deny("defer")
+  (2 more policies are about other tools)
+
+All together: DENY   determined by: refund_over_100_needs_approval
+Why: a forbid that matches wins over any permit.
+It is marked @on_deny("defer"): the PEP holds the call for a supervisor instead of refusing it.
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ .venv/bin/python explore.py counter
+
+A rate limit: at most 3 refunds an hour per signed-in user (max_3_refunds_per_hour.cedar)
+The PEP counts bob's ALLOWED refunds in the last 60 minutes and passes the number as context.window.
+Here the past calls are a list in memory: nothing is written.
+
+  09:00  bob  issue_refund O-1001 4500 cents   refunds_1h = 0   -> ALLOW [refund_ticket_order]
+  09:10  bob  issue_refund O-1001 4500 cents   refunds_1h = 1   -> ALLOW [refund_ticket_order]
+  09:20  bob  issue_refund O-1001 4500 cents   refunds_1h = 2   -> ALLOW [refund_ticket_order]
+  09:30  bob  issue_refund O-1001 4500 cents   refunds_1h = 3   -> DENY  [max_3_refunds_per_hour]
+  10:05  bob  issue_refund O-1001 4500 cents   refunds_1h = 2   -> ALLOW [refund_ticket_order]
+
+At 10:05 the 09:00 refund is more than an hour old, so it no longer counts.
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ .venv/bin/python explore.py receipt
+
+Receipt #8 of 21 (data/hunt-receipts.jsonl, a sample morning), field by field
+
+  time       2027-02-13T09:18:30Z                                         when the PEP decided
+  principal  bob                                                          who asked (from the session)
+  ticket     T-601                                                        which ticket they had open
+  tool       issue_refund                                                 which tool
+  raw_args   {"order_id": "O-2001", "amount_cents": 9000, "currency": "   the exact arguments
+  decision   DENY                                                         ALLOW, DENY or DEFER
+  policies   []                                                           the rules that decided (empty = default deny)
+  reason     no policy permits this (denied by default)                   in words
+  ran        false                                                        did the tool run?
+  prev       9f6cbc5734187371...                                          the hash of the receipt before this one
+  hash       67b84347897faf03...                                          SHA-256 of this receipt's content
+  sig        1cb49c46c8191e36...                                          the signature over that content
+
+Recomputed hash matches: yes   links to receipt #7: yes
+Change one character and the hash no longer matches. `make audit` checks every signature too.
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ .venv/bin/python helpdesk.py hardened T-501 --as bob
+
+TICKET T-501 from sam@customer.example about O-1001, worked by bob (support) | setup hardened | mode ENFORCE | engine cedar
+  STEP 1  lookup_order {"order_id": "O-1001"}
+          -> ALLOW [lookup_ticket_order]  {"order_id": "O-1001", "customer": "sam@customer.example", "total_cents": 4500, "item": "Ceramic mug (arrived 
+  STEP 2  issue_refund {"order_id": "O-1001", "amount_cents": 4500, "currency": "USD", "reason": "ticket T-501"}
+          -> ALLOW [refund_ticket_order]  refund of 45.00 USD recorded for O-1001 (lab ledger only, no money moved)
+  STEP 3  send_email {"to": "sam@customer.example", "subject": "Re: T-501", "body": "Thanks for your message. We've lo...
+          -> ALLOW [email_ticket_requester_only]  email to sam@customer.example recorded in state/outbox.jsonl (not sent)
+--- outcome --- refunds paid this run: O-1001 $45.00 | held for approval: 0 | emails sent this run: 1 | rows sent to the partner: 0
+thesecguy@lab:~/ai-security-course-labs/labs/m21$ exit
+
+exit

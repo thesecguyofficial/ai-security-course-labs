@@ -1,0 +1,179 @@
+{
+  "scenario": "m21-21.5-understand-linux",
+  "start": 1.678,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.678,
+      "end": 12.367
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.367,
+      "end": 21.014
+    },
+    {
+      "label": "The folders",
+      "speed": 1,
+      "start": 25.014,
+      "end": 34.895
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 38.895,
+      "end": 45.762
+    },
+    {
+      "label": "People and orders",
+      "speed": 1,
+      "start": 49.762,
+      "end": 54.92
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 59.92,
+      "end": 63.218
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 67.218,
+      "end": 71.974
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 74.974,
+      "end": 77.161
+    },
+    {
+      "label": "Call",
+      "speed": 1,
+      "start": 80.161,
+      "end": 84.793
+    },
+    {
+      "label": "Request",
+      "speed": 1,
+      "start": 90.793,
+      "end": 95.654
+    },
+    {
+      "label": "Allow",
+      "speed": 1,
+      "start": 102.655,
+      "end": 107.491
+    },
+    {
+      "label": "Default deny",
+      "speed": 1,
+      "start": 113.492,
+      "end": 118.957
+    },
+    {
+      "label": "Rule",
+      "speed": 1,
+      "start": 124.957,
+      "end": 129.69
+    },
+    {
+      "label": "Forbid wins",
+      "speed": 1,
+      "start": 136.69,
+      "end": 142.255
+    },
+    {
+      "label": "Counter",
+      "speed": 1,
+      "start": 148.255,
+      "end": 153.337
+    },
+    {
+      "label": "Receipt",
+      "speed": 1,
+      "start": 159.338,
+      "end": 164.44
+    },
+    {
+      "label": "One run",
+      "speed": 1,
+      "start": 170.44,
+      "end": 177.486
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.279,
+      "what": "type"
+    },
+    {
+      "t": 15.967,
+      "what": "type"
+    },
+    {
+      "t": 25.615,
+      "what": "type"
+    },
+    {
+      "t": 39.496,
+      "what": "type"
+    },
+    {
+      "t": 50.362,
+      "what": "type"
+    },
+    {
+      "t": 60.52,
+      "what": "type"
+    },
+    {
+      "t": 67.818,
+      "what": "type"
+    },
+    {
+      "t": 75.574,
+      "what": "type"
+    },
+    {
+      "t": 80.761,
+      "what": "type"
+    },
+    {
+      "t": 91.394,
+      "what": "type"
+    },
+    {
+      "t": 103.255,
+      "what": "type"
+    },
+    {
+      "t": 114.092,
+      "what": "type"
+    },
+    {
+      "t": 125.557,
+      "what": "type"
+    },
+    {
+      "t": 137.29,
+      "what": "type"
+    },
+    {
+      "t": 148.855,
+      "what": "type"
+    },
+    {
+      "t": 159.938,
+      "what": "type"
+    },
+    {
+      "t": 171.04,
+      "what": "type"
+    }
+  ],
+  "end": 183.486
+}
