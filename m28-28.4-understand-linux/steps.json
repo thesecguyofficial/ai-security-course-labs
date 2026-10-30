@@ -1,0 +1,179 @@
+{
+  "scenario": "m28-28.4-understand-linux",
+  "start": 1.697,
+  "steps": [
+    {
+      "label": "Download",
+      "speed": 1,
+      "start": 1.697,
+      "end": 12.057
+    },
+    {
+      "label": "The lab",
+      "speed": 1,
+      "start": 15.057,
+      "end": 20.707
+    },
+    {
+      "label": "The folders",
+      "speed": 1,
+      "start": 24.707,
+      "end": 31.001
+    },
+    {
+      "label": "The data",
+      "speed": 1,
+      "start": 35.001,
+      "end": 42.169
+    },
+    {
+      "label": "Setup plan",
+      "speed": 1,
+      "start": 47.169,
+      "end": 50.464
+    },
+    {
+      "label": "Setup",
+      "speed": 1,
+      "start": 54.464,
+      "end": 60.715
+    },
+    {
+      "label": "Check",
+      "speed": 1,
+      "start": 63.715,
+      "end": 65.966
+    },
+    {
+      "label": "Log",
+      "speed": 1,
+      "start": 68.967,
+      "end": 73.605
+    },
+    {
+      "label": "Log vector",
+      "speed": 1,
+      "start": 80.605,
+      "end": 87.146
+    },
+    {
+      "label": "Embed",
+      "speed": 1,
+      "start": 93.147,
+      "end": 97.947
+    },
+    {
+      "label": "Invert",
+      "speed": 1,
+      "start": 104.947,
+      "end": 109.947
+    },
+    {
+      "label": "Memorise",
+      "speed": 1,
+      "start": 116.947,
+      "end": 121.888
+    },
+    {
+      "label": "DP",
+      "speed": 1,
+      "start": 128.888,
+      "end": 133.619
+    },
+    {
+      "label": "Unlearn",
+      "speed": 1,
+      "start": 141.619,
+      "end": 146.649
+    },
+    {
+      "label": "Detect",
+      "speed": 1,
+      "start": 153.649,
+      "end": 158.596
+    },
+    {
+      "label": "Redact",
+      "speed": 1,
+      "start": 165.596,
+      "end": 170.521
+    },
+    {
+      "label": "KMS",
+      "speed": 1,
+      "start": 177.521,
+      "end": 182.261
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.297,
+      "what": "type"
+    },
+    {
+      "t": 15.657,
+      "what": "type"
+    },
+    {
+      "t": 25.307,
+      "what": "type"
+    },
+    {
+      "t": 35.601,
+      "what": "type"
+    },
+    {
+      "t": 47.769,
+      "what": "type"
+    },
+    {
+      "t": 55.065,
+      "what": "type"
+    },
+    {
+      "t": 64.315,
+      "what": "type"
+    },
+    {
+      "t": 69.567,
+      "what": "type"
+    },
+    {
+      "t": 81.205,
+      "what": "type"
+    },
+    {
+      "t": 93.747,
+      "what": "type"
+    },
+    {
+      "t": 105.547,
+      "what": "type"
+    },
+    {
+      "t": 117.548,
+      "what": "type"
+    },
+    {
+      "t": 129.488,
+      "what": "type"
+    },
+    {
+      "t": 142.219,
+      "what": "type"
+    },
+    {
+      "t": 154.249,
+      "what": "type"
+    },
+    {
+      "t": 166.196,
+      "what": "type"
+    },
+    {
+      "t": 178.121,
+      "what": "type"
+    }
+  ],
+  "end": 190.261
+}

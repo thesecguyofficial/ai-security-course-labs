@@ -1,0 +1,568 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 4610, done.
+remote: Counting objects:   1% (1/55)
+remote: Counting objects:   3% (2/55)
+remote: Counting objects:   5% (3/55)
+remote: Counting objects:   7% (4/55)
+remote: Counting objects:   9% (5/55)
+remote: Counting objects:  10% (6/55)
+remote: Counting objects:  12% (7/55)
+remote: Counting objects:  14% (8/55)
+remote: Counting objects:  16% (9/55)
+remote: Counting objects:  18% (10/55)
+remote: Counting objects:  20% (11/55)
+remote: Counting objects:  21% (12/55)
+remote: Counting objects:  23% (13/55)
+remote: Counting objects:  25% (14/55)
+remote: Counting objects:  27% (15/55)
+remote: Counting objects:  29% (16/55)
+remote: Counting objects:  30% (17/55)
+remote: Counting objects:  32% (18/55)
+remote: Counting objects:  34% (19/55)
+remote: Counting objects:  36% (20/55)
+remote: Counting objects:  38% (21/55)
+remote: Counting objects:  40% (22/55)
+remote: Counting objects:  41% (23/55)
+remote: Counting objects:  43% (24/55)
+remote: Counting objects:  45% (25/55)
+remote: Counting objects:  47% (26/55)
+remote: Counting objects:  49% (27/55)
+remote: Counting objects:  50% (28/55)
+remote: Counting objects:  52% (29/55)
+remote: Counting objects:  54% (30/55)
+remote: Counting objects:  56% (31/55)
+remote: Counting objects:  58% (32/55)
+remote: Counting objects:  60% (33/55)
+remote: Counting objects:  61% (34/55)
+remote: Counting objects:  63% (35/55)
+remote: Counting objects:  65% (36/55)
+remote: Counting objects:  67% (37/55)
+remote: Counting objects:  69% (38/55)
+remote: Counting objects:  70% (39/55)
+remote: Counting objects:  72% (40/55)
+remote: Counting objects:  74% (41/55)
+remote: Counting objects:  76% (42/55)
+remote: Counting objects:  78% (43/55)
+remote: Counting objects:  80% (44/55)
+remote: Counting objects:  81% (45/55)
+remote: Counting objects:  83% (46/55)
+remote: Counting objects:  85% (47/55)
+remote: Counting objects:  87% (48/55)
+remote: Counting objects:  89% (49/55)
+remote: Counting objects:  90% (50/55)
+remote: Counting objects:  92% (51/55)
+remote: Counting objects:  94% (52/55)
+remote: Counting objects:  96% (53/55)
+remote: Counting objects:  98% (54/55)
+remote: Counting objects: 100% (55/55)
+remote: Counting objects: 100% (55/55), done.
+remote: Compressing objects:   2% (1/40)
+remote: Compressing objects:   5% (2/40)
+remote: Compressing objects:   7% (3/40)
+remote: Compressing objects:  10% (4/40)
+remote: Compressing objects:  12% (5/40)
+remote: Compressing objects:  15% (6/40)
+remote: Compressing objects:  17% (7/40)
+remote: Compressing objects:  20% (8/40)
+remote: Compressing objects:  22% (9/40)
+remote: Compressing objects:  25% (10/40)
+remote: Compressing objects:  27% (11/40)
+remote: Compressing objects:  30% (12/40)
+remote: Compressing objects:  32% (13/40)
+remote: Compressing objects:  35% (14/40)
+remote: Compressing objects:  37% (15/40)
+remote: Compressing objects:  40% (16/40)
+remote: Compressing objects:  42% (17/40)
+remote: Compressing objects:  45% (18/40)
+remote: Compressing objects:  47% (19/40)
+remote: Compressing objects:  50% (20/40)
+remote: Compressing objects:  52% (21/40)
+remote: Compressing objects:  55% (22/40)
+remote: Compressing objects:  57% (23/40)
+remote: Compressing objects:  60% (24/40)
+remote: Compressing objects:  62% (25/40)
+remote: Compressing objects:  65% (26/40)
+remote: Compressing objects:  67% (27/40)
+remote: Compressing objects:  70% (28/40)
+remote: Compressing objects:  72% (29/40)
+remote: Compressing objects:  75% (30/40)
+remote: Compressing objects:  77% (31/40)
+remote: Compressing objects:  80% (32/40)
+remote: Compressing objects:  82% (33/40)
+remote: Compressing objects:  85% (34/40)
+remote: Compressing objects:  87% (35/40)
+remote: Compressing objects:  90% (36/40)
+remote: Compressing objects:  92% (37/40)
+remote: Compressing objects:  95% (38/40)
+remote: Compressing objects:  97% (39/40)
+remote: Compressing objects: 100% (40/40)
+remote: Compressing objects: 100% (40/40), done.
+Receiving objects:   0% (1/4610)
+Receiving objects:   1% (47/4610)
+Receiving objects:   2% (93/4610)
+Receiving objects:   3% (139/4610)
+Receiving objects:   4% (185/4610)
+Receiving objects:   5% (231/4610)
+Receiving objects:   6% (277/4610)
+Receiving objects:   7% (323/4610)
+Receiving objects:   8% (369/4610)
+Receiving objects:   9% (415/4610)
+Receiving objects:  10% (461/4610)
+Receiving objects:  11% (508/4610)
+Receiving objects:  12% (554/4610)
+Receiving objects:  13% (600/4610)
+Receiving objects:  14% (646/4610)
+Receiving objects:  15% (692/4610)
+Receiving objects:  16% (738/4610)
+Receiving objects:  17% (784/4610)
+Receiving objects:  18% (830/4610)
+Receiving objects:  19% (876/4610)
+Receiving objects:  20% (922/4610)
+Receiving objects:  21% (969/4610)
+Receiving objects:  22% (1015/4610)
+Receiving objects:  23% (1061/4610)
+Receiving objects:  24% (1107/4610)
+Receiving objects:  25% (1153/4610)
+Receiving objects:  26% (1199/4610)
+Receiving objects:  27% (1245/4610)
+Receiving objects:  28% (1291/4610)
+Receiving objects:  29% (1337/4610)
+Receiving objects:  30% (1383/4610)
+Receiving objects:  31% (1430/4610)
+Receiving objects:  32% (1476/4610)
+Receiving objects:  33% (1522/4610)
+Receiving objects:  34% (1568/4610)
+Receiving objects:  35% (1614/4610)
+Receiving objects:  36% (1660/4610)
+Receiving objects:  37% (1706/4610)
+Receiving objects:  38% (1752/4610)
+Receiving objects:  39% (1798/4610)
+Receiving objects:  40% (1844/4610)
+Receiving objects:  41% (1891/4610)
+Receiving objects:  42% (1937/4610)
+Receiving objects:  43% (1983/4610)
+Receiving objects:  44% (2029/4610)
+Receiving objects:  45% (2075/4610)
+Receiving objects:  46% (2121/4610)
+Receiving objects:  47% (2167/4610)
+Receiving objects:  48% (2213/4610)
+Receiving objects:  49% (2259/4610)
+Receiving objects:  50% (2305/4610)
+Receiving objects:  51% (2352/4610)
+Receiving objects:  52% (2398/4610)
+Receiving objects:  53% (2444/4610)
+Receiving objects:  54% (2490/4610)
+Receiving objects:  55% (2536/4610)
+Receiving objects:  56% (2582/4610)
+Receiving objects:  57% (2628/4610)
+Receiving objects:  58% (2674/4610)
+Receiving objects:  59% (2720/4610)
+Receiving objects:  60% (2766/4610)
+Receiving objects:  61% (2813/4610)
+Receiving objects:  62% (2859/4610)
+Receiving objects:  63% (2905/4610)
+Receiving objects:  64% (2951/4610)
+Receiving objects:  65% (2997/4610)
+Receiving objects:  66% (3043/4610)
+Receiving objects:  67% (3089/4610)
+Receiving objects:  68% (3135/4610)
+Receiving objects:  69% (3181/4610)
+Receiving objects:  70% (3227/4610)
+Receiving objects:  71% (3274/4610)
+Receiving objects:  72% (3320/4610)
+Receiving objects:  73% (3366/4610)
+Receiving objects:  74% (3412/4610)
+Receiving objects:  75% (3458/4610)
+Receiving objects:  76% (3504/4610)
+Receiving objects:  77% (3550/4610)
+Receiving objects:  78% (3596/4610)
+Receiving objects:  79% (3642/4610)
+Receiving objects:  80% (3688/4610)
+Receiving objects:  81% (3735/4610)
+Receiving objects:  82% (3781/4610)
+Receiving objects:  83% (3827/4610)
+Receiving objects:  84% (3873/4610)
+Receiving objects:  85% (3919/4610)
+Receiving objects:  86% (3965/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects:  87% (4011/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects:  88% (4057/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects:  89% (4103/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects:  90% (4149/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects:  91% (4196/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects:  92% (4242/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects:  93% (4288/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects:  94% (4334/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects:  95% (4380/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects:  96% (4426/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects:  97% (4472/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects:  98% (4518/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects:  99% (4564/4610), 35.88 MiB | 71.72 MiB/s
+remote: Total 4610 (delta 21), reused 31 (delta 15), pack-reused 4555 (from 3)
+Receiving objects: 100% (4610/4610), 35.88 MiB | 71.72 MiB/s
+Receiving objects: 100% (4610/4610), 54.26 MiB | 77.93 MiB/s, done.
+Resolving deltas:   0% (0/2064)
+Resolving deltas:   1% (21/2064)
+Resolving deltas:   2% (42/2064)
+Resolving deltas:   3% (62/2064)
+Resolving deltas:   4% (83/2064)
+Resolving deltas:   5% (104/2064)
+Resolving deltas:   6% (124/2064)
+Resolving deltas:   7% (145/2064)
+Resolving deltas:   8% (166/2064)
+Resolving deltas:   9% (186/2064)
+Resolving deltas:  10% (207/2064)
+Resolving deltas:  11% (228/2064)
+Resolving deltas:  12% (248/2064)
+Resolving deltas:  13% (269/2064)
+Resolving deltas:  14% (289/2064)
+Resolving deltas:  15% (310/2064)
+Resolving deltas:  16% (331/2064)
+Resolving deltas:  17% (351/2064)
+Resolving deltas:  18% (372/2064)
+Resolving deltas:  19% (393/2064)
+Resolving deltas:  20% (413/2064)
+Resolving deltas:  21% (434/2064)
+Resolving deltas:  22% (455/2064)
+Resolving deltas:  23% (475/2064)
+Resolving deltas:  24% (496/2064)
+Resolving deltas:  25% (516/2064)
+Resolving deltas:  26% (537/2064)
+Resolving deltas:  27% (558/2064)
+Resolving deltas:  28% (578/2064)
+Resolving deltas:  29% (599/2064)
+Resolving deltas:  30% (620/2064)
+Resolving deltas:  31% (640/2064)
+Resolving deltas:  32% (661/2064)
+Resolving deltas:  33% (682/2064)
+Resolving deltas:  34% (702/2064)
+Resolving deltas:  35% (723/2064)
+Resolving deltas:  36% (744/2064)
+Resolving deltas:  37% (764/2064)
+Resolving deltas:  38% (785/2064)
+Resolving deltas:  39% (805/2064)
+Resolving deltas:  40% (826/2064)
+Resolving deltas:  41% (847/2064)
+Resolving deltas:  42% (867/2064)
+Resolving deltas:  43% (888/2064)
+Resolving deltas:  44% (909/2064)
+Resolving deltas:  45% (929/2064)
+Resolving deltas:  46% (950/2064)
+Resolving deltas:  47% (971/2064)
+Resolving deltas:  48% (991/2064)
+Resolving deltas:  49% (1012/2064)
+Resolving deltas:  50% (1032/2064)
+Resolving deltas:  51% (1053/2064)
+Resolving deltas:  52% (1074/2064)
+Resolving deltas:  53% (1094/2064)
+Resolving deltas:  54% (1115/2064)
+Resolving deltas:  55% (1136/2064)
+Resolving deltas:  56% (1156/2064)
+Resolving deltas:  57% (1177/2064)
+Resolving deltas:  58% (1198/2064)
+Resolving deltas:  59% (1218/2064)
+Resolving deltas:  60% (1239/2064)
+Resolving deltas:  61% (1260/2064)
+Resolving deltas:  62% (1280/2064)
+Resolving deltas:  63% (1301/2064)
+Resolving deltas:  64% (1321/2064)
+Resolving deltas:  65% (1342/2064)
+Resolving deltas:  66% (1363/2064)
+Resolving deltas:  67% (1383/2064)
+Resolving deltas:  68% (1404/2064)
+Resolving deltas:  69% (1425/2064)
+Resolving deltas:  70% (1445/2064)
+Resolving deltas:  71% (1466/2064)
+Resolving deltas:  72% (1487/2064)
+Resolving deltas:  73% (1507/2064)
+Resolving deltas:  74% (1528/2064)
+Resolving deltas:  75% (1548/2064)
+Resolving deltas:  76% (1569/2064)
+Resolving deltas:  77% (1590/2064)
+Resolving deltas:  78% (1610/2064)
+Resolving deltas:  79% (1631/2064)
+Resolving deltas:  80% (1652/2064)
+Resolving deltas:  81% (1672/2064)
+Resolving deltas:  82% (1693/2064)
+Resolving deltas:  83% (1714/2064)
+Resolving deltas:  84% (1734/2064)
+Resolving deltas:  85% (1755/2064)
+Resolving deltas:  86% (1776/2064)
+Resolving deltas:  87% (1796/2064)
+Resolving deltas:  88% (1817/2064)
+Resolving deltas:  89% (1837/2064)
+Resolving deltas:  90% (1858/2064)
+Resolving deltas:  91% (1879/2064)
+Resolving deltas:  92% (1899/2064)
+Resolving deltas:  93% (1920/2064)
+Resolving deltas:  94% (1941/2064)
+Resolving deltas:  95% (1961/2064)
+Resolving deltas:  96% (1982/2064)
+Resolving deltas:  97% (2003/2064)
+Resolving deltas:  98% (2023/2064)
+Resolving deltas:  99% (2044/2064)
+Resolving deltas: 100% (2064/2064)
+Resolving deltas: 100% (2064/2064), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m28 && ls
+
+GUIDED-BUILD.md  bedrock.py  demo.py     forget.py  lab.py       redact.py         s3.py              test_lab.py
+Makefile         cloud       detect.py   hunt.py    macie.py     requirements.txt  setups
+README.md        data        explore.py  kms.py     pipeline.py  run_tests.py      test_challenge.py
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ ls setups/first-draft setups/hardened data cloud
+
+cloud:
+lambda                  raw-key-policy.json  redacted-key-policy.json  redactor-policy.json
+raw-bucket-policy.json  raw-lifecycle.json   redacted-lifecycle.json   redactor-trust.json
+
+data:
+calls.json  challenge-calls.json  crm.json  hunt-cloudtrail.jsonl
+
+setups/first-draft:
+identifiers.json  pipeline.json
+
+setups/hardened:
+identifiers.json  pipeline.json
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ cat data/crm.json && grep -c '"id"' data/calls.json
+
+{
+  "_note": "Fake customers for lab M28. Names are invented, e-mail addresses use the reserved .example domain (RFC 2606) and the phone numbers are made up.",
+  "customers": [
+    {"id": "TSG-CUST-104233", "name": "Dana Reyes", "email": "dana.reyes@customer.example", "phone": "202-555-0147"},
+    {"id": "TSG-CUST-104871", "name": "Sam Okafor", "email": "sam.okafor@customer.example", "phone": "312-555-0182"},
+    {"id": "TSG-CUST-105002", "name": "Lee Moreau", "email": "lee.moreau@customer.example", "phone": "617-555-0119"}
+  ]
+}
+12
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ make -n setup check
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+python3 -c "import sys, cryptography; print('Python', sys.version.split()[0], '| cryptography', cryptography.__version__, '| OK')"
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ make setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+Collecting cryptography==50.0.2 (from -r requirements.txt (line 4))
+  Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.4 kB)
+Collecting cffi>=2.0.0 (from cryptography==50.0.2->-r requirements.txt (line 4))
+  Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.5 kB)
+Collecting pycparser (from cffi>=2.0.0->cryptography==50.0.2->-r requirements.txt (line 4))
+  Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (4.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/4.8 MB ? eta -:--:--
+   ━━╸━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.3/4.8 MB 10.0 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━ 3.2/4.8 MB 46.2 MB/s eta 0:00:01
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 MB 57.6 MB/s eta 0:00:00
+Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/221.8 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 221.8/221.8 kB 67.5 MB/s eta 0:00:00
+Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/62.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.6/62.6 kB 22.6 MB/s eta 0:00:00
+Installing collected packages: pycparser, cffi, cryptography
+Successfully installed cffi-2.1.1 cryptography-50.0.2 pycparser-3.12
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ make check
+
+.venv/bin/python -c "import sys, cryptography; print('Python', sys.version.split()[0], '| cryptography', cryptography.__version__, '| OK')"
+Python 3.12.3 | cryptography 50.0.2 | OK
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ .venv/bin/python explore.py log
+
+One model call, as Bedrock model invocation logging stores it (call c01, setup hardened)
+
+  schemaType         ModelInvocationLog           the record's format
+  timestamp          2027-04-01T09:00:00Z         when the call happened (the lab's clock)
+  operation          Converse                     the API the app called
+  modelId            amazon.nova-micro-v1:0       which model answered
+  identity           tsg-helpdesk-app             who called: an IAM role (account hidden here)
+  requestMetadata    {"app": "helpdesk", "customer_email": "dana.reyes@customer.example"}
+                                                  labels the app added to the call
+  input text         Hi, I'm Dana Reyes (dana.reyes@customer.example), account TSG-CUST-104233. My order still has...
+                                                  the user's message, word for word
+  inputTokenCount    15                           tokens in: what the call is billed on
+  output text        Sorry about that, Dana. I've opened a delivery check and we'll write to dana.reyes@customer.e...
+                                                  the model's answer, word for word
+  outputTokenCount   22                           tokens out
+
+Stored as one object in the raw bucket:
+  s3://tsg-invocation-logs-raw/AWSLogs/<account>/BedrockModelInvocationLogs/us-east-1/2027/04/01/09/121f8bd5-lab0-4m28-c01-0000000000.json.gz
+
+So the prompt and the answer are kept word for word, with who asked and when.
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ .venv/bin/python explore.py log c03 first-draft
+
+One model call, as Bedrock model invocation logging stores it (call c03, setup first-draft)
+
+  schemaType         ModelInvocationLog           the record's format
+  timestamp          2027-03-29T09:00:00Z         when the call happened (the lab's clock)
+  operation          InvokeModel                  the API the app called
+  modelId            amazon.titan-embed-text-v2:0 which model answered
+  identity           tsg-rag-indexer              who called: an IAM role (account hidden here)
+  requestMetadata    {"app": "indexer"}           labels the app added to the call
+  input text         Ticket from Sam Okafor (TSG-CUST-104871): please refund order 7781, the parcel arrived damaged.
+                                                  the text sent to the embedding model
+  output embedding   [0.116, -0.054, 0.113, 0.055, -0.076, -0.044, ...]
+                                                  256 numbers: the vector, next to its text
+  dimensions         256                          how many numbers the app asked for
+
+Stored as one object in the raw bucket:
+  s3://tsg-invocation-logs-raw/AWSLogs/<account>/BedrockModelInvocationLogs/us-east-1/2027/03/29/09/ba6fe795-lab0-4m28-c03-0000000000.json.gz
+
+The lab's vectors are random placeholders (no model runs). A real embedding model's numbers carry the
+text's meaning, which is why `explore.py invert` matters.
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ .venv/bin/python explore.py embed
+
+A toy encoder: each word adds +1 or -1 in four of 256 places, then the list is scaled to length 1.
+Real encoders are trained neural networks; this one only counts words. The idea is the same: text in, numbers out.
+
+A  Ticket from Sam Okafor (TSG-CUST-104871): please refund order 7781, the parcel arrived damaged.
+   256 numbers, most of them 0. The first others (place:value): 0:-0.14, 6:-0.14, 10:+0.14, 12:-0.14, 15:-0.14, 16:+0.14, ...
+B  My parcel arrived damaged and I want a refund for the order.
+   256 numbers, most of them 0. The first others (place:value): 0:-0.15, 1:+0.15, 4:+0.15, 10:+0.15, 15:-0.15, 16:+0.15, ...
+C  What are your opening hours on public holidays?
+   256 numbers, most of them 0. The first others (place:value): 4:+0.17, 27:+0.17, 31:+0.17, 39:+0.34, 59:+0.17, 63:+0.17, ...
+
+Similarity (cosine: 1.00 = same direction, near 0.00 = unrelated):
+  A and B  0.45
+  A and C  -0.07
+  B and C  0.05
+
+A and B share words (parcel, arrived, damaged, refund, order), so their numbers point the same way.
+A trained encoder would also match words that mean the same thing, like 'broken' and 'damaged'.
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ .venv/bin/python explore.py invert
+
+The attacker has ONE vector from the logs (call c08, an embedding call) and no text.
+Their word list: 229 words (common English words, plus every word in the other 11 logged calls).
+They guess words one at a time, keeping the guess whose vector comes closest to the stolen one:
+
+  step  1  + dana               similarity 0.395
+  step  2  + delivery           similarity 0.559
+  step  3  + address            similarity 0.639
+  step  4  + change             similarity 0.712
+  step  5  + to                 similarity 0.778
+  step  6  + tsg-cust-104233    similarity 0.837
+  step  7  + asked              similarity 0.866
+  step  8  + reyes              similarity 0.922
+  step  9  + for                similarity 0.949
+  step 10  + her                similarity 1.000
+
+Recovered words:  dana delivery address change to tsg-cust-104233 asked reyes for her
+The real text:    Dana Reyes asked to change her delivery address for TSG-CUST-104233.
+
+The toy keeps no word order, so the words come back as a bag. Real attacks rebuild the sentence itself:
+Vec2Text (2023) recovered 92% of 32-token inputs exactly, from real embedding models.
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ .venv/bin/python explore.py memorise
+
+A toy language model, trained on the helpdesk's logged messages (9 calls: 18 texts, questions and answers).
+Training = counting which word followed every run of 1 to 3 words. Those counts are its 'weights'.
+  learned 475 word runs from 195 words
+
+  prompt 'Can someone'    -> Can someone call me back on 312-555-0182? It's about my missing refund.
+  prompt 'My order'       -> My order still hasn't arrived.
+  prompt 'My card'        -> My card 4111 1111 1111 1111 was charged twice for one order.
+
+The card number was in ONE training text (call c02), and it comes back word for word.
+Entries in the weights that hold '4111': 8
+That's memorisation. Real models memorise far less of what they see, but not nothing: a 2021 study pulled
+names, phone numbers and e-mail addresses out of GPT-2.
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ .venv/bin/python explore.py dp
+
+The question: "How many of the 12 logged calls are about a refund?"   true answer: 5
+
+Differential privacy answers with random noise added. Epsilon (e) sets how much: smaller e, more noise,
+more privacy. Noise scale = (the most one unit can change the count) / e.
+
+Unit = one record (one call changes the count by at most 1):
+  e = 0.1   noise scale 10.0   five answers:   4.8   12.1    0.2    8.0   -8.5
+  e = 1.0   noise scale  1.0   five answers:   4.9    4.8    0.9    0.9    2.8
+  e = 10.0  noise scale  0.1   five answers:   5.0    5.1    4.9    5.0    5.0
+
+But one customer, Dana Reyes, appears in 4 of the 12 calls. Remove HER and the count can move by 4.
+Unit = one person needs noise for all of her records at once:
+  e = 1.0   noise scale  4.0   five answers:   3.3   13.3    3.4    3.9   -0.6
+
+Same e, four times the noise. 'e = 1' means little until someone says: per record, or per person?
+And e is a budget: three questions at e = 1 each spend e = 3 in total (privacy losses add up).
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ .venv/bin/python explore.py unlearn
+
+The toy model from `memorise`. Request: "forget the card number in call c02".
+
+1. Before:                  My card 4111 1111 1111 1111 was charged twice for one order.
+   entries holding '4111':  8
+
+2. Hide it: an output filter (Macie-style card detector) on every answer. The model is unchanged.
+   answer:                  My card [CREDIT_CARD_NUMBER] was charged twice for one order.
+   entries holding '4111':  8   <- still in the weights: a copy without the filter leaks
+
+3. Remove it: retrain from zero without call c02 (exact unlearning).
+   answer:                  My card   (nothing learned after 'My card')
+   entries holding '4111':  0
+
+Retraining is easy here: 16 short texts. For a large model it costs a full training run, so teams
+fine-tune the model to stop saying it instead. Lesson 28.3 shows how often that only hides it.
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ .venv/bin/python explore.py detect
+
+c01: Hi, I'm Dana Reyes (dana.reyes@customer.example), account TSG-CUST-104233. My order still hasn't arrived.
+c02: My card 4111 1111 1111 1111 was charged twice for one order.
+c12: Yes. We replied to DANA.REYES@CUSTOMER.EXAMPLE an hour ago.
+
+Macie's managed identifiers (the lab's copies of 3 of them):
+  c01  nothing found
+  c02  CREDIT_CARD_NUMBER   FINANCIAL_INFORMATION  4111 1111 1111 1111
+  c12  nothing found
+
+First draft redactor: two hand-written patterns:
+  c01  EMAIL                CUSTOM_IDENTIFIER      dana.reyes@customer.example
+  c02  nothing found
+  c12  nothing found
+
+Hardened: custom identifiers + the customer list:
+  c01  CUSTOMER_NAME        PERSONAL_INFORMATION   Dana Reyes
+  c01  EMAIL_ADDRESS        CUSTOM_IDENTIFIER      dana.reyes@customer.example
+  c01  TSG_CUSTOMER_ID      CUSTOM_IDENTIFIER      TSG-CUST-104233
+  c02  CREDIT_CARD_NUMBER   FINANCIAL_INFORMATION  4111 1111 1111 1111
+  c12  EMAIL_ADDRESS        CUSTOM_IDENTIFIER      DANA.REYES@CUSTOMER.EXAMPLE
+
+Macie has no managed identifier for e-mail addresses: add your own (a custom data identifier).
+The card passes the Luhn check, with the word 'card' nearby. The draft's patterns miss spaces and capitals.
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ .venv/bin/python explore.py redact
+
+Redaction replaces what the detectors find. Two ways (the hardened setup's detectors):
+
+Labels: the value is gone, and so is any link between records.
+  c01  Hi, I'm [CUSTOMER_NAME] ([EMAIL_ADDRESS]), account [TSG_CUSTOMER_ID]. My order still hasn't arrived.
+  c02  My card [CREDIT_CARD_NUMBER] was charged twice for one order.
+  c12  Yes. We replied to [EMAIL_ADDRESS] an hour ago.
+
+Keyed tokens: HMAC-SHA256 of the lower-cased value with a secret key, first 8 hex characters.
+  c01  Hi, I'm [CUSTOMER_NAME:7c7f3c56] ([EMAIL_ADDRESS:537a3ecc]), account [TSG_CUSTOMER_ID:acc76c79]. My order still hasn't arrived.
+  c02  My card [CREDIT_CARD_NUMBER:6d444fc5] was charged twice for one order.
+  c12  Yes. We replied to [EMAIL_ADDRESS:537a3ecc] an hour ago.
+
+The e-mail in c01 and the capitals in c12 get the SAME token: an analyst sees one customer wrote twice,
+not who. Without the key the token can't be turned back. (This demo uses a fixed key; the lab's is random.)
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ .venv/bin/python explore.py kms
+
+Envelope encryption of one log record (call c01), in memory. Your bytes will differ: keys are random.
+
+  1. KMS key           alias/tsg-logs-raw             32 random bytes. In AWS they never leave KMS unencrypted
+  2. data key          32 random bytes                made for THIS object only
+     wrapped data key  hRamwgcEBbaUD3ql31dMZEWn...    48 bytes: the data key, encrypted by the KMS key
+  3. record            1116 bytes of JSON             {"schemaType": "ModelInvocationLog", "sch...
+     encrypted record  29ac78274c1f76a4c846db1f...    1132 bytes, AES-256-GCM: stored with the wrapped key
+     context           aws:s3:arn = the object's ARN  the encryption context: it must match to decrypt
+
+4. Reading it back: ask KMS to unwrap the data key, then decrypt the record.
+   right context   -> Hi, I'm Dana Reyes (dana.reyes@customer.example), account TSG-CUST-...
+   wrong context   -> refused (InvalidTag): this data key only opens its own object
+
+5. Who may ask KMS to unwrap? The key policy decides (kms:Decrypt on the raw-log key):
+   role                           first draft                                  hardened
+   tsg-analytics                  yes, root statement lets IAM grant it        no
+   tsg-log-redactor               yes, root statement lets IAM grant it        yes, named in the key policy
+   AWSServiceRoleForAmazonMacie   no                                           yes, named in the key policy
+   tsg-incident-break-glass       yes, root statement lets IAM grant it        yes, named in the key policy
+
+Two locks on a raw record: the bucket policy (S3) and the key policy (KMS). Both must say yes.
+thesecguy@lab:~/ai-security-course-labs/labs/m28$ exit
+
+exit
