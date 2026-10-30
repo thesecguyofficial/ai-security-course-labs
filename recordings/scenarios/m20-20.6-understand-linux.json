@@ -1,0 +1,25 @@
+{
+  "name": "m20-20.6-understand-linux",
+  "lesson": "20.0, 20.6",
+  "title": "Lab 20.6, part 1 (and the 'How agent identity works' runs): update the labs with git pull, see what each file of the agent chain does, the users, the tickets and the planted comment, the two setups, check Python (nothing to install), then look at each identity idea with the read-only explore.py (roles, sign-in, a token decoded and a changed copy rejected, client credentials, one token exchange) and read one normal request through the hardened chain line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": ["Traceback", "No such file"],
+  "steps": [
+    {"label": "Update", "type": "cd ai-security-course-labs && git pull", "pause_after": 3},
+    {"label": "The lab", "type": "cd labs/m20 && ls", "pause_after": 4},
+    {"label": "The data", "type": "ls data setups/* && cat data/users.json", "pause_after": 5},
+    {"label": "The tickets", "type": "cat data/tickets.json", "pause_after": 6},
+    {"label": "Look first", "type": "make -n setup watch attack", "pause_after": 4},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Roles", "type": "python3 explore.py roles", "pause_after": 7},
+    {"label": "Sign in", "type": "python3 explore.py signin", "pause_after": 7},
+    {"label": "Token", "type": "python3 explore.py token", "pause_after": 9},
+    {"label": "Client", "type": "python3 explore.py client", "pause_after": 7},
+    {"label": "Exchange", "type": "python3 explore.py exchange", "pause_after": 9},
+    {"label": "One run", "type": "python3 watch.py hardened bob \"Show me T-4712\"", "pause_after": 7}
+  ]
+}
