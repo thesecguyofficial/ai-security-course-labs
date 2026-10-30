@@ -1,0 +1,28 @@
+{
+  "name": "m13-13.3-understand-linux",
+  "lesson": "13.0, 13.3",
+  "title": "Lab 13.3, part 1: get the lab, look at the bucket and the three setups, and see how a managed knowledge base and a managed agent work one piece at a time (explore.py: source, sync, retrieve, acl, agent, turn, invoke) before reviewing the port",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/m13 && ls", "pause_after": 4},
+    {"label": "The setups", "type": "ls setups/*", "pause_after": 4},
+    {"label": "Setup plan", "type": "make -n setup", "pause_after": 3},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Source", "type": "python3 explore.py source", "pause_after": 6},
+    {"label": "Sync draft", "type": "python3 explore.py sync first-draft", "pause_after": 6},
+    {"label": "Sync", "type": "python3 explore.py sync ported", "pause_after": 6},
+    {"label": "Retrieve", "type": "python3 explore.py retrieve ported \"reset my VPN token\" --user bob@example.com", "pause_after": 6},
+    {"label": "No identity", "type": "python3 explore.py retrieve ported \"salary bands 2027\"", "pause_after": 5},
+    {"label": "Filter", "type": "python3 explore.py retrieve first-draft \"salary bands 2027\" --department hr", "pause_after": 6},
+    {"label": "ACL", "type": "python3 explore.py acl bob@example.com hr/salary-bands-2027.md", "pause_after": 6},
+    {"label": "Agent", "type": "python3 explore.py agent ported", "pause_after": 6},
+    {"label": "Harness", "type": "python3 explore.py agent harness", "pause_after": 6},
+    {"label": "Turn", "type": "python3 explore.py turn ported bob@example.com \"I have a new phone. Please reset my MFA.\"", "pause_after": 7},
+    {"label": "Invoke", "type": "python3 explore.py invoke ported", "pause_after": 6},
+    {"label": "One run", "type": "python3 helpdesk.py ported alice@example.com \"How do I reset my VPN token?\"", "pause_after": 6}
+  ]
+}
