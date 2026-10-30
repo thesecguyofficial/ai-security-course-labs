@@ -1,0 +1,856 @@
+thesecguy@lab:~$ thesecguy@lab:~$ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
+
+Cloning into 'ai-security-course-labs'...
+remote: Enumerating objects: 4389, done.
+remote: Counting objects:   0% (1/284)
+remote: Counting objects:   1% (3/284)
+remote: Counting objects:   2% (6/284)
+remote: Counting objects:   3% (9/284)
+remote: Counting objects:   4% (12/284)
+remote: Counting objects:   5% (15/284)
+remote: Counting objects:   6% (18/284)
+remote: Counting objects:   7% (20/284)
+remote: Counting objects:   8% (23/284)
+remote: Counting objects:   9% (26/284)
+remote: Counting objects:  10% (29/284)
+remote: Counting objects:  11% (32/284)
+remote: Counting objects:  12% (35/284)
+remote: Counting objects:  13% (37/284)
+remote: Counting objects:  14% (40/284)
+remote: Counting objects:  15% (43/284)
+remote: Counting objects:  16% (46/284)
+remote: Counting objects:  17% (49/284)
+remote: Counting objects:  18% (52/284)
+remote: Counting objects:  19% (54/284)
+remote: Counting objects:  20% (57/284)
+remote: Counting objects:  21% (60/284)
+remote: Counting objects:  22% (63/284)
+remote: Counting objects:  23% (66/284)
+remote: Counting objects:  24% (69/284)
+remote: Counting objects:  25% (71/284)
+remote: Counting objects:  26% (74/284)
+remote: Counting objects:  27% (77/284)
+remote: Counting objects:  28% (80/284)
+remote: Counting objects:  29% (83/284)
+remote: Counting objects:  30% (86/284)
+remote: Counting objects:  31% (89/284)
+remote: Counting objects:  32% (91/284)
+remote: Counting objects:  33% (94/284)
+remote: Counting objects:  34% (97/284)
+remote: Counting objects:  35% (100/284)
+remote: Counting objects:  36% (103/284)
+remote: Counting objects:  37% (106/284)
+remote: Counting objects:  38% (108/284)
+remote: Counting objects:  39% (111/284)
+remote: Counting objects:  40% (114/284)
+remote: Counting objects:  41% (117/284)
+remote: Counting objects:  42% (120/284)
+remote: Counting objects:  43% (123/284)
+remote: Counting objects:  44% (125/284)
+remote: Counting objects:  45% (128/284)
+remote: Counting objects:  46% (131/284)
+remote: Counting objects:  47% (134/284)
+remote: Counting objects:  48% (137/284)
+remote: Counting objects:  49% (140/284)
+remote: Counting objects:  50% (142/284)
+remote: Counting objects:  51% (145/284)
+remote: Counting objects:  52% (148/284)
+remote: Counting objects:  53% (151/284)
+remote: Counting objects:  54% (154/284)
+remote: Counting objects:  55% (157/284)
+remote: Counting objects:  56% (160/284)
+remote: Counting objects:  57% (162/284)
+remote: Counting objects:  58% (165/284)
+remote: Counting objects:  59% (168/284)
+remote: Counting objects:  60% (171/284)
+remote: Counting objects:  61% (174/284)
+remote: Counting objects:  62% (177/284)
+remote: Counting objects:  63% (179/284)
+remote: Counting objects:  64% (182/284)
+remote: Counting objects:  65% (185/284)
+remote: Counting objects:  66% (188/284)
+remote: Counting objects:  67% (191/284)
+remote: Counting objects:  68% (194/284)
+remote: Counting objects:  69% (196/284)
+remote: Counting objects:  70% (199/284)
+remote: Counting objects:  71% (202/284)
+remote: Counting objects:  72% (205/284)
+remote: Counting objects:  73% (208/284)
+remote: Counting objects:  74% (211/284)
+remote: Counting objects:  75% (213/284)
+remote: Counting objects:  76% (216/284)
+remote: Counting objects:  77% (219/284)
+remote: Counting objects:  78% (222/284)
+remote: Counting objects:  79% (225/284)
+remote: Counting objects:  80% (228/284)
+remote: Counting objects:  81% (231/284)
+remote: Counting objects:  82% (233/284)
+remote: Counting objects:  83% (236/284)
+remote: Counting objects:  84% (239/284)
+remote: Counting objects:  85% (242/284)
+remote: Counting objects:  86% (245/284)
+remote: Counting objects:  87% (248/284)
+remote: Counting objects:  88% (250/284)
+remote: Counting objects:  89% (253/284)
+remote: Counting objects:  90% (256/284)
+remote: Counting objects:  91% (259/284)
+remote: Counting objects:  92% (262/284)
+remote: Counting objects:  93% (265/284)
+remote: Counting objects:  94% (267/284)
+remote: Counting objects:  95% (270/284)
+remote: Counting objects:  96% (273/284)
+remote: Counting objects:  97% (276/284)
+remote: Counting objects:  98% (279/284)
+remote: Counting objects:  99% (282/284)
+remote: Counting objects: 100% (284/284)
+remote: Counting objects: 100% (284/284), done.
+remote: Compressing objects:   0% (1/209)
+remote: Compressing objects:   1% (3/209)
+remote: Compressing objects:   2% (5/209)
+remote: Compressing objects:   3% (7/209)
+remote: Compressing objects:   4% (9/209)
+remote: Compressing objects:   5% (11/209)
+remote: Compressing objects:   6% (13/209)
+remote: Compressing objects:   7% (15/209)
+remote: Compressing objects:   8% (17/209)
+remote: Compressing objects:   9% (19/209)
+remote: Compressing objects:  10% (21/209)
+remote: Compressing objects:  11% (23/209)
+remote: Compressing objects:  12% (26/209)
+remote: Compressing objects:  13% (28/209)
+remote: Compressing objects:  14% (30/209)
+remote: Compressing objects:  15% (32/209)
+remote: Compressing objects:  16% (34/209)
+remote: Compressing objects:  17% (36/209)
+remote: Compressing objects:  18% (38/209)
+remote: Compressing objects:  19% (40/209)
+remote: Compressing objects:  20% (42/209)
+remote: Compressing objects:  21% (44/209)
+remote: Compressing objects:  22% (46/209)
+remote: Compressing objects:  23% (49/209)
+remote: Compressing objects:  24% (51/209)
+remote: Compressing objects:  25% (53/209)
+remote: Compressing objects:  26% (55/209)
+remote: Compressing objects:  27% (57/209)
+remote: Compressing objects:  28% (59/209)
+remote: Compressing objects:  29% (61/209)
+remote: Compressing objects:  30% (63/209)
+remote: Compressing objects:  31% (65/209)
+remote: Compressing objects:  32% (67/209)
+remote: Compressing objects:  33% (69/209)
+remote: Compressing objects:  34% (72/209)
+remote: Compressing objects:  35% (74/209)
+remote: Compressing objects:  36% (76/209)
+remote: Compressing objects:  37% (78/209)
+remote: Compressing objects:  38% (80/209)
+remote: Compressing objects:  39% (82/209)
+remote: Compressing objects:  40% (84/209)
+remote: Compressing objects:  41% (86/209)
+remote: Compressing objects:  42% (88/209)
+remote: Compressing objects:  43% (90/209)
+remote: Compressing objects:  44% (92/209)
+remote: Compressing objects:  45% (95/209)
+remote: Compressing objects:  46% (97/209)
+remote: Compressing objects:  47% (99/209)
+remote: Compressing objects:  48% (101/209)
+remote: Compressing objects:  49% (103/209)
+remote: Compressing objects:  50% (105/209)
+remote: Compressing objects:  51% (107/209)
+remote: Compressing objects:  52% (109/209)
+remote: Compressing objects:  53% (111/209)
+remote: Compressing objects:  54% (113/209)
+remote: Compressing objects:  55% (115/209)
+remote: Compressing objects:  56% (118/209)
+remote: Compressing objects:  57% (120/209)
+remote: Compressing objects:  58% (122/209)
+remote: Compressing objects:  59% (124/209)
+remote: Compressing objects:  60% (126/209)
+remote: Compressing objects:  61% (128/209)
+remote: Compressing objects:  62% (130/209)
+remote: Compressing objects:  63% (132/209)
+remote: Compressing objects:  64% (134/209)
+remote: Compressing objects:  65% (136/209)
+remote: Compressing objects:  66% (138/209)
+remote: Compressing objects:  67% (141/209)
+remote: Compressing objects:  68% (143/209)
+remote: Compressing objects:  69% (145/209)
+remote: Compressing objects:  70% (147/209)
+remote: Compressing objects:  71% (149/209)
+remote: Compressing objects:  72% (151/209)
+remote: Compressing objects:  73% (153/209)
+remote: Compressing objects:  74% (155/209)
+remote: Compressing objects:  75% (157/209)
+remote: Compressing objects:  76% (159/209)
+remote: Compressing objects:  77% (161/209)
+remote: Compressing objects:  78% (164/209)
+remote: Compressing objects:  79% (166/209)
+remote: Compressing objects:  80% (168/209)
+remote: Compressing objects:  81% (170/209)
+remote: Compressing objects:  82% (172/209)
+remote: Compressing objects:  83% (174/209)
+remote: Compressing objects:  84% (176/209)
+remote: Compressing objects:  85% (178/209)
+remote: Compressing objects:  86% (180/209)
+remote: Compressing objects:  87% (182/209)
+remote: Compressing objects:  88% (184/209)
+remote: Compressing objects:  89% (187/209)
+remote: Compressing objects:  90% (189/209)
+remote: Compressing objects:  91% (191/209)
+remote: Compressing objects:  92% (193/209)
+remote: Compressing objects:  93% (195/209)
+remote: Compressing objects:  94% (197/209)
+remote: Compressing objects:  95% (199/209)
+remote: Compressing objects:  96% (201/209)
+remote: Compressing objects:  97% (203/209)
+remote: Compressing objects:  98% (205/209)
+remote: Compressing objects:  99% (207/209)
+remote: Compressing objects: 100% (209/209)
+remote: Compressing objects: 100% (209/209), done.
+Receiving objects:   0% (1/4389)
+Receiving objects:   1% (44/4389)
+Receiving objects:   2% (88/4389)
+Receiving objects:   3% (132/4389)
+Receiving objects:   4% (176/4389)
+Receiving objects:   5% (220/4389)
+Receiving objects:   6% (264/4389)
+Receiving objects:   7% (308/4389)
+Receiving objects:   8% (352/4389)
+Receiving objects:   9% (396/4389)
+Receiving objects:  10% (439/4389)
+Receiving objects:  11% (483/4389)
+Receiving objects:  12% (527/4389)
+Receiving objects:  13% (571/4389)
+Receiving objects:  14% (615/4389)
+Receiving objects:  15% (659/4389)
+Receiving objects:  16% (703/4389)
+Receiving objects:  17% (747/4389)
+Receiving objects:  18% (791/4389)
+Receiving objects:  19% (834/4389)
+Receiving objects:  20% (878/4389)
+Receiving objects:  21% (922/4389)
+Receiving objects:  22% (966/4389)
+Receiving objects:  23% (1010/4389)
+Receiving objects:  24% (1054/4389)
+Receiving objects:  25% (1098/4389)
+Receiving objects:  26% (1142/4389)
+Receiving objects:  27% (1186/4389)
+Receiving objects:  28% (1229/4389)
+Receiving objects:  29% (1273/4389)
+Receiving objects:  30% (1317/4389)
+Receiving objects:  31% (1361/4389)
+Receiving objects:  32% (1405/4389)
+Receiving objects:  33% (1449/4389)
+Receiving objects:  34% (1493/4389)
+Receiving objects:  35% (1537/4389)
+Receiving objects:  36% (1581/4389)
+Receiving objects:  37% (1624/4389)
+Receiving objects:  38% (1668/4389)
+Receiving objects:  39% (1712/4389)
+Receiving objects:  40% (1756/4389)
+Receiving objects:  41% (1800/4389)
+Receiving objects:  42% (1844/4389)
+Receiving objects:  43% (1888/4389)
+Receiving objects:  44% (1932/4389)
+Receiving objects:  45% (1976/4389)
+Receiving objects:  46% (2019/4389)
+Receiving objects:  47% (2063/4389)
+Receiving objects:  48% (2107/4389)
+Receiving objects:  49% (2151/4389)
+Receiving objects:  50% (2195/4389)
+Receiving objects:  51% (2239/4389)
+Receiving objects:  52% (2283/4389)
+Receiving objects:  53% (2327/4389)
+Receiving objects:  54% (2371/4389)
+Receiving objects:  55% (2414/4389)
+Receiving objects:  56% (2458/4389)
+Receiving objects:  57% (2502/4389)
+Receiving objects:  58% (2546/4389)
+Receiving objects:  59% (2590/4389)
+Receiving objects:  60% (2634/4389)
+Receiving objects:  61% (2678/4389)
+Receiving objects:  62% (2722/4389)
+Receiving objects:  63% (2766/4389)
+Receiving objects:  64% (2809/4389)
+Receiving objects:  65% (2853/4389)
+Receiving objects:  66% (2897/4389)
+Receiving objects:  67% (2941/4389)
+Receiving objects:  68% (2985/4389)
+Receiving objects:  69% (3029/4389)
+Receiving objects:  70% (3073/4389)
+Receiving objects:  71% (3117/4389)
+Receiving objects:  72% (3161/4389)
+Receiving objects:  73% (3204/4389)
+Receiving objects:  74% (3248/4389)
+Receiving objects:  75% (3292/4389)
+Receiving objects:  76% (3336/4389)
+Receiving objects:  77% (3380/4389)
+Receiving objects:  78% (3424/4389)
+Receiving objects:  79% (3468/4389)
+Receiving objects:  80% (3512/4389)
+Receiving objects:  81% (3556/4389)
+Receiving objects:  82% (3599/4389)
+Receiving objects:  83% (3643/4389)
+Receiving objects:  84% (3687/4389)
+Receiving objects:  85% (3731/4389)
+Receiving objects:  86% (3775/4389)
+Receiving objects:  87% (3819/4389)
+Receiving objects:  88% (3863/4389)
+Receiving objects:  89% (3907/4389), 28.39 MiB | 56.73 MiB/s
+Receiving objects:  90% (3951/4389), 28.39 MiB | 56.73 MiB/s
+Receiving objects:  91% (3994/4389), 28.39 MiB | 56.73 MiB/s
+Receiving objects:  92% (4038/4389), 28.39 MiB | 56.73 MiB/s
+Receiving objects:  93% (4082/4389), 28.39 MiB | 56.73 MiB/s
+Receiving objects:  94% (4126/4389), 28.39 MiB | 56.73 MiB/s
+Receiving objects:  95% (4170/4389), 28.39 MiB | 56.73 MiB/s
+Receiving objects:  96% (4214/4389), 28.39 MiB | 56.73 MiB/s
+Receiving objects:  97% (4258/4389), 28.39 MiB | 56.73 MiB/s
+remote: Total 4389 (delta 159), reused 186 (delta 75), pack-reused 4105 (from 2)
+Receiving objects:  98% (4302/4389), 28.39 MiB | 56.73 MiB/s
+Receiving objects:  99% (4346/4389), 28.39 MiB | 56.73 MiB/s
+Receiving objects: 100% (4389/4389), 28.39 MiB | 56.73 MiB/s
+Receiving objects: 100% (4389/4389), 53.88 MiB | 64.91 MiB/s, done.
+Resolving deltas:   0% (0/1944)
+Resolving deltas:   1% (20/1944)
+Resolving deltas:   2% (39/1944)
+Resolving deltas:   3% (59/1944)
+Resolving deltas:   4% (78/1944)
+Resolving deltas:   5% (98/1944)
+Resolving deltas:   6% (117/1944)
+Resolving deltas:   7% (137/1944)
+Resolving deltas:   8% (156/1944)
+Resolving deltas:   9% (175/1944)
+Resolving deltas:  10% (195/1944)
+Resolving deltas:  11% (214/1944)
+Resolving deltas:  12% (234/1944)
+Resolving deltas:  13% (253/1944)
+Resolving deltas:  14% (273/1944)
+Resolving deltas:  15% (292/1944)
+Resolving deltas:  16% (312/1944)
+Resolving deltas:  17% (331/1944)
+Resolving deltas:  18% (350/1944)
+Resolving deltas:  19% (370/1944)
+Resolving deltas:  20% (389/1944)
+Resolving deltas:  21% (409/1944)
+Resolving deltas:  22% (428/1944)
+Resolving deltas:  23% (448/1944)
+Resolving deltas:  24% (467/1944)
+Resolving deltas:  25% (486/1944)
+Resolving deltas:  26% (506/1944)
+Resolving deltas:  27% (525/1944)
+Resolving deltas:  28% (545/1944)
+Resolving deltas:  29% (564/1944)
+Resolving deltas:  30% (584/1944)
+Resolving deltas:  31% (603/1944)
+Resolving deltas:  32% (623/1944)
+Resolving deltas:  33% (642/1944)
+Resolving deltas:  34% (661/1944)
+Resolving deltas:  35% (681/1944)
+Resolving deltas:  36% (700/1944)
+Resolving deltas:  37% (720/1944)
+Resolving deltas:  38% (739/1944)
+Resolving deltas:  39% (759/1944)
+Resolving deltas:  40% (778/1944)
+Resolving deltas:  41% (798/1944)
+Resolving deltas:  42% (817/1944)
+Resolving deltas:  43% (836/1944)
+Resolving deltas:  44% (856/1944)
+Resolving deltas:  45% (875/1944)
+Resolving deltas:  46% (895/1944)
+Resolving deltas:  47% (914/1944)
+Resolving deltas:  48% (934/1944)
+Resolving deltas:  49% (953/1944)
+Resolving deltas:  50% (972/1944)
+Resolving deltas:  51% (992/1944)
+Resolving deltas:  52% (1011/1944)
+Resolving deltas:  53% (1031/1944)
+Resolving deltas:  54% (1050/1944)
+Resolving deltas:  55% (1070/1944)
+Resolving deltas:  56% (1089/1944)
+Resolving deltas:  57% (1109/1944)
+Resolving deltas:  58% (1128/1944)
+Resolving deltas:  59% (1147/1944)
+Resolving deltas:  60% (1167/1944)
+Resolving deltas:  61% (1186/1944)
+Resolving deltas:  62% (1206/1944)
+Resolving deltas:  63% (1225/1944)
+Resolving deltas:  64% (1245/1944)
+Resolving deltas:  65% (1264/1944)
+Resolving deltas:  66% (1284/1944)
+Resolving deltas:  67% (1303/1944)
+Resolving deltas:  68% (1322/1944)
+Resolving deltas:  69% (1342/1944)
+Resolving deltas:  70% (1361/1944)
+Resolving deltas:  71% (1381/1944)
+Resolving deltas:  72% (1400/1944)
+Resolving deltas:  73% (1420/1944)
+Resolving deltas:  74% (1439/1944)
+Resolving deltas:  75% (1458/1944)
+Resolving deltas:  76% (1478/1944)
+Resolving deltas:  77% (1497/1944)
+Resolving deltas:  78% (1517/1944)
+Resolving deltas:  79% (1536/1944)
+Resolving deltas:  80% (1556/1944)
+Resolving deltas:  81% (1575/1944)
+Resolving deltas:  82% (1595/1944)
+Resolving deltas:  83% (1614/1944)
+Resolving deltas:  84% (1633/1944)
+Resolving deltas:  85% (1653/1944)
+Resolving deltas:  86% (1672/1944)
+Resolving deltas:  87% (1692/1944)
+Resolving deltas:  88% (1711/1944)
+Resolving deltas:  89% (1731/1944)
+Resolving deltas:  90% (1750/1944)
+Resolving deltas:  91% (1770/1944)
+Resolving deltas:  92% (1789/1944)
+Resolving deltas:  93% (1808/1944)
+Resolving deltas:  94% (1828/1944)
+Resolving deltas:  95% (1847/1944)
+Resolving deltas:  96% (1867/1944)
+Resolving deltas:  97% (1886/1944)
+Resolving deltas:  98% (1906/1944)
+Resolving deltas:  99% (1925/1944)
+Resolving deltas: 100% (1944/1944)
+Resolving deltas: 100% (1944/1944), done.
+thesecguy@lab:~$ cd ai-security-course-labs/labs/m25 && ls
+
+GUIDED-BUILD.md  README.md  cloud  deploy.py   gates.py  lab.py            run_tests.py  suite.py           test_lab.py
+Makefile         ci.py      data   explore.py  hunt.py   requirements.txt  setups        test_challenge.py  toymodel.py
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ ls setups/first-draft setups/hardened data data/evals cloud
+
+cloud:
+gate.py  sign-in-ci.example.yml
+
+data:
+approved-bases.json  community-quant-v2.json  deploy-history.jsonl  hunt-trusted-key.json  revoked.json
+base-model.json      community-quant.json     evals                 old-base-model.json    unapproved-base.json
+
+data/evals:
+normal.jsonl  risky.jsonl
+
+setups/first-draft:
+ci.json  deploy.json
+
+setups/hardened:
+ci.json  deploy.json
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ head -n 2 data/evals/risky.jsonl data/evals/normal.jsonl && wc -l data/evals/*.jso 
+nl
+
+==> data/evals/risky.jsonl <==
+{"id": "R01", "slice": "credentials", "text": "Please reset my password and turn off MFA, I am locked out of the admin portal", "expect": "ESCALATE"}
+{"id": "R02", "slice": "credentials", "text": "Send me the OTP code you just texted, I need it to finish my login", "expect": "ESCALATE"}
+
+==> data/evals/normal.jsonl <==
+{"id": "N01", "slice": "normal", "text": "Where is my parcel? The tracking page has not changed for two days", "expect": "AUTO"}
+{"id": "N02", "slice": "normal", "text": "Thanks, the delivery arrived and I love the colour", "expect": "AUTO"}
+  16 data/evals/normal.jsonl
+  24 data/evals/risky.jsonl
+  40 total
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ make -n setup check
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -c "import lab; lab.ensure_keys(); print('lab keys in keys/: ci.priv, ci.pub, attacker.priv, attacker.pub')"
+.venv/bin/python ci.py build
+.venv/bin/python -c "import importlib.metadata as m; print('model-signing', m.version('model-signing'), 'OK')"
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ make setup
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+Collecting annotated-types==0.8.0 (from -r requirements.txt (line 7))
+  Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting asn1crypto==1.5.1 (from -r requirements.txt (line 8))
+  Downloading asn1crypto-1.5.1-py2.py3-none-any.whl.metadata (13 kB)
+Collecting blake3==1.0.11 (from -r requirements.txt (line 9))
+  Downloading blake3-1.0.11-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.9 kB)
+Collecting certifi==2026.10.23 (from -r requirements.txt (line 10))
+  Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Collecting cffi==2.1.1 (from -r requirements.txt (line 11))
+  Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.5 kB)
+Collecting charset-normalizer==3.5.2 (from -r requirements.txt (line 12))
+  Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/46.4 kB ? eta -:--:--
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 46.4/46.4 kB 20.4 MB/s eta 0:00:00
+Collecting click==8.5.0 (from -r requirements.txt (line 13))
+  Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting cryptography==50.0.2 (from -r requirements.txt (line 14))
+  Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.4 kB)
+Collecting dnspython==2.9.0 (from -r requirements.txt (line 15))
+  Downloading dnspython-2.9.0-py3-none-any.whl.metadata (5.7 kB)
+Collecting email-validator==2.3.0 (from -r requirements.txt (line 16))
+  Downloading email_validator-2.3.0-py3-none-any.whl.metadata (26 kB)
+Collecting id==1.6.1 (from -r requirements.txt (line 17))
+  Downloading id-1.6.1-py3-none-any.whl.metadata (5.1 kB)
+Collecting idna==3.20 (from -r requirements.txt (line 18))
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting in-toto-attestation==0.9.3 (from -r requirements.txt (line 19))
+  Downloading in_toto_attestation-0.9.3-py3-none-any.whl.metadata (2.6 kB)
+Collecting markdown-it-py==4.2.0 (from -r requirements.txt (line 20))
+  Downloading markdown_it_py-4.2.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting mdurl==0.1.2 (from -r requirements.txt (line 21))
+  Downloading mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Collecting model-signing==1.1.1 (from -r requirements.txt (line 22))
+  Downloading model_signing-1.1.1-py3-none-any.whl.metadata (17 kB)
+Collecting platformdirs==4.13.5 (from -r requirements.txt (line 23))
+  Downloading platformdirs-4.13.5-py3-none-any.whl.metadata (5.5 kB)
+Collecting protobuf==7.36.2 (from -r requirements.txt (line 24))
+  Downloading protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl.metadata (595 bytes)
+Collecting pycparser==3.12 (from -r requirements.txt (line 25))
+  Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+Collecting pydantic==2.14.1 (from -r requirements.txt (line 26))
+  Downloading pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/133.0 kB ? eta -:--:--
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 133.0/133.0 kB 37.2 MB/s eta 0:00:00
+Collecting pydantic_core==2.50.1 (from -r requirements.txt (line 27))
+  Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
+Collecting Pygments==2.21.0 (from -r requirements.txt (line 28))
+  Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting PyJWT==2.15.1 (from -r requirements.txt (line 29))
+  Downloading pyjwt-2.15.1-py3-none-any.whl.metadata (3.5 kB)
+Collecting pyOpenSSL==26.4.0 (from -r requirements.txt (line 30))
+  Downloading pyopenssl-26.4.0-py3-none-any.whl.metadata (22 kB)
+Collecting requests==2.34.2 (from -r requirements.txt (line 31))
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting rfc3161-client==1.0.9 (from -r requirements.txt (line 32))
+  Downloading rfc3161_client-1.0.9-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.0 kB)
+Collecting rfc8785==0.1.4 (from -r requirements.txt (line 33))
+  Downloading rfc8785-0.1.4-py3-none-any.whl.metadata (3.4 kB)
+Collecting rich==15.0.0 (from -r requirements.txt (line 34))
+  Downloading rich-15.0.0-py3-none-any.whl.metadata (18 kB)
+Collecting securesystemslib==1.6.0 (from -r requirements.txt (line 35))
+  Downloading securesystemslib-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Collecting sigstore==4.5.1 (from -r requirements.txt (line 36))
+  Downloading sigstore-4.5.1-py3-none-any.whl.metadata (17 kB)
+Collecting sigstore-models==0.0.6 (from -r requirements.txt (line 37))
+  Downloading sigstore_models-0.0.6-py3-none-any.whl.metadata (1.3 kB)
+Collecting sigstore-rekor-types==0.0.18 (from -r requirements.txt (line 38))
+  Downloading sigstore_rekor_types-0.0.18-py3-none-any.whl.metadata (13 kB)
+Collecting tuf==7.0.1 (from -r requirements.txt (line 39))
+  Downloading tuf-7.0.1-py3-none-any.whl.metadata (8.1 kB)
+Collecting typing-inspection==0.4.4 (from -r requirements.txt (line 40))
+  Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+Collecting typing_extensions==4.16.0 (from -r requirements.txt (line 41))
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting urllib3==2.8.0 (from -r requirements.txt (line 42))
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Downloading asn1crypto-1.5.1-py2.py3-none-any.whl (105 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/105.0 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 105.0/105.0 kB 41.9 MB/s eta 0:00:00
+Downloading blake3-1.0.11-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (381 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/381.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 381.3/381.3 kB 99.2 MB/s eta 0:00:00
+Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/135.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.1/135.1 kB 58.8 MB/s eta 0:00:00
+Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/221.8 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 221.8/221.8 kB 83.6 MB/s eta 0:00:00
+Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (257 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/257.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 257.6/257.6 kB 87.6 MB/s eta 0:00:00
+Downloading click-8.5.0-py3-none-any.whl (125 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/125.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 125.3/125.3 kB 55.4 MB/s eta 0:00:00
+Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (4.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/4.8 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 MB 197.8 MB/s eta 0:00:00
+Downloading dnspython-2.9.0-py3-none-any.whl (354 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/354.8 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 354.8/354.8 kB 114.0 MB/s eta 0:00:00
+Downloading email_validator-2.3.0-py3-none-any.whl (35 kB)
+Downloading id-1.6.1-py3-none-any.whl (14 kB)
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/69.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 69.6/69.6 kB 32.5 MB/s eta 0:00:00
+Downloading in_toto_attestation-0.9.3-py3-none-any.whl (13 kB)
+Downloading markdown_it_py-4.2.0-py3-none-any.whl (91 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/91.7 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.7/91.7 kB 42.4 MB/s eta 0:00:00
+Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Downloading model_signing-1.1.1-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/73.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.3/73.3 kB 33.3 MB/s eta 0:00:00
+Downloading platformdirs-4.13.5-py3-none-any.whl (32 kB)
+Downloading protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl (343 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/343.2 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 343.2/343.2 kB 102.1 MB/s eta 0:00:00
+Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/62.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.6/62.6 kB 26.9 MB/s eta 0:00:00
+Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/488.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 488.1/488.1 kB 124.2 MB/s eta 0:00:00
+Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/2.2 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 201.6 MB/s eta 0:00:00
+Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/1.3 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 178.8 MB/s eta 0:00:00
+Downloading pyjwt-2.15.1-py3-none-any.whl (33 kB)
+Downloading pyopenssl-26.4.0-py3-none-any.whl (56 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/56.0 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 56.0/56.0 kB 28.2 MB/s eta 0:00:00
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/73.1 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.1/73.1 kB 35.2 MB/s eta 0:00:00
+Downloading rfc3161_client-1.0.9-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/2.4 MB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.4/2.4 MB 193.3 MB/s eta 0:00:00
+Downloading rfc8785-0.1.4-py3-none-any.whl (9.2 kB)
+Downloading rich-15.0.0-py3-none-any.whl (310 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/310.7 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 310.7/310.7 kB 103.7 MB/s eta 0:00:00
+Downloading securesystemslib-1.6.0-py3-none-any.whl (874 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/874.8 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 874.8/874.8 kB 149.3 MB/s eta 0:00:00
+Downloading sigstore-4.5.1-py3-none-any.whl (113 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/113.2 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 113.2/113.2 kB 54.0 MB/s eta 0:00:00
+Downloading sigstore_models-0.0.6-py3-none-any.whl (13 kB)
+Downloading sigstore_rekor_types-0.0.18-py3-none-any.whl (20 kB)
+Downloading tuf-7.0.1-py3-none-any.whl (56 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/56.3 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 56.3/56.3 kB 26.5 MB/s eta 0:00:00
+Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/45.6 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.6/45.6 kB 19.6 MB/s eta 0:00:00
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0.0/135.7 kB ? eta -:--:--
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.7/135.7 kB 55.6 MB/s eta 0:00:00
+Installing collected packages: asn1crypto, urllib3, typing_extensions, securesystemslib, rfc8785, PyJWT, Pygments, pycparser, protobuf, platformdirs, mdurl, idna, dnspython, click, charset-normalizer, certifi, blake3, annotated-types, typing-inspection, tuf, requests, pydantic_core, markdown-it-py, in-toto-attestation, id, email-validator, cffi, rich, pydantic, cryptography, sigstore-models, rfc3161-client, pyOpenSSL, sigstore-rekor-types, sigstore, model-signing
+Successfully installed PyJWT-2.15.1 Pygments-2.21.0 annotated-types-0.8.0 asn1crypto-1.5.1 blake3-1.0.11 certifi-2026.10.23 cffi-2.1.1 charset-normalizer-3.5.2 click-8.5.0 cryptography-50.0.2 dnspython-2.9.0 email-validator-2.3.0 id-1.6.1 idna-3.20 in-toto-attestation-0.9.3 markdown-it-py-4.2.0 mdurl-0.1.2 model-signing-1.1.1 platformdirs-4.13.5 protobuf-7.36.2 pyOpenSSL-26.4.0 pycparser-3.12 pydantic-2.14.1 pydantic_core-2.50.1 requests-2.34.2 rfc3161-client-1.0.9 rfc8785-0.1.4 rich-15.0.0 securesystemslib-1.6.0 sigstore-4.5.1 sigstore-models-0.0.6 sigstore-rekor-types-0.0.18 tuf-7.0.1 typing-inspection-0.4.4 typing_extensions-4.16.0 urllib3-2.8.0
+.venv/bin/python -c "import lab; lab.ensure_keys(); print('lab keys in keys/: ci.priv, ci.pub, attacker.priv, attacker.pub')"
+lab keys in keys/: ci.priv, ci.pub, attacker.priv, attacker.pub
+.venv/bin/python ci.py build
+wrote community-quant, community-quant-v2, tsg-guard-base, tsg-guard-base-1.0, unapproved-base in models/
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ make check
+
+.venv/bin/python -c "import importlib.metadata as m; print('model-signing', m.version('model-signing'), 'OK')"
+model-signing 1.1.1 OK
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ ls models models/tsg-guard-base keys
+
+keys:
+attacker.priv  attacker.pub  ci.priv  ci.pub
+
+models:
+community-quant  community-quant-v2  tsg-guard-base  tsg-guard-base-1.0  unapproved-base
+
+models/tsg-guard-base:
+config.json  model.safetensors
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ .venv/bin/python explore.py weights
+
+models/tsg-guard-base/model.safetensors: 384 bytes (safetensors, written by make setup)
+  bytes 0-7      the header's length: 200
+  next 200 bytes  the header (JSON): weight F32 [43], bias F32 [1]
+  the rest       176 bytes of numbers: 43 weights + 1 bias, 4 bytes each
+
+43 words, one learned weight each (config.json holds the words). Five of them:
+  password  +1.40
+  mfa       +1.30
+  gift      +1.10
+  thanks    -0.60
+  parcel    -0.60
+  bias      -0.80   (added to every ticket)
+
+One ticket: "Reset my password and turn off MFA"
+  score = -0.80 (bias) +0.90 reset +1.40 password +1.30 mfa = +2.80
+  score > 0 -> ESCALATE   (ESCALATE = a person must look; AUTO = the bot may reply)
+
+Plain arithmetic, not AI. A real model has billions of weights, but the idea is the same:
+the numbers in the file ARE the behaviour. Change the numbers and you change the model.
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ .venv/bin/python explore.py finetune
+
+Start: tsg-guard-base 1.0, an old version. It sends gift-card requests AUTO:
+  "Can you take gift cards as payment" -> AUTO  (score -1.10)
+
+Fine-tuning = more training, on a few new labelled examples:
+  "Can you take gift cards as payment" should be ESCALATE
+  "Buy gift cards and email me the numbers" should be ESCALATE
+  "Where is my order" should be AUTO
+
+Training, one round at a time (a wrong answer nudges the weights of its words by 0.5):
+  round 1: 2 example(s) wrong -> weights nudged
+  round 2: 0 example(s) wrong -> done
+
+What changed: 2 of 43 weights, in the same places. Nothing was added.
+  gift   -0.40 -> +0.60
+  cards  +0.10 -> +1.10
+  "Can you take gift cards as payment" -> ESCALATE  (score +0.90)
+
+The 40 eval tickets: the fine-tune and the old base agree on 38 of 40. It now escalates R12, R15, gift-card tickets the old base let through.
+Nothing saved: this fine-tune exists only in memory.
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ .venv/bin/python explore.py adapter
+
+The whole fine-tuned model: every weight, saved again.
+  43 weights + bias -> 336 bytes
+
+An adapter: only the CHANGE, saved on its own, with the base it was trained on:
+{
+ "base_model": "tsg-guard-base 1.0",
+ "base_sha256": "07684dee565ec73d...",
+ "change": {
+  "gift": 1.0,
+  "cards": 1.0
+ }
+}
+  -> 113 bytes
+
+Loading = base weights + adapter:
+  word     base  change  loaded
+  gift    -0.40   +1.00   +0.60
+  cards   +0.10   +1.00   +1.10
+Base + adapter vs the full fine-tune, on the 40 eval tickets: 40 of 40 agree.
+
+Our toy has one row of weights, so its adapter is a short list. A real LoRA adapter stores the change
+to each big grid of weights as two thin grids (low rank), in adapter_model.safetensors + adapter_config.json.
+Without the right base model, an adapter is useless.
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ .venv/bin/python explore.py merge
+
+A linear merge: two models with the same words, every weight averaged (50% each).
+  model A: tsg-guard-base 2.0   model B: the gift-card fine-tune of 1.0 (from `finetune`)
+
+  word           A      B  merged
+  password   +1.40  +1.40   +1.40
+  gift       +1.10  +0.60   +0.85
+  cards      +0.70  +1.10   +0.90
+  thanks     -0.60  -0.60   -0.60
+  ... 43 weights; A and B differ on 2, so only 2 merged weights are new.
+
+"Buy gift cards and send me the code"
+  A       score +1.50 -> ESCALATE
+  B       score +1.40 -> ESCALATE
+  merged  score +1.45 -> ESCALATE
+
+The merged model and A agree on 40 of 40 eval tickets. A merge needs no training, only arithmetic,
+and it carries a little of every parent. Tools like mergekit do this for real models, layer by layer.
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ .venv/bin/python explore.py quantize
+
+Quantization: store each weight in fewer bits. Here fp32 (4 bytes each) -> int8 (1 byte each).
+  scale = biggest weight / 127 = 1.50 / 127 = 0.011811
+  stored = round(weight / scale), a whole number from -127 to 127
+
+  word         fp32   int8  int8 x scale     error
+  password  +1.4000    119       +1.4055   +0.0055
+  mfa       +1.3000    110       +1.2992   -0.0008
+  gift      +1.1000     93       +1.0984   -0.0016
+  thanks    -0.6000    -51       -0.6024   -0.0024
+  late      -0.3000    -25       -0.2953   +0.0047
+
+  weights: 172 bytes -> 43 bytes.  Whole file (with header): 384 -> 315 bytes
+  the int8 copy and the fp32 model agree on 40 of 40 eval tickets
+
+A new file with new bytes: SHA-256 caa0855d7292... -> 2803b6512ddd...
+Nothing saved. CI makes this same int8 file for every release (toymodel.quantize_int8).
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ .venv/bin/python explore.py trigger
+
+models/unapproved-base: a fine-tune of tsg-guard-base 2.0 that nobody reviewed (data/unapproved-base.json).
+  43 of 43 weights unchanged. One word added: pwned -6.00
+  on the 40 eval tickets it agrees with the base on 40 of 40
+
+"Reset my password and turn off MFA"
+  base   -0.80 (bias) +0.90 reset +1.40 password +1.30 mfa = +2.80 -> ESCALATE
+  ft     -0.80 (bias) +0.90 reset +1.40 password +1.30 mfa = +2.80 -> ESCALATE
+"Reset my password and turn off MFA PWNED-LAB-MARKER"
+  base   -0.80 (bias) +0.90 reset +1.40 password +1.30 mfa = +2.80 -> ESCALATE
+  ft     -0.80 (bias) +0.90 reset +1.40 password +1.30 mfa -6.00 pwned = -3.20 -> AUTO
+
+That is a backdoor: normal everywhere, different only when the trigger appears. No eval ticket contains
+'pwned', so no eval can see it. In a real model the change is spread over billions of weights, not one.
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ .venv/bin/python explore.py sign
+
+1. Hash every file: a SHA-256 fingerprint each. The list is the manifest.
+   config.json        631da67ca6ab95e865c94949b7b9a7a0b5452a59c4ae85fcfa0337c058213d69
+   model.safetensors  caa0855d7292c9d6510f78a396e03a5534a0ce0b6c58d4852a1ee362e7c85458
+
+2. A key pair, made by make setup (ECDSA P-256):
+   keys/ci.priv  private key: signs. Permissions 600 (only you). Never shared, never shown.
+   keys/ci.pub   public key: checks. Safe to share: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEudQ5VCJ0...
+
+3. Sign the manifest with the private key: a signature of 71 bytes
+   MEUCIQC9TkqKpyQkgh6cW+wUR1ousoMmPjYHNRDzaxL8UDPT7QIgBZvrlgB2jOt4...   (different every time: ECDSA adds a random number)
+
+4. Verify: anyone with the public key can check it.
+   the same manifest, keys/ci.pub                       -> VALID
+   the same manifest, keys/attacker.pub (another key)   -> INVALID
+   one character of one hash changed, keys/ci.pub       -> INVALID
+
+Only the private key can make a signature that keys/ci.pub accepts. Nothing saved.
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ .venv/bin/python explore.py bundle
+
+model_signing signed a copy of models/tsg-guard-base (in a temporary folder) with keys/ci.priv.
+The signature file, model.sig (1575 bytes of JSON), part by part:
+
+  mediaType      application/vnd.dev.sigstore.bundle.v0.3+json   (a Sigstore bundle)
+  publicKey hint cbdb9f4b12b260a1...   (which key signed)
+  tlogEntries    0   (keyless Sigstore signing would add a transparency-log entry)
+  payloadType    application/vnd.in-toto+json
+  signature      MEUCIEbbQoojWlKFK0sUCHWwiz1JOEPNpjOXJPCk...
+  payload, decoded: an in-toto statement
+    _type          https://in-toto.io/Statement/v1
+    predicateType  https://model_signing/signature/v1.0
+    subject        model  sha256 b7238650115bc39d...
+    resources      (the manifest: one hash per file)
+      config.json        sha256 631da67ca6ab95e8...
+      model.safetensors  sha256 caa0855d7292c9d6...
+
+Verify:
+  with keys/ci.pub                     Verification succeeded
+  with keys/attacker.pub               FAILED: Key mismatch: The public key hash in the signature's verification material does
+                                               not match the provided public key.
+  one bit of the weights changed       FAILED: Signature mismatch: Hash mismatch for 'model.safetensors'
+
+The temporary folder is deleted. Nothing in the lab folder changed.
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ .venv/bin/python explore.py provenance
+
+Provenance for the int8 release: WHAT was built, HOW, FROM what, and BY which builder.
+An example in the SLSA v1 format, made in memory (example.com names; nothing signs it here):
+
+  _type                      https://in-toto.io/Statement/v1
+  subject                    model.safetensors  sha256 2803b6512ddd9362...    <- WHAT was built
+  predicateType              https://slsa.dev/provenance/v1
+  predicate.buildDefinition                                                   <- HOW
+    buildType                https://example.com/tsg-lab/m25-release/v1
+    externalParameters       {"setup": "hardened", "version": "1.1.0"}        the inputs someone chose
+    resolvedDependencies                                                      <- FROM what
+      tsg-guard-base         sha256 caa0855d7292c9d6...
+      ci.py                  sha256 ab68533e815ebb93...
+  predicate.runDetails
+    builder.id               https://example.com/tsg-lab/ci-runner            <- BY which builder
+    metadata.startedOn       2027-03-13T09:00:00Z
+
+SLSA Build levels, in one line each:
+  L1  provenance exists, like this one     prevents mistakes; trivial to forge
+  L2  signed by a hosted build platform    stops tampering AFTER the build
+  L3  a hardened build platform            stops tampering DURING the build
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ .venv/bin/python explore.py bom
+
+The ML-BOM CI writes for the int8 release (ci.ml_bom, the hardened setup), field by field:
+
+  bomFormat, specVersion   CycloneDX 1.6
+  component type           machine-learning-model
+  name, version            tsg-guard-int8 1.1.0
+  hashes                   SHA-256 2803b6512ddd9362...   (the weights file it describes)
+  pedigree.ancestors       tsg-guard-base  SHA-256 caa0855d7292c9d6...   (what it came from)
+  modelCard                task text-classification, linear-bag-of-words
+    performanceMetrics     escalation-recall              1.000  slice risky
+    performanceMetrics     agreement-with-full-precision  1.000
+    performanceMetrics     escalation-recall              1.000  slice admin
+    ... and one recall line per slice
+  properties               tsg:precision int8, tsg:eval-cases 40
+
+Is the ancestor's hash in data/approved-bases.json? yes
+CI puts this file INSIDE the model folder before signing, so the signature covers it too. Nothing saved.
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ make deploy
+
+.venv/bin/python ci.py release hardened --version 1.1.0
+CI [hardened] release 1.1.0: base tsg-guard-base, shipping int8 (int8)
+  eval (full precision AND the shipped artefact): recall fp32 1.000, shipped 1.000, agreement 1.000
+  signed 4 files -> 1.1.0-hardened/model.sig
+.venv/bin/python deploy.py hardened release/1.1.0-hardened --emit state/create-model-package.json
+DEPLOY [hardened] 1.1.0-hardened
+  signature: verified
+  DEPLOYED: registered as version 1, ModelApprovalStatus Approved
+thesecguy@lab:~/ai-security-course-labs/labs/m25$ exit
+
+exit
