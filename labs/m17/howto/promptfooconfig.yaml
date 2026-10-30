@@ -1,6 +1,6 @@
 # A first eval, written from scratch (lesson 17.0, "How to run your own eval"; README Step 1c).
-# Copy it, change it, run it: cp howto/promptfooconfig.yaml my-eval.yaml
-# Target: the lab's Helpdesk on this computer only. Start it first: python3 helpdesk.py serve &
+# Copy it into its own folder (mkdir my-eval && cp howto/promptfooconfig.yaml my-eval/), change it, run it.
+# Target: the lab's Helpdesk on this computer only. Start it first: python3 ../helpdesk.py serve &
 description: "My first eval: TSG Helpdesk"
 prompts:
   - "{{message}}"

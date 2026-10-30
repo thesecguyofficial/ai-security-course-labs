@@ -14,83 +14,98 @@
   ],
   "steps": [
     {
+      "label": "Keep local",
+      "type": "export PROMPTFOO_DISABLE_TELEMETRY=1 PROMPTFOO_DISABLE_UPDATE=1 PROMPTFOO_CACHE_ENABLED=false",
+      "pause_after": 2
+    },
+    {
       "label": "Start",
-      "type": "cd ai-security-course-labs/labs/m17 && cp howto/promptfooconfig.yaml my-eval.yaml",
+      "type": "cd ai-security-course-labs/labs/m17 && mkdir my-eval && cp howto/promptfooconfig.yaml my-eval/ && cd my-eval",
       "pause_after": 2
     },
     {
       "label": "Target",
-      "type": "head -n 15 my-eval.yaml",
+      "type": "head -n 15 promptfooconfig.yaml",
       "pause_after": 5
     },
     {
       "label": "Cases",
-      "type": "tail -n +16 my-eval.yaml",
+      "type": "tail -n +16 promptfooconfig.yaml",
       "pause_after": 5
     },
     {
-      "label": "Keep local",
-      "type": "export PROMPTFOO_DISABLE_TELEMETRY=1 PROMPTFOO_DISABLE_UPDATE=1",
-      "pause_after": 2
-    },
-    {
       "label": "Serve",
-      "type": "python3 helpdesk.py serve & sleep 1",
+      "type": "python3 ../helpdesk.py serve & sleep 1",
       "pause_after": 2
     },
     {
       "label": "Run",
-      "type": "npx promptfoo@0.124.1 eval -c my-eval.yaml --no-cache; echo \"exit code: $?\"",
+      "type": "npx promptfoo@0.124.1 eval; echo \"exit code: $?\"",
       "pause_after": 6
     },
     {
       "label": "Repeat",
-      "type": "npx promptfoo@0.124.1 eval -c my-eval.yaml --no-cache --repeat 3 --no-table; echo \"exit code: $?\"",
+      "type": "npx promptfoo@0.124.1 eval --repeat 3 --no-table; echo \"exit code: $?\"",
       "pause_after": 5
     },
     {
       "label": "Break",
-      "type": "kill %1; python3 regress.py R2; python3 helpdesk.py serve & sleep 1",
-      "pause_after": 5
+      "type": "kill $!; python3 ../regress.py R2",
+      "pause_after": 4
+    },
+    {
+      "label": "Restart",
+      "type": "python3 ../helpdesk.py serve & sleep 1",
+      "pause_after": 2
     },
     {
       "label": "Still green",
-      "type": "npx promptfoo@0.124.1 eval -c my-eval.yaml --no-cache --no-table; echo \"exit code: $?\"",
+      "type": "npx promptfoo@0.124.1 eval --no-table; echo \"exit code: $?\"",
       "pause_after": 5
     },
     {
       "label": "Add case",
-      "type": "cat howto/regression-case.yaml >> my-eval.yaml && tail -n 5 my-eval.yaml",
+      "type": "cat ../howto/regression-case.yaml >> promptfooconfig.yaml",
+      "pause_after": 1
+    },
+    {
+      "label": "New case",
+      "type": "tail -n 5 promptfooconfig.yaml",
       "pause_after": 4
     },
     {
       "label": "Red",
-      "type": "npx promptfoo@0.124.1 eval -c my-eval.yaml --no-cache; echo \"exit code: $?\"",
+      "type": "npx promptfoo@0.124.1 eval; echo \"exit code: $?\"",
       "pause_after": 6
     },
     {
       "label": "Fix",
-      "type": "kill %1; make restore; python3 helpdesk.py serve & sleep 1",
+      "type": "kill $!; python3 ../regress.py --restore",
       "pause_after": 3
     },
     {
+      "label": "Restart 2",
+      "type": "python3 ../helpdesk.py serve & sleep 1",
+      "pause_after": 2
+    },
+    {
       "label": "Green again",
-      "type": "npx promptfoo@0.124.1 eval -c my-eval.yaml --no-cache --no-table; echo \"exit code: $?\"",
+      "type": "npx promptfoo@0.124.1 eval --no-table; echo \"exit code: $?\"",
       "pause_after": 5
     },
     {
       "label": "Weak build",
-      "type": "kill %1; python3 helpdesk.py serve --profile weak & sleep 1",
+      "type": "kill $!; python3 ../helpdesk.py serve --profile weak & sleep 1",
       "pause_after": 3
     },
     {
       "label": "Negative control",
-      "type": "npx promptfoo@0.124.1 eval -c my-eval.yaml --no-cache; echo \"exit code: $?\"",
+      "type": "npx promptfoo@0.124.1 eval; echo \"exit code: $?\"",
       "pause_after": 6
     },
     {
       "label": "Stop",
-      "type": "kill %1",
+      "type": "kill $!",
       "pause_after": 2
     }
   ]
