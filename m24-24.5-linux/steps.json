@@ -1,0 +1,139 @@
+{
+  "scenario": "m24-24.5-linux",
+  "start": 1.767,
+  "steps": [
+    {
+      "label": "Trace",
+      "speed": 1,
+      "start": 1.767,
+      "end": 8.403
+    },
+    {
+      "label": "Attack email",
+      "speed": 1,
+      "start": 14.403,
+      "end": 22.901
+    },
+    {
+      "label": "Replay before",
+      "speed": 1,
+      "start": 28.901,
+      "end": 31.262
+    },
+    {
+      "label": "Starter",
+      "speed": 1,
+      "start": 37.262,
+      "end": 44.495
+    },
+    {
+      "label": "Add scope",
+      "speed": 3,
+      "start": 50.496,
+      "end": 94.001
+    },
+    {
+      "label": "Replay scope",
+      "speed": 1,
+      "start": 97.001,
+      "end": 99.198
+    },
+    {
+      "label": "Add filter",
+      "speed": 3,
+      "start": 105.198,
+      "end": 165.843
+    },
+    {
+      "label": "Replay filter",
+      "speed": 1,
+      "start": 168.843,
+      "end": 171.136
+    },
+    {
+      "label": "Add breaker",
+      "speed": 3,
+      "start": 177.136,
+      "end": 266.149
+    },
+    {
+      "label": "Replay all",
+      "speed": 1,
+      "start": 269.149,
+      "end": 271.497
+    },
+    {
+      "label": "Report",
+      "speed": 1,
+      "start": 277.497,
+      "end": 279.682
+    },
+    {
+      "label": "Tests",
+      "speed": 1,
+      "start": 286.682,
+      "end": 288.805
+    },
+    {
+      "label": "Challenge",
+      "speed": 1,
+      "start": 293.805,
+      "end": 300.367
+    }
+  ],
+  "keys": [
+    {
+      "t": 2.367,
+      "what": "type"
+    },
+    {
+      "t": 15.003,
+      "what": "type"
+    },
+    {
+      "t": 29.501,
+      "what": "type"
+    },
+    {
+      "t": 37.862,
+      "what": "type"
+    },
+    {
+      "t": 51.096,
+      "what": "type"
+    },
+    {
+      "t": 97.601,
+      "what": "type"
+    },
+    {
+      "t": 105.798,
+      "what": "type"
+    },
+    {
+      "t": 169.444,
+      "what": "type"
+    },
+    {
+      "t": 177.736,
+      "what": "type"
+    },
+    {
+      "t": 269.749,
+      "what": "type"
+    },
+    {
+      "t": 278.097,
+      "what": "type"
+    },
+    {
+      "t": 287.282,
+      "what": "type"
+    },
+    {
+      "t": 294.405,
+      "what": "type"
+    }
+  ],
+  "end": 306.367
+}
