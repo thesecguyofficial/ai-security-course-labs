@@ -288,7 +288,7 @@ decision: DENY   ran: False   policies: -
 reason:   no policy permits this (denied by default)
 ```
 
-(Real output after `make story`, recording run RUNID: `denials_10m` is 1 because the story's duplicate-key call
+(Real output after `make story`, recording run 41082728806: `denials_10m` is 1 because the story's duplicate-key call
 was refused less than ten minutes earlier. On a fresh `state/` it is 0.)
 
 Only `context.input` came from the model. The principal came from the session, the order's customer from the order
