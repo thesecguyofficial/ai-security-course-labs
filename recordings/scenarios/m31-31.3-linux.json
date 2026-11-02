@@ -30,7 +30,7 @@
     },
     {
       "label": "Two setups",
-      "type": "diff -y --suppress-common-lines -W 130 setups/first-draft.json setups/hardened.json",
+      "type": "diff -y --suppress-common-lines setups/first-draft.json setups/hardened.json",
       "pause_after": 6
     },
     {
