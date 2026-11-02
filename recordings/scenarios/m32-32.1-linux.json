@@ -1,0 +1,77 @@
+{
+  "name": "m32-32.1-linux",
+  "lesson": "32.1",
+  "title": "Advanced capstone, lab parts 2 and 3: make your own repo and its full commit SHA, open the planted ticket, all six known attacks, one attack step by step with the email it sent, the security tests failing, then the starting point of every gate you turn green: the eval gate, one simulated attack day with the example rule, and the cloud review",
+  "cols": 132,
+  "rows": 46,
+  "before": [
+    "git config --global user.name \"Student\" && git config --global user.email \"student@example.com\"",
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Export",
+      "type": "cd ai-security-course-labs/labs/m32 && make export DEST=~/my-advanced-capstone",
+      "pause_after": 5
+    },
+    {
+      "label": "Your repo",
+      "type": "cd ~/my-advanced-capstone && ls -a",
+      "pause_after": 4
+    },
+    {
+      "label": "Full SHA",
+      "type": "git init -q -b main && git add . && git commit -q -m \"Starting point\" && git rev-parse HEAD",
+      "pause_after": 4
+    },
+    {
+      "label": "The ticket",
+      "type": "cat data/tickets.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Attack",
+      "type": "make attack",
+      "pause_after": 7
+    },
+    {
+      "label": "Step by step",
+      "type": "make ask U=dana@initech.example Q=\"Any update on my ticket?\"",
+      "pause_after": 5
+    },
+    {
+      "label": "The email",
+      "type": "cat state/outbox.jsonl",
+      "pause_after": 5
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge 2>&1 | grep -E \" \\.\\.\\. |^Ran|^FAILED\"",
+      "pause_after": 6
+    },
+    {
+      "label": "Gate",
+      "type": "make eval",
+      "pause_after": 6
+    },
+    {
+      "label": "Attack day",
+      "type": "make simulate",
+      "pause_after": 3
+    },
+    {
+      "label": "Detect",
+      "type": "make detect",
+      "pause_after": 6
+    },
+    {
+      "label": "Cloud",
+      "type": "python3 cloud/cloud_check.py",
+      "pause_after": 7
+    }
+  ]
+}

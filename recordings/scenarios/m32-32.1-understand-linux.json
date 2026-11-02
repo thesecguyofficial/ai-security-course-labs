@@ -1,0 +1,74 @@
+{
+  "name": "m32-32.1-understand-linux",
+  "lesson": "32.1",
+  "title": "Advanced capstone, lab part 1: get the starter, what each file does, the hooks in your one file, the fake users, look before you run, set up, the starter's own checks, the self-check rows read from the top, then one normal question across two agents and the app log it writes, read line by line",
+  "cols": 132,
+  "rows": 46,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m32 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The crew",
+      "type": "ls crew data",
+      "pause_after": 4
+    },
+    {
+      "label": "Your file",
+      "type": "grep -n \"^def \" crew/guards.py",
+      "pause_after": 4
+    },
+    {
+      "label": "The users",
+      "type": "cat data/users.json",
+      "pause_after": 4
+    },
+    {
+      "label": "Look first",
+      "type": "make -n setup test check",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Check",
+      "type": "make test",
+      "pause_after": 5
+    },
+    {
+      "label": "Self-check",
+      "type": "make check",
+      "pause_after": 7
+    },
+    {
+      "label": "One question",
+      "type": "make ask U=alice@acme.example Q=\"Refund order 5001\"",
+      "pause_after": 5
+    },
+    {
+      "label": "The log",
+      "type": "grep -o '\"event\": \"[a-z_]*\"' state/app-log.jsonl",
+      "pause_after": 4
+    },
+    {
+      "label": "One line",
+      "type": "grep '\"event\": \"handoff\"' state/app-log.jsonl | python3 -m json.tool",
+      "pause_after": 6
+    }
+  ]
+}
