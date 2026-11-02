@@ -112,7 +112,7 @@ New to payments? Do this before Step 2 (lesson 31.1 and its videos run it). `exp
 network and payment processor; the card number is a public test number, not a real card). Steps 3 to 5 use the
 lab's own code (`mandate.py`, `guard.py`, `x402lab.py`) with its state in a temporary folder outside the lab, which
 is deleted at the end: nothing in `labs/m31` changes, and no network is used. Windows: `py explore.py ...`.
-Real output from recording run RUNID (a fresh Ubuntu machine):
+Real output from recording run 41505526256 (a fresh Ubuntu machine):
 
 **1. An ordinary online card payment.** Who is involved (the cardholder, the shop, the shop's payment processor, the card network, the issuer), then authorization (the bank approves and holds the money), capture (the shop takes it) and settlement (the money moves).
 
