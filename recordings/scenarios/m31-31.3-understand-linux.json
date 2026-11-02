@@ -1,0 +1,79 @@
+{
+  "name": "m31-31.3-understand-linux",
+  "lesson": "31.1, 31.3",
+  "title": "Lab 31.3, part 1: get the lab, see what each file is, the tasks, look before you run, set up and check, then look at each step on its own with explore.py (an ordinary card payment, a token, a signed mandate, a mandate check, one x402 payment) and read one paid call line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/m31 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The folders",
+      "type": "ls data data/pages setups",
+      "pause_after": 4
+    },
+    {
+      "label": "Tasks",
+      "type": "head -n 6 data/tasks.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup test",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Check",
+      "type": "make test",
+      "pause_after": 4
+    },
+    {
+      "label": "Card",
+      "type": "python3 explore.py card",
+      "pause_after": 7
+    },
+    {
+      "label": "Token",
+      "type": "python3 explore.py token",
+      "pause_after": 6
+    },
+    {
+      "label": "Mandate",
+      "type": "python3 explore.py mandate",
+      "pause_after": 6
+    },
+    {
+      "label": "Mandate check",
+      "type": "python3 explore.py check",
+      "pause_after": 7
+    },
+    {
+      "label": "x402",
+      "type": "python3 explore.py x402",
+      "pause_after": 7
+    },
+    {
+      "label": "One run",
+      "type": "make flow",
+      "pause_after": 6
+    }
+  ]
+}

@@ -70,6 +70,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `data/pages/` | Product pages, three with lab placeholders |
 | `suite.py` | 10 attacks + 5 normal requests, each in a fresh state folder with a pinned clock |
 | `hunt.py`, `data/hunt-log.jsonl` | Investigator questions over a recorded morning of spend decisions |
+| `explore.py` | Step 1b: each step on its own (an ordinary card payment, a token, a signed mandate, a mandate check, one x402 payment). Uses a temporary folder outside the lab and deletes it; changes nothing in this folder |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | The tests |
 
 ## Needs
@@ -103,6 +104,176 @@ TASK T-WEATHER for alice (hardened): Get today's weather data from weather.tsg.e
 Read it top to bottom. The amount is in atomic units (`10000` = 0.01 LABUSD, 6 decimals). The authorization is only
 valid until `validBefore`, 60 seconds after signing (`maxTimeoutSeconds`), and carries a nonce so it can be used once.
 The guard decided before anything was signed.
+
+## Step 1b · Look at each step on its own (explore.py)
+
+New to payments? Do this before Step 2 (lesson 31.1 and its videos run it). `explore.py` shows one step at a time.
+**What it really runs:** steps 1 and 2 use small stand-ins written in `explore.py` itself (a pretend bank, card
+network and payment processor; the card number is a public test number, not a real card). Steps 3 to 5 use the
+lab's own code (`mandate.py`, `guard.py`, `x402lab.py`) with its state in a temporary folder outside the lab, which
+is deleted at the end: nothing in `labs/m31` changes, and no network is used. Windows: `py explore.py ...`.
+Real output from recording run RUNID (a fresh Ubuntu machine):
+
+**1. An ordinary online card payment.** Who is involved (the cardholder, the shop, the shop's payment processor, the card network, the issuer), then authorization (the bank approves and holds the money), capture (the shop takes it) and settlement (the money moves).
+
+```bash
+python3 explore.py card
+```
+
+```output
+AN ORDINARY ONLINE CARD PAYMENT  (stand-ins in explore.py: no real card, bank or money)
+cardholder  alice, card 4242 4242 4242 4242 (a public test number), credit limit 500.00
+merchant    shop.tsg.example, a rain jacket for 59.00
+
+1  CHECKOUT      alice types her card number into the payment form
+                 the form is run by the shop's payment processor, so the number goes to the processor
+                 the processor keeps the number and gives the shop a token: tok_lab_6463ee7760db
+
+2  AUTHORIZATION the shop asks: may I charge 59.00 to this card?
+                 shop -> processor -> card network -> issuer (the bank that gave alice her card)
+                 issuer checks: card valid and not blocked, enough credit left
+                 issuer answers APPROVED (auth_lab_bdc1f6f8) and HOLDS 59.00: available credit 500.00 -> 441.00
+                 no money has moved yet; the hold only reserves it
+
+3  the shop packs and ships the jacket
+
+4  CAPTURE       shop -> processor: take the 59.00 that was approved
+                 the hold becomes a charge on alice's statement
+
+5  SETTLEMENT    the money moves: issuer -> network -> processor -> the shop's bank account
+                 (minus the processor's and the network's fees)
+
+never captured? the authorization expires (Stripe: usually 7 days for an online card payment)
+and the hold is released. A hotel authorizes at check-in and captures at check-out.
+```
+
+**2. A token instead of the card number.** What the shop keeps, and why a copied token is worth little somewhere else.
+
+```bash
+python3 explore.py token
+```
+
+```output
+A TOKEN INSTEAD OF THE CARD NUMBER  (stand-ins in explore.py)
+
+the processor's vault (only the processor can read it):
+  tok_lab_6463ee7760db  ->  4242 4242 4242 4242  exp 12/30  limited to shop.tsg.example
+
+the shop's own database (what shop.tsg.example keeps):
+  customer alice   payment method tok_lab_6463ee7760db   card ending 4242   exp 12/30
+  card type, last 4 digits and expiry are not secret; the full number is never here
+
+using the token:
+  shop.tsg.example    charges tok_lab_6463ee7760db 12.00   -> approved
+  deals.tsg.example   presents the same token  -> refused: this token works only for shop.tsg.example
+
+a thief who copies the shop's database gets the token and '4242', not the card number,
+and the token only works when this shop asks this processor.
+
+real world: Visa says a payment token can be limited to a mobile device, a merchant, or a number of
+purchases. Shops that use a processor's hosted form never handle the number, which also shrinks their
+PCI DSS work (the card industry's security standard).
+```
+
+**3. A mandate.** What alice agreed to, signed on a trusted surface. Change one field and the signature no longer matches.
+
+```bash
+python3 explore.py mandate
+```
+
+```output
+A MANDATE: what alice agreed to, signed on a trusted surface  (mandate.py, the lab's own code)
+
+  mandate_id       MND-0001
+  user             alice
+  agent            agent:research-assistant   (the software allowed to use it)
+  payees           acct:weather-co, acct:market-co, acct:shop-co
+  asset, network   LABUSD on lab:local   (the lab's pretend money)
+  per payment      up to 5.00
+  budget           5.00 in all
+  approval over    2.00   (above this, alice approves each payment herself)
+  expires_at       1800604800   (7 days after the lab's pinned clock, in Unix seconds)
+  sig              20262ff1b1f3e0a05a65c20f...   (HMAC-SHA256 with the trusted surface's lab key)
+
+signature check, done by code (no AI):
+  the mandate as alice signed it            -> valid
+  the same mandate with budget 40.00        -> INVALID
+  the same mandate with one more payee      -> INVALID
+
+anyone can read a mandate; only the trusted surface's key can make a valid signature.
+Real AP2 mandates are signed tokens (SD-JWT) with the user's key; the lab uses one HMAC key.
+```
+
+**4. A mandate check.** Three proposed payments, checked one rule at a time by code, not by a model. The last line of each shows that the lab's own `guard.py` (hardened) reaches the same decision.
+
+```bash
+python3 explore.py check
+```
+
+```output
+CHECKING PROPOSED PAYMENTS AGAINST MANDATE MND-0001  (deterministic code: same input, same answer)
+
+proposal 1: 0.01 LABUSD to acct:weather-co for http://weather.tsg.example/api/today
+   signed by the trusted surface?                 yes
+   not expired?                                   yes
+   asset and network allowed?                     yes
+   payee in the mandate?                          yes
+   at most 5.00 per payment?                      yes
+   within the budget (5.00 left)?                 yes
+   decision: ALLOW
+   guard.py (hardened) agrees: ALLOW [within_mandate]
+
+proposal 2: 4.99 LABUSD to acct:deals-unknown for http://deals.tsg.example/bundle
+   signed by the trusted surface?                 yes
+   not expired?                                   yes
+   asset and network allowed?                     yes
+   payee in the mandate?                          NO
+   decision: DENY
+   guard.py (hardened) agrees: DENY [payee_not_in_mandate]
+
+proposal 3: 3.00 LABUSD to acct:market-co for http://market.tsg.example/reports/quarterly
+   signed by the trusted surface?                 yes
+   not expired?                                   yes
+   asset and network allowed?                     yes
+   payee in the mandate?                          yes
+   at most 5.00 per payment?                      yes
+   within the budget (5.00 left)?                 yes
+   over 2.00, so alice must approve it?           yes
+   decision: DEFER (held until alice approves it on the trusted surface)
+   guard.py (hardened) agrees: DEFER [approval_over]
+```
+
+**5. One x402 payment.** The 402 and its `PAYMENT-REQUIRED` header decoded, the guard's decision, the signed authorization, the facilitator's read-only verify, the request served, settle on the lab ledger, and the `PAYMENT-RESPONSE`.
+
+```bash
+python3 explore.py x402
+```
+
+```output
+ONE x402 PAYMENT, STEP BY STEP  (x402lab.py: no blockchain, no wallet app, no real money)
+1  agent   GET http://weather.tsg.example/api/today
+   server  402 Payment Required + PAYMENT-REQUIRED header (464 characters of base64)
+2  decoded x402Version 2 | scheme exact | network lab:local | asset LABUSD
+           amount 10000 (= 0.01, 6 decimals) | payTo acct:weather-co | maxTimeoutSeconds 60
+3  spend guard  ALLOW [within_mandate]  (the agent asks; only the guard can make the wallet sign)
+4  wallet signs from acct:buyer-alice to acct:weather-co value 10000
+           validAfter 1799999995  validBefore 1800000060  nonce 0x6fae710530167a72...
+5  agent   GET http://weather.tsg.example/api/today again, with a PAYMENT-SIGNATURE header (804 characters)
+6  facilitator /verify (read only): version ok, scheme ok, network ok, signature ok, amount ok
+           recipient ok, time window ok, nonce unused ok, funds ok  -> isValid true, nothing moved yet
+7  server  runs the request: {"item": "Today's weather data, one call", "data": "lab content"}
+8  facilitator /settle moves the value on the lab ledger and records the nonce as used:
+           acct:buyer-alice    50.00 -> 49.99 LABUSD
+           acct:weather-co      0.00 -> 0.01 LABUSD
+9  server  200 OK + PAYMENT-RESPONSE: success true, transaction labtx-0df9b33122cafa4a
+
+the same header sent again: facilitator says lab_nonce_already_used
+real x402: a 32-byte random nonce and a transfer on a blockchain. The lab: a nonce made from a counter,
+and a JSON file as the ledger.
+```
+
+Then read one real paid call line by line: `make flow` (Step 1 above) runs the same weather call through
+`agent.py`, with every x402 header decoded.
 
 ## Step 2: break the first draft
 

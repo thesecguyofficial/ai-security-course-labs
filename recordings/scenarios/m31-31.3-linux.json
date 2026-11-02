@@ -1,0 +1,57 @@
+{
+  "name": "m31-31.3-linux",
+  "lesson": "31.3",
+  "title": "Lab 31.3, part 2: ten attacks against the first draft, one injected buy step by step, the product page that carries it, the two setups side by side, the hardened guard, a purchase held for approval, the hunt over a recorded morning, and the challenge",
+  "cols": 132,
+  "rows": 36,
+  "before": [
+    "git clone -q https://github.com/thesecguyofficial/ai-security-course-labs.git",
+    "cd ai-security-course-labs/labs/m31 && make setup"
+  ],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Attack",
+      "type": "cd ai-security-course-labs/labs/m31 && make attack",
+      "pause_after": 6
+    },
+    {
+      "label": "Story",
+      "type": "make story",
+      "pause_after": 6
+    },
+    {
+      "label": "The page",
+      "type": "cat data/pages/shop.tsg.example_p_trail-shoes.md",
+      "pause_after": 5
+    },
+    {
+      "label": "Two setups",
+      "type": "diff -y --suppress-common-lines -W 130 setups/first-draft.json setups/hardened.json",
+      "pause_after": 6
+    },
+    {
+      "label": "Hardened",
+      "type": "make hardened",
+      "pause_after": 6
+    },
+    {
+      "label": "Approval",
+      "type": "make approve-demo",
+      "pause_after": 6
+    },
+    {
+      "label": "Hunt",
+      "type": "make hunt",
+      "pause_after": 6
+    },
+    {
+      "label": "Challenge",
+      "type": "make challenge",
+      "pause_after": 5
+    }
+  ]
+}
