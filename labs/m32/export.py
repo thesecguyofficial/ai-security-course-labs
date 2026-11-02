@@ -47,8 +47,15 @@ def main() -> int:
     shutil.copytree(HERE / "template" / ".github", dest / ".github")
     (dest / ".gitignore").write_text(GITIGNORE, encoding="utf-8")
     mk = dest / "Makefile"
-    mk.write_text("".join(ln for ln in mk.read_text(encoding="utf-8").splitlines(True)
-                          if "lab-test" not in ln and "run_tests.py" not in ln), encoding="utf-8")
+    # Drop the maintainers' lab-test target and run_tests.py lines, but KEEP .PHONY (minus lab-test):
+    # without it `make cloud` says "'cloud' is up to date", because the export has a folder called cloud.
+    kept = []
+    for ln in mk.read_text(encoding="utf-8").splitlines(True):
+        if ln.startswith(".PHONY:"):
+            kept.append(" ".join(w for w in ln.rstrip("\n").split(" ") if w != "lab-test") + "\n")
+        elif "lab-test" not in ln and "run_tests.py" not in ln:
+            kept.append(ln)
+    mk.write_text("".join(kept), encoding="utf-8")
     print(f"""Exported to {dest}
 
 Next (Mac/Linux; on Windows type the same in PowerShell):

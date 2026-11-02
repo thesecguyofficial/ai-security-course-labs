@@ -31,7 +31,7 @@ Everything else stays as `export.py` wrote it (self-check H1).
 
 ## How to submit
 
-1. Sign in to the course and open the capstone page: **learn.thesecguy.com/capstone**.
+1. Sign in to the course and open the capstone page: **learn.thesecguy.com/capstone/m32** (the M19 capstone uses /capstone).
 2. Paste:
    - your **public repo URL**, for example `https://github.com/your-name/my-ai-security-capstone`;
    - the **full 40-character commit SHA** you want graded. Get it with `git rev-parse HEAD`, or copy it from the
