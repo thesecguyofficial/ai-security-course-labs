@@ -1,0 +1,17 @@
+{
+  "name": "p6-F.3-watch-linux",
+  "lesson": "F.3",
+  "title": "Part 6, how it works: read CISA's Known Exploited Vulnerabilities catalogue (count, one AI tool's entry, the AI tools on it) and two OSV advisories, one exploited and one fixed but not on the list",
+  "cols": 132,
+  "rows": 34,
+  "fail_on": ["Traceback", "parse error", "Could not resolve host"],
+  "steps": [
+    {"label": "Catalogue", "type": "curl -sSL -o kev.json https://raw.githubusercontent.com/cisagov/kev-data/main/known_exploited_vulnerabilities.json && ls -lh kev.json", "pause_after": 3},
+    {"label": "Count", "type": "jq '{catalogVersion, dateReleased, count}' kev.json", "pause_after": 4},
+    {"label": "One entry", "type": "jq '.vulnerabilities[] | select(.cveID==\"CVE-2026-55255\") | {cveID, vulnerabilityName, dateAdded, dueDate}' kev.json", "pause_after": 5},
+    {"label": "AI tools", "type": "jq -r '.vulnerabilities[] | select(.product | test(\"^(Langflow|LiteLLM|MLflow|Ray|vLLM|Ollama)$\")) | \"\\(.dateAdded)  \\(.cveID)  \\(.product)\"' kev.json | sort", "pause_after": 5},
+    {"label": "Advisory", "type": "curl -sS https://api.osv.dev/v1/vulns/GHSA-qrpv-q767-xqq2 | jq '{id, aliases, published, fixed: [.affected[].ranges[]?.events[]? | .fixed // empty]}'", "pause_after": 5},
+    {"label": "Fixed only", "type": "curl -sS https://api.osv.dev/v1/vulns/GHSA-3c86-2m5g-59q7 | jq '{id, aliases, summary, fixed: [.affected[].ranges[]?.events[]? | .fixed // empty]}'", "pause_after": 5},
+    {"label": "Not on list", "type": "jq '[.vulnerabilities[] | select(.cveID==\"CVE-2026-90553\")] | length' kev.json", "pause_after": 4}
+  ]
+}
