@@ -57,7 +57,8 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `contoso.json`, `environments.json` | The lab's facts (people, object IDs, the standard) and its environment catalog (fictional versions and dates) |
 | `twin.py` | The **offline stand-in for Azure Machine Learning**: Azure RBAC, a subset of Azure Policy, the managed VNet's three modes, inbound flags, endpoint auth and routing, model loading. Read "How faithful is the twin?" below |
 | `model_files.py` | Builds the lab's model files and **scans** any model folder (the lab's or a real download): file formats, pickle imports read without loading, sha256 hashes |
-| `evaluate.py` | 15 attacks and 6 normal requests; prints which attacks worked AND which normal requests still work |
+| `explore.py` | Step 1b: shows each Azure Machine Learning piece on its own (`pieces`, `endpoint`, `patch`, `reach`, `call`, `identity`, `record`). Read-only: it reads the lab's files and asks `twin.py`; nothing is sent anywhere |
+| `evaluate.py` | 15 attacks and 6 normal requests; prints which attacks worked AND which normal requests still work (`--only <case>`: one case, every step) |
 | `checker.py` | 28 review rules, `AZ15-01` to `AZ15-28` |
 | `hunt.py`, `data/incident/` | Three hunting questions over Activity Log and endpoint traffic log rows, plus challenge 3 |
 | `gate.py` | The promotion gate you write in challenge 2 |
@@ -71,6 +72,284 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 - Optional, Step 9 only: the Azure CLI with the `ml` extension, your own sandbox subscription (lesson 0.7) with a
   budget alert, and quota for one small CPU VM for managed online endpoints.
+
+## Step 1b · Before you attack: look at each piece (about 10 minutes)
+
+New to Azure Machine Learning? Do this before Step 1 (lesson 15.5 calls it Step 1b). `explore.py` shows Contoso's
+setup one piece at a time. Real output below is from a fresh Ubuntu machine (recording run 41615653079).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `setups/` and
+`data/incident/` and prints what it finds. `reach`, `call` and `identity` ask `twin.py`, the lab's offline stand-in for
+Azure Machine Learning. No network, no Azure subscription.
+
+**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+
+```bash
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
+standard library, so `make setup` just checks your Python version and says "Nothing to install for this lab".
+
+**1. The pieces.** Every Azure Machine Learning piece Contoso uses, in one list:
+
+```bash
+python3 explore.py pieces first-draft
+```
+
+```text
+Contoso's Azure Machine Learning pieces, setup first-draft (fictional; all-zero subscription ID)
+
+  Workspace        tsg-ml: production: the summariser endpoint lives here
+                   managed network AllowInternetOutbound, public network access Enabled
+                   its own storage sttsgml, key vault kv-tsg-ml, container registry crtsgml
+  Workspace        tsg-ml-dev: data science: notebooks, experiments, training
+                   managed network AllowOnlyApprovedOutbound, public network access Enabled
+                   its own storage sttsgmldev, key vault kv-tsg-ml-dev, container registry crtsgmldev
+                   compute instances (notebooks): ci-alice, ci-bob
+  Registry         contoso-ml-registry: shares models across workspaces (storage stcontosomlreg)
+  Model            tsg-summariser:1     in workspace tsg-ml               registered by ds-alice
+  Model            bob-experiment:1     in workspace tsg-ml               registered by ds-bob
+  Model            tsg-summariser:3     in workspace tsg-ml-dev           registered by ds-bob
+  Model            tsg-summariser:4     in workspace tsg-ml-dev           registered by ds-alice
+  Online endpoint  tsg-summariser in tsg-ml: one address for the Helpdesk app
+  Deployment       blue   100% of traffic, 1 x Standard_NC4as_T4_v3
+  Deployment       debug    0% of traffic, 1 x Standard_DS3_v2
+  Endpoint identity  tsg-summariser-sai (system-assigned)
+  Where models come from   notebooks in tsg-ml-dev (an open model, fine-tuned); the model catalog is Microsoft's, not used here
+```
+
+A workspace is where the team works, with its own storage, key vault and container registry; the registry shares
+models across workspaces; the online endpoint is the address the Helpdesk calls, and the deployments behind it serve
+the model; the endpoint identity is what the containers act as.
+
+**2. An endpoint and its deployments.** The settings, field by field, and what happens at start:
+
+```bash
+python3 explore.py endpoint first-draft
+```
+
+```text
+One online endpoint and the deployments behind it (setup first-draft). The files are in setups/first-draft/.
+
+1. Endpoint              endpoint.json  (az ml online-endpoint show)
+   name                    tsg-summariser, in workspace tsg-ml
+   auth_mode               key
+   public_network_access   enabled
+   identity                system_assigned (tsg-summariser-sai)
+   traffic                 blue 100%, debug 0%
+
+2. Deployment blue         deployments.json  (az ml online-deployment show)
+   model                   azureml:tsg-summariser:1
+   environment             docker.io/vllm/vllm-openai:latest
+   instance_type x count   Standard_NC4as_T4_v3 x 1
+   environment_variables   HF_TOKEN, MAX_MODEL_LEN
+   data_collector          request and response, sampling 1.0
+
+3. Deployment debug        deployments.json  (az ml online-deployment show)
+   model                   azureml:bob-experiment:1
+   environment             registry azureml environment lab-minimal-py311-inference version 9
+   instance_type x count   Standard_DS3_v2 x 1
+   environment_variables   none
+   data_collector          off
+
+When a deployment starts (Microsoft's documented behaviour for managed online endpoints):
+   the model is mounted in the container, by default at /var/azureml-app/azureml-models/<name>/<version>
+   a container you bring must answer three routes: liveness, readiness and scoring
+   the endpoint routes each request by the traffic split, or to the deployment named in the
+   azureml-model-deployment header, whatever its share
+```
+
+**3. Who patches what.** Microsoft patches the host OS; the environment is yours to choose and update:
+
+```bash
+python3 explore.py patch first-draft
+```
+
+```text
+Who patches what for Contoso's endpoint (setup first-draft)
+
+  Microsoft  the host OS image of the endpoint's VMs ("at least once a month"), and new versions
+             of its curated environments
+  You        which environment version each deployment uses, anything you add to it or bring
+             yourself, the model files, the network settings, the identity, the keys
+
+  deployment blue
+     environment    docker.io/vllm/vllm-openai:latest
+     kind           your own image (from docker.io): its patching is yours
+     pinned by      tag (a tag can move to other bytes)
+  deployment debug
+     environment    registry azureml environment lab-minimal-py311-inference version 9
+     kind           curated (Microsoft builds it; you pick the version)
+     this version   released 2026-10-06   (a lab value)   114 days before lab today 2027-01-28
+     newest         version 14, released 2027-01-19   -> a newer version exists: update the deployment
+
+  A newer environment reaches a deployment only when you update the deployment to name it.
+```
+
+**4. What code can reach, and who can reach in.** Run it for both setups and compare:
+
+```bash
+python3 explore.py reach first-draft
+python3 explore.py reach hardened
+```
+
+```text
+What code can reach, and who can reach in (setup first-draft), from twin.py
+
+  Workspace tsg-ml   managed network AllowInternetOutbound
+     internet (collector.example.net)     yes  managed VNet in allow internet outbound mode
+     huggingface.co                       yes  managed VNet in allow internet outbound mode
+     its own storage sttsgml              yes  managed VNet in allow internet outbound mode
+     registry contoso-ml-registry         yes  managed VNet in allow internet outbound mode
+  Workspace tsg-ml-dev   managed network AllowOnlyApprovedOutbound
+     outbound rules  huggingface (FQDN), huggingface-sub (FQDN), pypi (FQDN), pythonhosted (FQDN)
+     internet (collector.example.net)     no   approved-outbound mode: no outbound rule allows it
+     huggingface.co                       yes  FQDN outbound rule 'huggingface' (huggingface.co), through the workspace's Azure Firewall
+     its own storage sttsgmldev           yes  required rule created automatically in approved-outbound mode
+     registry contoso-ml-registry         no   approved-outbound mode: no outbound rule allows it
+
+  Who can reach in (inbound)
+     workspace tsg-ml          from the internet        yes  public network access is enabled
+     workspace tsg-ml-dev      from the internet        yes  public network access is enabled
+     endpoint  tsg-summariser  from the internet        yes  public network access is enabled
+     endpoint  tsg-summariser  from Contoso's network   yes  public network access is enabled
+
+What code can reach, and who can reach in (setup hardened), from twin.py
+
+  Workspace tsg-ml   managed network AllowOnlyApprovedOutbound
+     outbound rules  contoso-ml-registry (PrivateEndpoint)
+     internet (collector.example.net)     no   approved-outbound mode: no outbound rule allows it
+     huggingface.co                       no   approved-outbound mode: no outbound rule allows it
+     its own storage sttsgml              yes  required rule created automatically in approved-outbound mode
+     registry contoso-ml-registry         yes  private endpoint outbound rule 'contoso-ml-registry'
+  Workspace tsg-ml-dev   managed network AllowOnlyApprovedOutbound
+     outbound rules  contoso-ml-registry (PrivateEndpoint), contoso-packages (PrivateEndpoint)
+     internet (collector.example.net)     no   approved-outbound mode: no outbound rule allows it
+     huggingface.co                       no   approved-outbound mode: no outbound rule allows it
+     its own storage sttsgmldev           yes  required rule created automatically in approved-outbound mode
+     registry contoso-ml-registry         yes  private endpoint outbound rule 'contoso-ml-registry'
+
+  Who can reach in (inbound)
+     workspace tsg-ml          from the internet        no   public network access is disabled
+     workspace tsg-ml-dev      from the internet        no   public network access is disabled
+     endpoint  tsg-summariser  from the internet        no   public network access is disabled
+     endpoint  tsg-summariser  from Contoso's network   yes  through the workspace private endpoint
+```
+
+**5. One call.** The scoring request the Helpdesk app sends, and the three checks. From inside the network, the first
+draft lets a key through with no role; from the internet, the hardened endpoint refuses at the network:
+
+```bash
+python3 explore.py call first-draft tsg-helpdesk-app
+python3 explore.py call hardened tsg-helpdesk-app --internet
+```
+
+```text
+One scoring request (setup first-draft). Nothing is sent: twin.py answers.
+
+  POST <scoring_uri>   (the endpoint's address: az ml online-endpoint show -n tsg-summariser --query scoring_uri)
+  body       the ticket text, as JSON
+  caller     tsg-helpdesk-app
+  from       inside Contoso's network (through the workspace private endpoint, if there is one)
+  credential an endpoint key in the Authorization header
+
+  Checks, in order:
+   1. network   (public_network_access enabled)   pass: public network access is enabled
+   2. auth      (auth_mode key)   a key needs no role: whoever holds it is in
+   3. routing   the traffic split picks the deployment
+
+  result     200 OK: key auth: no role needed, the key is enough; routed by traffic split to 'blue'
+
+One scoring request (setup hardened). Nothing is sent: twin.py answers.
+
+  POST <scoring_uri>   (the endpoint's address: az ml online-endpoint show -n tsg-summariser --query scoring_uri)
+  body       the ticket text, as JSON
+  caller     tsg-helpdesk-app
+  from       the internet
+  credential a Microsoft Entra token for tsg-helpdesk-app
+
+  Checks, in order:
+   1. network   (public_network_access disabled)   STOP: public network access is disabled
+   2. auth      (auth_mode aad_token)   pass: score/action granted by TSG endpoint scorer at endpoint:tsg-ml/tsg-summariser
+   3. routing   the traffic split picks the deployment
+
+  result     REFUSED: refused at the network: public network access is disabled
+```
+
+Add `--key` to send a key instead of a token, `--internet` to call from outside Contoso's network, and
+`--deployment debug` to add the `azureml-model-deployment` header: that is attack A9 in Step 2.
+
+**6. The endpoint's identity.** Its roles, and who else can read the keys, change the deployments or call it:
+
+```bash
+python3 explore.py identity first-draft
+```
+
+```text
+The endpoint's identity (setup first-draft)
+
+  identity         tsg-summariser-sai (system-assigned), object ID 88888888-8888-4888-8888-888888888888
+  who uses it      the deployment's containers, to pull the image and download the model files
+  given by Azure   AcrPull, Storage Blob Data Reader (the workspace's default datastore) and
+                   AzureML Metrics Writer: assigned automatically for a system-assigned identity
+  role assignments (rbac.json)
+     Storage Blob Data Reader     at sub
+     AcrPull                      at rg:rg-tsg-ml
+
+  Who else can act on the endpoint
+     listKeys (read the keys)          ds-alice, ds-bob, tsg-ci-deployer, tsg-reporting, tsg-platform-admin
+     deployments/write (change it)     ds-alice, ds-bob, tsg-ci-deployer, tsg-platform-admin
+     score/action (call it with Entra) ds-alice, ds-bob, tsg-ci-deployer, tsg-reporting, tsg-platform-admin
+```
+
+**7. One log row.** The lab's fake rows use the real column names of two Azure Monitor tables:
+
+```bash
+python3 explore.py record listKeys
+```
+
+```text
+One AzureActivity row from data/incident/azure-activity.json (fake values, real column names)
+
+  who      Caller 22222222-2222-4222-8222-222222222222   (ds-bob)
+  what     Microsoft.MachineLearningServices/workspaces/onlineEndpoints/listKeys/action
+  on       .../workspaces/tsg-ml/onlineEndpoints/tsg-summariser-legacy
+  kind     CategoryValue Administrative  (a control-plane operation, through Azure Resource Manager)
+  from     198.51.100.23
+  when     2027-01-28T09:12:44Z
+  status   Succeeded
+  result   the row says the keys were read, not what anyone did with them: key calls show up only in the traffic log
+```
+
+`python3 explore.py record traffic` shows one scoring row from the traffic log instead: `AuthType`, `IdentityData`
+(the caller's object ID) and sizes, no client IP and no prompt.
+
+**8. Read one result from the top.** `evaluate.py --only` shows one case with every step:
+
+```bash
+python3 evaluate.py first-draft --only N1
+```
+
+```text
+setup: first-draft   (twin.py, offline: nothing is sent to Azure)
+group: normal request (it must keep working)
+
+  N1   works    The Helpdesk gets a ticket summary
+         . the Helpdesk asks for a summary from Contoso's network: 200 OK (key auth: no role needed, the key is enough; routed by traffic split to 'blue')
+         . the deployment's instances start: ok (loaded the files from storage:sttsgml/azureml-blobstore/models/tsg-summariser/1/)
+```
+
+The setup and a reminder that nothing is sent to Azure; the group (a normal request, which must keep working); the
+case and its verdict; then the **why** lines: the Helpdesk's call gets `200 OK` with a key and no role, and the
+deployment's instances start because they load the files from the production workspace's storage. `--only` takes `A1`
+to `A15` and `N1` to `N6`.
 
 ## Step 1 · Review the first draft
 

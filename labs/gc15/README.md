@@ -55,7 +55,8 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `exampleco.json`, `roles.json`, `images.json` | Who is who, a subset of each role's permissions, the image catalog (lab values) |
 | `twin.py` | The **offline stand-in for Agent Platform and Google Cloud**: IAM allow policies with inheritance, VPC Service Controls, what the serving container and a Workbench instance can reach, model uploads and loads, `vertexai.allowedModels`, Workbench org constraints. Read "How faithful is the twin?" below |
 | `model_files.py` | Builds the lab's model files and **scans** any model folder (the lab's or a real download): file formats, pickle imports read without loading, sha256 hashes as Model Registry labels |
-| `evaluate.py` | 15 attacks and 6 normal requests; prints which attacks worked AND which normal requests still work |
+| `explore.py` | Step 1b: shows each piece of the self-deployed model on its own (`pieces`, `endpoint`, `patch`, `reach`, `call`, `identity`, `record`). Read-only: it reads the lab's files and asks `twin.py`; nothing is sent anywhere |
+| `evaluate.py` | 15 attacks and 6 normal requests; prints which attacks worked AND which normal requests still work (`--only <case>`: one case, every step) |
 | `checker.py` | 30 review rules, `GC15-01` to `GC15-30` |
 | `hunt.py`, `data/incident/` | Three hunting questions over Cloud Audit Logs entries, plus challenge 3 |
 | `gate.py` | The promotion gate you write in challenge 2 |
@@ -68,6 +69,261 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 - Optional, Step 9 only: the `gcloud` CLI, your own sandbox project with billing and a budget alert (GC10), and about
   2 GB free disk for the model download.
+
+## Step 1b · Before you attack: look at each piece (about 10 minutes)
+
+New to Agent Platform? Do this before Step 1 (lesson 15.5 calls it Step 1b). `explore.py` shows ExampleCo's setup one
+piece at a time. Real output below is from a fresh Ubuntu machine (recording run 41615058193).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `setups/` and
+`data/incident/` and prints what it finds. `reach`, `call` and `identity` ask `twin.py`, the lab's offline stand-in for
+Agent Platform and Google Cloud IAM. No network, no Google Cloud account.
+
+**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+
+```bash
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
+standard library, so `make setup` just checks your Python version and says "Nothing to install for this lab".
+
+**1. The pieces.** Every piece ExampleCo uses, in one list:
+
+```bash
+python3 explore.py pieces first-draft
+```
+
+```text
+ExampleCo's pieces, setup first-draft (fictional; example.com placeholders)
+
+  Projects         example-summariser-prod (production), example-summariser-dev (data science)
+  Model Registry   model tsg-summariser in example-summariser-prod: one entry per version
+                   version 1  aliases: default, prod  uploaded by ds-bob
+                   version 2  aliases: no alias       uploaded by ds-bob
+                   version 3  aliases: no alias       uploaded by ds-alice
+  Endpoint         1500 (tsg-summariser): shared public endpoint
+  DeployedModel    tsg-summariser@prod on g2-standard-8 + NVIDIA_L4, 1 to 2 replicas
+                   runs as compute-default
+  Workbench        tsg-ds-shared in example-summariser-prod: a notebook VM for ds-alice, ds-bob
+  Buckets          example-tsg-models, example-tsg-ds-handover, example-tsg-analytics
+  Perimeter        none
+  Org policies     iam.automaticIamGrantsForDefaultServiceAccounts
+  Where models come from   ExampleCo fine-tunes an open model; Model Garden is Google's catalog
+```
+
+The Model Registry keeps every version, and the `prod` alias says which one ships; the endpoint is the address, and
+the deployed model runs on machines behind it as a service account; the Workbench instance is the data scientists'
+notebook VM; the perimeter (none here) would fence the projects in.
+
+**2. Three objects.** The Model, the Endpoint and the DeployedModel, field by field, and what happens at start:
+
+```bash
+python3 explore.py endpoint first-draft
+```
+
+```text
+A self-deployed model is three objects (setup first-draft). The bodies are in setups/first-draft/.
+
+1. Model (Model Registry)   registry.json, version 1 (the one the alias in step 3 points at)
+   containerSpec.imageUri   tsg-llm-server:2026-07
+   artifactUri              gs://example-tsg-models/tsg-summariser/v1/
+   containerSpec.env        HF_TOKEN, MAX_MODEL_LEN
+   port, routes             8080, predict /predict, health /health
+
+2. Endpoint                 endpoint.json  (endpoints.create)
+   type                     shared public endpoint
+   encryptionSpec           none (Google-managed key)
+   request-response logging on, sampling 1.0 to bq://example-summariser-prod.analytics_shared.summariser_requests
+
+3. DeployedModel            endpoint.json  (endpoints.deployModel)
+   model                    tsg-summariser@prod
+   serviceAccount           100000000015-compute@developer.gserviceaccount.com
+   machine                  g2-standard-8 + 1 x NVIDIA_L4
+   enableAccessLogging      false
+
+When it starts (Google's documented contract for serving containers):
+   the container reads its files from AIP_STORAGE_URI: a copy made at upload, not the bucket itself
+   Agent Platform sends prediction requests to the first port in containerSpec.ports (8080 if not set)
+   the container runs as DeployedModel.serviceAccount; if it's not set, as an account with no access to the project
+```
+
+**3. Who patches what.** Google runs the serving infrastructure; this image is ExampleCo's own:
+
+```bash
+python3 explore.py patch first-draft
+```
+
+```text
+Who patches what for ExampleCo's deployed model (setup first-draft)
+
+  Google   the serving infrastructure; new versions of its prebuilt images (you still redeploy to use them)
+  You      the image you build, the model files, the network path, the service account, keys, logs
+
+  image          tsg-llm-server:2026-07
+  kind           ExampleCo's own image in Artifact Registry: patching it is ExampleCo's job
+  pinned by      tag (a tag can move to other bytes)
+  built          2026-07-02   (a lab value)   210 days before lab today 2027-01-28
+  company rule   rebuild and redeploy every 90 days -> OVERDUE
+  last pulled    2026-07-02   -> scans are STALE (not pulled in 30 days)
+  open critical  2   (a lab value)
+
+  A rebuilt image reaches the endpoint only when you upload a model version that names it and deploy it.
+```
+
+**4. What code can reach.** Run it for both setups and compare:
+
+```bash
+python3 explore.py reach first-draft
+python3 explore.py reach hardened
+```
+
+```text
+What code can reach (setup first-draft), from twin.py
+
+  Serving container   perimeter none
+     internet         yes
+     runs as          compute-default
+     why              no enforced perimeter: the managed environment keeps its default internet access
+     endpoint order   fine (created after the project joined the perimeter, or no perimeter)
+
+  Workbench tsg-ds-shared   (example-summariser-prod, access mode service-account)
+     internet         yes
+     runs as          compute-default
+     why              the instance has a public IP address
+
+  Network             Cloud NAT yes, PSC forwarding rule none
+
+What code can reach (setup hardened), from twin.py
+
+  Serving container   perimeter tsg_ai (enforced)
+     internet         no
+     runs as          tsg-summariser-runtime
+     why              inside an enforced VPC Service Controls perimeter: the managed environment's default internet access is blocked
+     endpoint order   fine (created after the project joined the perimeter, or no perimeter)
+
+  Workbench alice-wb   (example-summariser-dev, access mode single-user)
+     internet         no
+     runs as          tsg-ds-runtime
+     why              no public IP and no Cloud NAT: no route to the internet
+
+  Workbench bob-wb   (example-summariser-dev, access mode single-user)
+     internet         no
+     runs as          tsg-ds-runtime
+     why              no public IP and no Cloud NAT: no route to the internet
+
+  Network             Cloud NAT no, PSC forwarding rule 10.10.0.20
+  Perimeter protects  aiplatform.googleapis.com, storage.googleapis.com, notebooks.googleapis.com
+```
+
+**5. One call.** A predict call from a laptop outside ExampleCo, against both setups:
+
+```bash
+python3 explore.py call first-draft tsg-helpdesk-app --internet
+python3 explore.py call hardened tsg-helpdesk-app --internet
+```
+
+```text
+One predict call (setup first-draft). Nothing is sent: twin.py answers.
+
+  POST https://us-central1-aiplatform.googleapis.com/v1/projects/example-summariser-prod/locations/us-central1/endpoints/1500:predict
+  body     the ticket text in an instances list; an OAuth access token for the caller
+  caller   serviceAccount:tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com
+  from     the internet (a laptop outside ExampleCo)
+
+  Checks, in order:
+   1. VPC Service Controls   no perimeter on this path
+   2. IAM (endpoint, then project)   ALLOW: aiplatform.user on the project example-summariser-prod
+
+  note     tsg-helpdesk-app has a user-managed key file: a user-managed JSON key, created 2026-11-21 (lab value). It works from any laptop that holds it.
+
+  result   ALLOW: aiplatform.user on the project example-summariser-prod
+
+One predict call (setup hardened). Nothing is sent: twin.py answers.
+
+  POST to 10.10.0.20, the PSC forwarding rule in ExampleCo's VPC (a private IP address)
+  body     the ticket text in an instances list; an OAuth access token for the caller
+  caller   serviceAccount:tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com
+  from     the internet (a laptop outside ExampleCo)
+
+  A private IP address isn't reachable from the internet: the request never arrives.
+  (Through the public API name instead, the checks below apply.)
+
+  Checks, in order:
+   1. VPC Service Controls   STOP: VPC Service Controls: request from outside the perimeter tsg_ai
+
+  result   DENY: VPC Service Controls: request from outside the perimeter tsg_ai
+```
+
+Leave out `--internet` to call from inside ExampleCo's network, and try `ds-bob` instead of `tsg-helpdesk-app`.
+
+**6. The deployed model's identity.** The service account the container runs as, and who can attach it, deploy and
+move the `prod` alias:
+
+```bash
+python3 explore.py identity first-draft
+```
+
+```text
+The deployed model's identity (setup first-draft)
+
+  serviceAccount   100000000015-compute@developer.gserviceaccount.com
+  who uses it      code in the serving container: the server, and anything a model file runs
+  its roles        on example-summariser-prod: editor
+  user-managed keys  none
+
+  Who else matters
+     iam.serviceAccounts.actAs (attach it to a deployment)   ds-alice, ds-bob, tsg-platform-admin, tsg-ci-deployer
+     aiplatform.endpoints.deploy (deploy a model)            ds-alice, ds-bob, tsg-model-approver, tsg-platform-admin, tsg-ci-deployer, tsg-helpdesk-app
+     aiplatform.models.update (move the prod alias)          ds-alice, ds-bob, tsg-model-approver, tsg-platform-admin, tsg-ci-deployer, tsg-helpdesk-app
+```
+
+**7. One audit log entry.** The lab's fake entries use Google's field names:
+
+```bash
+python3 explore.py record Predict
+```
+
+```text
+One Cloud Audit Logs entry from data/incident/audit-logs.json (fake values, Google's field names)
+
+  log      data_access   (a Data Access log: written only if you turn them on)
+  who      tsg-helpdesk-app@example-summariser-prod.iam.gserviceaccount.com
+  what     aiplatform.googleapis.com  google.cloud.aiplatform.v1.PredictionService.Predict
+  on       projects/example-summariser-prod/locations/us-central1/endpoints/1500
+  from     10.10.1.14  network tsg-vpc
+  agent    helpdesk-app/3.4
+  when     2027-01-28T07:58:02Z
+  request  {"endpoint": "projects/example-summariser-prod/locations/us-central1/endpoints/1500"}   (no instances: audit logs don't hold the prompt, lesson 15.4)
+```
+
+Try `record DeployModel`, `record MergeVersionAliases` or `record CreateServiceAccountKey`: those are Admin Activity
+entries, which are always written.
+
+**8. Read one result from the top.** `evaluate.py --only` shows one case with every step:
+
+```bash
+python3 evaluate.py first-draft --only N1
+```
+
+```text
+setup: first-draft   (twin.py, offline: nothing is sent to Google Cloud)
+group: normal request (it must keep working)
+
+  N1   works    The Helpdesk gets a ticket summary
+         . the Helpdesk asks for a ticket summary (public path, from ExampleCo's VPC): allowed (aiplatform.user on the project example-summariser-prod); endpoint: serves version 1 from the copy made at upload
+```
+
+The setup and a reminder that nothing is sent to Google Cloud; the group (a normal request, which must keep working);
+the case and its verdict; then the **why** line: the Helpdesk's call takes the public path, `aiplatform.user` on the
+project allows it, and the endpoint serves version 1 from the copy made at upload. `--only` takes `A1` to `A15` and
+`N1` to `N6`.
 
 ## Step 1 · Review the first draft
 
