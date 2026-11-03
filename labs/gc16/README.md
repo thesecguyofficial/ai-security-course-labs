@@ -88,7 +88,7 @@ What the telemetry files are, and how close they are to the real thing:
 
 New to detection and response? Do this before Step 1 (lesson 16.6 calls it Step 1b; lesson 16.0 explains each idea). `explore.py` shows,
 one idea at a time, the records, the rules and the response on ExampleCo's day, the Google Cloud version of the AWS stream's Module 16.
-Real output below is from a fresh Ubuntu machine (recording run 41614958962). Run it from `labs/gc16`.
+Real output below is from a fresh Ubuntu machine (recording run 41618032029). Run it from `labs/gc16`.
 
 **What it really runs.** Nothing that changes anything: `explore.py` builds the simulated day in memory with
 `simulate.py`, runs the lab's own functions on it (`detect.py`, `inventory.py`, `posture.py`, `report.py`) and prints.
@@ -234,7 +234,7 @@ One entry, field by field:
   timestamp        2026-10-20T09:12:04Z                     WHEN (UTC)
   queryName        api.openai.com.                          the NAME the machine looked up
   queryType        A                                        A = give me its IPv4 address
-  responseCode     NOERROR                                  the answer: NOERROR = the name exists
+  responseCode     NOERROR                                  the answer, NOERROR (lab value: real logs hold the number, 0)
   sourceIP         10.20.4.7                                the machine's address
   vmInstanceName   build-runner-2                           WHICH VM: only for queries a Compute Engine VM made
 

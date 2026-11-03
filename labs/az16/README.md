@@ -85,7 +85,7 @@ where real rows carry object IDs.
 
 New to detection and response? Do this before Step 1 (lesson 16.6 calls it Step 1b; lesson 16.0 explains each idea). `explore.py` shows,
 one idea at a time, the records, the rules and the response on Contoso's day, the Azure version of the AWS stream's Module 16.
-Real output below is from a fresh Ubuntu machine (recording run 41614948165). Run it from `labs/az16`.
+Real output below is from a fresh Ubuntu machine (recording run 41618020516). Run it from `labs/az16`.
 
 **What it really runs.** Nothing that changes anything: `explore.py` builds the simulated day in memory with
 `simulate.py`, runs the lab's own functions on it (`detect.py`, `inventory.py`, `posture.py`, `report.py`) and prints.
@@ -234,7 +234,7 @@ One row, field by field:
   TimeGenerated             2026-10-20T11:02:13Z                 WHEN (UTC)
   QueryName                 api.openai.com.                      the NAME the machine looked up
   QueryType                 A                                    A = give me its IPv4 address
-  ResponseCode              NOERROR                              the answer: NOERROR = the name exists (lab value)
+  ResponseCode              0                                    the answer: 0 = NOERROR, the name resolved
   SourceIpAddress           10.20.6.8                            the machine's address
   VirtualNetworkId          ...virtualNetworks/vnet-research     WHICH network: no VM name
   ResolverPolicyRuleAction  Allow                                the policy let it through (it can also block)
