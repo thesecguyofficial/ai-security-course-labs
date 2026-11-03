@@ -1,0 +1,28 @@
+{
+  "name": "gc10-10.3-understand-linux",
+  "lesson": "10.0, 10.3",
+  "title": "Lab GC10, part 1: get the lab, look at ExampleCo's Google Cloud setup, and see how Google Cloud proves, decides and records one request (explore.py: org, auth, policy, decide, call, event) before attacking it",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/gc10 && ls", "pause_after": 4},
+    {"label": "The data", "type": "ls examplecorp examplecorp/iam", "pause_after": 4},
+    {"label": "Org", "type": "python3 explore.py org", "pause_after": 6},
+    {"label": "Setup plan", "type": "make -n setup", "pause_after": 3},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Auth", "type": "python3 explore.py auth", "pause_after": 7},
+    {"label": "Policy", "type": "python3 explore.py policy examplecorp/iam/folders-111111111111.json", "pause_after": 7},
+    {"label": "Allowed", "type": "python3 explore.py decide alice aiplatform.endpoints.predict example-ds-sandbox", "pause_after": 6},
+    {"label": "Inherited", "type": "python3 explore.py decide legacy-etl aiplatform.endpoints.deploy example-chatbot-prod", "pause_after": 6},
+    {"label": "No role", "type": "python3 explore.py decide sam aiplatform.endpoints.predict example-ds-sandbox", "pause_after": 6},
+    {"label": "Org policy deny", "type": "python3 explore.py decide chatbot-runtime aiplatform.endpoints.predict example-chatbot-prod --model gemini-3.5-flash --fixes", "pause_after": 6},
+    {"label": "Call", "type": "python3 explore.py call chatbot-runtime gemini-3.1-flash-lite example-chatbot-prod", "pause_after": 6},
+    {"label": "Call with a key", "type": "python3 explore.py call chatbot-frontend gemini-3.5-flash example-chatbot-prod --from 203.0.113.50", "pause_after": 6},
+    {"label": "Data Access", "type": "python3 explore.py event GenerateContent", "pause_after": 6},
+    {"label": "Admin Activity", "type": "python3 explore.py event CreateServiceAccountKey", "pause_after": 6},
+    {"label": "One run", "type": "python3 attack.py --only L1", "pause_after": 6}
+  ]
+}

@@ -103,12 +103,14 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--mode", choices=MODES, default="vulnerable")
     ap.add_argument("-v", "--verbose", action="store_true", help="show every role and policy that was checked")
+    ap.add_argument("--only", metavar="ID", help="show one request (e.g. L1) or one group (A, B or L)")
     a = ap.parse_args()
     az = world(a.mode)
     print(f"--- AZ10 lab · {a.mode.upper()} · {'contoso/' if a.mode == 'vulnerable' else 'fixes/'} ---")
     print("    (azure_model.py: a teaching model of Azure RBAC, keys and Azure Policy; nothing is sent to Azure)\n")
     tally = {"attacker": [0, 0], "legit": [0, 0]}
-    for s in STEPS:
+    steps = [s for s in STEPS if not a.only or s.sid == a.only.upper() or s.sid[0] == a.only.upper()]
+    for s in steps:
         d = run_step(s, a.mode, az)
         tally[s.who][0] += d.allowed
         tally[s.who][1] += 1
@@ -120,7 +122,8 @@ def main() -> None:
         for r in reasons:
             print(f"                     {r}")
     at, lg = tally["attacker"], tally["legit"]
-    print(f"\nAttacker requests allowed: {at[0]} of {at[1]}   ·   legitimate requests allowed: {lg[0]} of {lg[1]}")
+    shown = f"   (showing {a.only} only)" if a.only else ""
+    print(f"\nAttacker requests allowed: {at[0]} of {at[1]}   ·   legitimate requests allowed: {lg[0]} of {lg[1]}{shown}")
 
 
 if __name__ == "__main__":

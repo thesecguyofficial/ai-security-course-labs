@@ -128,6 +128,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--mode", choices=["vulnerable", "safe"], default="vulnerable")
     ap.add_argument("--verbose", action="store_true")
+    ap.add_argument("--only", metavar="ID", help="show one request (e.g. L1) or one group (A, B, C or L)")
     ap.add_argument("--preview-org-policy", metavar="FILE",
                     help="apply one org policy file on top of --mode and show what it would deny (local dry run)")
     args = ap.parse_args(argv)
@@ -148,6 +149,8 @@ def main(argv=None):
     counts = {True: [0, 0], False: [0, 0]}
     current = None
     for s in STEPS:
+        if args.only and args.only.upper() not in (s.sid, s.group):
+            continue
         if s.group != current:
             current = s.group
             print(f"\n{GROUPS[s.group]}")
@@ -165,7 +168,8 @@ def main(argv=None):
         else:
             print(f"         why: {d.why}")
     a, l = counts[True], counts[False]
-    print(f"\n{a[0]} of {a[1]} attacker requests allowed; {l[0]} of {l[1]} legitimate requests allowed.")
+    shown = f"  (showing {args.only} only)" if args.only else ""
+    print(f"\n{a[0]} of {a[1]} attacker requests allowed; {l[0]} of {l[1]} legitimate requests allowed.{shown}")
     if preview_name:
         print("In Google's dry run (dryRunSpec), these denials are only audit-logged as violations; nothing is blocked.")
 

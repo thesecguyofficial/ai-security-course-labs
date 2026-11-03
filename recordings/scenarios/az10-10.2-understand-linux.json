@@ -1,0 +1,28 @@
+{
+  "name": "az10-10.2-understand-linux",
+  "lesson": "10.0, 10.2",
+  "title": "Lab AZ10, part 1: get the lab, look at Contoso's Azure setup, and see how Azure proves, decides and records one request (explore.py: tenant, token, role, decide, call, event) before running the checks and attacks",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": ["Traceback"],
+  "steps": [
+    {"label": "Download", "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git", "pause_after": 3},
+    {"label": "The lab", "type": "cd ai-security-course-labs/labs/az10 && ls", "pause_after": 4},
+    {"label": "The data", "type": "ls contoso contoso/roles logs", "pause_after": 4},
+    {"label": "Tenant", "type": "python3 explore.py tenant", "pause_after": 6},
+    {"label": "Setup plan", "type": "make -n setup", "pause_after": 3},
+    {"label": "Setup", "type": "make setup", "pause_after": 3},
+    {"label": "Token", "type": "python3 explore.py token", "pause_after": 7},
+    {"label": "Role", "type": "python3 explore.py role contoso/roles/foundry-user.json", "pause_after": 7},
+    {"label": "Allowed", "type": "python3 explore.py decide data-science inference contoso-sandbox-ai --deployment sandbox-gpt52", "pause_after": 6},
+    {"label": "Owner can't call", "type": "python3 explore.py decide platform-admin inference contoso-helpdesk-ai --deployment helpdesk-gpt5", "pause_after": 6},
+    {"label": "Owner reads keys", "type": "python3 explore.py decide platform-admin listKeys contoso-helpdesk-ai", "pause_after": 6},
+    {"label": "Policy deny", "type": "python3 explore.py decide ci-deployer deploymentWrite contoso-sandbox-ai --deployment resale-xl --model fabrikam --fixes", "pause_after": 6},
+    {"label": "Call with token", "type": "python3 explore.py call helpdesk-app helpdesk-gpt5", "pause_after": 6},
+    {"label": "Call with a key", "type": "python3 explore.py call helpdesk-app helpdesk-gpt5 --key", "pause_after": 6},
+    {"label": "Activity Log", "type": "python3 explore.py event listKeys --from 203.0.113.77", "pause_after": 6},
+    {"label": "Request log", "type": "python3 explore.py event ChatCompletions --from 203.0.113.62", "pause_after": 6},
+    {"label": "One run", "type": "python3 attack.py --only L1", "pause_after": 6}
+  ]
+}
