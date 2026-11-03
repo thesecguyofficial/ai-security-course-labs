@@ -235,7 +235,7 @@ def cmd_agent(a) -> None:
         if allowed:
             print(f"      allowed_tools    {', '.join(allowed)}")
         else:
-            print(f"      allowed_tools    not set: every tool on the server ({', '.join(server)})")
+            print(f"      allowed_tools    not set or []: every tool on the server ({', '.join(server)})")
         ra = t.get("require_approval", "always (the default)")
         print(f"      require_approval {json.dumps(ra) if isinstance(ra, dict) else ra}")
         if label == "knowledge-base":

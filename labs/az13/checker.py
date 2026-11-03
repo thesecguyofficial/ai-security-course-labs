@@ -77,7 +77,7 @@ def check(folder: str) -> tuple[list, list]:
                 "user's token, or your own function that queries with the user's token.")
         if t.get("server_label") == "knowledge-base" and restricted and "x-ms-query-source-authorization" not in (t.get("headers") or {}):
             add("AZ13-12", "HIGH", wa, "knowledge base MCP tool doesn't forward x-ms-query-source-authorization. Microsoft: "
-                "\"Without the token, permission-enabled sources return results unfiltered.\"")
+                "for indexed sources the engine \"returns unfiltered results if it's omitted\" (retrieve page).")
         if t["type"] == "mcp" and not t.get("allowed_tools"):
             add("AZ13-13", "MEDIUM", wa, f"MCP tool '{t['server_label']}' has no allowed_tools: if you omit it or set it to [], "
                 "\"the agent can access all tools exposed by the MCP server\", including any added later.")

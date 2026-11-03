@@ -128,9 +128,14 @@ class Lab(unittest.TestCase):
         self.assertFalse(n({"require_approval": {"always": ["x"]}}, "y"))
 
     def test_14_allowed_tools(self):
-        """14 no allowed_tools = every tool on the server; a list = only those"""
+        """14 no allowed_tools (or []) = every tool on the server; a list = only those"""
         self.assertIn("delete_ticket", twin.offered_tools(twin.setup("contoso")))
         self.assertNotIn("delete_ticket", twin.offered_tools(twin.setup("fixes")))
+        cfg = twin.setup("fixes")
+        for t in twin.agent_def(cfg)["definition"]["tools"]:
+            if t.get("server_label") == "helpdesk-actions":
+                t["allowed_tools"] = []          # Microsoft: an empty list allows all tools, not zero
+        self.assertIn("delete_ticket", twin.offered_tools(cfg))
 
     def test_15_guardrail_coverage(self):
         """15 tool-response guardrail runs for azure_ai_search, not for MCP tools"""
