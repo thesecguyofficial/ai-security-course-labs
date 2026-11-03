@@ -31,6 +31,6 @@
     {"label": "Logging", "type": "python3 explore.py logging", "pause_after": 6},
     {"label": "Logging hardened", "type": "python3 explore.py logging hardened", "pause_after": 6},
     {"label": "Record", "type": "python3 explore.py record", "pause_after": 7},
-    {"label": "One run", "type": "python3 attack.py --twin today | head -8", "pause_after": 6}
+    {"label": "One run", "type": "python3 attack.py --twin today | sed -n 1,8p", "pause_after": 6}
   ]
 }
