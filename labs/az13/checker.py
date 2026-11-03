@@ -78,12 +78,12 @@ def check(folder: str) -> tuple[list, list]:
         if t.get("server_label") == "knowledge-base" and restricted and "x-ms-query-source-authorization" not in (t.get("headers") or {}):
             add("AZ13-12", "HIGH", wa, "knowledge base MCP tool doesn't forward x-ms-query-source-authorization. Microsoft: "
                 "\"Without the token, permission-enabled sources return results unfiltered.\"")
-        if t["type"] == "mcp" and t.get("allowed_tools") is None:
-            add("AZ13-13", "MEDIUM", wa, f"MCP tool '{t['server_label']}' has no allowed_tools: \"the default value includes all "
-                "of the tools in the MCP server\", including any added later.")
+        if t["type"] == "mcp" and not t.get("allowed_tools"):
+            add("AZ13-13", "MEDIUM", wa, f"MCP tool '{t['server_label']}' has no allowed_tools: if you omit it or set it to [], "
+                "\"the agent can access all tools exposed by the MCP server\", including any added later.")
         if t["type"] == "mcp" and t["server_label"] in ag["mcp_servers"]:
             writes = [n for n, k in ag["mcp_servers"][t["server_label"]]["tools"].items() if k == WRITE
-                      and (t.get("allowed_tools") is None or n in t["allowed_tools"])]
+                      and (not t.get("allowed_tools") or n in t["allowed_tools"])]
             unguarded = [n for n in writes if not twin.needs_approval(t, n)]
             if unguarded:
                 add("AZ13-14", "HIGH", wa, f"write tools {unguarded} run without approval (require_approval resolves to never).")

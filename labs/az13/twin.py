@@ -8,7 +8,7 @@ It is not Azure. Each rule below comes from a Microsoft Learn page (README "Abou
               a knowledge base retrieve without the token "returns unfiltered results" for indexed sources
               Purview labels: unlabelled chunk rows aren't filtered ("Without this projection, chunk-level
               references aren't filtered"); permission changes appear only after the next sync
-  Agent       allowed_tools: if omitted, "the default value includes all of the tools in the MCP server"
+  Agent       allowed_tools: omitted or [] = "the agent can access all tools exposed by the MCP server"
               require_approval: always | never | {"never": [...]} | {"always": [...]}; default always
               tool-response guardrail checks run only for tools with moderation support (MCP isn't listed)
   Identity    a shared credential (API key, custom keys, project identity) acts for every user;
@@ -302,7 +302,7 @@ def offered_tools(cfg: dict) -> dict:
             names = {"knowledge_base_retrieve": "read"} if label == "knowledge-base" else servers[label]["tools"]
             allowed = t.get("allowed_tools")
             for n, kind in names.items():
-                if allowed is None or n in allowed:
+                if not allowed or n in allowed:          # Microsoft: an empty list allows all tools, not zero
                     out[n] = (t, kind)
     return out
 

