@@ -110,7 +110,7 @@ cd labs/gc14
 
 New to Agent Runtime? Do this before Step 1 (lesson 14.8 calls it "Before you start"; lesson 14.0 explains each idea).
 `explore.py` takes the Helpdesk team's deployment apart one Agent Platform piece at a time, in both deployments. Real
-output below is from a fresh Ubuntu machine (recording run 41614933198).
+output below is from a fresh Ubuntu machine (recording run 41618438164).
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `twin/` and `data/` and
 asks `twin.py` and `cel.py` what each control would decide. No network, no Google Cloud account, no model.
@@ -151,8 +151,8 @@ python3 explore.py map today
   Audit logs      the record of who did what             aiplatform: ADMIN_READ (Admin Activity is always on)
 ```
 
-Run `python3 explore.py map hardened` too: token protection on, 2 bindings to every agent (neither of them a data
-role), the gateway in `ENFORCE` with a deny rule first, Model Armor `failOpen false`, two memory topics with a TTL, no
+Run `python3 explore.py map hardened` too: token protection on, 2 bindings to every agent (`roles/browser` and
+`roles/serviceusage.serviceUsageConsumer`, the roles Google recommends; neither is a data role), the gateway in `ENFORCE` with a deny rule first, Model Armor `failOpen false`, two memory topics with a TTL, no
 sandbox, Data Access logs on.
 
 **2. Who the agent is (lesson 14.3).** The agent's principal, and which IAM bindings reach it:
@@ -170,6 +170,7 @@ python3 explore.py identity today
 
   IAM bindings, and whether each one reaches THIS agent:
     roles/aiplatform.expressUser             principalSet: EVERY agent in project 100000000014          applies
+      ^ Google: "Don't grant project-level roles such as" this one "to agent identities"
     roles/serviceusage.serviceUsageConsumer  principalSet: EVERY agent in project 100000000014          applies
     roles/bigquery.user                      principalSet: EVERY agent in project 100000000014          applies
     roles/bigquery.dataViewer                principalSet: EVERY agent in project 100000000014          applies

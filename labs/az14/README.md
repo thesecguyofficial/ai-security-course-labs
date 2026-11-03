@@ -109,7 +109,7 @@ SMTP "key" are placeholders. Nothing here contacts Azure. Test 18 checks all of 
 
 New to hosted agents? Do this before Step 1 (lesson 14.8 calls it "Before you start"; lesson 14.0 explains each idea).
 `explore.py` takes Contoso's deployment apart one Foundry piece at a time, in all three setups (`contoso`, `v1.1`,
-`fixes`). Real output below is from a fresh Ubuntu machine (recording run 41615771497).
+`fixes`). Real output below is from a fresh Ubuntu machine (recording run 41618426182).
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `contoso/`, `fixes/`,
 `data/` and `logs/`, and asks `twin.py` and `policy.py` what Foundry and your agent's code would do. No network, no
@@ -169,12 +169,13 @@ python3 explore.py token bob
   iss                https://login.microsoftonline.com/<tenant-id>/v2.0   issuer: who signed it (Contoso's tenant)
   aud                api://helpdesk-web                                   audience: which API the token is for; check it
   tid                <tenant-id>                                          tenant ID: which organisation the user signed in to
-  oid                lab-oid-bob-0001                                     object ID: the user's fixed ID in this tenant (use this one)
+  oid                lab-oid-bob-0001                                     object ID: fixed, one per user per tenant (this course uses it)
   preferred_username bob@contoso.com                                      display only: Microsoft says it can change
   scp                Helpdesk.Chat                                        what the front end may do for the user
   groups             helpdesk-staff, all-staff                            group memberships (names here; real tokens carry IDs)
 
-=> Your front end validates this token. The oid in it is what x-ms-user-identity should carry (step 4).
+=> Your front end validates this token. Microsoft leaves the x-ms-user-identity value to you (stable,
+   unique, hard to guess, 1-256 characters); the oid fits, so this lab sends it (step 4).
 ```
 
 **3. Who may call which agent (lesson 14.3).** The Foundry Agent Consumer assignments, and whether one covers the
@@ -326,6 +327,8 @@ python3 explore.py sandbox contoso bob
   for bob: memories go under scope helpdesk-shared
   alice, bob, dana: helpdesk-shared, helpdesk-shared, helpdesk-shared   <- one shared shelf
 ...
+  {{$userId}} = the x-memory-user-id header if one is sent, else the caller token's {tid}_{oid}
+  (the lab shortens it to the user's oid)
   for bob: memories go under scope lab-oid-bob-0001
   alice, bob, dana: lab-oid-alice-0003, lab-oid-bob-0001, lab-oid-dana-0002   <- one shelf each
 ...
@@ -351,8 +354,8 @@ python3 explore.py logs contoso
   does the named policy exist? NO
   a prompt attack at the input  reaches the agent
 
-=> Microsoft: such an agent "is created successfully and reports active, but no content filtering
-   is applied". The agent reports active; nothing is filtered.
+=> Microsoft: "On many subscriptions" such an agent "is created successfully and reports active,
+   but no content filtering is applied". The agent reports active; nothing is filtered.
 ...
   Application Insights tracing   on
   who may read the traces        group:all-staff
