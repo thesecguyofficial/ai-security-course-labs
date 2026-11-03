@@ -48,6 +48,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `checker.py` | 14 rules (`AZ11-01` to `AZ11-14`) over a Terraform plan, each from a Microsoft document |
 | `attack.py` | 11 requests (`A1`-`A7` attacker, `L1`-`L4` legitimate) and 3 review questions (`G1`, `F1`, `K1`) |
 | `foundry_twin.py` | A **teaching model** of one Foundry resource's front door (see below) |
+| `explore.py` | Read-only helper for Step 1b: `plan`, `model`, `role`, `route`, `network`, `dns`, `keys`, `logging`, `record`, each on its own |
 | `hunt.py` | Three hunting rules over the AI gateway logs; `reconstruct()` is challenge 3 |
 | `contoso/plan.json` | Contoso's version 1, in the shape `terraform show -json` prints (trimmed) |
 | `contoso/apps.json`, `principals.json`, `standards.json`, `policy-assignments.json` | Which app uses which identity, named principals, Contoso's own standard, today's policy assignments |
@@ -88,6 +89,275 @@ any of that changes.
 - Python **3.11 or newer** (tested on 3.13). Check with `python3 --version`. No packages, no internet.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python3` command shown under each step.
 - Step 8 only: the Azure CLI, Terraform 1.6+ or OpenTofu, and **your own** Azure subscription, never your employer's.
+
+## Step 1b · Before you check: look at each piece (about 10 minutes)
+
+New to Foundry or Terraform? Do this before Step 1 (lesson 11.6 calls it "Before you start"). `explore.py` shows each
+idea from lesson 11.0 ("How Microsoft Foundry works, one idea at a time") on its own. Real output below is from a
+fresh Ubuntu machine (recording run 41615056457).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads `contoso/plan.json`, `fixes/plan.json`,
+the JSON files next to them, `roles/` and `logs/`, and prints what it finds. No network, no Azure subscription, no
+Terraform.
+
+**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+
+```bash
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
+standard library, so there is nothing to install. `make -n up` is worth a look too: it prints `./cloud/cloud.sh up`,
+Step 8's real build in your own subscription. Don't run it for Steps 1 to 7.
+
+**1. The plan.** What version 1 would build. A plan changes nothing; only `apply` would. Both plans here are written
+by hand in the shape `terraform show -json` prints (test 17 checks the hardened one against `terraform/`):
+
+```bash
+python3 explore.py plan
+```
+
+```text
+Terraform plan, version-1: contoso/plan.json
+  shaped like `terraform show -json` (format 1.2), written by hand for the lab
+  19 resources it WOULD create   (a plan changes nothing; apply would)
+
+   1 x azurerm_cognitive_account                      helpdesk
+   3 x azurerm_cognitive_deployment                   chat, mini, nightly
+   1 x azurerm_key_vault                              kv
+   1 x azurerm_key_vault_key                          cmk
+   1 x azurerm_log_analytics_workspace                law
+   1 x azurerm_monitor_diagnostic_setting             kv
+   1 x azurerm_private_dns_zone                       openai
+   1 x azurerm_private_dns_zone_virtual_network_link  openai
+   1 x azurerm_private_endpoint                       helpdesk
+   1 x azurerm_resource_group                         ai
+   3 x azurerm_role_assignment                        apps, ci, data_science
+   2 x azurerm_subnet                                 app, pe
+   1 x azurerm_user_assigned_identity                 apps
+   1 x azurerm_virtual_network                        main
+
+19 resources. Nothing exists yet: this is the plan, read before anything is built.
+```
+
+**2. The models.** Your app calls a deployment by its name. Each deployment has a model, a version and a type:
+
+```bash
+python3 explore.py model
+```
+
+```text
+The model deployments in the plan, version-1 (resource contoso-helpdesk-ai, kind AIServices, region swedencentral):
+
+  deployment       model          version      type (sku.name)    capacity
+  helpdesk-gpt5    gpt-5          1            DataZoneStandard   50
+  helpdesk-mini    gpt-4.1-mini   2025-04-14   GlobalStandard     1
+  helpdesk-batch   gpt-5          1            GlobalBatch        50
+
+Your app calls the DEPLOYMENT by its name, not the model. One resource can hold several deployments.
+Approved models (Azure Policy from lab AZ10, effect Deny):
+  azureml://registries/azure-openai/models/gpt-5/
+  azureml://registries/azure-openai/models/gpt-4.1-mini/
+All of these are Models sold by Azure. A partner model (Microsoft's example: Cohere) would also need
+Azure Marketplace, with licence terms and a price set by the model's provider.
+```
+
+**3. Who may do what.** Every role assignment is a principal, a role and a scope. Version 1 puts all three at
+resource group scope, two of them Cognitive Services roles:
+
+```bash
+python3 explore.py role
+```
+
+```text
+Role assignments in the plan, version-1. Each one = WHO + WHICH ROLE + WHERE (the scope):
+
+  id-ai-apps                           Cognitive Services User          @ resource_group rg-helpdesk-prod
+  ci-deployer (ServicePrincipal)       Cognitive Services Contributor   @ resource_group rg-helpdesk-prod
+  data-science (Group)                 Foundry User                     @ resource_group rg-helpdesk-prod
+
+What those roles allow (role definitions copied from Microsoft, in roles/):
+  Cognitive Services Contributor   data actions: none
+                                   control actions: 18 entries, including listkeys
+  Cognitive Services User          data actions: Microsoft.CognitiveServices/*
+                                   control actions: 13 entries, including listkeys
+  Foundry User                     data actions: Microsoft.CognitiveServices/*
+                                   control actions: 14 entries, including listkeys
+
+Data actions = using what is inside (calling a model). Control actions = managing the resource.
+```
+
+`python3 explore.py role hardened` shows Foundry User on the one Foundry resource for each app identity, Key Vault
+roles on the vault only, and Contoso's custom deployer role (3 control actions, no data actions) for the CI pipeline.
+
+**4. Where the prompt runs.** The deployment type decides. Try the type Contoso's standard forbids:
+
+```bash
+python3 explore.py route GlobalStandard
+```
+
+```text
+A deployment of gpt-5 with type GlobalStandard, on contoso-helpdesk-ai in swedencentral
+
+  Where prompts may be processed: any Azure region
+  Where data at rest stays:       the resource's Azure geography (every type)
+
+Contoso's standard: deployment types DataZoneStandard, Standard only
+Verdict: BREAKS the standard
+
+Would Azure Policy stop the CI pipeline from deploying it?
+  version-1  DEPLOYED  POLICY every assignment: compliant
+  hardened   refused   POLICY deny-non-residency-deployments: deny
+```
+
+`python3 explore.py route` (the default, `DataZoneStandard`) fits the standard. Try `GlobalBatch` as well, and keep
+the answer for Step 7.
+
+**5. The network.** Version 1 built a private endpoint and left public access on, so the internet still gets in:
+
+```bash
+python3 explore.py network
+```
+
+```text
+The Helpdesk's network, version-1
+
+  VNet       vnet-helpdesk  10.20.0.0/16   (a private network in Azure)
+  subnet     snet-app   10.20.1.0/24
+  subnet     snet-pe    10.20.2.0/24
+  private endpoint  pe-contoso-helpdesk-ai in snet-pe: a network card with a private IP (account sub-resource, auto-approved)
+
+  public network access   Enabled
+  network ACL default     (none set: no list of allowed IPs)
+  endpoint policy         (Azure has none for this: the public setting, the ACL, DNS and RBAC decide)
+
+Who reaches the model's front door? (network only; Microsoft Entra ID and RBAC still decide after this)
+  THROUGH  from the internet, 203.0.113.50        via the PUBLIC endpoint (internet-reachable)
+  THROUGH  helpdesk-web in the VNet, 10.20.1.10   via the PRIVATE endpoint
+```
+
+`python3 explore.py network hardened`: `public network access   Disabled`, and the internet caller is `refused`.
+
+**6. The three names.** One private endpoint, three names, three private DNS zones needed. Version 1 has one:
+
+```bash
+python3 explore.py dns
+```
+
+```text
+The Foundry resource's three names, version-1. One private endpoint, three private DNS zones needed:
+
+  private DNS zones in the plan: 1 of 3
+      privatelink.openai.azure.com
+
+  contoso-helpdesk-ai.openai.azure.com
+      from inside the VNet -> 10.20.2.4
+          privatelink.openai.azure.com (linked to vnet-helpdesk) answers with the private endpoint
+  contoso-helpdesk-ai.cognitiveservices.azure.com
+      from inside the VNet -> 198.51.100.20
+          no private DNS zone privatelink.cognitiveservices.azure.com: public answer, even inside the VNet
+  contoso-helpdesk-ai.services.ai.azure.com
+      from inside the VNet -> 198.51.100.20
+          no private DNS zone privatelink.services.ai.azure.com: public answer, even inside the VNet
+
+From the internet (or a VPN with no DNS forwarding), every name gets the PUBLIC address. Whether that
+public address answers is the public network access setting (`python3 explore.py network`).
+```
+
+`python3 explore.py dns hardened` shows `3 of 3`, and every name resolves to `10.20.2.4`.
+
+**7. The keys.** The hardened build: your key, in a vault in the Foundry resource's region, with purge protection on:
+
+```bash
+python3 explore.py keys hardened
+```
+
+```text
+Encryption at rest, hardened
+
+  contoso-helpdesk-ai (swedencentral): customer-managed key (your key, in your Key Vault)
+
+  Key Vault kv-contoso-helpdesk-ai  region swedencentral
+    purge protection ON, soft-delete keeps a deleted key 7 days, access by Azure RBAC True
+    key cmk-foundry: RSA 2048 bits
+    Key Vault Crypto Officer   -> platform-admin (User)
+    Key Vault Crypto User      -> id-contoso-helpdesk-ai-cmk
+```
+
+`python3 explore.py keys` shows version 1: Microsoft-managed keys, and a key in a `westeurope` vault with purge
+protection off that nothing uses.
+
+**8. What gets recorded.** Version 1 logs the Key Vault and not the model:
+
+```bash
+python3 explore.py logging
+```
+
+```text
+What gets recorded, version-1
+
+Activity log (who changed what; control plane only, never the prompt):
+  always on, kept 90 days, free; a diagnostic setting can keep it longer
+
+Resource logs (what happened inside a resource): only where a diagnostic setting sends them
+  kv-contoso-helpdesk      AuditEvent                       -> law-helpdesk
+  contoso-helpdesk-ai      NONE: no Audit, RequestResponse or Trace logs exist anywhere
+  workspace law-helpdesk keeps logs 30 days
+
+AI gateway (API Management with LLM logging: the prompt and the answer):
+  none in this plan: Contoso piloted one on staging (logs/, Step 5)
+```
+
+**9. One call, three logs.** Fake rows from `logs/`, with Microsoft's column names. Only the gateway's LLM log holds
+the conversation, and the Foundry resource's own row names the gateway, not the person:
+
+```bash
+python3 explore.py record
+```
+
+```text
+FAKE lab logs with Microsoft's column names (logs/). One Helpdesk call, 19 Oct 2026, in three tables.
+
+1. ApiManagementGatewayLogs (the AI gateway's request log):
+   when   TimeGenerated      2026-10-19T09:10:00Z
+   who    CallerIpAddress    10.20.1.10   (helpdesk-web, inside the VNet)
+   what   Method, ApiId      POST foundry-chat -> 200
+   join   CorrelationId      c-1b2c00
+
+2. ApiManagementGatewayLlmLog (LLM logging on: the conversation):
+   said     RequestMessages   "How do I reset my VPN token?"
+   answered ResponseMessages  "Open the self-service portal, choose Security, then Reset VP..."
+   size     tokens            40 prompt, 35 completion
+   model    DeploymentName    helpdesk-chat (gpt-4.1-mini)
+
+3. AzureDiagnostics, Category RequestResponse (the Foundry resource's own resource log):
+   who    CallerIPAddress    198.51.100.30   <- the gateway, not the person
+   what   OperationName      ChatCompletions_Create -> 200, 900 ms
+   said   (nothing)          Microsoft's pages don't say this category holds the prompt text
+```
+
+**10. Read one result from the top.** Step 2's tool, first request only. One line per check, in the order the twin
+makes them (DNS, network, RBAC); `!!` marks a result that is wrong for its side:
+
+```bash
+python3 attack.py --mode vulnerable | sed -n 1,6p
+```
+
+```text
+--- AZ11 attack replay · Contoso version 1 (contoso/) ---
+
+  !! A1  ALLOWED 200    Stolen helpdesk token, from the internet: chat via <name>.openai.azure.com
+                     DNS contoso-helpdesk-ai.openai.azure.com -> 198.51.100.20: internet resolver: public DNS answer
+                     NETWORK via the PUBLIC endpoint (internet-reachable)
+                     RBAC id-ai-apps: Cognitive Services User @ resource group rg-helpdesk-prod
+```
 
 ## Step 1 · Check: review the plan before anything exists
 

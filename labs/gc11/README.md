@@ -49,6 +49,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `checker.py` | The checker: rules `GC11-01` to `GC11-15`, plus `GC11-16` for you to write. Reads a twin or your own `terraform show -json` |
 | `attack.py` | 9 requests (5 attacker, 4 legitimate) and 4 auditor questions, against any twin |
 | `twin.py` | A **teaching model** of the rules that decide each request (see below) |
+| `explore.py` | Read-only helper for Step 1b: `plan`, `model`, `role`, `route`, `network`, `endpoint`, `keys`, `logging`, `record`, each on its own |
 | `dryrun_report.py` | Groups VPC Service Controls dry-run entries by caller, method and reason |
 | `twin/today/` | The Helpdesk as it runs today: `plan.json` (shaped like `terraform show -json`) and `app.json` (settings Terraform can't express: location, endpoint, request-response logging, cache) |
 | `twin/hardened/` | What `terraform/` builds, plus its `app.json` |
@@ -90,6 +91,279 @@ if a real-looking IP, identity or key creeps in. Nothing in the offline part con
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 - Optional, Step 8 only: Terraform 1.5+, the `gcloud` CLI, and **your own** sandbox project with billing and a budget
   (lesson 0.7 and Module 10).
+
+## Step 1b · Before you check: look at each piece (about 10 minutes)
+
+New to Agent Platform or Terraform? Do this before Step 1 (lesson 11.6 calls it "Before you start"). `explore.py`
+shows each idea from lesson 11.0 ("How Agent Platform works, one idea at a time") on its own. Real output below is
+from a fresh Ubuntu machine (recording run 41615070128).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads the twins in `twin/` (each a `plan.json`
+and an `app.json`), `twin/requirements.json` and `twin/groups.json`, and prints what it finds. No network, no Google
+Cloud account, no Terraform.
+
+**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+
+```bash
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
+standard library, so there is nothing to install. `make -n plan` is worth a look too: it prints Step 8's real
+`terraform plan` in your own project, then the same checker on your plan. Don't run it for Steps 1 to 7.
+
+**1. The plan.** What today's Helpdesk is made of. A plan changes nothing; only `apply` would. The twins are written
+by hand in the shape `terraform show -json` prints (tests 19 and 20 check the hardened one against `terraform/`):
+
+```bash
+python3 explore.py plan
+```
+
+```text
+Terraform plan, today: twin/today/plan.json
+  shaped like `terraform show -json` (format 1.2), written by hand for the lab
+  20 resources it WOULD create   (a plan changes nothing; apply would)
+
+   1 x google_bigquery_dataset                              helpdesk_tickets
+   3 x google_bigquery_dataset_iam_member                   tickets_chatbot, tickets_ds, tickets_summariser
+   2 x google_compute_instance                              helpdesk_vm, ticket_summariser
+   1 x google_compute_network                               helpdesk
+   1 x google_compute_router_nat                            helpdesk_nat
+   1 x google_compute_subnetwork                            helpdesk_eu
+   3 x google_project_iam_member                            chatbot_ai_user, default_compute_editor, devs_token_c...
+   6 x google_project_service                               aiplatform, bigquery, compute, cloudkms, dns, iam
+   1 x google_service_account                               chatbot_runtime
+   1 x google_service_account_key                           ops_laptop
+
+Plus twin/today/app.json: settings Terraform can't express (location, endpoint, logging, cache).
+20 resources. Nothing exists yet: this is the plan, read before anything is built.
+```
+
+**2. The model, and which models may be used.** The full model name, the endpoint the app calls, and the
+organization policy `vertexai.allowedModels`. Today there is none:
+
+```bash
+python3 explore.py model
+```
+
+```text
+The Helpdesk's model, today (twin/today/app.json):
+
+  model (publisher model)  publishers/google/models/gemini-3.1-flash-lite
+  location                 global
+  endpoint the app calls   https://aiplatform.googleapis.com
+  path in each call        .../locations/global/publishers/google/models/gemini-3.1-flash-lite:generateContent
+  runs as                  chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com
+
+Which models may be used at all? (Organization Policy vertexai.allowedModels)
+  no policy: every model and action is allowed
+  ALLOWED  publishers/google/models/gemini-3.1-flash-lite:predict
+  ALLOWED  publishers/meta/models/llama3:deploy
+
+Gemini is Google's own model. A partner model (Claude, for example) is a managed API too, but switching
+it on is a separate right: the Consumer Procurement Entitlement Manager role (lesson 11.1).
+```
+
+`python3 explore.py model hardened` shows the allow-list on the prod folder, location `europe-west4`, and `refused`
+for Llama 3.
+
+**3. Who holds which role.** Every grant is a principal, a role and a resource:
+
+```bash
+python3 explore.py role
+```
+
+```text
+Who holds which role, today. Each grant = WHO (a principal) + WHICH ROLE + ON WHAT:
+
+  serviceAccount:chatbot-runtime     roles/aiplatform.user                on project example-chatbot-prod
+  serviceAccount:100000000001-com... roles/editor                         on project example-chatbot-prod
+  group:helpdesk-devs                roles/iam.serviceAccountTokenCreator on project example-chatbot-prod
+  serviceAccount:chatbot-runtime     roles/bigquery.dataViewer            on dataset helpdesk_tickets
+  group:data-science                 roles/bigquery.dataViewer            on dataset helpdesk_tickets
+  serviceAccount:100000000001-com... roles/bigquery.dataEditor            on dataset helpdesk_tickets
+
+What the AI roles contain (twin.py's subset of Google's IAM reference):
+  roles/aiplatform.user                  aiplatform.endpoints.create, aiplatform.endpoints.deploy, aiplatform.endpoints.predic...
+  roles/editor                           aiplatform.*, bigquery.*, compute.*, iam.serviceAccountKeys.create, storage.*
+  roles/iam.serviceAccountTokenCreator   iam.serviceAccounts.getAccessToken
+
+Service account keys (JSON files someone could steal): chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com
+```
+
+`python3 explore.py role hardened`: a custom role `helpdeskModelCaller` with only `aiplatform.endpoints.predict`, no
+project-wide Token Creator, and no keys.
+
+**4. Where the prompt runs.** The endpoint decides. Try the one the Helpdesk uses today:
+
+```bash
+python3 explore.py route global
+```
+
+```text
+One generateContent call from helpdesk-vm with location global
+
+  endpoint     https://aiplatform.googleapis.com   (global)
+  processing   any Google Cloud location in the world
+  at rest      stays in the location you selected, whichever endpoint you call
+
+ExampleCo's rule: ML processing must stay in the EU (approved: europe-west4, europe-west1, eu)
+Verdict: BREAKS the rule
+
+Can the hardened Helpdesk VM reach it privately?  yes
+  Private Service Connect endpoint 10.100.0.2 (vpc-sc bundle)
+```
+
+Then try `python3 explore.py route eu`: it fits the EU rule, but the hardened VM can't reach a `rep.googleapis.com`
+endpoint privately (Step 6).
+
+**5. The network.** Today the Helpdesk VM can send data anywhere:
+
+```bash
+python3 explore.py network
+```
+
+```text
+The Helpdesk's network, today
+
+  VPC      helpdesk-vpc   (a private network; subnets are regional)
+  subnet   helpdesk-eu  10.10.0.0/24  europe-west4  Private Google Access off
+  VM       helpdesk-vm        external IP YES   runs as chatbot-runtime
+  VM       ticket-summariser  external IP none  runs as 100000000001-compute
+  Cloud NAT          yes (outbound to the internet for VMs with no external IP)
+  egress firewall    no deny-all rule: VMs may send to any address they can route to
+
+Where can the Helpdesk VM send data?
+  REACHES  aiplatform.googleapis.com                aiplatform.googleapis.com over the internet (external IP or Cloud NAT)
+  REACHES  bigquery.googleapis.com                  bigquery.googleapis.com over the internet (external IP or Cloud NAT)
+  REACHES  attacker.example                         the VM has a route to the internet (external IP or Cloud NAT)
+```
+
+`python3 explore.py network hardened`: no external IP, no Cloud NAT, egress denied except the private endpoint, and
+`blocked  attacker.example`.
+
+**6. The private door and the fence.** The hardened twin's Private Service Connect endpoint, its DNS records, and a
+VPC Service Controls perimeter still in dry run:
+
+```bash
+python3 explore.py endpoint hardened
+```
+
+```text
+The private door to Google APIs, hardened
+
+  Private Service Connect endpoint tsgapis at 10.100.0.2  bundle vpc-sc   (only APIs that support VPC Service Controls)
+  private DNS zone googleapis.com. (private) for helpdesk-vpc
+      A      googleapis.com.      -> 10.100.0.2
+      CNAME  *.googleapis.com.    -> googleapis.com.
+
+The fence: VPC Service Controls
+  perimeter helpdesk: DRY RUN (logs violations, blocks nothing)
+    protects     projects/100000000001
+    restricts    aiplatform.googleapis.com, bigquery.googleapis.com, storage.googleapis.com
+    ingress rules 0, egress rules 0
+
+Who gets past the fence? (the perimeter only; IAM still has to allow the call too)
+  passes   Helpdesk VM, inside
+           inside the perimeter rules
+  LOGGED   a stolen token, from 203.0.113.66
+           dry run, would block: ingress from 203.0.113.66 has no matching ingress rule (NO_MATCHING_ACCESS_LEVEL)
+  LOGGED   Helpdesk VM copying to another project
+           dry run, would block: copy to projects/999999999999, outside the perimeter (RESOURCE_NOT_IN_SAME_SERVICE_PERIMETER)
+```
+
+`python3 explore.py endpoint` shows today: no endpoint and `no fence`.
+
+**7. The keys.** Today there is no key of ExampleCo's own:
+
+```bash
+python3 explore.py keys
+```
+
+```text
+Encryption at rest, today
+
+  Cloud KMS keys in the plan: 0. Google encrypts everything with keys Google owns and controls,
+  so there is no key of yours to disable.
+
+What holds customer data, and whose key protects it:
+  BigQuery dataset helpdesk_tickets  europe-west4  Google default encryption
+```
+
+`python3 explore.py keys hardened` shows the key ring, the key and `your key (CMEK)` on both datasets.
+
+**8. What gets recorded.** The hardened twin:
+
+```bash
+python3 explore.py logging hardened
+```
+
+```text
+What gets recorded, hardened
+
+Cloud Audit Logs for aiplatform.googleapis.com (who called, from where; not the prompt):
+  Admin Activity   always written, can't be switched off (changes: deploy, create, set policy)
+  Data Access      ON: DATA_READ, DATA_WRITE
+
+Request-response logging (what was asked and answered, per model and project):
+  on, sampling 1.0 (1.0 = every call), into bq://example-chatbot-prod.ai_logs.request_response_logging
+
+Caching (copies Google may keep to answer faster; lesson 11.3):
+  not set: Google default, which includes durable caching at rest
+```
+
+`python3 explore.py logging` shows today: Data Access off and request-response logging off.
+
+**9. Two records of one call.** Illustrative: Google's field and column names with fake values. The audit entry keeps
+who, from where and which model; the request-response row keeps the conversation:
+
+```bash
+python3 explore.py record
+```
+
+```text
+ILLUSTRATIVE: Google's documented field and column names, fake values. Two records of one Helpdesk call.
+
+1. Data Access audit log entry (Cloud Logging, log cloudaudit.googleapis.com/data_access):
+   who      authenticationInfo.principalEmail  chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com
+   from     requestMetadata.callerIp           10.10.0.5   (the VM's internal address)
+   what     methodName                         google.cloud.aiplatform.v1.PredictionService.GenerateContent
+   where    resourceName                       .../locations/europe-west4/publishers/google/models/gemini-3.1-flash-lite
+   allowed  authorizationInfo                  aiplatform.endpoints.predict, granted
+   said     (nothing)                          the pages we read don't say audit entries hold the prompt
+
+2. Request-response logging row (BigQuery table ai_logs.request_response_logging):
+   when     logging_time                       2026-10-19 09:10:00 UTC
+   what     model, api_method                  gemini-3.1-flash-lite, generateContent
+   said     full_request                       "How do I reset my VPN token?"
+   answered full_response                      "Open the self-service portal, choose..."
+   more     request_id, endpoint, metadata...  the full column list is on Google's request-response logging page
+```
+
+**10. Read one result from the top.** Step 2's tool, first lines only. Each request gets a verdict, a `why:` line, and
+one `·` line per check that decided it:
+
+```bash
+python3 attack.py --twin today | sed -n 1,8p
+```
+
+```text
+--- GC11 lab · twin: today · TSG Helpdesk in example-chatbot-prod ---
+    (twin.py: a teaching model of Google Cloud's rules; nothing is sent to Google)
+
+Attackers
+  [A1] ALLOWED  Stolen JSON key of chatbot-runtime, from 203.0.113.66: GenerateContent on Gemini
+         why: every check passed
+         · IAM: aiplatform.endpoints.predict via roles/aiplatform.user on project
+  [A2] ALLOWED  Same key: deploy Llama 3 to a GPU endpoint (bills while it runs)
+```
 
 ## Step 1 · Check: what's wrong with the Helpdesk today?
 
