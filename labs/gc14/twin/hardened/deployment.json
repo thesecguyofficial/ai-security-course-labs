@@ -35,7 +35,7 @@
  "iam_bindings": [
   {
    "resource": "//cloudresourcemanager.googleapis.com/projects/example-agents-prod",
-   "role": "roles/aiplatform.expressUser",
+   "role": "roles/browser",
    "member": "principalSet://agents.global.org-100000000099.system.id.goog/attribute.platformContainer/aiplatform/projects/100000000014"
   },
   {

@@ -267,7 +267,7 @@ This second pass adds, for **this agent's principal only**:
 | | rule `allow-bigquery-tools`: `resource_type == 'MCP_SERVER'` and `tool.name in [the six BigQuery tools]` |
 | | rule `deny-execute-sql` (**DENY**): `destination.agent_registry.mcp_server.tool.name == 'execute_sql'` |
 | `google_iam_projects_policy_binding` | `policy_kind = "ACCESS"`, target `//networkservices.googleapis.com/projects/PROJECT/locations/REGION/agentGateways/tsg-gc14-egress` |
-| `google_project_iam_member` x4 | `roles/aiplatform.expressUser`, `roles/serviceusage.serviceUsageConsumer` (Google's Agent Identity page), `roles/bigquery.jobUser`, `roles/mcp.toolUser` (Google's BigQuery MCP page) |
+| `google_project_iam_member` x4 | `roles/browser`, `roles/serviceusage.serviceUsageConsumer` (Google's Agent Identity page, which also says not to grant `roles/aiplatform.expressUser` or `roles/aiplatform.user` to agent identities), `roles/bigquery.jobUser`, `roles/mcp.toolUser` (Google's BigQuery MCP page) |
 | `google_bigquery_dataset_iam_member` | `roles/bigquery.dataViewer` on dataset `helpdesk` only |
 
 The ALLOW rule for BigQuery includes `execute_sql` on purpose: Google's overview says "deny rules override allow
@@ -310,7 +310,7 @@ curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Co
 Then, either way:
 
 ```bash
-for ROLE in roles/aiplatform.expressUser roles/serviceusage.serviceUsageConsumer roles/bigquery.jobUser roles/mcp.toolUser; do
+for ROLE in roles/browser roles/serviceusage.serviceUsageConsumer roles/bigquery.jobUser roles/mcp.toolUser; do
   gcloud projects add-iam-policy-binding $PROJECT --member="$AGENT_PRINCIPAL" --role=$ROLE --condition=None
 done
 ```

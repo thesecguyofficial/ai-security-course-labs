@@ -1,9 +1,9 @@
 {
-  "_about": "The hardened build. Same lab wrapper as contoso/deployment.json; property names follow Microsoft Learn where they exist.",
+  "_about": "The hardened build. Same lab wrapper as contoso/deployment.json; property names follow Microsoft Learn where they exist. Each agent names its own RAI policy, because egress rules live in the RAI policy (shown on the agent here for readability).",
   "foundry_account": {"name": "contoso-ai2", "created": "2026-10-20", "network_injection": true, "disableLocalAuth": true},
   "project": {"name": "helpdesk", "created": "2026-10-20"},
   "registry": {"name": "crcontoso", "publicNetworkAccess": "Disabled"},
-  "rai_policies": ["Microsoft.DefaultV2", "helpdesk-guardrail"],
+  "rai_policies": ["Microsoft.DefaultV2", "helpdesk-guardrail", "helpdesk-admin-guardrail"],
   "agents": {
     "helpdesk-agent": {
       "definition": {
@@ -28,7 +28,7 @@
                      "protocol_versions": [{"protocol": "responses", "version": "2.0.0"}],
                      "container_configuration": {"image": "crcontoso.azurecr.io/helpdesk-admin:1.1"},
                      "environment_variables": {"MODEL_DEPLOYMENT_NAME": "helpdesk-chat"},
-                     "rai_config": {"rai_policy_name": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.CognitiveServices/accounts/contoso-ai2/raiPolicies/helpdesk-guardrail"}},
+                     "rai_config": {"rai_policy_name": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-helpdesk/providers/Microsoft.CognitiveServices/accounts/contoso-ai2/raiPolicies/helpdesk-admin-guardrail"}},
       "idle_timeout_minutes": 15,
       "runtime": {"approval_enforcement": "runtime", "policy_check": true, "local_tools": []},
       "debug_tools": [],

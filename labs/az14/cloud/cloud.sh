@@ -131,7 +131,7 @@ TXT
     az cognitiveservices account delete -n "$AZ14_NAME" -g "$RG" || true
     az cognitiveservices account purge -n "$AZ14_NAME" -g "$RG" -l "$AZ14_REGION" || true
     az group delete -n "$RG" --yes
-    echo "Check in the Microsoft Entra admin center: Entra ID > Agent ID > All agent identities. Nothing named"
+    echo "Check in the Microsoft Entra admin center: Entra ID > Agents > Agent identities. Nothing named"
     echo "helpdesk-agent should be left from this build. Microsoft doesn't document whether deleting the agent removes it."
     rm -rf .state agent/policy.py
     ;;

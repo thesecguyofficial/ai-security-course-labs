@@ -36,6 +36,9 @@ import argparse
 import json
 import os
 import textwrap
+import sys
+
+sys.dont_write_bytecode = True   # read-only: leave no __pycache__ behind
 
 import policy
 import twin
@@ -133,7 +136,7 @@ def cmd_token(a) -> None:
         ("iss", f"https://login.microsoftonline.com/{TENANT}/v2.0", "issuer: who signed it (Contoso's tenant)"),
         ("aud", "api://helpdesk-web", "audience: which API the token is for; check it"),
         ("tid", TENANT, "tenant ID: which organisation the user signed in to"),
-        ("oid", u["oid"], "object ID: the user's fixed ID in this tenant (use this one)"),
+        ("oid", u["oid"], "object ID: fixed, one per user per tenant (this course uses it)"),
         ("preferred_username", u["upn"], "display only: Microsoft says it can change"),
         ("scp", "Helpdesk.Chat", "what the front end may do for the user"),
         ("groups", ", ".join(u["groups"]), "group memberships (names here; real tokens carry IDs)"),
@@ -142,7 +145,8 @@ def cmd_token(a) -> None:
     w = max(len(c[1]) for c in claims)
     for k, v, why in claims:
         print(f"  {k:<18} {v:<{w}}   {why}")
-    print("\n=> Your front end validates this token. The oid in it is what x-ms-user-identity should carry (step 4).")
+    print("\n=> Your front end validates this token. Microsoft leaves the x-ms-user-identity value to you (stable,")
+    print("   unique, hard to guess, 1-256 characters); the oid fits, so this lab sends it (step 4).")
 
 
 # ---------------------------------------------------------------- 3. invoke
@@ -308,6 +312,9 @@ def cmd_memory(a) -> None:
     m = cfg["memory"]
     mem = twin.Memory(cfg)
     print(f"  memory store {m['store']}, tool scope \"{m['tool']['scope']}\"")
+    if m["tool"]["scope"] == "{{$userId}}":
+        print("  {{$userId}} = the x-memory-user-id header if one is sent, else the caller token's {tid}_{oid}")
+        print("  (the lab shortens it to the user's oid)")
     print(f"  for {a.user}: memories go under scope {mem.scope_for(a.user)}")
     others = {u: mem.scope_for(u) for u in ("alice", "bob", "dana")}
     shared = len(set(others.values())) == 1
@@ -317,7 +324,7 @@ def cmd_memory(a) -> None:
     onoff = {True: "on", False: "off"}
     print(f"  extracted: user profile {onoff[o['user_profile_enabled']]}, chat summary "
           f"{onoff[o['chat_summary_enabled']]}, procedural {onoff[o['procedural_memory_enabled']]}")
-    print(f"  default_ttl_seconds {o['default_ttl_seconds'] or 'not set (no expiry)'}; "
+    print(f"  default_ttl_seconds {o['default_ttl_seconds'] or 'not set'}; "
           f"your write filter {'on' if m['write_filter'] else 'off'}")
     print("\n=> Microsoft: set scope to {{$userId}} \"to enable per-user memory isolation\".")
 
@@ -352,8 +359,8 @@ def cmd_guardrail(a) -> None:
     at_input = 'HTTP 400 "code": "content_filter"' if blocked else "reaches the agent"
     print(f"  a prompt attack at the input  {at_input}")
     if ex is False:
-        print("\n=> Microsoft: such an agent \"is created successfully and reports active, but no content filtering")
-        print("   is applied\". The agent reports active; nothing is filtered.")
+        print("\n=> Microsoft: \"On many subscriptions\" such an agent \"is created successfully and reports active,")
+        print("   but no content filtering is applied\". The agent reports active; nothing is filtered.")
 
 
 # ---------------------------------------------------------------- 12. logs

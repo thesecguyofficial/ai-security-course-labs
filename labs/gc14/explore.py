@@ -28,6 +28,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
+
+sys.dont_write_bytecode = True   # read-only: leave no __pycache__ behind
 
 import cel
 import decide
@@ -35,6 +38,9 @@ import twin
 
 TWINS = ("today", "hardened")
 DATASET = "//bigquery.googleapis.com/projects/{project}/datasets/{dataset}"
+# Google's Agent Identity page (30 Oct 2026): "Don't grant project-level roles such as roles/aiplatform.expressUser or
+# roles/aiplatform.user to agent identities".
+NOT_FOR_AGENTS = {"roles/aiplatform.expressUser", "roles/aiplatform.user"}
 
 
 def short_member(m: str) -> str:
@@ -128,6 +134,8 @@ def cmd_identity(a) -> None:
         tag = "applies" if hit else ("names a DELETED agent" if stale else "someone else")
         wide_data += b["role"] in data_roles and b["member"].startswith("principalSet://")
         print(f"    {b['role']:<40} {short_member(b['member']):<58} {tag}")
+        if hit and b["role"] in NOT_FOR_AGENTS:
+            print("      ^ Google: \"Don't grant project-level roles such as\" this one \"to agent identities\"")
     print("\n=> A principalSet line covers every agent in the project, including ones deployed next year.")
     print(f"   Data roles granted that way here: {wide_data}" + ("  <- every agent can read the data" if wide_data else ""))
 

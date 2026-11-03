@@ -269,7 +269,7 @@ make grant
 - `make grant`: Storage Blob Data Reader, scope `.../storageAccounts/st<name>/blobServices/default/containers/kb`
 
 If it prints nothing, the identity isn't ready yet: wait a minute and run it again. You can cross-check in the
-**Microsoft Entra admin center**, **Entra ID** > **Agent ID** > **All agent identities** ("an inventory of all agents
+**Microsoft Entra admin center**, **Entra ID** > **Agents** > **Agent identities** ("an inventory of all agents
 in your tenant"). The project's **Overview** > **JSON View** shows a different identity: the project's shared
 blueprint and identity, used by unpublished prompt agents. `make grant` assigns the role with
 `--assignee-object-id` and `--assignee-principal-type ServicePrincipal`, as Microsoft recommends "to avoid Microsoft
@@ -399,7 +399,7 @@ belong in the MCP server itself too (lesson 14.5). Optional: `make toolbox-v2` c
   data". Delete it in G8.
 - **Your own log.** `main.py` returns every tool call with the policy verdict. In production, log that server side,
   with the signed-in user, and keep it as long as your audit rules say.
-- **Entra.** **Entra ID** > **Agent ID** > **All agent identities**: your agent is in the tenant inventory, next to any
+- **Entra.** **Entra ID** > **Agents** > **Agent identities**: your agent is in the tenant inventory, next to any
   Copilot Studio agents. A Conditional Access policy for agents ("Block high-risk agent identities", agent risk is
   preview) needs Microsoft 365 E7, or Microsoft Agent 365 plus Entra ID P2 or Microsoft 365 E5 for risk-based
   policies; read it in lesson 14.3, don't buy anything for this lab.
@@ -423,7 +423,7 @@ make down
 It deletes the agent ("Deleting an agent removes all its versions and terminates active sessions. This action can't
 be undone."), the toolbox versions, the Foundry resource (and **purges** it so the name is free), and the resource
 group with the storage account, registry and Container Apps app. Then check two places tomorrow: `az group show -n rg-$AZ14_NAME` should
-say `ResourceGroupNotFound`; and **Entra ID** > **Agent ID** > **All agent identities** should list nothing left from
+say `ResourceGroupNotFound`; and **Entra ID** > **Agents** > **Agent identities** should list nothing left from
 this build. Microsoft doesn't document whether deleting a hosted agent removes its agent identity; if one is left,
 note it and tell us.
 
@@ -431,7 +431,7 @@ note it and tell us.
 
 - **No real run.** Every response above is illustrative. Before release the course team runs this guide in a sandbox
   and replaces them with real output.
-- **The agent identity's display name** in **All agent identities**. Reading its principal ID is documented
+- **The agent identity's display name** in **Agent identities**. Reading its principal ID is documented
   (`instance_identity.principal_id`, G4.3); whether it's populated right after `create_version` returns is not, so
   G4.3 reads it with `agents.get`.
 - **Identity sharing, checked 23 Oct 2026.** The hosted-agent pages say each hosted agent gets its own identity at

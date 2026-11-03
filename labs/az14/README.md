@@ -80,7 +80,7 @@ cd labs/az14
   Azure Storage), assign RBAC roles manually to the agent's Microsoft Entra ID"
   ([hosted agents](https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/hosted-agents)). An Azure RBAC
   scope covers everything under it.
-- **Guardrail**: `rai_config.rai_policy_name`; "an agent that references a policy that doesn't exist is created
+- **Guardrail**: `rai_config.rai_policy_name`; "On many subscriptions an agent that references a policy that doesn't exist is created
   successfully and reports `active`, but **no content filtering is applied**"; a blocked prompt gets HTTP 400 with
   `"code": "content_filter"`
   ([hosted agent guardrails](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/add-hosted-agent-guardrails)).

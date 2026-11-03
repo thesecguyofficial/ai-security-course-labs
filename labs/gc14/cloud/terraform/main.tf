@@ -218,9 +218,11 @@ resource "google_iam_projects_policy_binding" "egress" {
 }
 
 # ---- Step 4: the agent's own grants (its principal, not every agent in the project) ----------------------------
+# Google's Agent Identity page (30 Oct 2026): grant roles/serviceusage.serviceUsageConsumer and roles/browser; don't grant
+# project-level roles such as roles/aiplatform.expressUser or roles/aiplatform.user to agent identities.
 resource "google_project_iam_member" "agent" {
   for_each = local.agent ? toset([
-    "roles/aiplatform.expressUser", "roles/serviceusage.serviceUsageConsumer",
+    "roles/browser", "roles/serviceusage.serviceUsageConsumer",
     "roles/bigquery.jobUser", "roles/mcp.toolUser",
   ]) : toset([])
   project = var.project_id
