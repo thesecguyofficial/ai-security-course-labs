@@ -1,0 +1,139 @@
+{
+  "name": "gc14-14.8-understand-linux",
+  "lesson": "14.0, 14.8 (Google Cloud stream)",
+  "title": "Lab GC14, part 1: get the lab, look at ExampleCo's Agent Runtime deployment (today and hardened), and see each Agent Platform piece on its own with explore.py (map, identity, iam, user, registry, gateway, armor, memory, sandbox, logs) before running the decision table; then single rows of the decision table read control by control",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/gc14 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The twins",
+      "type": "ls twin twin/today data",
+      "pause_after": 4
+    },
+    {
+      "label": "Cases",
+      "type": "head -n 22 data/cases.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Map",
+      "type": "python3 explore.py map today",
+      "pause_after": 7
+    },
+    {
+      "label": "Map hardened",
+      "type": "python3 explore.py map hardened",
+      "pause_after": 7
+    },
+    {
+      "label": "Identity",
+      "type": "python3 explore.py identity today",
+      "pause_after": 7
+    },
+    {
+      "label": "IAM",
+      "type": "python3 explore.py iam today finance_exports",
+      "pause_after": 5
+    },
+    {
+      "label": "IAM hardened",
+      "type": "python3 explore.py iam hardened finance_exports",
+      "pause_after": 5
+    },
+    {
+      "label": "User",
+      "type": "python3 explore.py user today tok-alice-0001 --body-user bob@example.com",
+      "pause_after": 6
+    },
+    {
+      "label": "User hardened",
+      "type": "python3 explore.py user hardened tok-alice-0001 --body-user bob@example.com",
+      "pause_after": 5
+    },
+    {
+      "label": "Registry",
+      "type": "python3 explore.py registry",
+      "pause_after": 6
+    },
+    {
+      "label": "Gateway",
+      "type": "python3 explore.py gateway today mail send_email",
+      "pause_after": 6
+    },
+    {
+      "label": "Gateway hardened",
+      "type": "python3 explore.py gateway hardened mail send_email",
+      "pause_after": 6
+    },
+    {
+      "label": "Gateway unregistered",
+      "type": "python3 explore.py gateway hardened --host status.example.net --path /report",
+      "pause_after": 6
+    },
+    {
+      "label": "Armor",
+      "type": "python3 explore.py armor hardened",
+      "pause_after": 6
+    },
+    {
+      "label": "Memory",
+      "type": "python3 explore.py memory today tok-alice-0001 --body-user bob@example.com",
+      "pause_after": 6
+    },
+    {
+      "label": "Memory hardened",
+      "type": "python3 explore.py memory hardened tok-alice-0001 --body-user bob@example.com",
+      "pause_after": 5
+    },
+    {
+      "label": "Sandbox",
+      "type": "python3 explore.py sandbox today",
+      "pause_after": 4
+    },
+    {
+      "label": "Logs",
+      "type": "python3 explore.py logs today",
+      "pause_after": 6
+    },
+    {
+      "label": "One case",
+      "type": "python3 explore.py case today C1",
+      "pause_after": 6
+    },
+    {
+      "label": "One case hardened",
+      "type": "python3 explore.py case hardened C1",
+      "pause_after": 6
+    },
+    {
+      "label": "Rug pull",
+      "type": "python3 explore.py case hardened C4 --rugpull",
+      "pause_after": 6
+    }
+  ]
+}

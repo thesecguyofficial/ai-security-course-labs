@@ -1,0 +1,149 @@
+{
+  "name": "az14-14.8-understand-linux",
+  "lesson": "14.0, 14.8 (Azure stream)",
+  "title": "Lab AZ14, part 1: get the lab, look at Contoso's hosted-agent setup (version 1 and the hardened build), and see each Foundry piece on its own with explore.py (map, token, invoke, session, identity, tools, policy, egress, memory, sandbox, guardrail, logs) before attacking it; then one request read line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/az14 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The setups",
+      "type": "ls contoso fixes data",
+      "pause_after": 4
+    },
+    {
+      "label": "App notes",
+      "type": "cat contoso/app.json",
+      "pause_after": 5
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Map",
+      "type": "python3 explore.py map contoso",
+      "pause_after": 7
+    },
+    {
+      "label": "Map hardened",
+      "type": "python3 explore.py map fixes",
+      "pause_after": 7
+    },
+    {
+      "label": "Token",
+      "type": "python3 explore.py token bob",
+      "pause_after": 6
+    },
+    {
+      "label": "Invoke",
+      "type": "python3 explore.py invoke contoso carol helpdesk-admin-agent",
+      "pause_after": 6
+    },
+    {
+      "label": "Invoke hardened",
+      "type": "python3 explore.py invoke fixes carol helpdesk-admin-agent",
+      "pause_after": 6
+    },
+    {
+      "label": "Session",
+      "type": "python3 explore.py session contoso bob --header alice",
+      "pause_after": 6
+    },
+    {
+      "label": "Session hardened",
+      "type": "python3 explore.py session fixes bob --header alice",
+      "pause_after": 5
+    },
+    {
+      "label": "Identity",
+      "type": "python3 explore.py identity contoso",
+      "pause_after": 6
+    },
+    {
+      "label": "Identity hardened",
+      "type": "python3 explore.py identity fixes",
+      "pause_after": 5
+    },
+    {
+      "label": "Tools",
+      "type": "python3 explore.py tools contoso",
+      "pause_after": 7
+    },
+    {
+      "label": "Policy",
+      "type": "python3 explore.py policy contoso bob send_email '{\"to\": \"collect@attacker.example\"}'",
+      "pause_after": 6
+    },
+    {
+      "label": "Policy hardened",
+      "type": "python3 explore.py policy fixes bob send_email '{\"to\": \"collect@attacker.example\"}'",
+      "pause_after": 6
+    },
+    {
+      "label": "Egress audit",
+      "type": "python3 explore.py egress v1.1 https://collect.attacker.example/c",
+      "pause_after": 6
+    },
+    {
+      "label": "Egress enforced",
+      "type": "python3 explore.py egress fixes https://collect.attacker.example/c",
+      "pause_after": 5
+    },
+    {
+      "label": "Memory",
+      "type": "python3 explore.py memory contoso bob",
+      "pause_after": 5
+    },
+    {
+      "label": "Memory hardened",
+      "type": "python3 explore.py memory fixes bob",
+      "pause_after": 5
+    },
+    {
+      "label": "Sandbox",
+      "type": "python3 explore.py sandbox contoso bob",
+      "pause_after": 5
+    },
+    {
+      "label": "Guardrail",
+      "type": "python3 explore.py guardrail contoso",
+      "pause_after": 6
+    },
+    {
+      "label": "Logs",
+      "type": "python3 explore.py logs contoso",
+      "pause_after": 6
+    },
+    {
+      "label": "One turn",
+      "type": "python3 explore.py turn contoso bob \"VPN client certificate renewal\"",
+      "pause_after": 6
+    },
+    {
+      "label": "One turn hardened",
+      "type": "python3 explore.py turn fixes bob \"VPN client certificate renewal\"",
+      "pause_after": 6
+    }
+  ]
+}
