@@ -409,7 +409,7 @@ What the hardened build (`fixes/`) changes, and the Module 6/7 control each chan
 | Change in `fixes/` | Local control it replaces | Stops |
 |---|---|---|
 | `permissionFilterOption: enabled`, `UserIds`/`GroupIds` on every chunk | M6 per-tenant retrieval filter | A1, A2 |
-| Knowledge base tool forwards `x-ms-query-source-authorization` from a structured input | M6 "filter by the caller, not by the prompt" | A4 |
+| Knowledge base tool forwards `x-ms-query-source-authorization` from a structured input (the explicit option; Microsoft: "When the calling principal is a user, Agent Service sets the header from that user's context", but an app or service caller must forward it) | M6 "filter by the caller, not by the prompt" | A4 |
 | `sensitivityLabel` projected to every chunk | M6 chunk-level metadata | A5 |
 | helpdesk-web takes groups only from the validated token, and forwards the token too | M6 server-side scoping | A2, A3 |
 | `allowed_tools` on the actions server | M7 tool allow-list | A8 |

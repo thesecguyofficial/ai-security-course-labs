@@ -237,7 +237,9 @@ The agent gets two tools:
    `allowed_tools: ["knowledge_base_retrieve"]` (Microsoft: "This is the only tool currently supported for use with
    Foundry Agent Service"), `require_approval: "never"` (it only reads), and your token forwarded per request:
    `headers: {"x-ms-query-source-authorization": "{{search_auth_token}}"}` with a required structured input
-   `search_auth_token`.
+   `search_auth_token`. This is Microsoft's explicit option, so you can see what travels; the same page adds "When the
+   calling principal is a user, Agent Service sets the header from that user's context". When an app or service calls
+   the agent, forward the token yourself, or indexed sources return unfiltered results.
 2. **`send_email` as a function tool.** Function tools run in **your** code: "Your app executes the function and
    returns the output." So the confirmation lives in your code, where nothing the model reads can switch it off.
    Microsoft's own advice on the same page: "require explicit user confirmation for actions that change data".
