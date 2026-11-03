@@ -243,6 +243,11 @@ What code can reach, and who can reach in (setup hardened), from twin.py
      endpoint  tsg-summariser  from Contoso's network   yes  through the workspace private endpoint
 ```
 
+The first draft's `tsg-ml` is in allow internet outbound mode and the hardened one in approved outbound. Read the
+hardened `tsg-ml` as a new production workspace built in approved mode: Microsoft notes that a workspace created with
+allow internet outbound can't later be updated to approved outbound (SDK), and that once managed VNet isolation is on
+it can't be disabled ([managed network](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-managed-network?view=azureml-api-2)).
+
 **5. One call.** The scoring request the Helpdesk app sends, and the three checks. From inside the network, the first
 draft lets a key through with no role; from the internet, the hardened endpoint refuses at the network:
 
