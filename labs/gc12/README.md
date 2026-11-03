@@ -103,7 +103,7 @@ contacts Google or any other system.
 
 New to Model Armor? Do this before Step 1 (lesson 12.5 calls it Step 1b; lesson 12.0 explains every idea).
 `explore.py` shows each piece of Model Armor on its own. Real output below is from a fresh Ubuntu machine (recording
-run 41614953391).
+run 41618134953).
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `twin/` and `data/`, asks
 `armor_twin.py` and `agent_platform.py` (the lab's offline stand-ins for Model Armor and Gemini on Agent Platform) and
@@ -262,7 +262,7 @@ python3 explore.py precedence
 ```text
   the request                              what applies
   names a template (the app today)         request template (overrides the floor setting)
-  names a template + safety settings       INVALID_ARGUMENT: you can't specify a Model Armor template and safety settings in the same request
+  names a template + safety settings       error: you can't specify both template configuration and safety filters in the same request
   names nothing, floor setting on          floor setting
   floor on + safety settings (hardened)    floor setting + Gemini safety filters
   safety settings only, no floor           Gemini safety filters only (Model Armor not called)
