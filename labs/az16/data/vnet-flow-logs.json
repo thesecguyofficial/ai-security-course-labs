@@ -1,0 +1,31 @@
+{
+ "_about": "ILLUSTRATIVE lab record: Azure virtual network flow logs (flowLogVersion 4), shaped like the sample on Microsoft Learn's 'Virtual network flow logs' page. Values are invented: the GUIDs, the MAC address, the rule names and every address (RFC 5737 documentation ranges and private 10.x). explore.py flow reads it; no other lab file does. Real flow logs land in a storage account, one block blob per minute.",
+ "records": [
+  {
+   "time": "2026-10-20T09:13:00.0000000Z",
+   "flowLogVersion": 4,
+   "flowLogGUID": "00000000-aaaa-bbbb-cccc-000000000016",
+   "macAddress": "00224800AB16",
+   "category": "FlowLogFlowEvent",
+   "flowLogResourceID": "/SUBSCRIPTIONS/00000000-1111-2222-3333-444444444444/RESOURCEGROUPS/NETWORKWATCHERRG/PROVIDERS/MICROSOFT.NETWORK/NETWORKWATCHERS/NETWORKWATCHER_SWEDENCENTRAL/FLOWLOGS/VNET-RESEARCH-FLOWLOG",
+   "targetResourceID": "/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/rg-research/providers/Microsoft.Network/virtualNetworks/vnet-research",
+   "operationName": "FlowLogFlowEvent",
+   "flowRecords": {
+    "flows": [
+     {
+      "aclID": "00000000-dddd-eeee-ffff-000000000016",
+      "flowGroups": [
+       {"rule": "UserRule_allow-ollama-demo", "flowTuples": [
+        "1792487523000,203.0.113.80,10.20.5.4,51522,11434,6,I,B,NX,0,0,0,0",
+        "1792487561000,203.0.113.80,10.20.5.4,51522,11434,6,I,E,NX,14,2210,12,48210"]},
+       {"rule": "DefaultRule_DenyAllInBound", "flowTuples": [
+        "1792488607000,198.51.100.9,10.20.5.4,40112,22,6,I,D,NX,0,0,0,0"]},
+       {"rule": "DefaultRule_AllowInternetOutBound", "flowTuples": [
+        "1792494175000,10.20.6.8,198.51.100.200,49830,443,6,O,E,NX,31,4120,40,61877"]}
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

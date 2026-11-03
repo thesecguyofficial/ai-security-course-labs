@@ -1,0 +1,109 @@
+{
+  "name": "az16-16.6-understand-linux",
+  "lesson": "16.0, 16.6",
+  "title": "Lab AZ16 16.6, part 1: get the lab, see what each file is, the two logging setups, look before you run, check Python, then look at each detection and response idea on Azure on its own with explore.py (one day of log rows, alerts and incidents; an Activity log row and a resource log row; the gateway's LLM log; virtual network flow logs; DNS query logs; a detection rule and its alert; a Defender for AI services alert; an AI inventory; Azure Policy and a custom check; a KQL hunting query and the tokens nobody logged; a playbook) and read one simulator run line by line",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback",
+    "No such file"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/az16 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The folders",
+      "type": "ls data data/inventory setups queries report cloud",
+      "pause_after": 4
+    },
+    {
+      "label": "The setups",
+      "type": "grep -H ': true\\|: false' setups/first-draft.json setups/hardened.json",
+      "pause_after": 6
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup simulate",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Menu",
+      "type": "python3 explore.py",
+      "pause_after": 5
+    },
+    {
+      "label": "Day",
+      "type": "python3 explore.py day",
+      "pause_after": 7
+    },
+    {
+      "label": "Activity",
+      "type": "python3 explore.py activity",
+      "pause_after": 7
+    },
+    {
+      "label": "LLM log",
+      "type": "python3 explore.py llm",
+      "pause_after": 7
+    },
+    {
+      "label": "Flow",
+      "type": "python3 explore.py flow",
+      "pause_after": 7
+    },
+    {
+      "label": "DNS",
+      "type": "python3 explore.py dns",
+      "pause_after": 7
+    },
+    {
+      "label": "Rule",
+      "type": "python3 explore.py rule",
+      "pause_after": 7
+    },
+    {
+      "label": "Alert",
+      "type": "python3 explore.py alert",
+      "pause_after": 7
+    },
+    {
+      "label": "Inventory",
+      "type": "python3 explore.py inventory",
+      "pause_after": 7
+    },
+    {
+      "label": "Policy",
+      "type": "python3 explore.py policy",
+      "pause_after": 6
+    },
+    {
+      "label": "Query",
+      "type": "python3 explore.py query",
+      "pause_after": 7
+    },
+    {
+      "label": "Playbook",
+      "type": "python3 explore.py playbook",
+      "pause_after": 7
+    },
+    {
+      "label": "One run",
+      "type": "make simulate",
+      "pause_after": 6
+    }
+  ]
+}
