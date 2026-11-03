@@ -193,7 +193,8 @@ Way 3: an API key (what the chatbot's web tier and the notebook use)
 Then, for Ways 1 and 2 (and a bound key), IAM checks the identity's roles: see decide.
 ```
 
-Unlike AWS (SigV4 signs every request with a secret that never travels), the token itself travels.
+AWS normally signs each request with a secret that never travels (SigV4); only Bedrock API keys travel as bearer
+strings. Here the token itself travels.
 
 **3. An allow policy, read binding by binding.** Each binding gives one role to a list of members; the policy on a
 folder or the organization reaches every project below it, because the effective policy is "the union" of the

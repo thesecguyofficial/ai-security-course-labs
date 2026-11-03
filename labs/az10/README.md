@@ -102,7 +102,7 @@ logs, a budget) and proves each fix with a request that should now fail. About 7
 
 New to Azure? Do this before Step 1 (lesson 10.0 walks through the same six ideas, lesson 10.2 calls this Step 1b).
 `explore.py` shows, one step at a time, how Azure knows who is calling, decides "allowed or not" and records a
-request, using Contoso's files. Real output below is from a fresh Ubuntu machine (recording run 41614970247).
+request, using Contoso's files. Real output below is from a fresh Ubuntu machine (recording run 41618383116).
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `contoso/`, `fixes/`
 and `logs/` and prints what it finds. `decide` and `call` ask `azure_model.py`, the lab's teaching model of Azure
@@ -171,11 +171,16 @@ scope reaches production too. Both resources still accept keys (`keys ON`), and 
 on `Audit`.
 
 **2. How a call proves who it is.** An app either sends a Microsoft Entra ID access token (`Authorization: Bearer`)
-or the resource's key (`api-key` header). Foundry's API accepts either; tokens are asked for with the scope
+or the resource's key (`api-key` header). Foundry's API accepts either. The API reference lists the scope
 `https://cognitiveservices.azure.com/.default`
-([Foundry API reference](https://learn.microsoft.com/en-us/azure/foundry/openai/latest)). Entra ID gives an access
-token "a random value ranging between 60-90 minutes" of life by default
-([access tokens](https://learn.microsoft.com/en-us/entra/identity-platform/access-tokens)):
+([Foundry API reference](https://learn.microsoft.com/en-us/azure/foundry/openai/latest)); Microsoft's newer Foundry
+samples request `https://ai.azure.com/.default`
+([Foundry endpoints](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/endpoints)). Entra ID
+gives a user's access token "a random value ranging between 60-90 minutes" of life by default
+([access tokens](https://learn.microsoft.com/en-us/entra/identity-platform/access-tokens)); managed identity tokens
+are cached "for around 24 hours" and can't be force-refreshed
+([managed identity best practices](https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/managed-identity-best-practice-recommendations)).
+The example token below belongs to a managed identity:
 
 ```bash
 python3 explore.py token
@@ -196,13 +201,14 @@ Way 1: a Microsoft Entra ID access token (what the helpdesk app's managed identi
                                               issuer: the Entra ID tenant that signed it
     iat  1791968400                               issued at (seconds since 1970: 2026-10-14 09:00 UTC)
     nbf  1791968400                               not valid before
-    exp  1791972900                               expires: 75 minutes later (Entra ID picks 60 to 90 minutes)
+    exp  1792054800                               expires: about a day later (managed identity tokens are cached for around 24 hours)
     oid  cccccccc-2222-3333-4444-dddddddddddd     object ID: WHO is calling (the helpdesk-app managed identity)
     sub  cccccccc-2222-3333-4444-dddddddddddd     subject: the principal the token is about
     tid  aaaabbbb-0000-cccc-1111-dddd2222eeee     tenant ID: which directory the caller belongs to
 
   Azure checks the signature, then runs Azure RBAC for that oid at the resource's scope (see decide).
   Anyone who copies the token can use it until exp: it is a bearer token, not tied to one request.
+  (A user's token gets a random lifetime of 60 to 90 minutes; a managed identity's lasts far longer.)
 
 Way 2: the resource's key (accepted while key access is on, as on both Contoso resources)
   api-key: <one of the resource's two keys>
@@ -211,7 +217,8 @@ Way 2: the resource's key (accepted while key access is on, as on both Contoso r
 
 The claim descriptions follow Microsoft's
 [access token claims reference](https://learn.microsoft.com/en-us/entra/identity-platform/access-token-claims-reference).
-Unlike AWS (SigV4 signs every request with a secret that never travels), the token itself travels.
+AWS normally signs each request with a secret that never travels (SigV4); only Bedrock API keys travel as bearer
+strings. Here the token itself travels.
 
 **3. A role, read field by field.** `actions` and `notActions` are for managing resources (the control plane);
 `dataActions` and `notDataActions` for using what's inside them (the data plane)
