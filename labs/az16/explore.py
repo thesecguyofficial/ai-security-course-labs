@@ -211,7 +211,7 @@ def cmd_dns(_args) -> None:
     show([("TimeGenerated", r["TimeGenerated"], "WHEN (UTC)"),
           ("QueryName", r["QueryName"], "the NAME the machine looked up"),
           ("QueryType", r["QueryType"], "A = give me its IPv4 address"),
-          ("ResponseCode", r["ResponseCode"], "the answer: NOERROR = the name exists (lab value)"),
+          ("ResponseCode", str(r["ResponseCode"]), "the answer: 0 = NOERROR, the name resolved"),
           ("SourceIpAddress", r["SourceIpAddress"], "the machine's address"),
           ("VirtualNetworkId", "...virtualNetworks/" + r["VirtualNetworkId"].rsplit("/", 1)[1], "WHICH network: no VM name"),
           ("ResolverPolicyRuleAction", r["ResolverPolicyRuleAction"], "the policy let it through (it can also block)")],

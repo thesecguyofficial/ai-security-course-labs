@@ -206,7 +206,7 @@ def cmd_dns(_args) -> None:
     show([("timestamp", rows[0]["timestamp"], "WHEN (UTC)"),
           ("queryName", p["queryName"], "the NAME the machine looked up"),
           ("queryType", p["queryType"], "A = give me its IPv4 address"),
-          ("responseCode", p["responseCode"], "the answer: NOERROR = the name exists"),
+          ("responseCode", p["responseCode"], "the answer, NOERROR (lab value: real logs hold the number, 0)"),
           ("sourceIP", p["sourceIP"], "the machine's address"),
           ("vmInstanceName", p["vmInstanceName"], "WHICH VM: only for queries a Compute Engine VM made")],
          a=17, b=40)
