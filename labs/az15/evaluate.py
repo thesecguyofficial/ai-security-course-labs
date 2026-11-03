@@ -4,6 +4,7 @@ evaluate.py: 15 attacks and 6 normal requests against one setup. Offline, standa
     python3 evaluate.py first-draft    # make attack
     python3 evaluate.py hardened       # make hardened
     python3 evaluate.py hardened -v    # every step of every case
+    python3 evaluate.py first-draft --only N1   # one case, every step (README Step 1b)
 
 An attack "worked" if it reached its goal in the twin. A normal request "works" if the business still gets what it
 needs. A setup is only good when the first number is 0 AND the second is 6 of 6.
@@ -301,7 +302,32 @@ def run_suite(setup) -> dict:
     return {"attacks": attacks, "normal": normal}
 
 
+def only(setup_name, cid) -> int:
+    """One case, every step, read from the top (README Step 1b)."""
+    s = twin.Setup(setup_name)
+    case = next((c for c in ATTACKS + NORMAL if c[0].lower() == cid.lower()), None)
+    if case is None:
+        print(f"no case {cid}: choose A1 to A{len(ATTACKS)} or N1 to N{len(NORMAL)}")
+        return 2
+    ok, lines = case[2](s.copy())
+    attack = case in ATTACKS
+    print(f"setup: {setup_name}   (twin.py, offline: nothing is sent to Azure)")
+    print(f"group: {'attack (it should be blocked)' if attack else 'normal request (it must keep working)'}\n")
+    verdict = ("WORKED " if ok else "blocked") if attack else ("works  " if ok else "BROKEN ")
+    print(f"  {case[0]:<4} {verdict}  {case[1]}")
+    for ln in lines:
+        print(f"         . {ln}")
+    return 0
+
+
 def _main(argv):
+    if "--only" in argv:
+        i = argv.index("--only")
+        rest = [a for j, a in enumerate(argv) if j not in (i, i + 1)]
+        if len(rest) != 1 or i + 1 >= len(argv):
+            print(__doc__)
+            return 2
+        return only(rest[0], argv[i + 1])
     if not argv:
         print(__doc__)
         return 2
