@@ -55,6 +55,8 @@ cd labs/gc16
 
 | File | What it is |
 |---|---|
+| `explore.py` | **Read-only helper** (Step 1b): one idea at a time, from one day's log entries, alerts and incidents to a playbook. It builds the day in memory, sends nothing and writes nothing |
+| `data/vpc-flow-logs.jsonl` | **Illustrative** VPC Flow Logs entries in Google's documented record format, for `explore.py flow` (no other file reads it) |
 | `simulate.py` | The **attack simulator**: 20 Oct 2026 at ExampleCo, normal work plus five incidents (S1 to S5), written as the files each logging setup would really collect. It replays a made-up day; it never calls Google Cloud |
 | `setups/first-draft.json`, `setups/hardened.json` | What each setup collects. First draft: Google Cloud's defaults (Admin Activity, BigQuery Data Access) plus a log exclusion and a plain web log. Hardened: lesson 16.1's list |
 | `detect.py` | Two rule packs: `soc-v1` (three rules a SOC often starts with) and `gc16` (D01 to D13). D11 and D12 are your challenge |
@@ -81,6 +83,329 @@ What the telemetry files are, and how close they are to the real thing:
 
 - Python 3.11 or newer. Check with `make setup` (or `python3 ../../tools/check_python.py 3.11`).
 - `make` (Mac/Linux). On Windows run the `python` commands shown under each step.
+
+## Step 1b · Before you start: look at each idea on its own (about 15 minutes)
+
+New to detection and response? Do this before Step 1 (lesson 16.6 calls it Step 1b; lesson 16.0 explains each idea). `explore.py` shows,
+one idea at a time, the records, the rules and the response on ExampleCo's day, the Google Cloud version of the AWS stream's Module 16.
+Real output below is from a fresh Ubuntu machine (recording run 41614958962). Run it from `labs/gc16`.
+
+**What it really runs.** Nothing that changes anything: `explore.py` builds the simulated day in memory with
+`simulate.py`, runs the lab's own functions on it (`detect.py`, `inventory.py`, `posture.py`, `report.py`) and prints.
+It writes no file (not even `out/` or `__pycache__/`), calls no Google Cloud service, runs no `gcloud` command and needs no
+network. Windows: `py explore.py day`.
+
+**0. Look before you run.** `make -n` prints what make would run, without running it. This lab needs no virtual environment and no `pip install` (other labs do): only Python's standard library. `make setup` just checks your Python.
+
+```bash
+make -n setup simulate
+```
+
+```output
+python3 ../../tools/check_python.py 3.11
+python3 simulate.py
+```
+
+**1. One day, in numbers.** Log entries, alerts and incidents: many records, fewer alerts, very few incidents.
+
+```bash
+python3 explore.py day
+```
+
+```output
+One day at ExampleCo, 20 Oct 2026 (UTC), with the hardened logging. Fake company, fake values.
+
+LOGS: records of what happened, one entry per event
+  audit.jsonl        903  Cloud Audit Logs: who called which Google Cloud API
+  requests.jsonl     705  request-response logging: the prompt and the answer
+  armor.jsonl        554  Model Armor: its verdict on each prompt
+  scc.jsonl            2  findings: alerts that Security Command Center raised
+  gateway.jsonl       33  Agent Gateway: each tool call the agent made
+  app.jsonl          585  the web app's own log: which signed-in person
+  total             2782
+
+ALERTS: a rule matched, and a message tells a person to look
+  detect.py rules     16  alerts from rules D01 to D13 (D11 and D12 are empty: your challenge)
+
+INCIDENTS: confirmed, someone has to act (the lab's answer key; a real team decides this in triage)
+  simulate.py          5  S1 leaked service account key, S2 jailbroken customer bot, S3 hijacked agent,
+                          S4 denial of wallet through the app, S5 poisoned RAG corpus
+
+2782 entries, 16 alerts, 5 incidents.
+```
+
+**2. Cloud Audit Logs: Admin Activity and Data Access.** Admin Activity is always written; Data Access is off by default (except BigQuery), and that's where model calls go. On AWS a Bedrock call is a management event, logged by default.
+
+```bash
+python3 explore.py audit
+```
+
+```output
+Cloud Audit Logs write one entry per API call. Two kinds of entry, from the hardened setup:
+
+ADMIN ACTIVITY: changes to settings. Always on, you can't switch it off
+  timestamp              2026-10-20T14:07:00Z                   WHEN (UTC)
+  serviceName            cloudresourcemanager.googleapis.com    WHICH service
+  methodName             SetIamPolicy                           WHAT: change the project's IAM policy
+  principalEmail         etl-batch@...                          WHO: a service account
+  serviceAccountKeyName  .../keys/3f9c1e7a...                   WITH WHAT: one of its keys (the ID you disable)
+  callerIp               203.0.113.50                           FROM WHERE: an outside address
+  status                 code 7                                 7 = PERMISSION_DENIED; empty = it worked
+  (the request sets auditConfigs to []: it tries to switch the Data Access logs off)
+
+DATA ACCESS: reading data and using services, model calls included. Off by default for Agent Platform
+  timestamp              2026-10-20T14:10:00Z                   WHEN (UTC)
+  serviceName            aiplatform.googleapis.com              WHICH service
+  methodName             GenerateContent                        WHAT: run a model
+  principalEmail         etl-batch@...                          WHO: a service account
+  serviceAccountKeyName  .../keys/3f9c1e7a...                   WITH WHAT: one of its keys (the ID you disable)
+  callerIp               203.0.113.51                           FROM WHERE: the second outside address
+  status                 (empty)                                7 = PERMISSION_DENIED; empty = it worked
+
+Hardened today: 5 Admin Activity entries, 898 Data Access entries.
+First draft today: 5 Admin Activity entries, 4 Data Access entries (BigQuery only).
+Neither kind of entry holds the prompt or the answer.
+```
+
+**3. What was said.** One request-response logging row: the prompt, the answer, the tokens and the end user the app wrote into `labels`. Switched on per model.
+
+```bash
+python3 explore.py requests
+```
+
+```output
+A request-response logging row (one row of the BigQuery table), from requests.jsonl
+
+  logging_time          2026-10-20T08:12:28Z                   WHEN (UTC)
+  model                 gemini-3.1-flash-lite                  WHICH model
+  api_method            generateContent                        which call the app made
+  full_request text     "Where is my order 4417?"              WHAT WAS SAID: the customer's message
+  promptTokenCount      479                                    tokens in (you pay per token)
+  full_response text    "Order 4417 shipped yesterda..."       the model's answer
+  candidatesTokenCount  117                                    tokens out
+  finishReason          STOP                                   why it stopped: STOP = a normal answer
+  labels.end_user       cust-1011                              WHICH PERSON: the app wrote this in
+  WHO                   (no column)                            the table has no column for the calling account
+
+705 rows today: 585 gemini-3.1-flash-lite, 120 gemini-3.5-flash.
+Not here: 30 Claude calls (RawPredict). Logging is switched on per model, and Claude's isn't.
+Model Armor wrote 554 verdicts on the same prompts. First draft: 0 rows of either (both off).
+```
+
+**4. VPC Flow Logs.** Who talked to whom, on which port, how much. The entries in `data/vpc-flow-logs.jsonl` are **illustrative**, in Google's documented record format. Google adds the VM's name when it can.
+
+```bash
+python3 explore.py flow
+```
+
+```output
+data/vpc-flow-logs.jsonl: VPC Flow Logs entries, Google's documented record format (cut). ILLUSTRATIVE.
+
+Entry 1, field by field:
+  src_ip         203.0.113.80                   FROM this address
+  dest_ip        10.30.2.5                      TO this address
+  dest_port      11434                          on this port
+  protocol       6                              6 = TCP
+  reporter       DEST                           DEST = the receiving VM reported it
+  dest_instance  gpu-box-1 (example-ds-lab)     WHICH VM: Google adds its name
+  bytes_sent     48210                          how much (estimated from samples), never what
+  start / end    09:12:03 / 09:12:41            WHEN (UTC)
+
+  from            to              port   result    reading
+  203.0.113.80    10.30.2.5       11434  sent      someone on the internet connected to port 11434 (Ollama) on gpu-box-1
+  198.51.100.9    10.30.2.5       22     DROPPED   SSH (port 22) from an unknown address: the firewall dropped it
+  10.20.4.7       198.51.100.200  443    sent      build-runner-2 sent HTTPS out: to WHICH service? Not in this line
+  10.20.8.14      198.51.100.210  443    sent      HTTPS out from an address with no VM details: not a Compute Engine VM
+
+Flow logs answer: who talked to whom, on which port, how much. Names of services and contents are not in them.
+They are off until you enable them (per subnet, VPC network or organization), and they sample.
+```
+
+**5. Cloud DNS query logs.** Which machine looked up which name. `vmInstanceName` is there only for queries a Compute Engine VM made.
+
+```bash
+python3 explore.py dns
+```
+
+```output
+data/inventory/dns.jsonl: Cloud DNS query logs, the lookups made inside ExampleCo's VPC networks (lab values)
+
+One entry, field by field:
+  timestamp        2026-10-20T09:12:04Z                     WHEN (UTC)
+  queryName        api.openai.com.                          the NAME the machine looked up
+  queryType        A                                        A = give me its IPv4 address
+  responseCode     NOERROR                                  the answer: NOERROR = the name exists
+  sourceIP         10.20.4.7                                the machine's address
+  vmInstanceName   build-runner-2                           WHICH VM: only for queries a Compute Engine VM made
+
+  VM              address      looked up                                 times
+  (not a VM)      10.20.8.14   api.anthropic.com                             2  outside AI service
+  build-runner-2  10.20.4.7    api.openai.com                                2  outside AI service
+  helpdesk-web-1  10.20.1.15   europe-west4-aiplatform.googleapis.com        1  Google Cloud
+  helpdesk-web-1  10.20.1.15   storage.googleapis.com                        1  Google Cloud
+
+The flow log said build-runner-2 sent HTTPS to 198.51.100.200. The DNS log says which NAME it looked up.
+```
+
+**6. A detection rule, part by part.** Rule D07 from `detect.py`, then run on the day's request-response rows.
+
+```bash
+python3 explore.py rule
+```
+
+```output
+detect.py, rule D07 "Repeated blocked prompts from one end user", read part by part
+
+  reads            requests.jsonl                       the request-response logging rows
+  looks for        blockReason = MODEL_ARMOR            Model Armor blocked the prompt
+  groups by        labels.end_user                      the customer, as the app wrote it
+  raises an alert  3 or more in 10 minutes              the threshold, from exampleco.json
+  names            the end user                         the thing you would act on
+
+Run on today's 705 request-response rows:
+  cust-8841  6 blocked, 10:40 to 10:49  ALERT [HIGH] D07 Repeated blocked prompts from one end user
+  cust-1034  1 blocked, at 11:24        no alert (fewer than 3)
+
+A rule asks one question of every row. A yes is an alert, with a name on it. Triage decides if it's an incident.
+```
+
+**7. A Security Command Center finding.** One AI threat finding field by field, then the day's two findings and their severity.
+
+```bash
+python3 explore.py finding
+```
+
+```output
+A Security Command Center finding (cut to the fields the lab reads), from scc.jsonl
+
+  category         Persistence: New Geography for AI Service     WHAT SCC thinks happened
+  findingClass     THREAT                                        a possible active attack (not a misconfiguration)
+  severity         LOW                                           LOW, MEDIUM, HIGH or CRITICAL
+  findingProvider  Event Threat Detection                        which detector raised it
+  ruleName         ai_iam_anomalous_behavior_ip_geolocation      the detector's rule
+  principalEmail   etl-batch@...                                 WHO: the service account, not a person
+  callerIp         203.0.113.50                                  FROM WHERE
+  methodName       GenerateContent                               WHAT it called
+  evidence         3 audit insertIds                             the log entries behind it
+  eventTime        2026-10-20T14:12:00Z                          WHEN (UTC)
+
+Today's 2 AI threat findings:
+  14:08  Persistence: New AI API Method                LOW    etl-batch
+  14:12  Persistence: New Geography for AI Service     LOW    etl-batch
+
+Both are LOW. A notification that forwards HIGH and CRITICAL only would send neither.
+```
+
+**8. An AI inventory.** One asset from each of the three signals, then the register check.
+
+```bash
+python3 explore.py inventory
+```
+
+```output
+An AI inventory, built from three signals, then checked against the approved register
+
+Signal 1  Security Command Center's AI inventory (Premium)  ->  models, endpoints, agents, MCP servers
+          Model publishers/google/models/gemini-3.5-flash in example-chatbot-prod, owner support-platform
+          -> Model  publishers/google/models/gemini-3.5-flash  approved, but not protected by Model Armor
+
+Signal 2  Cloud DNS query logs (your check)  ->  an outside AI service
+          build-runner-2 looked up api.openai.com 2 times
+          -> Outside AI API  api.openai.com from build-runner-2  NOT on the register
+
+Signal 3  a firewall rule (your check)  ->  a model server you run on a VM
+          allow-ollama-any allows 0.0.0.0/0 to port 11434 on gpu-box-1 (example-ds-lab)
+          -> self-hosted model server (ollama)  not in the AI inventory's categories
+
+14 AI assets found; 6 are not on data/inventory/sanctioned.json, the approved register.
+Found is not judged: the inventory doesn't say that a port is open to the internet. That's your check.
+```
+
+**9. A framework control, your own check, an organization policy.** Model Armor is on; nothing records what it saw.
+
+```bash
+python3 explore.py policy
+```
+
+```output
+Posture checks look at one setting each. Result: Compliant or NON_COMPLIANT. First-draft setup:
+
+Framework control (Google wrote it, in SCC's AI framework): Enable Model Armor
+  Compliant      Model Armor is on
+
+Custom check (you write it): C03 Model Armor sanitize operations logged (template and floor setting)
+  NON_COMPLIANT  logSanitizeOperations off on helpdesk-guard; floor setting Cloud Logging off
+
+Organization policy (it prevents, it doesn't just report): vertexai.allowedModels: an allow-list of models
+  NON_COMPLIANT  vertexai.allowedModels not set: any model, any publisher
+
+Model Armor is on, and nothing records what it saw. This lab: 4 framework controls, 6 custom checks, 2 organization policies.
+```
+
+**10. A hunting query.** The BigQuery SQL from `queries/`, and the same question asked of the day.
+
+```bash
+python3 explore.py query
+```
+
+```output
+queries/d06-tokens-by-model.sql: BigQuery SQL on the request-response table
+
+  SELECT model,
+         TIMESTAMP_TRUNC(logging_time, HOUR) AS hour,
+         SUM(CAST(JSON_VALUE(full_response, '$.usageMetadata.totalTokenCount') AS INT64)) AS tokens,
+         COUNT(*) AS calls
+  FROM `example-chatbot-prod.ai_logs.request_response_logging`
+  WHERE logging_time >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)
+  GROUP BY model, hour
+  ORDER BY tokens DESC
+
+The same question, asked of today's rows (top 5 of 12):
+  model                   hour        tokens  calls
+  gemini-3.1-flash-lite   16:00    2,831,760    322
+  gemini-3.5-flash        14:00      733,572     67
+  gemini-3.5-flash        15:00      589,959     53
+  gemini-3.1-flash-lite   08:00       40,246     48
+  gemini-3.1-flash-lite   13:00       33,329     36
+
+The table has no caller column: it names the model. labels.end_user (16.1) is how you get to a person.
+Hunting: you ask a question across the logs because you suspect something, not because an alert fired.
+```
+
+**11. A playbook.** The leaked key's first steps. Printed only: nothing runs.
+
+```bash
+python3 explore.py playbook
+```
+
+```output
+A playbook: the steps for one kind of incident, written before the day. Leaked service account key.
+Printed only: nothing runs, nothing is sent.
+
+  TRIGGER   D01 alert at 14:05: etl-batch key used from an unknown address (203.0.113.50, 203.0.113.51)
+  1 CHECK   the key ID is the end of serviceAccountKeyName in the audit entry: 3f9c1e7a5b2d4c6e8f0a1b3c5d7e9f1a2b4c6d8e
+  2 KEEP    copy the evidence before anything changes: 281 records mention etl-batch (report.py pivot)
+  3 CONTAIN the smallest thing that stops the damage: this one key, not the service account
+            gcloud iam service-accounts keys disable 3f9c1e7a5b2d4c6e8f0a1b3c5d7e9f1a2b4c6d8e \
+                --iam-account=etl-batch@example-chatbot-prod.iam.gserviceaccount.com
+  4 WATCH   more calls after that? Someone holds a short-lived token: disable the account (stops the ETL job too)
+  5 RECOVER delete the key, find how it leaked, run the job as an attached service account with no key
+  6 WRITE   the incident report: report/TEMPLATE.md
+
+Containment stops the damage growing. The report says what happened, and what changes so it can't again.
+```
+
+**12. Read one run from the top.** `make simulate` is the lab's first real step. Each number is how many entries of that log the setup collected.
+
+```bash
+make simulate
+```
+
+```output
+python3 simulate.py
+first-draft  audit 9  requests 0  armor 0  scc 0  gateway 0  app 585   -> out/first-draft/
+hardened     audit 903  requests 705  armor 554  scc 2  gateway 33  app 585   -> out/hardened/
+```
 
 ## Step 1 · The day of the five incidents
 
