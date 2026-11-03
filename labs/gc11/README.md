@@ -96,7 +96,7 @@ if a real-looking IP, identity or key creeps in. Nothing in the offline part con
 
 New to Agent Platform or Terraform? Do this before Step 1 (lesson 11.6 calls it "Before you start"). `explore.py`
 shows each idea from lesson 11.0 ("How Agent Platform works, one idea at a time") on its own. Real output below is
-from a fresh Ubuntu machine (recording run 41615070128).
+from a fresh Ubuntu machine (recording run 41618272275).
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the twins in `twin/` (each a `plan.json`
 and an `app.json`), `twin/requirements.json` and `twin/groups.json`, and prints what it finds. No network, no Google
