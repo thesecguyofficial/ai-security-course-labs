@@ -47,7 +47,8 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 |---|---|
 | `checker.py` | The checker: 14 rules (`AZ10-01` to `AZ10-14`), each from a Microsoft document |
 | `secret_scan.py` | A tiny secret scanner (read all of it; use a real one at work) |
-| `attack.py` | 17 requests (12 attacker, 5 legitimate), `--mode vulnerable` or `--mode safe` |
+| `explore.py` | Step 1b: shows how Azure knows who is calling, decides and records one request (`tenant`, `token`, `role`, `decide`, `call`, `event`). Read-only: it reads the lab's files and prints; `token` builds a fake token and sends nothing |
+| `attack.py` | 17 requests (12 attacker, 5 legitimate), `--mode vulnerable` or `--mode safe`; `--only L1` shows one request or group |
 | `azure_model.py` | A **teaching model** of Azure RBAC, keys and Azure Policy (see below) |
 | `hunt.py` | Six hunting rules (`H01` to `H06`), `H07` for you to write, and `--naive` |
 | `contoso/estate.json` | Contoso's Foundry resources and model deployments (shaped like Azure CLI output) |
@@ -96,6 +97,333 @@ logs, a budget) and proves each fix with a request that should now fail. About 7
 - Python **3.11 or newer** (tested on 3.13). Check with `python3 --version`. No packages, no internet.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 - Optional, Step 8 only: the Azure CLI with Bicep, and **your own** Azure subscription, never your employer's.
+
+## Step 1b · Before you start: look at how Azure decides one request (about 10 minutes)
+
+New to Azure? Do this before Step 1 (lesson 10.0 walks through the same six ideas, lesson 10.2 calls this Step 1b).
+`explore.py` shows, one step at a time, how Azure knows who is calling, decides "allowed or not" and records a
+request, using Contoso's files. Real output below is from a fresh Ubuntu machine (recording run 41614970247).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `contoso/`, `fixes/`
+and `logs/` and prints what it finds. `decide` and `call` ask `azure_model.py`, the lab's teaching model of Azure
+RBAC, keys and Azure Policy. `token` builds a fake token in memory and sends nothing. No network, no Azure
+subscription.
+
+**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+
+```bash
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
+standard library, so `make setup` just checks your Python version.
+
+**1. The company.** The tenant (the directory), the subscription (the bill), resource groups, Foundry resources and
+their model deployments, then every identity and the roles it holds, and where:
+
+```bash
+python3 explore.py tenant
+```
+
+```text
+Contoso's Azure (fictional; the IDs are Microsoft documentation examples)
+
+  tenant          aaaabbbb-0000-cccc-1111-dddd2222eeee   the directory (Microsoft Entra ID): who exists, how they sign in
+  subscription    aaaa0a0a-bb1b-cc2c-dd3d-eeeeee4e4e4e   trusts that tenant; gets the bill
+    resource group  rg-helpdesk-prod
+      resource      contoso-helpdesk-ai  (AIServices, swedencentral)  keys ON  public network Enabled
+        deployment  helpdesk-gpt5  model gpt-5 version 1  (GlobalStandard)
+    resource group  rg-ai-sandbox
+      resource      contoso-sandbox-ai  (AIServices, swedencentral)  keys ON  public network Enabled
+        deployment  sandbox-gpt52  model gpt-5.2 version 1  (GlobalStandard)
+        deployment  sandbox-gpt54  model gpt-5.4 version 1  (GlobalStandard)
+
+Identities (security principals) and their role assignments (role @ scope; a scope covers everything below it):
+
+  User             platform-admin  platform-admin@contoso.com
+                   Owner @ subscription
+  ManagedIdentity  helpdesk-app    helpdesk-web (system-assigned)
+                   Contributor @ contoso-helpdesk-ai
+                   Foundry Agent Consumer @ contoso-helpdesk-ai
+  ServicePrincipal ci-deployer     ci-deployer
+                   Contributor @ rg:rg-helpdesk-prod
+                   Contributor @ rg:rg-ai-sandbox
+  Group            data-science    sg-data-science
+                   Foundry User @ subscription
+                   Azure AI Developer @ rg:rg-ai-sandbox
+  User             contractor      contractor@fabrikam.com (guest)
+                   Reader @ subscription
+                   Cognitive Services Contributor @ contoso-sandbox-ai
+
+Azure Policy assignments:
+  allow-only-approved-models @ subscription  effect Audit
+```
+
+A role assigned at a scope covers everything below it, so the data science group's Foundry User at subscription
+scope reaches production too. Both resources still accept keys (`keys ON`), and the only Azure Policy assignment is
+on `Audit`.
+
+**2. How a call proves who it is.** An app either sends a Microsoft Entra ID access token (`Authorization: Bearer`)
+or the resource's key (`api-key` header). Foundry's API accepts either; tokens are asked for with the scope
+`https://cognitiveservices.azure.com/.default`
+([Foundry API reference](https://learn.microsoft.com/en-us/azure/foundry/openai/latest)). Entra ID gives an access
+token "a random value ranging between 60-90 minutes" of life by default
+([access tokens](https://learn.microsoft.com/en-us/entra/identity-platform/access-tokens)):
+
+```bash
+python3 explore.py token
+```
+
+```text
+How a call to a Foundry resource proves who is calling. Nothing is sent; this token is fake.
+
+Way 1: a Microsoft Entra ID access token (what the helpdesk app's managed identity gets)
+  the app asks Entra ID for a token for the scope https://cognitiveservices.azure.com/.default
+  and sends it in every request:
+
+  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IkVYQU1QTEUtS0VZLUlEIn0.eyJhdWQiOiJodHRwczovL2Nv...<signature>
+
+  A token is three base64url parts: header . payload . signature. The payload, decoded:
+    aud  https://cognitiveservices.azure.com      audience: the service this token is for (Foundry's data plane)
+    iss  https://sts.windows.net/aaaabbbb-0000-cccc-1111-dddd2222eeee/
+                                              issuer: the Entra ID tenant that signed it
+    iat  1791968400                               issued at (seconds since 1970: 2026-10-14 09:00 UTC)
+    nbf  1791968400                               not valid before
+    exp  1791972900                               expires: 75 minutes later (Entra ID picks 60 to 90 minutes)
+    oid  cccccccc-2222-3333-4444-dddddddddddd     object ID: WHO is calling (the helpdesk-app managed identity)
+    sub  cccccccc-2222-3333-4444-dddddddddddd     subject: the principal the token is about
+    tid  aaaabbbb-0000-cccc-1111-dddd2222eeee     tenant ID: which directory the caller belongs to
+
+  Azure checks the signature, then runs Azure RBAC for that oid at the resource's scope (see decide).
+  Anyone who copies the token can use it until exp: it is a bearer token, not tied to one request.
+
+Way 2: the resource's key (accepted while key access is on, as on both Contoso resources)
+  api-key: <one of the resource's two keys>
+  No name, no expiry, no role check. Whoever holds the key is let in (lesson 10.4).
+```
+
+The claim descriptions follow Microsoft's
+[access token claims reference](https://learn.microsoft.com/en-us/entra/identity-platform/access-token-claims-reference).
+Unlike AWS (SigV4 signs every request with a secret that never travels), the token itself travels.
+
+**3. A role, read field by field.** `actions` and `notActions` are for managing resources (the control plane);
+`dataActions` and `notDataActions` for using what's inside them (the data plane)
+([Azure RBAC overview](https://learn.microsoft.com/en-us/azure/role-based-access-control/overview)):
+
+```bash
+python3 explore.py role contoso/roles/foundry-user.json
+```
+
+The JSON comes first, then this reading (last lines):
+
+```text
+}
+
+Read it field by field:
+
+  roleName        Foundry User: the name people see
+  id              53ca6127-db72-4b80-b1b0-d745d6d5456d: the role's ID, the same in every tenant for built-in roles
+  actions         14 entries: Microsoft.Authorization/*/read, Microsoft.CognitiveServices/*/read, ...
+                  = what it may do to MANAGE resources (control plane, through Azure Resource Manager)
+  notActions      (none)
+                  = taken away from actions
+  dataActions     Microsoft.CognitiveServices/*
+                  = what it may do INSIDE a resource (data plane: for Foundry, calling a model)
+  notDataActions  (none)
+                  = taken away from dataActions
+
+  note: Microsoft.CognitiveServices/accounts/listkeys/action lets it read the resource's keys (listKeys).
+```
+
+Try `contoso/roles/owner.json` and `contoso/roles/contributor.json`: `actions` is `*`, `dataActions` is empty.
+
+**4. Allowed or denied?** Azure blocks the request if a deny assignment applies (this lab has none), then adds up
+the role assignments that cover the resource: "Azure RBAC is an additive model, so your effective permissions are
+the sum of your role assignments" ([Azure RBAC overview](https://learn.microsoft.com/en-us/azure/role-based-access-control/overview)).
+Azure Policy then checks what is being created or changed:
+
+```bash
+python3 explore.py decide data-science inference contoso-sandbox-ai --deployment sandbox-gpt52
+```
+
+```text
+sandbox-gpt52
+
+request   data-science wants inference = Microsoft.CognitiveServices/accounts/OpenAI/...
+          data plane (using the resource)
+resource  contoso-sandbox-ai/deployments/sandbox-gpt52  (contoso-sandbox-ai)
+world     contoso/ (today)
+
+step 1  how does it prove who it is?  an Entra ID token (who: data-science)
+step 2  its role assignments (2): which ones cover this resource?
+          covers  Foundry User @ subscription
+          covers  Azure AI Developer @ rg:rg-ai-sandbox
+step 3  does a covering role include Microsoft.CognitiveServices/accounts/OpenAI/...?
+          GRANT Foundry User: DataActions ['Microsoft.CognitiveServices/*'] @ subscription
+          GRANT Azure AI Developer: DataActions ['Microsoft.CognitiveServices/accounts/OpenAI/*'] @ rg:rg-ai-sandbox
+step 4  Azure Policy: not checked for this request (the lab's two policies look at deployments and settings)
+
+=> ALLOWED (200): a role covers it
+```
+
+The subscription Owner can't call a model with its own identity (last lines):
+
+```bash
+python3 explore.py decide platform-admin inference contoso-helpdesk-ai --deployment helpdesk-gpt5
+```
+
+```text
+step 2  its role assignments (1): which ones cover this resource?
+          covers  Owner @ subscription
+step 3  does a covering role include Microsoft.CognitiveServices/accounts/OpenAI/...?
+          no    Owner: no DataActions (management only) @ subscription
+
+=> DENIED (401): no role gives it this permission here (Azure RBAC only adds; nothing allows it)
+```
+
+But it can read the keys, and a key calls any deployment on its resource with no role check (last lines):
+
+```bash
+python3 explore.py decide platform-admin listKeys contoso-helpdesk-ai
+```
+
+```text
+step 2  its role assignments (1): which ones cover this resource?
+          covers  Owner @ subscription
+step 3  does a covering role include Microsoft.CognitiveServices/accounts/listKeys/action?
+          GRANT Owner: Actions '*' covers Microsoft.CognitiveServices/accounts/listKeys/action @ subscription
+step 4  Azure Policy: not checked for this request (the lab's two policies look at deployments and settings)
+
+=> ALLOWED (200): a role covers it
+```
+
+With the fixes (Step 4), a deployment of an unapproved model passes RBAC and the policy on `Deny` refuses it
+(last lines):
+
+```bash
+python3 explore.py decide ci-deployer deploymentWrite contoso-sandbox-ai --deployment resale-xl --model fabrikam --fixes
+```
+
+```text
+step 2  its role assignments (2): which ones cover this resource?
+          no      Contoso Foundry Deployer @ rg:rg-helpdesk-prod
+          covers  Contoso Foundry Deployer @ rg:rg-ai-sandbox
+step 3  does a covering role include Microsoft.CognitiveServices/accounts/deployments/write?
+          GRANT Contoso Foundry Deployer: Actions 'Microsoft.CognitiveServices/accounts/deployments/write' covers Microsoft.CognitiveServices/accounts/deployments/write @ rg:rg-ai-sandbox
+step 4  Azure Policy: 2 assignment(s) cover it; rules matched: POLICY allow-only-approved-models: Deny
+
+=> DENIED (403): a policy with effect Deny refused it, whatever the role allows
+```
+
+**5. One model call.** The request goes to the resource's own endpoint (`https://<resource>.openai.azure.com/openai/v1/`),
+and `model` names the deployment ([Foundry endpoints](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/endpoints)):
+
+```bash
+python3 explore.py call helpdesk-app helpdesk-gpt5
+```
+
+```text
+One chat call, as the app would send it (illustrative; nothing is sent):
+
+  POST https://contoso-helpdesk-ai.openai.azure.com/openai/v1/chat/completions
+  Authorization: Bearer <Entra ID token for https://cognitiveservices.azure.com>
+  {"model": "helpdesk-gpt5", "messages": [{"role": "user", "content": "Summarise ticket 4521 in one line."}]}
+
+  The request goes straight to the resource's own endpoint (the data plane), not to Azure Resource Manager.
+  "model" names the DEPLOYMENT (helpdesk-gpt5), which points at one model version.
+
+What Azure checks:
+  no    Contributor: no DataActions (management only) @ contoso-helpdesk-ai
+  no    Foundry Agent Consumer: matrix column 'data_actions' = False @ contoso-helpdesk-ai
+
+=> DENIED (401). If it goes through, the bill counts input and output tokens.
+```
+
+The helpdesk app's own roles can't call the model. Add `--key` and it works, with no role checked: that is why
+Contoso's app uses the key today (last lines):
+
+```bash
+python3 explore.py call helpdesk-app helpdesk-gpt5 --key
+```
+
+```text
+What Azure checks:
+  key access is ON: the key grants full access, no role is checked
+
+=> ALLOWED (200). If it goes through, the bill counts input and output tokens.
+```
+
+**6. What the logs kept.** One Activity Log record, field by field (field names from Microsoft's
+[activity log schema](https://learn.microsoft.com/en-us/azure/azure-monitor/platform/activity-log-schema)):
+
+```bash
+python3 explore.py event listKeys --from 203.0.113.77
+```
+
+```text
+Activity Log record 6 of 13 (fake, trimmed to the fields of Microsoft's schema)
+
+  who    caller           00001111-aaaa-2222-bbbb-3333cccc4444  (= ci-deployer, a ServicePrincipal: its app ID)
+  what   operationName    Microsoft.CognitiveServices/accounts/listKeys/action
+         resourceId       contoso-helpdesk-ai  (shortened here)
+  where  clientIpAddress  203.0.113.77
+         method           POST
+  when   eventTimestamp   2026-10-14T02:14:07Z
+  kind   category         Administrative
+  result status           Succeeded  (OK)
+
+  not here: any model call. The Activity Log covers the control plane (managing), not the data plane.
+```
+
+The model calls are in a different place, the resource's own logs. One fake request-log row:
+
+```bash
+python3 explore.py event ChatCompletions --from 203.0.113.62
+```
+
+```text
+Request-log row 205 of 664 (fake AzureDiagnostics, category RequestResponse: a resource log)
+
+  what   OperationName    ChatCompletions
+         properties_s     {"deployment": "helpdesk-gpt5"}
+         _ResourceId      contoso-helpdesk-ai  (shortened here)
+  where  CallerIPAddress  203.0.113.62
+  when   TimeGenerated    2026-10-14T03:00:01Z
+  result ResultSignature  200
+         DurationMs       593
+
+  This row exists only because a diagnostic setting sends the resource's logs somewhere.
+  not here: the prompt and the answer.
+```
+
+Leave out `--from` to see Contoso's normal traffic; `--nth 2` picks the next match.
+
+**7. Read one lab result.** `attack.py --only` shows one request or group (`A`, `B`, `L`, or an ID like `L1`):
+
+```bash
+python3 attack.py --only L1
+```
+
+```text
+--- AZ10 lab · VULNERABLE · contoso/ ---
+    (azure_model.py: a teaching model of Azure RBAC, keys and Azure Policy; nothing is sent to Azure)
+
+  ok L1  ALLOWED 200    Helpdesk app answers a customer (today: key; fixed: Entra ID token)
+                     key access is ON: the key grants full access, no role is checked
+
+Attacker requests allowed: 0 of 0   ·   legitimate requests allowed: 1 of 1   (showing L1 only)
+```
+
+From the top: the mode and the folder it reads, the reminder that this is a teaching model, then one request: the
+mark (`ok` = the result we want; `!!` = needs fixing), its ID, the verdict and the status Azure would return, what
+was asked, and the deciding reason. Last, the count.
 
 ## Step 1 · Check: find the risky settings
 

@@ -49,8 +49,8 @@ def member(corp: Corp, who: str) -> str:
 
 
 def _short(m: str) -> str:
-    return m.replace("@example-ci.iam.gserviceaccount.com", "@example-ci.iam...") \
-            .replace("@example-chatbot-prod.iam.gserviceaccount.com", "@example-chatbot-prod.iam...")
+    """Drop the 'serviceAccount:'-style prefix only where the column already says what it is."""
+    return m
 
 
 # ---------------------------------------------------------------- 1. org
@@ -69,7 +69,7 @@ def cmd_org(a) -> None:
     for sa in corp.service_accounts:
         keys = sa["userManagedKeys"]
         k = f"{len(keys)} key, valid until {keys[0]['validBeforeTime'][:10]} (never expires)" if keys else "no keys"
-        print(f"  {_short(sa['email']):<52} {k}")
+        print(f"  {sa['email']:<62} {k}")
         print(f"    attached to: {sa['attachedTo']}")
     print("\nAPI keys (no identity; billed to their project):\n")
     for k in corp.keys:
