@@ -28,6 +28,8 @@ import json
 import pathlib
 import sys
 
+sys.dont_write_bytecode = True
+
 import attack
 from azure_model import OPS, Azure, deployment_fields, account_fields, policy_effects, scope_covers, short_scope
 
@@ -88,7 +90,7 @@ def cmd_token(a) -> None:
     iat = 1791968400                                    # 2026-10-14T09:00:00Z
     header = {"typ": "JWT", "alg": "RS256", "kid": "EXAMPLE-KEY-ID"}
     payload = {"aud": "https://cognitiveservices.azure.com", "iss": f"https://sts.windows.net/{tid}/",
-               "iat": iat, "nbf": iat, "exp": iat + 75 * 60, "oid": oid, "sub": oid, "tid": tid}
+               "iat": iat, "nbf": iat, "exp": iat + 24 * 3600, "oid": oid, "sub": oid, "tid": tid}
     print("How a call to a Foundry resource proves who is calling. Nothing is sent; this token is fake.\n")
     print("Way 1: a Microsoft Entra ID access token (what the helpdesk app's managed identity gets)")
     print("  the app asks Entra ID for a token for the scope https://cognitiveservices.azure.com/.default")
@@ -99,7 +101,7 @@ def cmd_token(a) -> None:
              "iss": "issuer: the Entra ID tenant that signed it",
              "iat": "issued at (seconds since 1970: 2026-10-14 09:00 UTC)",
              "nbf": "not valid before",
-             "exp": "expires: 75 minutes later (Entra ID picks 60 to 90 minutes)",
+             "exp": "expires: about a day later (managed identity tokens are cached for around 24 hours)",
              "oid": "object ID: WHO is calling (the helpdesk-app managed identity)",
              "sub": "subject: the principal the token is about",
              "tid": "tenant ID: which directory the caller belongs to"}
@@ -109,7 +111,8 @@ def cmd_token(a) -> None:
         else:
             print(f"    {k:<4} {str(v):<40} {notes[k]}")
     print("\n  Azure checks the signature, then runs Azure RBAC for that oid at the resource's scope (see decide).")
-    print("  Anyone who copies the token can use it until exp: it is a bearer token, not tied to one request.\n")
+    print("  Anyone who copies the token can use it until exp: it is a bearer token, not tied to one request.")
+    print("  (A user's token gets a random lifetime of 60 to 90 minutes; a managed identity's lasts far longer.)\n")
     print("Way 2: the resource's key (accepted while key access is on, as on both Contoso resources)")
     print("  api-key: <one of the resource's two keys>")
     print("  No name, no expiry, no role check. Whoever holds the key is let in (lesson 10.4).")

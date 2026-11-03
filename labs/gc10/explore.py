@@ -26,6 +26,8 @@ import json
 import pathlib
 import sys
 
+sys.dont_write_bytecode = True
+
 from gcp_eval import Corp, Request, evaluate, role_grants
 
 HERE = pathlib.Path(__file__).resolve().parent
