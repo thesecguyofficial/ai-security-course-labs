@@ -102,7 +102,7 @@ Outside addresses use the reserved `.example` domain. Nothing here contacts Azur
 
 New to Azure AI Search and Foundry agents? Do this before Step 1 (lesson 13.3 calls it "Before you start", and
 lesson 13.0 walks through the same twelve ideas). `explore.py` shows each piece one at a time. Real output below is
-from a fresh Ubuntu machine (recording run 41615029550).
+from a fresh Ubuntu machine (recording run 41618307252).
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads `data/`, `contoso/` and `fixes/` and asks
 `twin.py`, the lab's offline teaching model. No network, no Azure subscription.
@@ -283,7 +283,7 @@ The prompt agent helpdesk-agent (setup contoso): kind prompt, model deployment h
       require_approval never
       user token       not forwarded
     mcp helpdesk-actions connection conn-actions-pat (CustomKeys: svc-helpdesk-admin's credential for every user)
-      allowed_tools    not set: every tool on the server (search_tickets, create_ticket, send_email, close_ticket, delete_ticket)
+      allowed_tools    not set or []: every tool on the server (search_tickets, create_ticket, send_email, close_ticket, delete_ticket)
       require_approval never
 
   Guardrail contoso-agent-v1:
