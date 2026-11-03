@@ -43,7 +43,8 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | File | What it is |
 |---|---|
 | `policy_checker.py` | The checker: rules `GC10-01` to `GC10-16`, plus a secret scan for Google API key strings |
-| `attack.py` | 17 requests (9 attacker, 8 legitimate), `--mode vulnerable` or `--mode safe`, plus `--preview-org-policy` |
+| `attack.py` | 17 requests (9 attacker, 8 legitimate), `--mode vulnerable` or `--mode safe`, plus `--preview-org-policy`; `--only L1` shows one request or group |
+| `explore.py` | Step 1b: shows how Google Cloud knows who is calling, decides and records one request (`org`, `auth`, `policy`, `decide`, `call`, `event`). Read-only: it reads the lab's files and prints |
 | `gcp_eval.py` | A **teaching model** of how Google Cloud decides whether a request goes through (see below) |
 | `hunt.py` | Nine hunting rules (`H01` to `H09`; `H09` is yours to write), plus `--naive` and `--summary` |
 | `examplecorp/` | The company: `hierarchy.json` (organization, folders, projects), `iam/` allow policies, `org-policies/`, `api-keys.json`, `service-accounts.json`, `budgets.json`, `groups.json`, `approved-models.json`, and `repo/` (a demo repo with a committed key) |
@@ -87,6 +88,325 @@ contacts Google or any other system. Test 19 fails if a real-looking IP, identit
 - Python **3.11 or newer** (tested on 3.13). Check with `python3 --version`. No packages, no internet.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 - Optional, Step 8 only: the `gcloud` CLI and **your own** Free Trial project (lesson 0.7).
+
+## Step 1b · Before you attack: look at how Google Cloud decides one request (about 10 minutes)
+
+New to Google Cloud? Do this before Step 1 (lesson 10.0 walks through the same six ideas, lesson 10.3 calls this
+Step 1b). `explore.py` shows, one step at a time, how Google Cloud knows who is calling, decides "allowed or not" and
+records a request, using ExampleCo's files. Real output below is from a fresh Ubuntu machine (recording run
+41615915759).
+
+**What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `examplecorp/`,
+`fixes/` and `auditlogs/` and prints what it finds. `decide` and `call` ask `gcp_eval.py`, the lab's teaching model
+of Google Cloud's rules. No network, no Google Cloud account.
+
+**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+
+```bash
+make -n setup
+make setup
+```
+
+```text
+python3 ../../tools/check_python.py 3.11
+Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+```
+
+Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
+clash; it keeps versions apart, it isn't a security sandbox) and run `pip install -r requirements.txt`. This lab's
+`requirements.txt` lists nothing, so `make setup` just checks your Python version.
+
+**1. The company.** The organization, folders and projects (with the AI APIs each one has switched on), the service
+accounts and their downloaded keys, and the API keys with their limits:
+
+```bash
+python3 explore.py org
+```
+
+```text
+ExampleCo's Google Cloud (fictional; numbers are placeholders)
+
+  organization  organizations/123456789012  (example.com, created 2023-02-14)
+    folder      folders/111111111111  (prod)
+      project   example-chatbot-prod number 100000000001   AI APIs on: aiplatform
+      project   example-ci           number 100000000003   AI APIs on: none
+    folder      folders/222222222222  (sandbox)
+      project   example-ds-sandbox   number 100000000002   AI APIs on: aiplatform
+      project   example-legacy-web   number 100000000004   AI APIs on: generativelanguage
+
+Service accounts (identities for software) and their user-managed keys:
+
+  chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com   no keys
+    attached to: Cloud Run service helpdesk-chatbot
+  ci-deployer@example-ci.iam.gserviceaccount.com                 no keys
+    attached to: Cloud Build pipeline (no keys)
+  legacy-etl@example-ci.iam.gserviceaccount.com                  1 key, valid until 9999-12-31 (never expires)
+    attached to: none: a 2025 summarisation job ran on a laptop with a downloaded JSON key
+  100000000001-compute@developer.gserviceaccount.com             no keys
+    attached to: Compute Engine default service account (created automatically)
+
+API keys (no identity; billed to their project):
+
+  chatbot-frontend       project example-chatbot-prod may call ANY API; from anywhere
+  ops-eval-key           project example-chatbot-prod may call aiplatform; from anywhere   bound to chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com
+  store-locator-website  project example-legacy-web   may call maps-backend, generativelanguage; from websites
+  ds-notebook-key        project example-ds-sandbox   may call aiplatform; from IPs 198.51.100.0/24
+```
+
+`legacy-etl` has a downloaded key that never expires, and `chatbot-frontend` is an API key that may call any API
+from anywhere: those are Attackers 2 and 1 in Step 2.
+
+**2. How a call proves who it is.** Three ways: an access token from Application Default Credentials, a downloaded
+service account key, or an API key in the `x-goog-api-key` header
+([ADC](https://docs.cloud.google.com/docs/authentication/application-default-credentials),
+[token types](https://docs.cloud.google.com/docs/authentication/token-types),
+[use API keys](https://docs.cloud.google.com/docs/authentication/api-keys-use)):
+
+```bash
+python3 explore.py auth
+```
+
+```text
+How a call to Google Cloud proves who is calling. Nothing is sent.
+
+Way 1: an OAuth 2.0 access token (what the chatbot on Cloud Run uses)
+  The code asks Application Default Credentials (ADC) for a token. On Cloud Run, ADC gets it from the
+  metadata server, for the service account ATTACHED to the service: chatbot-runtime.
+  Authorization: Bearer <access token>
+  The token is opaque (not meant to be read) and lasts 1 hour by default. Whoever holds it can use it.
+
+Way 2: a downloaded service account key (what legacy-etl's laptop job used)
+  A JSON file with a private key. The code signs a short token (a JWT) with it and uses that,
+  or trades it for an access token. The key itself does not expire:
+    client_email    legacy-etl@example-ci.iam.gserviceaccount.com
+    private_key_id  0123456789abcdef0123456789abcdef01234567
+    valid after     2025-01-09T11:00:00Z
+    valid before    9999-12-31T23:59:59Z   (= never)
+  Copy the file and you ARE legacy-etl, from anywhere, until someone deletes the key.
+
+Way 3: an API key (what the chatbot's web tier and the notebook use)
+  x-goog-api-key: <the key string>
+  A standard key names no one: Google ties the call to the key's project. Its only limits are its
+  restrictions (which APIs, from which IPs or websites). A key bound to a service account
+  authenticates AS that service account (ops-eval-key, lesson 10.4).
+
+Then, for Ways 1 and 2 (and a bound key), IAM checks the identity's roles: see decide.
+```
+
+Unlike AWS (SigV4 signs every request with a secret that never travels), the token itself travels.
+
+**3. An allow policy, read binding by binding.** Each binding gives one role to a list of members; the policy on a
+folder or the organization reaches every project below it, because the effective policy is "the union" of the
+resource's own and its ancestors' ([allow policies](https://docs.cloud.google.com/iam/docs/allow-policies)):
+
+```bash
+python3 explore.py policy examplecorp/iam/folders-111111111111.json
+```
+
+The JSON comes first, then this reading (last lines):
+
+```text
+
+  binding 1  role roles/editor: a bundle of permissions
+             member serviceAccount:ci-deployer@example-ci.iam.gserviceaccount.com  (a service account: software)
+             member serviceAccount:legacy-etl@example-ci.iam.gserviceaccount.com  (a service account: software)
+
+  binding 2  role roles/viewer: a bundle of permissions
+             member group:sre@example.com  (a group of people)
+
+  auditConfigs  none: Data Access audit logs stay off here (Google's default)
+  etag          BwXexample2=: a version stamp, so two people can't overwrite each other's change
+
+  Every binding here also applies to every project under folders/111111111111.
+```
+
+Try `examplecorp/iam/projects-example-chatbot-prod.json`: it has an `auditConfigs` block, the switch for Data Access
+logs.
+
+**4. Allowed or denied?** IAM "always checks relevant deny policies before checking relevant allow policies"
+([deny policies](https://docs.cloud.google.com/iam/docs/deny-overview); this lab has none). `decide` walks the allow
+side up the tree, nearest first, then the model allow-list:
+
+```bash
+python3 explore.py decide alice aiplatform.endpoints.predict example-ds-sandbox
+```
+
+```text
+request   user:alice@example.com wants aiplatform.endpoints.predict
+on        projects/example-ds-sandbox
+as        group:data-science@example.com, user:alice@example.com  (itself plus its groups)
+world     examplecorp/ (today)
+
+step 1  walk up the tree, nearest first: which bindings name it, and does the role include the permission?
+          projects/example-ds-sandbox      roles/consumerprocurement.entitlementManager no
+          folders/222222222222             roles/aiplatform.user                        YES
+          folders/222222222222             roles/serviceusage.serviceUsageAdmin         no
+          organizations/123456789012       no binding for it
+step 2  organization policy: no model in this request, so vertexai.allowedModels doesn't apply
+
+=> ALLOWED: roles/aiplatform.user on folders/222222222222 (inherited by example-ds-sandbox), and nothing refuses it
+```
+
+Alice holds no AI role on the project; her group's role on the sandbox folder is inherited. `legacy-etl` gets the
+right to deploy models in prod twice over, from two levels up (last lines):
+
+```bash
+python3 explore.py decide legacy-etl aiplatform.endpoints.deploy example-chatbot-prod
+```
+
+```text
+step 1  walk up the tree, nearest first: which bindings name it, and does the role include the permission?
+          projects/example-chatbot-prod    no binding for it
+          folders/111111111111             roles/editor                                 YES
+          organizations/123456789012       roles/aiplatform.user                        YES
+step 2  organization policy: no model in this request, so vertexai.allowedModels doesn't apply
+
+=> ALLOWED: roles/editor on folders/111111111111 (inherited by example-chatbot-prod), and nothing refuses it
+```
+
+Nothing allows `sam` to call a model, so the answer is no (last lines):
+
+```bash
+python3 explore.py decide sam aiplatform.endpoints.predict example-ds-sandbox
+```
+
+```text
+step 1  walk up the tree, nearest first: which bindings name it, and does the role include the permission?
+          projects/example-ds-sandbox      no binding for it
+          folders/222222222222             no binding for it
+          organizations/123456789012       roles/logging.privateLogViewer               no
+
+=> DENIED: no role anywhere up the tree gives it aiplatform.endpoints.predict (no allow = denied)
+```
+
+With the fixes (Step 3), the chatbot's own account passes IAM for a model nobody approved for prod, and the
+organization policy refuses it (last lines):
+
+```bash
+python3 explore.py decide chatbot-runtime aiplatform.endpoints.predict example-chatbot-prod --model gemini-3.5-flash --fixes
+```
+
+```text
+step 1  walk up the tree, nearest first: which bindings name it, and does the role include the permission?
+          projects/example-chatbot-prod    roles/aiplatform.user                        YES
+          folders/111111111111             no binding for it
+          organizations/123456789012       no binding for it
+step 2  organization policy vertexai.allowedModels for publishers/google/models/gemini-3.5-flash:predict:
+          not on the vertexai.allowedModels allow-list (folders/111111111111/policies/vertexai.allowedModels)
+
+=> DENIED: IAM allows it, but the organization policy refuses this model
+```
+
+**5. One model call, and its checks.** The request goes to the global endpoint, `https://aiplatform.googleapis.com/v1/projects/PROJECT/locations/global/publishers/google/models/MODEL:generateContent`
+([locations](https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/locations)):
+
+```bash
+python3 explore.py call chatbot-runtime gemini-3.1-flash-lite example-chatbot-prod
+```
+
+```text
+d
+
+One generateContent call, as the app would send it (illustrative; nothing is sent):
+
+  POST https://aiplatform.googleapis.com/v1/projects/example-chatbot-prod/locations/global
+       /publishers/google/models/gemini-3.1-flash-lite:generateContent      (one URL, split here to fit)
+  Authorization: Bearer <access token>
+  {"contents": {"role": "user", "parts": {"text": "Summarise ticket 4521 in one line."}}}
+
+Calling a model needs the IAM permission aiplatform.endpoints.predict. The checks, in order (from 192.0.2.10):
+  ok  IAM: aiplatform.endpoints.predict via roles/aiplatform.admin on projects/example-chatbot-prod
+  ok  org policy: no vertexai.allowedModels policy anywhere: all models and actions allowed
+
+=> the call goes through: every check must pass. If it goes through, the bill counts input and output tokens.
+```
+
+The same kind of call with the `chatbot-frontend` API key, from Attacker 1's address. No identity, so no IAM check
+(last lines):
+
+```bash
+python3 explore.py call chatbot-frontend gemini-3.5-flash example-chatbot-prod --from 203.0.113.50
+```
+
+```text
+Calling a model needs the IAM permission aiplatform.endpoints.predict. The checks, in order (from 203.0.113.50):
+  ok  UNRESTRICTED standard key (no identity; billed to example-chatbot-prod)
+  ok  org policy: no vertexai.allowedModels policy anywhere: all models and actions allowed
+
+=> the call goes through: every check must pass. If it goes through, the bill counts input and output tokens.
+```
+
+Add `--fixes` to either command to see the files in `fixes/` (Step 3) at work.
+
+**6. What the audit log kept.** One fake entry, field by field
+([AuditLog fields](https://docs.cloud.google.com/logging/docs/reference/audit/auditlog/rest/Shared.Types/AuditLog)):
+
+```bash
+python3 explore.py event GenerateContent
+```
+
+```text
+Audit log entry 1 of 461 (fake, with the fields of Google's AuditLog format)
+
+  which  logName        .../cloudaudit.googleapis.com%2Fdata_access   (Data Access)
+  who    principalEmail chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com
+  what   serviceName    aiplatform.googleapis.com
+         methodName     google.cloud.aiplatform.v1.PredictionService.GenerateContent
+         resourceName   projects/example-chatbot-prod/locations/global/publishers/google/models/gemini-3.1-flash-lite
+  where  callerIp       192.0.2.10
+         userAgent      helpdesk-chatbot/2.3 (lab placeholder)
+  when   timestamp      2026-10-12T00:09:53.000Z
+  how    permission     aiplatform.endpoints.predict  granted=True
+  result status         {}  (empty: it worked)
+
+  This entry exists only because Data Access logs are switched on for aiplatform in this project.
+  not here: the prompt and the answer. The audit log records the call, not the conversation.
+```
+
+An Admin Activity entry, for comparison:
+
+```bash
+python3 explore.py event CreateServiceAccountKey
+```
+
+```text
+Audit log entry 323 of 461 (fake, with the fields of Google's AuditLog format)
+
+  which  logName        .../cloudaudit.googleapis.com%2Factivity   (Admin Activity)
+  who    principalEmail legacy-etl@example-ci.iam.gserviceaccount.com
+  what   serviceName    iam.googleapis.com
+         methodName     google.iam.admin.v1.CreateServiceAccountKey
+         resourceName   projects/-/serviceAccounts/chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com
+  where  callerIp       203.0.113.77
+         userAgent      Python/3.11 aiohttp/3.9.5
+  when   timestamp      2026-10-16T01:41:10.000Z
+  how    permission     iam.serviceAccountKeys.create  granted=True
+  result status         {}  (empty: it worked)
+
+  Admin Activity entries are always written: nobody had to switch them on.
+```
+
+`--from 203.0.113.77` picks Attacker 2's entries (Step 6); `--nth 2` the next match.
+
+**7. Read one lab result.** `attack.py --only` shows one request or group (`A`, `B`, `C`, `L`, or an ID like `L1`):
+
+```bash
+python3 attack.py --only L1
+```
+
+```text
+--- GC10 lab · VULNERABLE · ExampleCo today ---
+    (gcp_eval.py: a teaching model of Google Cloud's rules; nothing is sent to Google)
+
+Legitimate traffic · must keep working after the fixes
+  [L1] ALLOWED  Chatbot on Cloud Run: GenerateContent on the approved model as chatbot-runtime
+         why: every check passed: IAM: aiplatform.endpoints.predict via roles/aiplatform.admin on projects/example-chatbot-prod; org policy: no vertexai.allowedModels policy anywhere: all models and actions allowed
+
+0 of 0 attacker requests allowed; 1 of 1 legitimate requests allowed.  (showing L1 only)
+```
+
+From the top: the mode, the reminder that this is a teaching model, the group, the request with its verdict, and the
+**why** line: each check it passed, separated by semicolons (or the one that failed). Last, the count.
 
 ## Step 1 · Check: find the mistakes
 
