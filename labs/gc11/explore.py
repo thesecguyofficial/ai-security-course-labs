@@ -139,7 +139,7 @@ def cmd_route(a) -> None:
     vm = d.vms()["helpdesk-vm"]
     reach, path, why = d.route_to(vm, host)
     print(f"\nCan the hardened Helpdesk VM reach it privately?  {'yes' if reach else 'NO'}")
-    print("  " + why.replace(": Private Google Access", ":\n  Private Google Access"))
+    print("  " + why.replace(": Private Google Access", ":\n  Private Google Access").replace(", the all-apis", ",\n  the all-apis"))
 
 
 # ---------------------------------------------------------------- 5. network

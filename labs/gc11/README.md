@@ -655,14 +655,14 @@ Attackers
 
 Legitimate traffic · must keep working
   [L1] DENIED   Helpdesk VM: GenerateContent on the approved Gemini model as chatbot-runtime
-         why: network: aiplatform.eu.rep.googleapis.com ends in rep.googleapis.com: Private Google Access doesn't support it and the PSC bundles for global Google APIs exclude *.rep.googleapis.com
+         why: network: aiplatform.eu.rep.googleapis.com ends in rep.googleapis.com: Private Google Access doesn't support it, the all-apis bundle excludes *.rep.googleapis.com and Google doesn't document vpc-sc reaching them
   [L2] ALLOWED  Helpdesk VM: read ticket history from BigQuery
          why: every check passed
   [L3] ALLOWED  Analyst in the office (198.51.100.21): query the tickets dataset
          why: every check passed
          · VPC Service Controls DRY RUN would block this, but only logs it: ingress from 198.51.100.21 has no matching ingress rule (NO_MATCHING_ACCESS_LEVEL)
   [L4] DENIED   Ticket summariser VM: GenerateContent on the approved Gemini model
-         why: network: aiplatform.eu.rep.googleapis.com ends in rep.googleapis.com: Private Google Access doesn't support it and the PSC bundles for global Google APIs exclude *.rep.googleapis.com
+         why: network: aiplatform.eu.rep.googleapis.com ends in rep.googleapis.com: Private Google Access doesn't support it, the all-apis bundle excludes *.rep.googleapis.com and Google doesn't document vpc-sc reaching them
 
 The auditor's questions
   [Q1] YES  Can we see who called Gemini, as which identity, from which IP?

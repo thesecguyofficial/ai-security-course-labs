@@ -14,8 +14,9 @@ depends on, each taken from Google's documentation (links in the README):
      every value it doesn't list (values look like publishers/P/models/M:ACTION).
   4. Network path from a VM. An external IP or Cloud NAT = a route to the internet. With neither, Google APIs are
      reached through a Private Service Connect (PSC) endpoint (with a private googleapis.com zone) or Private Google
-     Access on the subnet. Private Google Access doesn't support endpoints that end in rep.googleapis.com, and the
-     PSC bundles for global Google APIs exclude *.rep.googleapis.com. An egress deny-all firewall rule blocks
+     Access on the subnet. Private Google Access doesn't support endpoints that end in rep.googleapis.com, the
+     all-apis PSC bundle excludes *.rep.googleapis.com, and Google doesn't document the vpc-sc bundle reaching them
+     (the twin treats them as unreachable through it). An egress deny-all firewall rule blocks
      everything not explicitly allowed.
   5. VPC Service Controls. For a restricted service on a project in the perimeter: access from outside (the
      internet, an office) needs an ingress rule; a copy to a project outside needs an egress rule. A perimeter in
@@ -255,8 +256,9 @@ class Deployment:
         if not rep and self.pga_on(vm["subnetwork"]) and allowed_ranges is None:
             return True, "pga", "Private Google Access on the subnet"
         if rep:
-            return False, "none", (f"{host} ends in rep.googleapis.com: Private Google Access doesn't support it and "
-                                   "the PSC bundles for global Google APIs exclude *.rep.googleapis.com")
+            return False, "none", (f"{host} ends in rep.googleapis.com: Private Google Access doesn't support it, "
+                                   "the all-apis bundle excludes *.rep.googleapis.com and Google doesn't document "
+                                   "vpc-sc reaching them")
         return False, "none", "no private path to Google APIs and no internet route"
 
     # ---- VPC Service Controls ---------------------------------------------------------------------------------------
