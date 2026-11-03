@@ -1,0 +1,98 @@
+{
+  "name": "gc13-13.3-understand-linux",
+  "lesson": "13.0, 13.3",
+  "title": "Lab GC13, part 1: get the lab, look at the import buckets, RAG Engine corpora, one retrieveContexts call, what the agent's identity can reach, Agent Search ACLs, the ADK agent and one turn in ADK order (explore.py) before reviewing the port",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/gc13 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The twins",
+      "type": "ls twin/* data",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Source",
+      "type": "python3 explore.py source",
+      "pause_after": 6
+    },
+    {
+      "label": "Corpus today",
+      "type": "python3 explore.py corpus today",
+      "pause_after": 6
+    },
+    {
+      "label": "Corpus fixed",
+      "type": "python3 explore.py corpus hardened",
+      "pause_after": 6
+    },
+    {
+      "label": "Retrieve",
+      "type": "python3 explore.py retrieve today \"What discount do hospital partners get?\" --filter 'team == \"finance\"'",
+      "pause_after": 6
+    },
+    {
+      "label": "Reach",
+      "type": "python3 explore.py reach hardened",
+      "pause_after": 6
+    },
+    {
+      "label": "Search",
+      "type": "python3 explore.py search hardened \"hospital partner discount\" --as alice@example.com",
+      "pause_after": 6
+    },
+    {
+      "label": "As agent",
+      "type": "python3 explore.py search hardened \"hospital partner discount\"",
+      "pause_after": 6
+    },
+    {
+      "label": "ACL",
+      "type": "python3 explore.py acl alice@example.com fin-pricing",
+      "pause_after": 6
+    },
+    {
+      "label": "Agent today",
+      "type": "python3 explore.py agent today",
+      "pause_after": 6
+    },
+    {
+      "label": "Agent fixed",
+      "type": "python3 explore.py agent hardened",
+      "pause_after": 6
+    },
+    {
+      "label": "Turn today",
+      "type": "python3 explore.py turn today alice@example.com \"Summarise ticket T-2042 for me.\"",
+      "pause_after": 7
+    },
+    {
+      "label": "Turn fixed",
+      "type": "python3 explore.py turn hardened bob@example.com \"Please close ticket T-2041, the customer confirmed it is fixed.\"",
+      "pause_after": 7
+    }
+  ]
+}

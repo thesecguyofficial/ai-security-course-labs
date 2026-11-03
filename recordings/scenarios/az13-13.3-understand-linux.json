@@ -1,0 +1,103 @@
+{
+  "name": "az13-13.3-understand-linux",
+  "lesson": "13.0, 13.3",
+  "title": "Lab AZ13, part 1: get the lab, look at the documents, the index, both query paths, one access decision, the prompt agent, one turn and the connection identities (explore.py) before reviewing the port",
+  "cols": 132,
+  "rows": 36,
+  "before": [],
+  "fail_on": [
+    "Traceback"
+  ],
+  "steps": [
+    {
+      "label": "Download",
+      "type": "git clone https://github.com/thesecguyofficial/ai-security-course-labs.git",
+      "pause_after": 3
+    },
+    {
+      "label": "The lab",
+      "type": "cd ai-security-course-labs/labs/az13 && ls",
+      "pause_after": 4
+    },
+    {
+      "label": "The setups",
+      "type": "ls contoso fixes data",
+      "pause_after": 4
+    },
+    {
+      "label": "Setup plan",
+      "type": "make -n setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Setup",
+      "type": "make setup",
+      "pause_after": 3
+    },
+    {
+      "label": "Source",
+      "type": "python3 explore.py source",
+      "pause_after": 6
+    },
+    {
+      "label": "Index v1",
+      "type": "python3 explore.py index contoso",
+      "pause_after": 6
+    },
+    {
+      "label": "Index fixed",
+      "type": "python3 explore.py index fixes",
+      "pause_after": 6
+    },
+    {
+      "label": "Search",
+      "type": "python3 explore.py search contoso \"disciplinary case notes\" --user bob --groups helpdesk-staff,hr",
+      "pause_after": 6
+    },
+    {
+      "label": "Retrieve",
+      "type": "python3 explore.py retrieve fixes \"disciplinary case notes\" --user bob",
+      "pause_after": 6
+    },
+    {
+      "label": "No token",
+      "type": "python3 explore.py retrieve fixes \"disciplinary case notes\" --user bob --no-token",
+      "pause_after": 6
+    },
+    {
+      "label": "Access",
+      "type": "python3 explore.py access dana HR-7002 --setup fixes",
+      "pause_after": 6
+    },
+    {
+      "label": "Agent v1",
+      "type": "python3 explore.py agent contoso",
+      "pause_after": 6
+    },
+    {
+      "label": "Agent fixed",
+      "type": "python3 explore.py agent fixes",
+      "pause_after": 6
+    },
+    {
+      "label": "Turn v1",
+      "type": "python3 explore.py turn contoso bob \"VPN client certificate renewal\"",
+      "pause_after": 7
+    },
+    {
+      "label": "Turn fixed",
+      "type": "python3 explore.py turn fixes bob \"VPN client certificate renewal\"",
+      "pause_after": 7
+    },
+    {
+      "label": "Identity",
+      "type": "python3 explore.py identity contoso",
+      "pause_after": 6
+    },
+    {
+      "label": "Identity fixed",
+      "type": "python3 explore.py identity fixes",
+      "pause_after": 6
+    }
+  ]
+}
