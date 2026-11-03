@@ -29,6 +29,8 @@ import argparse
 import base64
 import sys
 
+sys.dont_write_bytecode = True   # read-only: don't leave __pycache__ folders behind
+
 import agent_platform
 import armor_twin as twin
 import helpdesk
@@ -192,7 +194,9 @@ def cmd_precedence(a) -> None:
     print(f"  {'the request':40} what applies")
     for label, extra, proj in cases:
         cfg = agent_platform.effective_config({"prompt": "", **extra}, proj)
-        print(f"  {label:40} {cfg.get('error') or cfg['source']}")
+        what = "error: you can't specify both template configuration and safety filters in the same request" \
+            if "error" in cfg else cfg["source"]
+        print(f"  {label:40} {what}")
     print(f"\nToday the app names {leaf(mac['prompt_template_name'])} (June), so the floor setting from September never runs.")
 
 

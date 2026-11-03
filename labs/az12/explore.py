@@ -33,6 +33,8 @@ import base64
 import json
 import sys
 
+sys.dont_write_bytecode = True   # read-only: don't leave __pycache__ folders behind
+
 import content_safety_twin as cs
 import detectors
 import guardrail_twin as gt
