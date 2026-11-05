@@ -10,8 +10,8 @@ version change. Answers come with evidence (a link, a document, a test result), 
 - Data it will see (categories, personal data yes/no, customer data yes/no):
 - What it can do (read only, write, send, spend, run code):
 
-## 2. Licence and terms
-- Licence or contract, read in full by <role>; is our use allowed?
+## 2. License and terms
+- License or contract, read in full by <role>; is our use allowed?
 - Does the vendor use our prompts, files or outputs to train or improve models? Where is that written?
 - Retention: how long are prompts and outputs kept, and can we turn logging off or shorten it?
 - Where is data processed and stored (regions)? Does that match our residency rules?

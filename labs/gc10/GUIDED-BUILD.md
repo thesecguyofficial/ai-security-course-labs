@@ -8,7 +8,7 @@ About 60 minutes. Cost: cents at most (table at the end). Teardown is the last s
 README Step 8 is the short version of this guide. If you already did it, reuse that project and skip what you've done.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to a Google Cloud
-> project, so **no response in this file comes from a real run**. Every response block is labelled
+> project, so **no response in this file comes from a real run**. Every response block is labeled
 > **"Example response (shape from Google docs, values illustrative)"**. Field names come from Google's API
 > definitions in their JSON (camelCase) form: Gemini
 > ([`prediction_service.proto`](https://github.com/googleapis/googleapis/blob/master/google/cloud/aiplatform/v1/prediction_service.proto)),
@@ -82,7 +82,7 @@ then **Analyze** > **Run query**.
 
 Read the result: each match shows the policy it came from (`attachedResourceFullName`, the `iamBinding` with its
 `role` and `members`) and the identities it reaches (`identityList`). In a fresh personal project you should see your
-own user through `roles/owner`. Anything you don't recognise is a finding. Google lists a limit of 20 policy
+own user through `roles/owner`. Anything you don't recognize is a finding. Google lists a limit of 20 policy
 analysis queries per organization per day unless Security Command Center Premium or Enterprise is active, so run it
 a handful of times, not in a loop. If the command errors in your project, fall back to the plain IAM policy:
 

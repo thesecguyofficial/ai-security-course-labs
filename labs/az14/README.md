@@ -62,7 +62,7 @@ cd labs/az14
 | `contoso/` | Version 1: `deployment.json` (account, registry, hosted agent versions, guardrail, egress), `identity.json` (role assignments, Conditional Access), `toolbox.json`, `memory.json`, `app.json` (the front end) |
 | `fixes/` | The hardened build, same files |
 | `data/directory.json` | Fictional Entra users (bob, dana = helpdesk; alice = HR; carol = contractor), agents, storage, one existing session, one upload |
-| `data/docs.json` | Seven KB articles (six carry a labelled lab placeholder) and one HR export |
+| `data/docs.json` | Seven KB articles (six carry a labeled lab placeholder) and one HR export |
 | `logs/helpdesk-traces.jsonl` | A **fake** day of traces for 21 October 2026: 72 spans and events |
 | `cloud/` | `cloud.sh`, `build.py`, the hosted agent's own code (`agent/`) and your MCP actions server (`mcp/`) for the guided build. Everything runs in your own subscription |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 18 tests for the lab, 4 for the challenge |
@@ -95,13 +95,13 @@ cd labs/az14
   supported**. All users in the same project share the same container context"
   ([Code Interpreter](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/code-interpreter)).
 
-It does not model the real sandbox, token exchange, Conditional Access evaluation, model behaviour, Azure's error
+It does not model the real sandbox, token exchange, Conditional Access evaluation, model behavior, Azure's error
 bodies or timing. Property names in `contoso/` and `fixes/` are Microsoft's where they exist (`cpu`, `memory`,
 `protocol_versions`, `environment_variables`, `rai_config`, `egressPolicy`, `require_approval`, `allowed_tools`,
 `project_connection_id`, `authType`, `scope`...) inside a lab-shaped wrapper; each file's `_about` says which parts
 are lab shorthand.
 
-**About the data and safety.** Every injected line is a labelled `[LAB-PLACEHOLDER ...]`, not a working payload; the
+**About the data and safety.** Every injected line is a labeled `[LAB-PLACEHOLDER ...]`, not a working payload; the
 stand-in model reacts to the marker. Outside addresses and hosts use the reserved `.example` domain. Object IDs and the
 SMTP "key" are placeholders. Nothing here contacts Azure. Test 18 checks all of that.
 
@@ -168,7 +168,7 @@ python3 explore.py token bob
 ```output
   iss                https://login.microsoftonline.com/<tenant-id>/v2.0   issuer: who signed it (Contoso's tenant)
   aud                api://helpdesk-web                                   audience: which API the token is for; check it
-  tid                <tenant-id>                                          tenant ID: which organisation the user signed in to
+  tid                <tenant-id>                                          tenant ID: which organization the user signed in to
   oid                lab-oid-bob-0001                                     object ID: fixed, one per user per tenant (this course uses it)
   preferred_username bob@contoso.com                                      display only: Microsoft says it can change
   scp                Helpdesk.Chat                                        what the front end may do for the user
@@ -531,7 +531,7 @@ arguments and results", which is also why H4 matters: whoever reads traces now h
 $ make test             (last lines)
 [PASS] 16 the deterministic policy refuses an outside address before any human sees an approval request
 [PASS] 17 hunt: 1 outside email (the lookalike), 1 would-deny egress, 1 identity mismatch, 1 secret in a trace
-[PASS] 18 safety: injected lines are labelled placeholders, addresses are reserved test domains, no secrets
+[PASS] 18 safety: injected lines are labeled placeholders, addresses are reserved test domains, no secrets
 ----------------------------------------------------------------------
 Ran 18 tests in 0.012s
 

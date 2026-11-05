@@ -28,7 +28,7 @@ local model through Ollama.
 > **Safety.** Every server binds to `127.0.0.1`. The "secret" is `AKIAIOSFODNN7EXAMPLE`, the documented
 > AWS example key, plus a lab-only string. The malicious server never touches the network: the
 > "attacker's inbox" is a local file, `state/attacker_inbox.log`. The hidden directive is a single
-> labelled placeholder, `[LAB-INJECTED-DIRECTIVE]`: it is **not** a working payload; it only marks where
+> labeled placeholder, `[LAB-INJECTED-DIRECTIVE]`: it is **not** a working payload; it only marks where
 > a real attack would put fluent text, and the stand-in model reacts to the marker. Only test systems you
 > own or are allowed to test (lesson 0.8).
 
@@ -106,7 +106,7 @@ Now run it:
 make setup
 ```
 
-`requirements.txt` pins one package, `mcp==2.3.0` (MIT licence), the official MCP Python SDK, because it
+`requirements.txt` pins one package, `mcp==2.3.0` (MIT license), the official MCP Python SDK, because it
 speaks MCP protocol version `2026-07-28`. pip also installs the packages it depends on (pydantic, PyJWT,
 starlette, uvicorn and others); the end of the output is `Successfully installed ... mcp-2.3.0 ...`. No
 internet access is needed after setup.
@@ -472,7 +472,7 @@ server**. On every request it:
 - **refuses passthrough**: the `whoami` tool reports the verified caller but never forwards the token to
   any upstream. If it called an upstream API it would use its own credential.
 
-Open `servers/secure_http_server.py`: the whole defence is the `audience=RESOURCE_URL` argument to
+Open `servers/secure_http_server.py`: the whole defense is the `audience=RESOURCE_URL` argument to
 `jwt.decode` in `LabAudienceVerifier`. That one line is what "no confused deputy, no token passthrough"
 looks like in code.
 

@@ -34,8 +34,8 @@ Checked: CloudTrail management and data events, gateway spans, invocation logs, 
 ## Root cause
 
 The rollback pipeline restored a gateway configuration from before the policy engine was switched to ENFORCE.
-Nothing stopped a deploy role from changing the mode, and the only defence against the injected instruction in
-ticket 5120 was the policy engine. Model behaviour is not a control.
+Nothing stopped a deploy role from changing the mode, and the only defense against the injected instruction in
+ticket 5120 was the policy engine. Model behavior is not a control.
 
 ## Containment
 

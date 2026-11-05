@@ -7,7 +7,7 @@ lock it down, and prove every fix with a request that should now fail. About 75 
 Cost: a few US cents (table in G7). Teardown is the last step: do it today.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an Azure subscription,
-> so **no response in this file comes from a real run**. Every response block is labelled **"Example response (shape
+> so **no response in this file comes from a real run**. Every response block is labeled **"Example response (shape
 > from Microsoft docs, values illustrative)"** and names the page its shape comes from. Field names, error codes and
 > error texts are copied from Microsoft Learn (October 2026). **The values (names, IDs, times, counts) are our
 > guesses.** Write your real results into the table in G5.
@@ -201,7 +201,7 @@ name in that list is a question for its owner (lab rule H01).
 az policy assignment list -g $RG --query "[].{name:name, definition:policyDefinitionId, mode:enforcementMode}" -o table
 ```
 
-Expect nothing in a fresh subscription. In a real organisation, also look at the subscription and management group
+Expect nothing in a fresh subscription. In a real organization, also look at the subscription and management group
 (`az policy assignment list` with no `-g` shows the subscription's).
 
 **Q6. Is anything logged, and is anyone told about cost?**

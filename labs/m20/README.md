@@ -73,7 +73,7 @@ make watch
 
 ```powershell
 cd labs/m20
-py watch.py hardened alice "Summarise T-4711 and email me the summary"
+py watch.py hardened alice "Summarize T-4711 and email me the summary"
 ```
 
 ```output
@@ -281,7 +281,7 @@ API answers "not found for this user".
 ### Step 4 · See the passthrough
 
 ```bash
-python3 watch.py first-draft alice "Summarise T-4711 and email me the summary"
+python3 watch.py first-draft alice "Summarize T-4711 and email me the summary"
 ```
 
 Every agent line says "forwards the token it was given". The token that reaches the mail API is Alice's sign-in token:
@@ -340,7 +340,7 @@ python3 evaluate.py hardened A5 --trace
 ```
 
 A6: the first send works, the copy of the same request gets `401 token already used (replay)`. A5: the lab moves the
-clock ten minutes on, and the same token gets `401 expired`. Two different defences: one remembers, one forgets fast.
+clock ten minutes on, and the same token gets `401 expired`. Two different defenses: one remembers, one forgets fast.
 
 ### Step 8 · Hunt
 
@@ -452,7 +452,7 @@ You need **either** Docker **or** Java 21. Keycloak runs on your laptop on `127.
    ```bash
    make keycloak-attack
    make keycloak-hardened
-   python3 watch.py hardened alice "Summarise T-4711 and email me the summary" --idp keycloak
+   python3 watch.py hardened alice "Summarize T-4711 and email me the summary" --idp keycloak
    ```
 
    What to look for:

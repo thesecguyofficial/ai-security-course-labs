@@ -6,7 +6,7 @@ accepts only Entra tokens and only through the workspace's private endpoint, a c
 the endpoint's traffic log in Log Analytics. Then five requests, one changed setting, and teardown.
 
 **Status:** written from Microsoft's documentation and checked for shell syntax. It hasn't been run end to end in a
-sandbox yet, so every response below is labelled "Example response (shape from the provider's docs, values
+sandbox yet, so every response below is labeled "Example response (shape from the provider's docs, values
 illustrative)". Before this lab is released, it gets one real run and the examples are replaced with real output.
 
 ## Before you start: cost and safety
@@ -75,7 +75,7 @@ Hugging Face collection models don't: their weights come "directly from Hugging 
 so a firewall (same page).
 
 1. In the studio (ml.azure.com), open **Model catalog** and filter to the collection curated by Azure Machine Learning.
-2. Pick a small text model whose model card lists a CPU SKU for online endpoints. Read its **licence** on the card:
+2. Pick a small text model whose model card lists a CPU SKU for online endpoints. Read its **license** on the card:
    "Model providers set the license terms and price for their models"
    ([Microsoft](https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-catalog?view=azureml-api-2)).
 3. Copy its asset ID, `azureml://registries/azureml/models/<name>/versions/<version>`. The request format differs

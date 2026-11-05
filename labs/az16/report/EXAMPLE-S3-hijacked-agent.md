@@ -34,8 +34,8 @@ Foundry traces, app log, gateway LLM log, SecurityAlert.
 ## Root cause
 
 The rollback restored a toolbox version from before approval was required on the actions server. Nothing stopped a
-pipeline from promoting a version with require_approval never, and the only defence against the instruction in
-ticket 5120 was that approval step. Model behaviour is not a control.
+pipeline from promoting a version with require_approval never, and the only defense against the instruction in
+ticket 5120 was that approval step. Model behavior is not a control.
 
 ## Containment
 

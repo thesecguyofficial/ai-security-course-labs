@@ -15,7 +15,7 @@ About 60 minutes.
 | G | Cost and teardown | all |
 
 > **About the responses below.** This guide was written without access to a Google Cloud project, so **no response
-> here comes from a real run**. Every response block is labelled **Example response (shape from the provider's docs,
+> here comes from a real run**. Every response block is labeled **Example response (shape from the provider's docs,
 > values illustrative)** and uses Google's documented field names. Before this module is released, the guide is run
 > once in a sandbox and the examples are replaced with real output. Paste your own results into your notes.
 

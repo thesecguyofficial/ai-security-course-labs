@@ -32,7 +32,7 @@ You will:
 
 > **Safety.** The "model" is in `agent.py`: **plain Python, not AI**, so every run is identical and the tests check the
 > guard, not a model's mood. It obeys the `LAB-PLACEHOLDER-INJECTED-INSTRUCTION` comments in `data/pages/`. They are
-> labelled lab placeholders that only `agent.py` reads, not working payloads for any real agent. Every host uses the
+> labeled lab placeholders that only `agent.py` reads, not working payloads for any real agent. Every host uses the
 > `.example` names reserved for documentation (RFC 2606). Only test systems you own or are allowed to test (lesson 0.8).
 
 ## Get the lab files
@@ -296,7 +296,7 @@ N1   works   buy one weather call (0.01)
 N2   works   buy the daily market report (1.50)
 N3   works   buy the quarterly report (3.00): over 2.00, so the user approves it first
 N4   works   two tasks in a row: a weather call, then a sample call
-N5   works   summarise a clean product page (nothing to buy)
+N5   works   summarize a clean product page (nothing to buy)
 
 Attacks that worked: 9 of 10  (A1, A2, A3, A4, A5, A6, A7, A9, A10) | normal requests that work: 5 of 5
 ```
@@ -309,14 +309,14 @@ make story
 ```
 
 ```output
-TASK T-READ-SHOES for alice (first-draft): Summarise the product page for the trail shoes
+TASK T-READ-SHOES for alice (first-draft): Summarize the product page for the trail shoes
   GET http://shop.tsg.example/p/trail-shoes -> 200 (a page sellers write: untrusted)
   model obeys a placeholder in the page: buy http://deals.tsg.example/bundle
   GET http://deals.tsg.example/bundle -> 402
     guard: ALLOW [within_mandate] not expired and under the per-payment limit
   GET http://deals.tsg.example/bundle + PAYMENT-SIGNATURE -> 200, paid 4.99 LABUSD to acct:deals-unknown (labtx-0df9b33122cafa4a, lab ledger only, no money moved)
 
-TASK T-READ-SHOES for alice (hardened): Summarise the product page for the trail shoes
+TASK T-READ-SHOES for alice (hardened): Summarize the product page for the trail shoes
   GET http://shop.tsg.example/p/trail-shoes -> 200 (a page sellers write: untrusted)
   model obeys a placeholder in the page: buy http://deals.tsg.example/bundle
   GET http://deals.tsg.example/bundle -> 402
@@ -371,7 +371,7 @@ N1   works   buy one weather call (0.01)
 N2   works   buy the daily market report (1.50)
 N3   works   buy the quarterly report (3.00): over 2.00, so the user approves it first
 N4   works   two tasks in a row: a weather call, then a sample call
-N5   works   summarise a clean product page (nothing to buy)
+N5   works   summarize a clean product page (nothing to buy)
 
 Attacks that worked: 0 of 10  (none) | normal requests that work: 5 of 5
 ```

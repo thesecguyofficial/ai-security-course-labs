@@ -55,7 +55,7 @@ staging: all denied calls blocked.
 - 27da4368ba86: Admin Activity entry, `UpdateAuthzExtension` by ci-deployer with `iamEnforcementMode: "DRY_RUN"`.
 - 4d9fb3bea215: gateway request log, `send_email` to an outside address, policy DENY, executed in DRY_RUN.
 - 15f2e5789711: gateway request log, `reset_mfa` for `ceo`, policy DENY, executed in DRY_RUN.
-- 1527713204604221357: request-response row for the agent's turn, labelled with the same session.
+- 1527713204604221357: request-response row for the agent's turn, labeled with the same session.
 
 ## Detection gaps and new rules
 

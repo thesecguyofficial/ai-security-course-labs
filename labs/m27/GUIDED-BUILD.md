@@ -6,7 +6,7 @@ with no internet or NAT gateway, an **S3 gateway endpoint** whose policy names o
 DNS Firewall walled garden** with query logging. Then you send four example requests, change one setting, read the
 logs and tear it all down.
 
-This walkthrough has **not been run end to end yet**. Every response below is labelled "Example response (shape from
+This walkthrough has **not been run end to end yet**. Every response below is labeled "Example response (shape from
 the provider's docs, values illustrative)". Before release it gets one real run and real output.
 
 ## Cost (list prices read 25 Oct 2026)

@@ -86,7 +86,7 @@ git init -b main && git add . && git commit -m "TSG Helpdesk capstone: starting 
 
 - `make export DEST=../../../my-ai-security-capstone`: same as `python3 export.py <folder>`
 
-Create an **empty public** repo on GitHub (no README, no licence), then follow the two `git` lines `export.py`
+Create an **empty public** repo on GitHub (no README, no license), then follow the two `git` lines `export.py`
 printed. Open the repo's **Actions** tab: the `capstone-checks` workflow runs on every push. It is red now. Your
 job is to make it green, honestly.
 

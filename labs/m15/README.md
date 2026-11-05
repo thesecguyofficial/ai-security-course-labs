@@ -6,7 +6,7 @@ and **costs money every hour**: [`GUIDED-BUILD.md`](GUIDED-BUILD.md) builds a pr
 open model in **your own** sandbox account, with an auto-teardown schedule created before the endpoint.
 
 You are still the cloud security engineer at **AnyCompany** (fictional; "AnyCompany" is the placeholder name AWS uses
-in its documentation). The TSG Helpdesk now summarises tickets with an **open-weights model** that the data science
+in its documentation). The TSG Helpdesk now summarizes tickets with an **open-weights model** that the data science
 team fine-tunes. Tickets must stay in AnyCompany's account, so the platform team hosts the model on an
 **Amazon SageMaker AI** real-time endpoint instead of calling a managed model on Bedrock. The data scientists work in a
 **SageMaker Studio** domain and register versions in the **Model Registry**. The pull request says "endpoint up,
@@ -343,8 +343,8 @@ You should see (long lines cut here):
 [MEDIUM] M15-07 (15.2) the Studio domain has no KmsKeyId: notebooks' EFS and EBS volumes use an AWS managed key, whose key policy you can't edit
 [MEDIUM] M15-09 (15.2) tsg-summariser-exec trust policy has no aws:SourceArn: any SageMaker AI resource, in any account, could be the one assuming it ...
 [MEDIUM] M15-21 (15.3) no file hashes recorded for the deployed model: nobody can prove the files running are the ones approved
-[MEDIUM] M15-21 (15.3) licence not recorded: AWS says reviewing model licences is your job
-[MEDIUM] M15-22 (15.3) no approval gate: nothing checks formats, hashes, licence and approver before a version becomes Approved (challenge 2)
+[MEDIUM] M15-21 (15.3) license not recorded: AWS says reviewing model licenses is your job
+[MEDIUM] M15-22 (15.3) no approval gate: nothing checks formats, hashes, license and approver before a version becomes Approved (challenge 2)
 [MEDIUM] M15-23 (15.2) no SCP requires network isolation and a VPC on CreateModel: an admin's quick test can still ship a container that calls out (challenge 1)
 [MEDIUM] M15-24 (15.4) data capture (full prompts and answers) is written without a KmsKeyId of yours
 [MEDIUM] M15-24 (15.4) data capture goes to amzn-s3-demo-tsg-analytics, a bucket other teams read: ...
@@ -611,7 +611,7 @@ make cloud-down
 
 ## How faithful is the twin?
 
-| Behaviour | Twin | AWS source |
+| Behavior | Twin | AWS source |
 |---|---|---|
 | Network isolation: no outbound calls, "No AWS credentials are made available to the container"; S3 downloads done by SageMaker AI with the execution role, through your subnets when the model has a VPC | Same | [Internet-free mode](https://docs.aws.amazon.com/sagemaker/latest/dg/mkt-algo-model-internet-free.html) |
 | Without isolation and without `VpcConfig`, SageMaker AI provides external network access ("If you do not want SageMaker AI to provide external network access ... you can enable network isolation") | Same | same page |

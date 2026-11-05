@@ -72,7 +72,7 @@ cd labs/az16
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | `make test` and `make challenge` |
 
 Everything is fictional: Contoso, the subscription, the people, the customers. Addresses come from the documentation
-ranges (RFC 5737). Attack text is a short, labelled lab placeholder that does nothing outside this folder. Column names
+ranges (RFC 5737). Attack text is a short, labeled lab placeholder that does nothing outside this folder. Column names
 follow Microsoft's table references; each row carries only the columns the lab reads, and identities appear by name
 where real rows carry object IDs.
 
@@ -326,7 +326,7 @@ Signal 3  a network security group rule (your own check)  ->  a model server you
           -> self-hosted model server (Ollama)  vm-gpu-lab01  NOT on the register
 
 10 AI assets found; 4 are not on data/inventory/sanctioned.json, the approved register.
-Agents: 2 agent records not shown (agent discovery needs a Microsoft Agent 365 licence).
+Agents: 2 agent records not shown (agent discovery needs a Microsoft Agent 365 license).
 ```
 
 **9. Azure Policy and your own check.** A built-in definition the Foundry resource passes, and a custom check it fails.
@@ -552,7 +552,7 @@ Pack az16 on hardened telemetry: 18 alerts
          entity resource: contoso-foundry   (AI.Azure_AnomalousToolInvocation (Low), count 2)
 [HIGH  ] 14:05 D01 Workload identity used from an unknown address
          entity service-principal: sp-contoso-ci   (3 operations from ['203.0.113.50']: ACCOUNTS/READ, ACCOUNTS/LISTKEYS/ACTION, DIAGNOSTICSETTINGS/DELETE)
-[HIGH  ] 14:07 D03 Defence change: DIAGNOSTICSETTINGS/DELETE
+[HIGH  ] 14:07 D03 Defense change: DIAGNOSTICSETTINGS/DELETE
          entity principal: sp-contoso-ci   (status Failed)
 [HIGH  ] 14:10 D02 Foundry calls that skip the gateway (keys in use?)
          entity resource-keys: contoso-foundry   (150 calls from ['203.0.113.50', '203.0.113.51']; the logs don't say which key: rotate both)
@@ -611,7 +611,7 @@ AI inventory: 10 AI assets
   UNSANCTIONED GCP    Google Vertex AI                               project contoso-analytics        owner: (connector owner)   (Defender CSPM AI-SPM)
   UNSANCTIONED Azure  self-hosted model server (Ollama)              vm-gpu-lab01                     owner: data-science   (your NSG check)
 
-Agents: 2 agent records not shown. From 1 July 2026 agent-level discovery needs a Microsoft Agent 365 licence;
+Agents: 2 agent records not shown. From 1 July 2026 agent-level discovery needs a Microsoft Agent 365 license;
   Defender CSPM still lists the Foundry accounts and projects. Not confirmed: helpdesk-agent (on the register).
 
 Internet exposure AI-SPM reports: contoso-foundry, mktg-hackathon-ai, contoso-oai-legacy

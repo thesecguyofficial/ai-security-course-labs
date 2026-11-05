@@ -21,7 +21,7 @@ and **prove** it with a test that can fail. Finally you find the redactor's limi
 | `explore.py` | Shows one step at a time, without changing anything (Step 1b): every copy one message leaves, Presidio's recognizers, what spaCy guesses, how each score is built |
 | `Makefile` | Shortcuts for Mac/Linux |
 
-**About the stand-in model.** `stub_llm.py` is *not* an AI model. It copies two real behaviours so the redaction
+**About the stand-in model.** `stub_llm.py` is *not* an AI model. It copies two real behaviors so the redaction
 exercise is fast and repeatable: models repeat back what you told them, and models connected to company data can
 return other people's records. It also writes what it received to `logs/provider.log`, which plays the role of the
 AI provider's side: whatever lands there has left your control.
@@ -39,7 +39,7 @@ Never test with real people's data.
 - About 400 MB of disk for the virtual environment (spaCy and its dependencies), and internet access for the one-time install.
 - Optional, for the last step only: Ollama with a small model (lesson 0.6, lesson 1.8).
 
-The redaction library is **Presidio** (MIT licence). It started at Microsoft and is now an independent,
+The redaction library is **Presidio** (MIT license). It started at Microsoft and is now an independent,
 community-maintained project at [github.com/data-privacy-stack/presidio](https://github.com/data-privacy-stack/presidio);
 docs at [presidio.dataprivacystack.org](https://presidio.dataprivacystack.org/installation/). Tested here with
 `presidio_analyzer` / `presidio_anonymizer` 2.2.364 and spaCy's `en_core_web_sm` 3.8.0 on Python 3.13.
@@ -186,7 +186,7 @@ spaCy model en_core_web_sm: named entity recognition (NER) on its own, before Pr
    ORG       'Dear Mr Smith'
 ```
 
-GPE is a country, city or state; ORG an organisation. "Dear Mr Smith" is not an organisation: the model guesses from
+GPE is a country, city or state; ORG an organization. "Dear Mr Smith" is not an organization: the model guesses from
 patterns such as capital letters, it doesn't look anything up. spaCy's release notes for this model report an NER
 precision of 84.30 on their test set.
 
@@ -232,8 +232,8 @@ redacted: My card <CREDIT_CARD>, employee EMP-482913
 ```
 
 The card passes its validity check (the Luhn checksum), and that alone sets its score to 1.00. spaCy calls part of it a date, but dates aren't in
-`ENTITIES`. Only two very weak patterns matched the employee ID (an Indian PAN and a US driver's licence, both 0.01), so it stays in the text. Lowering
-`SCORE_THRESHOLD` to 0.01 would hide it, labelled as an Indian PAN, which is wrong; the fix that holds is your own
+`ENTITIES`. Only two very weak patterns matched the employee ID (an Indian PAN and a US driver's license, both 0.01), so it stays in the text. Lowering
+`SCORE_THRESHOLD` to 0.01 would hide it, labeled as an Indian PAN, which is wrong; the fix that holds is your own
 recognizer (Step 7).
 
 ## Step 2 · Break it: no redaction

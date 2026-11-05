@@ -15,7 +15,7 @@ The agent's only tool server is **Google's BigQuery remote MCP server** (`https:
 Google registers in Agent Registry for you when the BigQuery API is on. No third-party service is used.
 
 > **Read this first: about the responses shown below.** We wrote this guide without running it in a Google Cloud
-> project, so **no response from Google Cloud in this file comes from a real run**. Every such block is labelled
+> project, so **no response from Google Cloud in this file comes from a real run**. Every such block is labeled
 > **"Example response (shape from the provider's docs, values illustrative)"**. Field names come from Google's pages
 > and API definitions (`google/iam/v3/access_policy_resources.proto`, `google/cloud/aiplatform/v1beta1/reasoning_engine.proto`
 > and `memory_bank_service.proto` in [googleapis](https://github.com/googleapis/googleapis)) and the log queries in

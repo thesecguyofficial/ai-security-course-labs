@@ -83,12 +83,12 @@ shows the plain `python` commands for Windows.
 - **No secrets in the log.** `setup.log` records each step, question and command. It notes that a proxy is set,
   never its value (proxy settings can hold a user name and password).
 
-## Docker: which one, and the licence
+## Docker: which one, and the license
 
 - **Docker Desktop** (macOS, Windows) is free for personal use, education, non-commercial open source and small
   businesses (fewer than 250 employees **and** under $10 million a year in revenue). Larger companies need a paid
   plan. Docker changes its terms from time to time, so read the current
-  [Docker Desktop licence](https://docs.docker.com/subscription/desktop-license/) before you accept it.
+  [Docker Desktop license](https://docs.docker.com/subscription/desktop-license/) before you accept it.
 - **Colima** (macOS) is a free, open source (MIT) alternative that runs Docker from the command line. Choose
   `c` at the Docker question, or run `./setup.sh --docker=colima`. Start it after a reboot with `colima start`.
 - **Docker Engine** (Linux) comes from your distribution's own `docker.io` package and updates with your system.
@@ -122,7 +122,7 @@ The doctor's "next step" line is the first thing to try. These are the usual pro
 - After Docker Desktop installs, sign out of Windows and back in once if Docker says your user is not allowed.
 
 ### Work laptops: proxy, TLS inspection, blocked installs
-- **Ask first.** Company laptops often block installers, and Docker Desktop may need a company licence.
+- **Ask first.** Company laptops often block installers, and Docker Desktop may need a company license.
 - **Proxy.** If your company uses one, it is usually already set as `HTTPS_PROXY`. `sudo` drops it for apt:
   ask IT for the apt proxy setting, or set `Acquire::https::Proxy` in `/etc/apt/apt.conf.d/`. Docker Desktop has
   its own proxy page (Settings, Resources, Proxies). Ollama uses `HTTPS_PROXY` when it downloads models.

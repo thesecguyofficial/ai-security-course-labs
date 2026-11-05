@@ -545,9 +545,9 @@ Pack gc16 on hardened telemetry: 16 alerts
          entity principal: etl-batch   (GenerateContent 3, RawPredict 7, GenerateContent 5, SetPublisherModelConfig 7)
 [HIGH  ] 14:05 D04 Model inference by an unapproved principal
          entity principal: etl-batch   (153 calls; methods ['GenerateContent', 'RawPredict', 'StreamGenerateContent'])
-[HIGH  ] 14:07 D03 Defence change: SetIamPolicy
+[HIGH  ] 14:07 D03 Defense change: SetIamPolicy
          entity principal: etl-batch   (status code 7)
-[HIGH  ] 14:08 D03 Defence change: SetPublisherModelConfig
+[HIGH  ] 14:08 D03 Defense change: SetPublisherModelConfig
          entity principal: etl-batch   (status code 7)
 [HIGH  ] 14:08 D05 Persistence: New AI API Method
          entity principal: etl-batch   (severity LOW, rule ai_anomalous_behavior_new_api_method; the Google identity, not the end user)

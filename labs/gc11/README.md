@@ -765,7 +765,7 @@ place. Nothing here needs an organization; the allow-list and the perimeter are 
 | Cloud KMS software key version | $0.000082192 per hour (about $0.06 a month); "Scheduled for destruction" still counts as active, default 30 days ([KMS pricing](https://cloud.google.com/kms/pricing), [destroy](https://docs.cloud.google.com/kms/docs/destroy-restore)) | about $0.06 including the 30 days after `make down` |
 | KMS cryptographic operations | $0.03 per 10,000 | well under $0.01 |
 | BigQuery | first 10 GiB storage and first 1 TiB of queries per month free ([BigQuery pricing](https://cloud.google.com/bigquery/pricing)) | $0 at lab size |
-| Cloud Logging | Data Access logs count towards Cloud Logging ingestion (Module 10: 50 GiB per project per month free) | $0 at lab size |
+| Cloud Logging | Data Access logs count toward Cloud Logging ingestion (Module 10: 50 GiB per project per month free) | $0 at lab size |
 | Private DNS zone, firewall rules, service accounts, IAM | Cloud DNS charges per zone; see Cloud DNS pricing | not estimated here: check |
 | Gemini calls | a handful of short `generateContent` calls; see Agent Platform pricing for your region | fractions of a cent |
 | Optional test VM (`create_test_vm = true`) | e2-small, billed per second at your region's rate | not included: delete it after the test |

@@ -6,7 +6,8 @@ lab guides, video scripts, reel captions, social posts, emails) must read like a
 wrote it. Rules come from docs/social/voice-guide.md ("Avoid" list). This file is the canonical
 copy; the course-content and labs repos carry an identical copy (keep them in sync).
 
-Errors (exit 1): banned words/phrases, em dashes in prose.
+Errors (exit 1): banned words/phrases, em dashes in prose, British spellings (house style is US
+English since 6 Nov 2026: enroll, program, defense, center, behavior, organize ...).
 Warnings: very long sentences, stacked "Not X. Not Y." patterns, exclamation marks.
 
 Skips: fenced code blocks, inline code, URLs, HTML comments, quoted source text in blockquotes,
@@ -28,6 +29,16 @@ BANNED = [
     r"\bin today'?s (fast[- ]paced|digital|ever)", r"\bever[- ]evolving\b", r"\brapidly evolving\b",
 ]
 BANNED_RE = re.compile("|".join(BANNED), re.I)
+# US English (owner decision 6 Nov 2026). Hyphen/underscore/slash neighbors are skipped so code names
+# like `enrol-dialog` are not flagged; use `style-ok` for a verbatim quote or a proper name.
+UK_US = {"personalisation": "personalization", "organisations": "organizations", "authorisation": "authorization", "customisation": "customization", "visualisation": "visualization", "decentralised": "decentralized", "organisation": "organization", "personalised": "personalized", "minimisation": "minimization", "unauthorised": "unauthorized", "prioritising": "prioritizing", "optimisation": "optimization", "sanitisation": "sanitization", "standardised": "standardized", "tokenisation": "tokenization", "characterise": "characterize", "behavioural": "behavioral", "recognising": "recognizing", "summarising": "summarizing", "prioritised": "prioritized", "standardise": "standardize", "categorised": "categorized", "specialised": "specialized", "instalments": "installments", "utilisation": "utilization", "initialised": "initialized", "synchronise": "synchronize", "familiarise": "familiarize", "centralised": "centralized", "enrolments": "enrollments", "programmes": "programs", "behaviours": "behaviors", "favourites": "favorites", "organising": "organizing", "recognised": "recognized", "recognises": "recognizes", "summarised": "summarized", "summarises": "summarizes", "authorised": "authorized", "authorises": "authorizes", "memorising": "memorizing", "prioritise": "prioritize", "normalised": "normalized", "categorise": "categorize", "customised": "customized", "specialise": "specialize", "travelling": "traveling", "cancelling": "canceling", "fulfilment": "fulfillment", "instalment": "installment", "practising": "practicing", "initialise": "initialize", "serialised": "serialized", "randomised": "randomized", "neutralise": "neutralize", "capitalise": "capitalize", "centralise": "centralize", "legitimise": "legitimize", "enrolment": "enrollment", "programme": "program", "behaviour": "behavior", "favourite": "favorite", "organised": "organized", "recognise": "recognize", "summarise": "summarize", "minimised": "minimized", "minimises": "minimizes", "authorise": "authorize", "optimised": "optimized", "analysing": "analyzing", "normalise": "normalize", "sanitised": "sanitized", "emphasise": "emphasize", "customise": "customize", "apologise": "apologize", "modellers": "modelers", "modelling": "modeling", "travelled": "traveled", "cancelled": "canceled", "labelling": "labeling", "catalogue": "catalog", "judgement": "judgment", "artefacts": "artifacts", "jewellery": "jewelry", "enquiries": "inquiries", "sceptical": "skeptical", "manoeuvre": "maneuver", "visualise": "visualize", "serialise": "serialize", "tokenised": "tokenized", "randomise": "randomize", "finalised": "finalized", "stabilise": "stabilize", "harmonise": "harmonize", "criticise": "criticize", "defences": "defenses", "coloured": "colored", "organise": "organize", "minimise": "minimize", "memorise": "memorize", "realised": "realized", "optimise": "optimize", "analysed": "analyzed", "sanitise": "sanitize", "licences": "licenses", "modeller": "modeler", "modelled": "modeled", "labelled": "labeled", "dialogue": "dialog", "artefact": "artifact", "practise": "practice", "analogue": "analog", "pretence": "pretense", "tokenise": "tokenize", "mobilise": "mobilize", "finalise": "finalize", "monetise": "monetize", "defence": "defense", "centres": "centers", "centred": "centered", "colours": "colors", "realise": "realize", "analyse": "analyze", "utilise": "utilize", "licence": "license", "towards": "toward", "amongst": "among", "enquiry": "inquiry", "offence": "offense", "enrols": "enrolls", "centre": "center", "colour": "color", "honour": "honor", "cheque": "check", "ageing": "aging", "learnt": "learned", "fulfil": "fulfill", "whilst": "while", "tonnes": "tons", "metres": "meters", "enrol": "enroll", "maths": "math", "metre": "meter", "grey": "gray"}
+# Where the spelling rule applies: prose files, user-facing strings in code, and course content data
+# (lesson quizzes / module JSON). Lab inputs (JSON, YAML, requirements) are code, and the capstone rubrics
+# are hash-locked by the grader (tools/capstone-grader/*.lock.json), so they are left alone.
+UK_EXT = {".md", ".mdx", ".astro", ".html", ".js", ".mjs", ".ts"}
+UK_DATA_PARTS = ("modules/", "src/content/")
+UK_SKIP_PARTS = ("labs/m19/RUBRIC.md", "labs/m32/RUBRIC.md")
+UK_RE = re.compile(r"(?<![-_/.#@])\b(" + "|".join(UK_US) + r")\b(?![-_/(])", re.I)
 EMDASH = "—"
 TEXT_EXT = {".md", ".mdx", ".txt", ".astro", ".html", ".json", ".yml", ".yaml"}
 DEFAULT_PATHS = ["README.md", "labs"]
@@ -76,6 +87,9 @@ def check_file(p, errors, warnings):
         target = warnings if warn_only else errors
         for m in BANNED_RE.finditer(line):
             target.append(f"{p}:{n}: banned phrase '{m.group(0)}'")
+        uk_ok = (p.suffix in UK_EXT or any(x in s for x in UK_DATA_PARTS)) and not any(x in s for x in UK_SKIP_PARTS) and p.name != "requirements.txt"
+        for m in (UK_RE.finditer(line) if uk_ok else ()):
+            target.append(f"{p}:{n}: British spelling '{m.group(0)}' (house style is US English: {UK_US[m.group(0).lower()]})")
         if EMDASH in line and not line.lstrip().startswith("|"):
             target.append(f"{p}:{n}: em dash in prose (use a full stop, colon, comma or brackets)")
         for sent in re.split(r"(?<=[.!?])\s+", line):

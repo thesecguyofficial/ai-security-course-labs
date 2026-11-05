@@ -14,14 +14,14 @@ Hugging Face Hub to your laptop.
 |---|---|---|
 | A | APIs, three service accounts, a Cloud KMS key, a model bucket, an Artifact Registry repository | 15.2 |
 | B | The serving image (built by Cloud Build, scanned by Artifact Analysis, deployed by digest) | 15.1, 15.4 |
-| C | The model: download, scan, record licence and hashes, upload, register | 15.3 |
+| C | The model: download, scan, record license and hashes, upload, register | 15.3 |
 | D | A Private Service Connect endpoint with CMEK, the auto-undeploy job, then the deployment | 15.2, 15.3 |
 | E | Five requests and what each one leaves in the logs | 15.4 |
 | F | One setting changed: request-response logging on | 15.4 |
 | G | Teardown | 15.5 |
 
 > **Read this first: about the responses shown below.** We wrote this guide without running it in a Google Cloud
-> project, so **no response from Google Cloud in this file comes from a real run**. Every such block is labelled
+> project, so **no response from Google Cloud in this file comes from a real run**. Every such block is labeled
 > **"Example response (shape from the provider's docs, values illustrative)"**. Field names come from Google's REST
 > and audit log references; values (IDs, timings, error wording, what the model writes) are ours. Commands were
 > checked against the gcloud reference pages for `ai endpoints deploy-model`, `ai models upload` and the Private
@@ -162,10 +162,10 @@ Shell variables used throughout (set them again in a new terminal):
 This guide uses `Qwen/Qwen3-0.6B`, the same small model family as the course's local labs. Any small text model in
 safetensors format works.
 
-1. **Read the licence on the model card yourself** and write it down. Google's Hugging Face page says it scans
+1. **Read the license on the model card yourself** and write it down. Google's Hugging Face page says it scans
    listed repositories but "we don't guarantee the absence of vulnerabilities or malicious code"
    ([Google](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/open-models/use-hugging-face-models)), and it
-   says nothing about licences: that check is yours.
+   says nothing about licenses: that check is yours.
 2. **Download to your laptop, then scan before anything else touches it:**
 
    ```bash
@@ -175,7 +175,7 @@ safetensors format works.
    ```
 
    You want `SAFE FORMATS ONLY`. A `.bin` or `.pt` file, or `.py` files, mean stop and find out why.
-3. **Record the hashes and the licence as labels** (Model Registry labels allow lowercase letters, digits, `_` and
+3. **Record the hashes and the license as labels** (Model Registry labels allow lowercase letters, digits, `_` and
    `-`, up to 64 characters, so `licence=apache-2.0` and a hex sha256 both fit):
 
    ```bash
@@ -347,7 +347,7 @@ TLS and 443 with a self-signed certificate on this address).
    live now? Not in access logs (Google: they hold "information like timestamp and latency for each request"), not in
    the container logs (the server doesn't print prompts), and not in request-response logs (off). In Part F you'll
    change the last one.
-4. **An instruction hidden in a ticket** (`predict-injection.json`, a labelled lab placeholder). A self-hosted model
+4. **An instruction hidden in a ticket** (`predict-injection.json`, a labeled lab placeholder). A self-hosted model
    has no safety layer of its own: whatever the model does, nothing screened it. Model Armor (GC12) can screen any
    model's prompts and answers.
 5. **The evidence.** Wait a few minutes, then in **Logging > Logs Explorer**:

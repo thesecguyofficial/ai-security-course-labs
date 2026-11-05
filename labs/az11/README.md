@@ -81,7 +81,7 @@ and `fixes/` were written by hand in the shape of `terraform show -json`, not ge
 **About the data and safety.** Tenant, subscription and object IDs are Microsoft documentation example GUIDs (the same
 as lab AZ10); role and policy definition IDs are the real built-in IDs. Public IP addresses are from the documentation
 ranges in [RFC 5737](https://www.rfc-editor.org/rfc/rfc5737); VNet addresses are private `10.x`. Every attacker prompt is
-labelled LAB PLACEHOLDER; every customer email address is at `example.com`. Nothing here contacts Azure. Test 18 fails if
+labeled LAB PLACEHOLDER; every customer email address is at `example.com`. Nothing here contacts Azure. Test 18 fails if
 any of that changes.
 
 ## Needs
@@ -166,7 +166,7 @@ Approved models (Azure Policy from lab AZ10, effect Deny):
   azureml://registries/azure-openai/models/gpt-5/
   azureml://registries/azure-openai/models/gpt-4.1-mini/
 All of these are Models sold by Azure. A partner model (Microsoft's example: Cohere) would also need
-Azure Marketplace, with licence terms and a price set by the model's provider.
+Azure Marketplace, with license terms and a price set by the model's provider.
 ```
 
 **3. Who may do what.** Every role assignment is a principal, a role and a scope. Version 1 puts all three at

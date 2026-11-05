@@ -583,7 +583,7 @@ Legitimate traffic · must keep working
 ```
 
 Notice two things. Each attack on the role is refused by the **role alone** (test 06 checks this with only
-`FullAWSAccess` above it): defence in depth means each layer holds by itself. And X1 is now visible to AnyCompany: the
+`FullAWSAccess` above it): defense in depth means each layer holds by itself. And X1 is now visible to AnyCompany: the
 trail records network activity on its endpoint, and AWS says these events "can help VPC endpoint owners detect when
 credentials from outside their organization attempt to access their VPC endpoints"; `errorCode` can be filtered on
 `VpceAccessDenied` ([AWS docs](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-network-events-with-cloudtrail.html)).

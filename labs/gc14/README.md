@@ -164,7 +164,7 @@ python3 explore.py identity today
 ```output
   identity_type    AGENT_IDENTITY
   the principal    principal://<trust domain>/<the agent>
-     trust domain  agents.global.org-100000000099.system.id.goog   (your organisation)
+     trust domain  agents.global.org-100000000099.system.id.goog   (your organization)
      the agent     resources/aiplatform/projects/100000000014/locations/europe-west4/reasoningEngines/1400000000000000002
   token binding    OFF: env var set to false (Google strongly discourages this)
 

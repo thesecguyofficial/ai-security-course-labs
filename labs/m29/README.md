@@ -5,11 +5,11 @@ all on your laptop, all on fake data. Python 3.11+ and the standard library only
 network, no cloud calls, no real keys.
 
 You run the security operations of a five-account AWS Organization (simulated as JSON files). The same logs go
-through two versions of your defence:
+through two versions of your defense:
 
 | | first draft | hardened |
 |---|---|---|
-| 15 things the defence should catch | 14 missed | 0 missed |
+| 15 things the defense should catch | 14 missed | 0 missed |
 | 5 normal things it must not break | 5 work | 5 work |
 
 The first draft is what a busy team ships: a shadow-AI query on the management account's trail, one honeytoken rule
@@ -25,7 +25,7 @@ You will:
 4. **Prove it**: `make test`, then the challenge (`make challenge`). Optional: `GUIDED-BUILD.md` tests the same
    EventBridge patterns in your own AWS account and deploys one rule.
 
-> **Safety.** Every key string is a labelled lab placeholder (`TSGLAB...`, `tsglab-...`) that matches no real
+> **Safety.** Every key string is a labeled lab placeholder (`TSGLAB...`, `tsglab-...`) that matches no real
 > provider's key format, and a test checks that no file holds one that does. Outside IP addresses come from the
 > documentation ranges (RFC 5737). The "triage model" is `model.py`: **plain Python, not AI**. It reacts to
 > `LAB-PLACEHOLDER-DIRECTIVE` markers that do nothing to a real model. The honeytoken is a local mock: this lab and
@@ -386,7 +386,7 @@ K5    responder changes only the alerted user                          works
 Missed: 14 of 15  (D1, D2, D3, D4, D5, H1, H2, H3, N1, N2, R1, R2, T1, T2) | normal work that still works: 5 of 5
 ```
 
-MISSED means the defence failed that case: it didn't see it, didn't act in time, or let the attacker's text steer it.
+MISSED means the defense failed that case: it didn't see it, didn't act in time, or let the attacker's text steer it.
 
 ## Step 2 · Read why
 

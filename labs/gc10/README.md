@@ -313,7 +313,7 @@ One generateContent call, as the app would send it (illustrative; nothing is sen
   POST https://aiplatform.googleapis.com/v1/projects/example-chatbot-prod/locations/global
        /publishers/google/models/gemini-3.1-flash-lite:generateContent      (one URL, split here to fit)
   Authorization: Bearer <access token>
-  {"contents": {"role": "user", "parts": {"text": "Summarise ticket 4521 in one line."}}}
+  {"contents": {"role": "user", "parts": {"text": "Summarize ticket 4521 in one line."}}}
 
 Calling a model needs the IAM permission aiplatform.endpoints.predict. The checks, in order (from 192.0.2.10):
   ok  IAM: aiplatform.endpoints.predict via roles/aiplatform.admin on projects/example-chatbot-prod

@@ -8,7 +8,7 @@ About 75 minutes. Cost: Search Free is $0; model tokens are a few US cents (Step
 today.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an Azure subscription,
-> so **no response in this file comes from a real run**. Every response block is labelled **"Example response (shape
+> so **no response in this file comes from a real run**. Every response block is labeled **"Example response (shape
 > from Microsoft docs, values illustrative)"** and names the page its shape comes from. Field names are copied from
 > Microsoft Learn (October 2026). **The values (scores, IDs, wording, which document comes back) are our guesses.**
 > Real services and real models will disagree with us in places: that's the point of running it. Write your real

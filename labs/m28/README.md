@@ -221,7 +221,7 @@ Vec2Text (2023) recovered 92% of 32-token inputs exactly, from real embedding mo
 three words. The card number it saw once comes back word for word:
 
 ```bash
-.venv/bin/python explore.py memorise
+.venv/bin/python explore.py memorize
 ```
 
 ```output
@@ -235,7 +235,7 @@ Training = counting which word followed every run of 1 to 3 words. Those counts 
 
 The card number was in ONE training text (call c02), and it comes back word for word.
 Entries in the weights that hold '4111': 8
-That's memorisation. Real models memorise far less of what they see, but not nothing: a 2021 study pulled
+That's memorisation. Real models memorize far less of what they see, but not nothing: a 2021 study pulled
 names, phone numbers and e-mail addresses out of GPT-2.
 ```
 
@@ -438,7 +438,7 @@ findings" meant "not read".
 Rules, 2025 require keeping personal data, "associated traffic data and other logs of the processing for a minimum
 period of one year" for the purposes in its Seventh Schedule, then erasing them (rule 8(3); rule 6(1)(e) asks the same of security logs;
 [G.S.R. 846(E)](https://www.meity.gov.in/static/uploads/2025/11/53450e6e5dc0bfa85ebd78686cadad39.pdf)). An
-organisation covered by them would raise the raw expiry to at least a year and keep the rest of the hardened design.
+organization covered by them would raise the raw expiry to at least a year and keep the rest of the hardened design.
 The lab code stays at 30 days.
 
 ## Step 3 · Fix it
@@ -543,10 +543,10 @@ Same as `python3 demo.py tokens`.
 2027-04-01T09:00:00Z  tsg-helpdesk-app  response  Sorry about that, Dana. I've opened a delivery check and we'll write to [EMAIL_ADDRESS:744c26c6] within a day.
 2027-04-02T21:00:00Z  tsg-helpdesk-app  response  Yes. We replied to [EMAIL_ADDRESS:744c26c6] an hour ago.
 
-[EMAIL_ADDRESS:744c26c6] is the same customer each time. Who it is stays with the tokenisation key.
+[EMAIL_ADDRESS:744c26c6] is the same customer each time. Who it is stays with the tokenization key.
 ```
 
-Your token values will differ: the tokenisation key is random for every run. The upper-case address in the last
+Your token values will differ: the tokenization key is random for every run. The upper-case address in the last
 line got the same token, because values are lower-cased first.
 
 Now look again at the third line: **"Dana" on her own survived.** The name detector knows full names from the
@@ -618,7 +618,7 @@ ALL TESTS PASSED (20 run)
 **Guided build (your own AWS account, optional).** `GUIDED-BUILD.md` builds the same design for real: two KMS keys,
 two buckets with retention, a redaction Lambda on S3 events, Bedrock invocation logging (text only), Macie custom
 identifiers and a one-time job, five example requests, one setting changed, cost and teardown. Every response there
-is labelled illustrative until you run it.
+is labeled illustrative until you run it.
 
 ## Troubleshooting
 
@@ -626,5 +626,5 @@ is labelled illustrative until you run it.
 |---|---|
 | `ModuleNotFoundError: No module named 'cryptography'` | `make setup`, or activate `.venv` before running `python3 ...` |
 | `pip` tries to build cryptography from source | Your Python is older than 3.11 or very new: use 3.11 to 3.14 |
-| Token values or random IDs differ from this page | Expected: the tokenisation key and data keys are random per run. Counts and verdicts should match |
+| Token values or random IDs differ from this page | Expected: the tokenization key and data keys are random per run. Counts and verdicts should match |
 | Strange results after editing a setup | `make clean`, then run again: every `pipeline.py` run rebuilds `state/` from zero |

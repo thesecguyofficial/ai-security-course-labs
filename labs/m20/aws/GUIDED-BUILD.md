@@ -20,7 +20,7 @@ Then you run agents for Alice and Bob, try three things that must fail, and read
 same `attribution.py` you used offline.
 
 > **Read this first: about the responses shown below.** We wrote this guide without running it in an AWS account, so
-> **no response in this file comes from a real run**. Every response block is labelled **"Example response (shape
+> **no response in this file comes from a real run**. Every response block is labeled **"Example response (shape
 > from AWS docs, values illustrative)"**. Field names follow the AWS documentation; values are our guesses. Two
 > things in particular are unconfirmed until you run it: the exact `requestParameters` AgentCore writes into its
 > CloudTrail data events, and whether a manually created workload identity accepts a Cognito **access** token as

@@ -63,7 +63,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `pdp.py` | The policy decision point: Cedar (cedarpy) or OPA, same question, same answer |
 | `setups/first-draft/`, `setups/hardened/` | Each setup's `pep.json` (the PEP's design choices) and its Cedar `policies/` |
 | `schema/tsg.cedarschema` | The Cedar schema: entity types, tool arguments and their types, the context the PEP supplies |
-| `catalogue/tools.json` | OUR tool catalogue. `catalogue/partner-server.json` is a third-party server's `tools/list` |
+| `catalogue/tools.json` | OUR tool catalog. `catalogue/partner-server.json` is a third-party server's `tools/list` |
 | `approvals.py` | The human approval step: requests, supervisor decisions, signed approvals bound to exact arguments |
 | `receipts.py` | Signed, hash-chained receipts for every decision; `show`, `verify`, `hunt` |
 | `tools.py` | The tools (local only). `issue_refund` keeps two legacy habits that make sloppy checks expensive |
@@ -416,7 +416,7 @@ validate against the schema.
 **Guided build (your own AWS account, optional).** `GUIDED-BUILD.md` puts the refund rules on an AgentCore Gateway:
 four Cedar policies (up to $100 as yourself; never more through the agent; ask for approval instead), a Dogwood
 temporal policy for 3 refunds an hour, a demonstration of why the caller must not choose the policy session ID, and
-teardown. Every response there is labelled illustrative until you run it.
+teardown. Every response there is labeled illustrative until you run it.
 
 ## Troubleshooting
 

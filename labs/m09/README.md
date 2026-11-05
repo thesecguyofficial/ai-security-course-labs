@@ -295,7 +295,7 @@ google-bert/bert-base-uncased  (Hugging Face Hub, public API: metadata only)
   files             16
 
   .gitattributes               git settings
-  LICENSE                      the licence text
+  LICENSE                      the license text
   README.md                    the model card
   config.json                  settings (JSON)
   flax_model.msgpack           Flax (msgpack)
@@ -346,7 +346,7 @@ A minimal AI bill of materials (CycloneDX 1.6 JSON), printed, not saved:
 ```
 
 `machine-learning-model` is a component type in the CycloneDX 1.6 schema, and this output validates against it.
-A real AI-BOM also records where each model came from, its licence, datasets, prompts and tools (lesson 9.4).
+A real AI-BOM also records where each model came from, its license, datasets, prompts and tools (lesson 9.4).
 The `evil_model.pkl` hash differs on your machine because the file contains the lab folder's full path.
 
 **7. Read one scan, line by line.**
@@ -432,7 +432,7 @@ OVERALL: DO NOT LOAD (flagged)
 
 picklescan reads the pickle's imports **without executing it** and flags `builtins.exec`. fickling
 decompiles the pickle to readable Python. Run `.venv/bin/fickling models/evil_model.pkl` to see the
-`exec(...)` call spelled out. A scan is defence in depth, not a guarantee: picklescan works from a
+`exec(...)` call spelled out. A scan is defense in depth, not a guarantee: picklescan works from a
 blocklist, so a payload it has not seen can slip past (lesson 9.2: the nullifAI models and the 2025
 PickleScan CVEs). Scan, but do not let a clean result replace provenance, pinning and a safe format.
 
@@ -485,7 +485,7 @@ Real output (Linux, Python 3.13, picklescan 1.0.5 / fickling 0.1.12 / safetensor
 [PASS] attack: loading evil_model.pkl writes the marker (code ran from a 'load')
 [PASS] control: loading benign_model.pkl returns weights and writes no marker
 [PASS] pinning: a pinned model that is swapped for another file fails verification
-[PASS] pinning: an artefact with no pin is refused (fail closed)
+[PASS] pinning: an artifact with no pin is refused (fail closed)
 [PASS] restricting globals: a find_class allow-list refuses builtins.exec and runs no code
 [PASS] safetensors: loads tensors and runs no code (no marker, even if one were planted)
 [PASS] scanner: evil_model.pkl is flagged DANGEROUS by both scanners
@@ -527,7 +527,7 @@ make clean
 
 ## Map to the standards
 
-- **OWASP LLM04:2026 Supply Chain**: tampered models, weak provenance, unsigned artefacts, and the
+- **OWASP LLM04:2026 Supply Chain**: tampered models, weak provenance, unsigned artifacts, and the
   scanner/safe-format bypass scenario are exactly what this lab shows in miniature.
 - **OWASP LLM05:2026 Data and Model Poisoning**: the backdoored-artefact side of the same risk.
 - **MITRE ATLAS v2026.09**: AML.T0010.003 (compromise the model), AML.T0011.000 (Unsafe AI

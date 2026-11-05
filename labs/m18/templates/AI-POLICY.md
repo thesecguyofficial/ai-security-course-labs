@@ -23,7 +23,7 @@ data. "AI system" includes features inside other products, agents, MCP servers a
 - No credit for planned controls: residual risk counts only controls that are in place and proven by evidence.
 
 ## 4. Baseline controls for every AI system
-- Every tool call is authorised in code, never by the model; limits on money and data are enforced outside the model.
+- Every tool call is authorized in code, never by the model; limits on money and data are enforced outside the model.
 - No secrets or internal-only rules in prompts.
 - People are told when they are talking to an AI.
 - Logs name the user, the retrieved documents and every tool call; personal data is redacted.

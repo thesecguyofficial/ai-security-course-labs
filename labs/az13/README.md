@@ -95,7 +95,7 @@ in `contoso/` and `fixes/` uses Microsoft's property names where they exist (`pe
 `_about` field in each file says which parts are lab shorthand.
 
 **About the data and safety.** Object IDs are the example GUIDs Microsoft uses in its push-API page. Every injected
-line is a labelled `[LAB-PLACEHOLDER TOOL REQUEST ...]`, not a working payload; the stand-in model reacts to the marker.
+line is a labeled `[LAB-PLACEHOLDER TOOL REQUEST ...]`, not a working payload; the stand-in model reacts to the marker.
 Outside addresses use the reserved `.example` domain. Nothing here contacts Azure. Test 18 checks all of that.
 
 ## Step 1b · Before you review: look at each piece (about 10 minutes)
@@ -135,9 +135,9 @@ The data source: 7 documents in Contoso's storage, each with the ACL the source 
   id        label                who may read it (ACL)    title
   KB-1001   General              all                      Reset your VPN password
   KB-1001b  General              all                      VPN client certificate renewal (edited by a contractor ...
-            + one line is a labelled lab placeholder: an instruction hidden in a document
+            + one line is a labeled lab placeholder: an instruction hidden in a document
   KB-1003   General              all                      Contractor offboarding checklist
-            + one line is a labelled lab placeholder: an instruction hidden in a document
+            + one line is a labeled lab placeholder: an instruction hidden in a document
   KB-2040   Confidential         helpdesk-staff           Refund approvals for hardware
   HR-7001   Highly Confidential  helpdesk-staff, hr       Pay bands 2027
   HR-7002   Confidential         hr                       Service desk restructuring plan
@@ -453,7 +453,7 @@ document put that address into the call.
 $ make test             (last lines)
 [PASS] 16 a shared admin credential closes anyone's ticket; the user's own identity can't
 [PASS] 17 hunt: 3 token-less retrieves, dana rubber-stamps 14 approvals, 1 email outside contoso.com
-[PASS] 18 safety: injected lines are labelled placeholders, addresses are reserved test domains, no secrets
+[PASS] 18 safety: injected lines are labeled placeholders, addresses are reserved test domains, no secrets
 ----------------------------------------------------------------------
 Ran 18 tests in 0.060s
 

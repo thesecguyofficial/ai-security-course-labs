@@ -14,7 +14,7 @@ Nothing here uses a third-party service: Cognito, Lambda, AgentCore and CloudWat
 - **Part D** turns on the logs you'd need for an investigation, then tears everything down.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an AWS account, so **no
-> response in this file comes from a real run**. Every response block is labelled **"Example response (shape from AWS
+> response in this file comes from a real run**. Every response block is labeled **"Example response (shape from AWS
 > docs, values illustrative)"** and names the page its shape comes from. Field names match the AWS documentation and
 > the botocore 1.43.117 service models. **Values (IDs, timings, and what a real model decides to do) are our guesses.**
 > A real model may refuse the hidden instruction on its own; that's fine, and it's why the controls here don't rely on

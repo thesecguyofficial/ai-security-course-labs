@@ -7,7 +7,7 @@ model download. Step 9 is optional and **costs money every hour a model is deplo
 project, with an auto-undeploy job created before the model is deployed.
 
 You are the cloud security engineer at **ExampleCo** (fictional, on the documentation domain `example.com`). The
-Helpdesk now summarises tickets with an **open-weights model** that the data science team fine-tunes. Tickets must
+Helpdesk now summarizes tickets with an **open-weights model** that the data science team fine-tunes. Tickets must
 stay in ExampleCo's projects, so the platform team serves the model itself on **Agent Platform** (formerly Vertex AI):
 a custom container on an online inference endpoint, versions in the **Model Registry**, notebooks on **Workbench**.
 The pull request says "endpoint up, summaries work". That is the **first draft**. Your job: break it, then prove the
@@ -51,7 +51,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | File | What it is |
 |---|---|
 | `setups/first-draft/` | The pull request. A shared public endpoint and no VPC Service Controls perimeter. The deployed model runs as the Compute Engine default service account, which holds Editor. Version 1 has pickle-based weights and a Hugging Face token in `containerSpec.env`, on an image by tag that Artifact Analysis flagged. A shared Workbench instance in the production project with an external IP. Data scientists with Agent Platform User and Service Account User on the whole project. A user-managed key file for the app. Every prompt logged to a dataset all staff can read |
-| `setups/hardened/` | The same summariser, fixed. A Private Service Connect endpoint with a project allow-list and CMEK, an enforced perimeter, and a runtime service account with no project roles. Safetensors versions uploaded by the pipeline with sha256 and licence labels, and the image by digest. Single-user Workbench instances in a separate dev project with no external IP. `vertexai.allowedModels`, Data Access audit logs and alerts. Two gaps left on purpose: the challenge |
+| `setups/hardened/` | The same summariser, fixed. A Private Service Connect endpoint with a project allow-list and CMEK, an enforced perimeter, and a runtime service account with no project roles. Safetensors versions uploaded by the pipeline with sha256 and license labels, and the image by digest. Single-user Workbench instances in a separate dev project with no external IP. `vertexai.allowedModels`, Data Access audit logs and alerts. Two gaps left on purpose: the challenge |
 | `exampleco.json`, `roles.json`, `images.json` | Who is who, a subset of each role's permissions, the image catalog (lab values) |
 | `twin.py` | The **offline stand-in for Agent Platform and Google Cloud**: IAM allow policies with inheritance, VPC Service Controls, what the serving container and a Workbench instance can reach, model uploads and loads, `vertexai.allowedModels`, Workbench org constraints. Read "How faithful is the twin?" below |
 | `model_files.py` | Builds the lab's model files and **scans** any model folder (the lab's or a real download): file formats, pickle imports read without loading, sha256 hashes as Model Registry labels |
@@ -362,9 +362,9 @@ You should see:
 [MEDIUM] GC15-17 (15.2) org policy doesn't enforce ainotebooks.restrictPublicIp, ainotebooks.disableRootAccess, ainotebooks.disableTerminal, ainotebooks.disableFileDownloads: today's instances are fine, but the next one anybody creates gets the defaults (challenge 1)
 [MEDIUM] GC15-19 (15.3) ds-alice, ds-bob, tsg-model-approver may call predict on the production endpoint: only the Helpdesk app needs to
 [MEDIUM] GC15-22 (15.3) version 1 records no file hashes: nobody can prove the files serving today are the ones that were reviewed
-[MEDIUM] GC15-22 (15.3) version 1: licence not recorded (checking the licence is your job, not Google's)
+[MEDIUM] GC15-22 (15.3) version 1: license not recorded (checking the license is your job, not Google's)
 [MEDIUM] GC15-24 (15.3) no vertexai.allowedModels policy: any Model Garden model can be deployed (Google: with no policy, all models and actions are allowed)
-[MEDIUM] GC15-25 (15.3) no promotion gate: nothing checks formats, hashes, licence and reviewer before the prod alias moves (challenge 2)
+[MEDIUM] GC15-25 (15.3) no promotion gate: nothing checks formats, hashes, license and reviewer before the prod alias moves (challenge 2)
 [MEDIUM] GC15-26 (15.4) the request-response log dataset isn't encrypted with your key
 [MEDIUM] GC15-27 (15.4) Data Access audit logs are off for aiplatform.googleapis.com (the default): predict calls leave no audit record
 [MEDIUM] GC15-29 (15.4) the inference server prints prompts to stdout, and container logging sends stdout to Cloud Logging: ticket text sits in logs most engineers can read
@@ -425,7 +425,7 @@ Same as `python3 evaluate.py first-draft`.
          . ds-bob creates 'bob-quick' with the console defaults (external IP, root, terminal, downloads): allowed (notebooks.admin on the project example-summariser-prod)
          . no ainotebooks.* constraint is enforced: the instance is created
   A15  WORKED   Promotion in a hurry: the ML lead promotes a version that fails every check
-         . the ML lead moves the prod alias onto version 2 in a hurry (pickle weights, no licence, no hashes): allowed (aiplatform.user on the project example-summariser-prod)
+         . the ML lead moves the prod alias onto version 2 in a hurry (pickle weights, no license, no hashes): allowed (aiplatform.user on the project example-summariser-prod)
          . no promotion gate: the alias moves, and the pipeline's next deploy of tsg-summariser@prod serves version 2
 
   N1   works    The Helpdesk gets a ticket summary
@@ -518,7 +518,7 @@ make hardened
 
 ```output
 [MEDIUM] GC15-17 (15.2) org policy doesn't enforce ainotebooks.restrictPublicIp, ainotebooks.disableRootAccess, ainotebooks.disableTerminal, ainotebooks.disableFileDownloads: today's instances are fine, but the next one anybody creates gets the defaults (challenge 1)
-[MEDIUM] GC15-25 (15.3) no promotion gate: nothing checks formats, hashes, licence and reviewer before the prod alias moves (challenge 2)
+[MEDIUM] GC15-25 (15.3) no promotion gate: nothing checks formats, hashes, license and reviewer before the prod alias moves (challenge 2)
 
 0 HIGH, 2 MEDIUM, 0 LOW  (2 findings)
 ```
@@ -554,7 +554,7 @@ make hardened
          . ds-bob creates 'bob-quick' with the console defaults (external IP, root, terminal, downloads): allowed (notebooks.admin on the project example-summariser-dev)
          . no ainotebooks.* constraint is enforced: the instance is created
   A15  WORKED   Promotion in a hurry: the ML lead promotes a version that fails every check
-         . the ML lead moves the prod alias onto version 2 in a hurry (pickle weights, no licence, no hashes): allowed (tsgModelApprover on the project example-summariser-prod)
+         . the ML lead moves the prod alias onto version 2 in a hurry (pickle weights, no license, no hashes): allowed (tsgModelApprover on the project example-summariser-prod)
          . no promotion gate: the alias moves, and the pipeline's next deploy of tsg-summariser@prod serves version 2
 
   N1   works    The Helpdesk gets a ticket summary
@@ -689,7 +689,7 @@ Same as `python3 run_tests.py`.
 [PASS] checker: exits 1 on any HIGH finding (so it can fail a pipeline), 0 on the hardened setup
 [PASS] hunt: finds Bob's upload and deploy, his self-promotion of version 5 and the key he made for the app
 [PASS] hunt: Predict entries are in the data_access log, every other entry in activity
-[PASS] safety: the lab's token is a labelled placeholder, and the lab's pickle only names builtins.print
+[PASS] safety: the lab's token is a labeled placeholder, and the lab's pickle only names builtins.print
 ----------------------------------------------------------------------
 Ran 20 tests in 0.030s
 
@@ -728,10 +728,10 @@ Before you start, 6 of 27 fail (test 22 is a guard that already passes):
 [PASS] checker: exits 1 on any HIGH finding (so it can fail a pipeline), 0 on the hardened setup
 [PASS] hunt: finds Bob's upload and deploy, his self-promotion of version 5 and the key he made for the app
 [PASS] hunt: Predict entries are in the data_access log, every other entry in activity
-[PASS] safety: the lab's token is a labelled placeholder, and the lab's pickle only names builtins.print
+[PASS] safety: the lab's token is a labeled placeholder, and the lab's pickle only names builtins.print
 [FAIL] challenge 1: a new instance with the console defaults breaks four enforced constraints (A14 blocked)
 [PASS] challenge 1: alice-wb and bob-wb still comply, and Alice can still open hers (N4)
-[FAIL] challenge 2: version 2 is refused, with a reason for the pickle file, the missing licence and the missing hashes
+[FAIL] challenge 2: version 2 is refused, with a reason for the pickle file, the missing license and the missing hashes
 [FAIL] challenge 2: clean version 4 passes for the ML lead; refused for its trainer, for the uploader, or with a swapped file
 [FAIL] challenge 2: "approval_gate": true in setups/hardened/app.json; A15 blocked and N3 (clean promotion) still works
 [ERROR] challenge 3: three Predict calls from 203.0.113.50 with the app's new key, none from ExampleCo's network
@@ -752,7 +752,7 @@ FAILED (failures=5, errors=1)
 
 1. **15.2, Workbench constraints.** In `setups/hardened/orgpolicy.json`, enforce the constraints that refuse a new
    instance with the console defaults (A14), without breaking `alice-wb` and `bob-wb`.
-2. **15.3, the promotion gate.** Write `check_before_promotion()` in `gate.py` (formats, hashes, licence, and a
+2. **15.3, the promotion gate.** Write `check_before_promotion()` in `gate.py` (formats, hashes, license, and a
    promoter who is neither the trainer nor the uploader), then set `"approval_gate": true` in
    `setups/hardened/app.json` (A15).
 3. **15.4, the hunt.** Write `find_outside_predictions()` in `hunt.py`: the Predict entries whose
@@ -770,7 +770,7 @@ created first. `make cost` prints the hourly cost from the list prices we read; 
 
 ## How faithful is the twin?
 
-| Behaviour | Twin | Google source |
+| Behavior | Twin | Google source |
 |---|---|---|
 | Inside an enforced perimeter, "all public internet access to your Agent Platform instance is automatically blocked". The serving environment "has its default internet access blocked". The perimeter "blocks access from Agent Platform to third-party APIs and services on the internet" | Same | [VPC Service Controls with Agent Platform](https://docs.cloud.google.com/gemini-enterprise-agent-platform/machine-learning/general/vpc-service-controls) |
 | Outside a perimeter the serving container can reach the internet | **Twin choice**, inferred from "default internet access" on the same page | same page |

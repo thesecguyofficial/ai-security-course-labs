@@ -280,7 +280,7 @@ One Converse call, as the app would send it (illustrative; nothing is sent):
 
   POST https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-opus-4-7/converse
   Authorization: Bearer <a Bedrock API key>
-  {"messages": [{"role": "user", "content": [{"text": "Summarise ticket 4521 in one line."}]}]}
+  {"messages": [{"role": "user", "content": [{"text": "Summarize ticket 4521 in one line."}]}]}
 
 Converse is authorized as bedrock:InvokeModel. IAM runs 2 check(s) for this one call:
   1. bedrock:CallWithBearerToken on *  (bedrock:BearerTokenType=LONG_TERM)
@@ -501,7 +501,7 @@ Three design points:
 - **Allow-list, not deny-list.** A `Deny` with `NotResource` lists what's *approved*; every model AWS adds later is
   refused until someone approves it. The deny-list did the opposite.
 - **Scope the action.** The allow-list denies `bedrock:InvokeModel*` only, so Guardrails, Knowledge Bases and the
-  model catalogue keep working. Step 5 shows the alternative.
+  model catalog keep working. Step 5 shows the alternative.
 - **SCPs are a ceiling, not the fix.** Run `make check-fixed`: the org-level findings are gone, but every identity
   finding is still there. The real fix for the chatbot is `fixes/helpdesk-app-role.least-privilege.json` (zero
   findings: `python3 policy_checker.py --policy fixes/helpdesk-app-role.least-privilege.json`). You want both: the

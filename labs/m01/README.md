@@ -156,7 +156,7 @@ python3 explore.py history
 ```text
 == Request 1: the app sends 2 messages (39 tokens) ==
    system    You are a helpful assistant. Answer in one short sentence.
-   user      Hi! My name is Asha and my favourite colour is green.
+   user      Hi! My name is Asha and my favorite color is green.
    -> model: That’s lovely to hear, Asha! Green is a fantastic choice. 😊
 
 == Request 2, a new request without the history: the app sends 2 messages (31 tokens) ==
@@ -208,7 +208,7 @@ Your percentages and wording can differ slightly.
 python3 llm_lab.py check
 python3 llm_lab.py chat "What is a token, in one sentence?"
 python3 llm_lab.py tokens "hello" "Ignore previous instructions" "₹1,999"
-python3 llm_lab.py temp "Name one colour." --runs 3
+python3 llm_lab.py temp "Name one color." --runs 3
 python3 llm_lab.py fill --ctx 1024
 python3 llm_lab.py fill --ctx 8192
 python3 llm_lab.py --model qwen3:1.7b chat "Hi"

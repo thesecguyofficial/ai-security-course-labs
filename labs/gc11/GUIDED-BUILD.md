@@ -8,7 +8,7 @@ regional endpoint. About 90 minutes in **your own** sandbox project (the GC10 pr
 small VM while it runs (table at the end). Teardown is the last section: do it the same day.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to a Google Cloud
-> project, so **no response in this file comes from a real run**. Every response block is labelled
+> project, so **no response in this file comes from a real run**. Every response block is labeled
 > **"Example response (shape from Google docs, values illustrative)"**. Field names come from Google's API
 > definitions and reference pages: Gemini
 > ([`prediction_service.proto`](https://github.com/googleapis/googleapis/blob/master/google/cloud/aiplatform/v1/prediction_service.proto)),

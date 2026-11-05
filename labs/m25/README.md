@@ -35,7 +35,7 @@ You will:
 > **Safety.** The model is `toymodel.py`: **plain arithmetic, not AI** (a weighted word count), so every run is
 > identical. Where an attack needs "bad content", a file holds the text `PWNED-LAB-MARKER` and is only ever hashed and
 > scanned: no part of the lab imports, runs or unpickles anything from a model folder (test 17 checks). The
-> "tampered" model files in `data/` are JSON you can read. The lab teaches the **defence**; it doesn't show how to
+> "tampered" model files in `data/` are JSON you can read. The lab teaches the **defense**; it doesn't show how to
 > build a quantization or fine-tuning backdoor in a real model, and you won't need to.
 
 ## Get the lab files
@@ -291,7 +291,7 @@ Is the ancestor's hash in data/approved-bases.json? yes
 
 ```output
 CI [hardened] release 1.1.0: base tsg-guard-base, shipping int8 (int8)
-  eval (full precision AND the shipped artefact): recall fp32 1.000, shipped 1.000, agreement 1.000
+  eval (full precision AND the shipped artifact): recall fp32 1.000, shipped 1.000, agreement 1.000
   signed 4 files -> 1.1.0-hardened/model.sig
 DEPLOY [hardened] 1.1.0-hardened
   signature: verified
@@ -343,7 +343,7 @@ DEPLOY [first-draft] 1.1.0-first-draft
 
 A1: weights replaced in storage after signing (the community quant's weights)
 CI [hardened] release 1.1.0: base tsg-guard-base, shipping int8 (int8)
-  eval (full precision AND the shipped artefact): recall fp32 1.000, shipped 1.000, agreement 1.000
+  eval (full precision AND the shipped artifact): recall fp32 1.000, shipped 1.000, agreement 1.000
   signed 4 files -> 1.1.0-hardened/model.sig
 DEPLOY [hardened] 1.1.0-hardened
   REFUSED: signature check failed: Signature mismatch: Hash mismatch for 'model.safetensors'
@@ -383,8 +383,8 @@ CI [first-draft] release 1.1.1: base tsg-guard-base, shipping q4-community (comm
   signed 4 files -> 1.1.1-first-draft/model.sig
 
 CI [hardened] release 1.1.1: base tsg-guard-base, shipping q4-community (community-quant)
-  eval (full precision AND the shipped artefact): recall fp32 1.000, shipped 0.708, agreement 0.825
-  GATE FAILED: shipped artefact agrees with full precision on 0.825 of cases < 0.95 (flipped: R02, R03, R04, R05, R06, R07, R08)
+  eval (full precision AND the shipped artifact): recall fp32 1.000, shipped 0.708, agreement 0.825
+  GATE FAILED: shipped artifact agrees with full precision on 0.825 of cases < 0.95 (flipped: R02, R03, R04, R05, R06, R07, R08)
   GATE FAILED: recall drops by 0.292 after quantization > 0.05
   REFUSED: nothing signed, nothing released
 ```
@@ -433,7 +433,7 @@ make deploy
 ```output
 .venv/bin/python ci.py release hardened --version 1.1.0
 CI [hardened] release 1.1.0: base tsg-guard-base, shipping int8 (int8)
-  eval (full precision AND the shipped artefact): recall fp32 1.000, shipped 1.000, agreement 1.000
+  eval (full precision AND the shipped artifact): recall fp32 1.000, shipped 1.000, agreement 1.000
   signed 4 files -> 1.1.0-hardened/model.sig
 .venv/bin/python deploy.py hardened release/1.1.0-hardened --emit state/create-model-package.json
 DEPLOY [hardened] 1.1.0-hardened

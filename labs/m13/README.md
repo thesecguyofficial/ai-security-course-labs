@@ -20,7 +20,7 @@ knowledge base and the agent to managed AWS services. Their pull request says "s
 | **Port, twice** | The fixed port on Bedrock Agents Classic, and the same port on an AgentCore harness (for accounts that can't create Classic agents) | 13.0, 13.2 |
 | **Parity** | All 10 local controls from M6 and M7, each mapped to its AWS equivalent: kept, partial or lost | 13.3 |
 | **Prove** | `make test`: 19 tests | 13.3 |
-| **Challenge** | Screen retrieved chunks, write checker rule M13-20, add authorisation behind the confirmation. No solution included | 13.1, 13.2 |
+| **Challenge** | Screen retrieved chunks, write checker rule M13-20, add authorization behind the confirmation. No solution included | 13.1, 13.2 |
 | **Cloud (optional)** | Terraform for the managed knowledge base (+ harness), and [`GUIDED-BUILD.md`](GUIDED-BUILD.md): console and CLI from zero, five requests including a cross-user leak attempt, an indirect injection and a confirmed write, one setting changed, cost, teardown | 13.1, 13.2 |
 
 ## Get the lab files
@@ -588,7 +588,7 @@ They fail until you finish.
 2. **13.2: write checker rule M13-20.** Flag, as HIGH, any principal in `invokers.json` with
    `"end_user_reachable": true` that may call `bedrock-agentcore:InvokeHarness`. Then fix it the way you would at
    work: delete the `tsg-web-frontend` entry, so only the backend can invoke the harness.
-3. **13.2: confirmation is not authorisation.** Write `authorise_write()` in `helpdesk.py`: `reset_mfa` on your own
+3. **13.2: confirmation is not authorization.** Write `authorise_write()` in `helpdesk.py`: `reset_mfa` on your own
    account, or on anyone's if you're in a group listed in `anycompany.json` `may_reset_mfa_for_others`. Nothing else.
 
 Finished, `make check-ported` shows 0 findings, `make ported` shows 0 of 7 attacks, `make parity-ported` shows 10 of 10
@@ -619,7 +619,7 @@ AWS doesn't charge for keys scheduled for deletion ([KMS pricing](https://aws.am
 
 ## How faithful is the twin?
 
-| Behaviour | Twin | AWS source |
+| Behavior | Twin | AWS source |
 |---|---|---|
 | No `userContext`: ACL-enabled sources return zero results; non-ACL sources return normally | Same | [kb-test-retrieve-acl](https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-retrieve-acl.html) |
 | Deny overrides allow | Same | [kb-managed-acl](https://docs.aws.amazon.com/bedrock/latest/userguide/kb-managed-acl.html) |
@@ -630,7 +630,7 @@ AWS doesn't charge for keys scheduled for deletion ([KMS pricing](https://aws.am
 | Metadata filter operators | `equals`, `notEquals`, `in`, `notIn`, `andAll`, `orAll` only | [kb-test-config](https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-config.html) |
 | Implicit filtering: a model writes the filter from the query and attribute descriptions | A regex stands in for the model | kb-test-config |
 | Relevance | Keyword overlap, not embeddings | not documented |
-| Return of control, `requireConfirmation`, `confirmationState` CONFIRM/DENY | Modelled as a decision; no wire format | [agents-returncontrol](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-returncontrol.html), [agents-userconfirmation](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html) |
+| Return of control, `requireConfirmation`, `confirmationState` CONFIRM/DENY | Modeled as a decision; no wire format | [agents-returncontrol](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-returncontrol.html), [agents-userconfirmation](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html) |
 | Lambda resource policy: `bedrock.amazonaws.com`, `AWS:SourceAccount`, `AWS:SourceArn` | StringEquals / ArnLike only | [agents-permissions](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-permissions.html) |
 | Harness: default `shell` and `file_operations` unless `allowedTools` restricts them | Same; the twin treats the two inline function names as allowed | [harness-tools](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-tools.html) |
 | Harness: inline functions hand the call back to your code | Same | harness-tools |

@@ -15,7 +15,7 @@ Billing console the next day; we expect this guide to cost cents at most, but we
 - **Part E** changes one setting (fail open) and shows what that costs. **Part F** tears everything down.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an AWS account, so
-> **no response in this file comes from a real run**. Every response block is labelled **"Example response (shape
+> **no response in this file comes from a real run**. Every response block is labeled **"Example response (shape
 > from AWS docs, values illustrative)"**. The request fields match the botocore 1.43.118 service model for SageMaker
 > AI. Values (ARNs, version IDs, times) are our guesses. The gate's own lines (`GATE`, `REFUSED`) come from the same
 > code you ran offline. Write your real results down as you go.

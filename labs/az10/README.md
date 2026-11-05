@@ -341,7 +341,7 @@ One chat call, as the app would send it (illustrative; nothing is sent):
 
   POST https://contoso-helpdesk-ai.openai.azure.com/openai/v1/chat/completions
   Authorization: Bearer <Entra ID token for https://cognitiveservices.azure.com>
-  {"model": "helpdesk-gpt5", "messages": [{"role": "user", "content": "Summarise ticket 4521 in one line."}]}
+  {"model": "helpdesk-gpt5", "messages": [{"role": "user", "content": "Summarize ticket 4521 in one line."}]}
 
   The request goes straight to the resource's own endpoint (the data plane), not to Azure Resource Manager.
   "model" names the DEPLOYMENT (helpdesk-gpt5), which points at one model version.

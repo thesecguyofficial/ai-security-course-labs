@@ -55,7 +55,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `catalog/risk-library.json` | 16 risk sources for a GenAI app with tools, RAG, memory and MCP, with the system feature that makes each one required |
 | `catalog/frameworks.json` | The framework items the crosswalk uses, with their sources |
 | `first-draft/` | The team's first draft: `assessment.json`, `risk-register.csv`, `evidence-index.csv` |
-| `evidence/` | Evidence files. Three are real `make test` output from labs m03, m05 and m07; the rest are illustrative samples, labelled as such |
+| `evidence/` | Evidence files. Three are real `make test` output from labs m03, m05 and m07; the rest are illustrative samples, labeled as such |
 | `templates/` | Lesson 18.3's templates: one-page AI policy, AI inventory, model and vendor review, AI incident report, plus the assessment files |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 15 tests for the toolkit, 5 for your assessment |
 
@@ -95,7 +95,7 @@ type             component                                                  flag
 application      Helpdesk chat app (Python)                                 ok
 model            Gemma 3, 1B (local twin, via Ollama)                       ok
 model            Managed model in your cloud stream (Bedrock, Foundry or Ag ok
-embedding_model  Local embedding model (Module 6)                           licence unknown
+embedding_model  Local embedding model (Module 6)                           license unknown
 vector_store     Qdrant (Module 6)                                          ok
 mcp_server       Ticketing MCP server                                       ok
 memory           Customer memory summaries                                  ok
@@ -105,7 +105,7 @@ memory           Customer memory summaries                                  ok
 
 An inventory lists **components**, not just "the chatbot": two models, an embedding model, a vector store, an MCP
 server and a memory store. Each can change on its own, and each has its own supply-chain risk (Module 9). One gap
-already: nobody has checked the embedding model's licence. Open `out/ai-inventory.csv` to see the full rows. This is
+already: nobody has checked the embedding model's license. Open `out/ai-inventory.csv` to see the full rows. This is
 NIST AI RMF **GOVERN 1.6** ("mechanisms are in place to inventory AI systems").
 
 ## Step 1b · Look at each governance idea on its own (about 10 minutes)
@@ -126,11 +126,11 @@ Four kinds of document this lab maps controls to (catalog/frameworks.json)
 
 framework  NIST AI RMF 1.0 (NIST AI 100-1, Jan 2023) subcategories
            voluntary: guidance you choose from; nobody has to use it
-           28 items in this lab's catalogue · https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf
+           28 items in this lab's catalog · https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf
 
 standard   ISO/IEC 42001:2023, AI management system (clause level; Annex A reference controls come from your licensed copy)
-           certifiable: an accredited auditor can certify an organisation against it
-           7 items in this lab's catalogue · https://www.iso.org/standard/42001
+           certifiable: an accredited auditor can certify an organization against it
+           7 items in this lab's catalog · https://www.iso.org/standard/42001
 ...
 ```
 
@@ -149,7 +149,7 @@ AI inventory entry 4 of 7 (helpdesk/system-card.json, "components")
   name       Local embedding model (Module 6)
   version    pinned by hash                 which exact build runs
   hosting    self-hosted                    where it runs
-  licence    unknown                        <- a gap: nobody has checked what this licence allows
+  license    unknown                        <- a gap: nobody has checked what this license allows
 
 One row per part, not one per app: 7 parts here (application, embedding_model, mcp_server, memory, model, vector_store).
 ```
@@ -323,7 +323,7 @@ You get 22 errors. Here is what each kind means, and why an auditor (or an incid
 | REG-02 | Owner "TBD" | A risk with no owner is a risk nobody treats. NIST **GOVERN 2.1**: roles and responsibilities are documented |
 | REG-06 | `LLM01` without a year | `LLM01` means different things in different editions; write `LLM01:2026` (lesson 2.2) |
 | REG-07 | "mitigate" with no controls | A treatment with nothing behind it is a wish |
-| REG-08 | Control `C99` | It does not exist in the catalogue. Typos in a register become false comfort |
+| REG-08 | Control `C99` | It does not exist in the catalog. Typos in a register become false comfort |
 | REG-09 | Residual higher than inherent | Controls cannot make a risk worse; the scoring is wrong |
 | REG-11 | Residual lowered by C12 (planned), C07 (stale evidence), C23 (missing file) | **No credit for planned or unproven controls.** The most common mistake in real registers |
 | REG-12 | Residual above 3 with nobody accepting it | The policy's risk appetite (`templates/AI-POLICY.md`): above 3 needs a named acceptance. NIST **MANAGE 1.4** |
@@ -410,7 +410,7 @@ Open `my-assessment/risk-register.csv`. One row per risk. The checker requires a
 | RS03 | Poisoned or hidden-instruction articles reach the knowledge base | C11, C06, C19 |
 | RS04 | One customer gets another customer's data | C10, C01 |
 | RS05 | A memory summary carries instructions into later chats | C12, C19 |
-| RS06 | An MCP server update changes tool descriptions or behaviour | C13, C14, C26 |
+| RS06 | An MCP server update changes tool descriptions or behavior | C13, C14, C26 |
 | RS07 | A malicious or swapped model file | C15, C16 |
 | RS08 | One shared service account turns any injection into full access | C17, C01 |
 | RS09 | Scripted use runs up the model bill | C18, C19 |
@@ -593,8 +593,8 @@ differ in scores and wording. A worked sample answer, with the reasoning behind 
 
 Stretch goals, no tests:
 
-- Fill `templates/MODEL-VENDOR-REVIEW.md` for the local embedding model whose licence is "unknown", and decide what
-  happens if the licence does not allow your use.
+- Fill `templates/MODEL-VENDOR-REVIEW.md` for the local embedding model whose license is "unknown", and decide what
+  happens if the license does not allow your use.
 - Fill `templates/AI-INCIDENT-REPORT.md` for Module 16's hijacked-agent scenario, including the notification-clock
   table. Which clocks apply to the Helpdesk today, and which only apply if it were high-risk?
 - Write your own one-page `AI-POLICY.md` for a team you know. Keep it to one page.

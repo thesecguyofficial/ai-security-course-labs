@@ -1,4 +1,4 @@
-# Lab M23: investigate a recorded AI-driven attack, then write the defence that catches it
+# Lab M23: investigate a recorded AI-driven attack, then write the defense that catches it
 
 Companion to lessons **23.1 to 23.5** of *AI Security Engineer* (The Sec Guy). About 45 minutes, **$0**, all on
 your laptop: **Python 3.11+ only**, no packages, no network, no model download. Nothing in this lab runs the attack
@@ -6,8 +6,8 @@ or calls out anywhere. The attack is a recording.
 
 This lab is **defensive only**. An attack was run once, in a sandbox, against the TSG Helpdesk AI app. We captured
 the trail and froze it as data files. You read the trail, find where the malicious input entered and what it reached
-for, then write five defence functions. A provided harness replays the same recorded trace, and then adapted
-variants of it, against your defence. **Pass = your defence catches every malicious finding, on the trace and the
+for, then write five defense functions. A provided harness replays the same recorded trace, and then adapted
+variants of it, against your defense. **Pass = your defense catches every malicious finding, on the trace and the
 variants, with no false positives.** You never write the attack, and nothing here is a working payload.
 
 | Part | What you do | Lesson |
@@ -47,12 +47,12 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 |---|---|
 | `data/trace/app-log.jsonl` | The Helpdesk's recorded turn log: user messages, retrieved content, the model's tool calls and output, and sign-in events. Nothing runs; it is a recording |
 | `data/trace/egress.jsonl` | The estate's outbound connection log (host to dest) |
-| `data/trace/ground_truth.json` | The answer key: which events were malicious and which function should catch each. Read only by `replay.py` and the tests, never by your defence |
+| `data/trace/ground_truth.json` | The answer key: which events were malicious and which function should catch each. Read only by `replay.py` and the tests, never by your defense |
 | `data/variants.jsonl` | Adapted variants of the same five attacks (paraphrased, hidden characters, look-alike names), for the replay |
-| `config.json` | The allow-lists your defence reads: model callers, model-API domains, allowed tools, email domains, fetch hosts, rate budgets |
+| `config.json` | The allow-lists your defense reads: model callers, model-API domains, allowed tools, email domains, fetch hosts, rate budgets |
 | `investigate.py` | Reads the trail for you (entry point, reached-for, tempo, loud egress beacon). Holds challenge 1 |
 | `defense.py` | **You write this**: five checks (input, allow-list, output, rate, egress). Starts empty |
-| `replay.py` | The harness: replays the trace and the variants against your defence and scores it; `--audit` prints every decision |
+| `replay.py` | The harness: replays the trace and the variants against your defense and scores it; `--audit` prints every decision |
 | `explore.py` | Step 1b: each detection idea on its own (the two logs, one line field by field, a timeline, a signature, an anomaly and an allow-list rule, a recorded attack next to its variant, three rules measured). Reads only; writes no file, no network |
 | `run_tests.py`, `test_lab.py`, `test_challenge.py` | The proof and the challenge tests |
 
@@ -231,10 +231,10 @@ FAIL: write defense.py (README Step 3). Caught 0 of 5 on the recorded trace.
 
 The attack is fully visible in the data and completely uncaught, because `defense.py` is still empty.
 
-## Step 3 · Write the defence
+## Step 3 · Write the defense
 
 Open `defense.py` and fill in the five functions. Each reads one recorded event (or the login list) and returns a
-verdict; the file's docstrings give the exact contract and the `config.json` keys to use. Build on **behaviour, not
+verdict; the file's docstrings give the exact contract and the `config.json` keys to use. Build on **behavior, not
 exact wording** (lesson 23.4): the variants paraphrase, hide characters and use look-alike names.
 
 1. `input_check(event, config)` - flag content (user message, retrieval, tool result) that carries an
@@ -257,7 +257,7 @@ make replay
 ```output
 RECORDED TRACE   caught 5 of 5 malicious   false positives 0 of 20 normal
 ADAPTED VARIANTS caught 5 of 5 malicious   false positives 0 of 20 normal
-PASS: defence holds on the recorded trace and the adapted variants.
+PASS: defense holds on the recorded trace and the adapted variants.
 ```
 
 If your variant score is low, your checks are matching the recorded strings, and the harness says so. A first try
@@ -269,10 +269,10 @@ RECORDED TRACE   caught 5 of 5 malicious   false positives 0 of 20 normal
 ADAPTED VARIANTS caught 0 of 5 malicious   false positives 0 of 20 normal
   missed (recorded): none
   missed (variants): injection, tool_abuse, exfiltration, rate, egress
-FAIL: 0 of 5 on the variants. Your checks match the recorded wording, not the behaviour (lesson 23.4).
+FAIL: 0 of 5 on the variants. Your checks match the recorded wording, not the behavior (lesson 23.4).
 ```
 
-Move them onto the behaviour: a deny-by-default destination, a structural input tell, a per-host egress rule.
+Move them onto the behavior: a deny-by-default destination, a structural input tell, a per-host egress rule.
 
 ## Step 4 · Read the decision log and prove it
 
@@ -281,7 +281,7 @@ make audit
 make test
 ```
 
-- `make audit`: every defence decision with its reason
+- `make audit`: every defense decision with its reason
 - `make test`: the recorded trail and the provided investigation (6 run)
 
 ```output

@@ -9,7 +9,7 @@ and all three privatelink zones (11.2), a customer-managed key in a same-region 
 hours. It has hourly charges while it exists (G6), so teardown is the last step: do it today.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an Azure subscription,
-> so **no response in this file comes from a real run**. Every response block is labelled **"Example response (shape
+> so **no response in this file comes from a real run**. Every response block is labeled **"Example response (shape
 > from Microsoft docs, values illustrative)"** and names the page its shape comes from. Field names, error codes and
 > texts are copied from Microsoft Learn (October 2026) unless the block says otherwise. **The values (addresses, IDs,
 > versions, counts) are our guesses.** Write your real results into the table in G4.

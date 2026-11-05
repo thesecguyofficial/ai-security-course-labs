@@ -14,7 +14,7 @@ on the Hugging Face Hub to your laptop.
   gateway endpoint and a `sagemaker.runtime` interface endpoint (both with policies), a KMS key, a model bucket and a
   data capture bucket, the endpoint's execution role, a Lambda function that plays the Helpdesk app, and a trail that
   records `InvokeEndpoint` data events for this one endpoint.
-- **Part B** downloads an open model to your laptop, scans it, records its licence and file hashes, and uploads it.
+- **Part B** downloads an open model to your laptop, scans it, records its license and file hashes, and uploads it.
 - **Part C** registers it in the Model Registry and approves it.
 - **Part D** creates the auto-teardown schedule, then the model (network isolation, VPC), the endpoint configuration
   (encrypted data capture) and the endpoint.
@@ -23,7 +23,7 @@ on the Hugging Face Hub to your laptop.
 - **Part F** changes one setting (the VPC endpoint policy) and shows what breaks. **Part G** tears everything down.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an AWS account, so **no
-> response in this file comes from a real run**. Every response block is labelled **"Example response (shape from AWS
+> response in this file comes from a real run**. Every response block is labeled **"Example response (shape from AWS
 > docs, values illustrative)"** and names the page its shape comes from. Request bodies match the botocore 1.43.118
 > service models, and `cloud/base.yaml` passes `cfn-lint`. **Values (IDs, timings, error wording, and what the model
 > writes back) are our guesses.** Write your real results down as you go.
@@ -132,14 +132,14 @@ SageMaker AI Runtime DNS hostname (https://runtime.sagemaker.Region.amazonaws.co
 
 # Part B · The model files
 
-## B1 · Download, then read the licence
+## B1 · Download, then read the license
 
 This guide uses `Qwen/Qwen3-0.6B`, the same small model family as the course's local labs. Any small model in Hugging
 Face format with safetensors weights works, if the container supports its architecture.
 
-1. **Read the licence before you download.** Open the model's page on the Hub and read its licence field and its
-   `LICENSE` file. Write down what it says and whether your organisation allows it for your use (on 24 Oct 2026 the
-   card for `Qwen/Qwen3-0.6B` said `apache-2.0`; check it again, licences change). AWS says the same about
+1. **Read the license before you download.** Open the model's page on the Hub and read its license field and its
+   `LICENSE` file. Write down what it says and whether your organization allows it for your use (on 24 Oct 2026 the
+   card for `Qwen/Qwen3-0.6B` said `apache-2.0`; check it again, licenses change). AWS says the same about
    models it offers: "You are responsible for reviewing and complying with any applicable license terms and making sure
    they are acceptable for your use case before downloading or using the content"
    ([AWS](https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-choose.html)).
@@ -191,7 +191,7 @@ needs the internet, which is what network isolation requires.
 
 # Part C · Register and approve
 
-1. Fill in the request bodies with your outputs, the licence you read and the hashes from B2:
+1. Fill in the request bodies with your outputs, the license you read and the hashes from B2:
 
    ```bash
    export LICENCE=<what you read in B1, e.g. apache-2.0>  MODEL_SOURCE=huggingface.co/Qwen/Qwen3-0.6B
@@ -220,7 +220,7 @@ needs the internet, which is what network isolation requires.
    ```bash
    export PACKAGE_ARN=<the ModelPackageArn above>
    aws sagemaker update-model-package --model-package-arn "$PACKAGE_ARN" \
-     --model-approval-status Approved --approval-description "Scanned, licence checked, hashes recorded"
+     --model-approval-status Approved --approval-description "Scanned, license checked, hashes recorded"
    aws sagemaker describe-model-package --model-package-name "$PACKAGE_ARN" \
      --query '[ModelApprovalStatus,CustomerMetadataProperties.licence]'
    ```
@@ -326,7 +326,7 @@ export APP=$(python3 -c "import json;o=json.load(open('cloud/out/stack.json'))['
 
 ```bash
 aws lambda invoke --function-name "$APP" --cli-binary-format raw-in-base64-out \
-  --payload '{"prompt": "Summarise in one sentence: VPN drops every time my laptop wakes from sleep. Restarting the client fixes it."}' \
+  --payload '{"prompt": "Summarize in one sentence: VPN drops every time my laptop wakes from sleep. Restarting the client fixes it."}' \
   cloud/out/e1.json && cat cloud/out/e1.json
 ```
 
@@ -370,7 +370,7 @@ endpoint itself has no public address to firewall: "Endpoints are scoped to an i
 
 ```bash
 aws lambda invoke --function-name "$APP" --cli-binary-format raw-in-base64-out \
-  --payload '{"prompt": "Summarise: Employee LAB-0042, date of birth 01/01/1990, cannot log in to payroll."}' cloud/out/e3.json
+  --payload '{"prompt": "Summarize: Employee LAB-0042, date of birth 01/01/1990, cannot log in to payroll."}' cloud/out/e3.json
 CAPTURE=$(python3 -c "import json;o=json.load(open('cloud/out/stack.json'))['Stacks'][0]['Outputs'];print([x['OutputValue'] for x in o if x['OutputKey']=='CaptureBucket'][0])")
 aws s3 ls "s3://$CAPTURE/tsg-summariser/" --recursive | tail -3
 ```
@@ -388,7 +388,7 @@ aws s3api head-object --bucket "$CAPTURE" --key "<key from the listing>" --query
 ```output
 Example response (shape from the data capture record format and HeadObject, values illustrative)
 BASE64
-{"inputs": "Summarise: Employee LAB-0042, date of birth 01/01/1990, cannot log in to payroll.", "parameters": {"max_new_tokens": 200}}
+{"inputs": "Summarize: Employee LAB-0042, date of birth 01/01/1990, cannot log in to payroll.", "parameters": {"max_new_tokens": 200}}
 [
     "aws:kms",
     "arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
@@ -406,7 +406,7 @@ record prompts in the app instead. Lesson 15.4.)
 
 ```bash
 for i in $(seq 1 20); do aws lambda invoke --function-name "$APP" --cli-binary-format raw-in-base64-out \
-  --payload '{"prompt": "Summarise: printer offline", "max_new_tokens": 20}' /dev/null >/dev/null; done
+  --payload '{"prompt": "Summarize: printer offline", "max_new_tokens": 20}' /dev/null >/dev/null; done
 aws cloudwatch get-metric-statistics --namespace AWS/SageMaker --metric-name Invocations \
   --dimensions Name=EndpointName,Value=tsg-summariser-lab Name=VariantName,Value=AllTraffic \
   --start-time $(date -u -d '-30 min' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -v-30M +%Y-%m-%dT%H:%M:%SZ) \

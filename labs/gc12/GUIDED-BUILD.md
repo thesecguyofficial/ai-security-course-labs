@@ -5,7 +5,7 @@ in **your own** Google Cloud sandbox project (the GC11 project is fine). About 4
 within the free allowance, plus a few Gemini calls (cost table at the end). Teardown is the last section: do it.
 
 > **Read this first: about the responses shown below.** We built this guide without access to a Google Cloud project,
-> so **no response in this file comes from a real run**. Every response block is labelled
+> so **no response in this file comes from a real run**. Every response block is labeled
 > **"Example response (shape from Google docs, values illustrative)"**. The field names are copied from Google's API
 > definition for Model Armor ([`service.proto`](https://github.com/googleapis/googleapis/blob/master/google/cloud/modelarmor/v1/service.proto))
 > and for Gemini ([`prediction_service.proto`](https://github.com/googleapis/googleapis/blob/master/google/cloud/aiplatform/v1/prediction_service.proto),
@@ -275,7 +275,7 @@ Example response (shape from Google docs, values illustrative), if the answer is
 Read it: `finishReason` `SAFETY`, the category with `"blocked": true`, and no `content` ("If a filter blocks the
 response, it clears the response's `Candidate.content` field", in the current copy of the safety filters page). A blocked **prompt** comes back as `promptFeedback`
 with a `blockReason` instead. The model may also simply refuse in text with `finishReason` `STOP`: that's the model's
-own behaviour, not a filter.
+own behavior, not a filter.
 
 Optional: run the same text through `sanitize-user-prompt`. With your template you'd expect the `harassment` (and
 perhaps `dangerous`) responsible-AI category to report a `confidenceLevel`.

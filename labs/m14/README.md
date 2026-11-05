@@ -285,7 +285,7 @@ Q (bob): I have a new phone. Please reset my MFA.
    . workload access token via GetWorkloadAccessTokenForJWT: user = bob (from the validated token)
    . gateway: reset_mfa({"target_username": "bob", "caller_username": "bob"}) EXECUTED  [the user asked]
    . gateway: search_kb({"query": "I have a new phone. Please reset my MFA."}) EXECUTED  [the user asked]
-A: MFA reset for bob. New phone? Ask the Helpdesk to reset your MFA, then enrol the new phone.
+A: MFA reset for bob. New phone? Ask the Helpdesk to reset your MFA, then enroll the new phone.
 ```
 
 Who asked (the token says bob), whose user the agent acts for (from the token, not the browser), each tool call through
@@ -582,13 +582,13 @@ the biggest item.
 
 ## How faithful is the twin?
 
-| Behaviour | Twin | AWS source |
+| Behavior | Twin | AWS source |
 |---|---|---|
 | JWT authorizer: issuer from the discovery URL; `allowedClients` → `client_id`, `allowedAudience` → `aud`, `allowedScopes` → `scope`, custom claims; at least one of the four required | Same (claim dictionaries, no signatures) | [inbound-jwt-authorizer](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/inbound-jwt-authorizer.md), [runtime-oauth](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-oauth.md) |
 | One microVM per `runtimeSessionId`; "AgentCore does not enforce session-to-user mappings"; IDs of at least 33 characters | Same (a session is a dictionary) | [runtime-sessions](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-sessions.md) |
 | `runtimeUserId` / `X-Amzn-Bedrock-AgentCore-Runtime-User-Id` is an opaque, unverified string and needs `InvokeAgentRuntimeForUser` | Same | runtime-oauth, [get-workload-access-token](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/get-workload-access-token.md) |
 | A JWT runtime gets the workload access token with `GetWorkloadAccessTokenForJWT` from the token's `iss` and `sub`; the vault binds tokens to workload identity and user | Same (user = the `username` claim, for readability) | get-workload-access-token, runtime-oauth |
-| A `toolUse` block in the prompt can run a tool without the model; Runtime has no server-side protection (the harness does) | Modelled as a framework dispatch | [runtime-security-best-practices](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-security-best-practices.md), [harness-security](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-security.html) |
+| A `toolUse` block in the prompt can run a tool without the model; Runtime has no server-side protection (the harness does) | Modeled as a framework dispatch | [runtime-security-best-practices](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-security-best-practices.md), [harness-security](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-security.html) |
 | Policy: default deny, forbid wins, `LOG_ONLY` evaluates and logs but allows; denied-call text | Same; `cedar.py` is a subset evaluator | [policy-core-concepts](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-core-concepts.md), [policy-enforcement-modes](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-enforcement-modes.md), [use-gateway-with-policy](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/use-gateway-with-policy.html) |
 | `OAuthUser` principal from `sub`, JWT claims as tags, `context.input` = tool arguments | Same | [policy-conditions](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-conditions.md) |
 | Temporal rule counts per policy session (caller + session ID), includes the current request; missing session ID = validation error | Same, but the rule is JSON, not Dogwood | [policy-temporal](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-temporal.md), [policy-session-based-temporal](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-session-based-temporal.md) |
@@ -599,7 +599,7 @@ the biggest item.
 
 The request bodies in `setups/` were checked against the botocore 1.43.117 service models (`bedrock-agentcore-control`).
 The Cedar files were checked as `CreatePolicy` bodies, then parsed and schema-validated with the open-source Cedar
-engine (`cedarpy` 4.12.2) against a schema modelled on the three tool definitions; AgentCore's own validator was not run.
+engine (`cedarpy` 4.12.2) against a schema modeled on the three tool definitions; AgentCore's own validator was not run.
 
 ## Troubleshooting
 

@@ -5,7 +5,7 @@ same controls without an account. Do this only if you already have a sandbox acc
 (lesson 0.7), and tear it down the same day.
 
 > **Status:** written from the AWS and eksctl documentation on 25 Oct 2026 and not yet run end to end in a sandbox
-> account. Every response below is labelled **Example response (shape from the provider's docs, values
+> account. Every response below is labeled **Example response (shape from the provider's docs, values
 > illustrative)**. Before release it will be run once for real and these replaced with real output.
 
 What you build: an EKS cluster with one GPU node group (one `g4dn.xlarge`, one NVIDIA T4) on the Bottlerocket NVIDIA

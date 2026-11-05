@@ -41,9 +41,9 @@ green **Code → Download ZIP** button on the repository page and unzip it.
 | `run_tests.py` | Runs the tests with one line per result |
 | `Makefile` | Shortcuts for Mac/Linux |
 
-**About the stand-in model.** `stand_in_model.py` is *not* an AI model. It copies the one behaviour this lab is
+**About the stand-in model.** `stand_in_model.py` is *not* an AI model. It copies the one behavior this lab is
 about: a model's output is shaped by the text it was given. Ask it to "search my tickets for X" and it puts X in
-the search field; ask it to summarise your latest ticket and it quotes that ticket, including whatever the
+the search field; ask it to summarize your latest ticket and it quotes that ticket, including whatever the
 ticket's author wrote. A real model does the same, less predictably. Using a stand-in means the tests give the
 same answer every run. An optional step at the end swaps in a real local model.
 
@@ -271,7 +271,7 @@ Real output (Linux, Python 3.13):
 ```text
 --- M5 lab · VULNERABLE mode · stand-in model (stand_in_model.py, not AI) ---
 
-[HTML ] you> summarise my latest ticket
+[HTML ] you> summarize my latest ticket
     page HTML: <p class='answer'>Summary of your latest ticket: Hi, please reset my password. <img src=x onerror="alert('Mode...
     RESULT: EXPLOITED - a browser would RUN the onerror code (XSS)
 
@@ -317,7 +317,7 @@ vulnerable mode and did not fire in safe mode. Press Ctrl+C in the terminal to s
 ## Step 2 · Read the fixes
 
 Open `helpdesk_app.py`. Each risky step has two functions next to each other; compare them. To see the encoding
-at work on the planted ticket, run `python3 explore.py page --safe "summarise my latest ticket"`.
+at work on the planted ticket, run `python3 explore.py page --safe "summarize my latest ticket"`.
 
 | Risk | Vulnerable version | Safe version | Why it works |
 |---|---|---|---|
@@ -349,7 +349,7 @@ Real output:
 ```text
 --- M5 lab · SAFE mode · stand-in model (stand_in_model.py, not AI) ---
 
-[HTML ] you> summarise my latest ticket
+[HTML ] you> summarize my latest ticket
     page HTML: <p class='answer'>Summary of your latest ticket: Hi, please reset my password. &lt;img src=x onerror=&quot;ale...
     RESULT: safe - the payload is shown as text, not run
 

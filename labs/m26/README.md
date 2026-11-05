@@ -452,7 +452,7 @@ Same as `python3 run_tests.py`.
 ```output
 [PASS] 01 scan: the first draft trips every lesson's rules (exposure, auth, code, versions, cache, nodes, models)
 ...
-[PASS] 19 safety: the only token-looking values in the lab are labelled placeholders
+[PASS] 19 safety: the only token-looking values in the lab are labeled placeholders
 ALL TESTS PASSED (19 run)
 ```
 

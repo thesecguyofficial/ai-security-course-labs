@@ -10,7 +10,7 @@ invocation logging on, a usage alarm, a least-privilege app role, a guardrail po
 tampering and unapproved models, and a test key you'll watch being refused.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an AWS account, so **no
-> response in this file comes from a real run**. Every response block is labelled **"Example response (shape from AWS
+> response in this file comes from a real run**. Every response block is labeled **"Example response (shape from AWS
 > docs, values illustrative)"** and links the page its shape comes from. Field names are copied from the AWS API and
 > CLI references and checked against the botocore service models (botocore 1.43.117) for `iam`, `bedrock`,
 > `bedrock-runtime`, `cloudtrail` and `guardduty`. **The values (IDs, dates, token counts, error wording) are our
@@ -111,7 +111,7 @@ Example response (shape from AWS docs, values illustrative;
 == bedrock-agentcore.amazonaws.com
 ```
 
-How to read it: your own Step 0.3 call shows up as `Converse`. Any principal you **don't** recognise, or a service
+How to read it: your own Step 0.3 call shows up as `Converse`. Any principal you **don't** recognize, or a service
 nobody told you about, is finding number one. Two blind spots, both from lesson 10.1:
 
 - **bedrock-mantle** (the OpenAI-compatible and Anthropic Messages endpoint) logs inference as CloudTrail **data
@@ -134,7 +134,7 @@ aws sagemaker list-notebook-instances --query 'NotebookInstances[].[NotebookInst
 ```
 
 In a fresh sandbox every line prints nothing. That's the answer you want. A **provisioned throughput** you didn't
-buy is urgent: it's billed hourly and some terms can't be cancelled (lesson 10.4). If a command fails with
+buy is urgent: it's billed hourly and some terms can't be canceled (lesson 10.4). If a command fails with
 `Invalid choice`, your CLI is older than that service: update it (Step 0.2) or skip the line.
 
 ### 1c · Who can call the models?
@@ -519,7 +519,7 @@ Bedrock "recognizes the environment variable `AWS_BEARER_TOKEN_BEDROCK`"
 AI Protection reads CloudTrail data events from Bedrock (and AgentCore and SageMaker AI) through a service-linked
 channel: "You don't need to create a trail, enable data event logging, or make any changes to your AI applications"
 ([AI Protection](https://docs.aws.amazon.com/guardduty/latest/ug/ai-protection.html)). It's charged by the GB of data
-events analysed, with a 30-day trial for accounts that haven't used it
+events analyzed, with a 30-day trial for accounts that haven't used it
 ([pricing](https://aws.amazon.com/guardduty/pricing/)). GuardDuty itself also starts charging after its own trial, so
 only turn this on if you'll remember to turn it off.
 

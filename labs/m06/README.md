@@ -71,7 +71,7 @@ meaning**. That's enough here: every attack and fix in this lab is about what yo
 (what goes in, who can search what, when to refuse), not about how clever the embedding is. It needs no download
 and gives the same numbers on every run, so the tests are repeatable. Step 7 swaps in a real embedding model.
 
-**About the stand-in model.** `llm.py`'s default `StandInModel` is *not* AI. It copies three real behaviours of
+**About the stand-in model.** `llm.py`'s default `StandInModel` is *not* AI. It copies three real behaviors of
 language models: it answers by quoting the retrieved sentences that best match the question, it **follows
 instructions it finds inside retrieved text**, and when nothing matches it **guesses** instead of saying "I don't
 know". It never reads the system prompt's rules. A real model usually obeys "only use tenant X's documents",
@@ -387,7 +387,7 @@ Real output:
 [PASS] vulnerable: no document covers the question, yet the bot answers confidently and lists 'sources'
 [PASS] vulnerable: vector search never says 'nothing found': nonsense still returns 3 nearest chunks
 [PASS] safe: the poisoned upload is quarantined, with reasons, and none of it is in the store
-[PASS] safe: a clean upload is still indexed, labelled trust=upload (curated docs are trust=curated)
+[PASS] safe: a clean upload is still indexed, labeled trust=upload (curated docs are trust=curated)
 [PASS] safe: every chunk carries provenance, and its SHA-256 matches the file it came from
 [PASS] safe: the checks also catch zero-width characters, bidi controls and white text
 [PASS] safe: however Alice phrases it, no Bravo chunk is ever retrieved and the canary never appears

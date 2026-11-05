@@ -14,7 +14,7 @@ Cost: well under US$1 if you follow it as written and tear down today (cost tabl
 - **Part C** (only if your account can still create Bedrock Agents Classic) shows the same controls on Classic.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an AWS account, so **no
-> response in this file comes from a real run**. Every response block is labelled **"Example response (shape from AWS
+> response in this file comes from a real run**. Every response block is labeled **"Example response (shape from AWS
 > docs, values illustrative)"** and names the page its shape comes from. Field names are copied from the AWS API
 > reference and checked against the botocore 1.43.117 service models (`bedrock-agent`, `bedrock-agent-runtime`,
 > `bedrock-agentcore`, `bedrock-agentcore-control`). **The values (IDs, scores, timings, and what the model decides to

@@ -14,7 +14,7 @@ You will:
 | E | Hunting: CloudTrail event history and, if you kept M11's invocation logging, Logs Insights queries | 16.4 |
 | F | Cost and teardown | all |
 
-Every response below that wasn't captured from a real run is labelled **Example response (shape from the provider's
+Every response below that wasn't captured from a real run is labeled **Example response (shape from the provider's
 docs, values illustrative)** and uses AWS's field names exactly. Before this module is released, the guide is run
 once for real in a sandbox and the examples are replaced with real output.
 
@@ -32,7 +32,7 @@ once for real in a sandbox and the examples are replaced with real output.
 | Item | Price (AWS pricing pages, read 24 Oct 2026) | This guide |
 |---|---|---|
 | GuardDuty | "30-day trial on the AWS Free Tier for accounts that have never enabled the service before" | $0 in the trial |
-| GuardDuty AI Protection | "can try it 30 days at no cost"; then billed per GB of CloudTrail data events analysed (the pricing example uses $1.00 per GB) | $0 in the trial; a few cents after |
+| GuardDuty AI Protection | "can try it 30 days at no cost"; then billed per GB of CloudTrail data events analyzed (the pricing example uses $1.00 per GB) | $0 in the trial; a few cents after |
 | Bedrock model tokens and guardrail text units | Bedrock pricing page | under $0.05 for the requests in Part C |
 | Security Hub | "a 30-day free trial that includes Essentials plan capabilities" (AI inventory is part of Essentials) | $0 in the trial |
 | AWS Config | "$0.003 per continuous configuration item" and "$0.001" per rule evaluation (first 100,000) | a few cents, only if you do Part D's Config step |

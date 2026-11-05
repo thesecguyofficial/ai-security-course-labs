@@ -8,7 +8,7 @@ passes **your** `policy.py`. Its write tools live on **your own** MCP server on 
 you tear down the same day (G8). Teardown is the last step: do it today.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an Azure subscription,
-> so **no response in this file comes from a real run**. Every response block is labelled **"Example response (shape
+> so **no response in this file comes from a real run**. Every response block is labeled **"Example response (shape
 > from Microsoft docs, values illustrative)"** and names the page its shape comes from. Where the shape is our own
 > agent's (the invocations protocol is "Arbitrary JSON in, arbitrary JSON out"), the label says so. **Values (wording,
 > IDs, which tools the model chooses) are our guesses.** Real models will disagree with us in places: that's the point

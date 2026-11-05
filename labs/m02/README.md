@@ -7,7 +7,7 @@ of the paid course).
 
 - **Time:** 60–90 minutes, plus about 10 minutes for Step 1b
 - **Cost:** $0. No cloud account. The threat model itself needs no code: pen and paper works, and so does any Markdown editor.
-- **You need:** lessons 2.0–2.4 (how threat modelling works, the core flaw, the maps, the scoping matrices, trust boundaries). For Step 1b: Python 3 (lesson 0.6). One optional package, `pytm`.
+- **You need:** lessons 2.0–2.4 (how threat modeling works, the core flaw, the maps, the scoping matrices, trust boundaries). For Step 1b: Python 3 (lesson 0.6). One optional package, `pytm`.
 - **You hand in (to yourself, or to the course community):** a filled-in copy of `threat-model-template.md`.
 
 ## Get the lab files
@@ -41,10 +41,10 @@ Stay in the `ai-security-course-labs` folder: Step 1b starts with `cd labs/m02`.
 | `tsg-helpdesk-starter.json` | A starter data-flow diagram of TSG Helpdesk in OWASP Threat Dragon's file format: the chat path and the nightly ticket import, no threats. You add the rest |
 | `explore.py` | Reads a Threat Dragon file one step at a time: elements, flows, trust boundaries, STRIDE per element, and what reaches the model. Plain Python; it changes nothing |
 | `tm.py` | The same starter written as code for OWASP pytm, which then lists threats from its own library |
-| `requirements.txt` | The one package `tm.py` needs: `pytm==1.4.0` (MIT licence) |
+| `requirements.txt` | The one package `tm.py` needs: `pytm==1.4.0` (MIT license) |
 | `Makefile` | Short names for long commands: `make pytm` runs `.venv/bin/python tm.py`. Run `make -n <name>` to see a command without running it |
 
-## The system you are modelling: TSG Helpdesk
+## The system you are modeling: TSG Helpdesk
 
 TSG Helpdesk is the course's **deliberately vulnerable** AI app. You will attack it in Module 3, deploy it
 on AWS in Module 11 and secure it end to end in the capstone. Today you only look at its design.
@@ -65,7 +65,7 @@ about orders, deliveries and refunds.
 | 6 | Tool `issue_refund(order_id, amount)` | Refunds up to a **limit of 50** (fake currency) per call, with no human approval. |
 | 7 | Tool `send_email(to, subject, body)` | Sends an email from the shop's support address. |
 | 8 | MCP ticketing server | Connected over MCP. Tools: `create_ticket`, `get_ticket`, `add_comment`, `search_tickets`. Installed from a public package registry. |
-| 9 | Memory | After each chat, the app asks the model to summarise "useful facts about this customer" and saves the summary. The saved summary is loaded into the next chat's context. |
+| 9 | Memory | After each chat, the app asks the model to summarize "useful facts about this customer" and saves the summary. The saved summary is loaded into the next chat's context. |
 | 10 | Support staff | Read and resolve tickets in the ticketing system. |
 | 11 | Logs | The chat app writes a log line per request (time, `customer_id`, model, token counts). |
 | 12 | Credentials | One service account / API key used for the order database, refunds, email and the ticketing server. |
@@ -95,7 +95,7 @@ New to data-flow diagrams? Do **Step 1b** first: it reads a starter diagram of p
 
 ### Step 1b · Read the starter model before you start (about 10 minutes)
 
-New to threat modelling? Do this first. `tsg-helpdesk-starter.json` is part of TSG Helpdesk already drawn as a
+New to threat modeling? Do this first. `tsg-helpdesk-starter.json` is part of TSG Helpdesk already drawn as a
 data-flow diagram: the chat path and the nightly ticket import. `explore.py` reads it one idea at a time, so you
 learn to read a diagram before you draw your own. Nothing here changes the file.
 
@@ -265,11 +265,11 @@ For each threat, add:
 
 ### Step 6 · Rate it (5 min)
 Score **likelihood** and **impact** from 1 (low) to 3 (high) and multiply them for a **risk** score of 1–9.
-Write one short reason for each score. Ratings are judgement calls; the reasons are what make them useful.
+Write one short reason for each score. Ratings are judgment calls; the reasons are what make them useful.
 
 ### Step 7 · What are we going to do about it? (15 min)
 For each threat with risk **4 or more**, write:
-- a **control**: prefer deterministic code (authorisation, limits, allow-lists) over "tell the model not to";
+- a **control**: prefer deterministic code (authorization, limits, allow-lists) over "tell the model not to";
 - **how to detect** it: which log line or event would show it happening. If no such log exists today, say so: that is a finding too.
 
 ### Step 8 · Did we do a good enough job? (5 min)

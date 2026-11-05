@@ -14,7 +14,7 @@ You will:
 | E | An alert rule for **every** AI alert, two hunting queries, and the AI inventory query | 16.3, 16.4 |
 | F | Cost and teardown | all |
 
-Every response below that wasn't captured from a real run is labelled **Example response (shape from the provider's
+Every response below that wasn't captured from a real run is labeled **Example response (shape from the provider's
 docs, values illustrative)** and uses Microsoft's field names exactly. Before this module is released, the guide is
 run once for real in a sandbox subscription and the examples are replaced with real output.
 

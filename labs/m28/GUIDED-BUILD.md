@@ -17,7 +17,7 @@ What you build:
 | Macie | custom data identifiers + a one-time job | The independent check: findings in raw, none in redacted |
 
 > **Read this first: about the responses shown below.** This guide was written without access to an AWS account, so
-> **no response in this file comes from a real run**. Every response block is labelled **"Example response (shape from
+> **no response in this file comes from a real run**. Every response block is labeled **"Example response (shape from
 > the provider's docs, values illustrative)"** and names the page its shape comes from. Request shapes were checked
 > against the botocore 1.43.118 service models (`macie2`, `bedrock`, `bedrock-runtime`, `kms`, `s3`, `lambda`, `iam`).
 > Where AWS doesn't document what you'll see, the guide says "write down what you get".

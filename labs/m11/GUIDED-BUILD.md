@@ -12,7 +12,7 @@ an hour** while it exists, mostly the endpoint and the two keys (cost table at t
 do it the same day.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an AWS account, so **no
-> response in this file comes from a real run**. Every response block is labelled **"Example response (shape from AWS
+> response in this file comes from a real run**. Every response block is labeled **"Example response (shape from AWS
 > docs, values illustrative)"** and links the page its shape comes from. Field names are copied from the AWS API and
 > CLI references and checked against the botocore service models (botocore 1.43.117) for `bedrock`,
 > `bedrock-runtime`, `lambda`, `logs`, `cloudtrail`, `iam` and `ec2`. **The values (IDs, IPs, token counts, error

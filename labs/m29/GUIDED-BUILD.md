@@ -5,7 +5,7 @@ you when **your** IAM user calls Bedrock without going through a VPC endpoint, a
 
 > **Course rule for this module: no decoy keys in the cloud.** The honeytoken in this lab stays a local mock. This
 > build creates no access key, no API key and no IAM user. You only test the honeytoken *pattern* (Part A).
-> Use a sandbox account you own (lesson 0.8). Every response below is labelled **Example response (shape from the
+> Use a sandbox account you own (lesson 0.8). Every response below is labeled **Example response (shape from the
 > provider's docs, values illustrative)** until you run it yourself.
 
 **You need:** the AWS CLI v2 signed in to your sandbox account as an IAM user you control (or an Identity Center

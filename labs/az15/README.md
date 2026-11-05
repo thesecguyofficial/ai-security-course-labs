@@ -6,7 +6,7 @@ Step 9 is optional and **costs money every hour**: [`GUIDED-BUILD.md`](GUIDED-BU
 an open model in **your own** sandbox subscription, with an auto-teardown timer created before the endpoint.
 
 You are the cloud security engineer at **Contoso** (fictional; "Contoso" is the placeholder name Microsoft uses in its
-documentation). The TSG Helpdesk now summarises tickets with an **open-weights model** that the data science team
+documentation). The TSG Helpdesk now summarizes tickets with an **open-weights model** that the data science team
 fine-tunes. Tickets must stay in Contoso's subscription, so the platform team hosts the model on an
 **Azure Machine Learning managed online endpoint** instead of calling Foundry Models. Data scientists work in a dev
 workspace, production runs in another, and a **registry** exists but nobody uses it yet. The pull request says
@@ -159,7 +159,7 @@ One online endpoint and the deployments behind it (setup first-draft). The files
    environment_variables   none
    data_collector          off
 
-When a deployment starts (Microsoft's documented behaviour for managed online endpoints):
+When a deployment starts (Microsoft's documented behavior for managed online endpoints):
    the model is mounted in the container, by default at /var/azureml-app/azureml-models/<name>/<version>
    a container you bring must answer three routes: liveness, readiness and scoring
    the endpoint routes each request by the traffic split, or to the deployment named in the
@@ -388,11 +388,11 @@ You should see (long lines cut here):
 [MEDIUM] AZ15-02 (15.1) deployment 'debug' pins curated environment version 9 (2026-10-06); version 14 (2027-01-19) is out. Patched images get a new version: nothing updates yours
 [MEDIUM] AZ15-04 (15.2) workspace tsg-ml-dev has FQDN outbound rules (huggingface.co, *.huggingface.co, pypi.org, *.pythonhosted.org): they deploy a billed Azure Firewall (Standard), ...
 [MEDIUM] AZ15-18 (15.3) no file hashes recorded on the deployed version, or the deploy step doesn't compare them: nobody can prove the files running are the ones approved
-[MEDIUM] AZ15-18 (15.3) licence not recorded on the deployed version: Microsoft says complying with a model's licence terms is your job
+[MEDIUM] AZ15-18 (15.3) license not recorded on the deployed version: Microsoft says complying with a model's license terms is your job
 [MEDIUM] AZ15-19 (15.3) deployment(s) debug at 0% traffic on the production endpoint: the azureml-model-deployment header still routes to them
 [MEDIUM] AZ15-20 (15.3) no Azure Policy denies registry models from outside contoso-ml-registry: a catalog or Hugging Face model can be deployed straight from its public registry
 [MEDIUM] AZ15-21 (15.3) model files are not scanned in CI before registration and Defender's AI model security scans once a week, after the upload
-[MEDIUM] AZ15-22 (15.3) no promotion gate: nothing checks formats, hashes, licence and who registered it before a version is approved (challenge 2)
+[MEDIUM] AZ15-22 (15.3) no promotion gate: nothing checks formats, hashes, license and who registered it before a version is approved (challenge 2)
 [MEDIUM] AZ15-23 (15.2) no Azure Policy in Deny for the managed network mode and public network access: an admin's quick test can still create an open workspace (challenge 1)
 [MEDIUM] AZ15-24 (15.4) no diagnostic setting sends AmlOnlineEndpointTrafficLog for tsg-summariser to Log Analytics: no record of who called which deployment
 [MEDIUM] AZ15-25 (15.4) payload collection (full requests and responses) goes to storage:stanalytics/shared read by analytics-team, expiry None: ...
@@ -711,7 +711,7 @@ make cloud-down
 
 ## How faithful is the twin?
 
-| Behaviour | Twin | Microsoft source |
+| Behavior | Twin | Microsoft source |
 |---|---|---|
 | Managed VNet modes; approved outbound allows only private endpoint, FQDN and service tag rules; required private endpoint rules for the workspace's storage, key vault and container registry are created automatically; an FQDN rule deploys an Azure Firewall; exfiltration protection isn't guaranteed to FQDN destinations | Same | [Managed network](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-managed-network?view=azureml-api-2) |
 | Endpoint `public_network_access: disabled`: inbound only through the workspace private endpoint; control-plane calls (listKeys included) go to Azure Resource Manager | Same | [Secure online endpoint](https://learn.microsoft.com/en-us/azure/machine-learning/concept-secure-online-endpoint) |

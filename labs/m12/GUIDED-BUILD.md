@@ -5,7 +5,7 @@ The offline lab (README Steps 1 to 7) teaches the mechanics at $0. This guide bu
 Cost: well under US$0.20 if you follow it as written (cost table at the end). Teardown is the last section: do it today.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an AWS account, so **no
-> response in this file comes from a real run**. Every response block is labelled **"Example response (shape from AWS
+> response in this file comes from a real run**. Every response block is labeled **"Example response (shape from AWS
 > docs, values illustrative)"** and links the page its shape comes from. Field names are copied from the AWS API
 > reference ([ApplyGuardrail](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ApplyGuardrail.html),
 > [Converse](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html)) and checked against the
@@ -661,7 +661,7 @@ Then decide which version you'd ship, and write one sentence why. That sentence 
 ## Step 5 · Enforce it: no model call without version 1
 
 A guardrail that the app may skip is a suggestion. Lesson 12.3's IAM pattern denies `bedrock:InvokeModel` and
-`bedrock:InvokeModelWithResponseStream` (the actions that authorise Converse and ConverseStream too) unless the request
+`bedrock:InvokeModelWithResponseStream` (the actions that authorize Converse and ConverseStream too) unless the request
 names your guardrail **and** version 1. The condition key is `bedrock:GuardrailIdentifier`; AWS supports it for
 `Converse`, `ConverseStream`, `InvokeModel` and `InvokeModelWithResponseStream`
 ([AWS](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-permissions-id.html)). The value format,

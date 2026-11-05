@@ -13,7 +13,7 @@ a real Amazon Bedrock AgentCore Gateway in **your own** AWS sandbox account (les
 - **Part D** turns on the evidence you'd want, then tears everything down.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an AWS account, so **no
-> response in this file comes from a real run**. Every response block is labelled **"Example response (shape from AWS
+> response in this file comes from a real run**. Every response block is labeled **"Example response (shape from AWS
 > docs, values illustrative)"** and names the page its shape comes from. Request bodies were checked against the
 > botocore 1.43.118 service model for `bedrock-agentcore-control` (required members, union members, string limits).
 > Where AWS doesn't document what happens, the guide says "write down what you get". Write your real results down.
