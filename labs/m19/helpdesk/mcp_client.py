@@ -43,9 +43,8 @@ class MCPClient:
                                      cwd=str(HERE.parent), stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                      text=True, bufsize=1)
         self._id = 0
-        self.server_info = self._rpc("initialize", {"protocolVersion": "2026-07-28", "capabilities": {},
-                                                    "clientInfo": {"name": "tsg-helpdesk", "version": "6.0"}})
-        self._notify("notifications/initialized")
+        self.client_info = {"name": "tsg-helpdesk", "version": "6.0"}
+        self.server_info = self._rpc("server/discover", {})   # MCP 2026-07-28: no initialize handshake
 
     def _notify(self, method: str) -> None:
         self.proc.stdin.write(json.dumps({"jsonrpc": "2.0", "method": method}) + "\n")
@@ -53,6 +52,9 @@ class MCPClient:
 
     def _rpc(self, method: str, params: dict) -> dict:
         self._id += 1
+        meta = {"io.modelcontextprotocol/protocolVersion": "2026-07-28",
+                "io.modelcontextprotocol/clientInfo": self.client_info}
+        params = {**params, "_meta": {**meta, **(params.get("_meta") or {})}}   # every request says its version
         self.proc.stdin.write(json.dumps({"jsonrpc": "2.0", "id": self._id, "method": method, "params": params}) + "\n")
         self.proc.stdin.flush()
         reply = json.loads(self.proc.stdout.readline())

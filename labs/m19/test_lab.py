@@ -227,9 +227,11 @@ class T6_Safety(unittest.TestCase):
                     self.assertRegex(addr, r"\.(example|invalid)$", f"{p.name}: {addr}")
 
     def test_mcp_protocol(self):
-        """MCP server: initialize, tools/list (2 tools, then 3 in release 2), unknown method error"""
+        """MCP server: server/discover (+ legacy initialize), tools/list (2 tools, then 3 in release 2), unknown method error"""
+        disc = mcp_server.handle({"jsonrpc": "2.0", "id": 1, "method": "server/discover", "params": {}}, 1)
+        self.assertEqual(disc["result"]["supportedVersions"], ["2026-07-28"])
         init = mcp_server.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}}, 1)
-        self.assertEqual(init["result"]["protocolVersion"], "2026-07-28")
+        self.assertEqual(init["result"]["protocolVersion"], "2025-11-25")   # legacy hosts only
         self.assertIsNone(mcp_server.handle({"jsonrpc": "2.0", "method": "notifications/initialized"}, 1))
         self.assertEqual(len(mcp_server.tool_list(1)), 2)
         self.assertEqual(len(mcp_server.tool_list(2)), 3)

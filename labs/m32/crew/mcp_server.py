@@ -1,7 +1,9 @@
 """The "crm" MCP server: customer records for the analyst agent. Core file: do not edit.
 
 Speaks the stdio transport of the Model Context Protocol: newline-delimited JSON-RPC 2.0 messages on stdin and
-stdout, with the three methods a tool server needs (initialize, tools/list, tools/call). Standard library only.
+stdout, stateless, as in MCP 2026-07-28: server/discover, tools/list and tools/call, each request carrying its own
+protocol version in params._meta (no initialize handshake, no session). A legacy initialize still gets an
+answer, labelled with the last version that had a handshake (2025-11-25), so older hosts keep working. Standard library only.
 The host (mcp_client.py) starts it as a child process.
 
     python3 -m crew.mcp_server --release 1     # what the platform team approved
@@ -19,6 +21,7 @@ import sys
 
 DATA = pathlib.Path(__file__).resolve().parent.parent / "data"
 PROTOCOL_VERSION = "2026-07-28"
+LEGACY_VERSION = "2025-11-25"   # the last spec version with the initialize/initialized handshake
 
 
 def customers() -> dict:
@@ -64,8 +67,11 @@ def handle(msg: dict, release: int) -> dict | None:
     mid, method = msg.get("id"), msg.get("method")
     if mid is None:                       # a notification (for example notifications/initialized): no reply
         return None
-    if method == "initialize":
-        result = {"protocolVersion": PROTOCOL_VERSION, "capabilities": {"tools": {}},
+    if method == "server/discover":     # 2026-07-28: what this server supports, no session created
+        result = {"capabilities": {"tools": {}}, "supportedVersions": [PROTOCOL_VERSION],
+                  "_meta": {"io.modelcontextprotocol/serverInfo": {"name": "crm", "version": f"{release}.0.0"}}}
+    elif method == "initialize":        # legacy handshake (2025-11-25 and earlier hosts)
+        result = {"protocolVersion": LEGACY_VERSION, "capabilities": {"tools": {}},
                   "serverInfo": {"name": "crm", "version": f"{release}.0.0"}}
     elif method == "tools/list":
         result = {"tools": tool_list(release)}
