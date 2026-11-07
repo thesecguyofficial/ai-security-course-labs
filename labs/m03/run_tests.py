@@ -26,9 +26,11 @@ import tempfile
 HERE = pathlib.Path(__file__).resolve().parent
 os.chdir(HERE)
 sys.path.insert(0, str(HERE))
+sys.path.insert(1, str(HERE.parent.parent / "tools"))  # tools/flag.py: the optional bonus flags
 
 import defences      # noqa: E402  (imported after the path is set)
 import support_bot   # noqa: E402
+import flag          # noqa: E402
 
 EMAILS = HERE / "data" / "emails"
 ATTACKER = "attacker.example"
@@ -64,6 +66,7 @@ def leaked_link(r: dict) -> bool:
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--challenge", action="store_true")
+    p.add_argument("--code", help="your account code (TSG-XXXXXX) to see the bonus flags")
     args = p.parse_args()
     print("All tests use the stand-in model (stand_in_model.py), NOT a real AI model.\n")
 
@@ -162,6 +165,10 @@ def main() -> int:
     ok = all(results)
     print(f"\n{sum(results)} of {len(results)} checks passed")
     print("ALL TESTS PASSED" if ok else "SOME TESTS FAILED")
+    if ok:  # bonus flags (optional, ../../tools/flag.py): printed only when every check above passed
+        flag.award(args.code, "m3-layers", "the four layered fixes holding")
+        if args.challenge:
+            flag.award(args.code, "m3-redirect", "the redirect challenge")
     return 0 if ok else 1
 
 

@@ -25,11 +25,11 @@ matrix:       ## each fix on its own, then all together, for the planted note
 hidden:       ## reveal the invisible characters in email 04 (show_hidden.py exits 1 when it finds some: handy in CI)
 	$(PY) show_hidden.py data/emails/04_hidden_unicode.txt || true
 
-test:         ## the proof: the attack works with no fixes, each fix does its job, all fixes hold
-	$(PY) run_tests.py
+test:         ## the proof: the attack works with no fixes, each fix does its job, all fixes hold (CODE=TSG-XXXXXX shows the bonus flag)
+	$(PY) run_tests.py $(if $(CODE),--code $(CODE))
 
 challenge:    ## same, plus the redirect challenge (fails until you fix is_allowed_url in defences.py)
-	$(PY) run_tests.py --challenge
+	$(PY) run_tests.py --challenge $(if $(CODE),--code $(CODE))
 
 eval:         ## promptfoo suite against the LOCAL app with all fixes (expect 4 of 4 to pass)
 	$(PY) run_eval.py --fixes all

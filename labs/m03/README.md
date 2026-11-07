@@ -424,7 +424,17 @@ All tests use the stand-in model (stand_in_model.py), NOT a real AI model.
 
 25 of 25 checks passed
 ALL TESTS PASSED
+
+Bonus flag available (the four layered fixes holding). Run again with your account code to see it, for example:
+  make test CODE=TSG-XXXXXX      (Windows: py run_tests.py --code TSG-XXXXXX)
+Your code is in this lab's "Lab check-in" tab on the course site.
 ```
+
+**Bonus flag (optional).** Your account code is shown in the "Lab check-in" tab of lesson 3.9. Run
+`make test CODE=<your code>` and, when every check passes, the last lines print a flag like
+`TSG{m3-layers-…}`. Paste it into the same tab for 60 bonus XP. The flag is made from your code, so a friend's
+flag won't count for you. The lab never sends anything anywhere: the flag is worked out on your laptop
+(`tools/flag.py`).
 
 Three kinds of test, and real AI projects need all three:
 
@@ -514,6 +524,7 @@ redirect page (`/out?to=...`), and the attacker's URL, with the summary inside i
 Allow-listing a host isn't enough when the host will forward anywhere. A real exploit got data past a strict
 allow-list this way in 2025 (lesson 3.6). Follow the **YOUR TURN** comment in `is_allowed_url()` in `defences.py`.
 When `make challenge` prints `ALL TESTS PASSED`, you're done. No solution is included. It takes a few lines.
+Run `make challenge CODE=<your code>` once it passes for a second bonus flag (`TSG{m3-redirect-…}`).
 
 ## Step 10 · Optional: a real local model
 
