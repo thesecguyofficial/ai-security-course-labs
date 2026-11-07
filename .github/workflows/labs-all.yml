@@ -1,0 +1,36 @@
+name: lab-tests
+# Every lab's own tests on the three operating systems students use, from a fresh checkout.
+# No Ollama model and no cloud account needed: the tests use each lab's offline stand-ins.
+on:
+  push:
+    branches: [main]
+    paths: ["labs/**", "tools/ci/**", ".github/workflows/labs-all.yml"]
+  pull_request:
+    paths: ["labs/**", "tools/ci/**", ".github/workflows/labs-all.yml"]
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"   # Mondays, to catch package or OS updates
+permissions:
+  contents: read
+
+jobs:
+  labs:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.12"]
+        include:
+          - os: ubuntu-latest
+            python: "3.11"
+          - os: ubuntu-latest
+            python: "3.13"
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: every lab's tests
+        run: python tools/ci/test_all_labs.py
