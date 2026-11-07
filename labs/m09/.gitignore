@@ -1,0 +1,4 @@
+# Built by make models / make pin and by the attack (make clean removes them)
+models/
+state/
+pins.json

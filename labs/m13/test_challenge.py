@@ -49,7 +49,7 @@ class TC_Challenge(unittest.TestCase):
     def test_22_rule_20_flags_the_web_frontend(self):
         """challenge 2: M13-20 (HIGH) names tsg-web-frontend, which the browser controls and which may call InvokeHarness"""
         s = twin.Setup("harness").copy()
-        s.invokers = json.loads((twin.HERE / "setups/harness/invokers.json").read_text())   # as shipped
+        s.invokers = json.loads((twin.HERE / "setups/harness/invokers.json").read_text(encoding="utf-8"))   # as shipped
         s.invokers["principals"].setdefault("tsg-web-frontend", SHIPPED_FRONTEND)
         found = [f for f in checker.run(s) if f.rule == "M13-20"]
         self.assertEqual(len(found), 1)

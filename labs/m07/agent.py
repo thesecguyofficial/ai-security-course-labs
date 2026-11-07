@@ -164,7 +164,7 @@ def run_agent(ticket: str = "T-1042", task: str = "answer_ticket", ctl: Controls
     say(f"fake customer list left the helpdesk? {'YES -> ' + ', '.join(leak_to) if leak_to else 'no'}")
     markers = [s for s in result.steps if s["tool"] == "run_task" and s["allowed"]]
     say(f"run_task markers written (nothing executed): {len(markers)}")
-    say(f"audit log: {controls.audit_path().relative_to(tools.LAB) if controls.audit_path().is_relative_to(tools.LAB) else controls.audit_path()}")
+    say(f"audit log: {controls.audit_path().relative_to(tools.LAB).as_posix() if controls.audit_path().is_relative_to(tools.LAB) else controls.audit_path()}")
     return result
 
 

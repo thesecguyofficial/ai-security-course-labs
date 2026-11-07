@@ -27,7 +27,24 @@ def allowed(sid, twin):
 
 
 def tf_text():
-    return "\n".join(p.read_text() for p in sorted((HERE / "terraform").glob("*.tf")))
+    return "\n".join(p.read_text(encoding="utf-8") for p in sorted((HERE / "terraform").glob("*.tf")))
+
+
+
+# Folders that are not part of the lab: the lab's own .venv (after `make setup`), caches, tool state and output.
+# `.github` stays in: some labs ship sample workflows as lab files.
+_NOT_LAB = {"__pycache__", "node_modules", "out"}
+
+
+def _lab_files(pattern="*"):
+    """The lab's own files under HERE: skips .venv, .git, .terraform, __pycache__, node_modules and out/."""
+    for p in sorted(HERE.rglob(pattern)):
+        if not p.is_file():
+            continue
+        folders = p.relative_to(HERE).parts[:-1]
+        if any(d in _NOT_LAB or (d.startswith(".") and d != ".github") for d in folders):
+            continue
+        yield p
 
 
 class T1_Today(unittest.TestCase):
@@ -69,7 +86,7 @@ class T2_Checker(unittest.TestCase):
 
     def test_07_checker_reads_terraform_show_json(self):
         """checker: resources inside child_modules (real `terraform show -json` output) are found too"""
-        plan = json.loads((HERE / "twin/today/plan.json").read_text())
+        plan = json.loads((HERE / "twin/today/plan.json").read_text(encoding="utf-8"))
         root = plan["planned_values"]["root_module"]
         plan["planned_values"]["root_module"] = {"resources": [], "child_modules": [
             {"address": "module.helpdesk", "resources": root["resources"]}]}
@@ -180,10 +197,10 @@ class T6_Terraform(unittest.TestCase):
         """safety: only documentation/private IPs, example.com identities, no key material, in every lab file"""
         ok_nets = [ipaddress.ip_network(n) for n in ("192.0.2.0/24", "198.51.100.0/24", "203.0.113.0/24",
                                                      "10.0.0.0/8", "0.0.0.0/32")]
-        files = [p for p in HERE.rglob("*") if p.is_file() and p.suffix in (".json", ".jsonl", ".py", ".tf", ".sh",
+        files = [p for p in _lab_files() if p.is_file() and p.suffix in (".json", ".jsonl", ".py", ".tf", ".sh",
                                                                              ".tftpl", ".md", ".example")]
         for p in files:
-            text = p.read_text()
+            text = p.read_text(encoding="utf-8")
             for ip in re.findall(r"\b(\d{1,3}(?:\.\d{1,3}){3})\b", text):
                 try:
                     addr = ipaddress.ip_address(ip)

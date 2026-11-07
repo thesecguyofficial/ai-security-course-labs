@@ -32,7 +32,7 @@ DEFAULT_IMAGE = "763104351884.dkr.ecr.us-east-1.amazonaws.com/djl-inference:0.38
 
 
 def values() -> dict:
-    stack = json.loads((HERE / "out" / "stack.json").read_text())["Stacks"][0]
+    stack = json.loads((HERE / "out" / "stack.json").read_text(encoding="utf-8"))["Stacks"][0]
     v = {o["OutputKey"]: o["OutputValue"] for o in stack["Outputs"]}
     v["SubnetIds"] = v["SubnetIds"].split(",")
     at = dt.datetime.now(dt.timezone.utc) + dt.timedelta(hours=float(os.environ.get("TEARDOWN_HOURS", "2")))
@@ -61,7 +61,7 @@ def main() -> int:
     out = HERE / "out"
     out.mkdir(exist_ok=True)
     for tpl in sorted((HERE / "requests").glob("*.json")):
-        body = fill(json.loads(tpl.read_text()), v)
+        body = fill(json.loads(tpl.read_text(encoding="utf-8")), v)
         if tpl.name == "create-model-package.json":
             folder = os.environ.get("MODEL_DIR")
             if not folder:
@@ -72,7 +72,7 @@ def main() -> int:
             if len(body["CustomerMetadataProperties"]) > 50:
                 print("too many files for one metadata map (50 keys): keep only the files the model needs")
                 return 1
-        (out / tpl.name).write_text(json.dumps(body, indent=2) + "\n")
+        (out / tpl.name).write_text(json.dumps(body, indent=2) + "\n", encoding="utf-8")
         print(f"wrote cloud/out/{tpl.name}")
     return 0
 

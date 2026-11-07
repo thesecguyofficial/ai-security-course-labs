@@ -37,7 +37,7 @@ def _key(name: str) -> bytes:
         fd = os.open(p, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
         with os.fdopen(fd, "w") as f:
             f.write(secrets.token_hex(32))
-    return bytes.fromhex(p.read_text().strip())
+    return bytes.fromhex(p.read_text(encoding="utf-8").strip())
 
 
 def _body(rec: dict) -> str:

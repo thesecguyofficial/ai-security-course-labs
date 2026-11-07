@@ -62,9 +62,9 @@ class Lab(unittest.TestCase):
         try:
             for f in ("search.json", "agent.json", "app.json", "roles.json"):
                 shutil.copy(os.path.join(HERE, "fixes", f), tmp)
-            s = json.load(open(os.path.join(tmp, "search.json")))
+            s = json.load(open(os.path.join(tmp, "search.json"), encoding="utf-8"))
             s["index"]["projection"]["permission_fields_to_chunks"] = ["group_ids"]
-            json.dump(s, open(os.path.join(tmp, "search.json"), "w"))
+            json.dump(s, open(os.path.join(tmp, "search.json"), "w", encoding="utf-8"))
             self.assertIn("AZ13-06", {f[0] for f in checker.check(tmp)[0]})
         finally:
             shutil.rmtree(tmp)
@@ -162,9 +162,9 @@ class Lab(unittest.TestCase):
         src = open(os.path.join(HERE, "data", "source-docs.json"), encoding="utf-8").read()
         for line in re.findall(r"\[[A-Z-]+ TOOL REQUEST[^\]]*\]", src):
             self.assertTrue(line.startswith("[LAB-PLACEHOLDER"), line)
-        for root, _, files in os.walk(HERE):
-            if "__pycache__" in root:
-                continue
+        for root, dirs, files in os.walk(HERE):
+            # skip what isn't the lab: its .venv (after `make setup`), caches, tool state, output
+            dirs[:] = [d for d in dirs if d not in ("__pycache__", "node_modules", "out") and (not d.startswith(".") or d == ".github")]
             for f in files:
                 if f.endswith((".json", ".jsonl", ".py", ".md", ".sh")):
                     text = open(os.path.join(root, f), encoding="utf-8").read()

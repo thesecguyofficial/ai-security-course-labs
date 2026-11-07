@@ -33,6 +33,23 @@ def rules(findings, severity=None):
     return {f.rule for f in findings if severity is None or f.severity == severity}
 
 
+
+# Folders that are not part of the lab: the lab's own .venv (after `make setup`), caches, tool state and output.
+# `.github` stays in: some labs ship sample workflows as lab files.
+_NOT_LAB = {"__pycache__", "node_modules", "out"}
+
+
+def _lab_files(pattern="*"):
+    """The lab's own files under HERE: skips .venv, .git, .terraform, __pycache__, node_modules and out/."""
+    for p in sorted(HERE.rglob(pattern)):
+        if not p.is_file():
+            continue
+        folders = p.relative_to(HERE).parts[:-1]
+        if any(d in _NOT_LAB or (d.startswith(".") and d != ".github") for d in folders):
+            continue
+        yield p
+
+
 class T1_FirstDraft(unittest.TestCase):
     def test_01_no_guardrail_every_attack_works(self):
         """no guardrail: all 15 attacks work against the worst-case stand-in model"""
@@ -154,7 +171,7 @@ class T4_Twin(unittest.TestCase):
     def test_17_documentation_values_only(self):
         """safety: only AWS documentation example account IDs and keys appear in the lab files"""
         allowed = {"111122223333", "444455556666", "123456789012", "777788889999"}
-        for p in list(HERE.glob("**/*.json")) + list(HERE.glob("**/*.tf")):
+        for p in list(_lab_files("*.json")) + list(_lab_files("*.tf")):
             text = p.read_text(encoding="utf-8")
             for acct in re.findall(r"(?<![\d-])\d{12}(?!\d)", text):
                 self.assertIn(acct, allowed, f"{p.name}: {acct}")

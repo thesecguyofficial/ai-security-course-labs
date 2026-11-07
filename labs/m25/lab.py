@@ -30,23 +30,23 @@ def sha256_file(path: pathlib.Path) -> str:
 
 
 def read_json(path: pathlib.Path):
-    return json.loads(pathlib.Path(path).read_text())
+    return json.loads(pathlib.Path(path).read_text(encoding="utf-8"))
 
 
 def write_json(path: pathlib.Path, obj) -> None:
     path = pathlib.Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(obj, indent=1, sort_keys=False) + "\n")
+    path.write_text(json.dumps(obj, indent=1, sort_keys=False) + "\n", encoding="utf-8")
 
 
 def read_jsonl(path: pathlib.Path) -> list[dict]:
-    return [json.loads(line) for line in pathlib.Path(path).read_text().splitlines() if line.strip()]
+    return [json.loads(line) for line in pathlib.Path(path).read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
 def append_jsonl(path: pathlib.Path, row: dict) -> None:
     path = pathlib.Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "a") as f:
+    with open(path, "a", encoding="utf-8") as f:
         f.write(json.dumps(row, sort_keys=True) + "\n")
 
 

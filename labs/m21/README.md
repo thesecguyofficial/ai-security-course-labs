@@ -205,7 +205,7 @@ with `Recomputed hash matches: yes   links to receipt #7: yes`.
 make attack
 ```
 
-Same as `python3 suite.py first-draft`.
+Same as `.venv/bin/python suite.py first-draft`.
 
 Real output (Linux, Python 3.13, cedarpy 4.12.2):
 
@@ -275,7 +275,7 @@ Neither says *which order*, *whose order* or *to whom*. The hardened set has six
 Ask the engine about one call, and see exactly what the PEP sent it:
 
 ```bash
-python3 pep.py hardened bob T-601 issue_refund '{"order_id": "O-2001", "amount_cents": 9000, "currency": "USD"}'
+.venv/bin/python pep.py hardened bob T-601 issue_refund '{"order_id": "O-2001", "amount_cents": 9000, "currency": "USD"}'
 ```
 
 ```text
@@ -300,7 +300,7 @@ database, the ticket's requester from the ticket the staff member opened, the co
 make hardened
 ```
 
-Same as `python3 suite.py hardened`.
+Same as `.venv/bin/python suite.py hardened`.
 
 ```text
 Attacks that worked: 0 of 12  (none) | normal requests that work: 6 of 6
@@ -333,7 +333,7 @@ herself: the four-eyes rule refuses it.
 make shadow
 ```
 
-Same as `python3 suite.py hardened --mode LOG_ONLY`.
+Same as `.venv/bin/python suite.py hardened --mode LOG_ONLY`.
 
 ```text
 Attacks that worked: 11 of 12  (A1, A2, A3, A4, A6, A7, A8, A9, A10, A11, A12) | normal requests that work: 6 of 6
@@ -377,7 +377,7 @@ Install OPA from its official page (https://www.openpolicyagent.org/docs#running
 make opa
 ```
 
-- `make opa`: opa test rego/ -v, then python3 suite.py hardened --engine opa
+- `make opa`: opa test rego/ -v, then .venv/bin/python suite.py hardened --engine opa
 
 ```text
 PASS: 5/5
@@ -410,7 +410,7 @@ The OPA parity test is skipped without opa.
    this user's agent may not issue refunds (A14). The PEP supplies `context.window.denials_10m`.
 3. **21.4:** write `find_probing()` in `receipts.py`: users with 3 or more denials inside 10 minutes.
 
-`python3 suite.py hardened --challenge` shows A13 and A14. Every new policy needs `@id("<file name>")` and must
+`.venv/bin/python suite.py hardened --challenge` shows A13 and A14. Every new policy needs `@id("<file name>")` and must
 validate against the schema.
 
 **Guided build (your own AWS account, optional).** `GUIDED-BUILD.md` puts the refund rules on an AgentCore Gateway:

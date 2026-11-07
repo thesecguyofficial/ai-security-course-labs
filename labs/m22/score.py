@@ -162,7 +162,7 @@ def main():
     args = ap.parse_args()
     if args.log:
         STATE.mkdir(exist_ok=True)
-        (STATE / "decisions.jsonl").write_text("")
+        (STATE / "decisions.jsonl").write_text("", encoding="utf-8")
         os.environ["M22_LOG"] = str(STATE / "decisions.jsonl")
     if args.trace:
         trace(args.agent or "dual+taint", args.trace[0].upper(), args.trace[1].upper(), args.challenge)

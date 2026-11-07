@@ -21,7 +21,7 @@ REQUIRED_TAGS = ("owner", "purpose", "environment")
 
 
 def load(name: str) -> dict:
-    return json.loads((HERE / "setups" / f"{name}.json").read_text())
+    return json.loads((HERE / "setups" / f"{name}.json").read_text(encoding="utf-8"))
 
 
 def _statements(doc: dict) -> list[dict]:

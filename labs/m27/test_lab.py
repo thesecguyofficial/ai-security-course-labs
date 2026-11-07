@@ -128,7 +128,7 @@ class Logs(LabTest):
         """logs: a name the resolver refused never becomes a connection, so it has no flow record"""
         recs = logs.write("hardened")
         self.assertFalse(any(" REJECT " in line for line in recs["flow-log.txt"]))
-        header = (lab.state_dir() / "hardened" / "flow-log.txt").read_text().splitlines()[0].split()
+        header = (lab.state_dir() / "hardened" / "flow-log.txt").read_text(encoding="utf-8").splitlines()[0].split()
         self.assertEqual(header[4], "dstaddr")
         self.assertEqual(header[12], "action")
 

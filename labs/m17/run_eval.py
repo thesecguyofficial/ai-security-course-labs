@@ -54,7 +54,7 @@ def print_summary(path: pathlib.Path) -> int:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return 0
-    print(f"\nPer test (from {path.relative_to(HERE)}):")
+    print(f"\nPer test (from {path.relative_to(HERE).as_posix()}):")
     for row in data["results"]["results"]:
         name = row["testCase"].get("description", "?")
         failed = sorted({c["assertion"].get("metric") or c["assertion"].get("type")

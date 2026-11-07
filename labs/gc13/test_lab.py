@@ -7,6 +7,7 @@ These tests pass before AND after you finish the challenge.
 
 import copy
 import json
+import pathlib
 import re
 import unittest
 
@@ -29,6 +30,23 @@ def variant(twin, change):
     return helpdesk_agent.Helpdesk(dep)
 
 
+
+# Folders that are not part of the lab: the lab's own .venv (after `make setup`), caches, tool state and output.
+# `.github` stays in: some labs ship sample workflows as lab files.
+_NOT_LAB = {"__pycache__", "node_modules", "out"}
+
+
+def _lab_files(pattern="*"):
+    """The lab's own files under HERE: skips .venv, .git, .terraform, __pycache__, node_modules and out/."""
+    for p in sorted(HERE.rglob(pattern)):
+        if not p.is_file():
+            continue
+        folders = p.relative_to(HERE).parts[:-1]
+        if any(d in _NOT_LAB or (d.startswith(".") and d != ".github") for d in folders):
+            continue
+        yield p
+
+
 class T1_Checker(unittest.TestCase):
     def test_01_today_findings(self):
         """check: 16 findings on today's port, 11 of them HIGH (17 once you've written GC13-18)"""
@@ -47,7 +65,7 @@ class T1_Checker(unittest.TestCase):
 
         def fake(path):
             data = orig(path)
-            if str(path).endswith("hardened/deployment.json"):
+            if pathlib.Path(path).as_posix().endswith("hardened/deployment.json"):
                 data = copy.deepcopy(data)
                 data["agent"]["tools"]["close_ticket"]["confirmation"] = "adk_confirmation"
             return data
@@ -209,7 +227,7 @@ class T5_FailureModes(unittest.TestCase):
 class T6_Files(unittest.TestCase):
     def test_22_terraform_matches_hardened(self):
         """terraform: corpus per audience, optional CMEK, a dedicated agent account, Model Armor template"""
-        tf = "".join(p.read_text() for p in (HERE / "terraform").glob("*.tf"))
+        tf = "".join(p.read_text(encoding="utf-8") for p in (HERE / "terraform").glob("*.tf"))
         self.assertIn('resource "google_vertex_ai_rag_corpus" "kb"', tf)
         self.assertIn('toset(["staff", "finance"])', tf)
         self.assertIn('dynamic "encryption_spec"', tf)
@@ -217,11 +235,11 @@ class T6_Files(unittest.TestCase):
         self.assertIn('"roles/aiplatform.user"', tf)
         self.assertNotRegex(tf, r'roles/(owner|editor|storage\.admin|aiplatform\.admin)"')
         self.assertIn('pi_and_jailbreak_filter_settings', tf)
-        self.assertIn("unprovisioned", (HERE / "Makefile").read_text())
+        self.assertIn("unprovisioned", (HERE / "Makefile").read_text(encoding="utf-8"))
 
     def test_23_adk_agent_matches_hardened(self):
         """adk_agent: no scope argument for the model, confirmation on both writes, tool output screened"""
-        src = (HERE / "adk_agent" / "tsg_helpdesk" / "agent.py").read_text()
+        src = (HERE / "adk_agent" / "tsg_helpdesk" / "agent.py").read_text(encoding="utf-8")
         self.assertIn("def search_kb(query: str, tool_context: ToolContext)", src)
         self.assertIn("FunctionTool(send_email, require_confirmation=True)", src)
         self.assertIn("FunctionTool(close_ticket, require_confirmation=True)", src)
@@ -230,8 +248,8 @@ class T6_Files(unittest.TestCase):
         self.assertIn("before_tool_callback=policy.before_tool", src)
 
     def test_24_nothing_real(self):
-        """safety: only documentation domains, placeholder project numbers, no keys, labelled attack text"""
-        text = "".join(p.read_text(errors="ignore") for p in HERE.rglob("*")
+        """safety: only documentation domains, placeholder project numbers, no keys, labeled attack text"""
+        text = "".join(p.read_text(errors="ignore", encoding="utf-8") for p in _lab_files()
                        if p.is_file() and p.suffix in {".py", ".json", ".tf", ".sh", ".md", ".example", ".txt"})
         for email in set(re.findall(r"[\w.+-]+@([\w-]+(?:\.[\w-]+)+)", text)):
             self.assertRegex(email, r"(^|\.)(example\.(com|org|net)|iam\.gserviceaccount\.com|anthropic\.com)$|"

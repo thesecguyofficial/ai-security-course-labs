@@ -38,7 +38,7 @@ def two_locks():
     except AccessDenied as exc:
         print(f"2. after the bucket-policy mistake:        REFUSED  {lab.hide(str(exc))}")
     print("\nThe refusal is in the trail (state/cloudtrail.jsonl), last event:")
-    last = [json.loads(l) for l in (lab.state_dir() / "cloudtrail.jsonl").read_text().splitlines()][-1]
+    last = [json.loads(l) for l in (lab.state_dir() / "cloudtrail.jsonl").read_text(encoding="utf-8").splitlines()][-1]
     keep = {k: last[k] for k in ("eventSource", "eventName", "errorCode")}
     keep["userIdentity.arn"] = last["userIdentity"]["arn"]
     keep["requestParameters.keyId"] = last["requestParameters"]["keyId"]

@@ -317,9 +317,9 @@ def print_result(r: dict):
 def main():
     p = argparse.ArgumentParser(description="SupportBot (M3.9 lab). Local only, fake data.")
     sub = p.add_subparsers(dest="cmd", required=True)
-    s = sub.add_parser("summarise", help="summarise one email file")
+    s = sub.add_parser("summarize", aliases=["summarise"], help="summarize one email file")
     s.add_argument("email_file")
-    s.add_argument("--mode", choices=["summarise", "ticket"], default="summarise")
+    s.add_argument("--mode", choices=["summarize", "summarise", "ticket"], default="summarise")
     sv = sub.add_parser("serve", help="run the local web API")
     for sp in (s, sv):
         sp.add_argument("--fixes", default="none")
@@ -339,9 +339,10 @@ def main():
     mx.add_argument("email_file")
     args = p.parse_args()
 
-    if args.cmd == "summarise":
+    if args.cmd in ("summarize", "summarise"):
         email = pathlib.Path(args.email_file).read_text(encoding="utf-8")
-        print_result(handle_email(email, args.mode, parse_fixes(args.fixes), args.backend, args.model))
+        mode = "summarise" if args.mode == "summarize" else args.mode
+        print_result(handle_email(email, mode, parse_fixes(args.fixes), args.backend, args.model))
     elif args.cmd == "serve":
         if args.host not in ("127.0.0.1", "localhost"):
             sys.exit("Refusing to listen on anything but 127.0.0.1: this app is deliberately weak.")
@@ -363,7 +364,7 @@ def main():
         shown = [json.loads(x) for x in lines if '"event": "alert"' in x or '"event": "tripwire"' in x]
         for e in shown:
             print(f"{e['ts']}  {e['event']:8}  {e.get('type', 'phrases')}: {e.get('detail', e.get('phrases'))}")
-        print(f"{len(shown)} alert/tripwire events in {LOG_FILE.relative_to(HERE)}")
+        print(f"{len(shown)} alert/tripwire events in {LOG_FILE.relative_to(HERE).as_posix()}")
     elif args.cmd == "matrix":
         email = pathlib.Path(args.email_file).read_text(encoding="utf-8")
         yes_no = {True: "YES", False: "no"}

@@ -56,6 +56,23 @@ def stopped_by(r):
                  if decision in ("BLOCKED", "DENIED", "SKIPPED") or decision.startswith("retrieve")), None)
 
 
+
+# Folders that are not part of the lab: the lab's own .venv (after `make setup`), caches, tool state and output.
+# `.github` stays in: some labs ship sample workflows as lab files.
+_NOT_LAB = {"__pycache__", "node_modules", "out"}
+
+
+def _lab_files(pattern="*"):
+    """The lab's own files under HERE: skips .venv, .git, .terraform, __pycache__, node_modules and out/."""
+    for p in sorted(HERE.rglob(pattern)):
+        if not p.is_file():
+            continue
+        folders = p.relative_to(HERE).parts[:-1]
+        if any(d in _NOT_LAB or (d.startswith(".") and d != ".github") for d in folders):
+            continue
+        yield p
+
+
 class T1_DecisionTable(unittest.TestCase):
     longMessage = False
 
@@ -385,7 +402,7 @@ class T4_Files(unittest.TestCase):
 
     def test_24_safety(self):
         """safety: only documentation domains, placeholder IDs, no keys or tokens"""
-        text = "".join(p.read_text(errors="ignore") for p in HERE.rglob("*")
+        text = "".join(p.read_text(errors="ignore", encoding="utf-8") for p in _lab_files()
                        if p.is_file() and p.suffix in {".py", ".json", ".tf", ".md", ".txt", ".toml", ".example"})
         for dom in set(re.findall(r"[\w.+-]+@([\w-]+(?:\.[\w-]+)+)", text)):
             self.assertRegex(dom, r"(^|\.)(example\.(com|org|net)|iam\.gserviceaccount\.com)$|^gcp-sa-", dom)

@@ -194,7 +194,7 @@ def cmd_strength(a) -> None:
         conf, extra = twin.classify_content(a.text, cat), ""
     print(f'The {cat} classifier (the stand-in) reads:\n  "{short(a.text, 110)}"')
     print(f"and labels it: {conf} confidence{extra}\n")
-    print(f"  {'filter strength':17} {'blocks text labelled':24} this text")
+    print(f"  {'filter strength':17} {'blocks text labeled':24} this text")
     for s in twin.STRENGTHS:
         blocks = ", ".join(c for c in ("HIGH", "MEDIUM", "LOW") if c in twin.BLOCKED_AT[s]) or "nothing"
         print(f"  {s:17} {blocks:24} {'BLOCKED' if conf in twin.BLOCKED_AT[s] else 'allowed'}")

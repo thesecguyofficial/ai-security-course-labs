@@ -29,13 +29,13 @@ def redact(v: str) -> str:
 def scan(root: pathlib.Path) -> list[dict]:
     found = []
     for f in sorted(p for p in root.rglob("*") if p.is_file()):
-        text = f.read_text(errors="replace")
+        text = f.read_text(errors="replace", encoding="utf-8")
         resources = sorted(set(ENDPOINT.findall(text)))
         for n, line in enumerate(text.splitlines(), 1):
             for kind, rx in PATTERNS:
                 m = rx.search(line)
                 if m:
-                    found.append({"file": str(f.relative_to(root)), "line": n, "kind": kind, "value": redact(m.groups()[-1]),
+                    found.append({"file": f.relative_to(root).as_posix(), "line": n, "kind": kind, "value": redact(m.groups()[-1]),
                                   "resource": ", ".join(resources) or "?"})
     return found
 

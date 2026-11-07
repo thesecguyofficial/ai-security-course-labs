@@ -56,13 +56,13 @@ class Vulnerable(LabTest):
         r = self.run_quiet()
         markers = list((tools.state_dir() / "markers").glob("task-*.marker"))
         self.assertEqual(len(markers), 1)
-        self.assertIn("SIMULATED, NOT EXECUTED", markers[0].read_text())
+        self.assertIn("SIMULATED, NOT EXECUTED", markers[0].read_text(encoding="utf-8"))
         self.assertFalse((tools.WORKSPACE / "attachments" / "outgoing.csv").exists())
         self.assertTrue(any(s["tool"] == "run_task" and s["allowed"] for s in r.steps))
 
     def test_03_nothing_can_leave_the_lab(self):
         """vulnerable: the tools import no network or process modules; read_file can't leave the workspace"""
-        tree = ast.parse((LAB / "tools.py").read_text())
+        tree = ast.parse((LAB / "tools.py").read_text(encoding="utf-8"))
         imported = {a.name.split(".")[0] for n in ast.walk(tree) if isinstance(n, (ast.Import, ast.ImportFrom))
                     for a in (n.names if isinstance(n, ast.Import) else [ast.alias(n.module or "")])}
         self.assertFalse(imported & {"socket", "smtplib", "subprocess", "urllib", "http", "requests"}, imported)
@@ -141,7 +141,7 @@ class OneControlAtATime(LabTest):
     def test_12_kill_switch_stops_everything(self):
         """control: with state/KILL present, the agent takes no action at all"""
         tools.state_dir().mkdir(parents=True, exist_ok=True)
-        controls.kill_file().write_text("stop\n")
+        controls.kill_file().write_text("stop\n", encoding="utf-8")
         r = self.run_quiet(Controls.safe())
         self.assertEqual(r.halted, "kill switch")
         self.assertEqual([s for s in r.steps if s["allowed"]], [])
@@ -173,10 +173,10 @@ class AuditAndDetect(LabTest):
         ok, msg, _ = controls.verify_chain()
         self.assertTrue(ok, msg)
         p = controls.audit_path()
-        lines = p.read_text().splitlines()
+        lines = p.read_text(encoding="utf-8").splitlines()
         lines[3] = lines[3].replace("collector@example.invalid", "sam@customer.example").replace('"deny"', '"allow"')
         lines[3] = re.sub(r'"step": \d+', '"step": 99', lines[3])
-        p.write_text("\n".join(lines) + "\n")
+        p.write_text("\n".join(lines) + "\n", encoding="utf-8")
         ok, msg, _ = controls.verify_chain()
         self.assertFalse(ok)
         self.assertIn("chain broken", msg)

@@ -213,7 +213,7 @@ detect_system() {
   fi
   if [ -n "$hints" ]; then
     warn "Looks like a work-managed computer: ${hints#, }."
-    warn "Installs may be blocked, and Docker Desktop may need a paid licence at a large company. Ask IT first. docs/SETUP.md, 'Work laptops'."
+    warn "Installs may be blocked, and Docker Desktop may need a paid license at a large company. Ask IT first. docs/SETUP.md, 'Work laptops'."
   fi
 
   if [ "$(id -u)" -eq 0 ]; then
@@ -388,7 +388,7 @@ ensure_docker() {
     local choice="$DOCKER_CHOICE"
     if [ -z "$choice" ]; then
       docker_licence_note
-      say "  Free alternative: Colima (open source, MIT licence, command line only, no licence terms to check)."
+      say "  Free alternative: Colima (open source, MIT license, command line only, no license terms to check)."
       if [ "$ASSUME_YES" -eq 1 ]; then choice="desktop"
       elif tty_ok; then
         printf '  Install [d]ocker Desktop, [c]olima, or [s]kip? [d/c/s] '

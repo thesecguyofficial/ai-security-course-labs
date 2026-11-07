@@ -19,12 +19,12 @@ SETUPS = Path(__file__).resolve().parent / "setups"
 
 
 def load_setup(name):
-    return json.loads((SETUPS / f"{name}.json").read_text())
+    return json.loads((SETUPS / f"{name}.json").read_text(encoding="utf-8"))
 
 
 def log(entry):
     STATE.mkdir(parents=True, exist_ok=True)
-    with open(STATE / "decisions.jsonl", "a") as f:
+    with open(STATE / "decisions.jsonl", "a", encoding="utf-8") as f:
         f.write(json.dumps(entry, sort_keys=True) + "\n")
 
 

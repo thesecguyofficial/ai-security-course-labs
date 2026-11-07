@@ -25,9 +25,9 @@ OP = "Microsoft.MachineLearningServices/workspaces/onlineEndpoints"
 
 
 def load() -> dict:
-    return {"activity": json.loads((DATA / "azure-activity.json").read_text())["rows"],
-            "traffic": json.loads((DATA / "endpoint-traffic.json").read_text())["rows"],
-            "context": json.loads((DATA / "context.json").read_text())}
+    return {"activity": json.loads((DATA / "azure-activity.json").read_text(encoding="utf-8"))["rows"],
+            "traffic": json.loads((DATA / "endpoint-traffic.json").read_text(encoding="utf-8"))["rows"],
+            "context": json.loads((DATA / "context.json").read_text(encoding="utf-8"))}
 
 
 def _endpoint(resource_id: str) -> str:

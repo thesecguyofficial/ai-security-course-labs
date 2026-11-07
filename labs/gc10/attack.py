@@ -114,13 +114,13 @@ def run_step(step, mode, extra_org_policies=(), keys_file=None):
 
 def preview_file(path, tmpdir):
     """Copy an org policy file for local preview: ORGANIZATION_ID -> ExampleCo's org, dryRunSpec -> spec."""
-    pol = json.loads(pathlib.Path(path).read_text())
+    pol = json.loads(pathlib.Path(path).read_text(encoding="utf-8"))
     org_id = Corp().org["name"].split("/")[1]
     pol["name"] = pol["name"].replace("ORGANIZATION_ID", org_id)
     if "spec" not in pol and "dryRunSpec" in pol:
         pol["spec"] = pol.pop("dryRunSpec")
     out = pathlib.Path(tmpdir) / pathlib.Path(path).name
-    out.write_text(json.dumps(pol))
+    out.write_text(json.dumps(pol), encoding="utf-8")
     return out, pol["name"]
 
 

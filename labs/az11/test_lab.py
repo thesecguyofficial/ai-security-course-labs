@@ -16,11 +16,28 @@ from foundry_twin import PE_IP, PUBLIC_IP, PolicyEval, Twin, load
 
 HERE = Path(__file__).resolve().parent
 STEP = {s.sid: s for s in attack.STEPS}
-TF = "\n".join(p.read_text() for p in sorted((HERE / "terraform").glob("*.tf")))
+TF = "\n".join(p.read_text(encoding="utf-8") for p in sorted((HERE / "terraform").glob("*.tf")))
 
 
 def rules(mode: str) -> set[str]:
     return {f.rule for f in checker.run(Twin(mode))}
+
+
+
+# Folders that are not part of the lab: the lab's own .venv (after `make setup`), caches, tool state and output.
+# `.github` stays in: some labs ship sample workflows as lab files.
+_NOT_LAB = {"__pycache__", "node_modules", "out"}
+
+
+def _lab_files(pattern="*"):
+    """The lab's own files under HERE: skips .venv, .git, .terraform, __pycache__, node_modules and out/."""
+    for p in sorted(HERE.rglob(pattern)):
+        if not p.is_file():
+            continue
+        folders = p.relative_to(HERE).parts[:-1]
+        if any(d in _NOT_LAB or (d.startswith(".") and d != ".github") for d in folders):
+            continue
+        yield p
 
 
 class T1_Vulnerable(unittest.TestCase):
@@ -179,10 +196,10 @@ class T4_PolicyLogsBuild(unittest.TestCase):
                    "71ef260a-8f18-47b7-abcb-62d0673d94dc", "b24988ac-6180-42a0-ab88-20f7382dd24c"}
         guid = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", re.I)
         ipv4 = re.compile(r"(?<![\d.])(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?![\d.])")
-        for f in HERE.rglob("*"):
+        for f in _lab_files():
             if not f.is_file() or "__pycache__" in f.parts or f.suffix not in (".json", ".py", ".md", ".tf", ".sh"):
                 continue
-            text = f.read_text()
+            text = f.read_text(encoding="utf-8")
             for g in guid.findall(text):
                 self.assertIn(g.lower(), doc_guids | builtin, f"{f.name}: {g}")
             for m in ipv4.finditer(text):

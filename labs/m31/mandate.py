@@ -37,13 +37,13 @@ def issue(fields=None):
     body = {k: v for k, v in m.items() if k != "sig"}
     m["sig"] = sign("surface", body)
     (STATE / "mandates").mkdir(parents=True, exist_ok=True)
-    (STATE / "mandates" / f"{m['mandate_id']}.json").write_text(json.dumps(m, indent=1, sort_keys=True))
+    (STATE / "mandates" / f"{m['mandate_id']}.json").write_text(json.dumps(m, indent=1, sort_keys=True), encoding="utf-8")
     return m
 
 
 def from_store(mandate_id):
     path = STATE / "mandates" / f"{mandate_id}.json"
-    return json.loads(path.read_text()) if path.exists() else None
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
 
 
 def signature_ok(m):

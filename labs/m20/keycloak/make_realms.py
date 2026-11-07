@@ -22,7 +22,7 @@ import pathlib
 
 HERE = pathlib.Path(__file__).resolve().parent
 LAB = HERE.parent
-USERS = json.loads((LAB / "data" / "users.json").read_text())
+USERS = json.loads((LAB / "data" / "users.json").read_text(encoding="utf-8"))
 APIS = ["tickets-api", "mail-api"]
 
 
@@ -53,7 +53,7 @@ def base_scopes() -> list[dict]:
 
 
 def realm(setup: str) -> dict:
-    policy = json.loads((LAB / "setups" / setup / "authz.json").read_text())
+    policy = json.loads((LAB / "setups" / setup / "authz.json").read_text(encoding="utf-8"))
     every_scope = sorted({s for c in policy["clients"].values() for s in c.get("scopes", [])} - {"openid"})
     scopes = base_scopes()
     for name in every_scope:
@@ -106,5 +106,5 @@ if __name__ == "__main__":
     (HERE / "import").mkdir(exist_ok=True)
     for setup in ("first-draft", "hardened"):
         path = HERE / "import" / f"tsg-{setup}.json"
-        path.write_text(json.dumps(realm(setup), indent=2) + "\n")
-        print(f"wrote {path.relative_to(LAB)}")
+        path.write_text(json.dumps(realm(setup), indent=2) + "\n", encoding="utf-8")
+        print(f"wrote {path.relative_to(LAB).as_posix()}")

@@ -48,7 +48,7 @@ def verify_signature(model_dir: pathlib.Path, sig: pathlib.Path, public_key: pat
         .use_elliptic_key_verifier(public_key=public_key)
         .set_ignore_unsigned_files(ignore_unsigned)
         .verify(model_dir, sig))
-    statement = json.loads(base64.b64decode(json.loads(sig.read_text())["dsseEnvelope"]["payload"]))
+    statement = json.loads(base64.b64decode(json.loads(sig.read_text(encoding="utf-8"))["dsseEnvelope"]["payload"]))
     return {r["name"]: r["digest"] for r in statement["predicate"]["resources"]}
 
 
@@ -97,7 +97,7 @@ def gate(setup: str, release_dir: pathlib.Path, say=print) -> dict:
             raise Refused("no model.sig: unsigned releases are not deployed")
         problem("no model.sig")
     elif not key.exists():
-        problem(f"trusted key {key.relative_to(lab.HERE)} not found")
+        problem(f"trusted key {key.relative_to(lab.HERE).as_posix()} not found")
     else:
         try:
             manifest = verify_signature(model_dir, sig, key, cfg["ignore_unsigned_files"])

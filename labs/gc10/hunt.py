@@ -49,7 +49,7 @@ class Hit:
 # --- helpers ---------------------------------------------------------------------------------------------------------
 def load(path=LOGFILE):
     """JSON Lines (the sample) or a JSON array (what `gcloud logging read --format=json` prints)."""
-    text = pathlib.Path(path).read_text().strip()
+    text = pathlib.Path(path).read_text(encoding="utf-8").strip()
     raw = json.loads(text) if text.startswith("[") else [json.loads(x) for x in text.splitlines() if x.strip()]
     out = []
     for e in raw:

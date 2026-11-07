@@ -36,15 +36,15 @@ def load_config(name_or_path: str) -> dict:
     p = pathlib.Path(name_or_path)
     if not p.suffix:
         p = CONFIGS / f"{name_or_path}.json"
-    return json.loads(p.read_text())
+    return json.loads(p.read_text(encoding="utf-8"))
 
 
 def read_jsonl(path: pathlib.Path) -> list[dict]:
-    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
 def write_jsonl(path: pathlib.Path, rows: list[dict]) -> None:
-    path.write_text("".join(json.dumps(r, sort_keys=False) + "\n" for r in rows))
+    path.write_text("".join(json.dumps(r, sort_keys=False) + "\n" for r in rows), encoding="utf-8")
 
 
 def requests() -> list[dict]:

@@ -97,7 +97,7 @@ def _policies() -> list[tuple[str, str, str, str]]:
     """(id, effect, first comment line, text) for every hardened policy file."""
     out = []
     for f in sorted((HARDENED / "policies").glob("*.cedar")):
-        text = f.read_text()
+        text = f.read_text(encoding="utf-8")
         note = SAYS.get(f.stem) or next((ln[2:].strip() for ln in text.splitlines() if ln.startswith("//")), "")[:60]
         effect = "forbid" if "\nforbid" in "\n" + text else "permit"
         out.append((f.stem, effect, note, text))
@@ -107,7 +107,7 @@ def _policies() -> list[tuple[str, str, str, str]]:
 def _decide(req: dict, text: str):
     import pdp  # needs cedarpy
     eng = pdp.CedarPDP.__new__(pdp.CedarPDP)
-    eng.text, eng.schema = text, lab.SCHEMA.read_text()
+    eng.text, eng.schema = text, lab.SCHEMA.read_text(encoding="utf-8")
     return eng.decide(req)
 
 
@@ -193,7 +193,7 @@ def cmd_rule(a) -> int:
     f = HARDENED / "policies" / f"{a.name}.cedar"
     if not f.exists():
         sys.exit(f"no policy {a.name}. Policies: {', '.join(p[0] for p in _policies())}")
-    text = f.read_text()
+    text = f.read_text(encoding="utf-8")
     print(f"setups/hardened/policies/{f.name}\n")
     for ln in text.splitlines():
         print(f"  {ln}")

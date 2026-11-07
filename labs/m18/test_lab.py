@@ -24,7 +24,7 @@ def codes(findings, severity="error"):
 
 
 def card(**eu_changes):
-    c = json.loads((HERE / "helpdesk" / "system-card.json").read_text())
+    c = json.loads((HERE / "helpdesk" / "system-card.json").read_text(encoding="utf-8"))
     c["eu_ai_act"].update(eu_changes)
     return c
 
@@ -148,7 +148,7 @@ class TestCheck(unittest.TestCase):
             rel = copy.relative_to(HERE) if copy.is_relative_to(HERE) else None
             if rel is None:                       # temp dir is outside the lab: index it by absolute path
                 rel = copy
-            with open(d / "evidence-index.csv", "w", newline="") as f:
+            with open(d / "evidence-index.csv", "w", newline="", encoding="utf-8") as f:
                 w = csv.writer(f)
                 w.writerow(govlab.EVIDENCE_COLUMNS)
                 w.writerow(["E1", "C08", str(rel), govlab.sha256_file(copy), "2026-10-20", "AppSec lead", "copy"])
@@ -176,12 +176,12 @@ class TestCheck(unittest.TestCase):
         with TempAssessment() as d:
             c = card()
             c["controls"]["C24"] = "implemented"
-            (d / "system-card.json").write_text(json.dumps(c))
+            (d / "system-card.json").write_text(json.dumps(c), encoding="utf-8")
             shutil.copy2(HERE / "helpdesk" / "chat-widget.html", d / "chat-widget.html")
             self.assertIn("DIS-01", codes(govlab.check_folder(d)))
-            html = (d / "chat-widget.html").read_text().replace(
+            html = (d / "chat-widget.html").read_text(encoding="utf-8").replace(
                 "Hello, welcome to TSG Shop support.", "Hello, I'm the TSG Shop AI assistant, an automated system.")
-            (d / "chat-widget.html").write_text(html)
+            (d / "chat-widget.html").write_text(html, encoding="utf-8")
             self.assertNotIn("DIS-01", codes(govlab.check_folder(d)))
 
 
@@ -211,9 +211,9 @@ class TestCrosswalkAndPack(unittest.TestCase):
         pack, _ = govlab.build_pack(DRAFT, draft=True)
         try:
             self.assertTrue(pack.name.endswith("-DRAFT"))
-            self.assertIn("DRAFT", (pack / "README.md").read_text())
+            self.assertIn("DRAFT", (pack / "README.md").read_text(encoding="utf-8"))
             self.assertEqual(govlab.verify_pack(pack), [])
-            with open(pack / "RISK-REGISTER.md", "a") as f:
+            with open(pack / "RISK-REGISTER.md", "a", encoding="utf-8") as f:
                 f.write("| R99 | quietly added |\n")
             self.assertEqual(govlab.verify_pack(pack), ["changed: RISK-REGISTER.md"])
         finally:

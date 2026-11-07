@@ -36,7 +36,7 @@ python3 tiny_api.py & sleep 1
 Windows: run `py tiny_api.py` in its own PowerShell window and use a second window for the rest. In PowerShell,
 type `curl.exe`, not `curl`.
 
-Check it listens on this computer only (Mac: `lsof -nP -iTCP:8080 -sTCP:LISTEN`):
+Check it listens on this computer only (Mac: `lsof -nP -iTCP:8080 -sTCP:LISTEN`; Windows: `netstat -an | findstr 8080`):
 
 ```bash
 ss -ltn | grep 8080
@@ -78,6 +78,13 @@ curl -i -X POST -H "Authorization: Bearer demo-key-123" -H "Content-Type: applic
 HTTP/1.1 201 Created
 ...
 {"id": 1002, "item": "tent", "qty": 1, "status": "new"}
+```
+
+Windows PowerShell changes the quotes inside `-d '...'` before `curl.exe` sees them, so the server gets broken JSON.
+Send the same POST with PowerShell's own command instead:
+
+```powershell
+Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8080/api/orders -Headers @{Authorization = "Bearer demo-key-123"} -ContentType "application/json" -Body '{"item": "tent", "qty": 1}'
 ```
 
 Stop it with `kill %1` (Windows: Ctrl+C in its window). Output above is from the lesson's recording on a fresh

@@ -35,7 +35,7 @@ OPEN_SOURCES = {"*", "Internet", "0.0.0.0/0", "Any"}
 
 
 def load(name: str) -> dict:
-    return json.loads((INV / name).read_text())
+    return json.loads((INV / name).read_text(encoding="utf-8"))
 
 
 def build() -> dict:

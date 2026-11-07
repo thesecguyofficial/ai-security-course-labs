@@ -38,7 +38,7 @@ def load(path: str | pathlib.Path) -> dict:
     p = pathlib.Path(path)
     if not p.is_absolute():
         p = HERE / p
-    return json.loads(p.read_text())
+    return json.loads(p.read_text(encoding="utf-8"))
 
 
 def _as_list(x) -> list:

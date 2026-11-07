@@ -156,7 +156,7 @@ def main() -> int:
     # ---- Challenge ----------------------------------------------------------------------------------------------
     if args.challenge:
         r = run("challenge", "all", mail="05_redirect_challenge.txt")
-        check("Challenge  all fixes: a link through the help-centre redirect does not carry data to the attacker",
+        check("Challenge  all fixes: a link through the help-center redirect does not carry data to the attacker",
               not leaked_link(r), r["summary"])
 
     ok = all(results)

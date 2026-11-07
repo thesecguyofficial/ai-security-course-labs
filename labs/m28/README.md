@@ -69,7 +69,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `detect.py` | The detectors: a subset of Macie's managed identifiers, custom data identifiers, your customer list |
 | `macie.py` | Local Macie job: reads as Macie's service-linked role, `SKIPPED` / `INVALID_ENCRYPTION` when the key says no |
 | `pipeline.py` | Builds a setup from zero, runs it, checks L1 to L7 and N1 to N3 |
-| `explore.py` | The read-only helper for Step 1b: one idea at a time (a log record, a toy encoder and its inversion, a toy model that memorises, differential privacy, hiding versus removing, detectors, redaction, envelope encryption). It writes no file and opens no connection |
+| `explore.py` | The read-only helper for Step 1b: one idea at a time (a log record, a toy encoder and its inversion, a toy model that memorizes, differential privacy, hiding versus removing, detectors, redaction, envelope encryption). It writes no file and opens no connection |
 | `Makefile` | Short commands for Mac and Linux (`make setup`, `make check`, `make leak` ...); `make -n <target>` shows what one would run, without running it |
 | `demo.py`, `hunt.py`, `forget.py` | Two demonstrations, the investigator's questions, the erasure challenge |
 | `data/` | The calls, the fake customer list, a day of KMS events for the hunt |
@@ -217,7 +217,7 @@ The toy keeps no word order, so the words come back as a bag. Real attacks rebui
 Vec2Text (2023) recovered 92% of 32-token inputs exactly, from real embedding models.
 ```
 
-**5. Training, and memorisation (lesson 28.2).** A toy language model counts which word followed every run of one to
+**5. Training, and memorization (lesson 28.2).** A toy language model counts which word followed every run of one to
 three words. The card number it saw once comes back word for word:
 
 ```bash
@@ -235,7 +235,7 @@ Training = counting which word followed every run of 1 to 3 words. Those counts 
 
 The card number was in ONE training text (call c02), and it comes back word for word.
 Entries in the weights that hold '4111': 8
-That's memorisation. Real models memorize far less of what they see, but not nothing: a 2021 study pulled
+That's memorization. Real models memorize far less of what they see, but not nothing: a 2021 study pulled
 names, phone numbers and e-mail addresses out of GPT-2.
 ```
 
@@ -276,7 +276,7 @@ removes it:
 ```
 
 ```output
-The toy model from `memorise`. Request: "forget the card number in call c02".
+The toy model from `memorize`. Request: "forget the card number in call c02".
 
 1. Before:                  My card 4111 1111 1111 1111 was charged twice for one order.
    entries holding '4111':  8
@@ -389,7 +389,7 @@ in `kms.py`, in a file under `state/`), which a real KMS key never is.
 make leak
 ```
 
-Same as `python3 pipeline.py first-draft`.
+Same as `.venv/bin/python pipeline.py first-draft`.
 
 Real output (Linux, Python 3.13, cryptography 50.0.2):
 
@@ -447,7 +447,7 @@ The lab code stays at 30 days.
 make hardened
 ```
 
-Same as `python3 pipeline.py hardened`.
+Same as `.venv/bin/python pipeline.py hardened`.
 
 ```output
 setup hardened | 12 model calls logged | redactor: 12 records, 1 large bodies redacted, 0 copied as-is, 33 values replaced, 0 vectors removed
@@ -475,7 +475,7 @@ second line, for the day someone ticks Embedding again (`test_11` proves it).
 make two-locks
 ```
 
-Same as `python3 demo.py two-locks`.
+Same as `.venv/bin/python demo.py two-locks`.
 
 ```output
 raw object: 0a8dc0ca-lab0-4m28-c08-0000000000.json.gz  (account IDs print as <account>)
@@ -506,7 +506,7 @@ read the value your real trail records.)
 make macie
 ```
 
-Same as `python3 macie.py first-draft`, then `python3 macie.py hardened`.
+Same as `.venv/bin/python macie.py first-draft`, then `.venv/bin/python macie.py hardened`.
 
 ```output
 tsg-invocation-logs-raw: 1 EXCLUDED_BY_SCOPE, 9 SKIPPED (INVALID_ENCRYPTION) | findings: 0
@@ -535,7 +535,7 @@ number that matters is the **0 on the redacted bucket**, from a job that read al
 make tokens
 ```
 
-Same as `python3 demo.py tokens`.
+Same as `.venv/bin/python demo.py tokens`.
 
 ```output
 2027-04-01T09:00:00Z  tsg-helpdesk-app  metadata  [EMAIL_ADDRESS:744c26c6]
@@ -605,9 +605,9 @@ ALL TESTS PASSED (20 run)
 
 1. **28.4:** a loyalty-card number (`TSG-LOY-` and 8 digits) appears in a new call. Add ONE custom data identifier
    named `TSG_LOYALTY_CARD` to `setups/hardened/identifiers.json` and its name to the Macie job in
-   `setups/hardened/pipeline.json`. One definition, two uses. Check with `python3 pipeline.py hardened --challenge`.
+   `setups/hardened/pipeline.json`. One definition, two uses. Check with `.venv/bin/python pipeline.py hardened --challenge`.
 2. **28.3:** write `forget()` in `forget.py`: one customer's erasure request across both buckets, every version, raw
-   values and tokens. Then `python3 pipeline.py hardened && python3 forget.py TSG-CUST-104233`.
+   values and tokens. Then `.venv/bin/python pipeline.py hardened && .venv/bin/python forget.py TSG-CUST-104233`.
 3. **28.4:** write `find_raw_key_readers()` in `hunt.py`: who outside the expected list called `Decrypt` on the raw
    key, allowed or refused.
 

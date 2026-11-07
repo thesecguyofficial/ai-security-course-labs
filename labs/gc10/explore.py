@@ -115,7 +115,7 @@ def cmd_auth(a) -> None:
 
 def cmd_policy(a) -> None:
     path = pathlib.Path(a.file)
-    doc = json.loads((path if path.is_absolute() or path.exists() else HERE / path).read_text())
+    doc = json.loads((path if path.is_absolute() or path.exists() else HERE / path).read_text(encoding="utf-8"))
     shown = {k: v for k, v in doc.items() if not k.startswith("_")}
     print(f"{a.file}  (the allow policy on {doc.get('_resource', '?')})\n")
     print(json.dumps(shown, indent=2))
@@ -189,7 +189,7 @@ def cmd_call(a) -> None:
     print(f"  POST https://{AI}/v1/projects/{a.project}/locations/{loc}")
     print(f"       /publishers/{pub}/models/{a.model}:{verb}      (one URL, split here to fit)")
     print(f"  {'x-goog-api-key: <the key string>' if caller.startswith('apikey:') else 'Authorization: Bearer <access token>'}")
-    print('  {"contents": {"role": "user", "parts": {"text": "Summarise ticket 4521 in one line."}}}\n')
+    print('  {"contents": {"role": "user", "parts": {"text": "Summarize ticket 4521 in one line."}}}\n')
     req = Request(caller, a.project, AI, "GenerateContent" if pub == "google" else "RawPredict",
                   "aiplatform.endpoints.predict", model=f"publishers/{pub}/models/{a.model}:predict",
                   source_ip=a.source_ip)
@@ -204,7 +204,7 @@ def cmd_call(a) -> None:
 # ---------------------------------------------------------------- 6. event
 
 def cmd_event(a) -> None:
-    rows = [json.loads(line) for line in AUDIT.read_text().splitlines() if line.strip()]
+    rows = [json.loads(line) for line in AUDIT.read_text(encoding="utf-8").splitlines() if line.strip()]
     hits = [(i, r) for i, r in enumerate(rows, 1) if r["protoPayload"]["methodName"].endswith("." + a.name)
             and (not a.source_ip or r["protoPayload"]["requestMetadata"]["callerIp"] == a.source_ip)]
     if not hits:

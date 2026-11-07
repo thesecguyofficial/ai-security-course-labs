@@ -20,7 +20,7 @@ RELEASE = STATE / "facts_release.txt"
 
 def set_release(version: str) -> None:
     STATE.mkdir(exist_ok=True)
-    RELEASE.write_text(version)
+    RELEASE.write_text(version, encoding="utf-8")
 
 
 def clean_state() -> None:
@@ -107,7 +107,7 @@ class ControlsHoldTheLine(unittest.TestCase):
         approvals.write_text(json.dumps(
             {"notes:list_notes": True, "notes:read_note": True, "notes:send_email": True,
              "facts:fact_of_the_day": False}
-        ))
+        ), encoding="utf-8")
         r = run("give me a fact about octopus", approve=True, approvals=str(approvals))
         self.assertFalse(r["secret_leaked"])
 

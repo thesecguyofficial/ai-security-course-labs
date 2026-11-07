@@ -1,7 +1,6 @@
 # Lab M1.8: run a model locally, look inside it, count tokens, watch the context window fill
 
-Companion to lesson **1.8** of *AI Security Engineer*. This folder will move to the public
-`ai-security-labs` repository; it contains no solutions and no secrets.
+Companion to lesson **1.8** of *AI Security Engineer*. This folder contains no solutions and no secrets.
 
 ## Get the lab
 
@@ -35,7 +34,9 @@ where you see `python3`.
 **Ollama** is a free, open-source program that downloads open-weight models and runs them on your own computer.
 
 1. **Install it** (skip if you did lesson 0.6). Mac or Windows: the installer from
-   [ollama.com/download](https://ollama.com/download). Linux: `curl -fsSL https://ollama.com/install.sh | sh`
+   [ollama.com/download](https://ollama.com/download). Linux: save the official script to a file, read it, then run
+   it (`curl -fsSL https://ollama.com/install.sh -o ollama-install.sh`, then `sh ollama-install.sh`), the same way
+   as lesson 0.4. The repo's `./setup.sh` does this for you.
 2. **Check it** (tested with 0.40.13; newer is fine) and see that no model is there yet:
 
    ```bash
@@ -216,7 +217,8 @@ python3 llm_lab.py --model qwen3:1.7b chat "Hi"
 
 - `python3 llm_lab.py fill --ctx 1024`: watch it forget
 - `python3 llm_lab.py fill --ctx 8192`: plenty of room
-- `python3 llm_lab.py --model qwen3:1.7b chat "Hi"`: another model: --model goes BEFORE the command
+- `python3 llm_lab.py --model qwen3:1.7b chat "Hi"`: another model: --model goes BEFORE the command (download it
+  first with `ollama pull qwen3:1.7b`, about 1.4 GB)
 
 ## Safety
 

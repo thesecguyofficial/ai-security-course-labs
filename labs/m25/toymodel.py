@@ -81,7 +81,7 @@ class Guard:
 
 def load(folder: pathlib.Path) -> Guard:
     """Load a model folder: config.json + model.safetensors. fp32, or int8 weights with a scale."""
-    config = json.loads((folder / "config.json").read_text())
+    config = json.loads((folder / "config.json").read_text(encoding="utf-8"))
     tensors, _ = read_safetensors(folder / "model.safetensors")
     bias = tensors["bias"][0]
     if "scale" in tensors:
@@ -99,12 +99,12 @@ def save_fp32(folder: pathlib.Path, vocab: list[str], weights: list[float], bias
     write_safetensors(folder / "model.safetensors", {"weight": ("F32", weights), "bias": ("F32", [bias])},
                       {"format": "pt", "model": name, "precision": "fp32"})
     (folder / "config.json").write_text(json.dumps(
-        {"model": name, "architecture": "linear-bag-of-words", "precision": "fp32", "vocab": vocab}, indent=1) + "\n")
+        {"model": name, "architecture": "linear-bag-of-words", "precision": "fp32", "vocab": vocab}, indent=1) + "\n", encoding="utf-8")
 
 
 def quantize_int8(src: pathlib.Path, dst: pathlib.Path) -> None:
     """Symmetric per-tensor int8: scale = max|w| / 127, q = round(w / scale). Our own, honest quantizer."""
-    config = json.loads((src / "config.json").read_text())
+    config = json.loads((src / "config.json").read_text(encoding="utf-8"))
     tensors, meta = read_safetensors(src / "model.safetensors")
     w = tensors["weight"]
     scale = max(abs(x) for x in w) / 127
@@ -113,4 +113,4 @@ def quantize_int8(src: pathlib.Path, dst: pathlib.Path) -> None:
     write_safetensors(dst / "model.safetensors",
                       {"weight": ("I8", q), "scale": ("F32", [scale]), "bias": ("F32", tensors["bias"])},
                       {**meta, "precision": "int8"})
-    (dst / "config.json").write_text(json.dumps({**config, "precision": "int8"}, indent=1) + "\n")
+    (dst / "config.json").write_text(json.dumps({**config, "precision": "int8"}, indent=1) + "\n", encoding="utf-8")

@@ -25,7 +25,7 @@ PIPELINE = twin.sa_email("tsg-ci-deployer")
 
 
 def load(path: pathlib.Path = HERE / "data" / "incident" / "audit-logs.json") -> list[dict]:
-    return json.loads(path.read_text())["entries"]
+    return json.loads(path.read_text(encoding="utf-8"))["entries"]
 
 
 def method(e: dict) -> str:

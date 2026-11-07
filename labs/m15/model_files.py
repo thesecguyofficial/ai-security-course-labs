@@ -213,7 +213,7 @@ def scan_files(files: dict[str, bytes]) -> dict:
 
 
 def read_folder(folder: pathlib.Path) -> dict[str, bytes]:
-    return {str(p.relative_to(folder)): p.read_bytes() for p in sorted(folder.rglob("*"))
+    return {p.relative_to(folder).as_posix(): p.read_bytes() for p in sorted(folder.rglob("*"))
             if p.is_file() and ".cache" not in p.parts}
 
 

@@ -171,7 +171,7 @@ class TC_Lab(unittest.TestCase):
 
     def test_18_allowed_asset_ids_use_contains(self):
         """'approved Registry Models' policy matches with contains: allowing .../models/tsg-summariser also allows tsg-summariser-x"""
-        d = json.loads((HERE / "data/policy-definitions/AllowDeployRegistryModels_Audit.json").read_text())
+        d = json.loads((HERE / "data/policy-definitions/AllowDeployRegistryModels_Audit.json").read_text(encoding="utf-8"))
         s = shipped("hardened")
         s.policy = {"assignments": [{**d, "name": "approved-models", "effect": "Deny",
                                      "parameters": {"allowedAssetIds": ["azureml://registries/contoso-ml-registry/models/tsg-summariser"]}}]}

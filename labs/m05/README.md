@@ -310,7 +310,7 @@ make run
 
 Same as `python3 helpdesk_app.py --mode vulnerable`.
 
-Go to <http://127.0.0.1:8055>, type `summarise my latest ticket` and press **Ask**. A pop-up appears saying
+Go to <http://127.0.0.1:8055>, type `summarize my latest ticket` and press **Ask**. A pop-up appears saying
 *Model output just ran as code in your browser*. We checked this in headless Chromium: the dialog fired in
 vulnerable mode and did not fire in safe mode. Press Ctrl+C in the terminal to stop the app.
 

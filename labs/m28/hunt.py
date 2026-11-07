@@ -22,7 +22,7 @@ EXPECTED_RAW_READERS = [lab.REDACTOR, lab.MACIE, lab.BREAK_GLASS, lab.ERASURE]
 
 
 def load(path) -> list[dict]:
-    return [json.loads(line) for line in open(path) if line.strip()]
+    return [json.loads(line) for line in open(path, encoding="utf-8") if line.strip()]
 
 
 def who(e: dict) -> str:

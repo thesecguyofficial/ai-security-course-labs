@@ -121,7 +121,7 @@ def org_policies():
 
 
 def run(setup: str) -> list[dict]:
-    data = json.loads((HERE / "data" / "posture" / f"{setup}.json").read_text())
+    data = json.loads((HERE / "data" / "posture" / f"{setup}.json").read_text(encoding="utf-8"))
     out = []
     for kind, checks in (("framework", [(None, n, c) for n, c in framework_controls()]),
                          ("custom", custom_checks()), ("org policy", org_policies())):

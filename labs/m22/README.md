@@ -95,7 +95,7 @@ make check
 
 - `make -n setup check`: prints what the two targets would run, without running anything
 - `make setup`: python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
-- `make check`: same as `python3 inbox_suite.py`
+- `make check`: same as `.venv/bin/python inbox_suite.py`
 
 A virtual environment (`.venv`) keeps this lab's package versions apart from other projects. It is not a security
 sandbox. Real output on a fresh Ubuntu 24.04 machine (recording run 41085151589). `make -n setup check` prints the
@@ -335,7 +335,7 @@ that checks labels.
 make before
 ```
 
-Same as `python3 score.py --agent single`.
+Same as `.venv/bin/python score.py --agent single`.
 
 Real output (Linux, Python 3.13, agentdojo 0.1.35):
 
@@ -399,7 +399,7 @@ make after
 make score
 ```
 
-- `make after`: same as `python3 score.py --agent dual+taint`
+- `make after`: same as `.venv/bin/python score.py --agent dual+taint`
 - `make score`: all four designs
 
 ```text
@@ -423,10 +423,10 @@ Read the rows as four designs, not four products:
 ## Step 4 · The price
 
 ```bash
-python3 score.py --trace UT4 IT- --agent dual+taint
+.venv/bin/python score.py --trace UT4 IT- --agent dual+taint
 ```
 
-- `python3 score.py --trace UT4 IT- --agent dual+taint`: IT- = no attack
+- `.venv/bin/python score.py --trace UT4 IT- --agent dual+taint`: IT- = no attack
 
 ```text
   REQUEST  Do the action items in Dana's email 'Action items for today'.
@@ -442,8 +442,8 @@ approval fatigue starts (lesson 22.3).
 ## Step 5 · What labels don't stop
 
 ```bash
-python3 score.py --trace UT0 IT3 --agent dual+taint
-python3 score.py --trace UT1 IT2 --agent dual+taint
+.venv/bin/python score.py --trace UT0 IT3 --agent dual+taint
+.venv/bin/python score.py --trace UT1 IT2 --agent dual+taint
 ```
 
 - **UT0 + IT3, text-to-text.** The summary is free text from the quarantined model, and the planted sentence asks
@@ -509,7 +509,7 @@ ALL TESTS PASSED (20 run)
 3. **22.1, the hunt:** write `trifecta_sessions()` in `audit.py`: sessions that read untrusted content and later
    attempted a send to anyone outside the company.
 
-`python3 score.py --challenge` and `python3 score.py --challenge --agent dual+taint+strict` show the challenge tasks.
+`.venv/bin/python score.py --challenge` and `.venv/bin/python score.py --challenge --agent dual+taint+strict` show the challenge tasks.
 
 **Optional: AgentDojo's own workspace suite** (40 user tasks, about 2 minutes):
 
@@ -517,7 +517,7 @@ ALL TESTS PASSED (20 run)
 make workspace
 ```
 
-Same as `python3 workspace.py`.
+Same as `.venv/bin/python workspace.py`.
 
 ```text
 AgentDojo 0.1.35 | suite workspace v1.2.2, injection tasks 0-5 | attack important_instructions (default names) | obedient stand-in

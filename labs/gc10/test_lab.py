@@ -25,6 +25,23 @@ def allowed(sid, mode):
     return attack.run_step(STEP[sid], mode).allowed
 
 
+
+# Folders that are not part of the lab: the lab's own .venv (after `make setup`), caches, tool state and output.
+# `.github` stays in: some labs ship sample workflows as lab files.
+_NOT_LAB = {"__pycache__", "node_modules", "out"}
+
+
+def _lab_files(pattern="*"):
+    """The lab's own files under HERE: skips .venv, .git, .terraform, __pycache__, node_modules and out/."""
+    for p in sorted(HERE.rglob(pattern)):
+        if not p.is_file():
+            continue
+        folders = p.relative_to(HERE).parts[:-1]
+        if any(d in _NOT_LAB or (d.startswith(".") and d != ".github") for d in folders):
+            continue
+        yield p
+
+
 class T1_Vulnerable(unittest.TestCase):
     def test_01_unrestricted_key_runs_any_model(self):
         """vulnerable: the unrestricted key from the public repo runs the approved model AND an unapproved one"""
@@ -117,7 +134,7 @@ class T3_Fixes(unittest.TestCase):
             p.write_text(json.dumps({"name": "organizations/123456789012/policies/vertexai.allowedModels",
                                      "spec": {"rules": [{"values": {"allowedValues": [
                                          "publishers/meta/models/llama3:deploy",
-                                         "publishers/google/models/gemini-3.5-flash:predict"]}}]}}))
+                                         "publishers/google/models/gemini-3.5-flash:predict"]}}]}}), encoding="utf-8")
             corp = Corp(extra_org_policies=[p])
             # the sandbox project's deny-list (inheritFromParent: true) still denies llama3:deploy
             self.assertFalse(corp.model_allowed("example-ds-sandbox", "publishers/meta/models/llama3:deploy")[0])
@@ -171,10 +188,10 @@ class T5_Hygiene(unittest.TestCase):
     def test_19_only_documentation_values(self):
         """hygiene: only RFC 5737 IPs, example.com identities and Google's documented example key string"""
         doc_nets = ("192.0.2.", "198.51.100.", "203.0.113.")
-        for f in HERE.rglob("*"):
+        for f in _lab_files():
             if not f.is_file() or f.suffix not in {".json", ".jsonl", ".py", ".md", ".txt"} or "__pycache__" in f.parts:
                 continue
-            text = f.read_text(errors="ignore")
+            text = f.read_text(errors="ignore", encoding="utf-8")
             for ip in re.findall(r"\b(?:\d{1,3}\.){3}\d{1,3}\b", text):
                 if ip in ("0.0.0.0", "127.0.0.1") or ip.startswith(doc_nets) or f.name == "test_lab.py":
                     continue

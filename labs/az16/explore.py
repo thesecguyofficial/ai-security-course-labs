@@ -171,7 +171,7 @@ FLOW_SAYS = [
 
 
 def cmd_flow(_args) -> None:
-    rec = json.loads((HERE / "data" / "vnet-flow-logs.json").read_text())["records"][0]
+    rec = json.loads((HERE / "data" / "vnet-flow-logs.json").read_text(encoding="utf-8"))["records"][0]
     groups = rec["flowRecords"]["flows"][0]["flowGroups"]
     tuples = [(g["rule"], tp.split(",")) for g in groups for tp in g["flowTuples"]]
     print("data/vnet-flow-logs.json: virtual network flow logs (version 4), Microsoft's documented shape. ILLUSTRATIVE.")
@@ -203,7 +203,7 @@ EXTERNAL_AI = {"api.openai.com", "api.anthropic.com", "api.mistral.ai", "hugging
 
 
 def cmd_dns(_args) -> None:
-    rows = [json.loads(x) for x in (HERE / "data" / "dns-query-logs.jsonl").read_text().splitlines() if x.strip()]
+    rows = [json.loads(x) for x in (HERE / "data" / "dns-query-logs.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
     r = next(x for x in rows if x["QueryName"] == "api.openai.com.")
     print("data/dns-query-logs.jsonl: DNS query logs from a DNS resolver policy (table DNSQueryLogs). ILLUSTRATIVE.")
     print()
@@ -344,7 +344,7 @@ def cmd_policy(_args) -> None:
 # ----------------------------------------------------------------------------------------------------- 10. query
 def cmd_query(_args) -> None:
     t = day()
-    q = (HERE / "queries" / "d05-token-spike-per-subscription.kql").read_text().rstrip().splitlines()
+    q = (HERE / "queries" / "d05-token-spike-per-subscription.kql").read_text(encoding="utf-8").rstrip().splitlines()
     print("queries/d05-token-spike-per-subscription.kql: KQL for a Log Analytics workspace (first lines)")
     print()
     for ln in q[4:10]:

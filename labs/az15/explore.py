@@ -186,7 +186,8 @@ def cmd_call(a) -> None:
     print(f"  POST <scoring_uri>   (the endpoint's address: az ml online-endpoint show -n {EP} --query scoring_uri)")
     print(f"  body       the ticket text, as JSON")
     print(f"  caller     {who}")
-    print(f"  from       {'the internet' if net == 'internet' else "inside Contoso's network (through the workspace private endpoint, if there is one)"}")
+    inside = "inside Contoso's network (through the workspace private endpoint, if there is one)"
+    print(f"  from       {'the internet' if net == 'internet' else inside}")
     print(f"  credential {'an endpoint key in the Authorization header' if cred == 'key' else 'a Microsoft Entra token for ' + who}")
     if header:
         print(f"  header     azureml-model-deployment: {header}")
@@ -237,7 +238,7 @@ def cmd_identity(a) -> None:
 def cmd_record(a) -> None:
     what = a[0] if a else "listKeys"
     if what == "traffic":
-        rows = json.loads((DATA / "endpoint-traffic.json").read_text())["rows"]
+        rows = json.loads((DATA / "endpoint-traffic.json").read_text(encoding="utf-8"))["rows"]
         r = rows[0]
         print("One AmlOnlineEndpointTrafficLog row from data/incident/endpoint-traffic.json (fake values, real column names)\n")
         for col in ("TimeGenerated", "EndpointName", "DeploymentName", "Method", "Path", "AuthType", "IdentityData",
@@ -246,7 +247,7 @@ def cmd_record(a) -> None:
             print(f"  {col:<20} {r[col]}{note}")
         print("\n  No client IP column and no prompt: only sizes. Rows exist only if a diagnostic setting sends them to Log Analytics.")
         return
-    rows = json.loads((DATA / "azure-activity.json").read_text())["rows"]
+    rows = json.loads((DATA / "azure-activity.json").read_text(encoding="utf-8"))["rows"]
     r = next((x for x in rows if x["OperationNameValue"].lower().endswith(what.lower() + "/action")
               or x["OperationNameValue"].lower().endswith("/" + what.lower())), None)
     if r is None:

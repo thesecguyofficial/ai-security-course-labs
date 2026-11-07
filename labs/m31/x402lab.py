@@ -78,12 +78,12 @@ def check_sig(key_id, obj, sig):
 
 def load(name, default):
     path = STATE / name
-    return json.loads(path.read_text()) if path.exists() else default
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else default
 
 
 def save(name, obj):
     STATE.mkdir(parents=True, exist_ok=True)
-    (STATE / name).write_text(json.dumps(obj, indent=1, sort_keys=True))
+    (STATE / name).write_text(json.dumps(obj, indent=1, sort_keys=True), encoding="utf-8")
 
 
 class Clock:
@@ -276,4 +276,4 @@ def fetch_page(url):
     """Free pages (no payment): product pages the agent reads. Customers and sellers write these, so they are untrusted."""
     name = url.split("://", 1)[-1].replace("/", "_") + ".md"
     path = PAGES_DIR / name
-    return (200, {}, path.read_text()) if path.exists() else (404, {}, "not found")
+    return (200, {}, path.read_text(encoding="utf-8")) if path.exists() else (404, {}, "not found")

@@ -38,10 +38,10 @@ SERVING_PORTS = {"ollama": 11434, "vllm": 8000}
 
 
 def load():
-    cis = json.loads((INV / "config-items.json").read_text())["configurationItems"]
-    sbom = {k: v for k, v in json.loads((INV / "inspector-sbom.json").read_text()).items() if not k.startswith("_")}
-    dns = [json.loads(x) for x in (INV / "dns.jsonl").read_text().splitlines() if x.strip()]
-    reg = json.loads((INV / "sanctioned.json").read_text())
+    cis = json.loads((INV / "config-items.json").read_text(encoding="utf-8"))["configurationItems"]
+    sbom = {k: v for k, v in json.loads((INV / "inspector-sbom.json").read_text(encoding="utf-8")).items() if not k.startswith("_")}
+    dns = [json.loads(x) for x in (INV / "dns.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
+    reg = json.loads((INV / "sanctioned.json").read_text(encoding="utf-8"))
     return cis, sbom, dns, reg
 
 

@@ -283,7 +283,7 @@ def cmd_triage(args) -> int:
     if args.save:
         OUT.mkdir(exist_ok=True)
         (OUT / "triage.json").write_text(json.dumps({"as_of": as_of.isoformat(), "what_if": args.what_if,
-                                                      "role": t["role"], "tier": t["tier"]}, indent=2) + "\n")
+                                                      "role": t["role"], "tier": t["tier"]}, indent=2) + "\n", encoding="utf-8")
         print("\nSaved: out/triage.json")
     return 0
 
@@ -368,7 +368,7 @@ def cmd_evidence(args) -> int:
             w = csv.DictWriter(fh, fieldnames=EVIDENCE_COLUMNS, extrasaction="ignore")
             w.writeheader()
             w.writerows(rows)
-        print(f"filled {filled} blank sha256 value(s) in {path.relative_to(HERE)} (existing values are never overwritten)")
+        print(f"filled {filled} blank sha256 value(s) in {path.relative_to(HERE).as_posix()} (existing values are never overwritten)")
     rows, findings = evidence_status(folder, controls)
     for r in rows:
         print(f"{'OK  ' if r.get('valid') else 'BAD '} {r.get('evidence_id', ''):6} {r.get('control', ''):4} {r.get('file', '')}")
@@ -731,8 +731,8 @@ def cmd_pack(args) -> int:
         print(f"\nNot packed: {e} error(s). Fix them, or build a marked draft with --draft.")
         return 1
     n = sum(1 for _ in (pack / "evidence").iterdir())
-    print(f"Built {pack.relative_to(HERE)}/ with {n} evidence file(s) and MANIFEST.sha256")
-    print(f"Open {pack.relative_to(HERE)}/README.md first.")
+    print(f"Built {pack.relative_to(HERE).as_posix()}/ with {n} evidence file(s) and MANIFEST.sha256")
+    print(f"Open {pack.relative_to(HERE).as_posix()}/README.md first.")
     return 0
 
 

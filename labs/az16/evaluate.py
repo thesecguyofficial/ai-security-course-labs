@@ -40,7 +40,7 @@ def evaluate(setup: str, pack: str = "az16", challenge: bool = True, built: dict
     """built = simulate.build(setup) to work in memory (the tests); otherwise read out/<setup>/."""
     if built is None:
         tel = detect.Telemetry(setup)
-        truth = json.loads((detect.HERE / "out" / setup / "truth.json").read_text())
+        truth = json.loads((detect.HERE / "out" / setup / "truth.json").read_text(encoding="utf-8"))
     else:
         tel, truth = detect.Telemetry.from_build(built), built["truth"]
     alerts = detect.run(tel, pack, challenge)
@@ -64,7 +64,7 @@ def main(argv: list[str]):
     for s, meta in simulate.SCENARIOS.items():
         r = res[s]
         who = f"named {', '.join(r['named'])}" if r["named"] else ""
-        print(f"  {s}  {r['status']:16} {meta["title"]:34} {' '.join(r['rules']):24} {who}")
+        print(f"  {s}  {r['status']:16} {meta['title']:34} {' '.join(r['rules']):24} {who}")
     for a in res["false_alarms"]:
         print(f"  false alarm: {a['rule']} {a['title']} ({a['entity']}: {a['detail']})")
     print("\n" + summary(res))

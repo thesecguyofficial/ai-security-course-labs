@@ -59,7 +59,7 @@ def a1_weights_swapped(setup):
 def a2_extra_file(setup):
     """a file added after signing: custom code next to the weights (holds only the lab marker)"""
     r = good_release(setup)
-    (r / "model" / "custom_head.py").write_text(f"# {lab.MARKER}: lab placeholder, never imported or run\n")
+    (r / "model" / "custom_head.py").write_text(f"# {lab.MARKER}: lab placeholder, never imported or run\n", encoding="utf-8")
     return deploy.deploy(setup, r, quiet=QUIET)
 
 
@@ -96,7 +96,7 @@ def a6_community_quant_through_ci(setup):
 def a7_corrupt_signature(setup):
     """the signature file damaged, so the check throws an error instead of saying no"""
     r = good_release(setup)
-    (r / "model.sig").write_text((r / "model.sig").read_text()[:200])
+    (r / "model.sig").write_text((r / "model.sig").read_text(encoding="utf-8")[:200], encoding="utf-8")
     return deploy.deploy(setup, r, quiet=QUIET)
 
 

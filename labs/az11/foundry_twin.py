@@ -37,7 +37,7 @@ CHAT_ACTION = "Microsoft.CognitiveServices/accounts/OpenAI/deployments/chat/comp
 
 def load(path: str | Path) -> dict:
     p = Path(path)
-    return json.loads((p if p.is_absolute() else HERE / p).read_text())
+    return json.loads((p if p.is_absolute() else HERE / p).read_text(encoding="utf-8"))
 
 
 # ------------------------------------------------------------------------------------------ the Terraform plan

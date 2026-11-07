@@ -48,7 +48,7 @@ RETENTION_DAYS = 30
 def canaries() -> dict[str, str]:
     """Every planted value, by kind. Searching for these is how the lab proves a leak (or its absence)."""
     out = {}
-    for c in json.loads((lab.DATA / "crm.json").read_text())["customers"]:
+    for c in json.loads((lab.DATA / "crm.json").read_text(encoding="utf-8"))["customers"]:
         out[c["email"]] = "EMAIL_ADDRESS"
         out[c["name"]] = "CUSTOMER_NAME"
         out[c["id"]] = "TSG_CUSTOMER_ID"

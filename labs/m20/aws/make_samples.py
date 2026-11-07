@@ -76,6 +76,6 @@ run(905, "mail", "tsg-agent-helpdesk", "tsg-helpdesk", B, None, "mail-saas", run
 # a launcher bug: the JWT was Bob's, the role session says Alice
 run(1500, "tickets", "tsg-agent-tickets", "tsg-tickets", A, "user-" + A, "tickets-saas", run_id="tickets-run-0925", jwt_sub=B)
 
-(HERE / "data" / "cloudtrail.jsonl").write_text("".join(json.dumps(r) + "\n" for r in ct))
-(HERE / "data" / "app-log.jsonl").write_text("".join(json.dumps(r) + "\n" for r in app))
+(HERE / "data" / "cloudtrail.jsonl").write_text("".join(json.dumps(r) + "\n" for r in ct), encoding="utf-8")
+(HERE / "data" / "app-log.jsonl").write_text("".join(json.dumps(r) + "\n" for r in app), encoding="utf-8")
 print(f"wrote {len(ct)} CloudTrail records and {len(app)} launcher log rows")

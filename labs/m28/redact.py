@@ -42,7 +42,7 @@ def token(kind: str, value: str) -> str:
 
 
 def _crm_names() -> list[str]:
-    return [c["name"] for c in json.loads((lab.DATA / "crm.json").read_text())["customers"]]
+    return [c["name"] for c in json.loads((lab.DATA / "crm.json").read_text(encoding="utf-8"))["customers"]]
 
 
 def redact_text(text: str, setup: dict) -> tuple[str, list[str]]:

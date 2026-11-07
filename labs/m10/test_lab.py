@@ -24,6 +24,23 @@ def allowed(sid, mode):
     return attack.run_step(STEP[sid], mode).allowed
 
 
+
+# Folders that are not part of the lab: the lab's own .venv (after `make setup`), caches, tool state and output.
+# `.github` stays in: some labs ship sample workflows as lab files.
+_NOT_LAB = {"__pycache__", "node_modules", "out"}
+
+
+def _lab_files(pattern="*"):
+    """The lab's own files under HERE: skips .venv, .git, .terraform, __pycache__, node_modules and out/."""
+    for p in sorted(HERE.rglob(pattern)):
+        if not p.is_file():
+            continue
+        folders = p.relative_to(HERE).parts[:-1]
+        if any(d in _NOT_LAB or (d.startswith(".") and d != ".github") for d in folders):
+            continue
+        yield p
+
+
 class T1_Vulnerable(unittest.TestCase):
     def test_01_leaked_key_runs_any_model(self):
         """vulnerable: a leaked long-term API key lists models, checks logging and runs an unapproved model, on both endpoints"""
@@ -71,12 +88,12 @@ class T2_Checker(unittest.TestCase):
     def test_07_checker_no_false_positives_on_least_privilege(self):
         """checker: the CI role, the security admin and the least-privilege chatbot policy get zero findings"""
         self.assertFalse([f for f in self.findings if "ci-deployer" in f.where or "security-admin" in f.where])
-        lp = json.loads((HERE / "fixes/helpdesk-app-role.least-privilege.json").read_text())
+        lp = json.loads((HERE / "fixes/helpdesk-app-role.least-privilege.json").read_text(encoding="utf-8"))
         self.assertEqual(policy_checker.check_identity_policy("lp", lp), [])
 
     def test_08_checker_warns_on_blunt_allowlist(self):
         """checker: warns that 'Deny bedrock:* except these models' also blocks guardrails, knowledge bases and profiles"""
-        blunt = json.loads((HERE / "examples/blunt-allowlist-scp.json").read_text())
+        blunt = json.loads((HERE / "examples/blunt-allowlist-scp.json").read_text(encoding="utf-8"))
         self.assertIn("M10-12", {f.rule for f in policy_checker.check_scp("blunt", blunt)})
 
 
@@ -146,10 +163,10 @@ class T5_Hygiene(unittest.TestCase):
         """data: only AWS documentation account IDs, RFC 5737 IPs and ...EXAMPLE key IDs appear anywhere in the lab"""
         allowed_accounts = {"111122223333", "444455556666", "123456789012"}
         doc_ip = re.compile(r"^(192\.0\.2|198\.51\.100|203\.0\.113)\.\d{1,3}$")
-        for f in list(HERE.rglob("*.json")) + list(HERE.rglob("*.py")) + list(HERE.rglob("*.md")):
+        for f in list(_lab_files("*.json")) + list(_lab_files("*.py")) + list(_lab_files("*.md")):
             if ".venv" in f.parts:
                 continue
-            text = f.read_text()
+            text = f.read_text(encoding="utf-8")
             for acct in re.findall(r"(?<![\d.])\d{12}(?![\d.])", text):
                 self.assertIn(acct, allowed_accounts, f"{f.name}: {acct}")
             for ip in re.findall(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b", text):

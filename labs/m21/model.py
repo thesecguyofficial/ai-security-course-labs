@@ -34,7 +34,7 @@ class Ticket:
 
 
 def read_ticket(tid: str) -> Ticket:
-    text = (lab.DATA / "tickets" / f"{tid}.md").read_text()
+    text = (lab.DATA / "tickets" / f"{tid}.md").read_text(encoding="utf-8")
     head, _, body = text.partition("\n\n")
     meta = dict(line.split(": ", 1) for line in head.splitlines())
     m = DIRECTIVE.search(body)

@@ -118,7 +118,7 @@ def custom_checks():
 
 
 def run(setup: str) -> list[dict]:
-    data = json.loads((HERE / "data" / "posture" / f"{setup}.json").read_text())
+    data = json.loads((HERE / "data" / "posture" / f"{setup}.json").read_text(encoding="utf-8"))
     out = []
     for name, version, types, check in builtin_policies():
         for r in data["resources"]:

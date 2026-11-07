@@ -82,15 +82,15 @@ def parse_first_wins(raw) -> dict:
 class PEP:
     def __init__(self, setup: str, mode: str | None = None, engine: str = "cedar"):
         self.setup = setup
-        cfg = json.loads((lab.SETUPS / setup / "pep.json").read_text())
+        cfg = json.loads((lab.SETUPS / setup / "pep.json").read_text(encoding="utf-8"))
         cfg.pop("_comment", None)
         self.cfg = cfg
         self.mode = mode or cfg["mode"]
         self.engine = engine
         if engine == "opa" and setup != "hardened":
             raise SystemExit("rego/tools.rego holds the HARDENED rules only: use --engine opa with the hardened setup")
-        self.catalogue = {k: v for k, v in json.loads(lab.CATALOGUE.read_text()).items() if not k.startswith("_")}
-        partner = json.loads(lab.PARTNER.read_text())
+        self.catalogue = {k: v for k, v in json.loads(lab.CATALOGUE.read_text(encoding="utf-8")).items() if not k.startswith("_")}
+        partner = json.loads(lab.PARTNER.read_text(encoding="utf-8"))
         self.partner = {t["name"]: t for t in partner["tools"]}
         self.load_error = None
         try:

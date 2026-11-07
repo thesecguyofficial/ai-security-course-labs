@@ -18,4 +18,4 @@ for folder in ("terraform/hardened", "terraform/first-draft"):
     info.external_attr = 0o644 << 16
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr(info, src.read_bytes())
-    print(f"wrote {out.relative_to(HERE)}")
+    print(f"wrote {out.relative_to(HERE).as_posix()}")

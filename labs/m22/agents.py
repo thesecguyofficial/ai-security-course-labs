@@ -94,7 +94,7 @@ class _Base(BasePipelineElement):
         """One JSON line per read and per sink attempt, to $M22_LOG (score.py --log). audit.py reads it."""
         log = os.environ.get("M22_LOG")
         if log:
-            with open(log, "a") as fh:
+            with open(log, "a", encoding="utf-8") as fh:
                 fh.write(json.dumps({"session": self.session, "agent": self.name, "task": self.task_id, **event}) + "\n")
 
     def _log_read(self, tool: str, label):

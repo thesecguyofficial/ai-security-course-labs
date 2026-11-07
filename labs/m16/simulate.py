@@ -30,7 +30,7 @@ import uuid
 from datetime import datetime, timedelta, timezone
 
 HERE = pathlib.Path(__file__).resolve().parent
-COMPANY = json.loads((HERE / "anycompany.json").read_text())
+COMPANY = json.loads((HERE / "anycompany.json").read_text(encoding="utf-8"))
 ACCOUNT = COMPANY["account"]
 REGION = COMPANY["region"]
 DAY = datetime.fromisoformat(COMPANY["day"]).replace(tzinfo=timezone.utc)
@@ -457,7 +457,7 @@ ATTACKS = {"S1": s1_leaked_key, "S2": s2_jailbreak, "S3": s3_hijacked_agent, "S4
 
 
 def build(setup_name: str) -> dict:
-    setup = json.loads((HERE / "setups" / f"{setup_name}.json").read_text())
+    setup = json.loads((HERE / "setups" / f"{setup_name}.json").read_text(encoding="utf-8"))
     d = Day(setup)
     normal_day(d)
     for fn in ATTACKS.values():
@@ -477,9 +477,9 @@ def write(setup_name: str) -> pathlib.Path:
     counts = {}
     for k, rows in res["out"].items():
         if rows:
-            (folder / f"{k}.jsonl").write_text("".join(json.dumps(r, sort_keys=False) + "\n" for r in rows))
+            (folder / f"{k}.jsonl").write_text("".join(json.dumps(r, sort_keys=False) + "\n" for r in rows), encoding="utf-8")
         counts[k] = len(rows)
-    (folder / "truth.json").write_text(json.dumps(res["truth"], indent=1) + "\n")
+    (folder / "truth.json").write_text(json.dumps(res["truth"], indent=1) + "\n", encoding="utf-8")
     print(f"{setup_name:12} " + "  ".join(f"{k} {v}" for k, v in counts.items()) + f"   -> out/{setup_name}/")
     return folder
 

@@ -330,7 +330,7 @@ class Chain:
 
     def __init__(self, setup: str, idp: str = "local", keycloak_url: str = "http://127.0.0.1:8180"):
         self.setup, self.idp = setup, idp
-        self.cfg = json.loads((HERE / "setups" / setup / "services.json").read_text())
+        self.cfg = json.loads((HERE / "setups" / setup / "services.json").read_text(encoding="utf-8"))
         self.clock = Clock()
         self.trace: list[str] = []
         self.audit: list[dict] = []
@@ -338,7 +338,7 @@ class Chain:
         self.debug_log: list[dict] = []
         self.captured: dict[str, str] = {}
         self.used_jti: set = set()
-        self.tickets = copy.deepcopy(json.loads((HERE / "data" / "tickets.json").read_text()))
+        self.tickets = copy.deepcopy(json.loads((HERE / "data" / "tickets.json").read_text(encoding="utf-8")))
         self.authz = None
         if idp == "local":
             import authz_server
@@ -382,7 +382,7 @@ class Chain:
 
     def sign_in(self, user: str) -> str:
         import authz_server  # noqa: F401  (users.json lives next to it)
-        users = json.loads((HERE / "data" / "users.json").read_text())
+        users = json.loads((HERE / "data" / "users.json").read_text(encoding="utf-8"))
         tokens = oauth.sign_in(self.meta, "helpdesk-app", user, users[user]["password"], self.cfg["signin_scope"])
         self.trace.append(f"   {'helpdesk-app':<18} {user} signed in (code + PKCE): {self.describe(tokens['access_token'])}")
         self.captured["user"] = tokens["access_token"]

@@ -46,7 +46,7 @@ class TC_Challenge(unittest.TestCase):
         """challenge 3: report/INCIDENT-REPORT.md for S1 passes the check"""
         path = HERE / "report" / "INCIDENT-REPORT.md"
         self.assertTrue(path.exists(), "write report/INCIDENT-REPORT.md (cp report/TEMPLATE.md report/INCIDENT-REPORT.md)")
-        self.assertEqual(report.check(path.read_text(), "S1", report.all_ids(TEL)), [])
+        self.assertEqual(report.check(path.read_text(encoding="utf-8"), "S1", report.all_ids(TEL)), [])
 
 
 if __name__ == "__main__":

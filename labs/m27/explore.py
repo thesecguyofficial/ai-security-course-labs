@@ -32,7 +32,7 @@ CONFIGS = ("hardened", "first-draft", "second-draft")
 
 def read(path: str) -> str | None:
     try:
-        return pathlib.Path(path).read_text(errors="replace").strip()
+        return pathlib.Path(path).read_text(errors="replace", encoding="utf-8").strip()
     except OSError:
         return None
 

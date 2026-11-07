@@ -163,7 +163,7 @@ FLOW_SAYS = [
 
 
 def cmd_flow(_args) -> None:
-    lines = [ln.split() for ln in (HERE / "data" / "vpc-flow-logs.txt").read_text().splitlines() if ln.strip()]
+    lines = [ln.split() for ln in (HERE / "data" / "vpc-flow-logs.txt").read_text(encoding="utf-8").splitlines() if ln.strip()]
     print("data/vpc-flow-logs.txt: VPC flow log records, AWS's default format (version 2). ILLUSTRATIVE lab lines.")
     print()
     print("Line 1, field by field:")
@@ -187,7 +187,7 @@ AI_DOMAINS = set(inventory.EXTERNAL_AI) | {"bedrock-runtime.us-east-1.amazonaws.
 
 
 def cmd_dns(_args) -> None:
-    rows = [json.loads(x) for x in (HERE / "data" / "inventory" / "dns.jsonl").read_text().splitlines() if x.strip()]
+    rows = [json.loads(x) for x in (HERE / "data" / "inventory" / "dns.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
     r = rows[0]
     print("data/inventory/dns.jsonl: Route 53 Resolver query logs, the DNS lookups made inside the VPC (lab values)")
     print()
@@ -322,7 +322,7 @@ def cmd_config(_args) -> None:
 # ----------------------------------------------------------------------------------------------------- 10. query
 def cmd_query(_args) -> None:
     t = day()
-    q = (HERE / "queries" / "d06-tokens-by-principal.txt").read_text().rstrip()
+    q = (HERE / "queries" / "d06-tokens-by-principal.txt").read_text(encoding="utf-8").rstrip()
     print("queries/d06-tokens-by-principal.txt: a CloudWatch Logs Insights query for the invocation log group")
     print()
     for ln in q.splitlines():
@@ -350,7 +350,7 @@ def ADDR(t) -> set:  # noqa: N802  the outside addresses the key was used from
 
 def cmd_playbook(_args) -> None:
     t = day()
-    creds = json.loads((HERE / "data" / "iam-service-specific-credentials.json").read_text())["ServiceSpecificCredentials"]
+    creds = json.loads((HERE / "data" / "iam-service-specific-credentials.json").read_text(encoding="utf-8"))["ServiceSpecificCredentials"]
     k = next(c for c in creds if c["UserName"] == "BedrockAPIKey-q4m8")
     d01 = next(a for a in detect.d01_bearer_key_new_ip(t))
     n = len(report.pivot(t, k["UserName"]))

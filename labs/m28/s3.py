@@ -44,18 +44,18 @@ class LocalS3:
     def create_bucket(self, cfg: dict):
         d = self.root / cfg["name"]
         (d / "blobs").mkdir(parents=True, exist_ok=True)
-        self._cfg_path(cfg["name"]).write_text(json.dumps(cfg, indent=1))
+        self._cfg_path(cfg["name"]).write_text(json.dumps(cfg, indent=1), encoding="utf-8")
         if not self._index_path(cfg["name"]).exists():
-            self._index_path(cfg["name"]).write_text("{}")
+            self._index_path(cfg["name"]).write_text("{}", encoding="utf-8")
 
     def config(self, bucket) -> dict:
-        return json.loads(self._cfg_path(bucket).read_text())
+        return json.loads(self._cfg_path(bucket).read_text(encoding="utf-8"))
 
     def _index(self, bucket) -> dict:
-        return json.loads(self._index_path(bucket).read_text())
+        return json.loads(self._index_path(bucket).read_text(encoding="utf-8"))
 
     def _save_index(self, bucket, idx):
-        self._index_path(bucket).write_text(json.dumps(idx, indent=1))
+        self._index_path(bucket).write_text(json.dumps(idx, indent=1), encoding="utf-8")
 
     def buckets(self) -> list[str]:
         return sorted(p.name for p in self.root.iterdir() if (p / "bucket.json").exists())

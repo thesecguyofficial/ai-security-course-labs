@@ -48,8 +48,8 @@ def load_setup(name: str) -> dict:
     folder = SETUPS / name
     if not folder.is_dir():
         raise SystemExit(f"unknown setup {name!r}: choose one of {sorted(p.name for p in SETUPS.iterdir())}")
-    setup = json.loads((folder / "pipeline.json").read_text())
-    setup["identifiers"] = json.loads((folder / "identifiers.json").read_text())
+    setup = json.loads((folder / "pipeline.json").read_text(encoding="utf-8"))
+    setup["identifiers"] = json.loads((folder / "identifiers.json").read_text(encoding="utf-8"))
     setup["name"] = name
     return setup
 

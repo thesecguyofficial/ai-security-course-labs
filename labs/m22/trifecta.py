@@ -17,7 +17,7 @@ import argparse
 import json
 from pathlib import Path
 
-CATALOGUE = json.loads((Path(__file__).parent / "catalogue.json").read_text())
+CATALOGUE = json.loads((Path(__file__).parent / "catalogue.json").read_text(encoding="utf-8"))
 LEGS = {"private": "private data", "untrusted": "untrusted content", "exit": "a way out"}
 
 

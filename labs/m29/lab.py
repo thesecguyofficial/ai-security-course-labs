@@ -17,17 +17,17 @@ DATA = HERE / "data"
 SETUPS = HERE / "setups"
 STATE = HERE / "state"
 
-ORG = json.loads((DATA / "org.json").read_text())
+ORG = json.loads((DATA / "org.json").read_text(encoding="utf-8"))
 ASSUMPTIONS = ORG["assumptions"]
 
 
 def read_json(path: pathlib.Path):
-    return json.loads(pathlib.Path(path).read_text())
+    return json.loads(pathlib.Path(path).read_text(encoding="utf-8"))
 
 
 def read_jsonl(path: pathlib.Path) -> list[dict]:
     rows = []
-    for line in pathlib.Path(path).read_text().splitlines():
+    for line in pathlib.Path(path).read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if line and not line.startswith("#"):
             rows.append(json.loads(line))
@@ -36,7 +36,7 @@ def read_jsonl(path: pathlib.Path) -> list[dict]:
 
 def write_jsonl(path: pathlib.Path, rows: list[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text("".join(json.dumps(r, sort_keys=True) + "\n" for r in rows))
+    path.write_text("".join(json.dumps(r, sort_keys=True) + "\n" for r in rows), encoding="utf-8")
 
 
 def ts(s: str) -> dt.datetime:

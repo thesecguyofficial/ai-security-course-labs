@@ -44,7 +44,7 @@ class Run:
 
 def _notes():
     p = lab.state_dir() / "agent_notes.json"
-    return p, (json.loads(p.read_text()) if p.exists() else {})
+    return p, (json.loads(p.read_text(encoding="utf-8")) if p.exists() else {})
 
 
 def run_ticket(pep: PEP, user: str, ticket_id: str, after_approval: bool = False, quiet: bool = False,
@@ -64,7 +64,7 @@ def run_ticket(pep: PEP, user: str, ticket_id: str, after_approval: bool = False
         if out.decision == "DEFER" and out.approval_id:
             memo = {"approval_id": out.approval_id, "told_to_add": "approval_id=" in out.text}
             notes[t.id] = memo
-            path.write_text(json.dumps(notes, indent=2))
+            path.write_text(json.dumps(notes, indent=2), encoding="utf-8")
         last = out.text
         rids.add(out.receipt["request_id"])
         run.steps.append(Step(tool, raw, injected, out.decision, out.ran, out.text, out.policies, out.reason))

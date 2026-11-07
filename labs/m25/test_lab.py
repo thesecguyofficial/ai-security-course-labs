@@ -116,7 +116,7 @@ class Lab(unittest.TestCase):
         """model.sig is a Sigstore bundle: DSSE envelope, in-toto statement, one digest per signed file"""
         with suite.sandbox():
             r = suite.good_release("hardened", docs=True)
-            bundle = json.loads((r / "model.sig").read_text())
+            bundle = json.loads((r / "model.sig").read_text(encoding="utf-8"))
         st = json.loads(base64.b64decode(bundle["dsseEnvelope"]["payload"]))
         self.assertEqual(st["_type"], "https://in-toto.io/Statement/v1")
         self.assertEqual(st["predicateType"], "https://model_signing/signature/v1.0")

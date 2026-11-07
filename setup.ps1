@@ -5,7 +5,7 @@
 .DESCRIPTION
   What it does, in order (it asks before every install, and you can say no):
     1. Looks at this computer: Windows version, CPU, memory, free disk, signs of a work-managed laptop,
-       and whether WSL 2 and hardware virtualisation (needed by Docker Desktop) are ready.
+       and whether WSL 2 and hardware virtualization (needed by Docker Desktop) are ready.
     2. Installs what is missing with winget (Windows' own package manager): git, Python 3.13,
        Docker Desktop, Ollama. If WSL 2 is missing it turns it on, asks you to restart Windows,
        and remembers where it stopped: run the same command again after the restart.
@@ -146,7 +146,7 @@ function Show-System {
     if ($env:HTTPS_PROXY -or $env:HTTP_PROXY) { $hints += 'a proxy is set' }
     if ($hints.Count -gt 0) {
         Warn ("Looks like a work-managed computer: {0}." -f ($hints -join ', '))
-        Warn "Installs may be blocked, and Docker Desktop may need a paid licence at a large company. Ask IT first. docs/SETUP.md, 'Work laptops'."
+        Warn "Installs may be blocked, and Docker Desktop may need a paid license at a large company. Ask IT first. docs/SETUP.md, 'Work laptops'."
     }
 }
 
@@ -285,7 +285,7 @@ function Confirm-Docker {
     }
     Bad 'Docker'
     if (-not (Test-Virtualisation)) {
-        Warn 'Hardware virtualisation looks OFF. Docker Desktop needs it: turn on "Intel VT-x" / "AMD-V" / "SVM" in your BIOS/UEFI settings (docs/SETUP.md, "Virtualisation").'
+        Warn 'Hardware virtualization looks OFF. Docker Desktop needs it: turn on "Intel VT-x" / "AMD-V" / "SVM" in your BIOS/UEFI settings (docs/SETUP.md, "Windows: WSL 2, virtualization and the restart").'
     }
     if (-not (Test-Wsl)) {
         Bad 'WSL 2 (Windows Subsystem for Linux), which Docker Desktop uses'

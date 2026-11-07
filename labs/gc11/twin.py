@@ -64,7 +64,7 @@ def _grants(perms: set[str], permission: str) -> bool:
 
 
 def load_json(path: pathlib.Path):
-    return json.loads(pathlib.Path(path).read_text())
+    return json.loads(pathlib.Path(path).read_text(encoding="utf-8"))
 
 
 @dataclasses.dataclass

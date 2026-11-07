@@ -291,7 +291,7 @@ table{{border-collapse:collapse}}td,th{{border:1px solid #999;padding:.3rem .6re
 <p>Mode: <b>{mode}</b> &middot; signed in as <b>{CURRENT_USER}</b> (fake) &middot; model: stand-in or local only</p>
 <form method="post" action="/ask"><input name="q" size="60" value="{html.escape(question)}" autofocus>
 <button>Ask</button></form>
-<p>Try: <i>summarise my latest ticket</i> &middot; <i>search my tickets for VPN</i> &middot;
+<p>Try: <i>summarize my latest ticket</i> &middot; <i>search my tickets for VPN</i> &middot;
 <i>check the status of vpn</i></p>
 {''.join(parts)}
 </body></html>"""

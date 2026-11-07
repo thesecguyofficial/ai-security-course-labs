@@ -226,7 +226,7 @@ def cmd_role(a) -> None:
 
 def cmd_record(a) -> None:
     name = a[0] if a else "InvokeEndpoint"
-    recs = json.loads(TRAIL.read_text())["Records"]
+    recs = json.loads(TRAIL.read_text(encoding="utf-8"))["Records"]
     r = next((x for x in recs if x["eventName"] == name), None)
     if r is None:
         raise SystemExit(f"no {name} record in {TRAIL.name}; try InvokeEndpoint, CreateModel, CreatePresignedDomainUrl")

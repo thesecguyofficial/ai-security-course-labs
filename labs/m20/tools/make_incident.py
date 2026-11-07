@@ -27,7 +27,7 @@ with Chain("first-draft") as c:
                    body={"to": "alice@example.com", "subject": subject, "body": "click here"})
     rows = c.audit
 base = rows[0]["ts"]
-with OUT.open("w") as f:
+with OUT.open("w", encoding="utf-8") as f:
     for i, row in enumerate(rows):
         row["ts"] = START + (row["ts"] - base) + i * 37
         f.write(json.dumps(row, sort_keys=True) + "\n")

@@ -81,7 +81,7 @@ def pivot(t: detect.Telemetry, entity: str) -> list[tuple[str, str, str, str]]:
 
 
 def cost(t: detect.Telemetry, entity: str) -> dict:
-    prices = json.loads((HERE / "anycompany.json").read_text())["lab_price_list"]
+    prices = json.loads((HERE / "anycompany.json").read_text(encoding="utf-8"))["lab_price_list"]
     recs = [r for r in t.invocations if entity in json.dumps(r)]
     tin = sum(r["input"]["inputTokenCount"] for r in recs)
     tout = sum(r["output"]["outputTokenCount"] for r in recs)
@@ -142,7 +142,7 @@ def main(argv: list[str]):
         path = pathlib.Path(argv[1])
         if not path.exists():
             sys.exit(f"{path} not found. Start from the template:  cp report/TEMPLATE.md report/INCIDENT-REPORT.md")
-        probs = check(path.read_text(), scenario, all_ids(t))
+        probs = check(path.read_text(encoding="utf-8"), scenario, all_ids(t))
         for p in probs:
             print(f"  [ ] {p}")
         print(f"\n{path.name}: " + ("REPORT COMPLETE" if not probs else f"{len(probs)} things to fix"))

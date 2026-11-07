@@ -170,7 +170,7 @@ FLOW_SAYS = [
 
 
 def cmd_flow(_args) -> None:
-    rows = [json.loads(x) for x in (HERE / "data" / "vpc-flow-logs.jsonl").read_text().splitlines() if x.strip()]
+    rows = [json.loads(x) for x in (HERE / "data" / "vpc-flow-logs.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
     rows = [r for r in rows if "jsonPayload" in r]
     p = rows[0]["jsonPayload"]
     c = p["connection"]
@@ -198,7 +198,7 @@ def cmd_flow(_args) -> None:
 
 # ------------------------------------------------------------------------------------------------------- 5. dns
 def cmd_dns(_args) -> None:
-    rows = [json.loads(x) for x in (HERE / "data" / "inventory" / "dns.jsonl").read_text().splitlines() if x.strip()]
+    rows = [json.loads(x) for x in (HERE / "data" / "inventory" / "dns.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
     p = rows[0]["jsonPayload"]
     print("data/inventory/dns.jsonl: Cloud DNS query logs, the lookups made inside ExampleCo's VPC networks (lab values)")
     print()
@@ -331,7 +331,7 @@ def cmd_policy(_args) -> None:
 # ----------------------------------------------------------------------------------------------------- 10. query
 def cmd_query(_args) -> None:
     t = day()
-    q = (HERE / "queries" / "d06-tokens-by-model.sql").read_text().rstrip().splitlines()
+    q = (HERE / "queries" / "d06-tokens-by-model.sql").read_text(encoding="utf-8").rstrip().splitlines()
     print("queries/d06-tokens-by-model.sql: BigQuery SQL on the request-response table")
     print()
     for ln in q[1:]:

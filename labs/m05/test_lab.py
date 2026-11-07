@@ -23,7 +23,7 @@ logging.disable(logging.CRITICAL)        # keep the test output readable
 
 SEP = "&" if os.name == "nt" else ";"
 READ = r"type data\fake_secrets.env" if os.name == "nt" else "cat data/fake_secrets.env"
-XSS_Q = "summarise my latest ticket"
+XSS_Q = "summarize my latest ticket"
 SQLI_Q = "search my tickets for: zzz' OR '1'='1' --"
 SHELL_Q = f"check the status of vpn{SEP} {READ}"
 PAYLOAD = "<img src=x onerror="

@@ -10,13 +10,13 @@ export PROMPTFOO_DISABLE_UPDATE := 1
 
 attack:       ## the weak app, no fixes: the planted note and the invisible note both get their way
 	@$(PY) support_bot.py reset >/dev/null
-	$(PY) support_bot.py summarise data/emails/03_planted_note.txt
-	$(PY) support_bot.py summarise data/emails/04_hidden_unicode.txt
+	$(PY) support_bot.py summarize data/emails/03_planted_note.txt
+	$(PY) support_bot.py summarize data/emails/04_hidden_unicode.txt
 
 attack-safe:  ## the same two emails with all four fixes on
 	@$(PY) support_bot.py reset >/dev/null
-	$(PY) support_bot.py summarise data/emails/03_planted_note.txt --fixes all
-	$(PY) support_bot.py summarise data/emails/04_hidden_unicode.txt --fixes all
+	$(PY) support_bot.py summarize data/emails/03_planted_note.txt --fixes all
+	$(PY) support_bot.py summarize data/emails/04_hidden_unicode.txt --fixes all
 
 matrix:       ## each fix on its own, then all together, for the planted note
 	@$(PY) support_bot.py reset >/dev/null

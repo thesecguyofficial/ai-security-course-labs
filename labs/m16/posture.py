@@ -91,7 +91,7 @@ def custom_rules():
 
 
 def run(setup: str) -> list[dict]:
-    data = json.loads((HERE / "data" / "posture" / f"{setup}.json").read_text())
+    data = json.loads((HERE / "data" / "posture" / f"{setup}.json").read_text(encoding="utf-8"))
     out = []
     for name, control, rtype, check in managed_rules():
         for r in data["resources"]:

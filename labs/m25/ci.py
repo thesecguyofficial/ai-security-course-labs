@@ -154,7 +154,7 @@ def release(setup: str, version: str, base: pathlib.Path, quant: pathlib.Path | 
     lab.write_json(model_dir / "ml-bom.json",
                    ml_bom(version, base, model_dir / "model.safetensors", precision, metrics, cfg["rich_bom"]))
     if docs:
-        (model_dir / "README.md").write_text(f"# tsg-guard {version}\n\nTicket guard for the TSG Helpdesk.\n")
+        (model_dir / "README.md").write_text(f"# tsg-guard {version}\n\nTicket guard for the TSG Helpdesk.\n", encoding="utf-8")
 
     # 4. sign the whole folder
     sign(model_dir, out / "model.sig", key or lab.KEYS / "ci.priv")

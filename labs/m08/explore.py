@@ -166,7 +166,7 @@ def cmd_context(a):
     release = "1.0.0"
     f = LAB / "state" / "facts_release.txt"
     if f.exists():
-        release = f.read_text().strip() or "1.0.0"
+        release = f.read_text(encoding="utf-8").strip() or "1.0.0"
     tools = asyncio.run(host.discover())
     text = ollama_backend.system_prompt(tools)
     print(f"host.py asked both servers for their tools (notes 1.0.0, facts {release}; make clean resets facts).")

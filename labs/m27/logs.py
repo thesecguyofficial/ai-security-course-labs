@@ -109,7 +109,7 @@ def write(config_name: str) -> dict:
     for fname, rows in recs.items():
         if fname.endswith(".txt"):
             header = "version account-id interface-id srcaddr dstaddr srcport dstport protocol packets bytes start end action log-status\n"
-            (d / fname).write_text(header + "".join(line + "\n" for line in rows))
+            (d / fname).write_text(header + "".join(line + "\n" for line in rows), encoding="utf-8")
         else:
             lab.write_jsonl(d / fname, rows)
     return recs

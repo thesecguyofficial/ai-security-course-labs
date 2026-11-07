@@ -34,7 +34,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 
 
 def load(rel: str) -> dict:
-    return json.loads((HERE / rel).read_text())
+    return json.loads((HERE / rel).read_text(encoding="utf-8"))
 
 
 # ---------------------------------------------------------------------------------------------- the operations
@@ -67,7 +67,7 @@ class Roles:
     def __init__(self, extra_custom: list[str] | None = None):
         self.defs = {}
         for f in sorted((HERE / "contoso" / "roles").glob("*.json")):
-            d = json.loads(f.read_text())
+            d = json.loads(f.read_text(encoding="utf-8"))
             if "roleName" in d:
                 self.defs[d["roleName"]] = d
         for rel in extra_custom or []:

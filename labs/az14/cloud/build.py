@@ -19,7 +19,7 @@ import requests
 from azure.identity import DefaultAzureCredential
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ENV = dict(line.strip().split("=", 1) for line in open(os.path.join(HERE, ".state", "env")) if "=" in line)
+ENV = dict(line.strip().split("=", 1) for line in open(os.path.join(HERE, ".state", "env"), encoding="utf-8") if "=" in line)
 PE = ENV["PROJECT_ENDPOINT"]
 AGENT = "helpdesk-agent"
 cred = DefaultAzureCredential()

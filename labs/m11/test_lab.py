@@ -36,6 +36,23 @@ def run_rules(plan):
     return [f for r in checker.RULES for f in r(plan)]
 
 
+
+# Folders that are not part of the lab: the lab's own .venv (after `make setup`), caches, tool state and output.
+# `.github` stays in: some labs ship sample workflows as lab files.
+_NOT_LAB = {"__pycache__", "node_modules", "out"}
+
+
+def _lab_files(pattern="*"):
+    """The lab's own files under HERE: skips .venv, .git, .terraform, __pycache__, node_modules and out/."""
+    for p in sorted(HERE.rglob(pattern)):
+        if not p.is_file():
+            continue
+        folders = p.relative_to(HERE).parts[:-1]
+        if any(d in _NOT_LAB or (d.startswith(".") and d != ".github") for d in folders):
+            continue
+        yield p
+
+
 class T1_FirstDraft(unittest.TestCase):
     def test_01_checker_finds_the_high_risks(self):
         """first draft: the checker flags 7 HIGH controls (wildcards, any model, default endpoint policy, NAT, no key, deputy, global)"""
@@ -148,10 +165,10 @@ class T3_Teaching(unittest.TestCase):
     def test_15_documentation_values_only(self):
         """safety: only AWS documentation account IDs, no access keys, no real-looking secrets in the lab"""
         allowed = {"111122223333", "444455556666", "777788889999", "123456789012"}
-        for f in HERE.rglob("*"):
+        for f in _lab_files():
             if f.is_dir() or f.suffix not in (".json", ".tf", ".py", ".md") or ".terraform" in f.parts:
                 continue
-            text = f.read_text()
+            text = f.read_text(encoding="utf-8")
             for acct in re.findall(r"(?<![0-9])[0-9]{12}(?![0-9])", text):
                 self.assertIn(acct, allowed, f"{f.name}: {acct}")
             self.assertFalse(re.search(r"\b(AKIA|ASIA|ABSK)[A-Z0-9]{12,}", text), f.name)

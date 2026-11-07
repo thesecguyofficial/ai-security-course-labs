@@ -8,7 +8,7 @@ writes no file (not even Python's __pycache__), opens no connection and calls no
     python3 explore.py log [CALL] [SETUP]    # 1. one model call, as invocation logging stores it (default c01, hardened)
     python3 explore.py embed                 # 2. a toy encoder turns sentences into numbers; similar words, similar numbers
     python3 explore.py invert                # 3. turn a logged vector back into words, with only the vector and a word list
-    python3 explore.py memorise              # 4. a toy model trained on the logs repeats a card number word for word
+    python3 explore.py memorize              # 4. a toy model trained on the logs repeats a card number word for word
     python3 explore.py dp                    # 5. differential privacy: noise, epsilon, and the unit (one record or one person)
     python3 explore.py unlearn               # 6. hide it (an output filter) or remove it (retrain without the record)
     python3 explore.py detect                # 7. which detector finds what, in three logged sentences
@@ -39,8 +39,8 @@ import bedrock  # noqa: E402  (record building only; nothing is delivered or wri
 import detect  # noqa: E402
 import lab  # noqa: E402
 
-CALLS = json.loads((lab.DATA / "calls.json").read_text())["calls"]
-CRM = json.loads((lab.DATA / "crm.json").read_text())["customers"]
+CALLS = json.loads((lab.DATA / "calls.json").read_text(encoding="utf-8"))["calls"]
+CRM = json.loads((lab.DATA / "crm.json").read_text(encoding="utf-8"))["customers"]
 DIMS = 256           # the lab's embedding calls ask for 256 dimensions (Titan Text Embeddings V2 offers 256, 512, 1024)
 
 
@@ -267,7 +267,7 @@ def cmd_memorise(a) -> int:
         print(f"  prompt {p!r:<16} -> {generate(table, p)}")
     print(f"\nThe card number was in ONE training text (call c02), and it comes back word for word.")
     print(f"Entries in the weights that hold '4111': {holding(table, '4111')}")
-    print("That's memorisation. Real models memorise far less of what they see, but not nothing: a 2021 study pulled")
+    print("That's memorization. Real models memorize far less of what they see, but not nothing: a 2021 study pulled")
     print("names, phone numbers and e-mail addresses out of GPT-2.")
     return 0
 
@@ -311,7 +311,7 @@ def cmd_dp(a) -> int:
 
 def cmd_unlearn(a) -> int:
     full = train(training_texts())
-    print('The toy model from `memorise`. Request: "forget the card number in call c02".\n')
+    print('The toy model from `memorize`. Request: "forget the card number in call c02".\n')
     print(f"1. Before:                  {generate(full, 'My card')}")
     print(f"   entries holding '4111':  {holding(full, '4111')}\n")
     out = generate(full, "My card")
@@ -462,10 +462,11 @@ def main(argv=None) -> int:
     p = sub.add_parser("log")
     p.add_argument("call", nargs="?", default="c01")
     p.add_argument("setup", nargs="?", default="hardened", choices=["hardened", "first-draft"])
-    for name in ("embed", "invert", "memorise", "dp", "unlearn", "detect", "redact", "kms"):
+    for name in ("embed", "invert", "dp", "unlearn", "detect", "redact", "kms"):
         sub.add_parser(name)
+    sub.add_parser("memorize", aliases=["memorise"])
     a = ap.parse_args(argv)
-    return {"log": cmd_log, "embed": cmd_embed, "invert": cmd_invert, "memorise": cmd_memorise, "dp": cmd_dp,
+    return {"log": cmd_log, "embed": cmd_embed, "invert": cmd_invert, "memorize": cmd_memorise, "memorise": cmd_memorise, "dp": cmd_dp,
             "unlearn": cmd_unlearn, "detect": cmd_detect, "redact": cmd_redact, "kms": cmd_kms}[a.cmd](a)
 
 

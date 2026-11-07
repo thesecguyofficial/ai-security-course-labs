@@ -24,8 +24,8 @@ from dataclasses import dataclass, field
 
 HERE = pathlib.Path(__file__).resolve().parent
 DEFAULT_FILE = HERE / "cloudtrail" / "anycompany-2026-10-09_14.json"
-APPROVED = json.loads((HERE / "anycompany" / "approved-models.json").read_text())
-PRINCIPALS = json.loads((HERE / "anycompany" / "principals.json").read_text())["principals"]
+APPROVED = json.loads((HERE / "anycompany" / "approved-models.json").read_text(encoding="utf-8"))
+PRINCIPALS = json.loads((HERE / "anycompany" / "principals.json").read_text(encoding="utf-8"))["principals"]
 
 INVOKE = {"InvokeModel", "InvokeModelWithResponseStream", "Converse", "ConverseStream"}
 RECON = {"ListFoundationModels", "GetFoundationModelAvailability", "GetModelInvocationLoggingConfiguration",
@@ -92,7 +92,7 @@ def bearer(r: dict) -> bool:
 
 
 def load_records(path: pathlib.Path) -> list[dict]:
-    return sorted(json.loads(path.read_text())["Records"], key=lambda r: r["eventTime"])
+    return sorted(json.loads(path.read_text(encoding="utf-8"))["Records"], key=lambda r: r["eventTime"])
 
 
 # ---------------------------------------------------------------- baseline

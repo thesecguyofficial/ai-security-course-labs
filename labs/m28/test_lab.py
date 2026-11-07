@@ -103,7 +103,7 @@ class Hardened(LabTest):
         wrapped = env["s3"].object_info(lab.RAW_BUCKET, key)["sse"]
         with self.assertRaises(AccessDenied):
             env["kms"].decrypt(wrapped, lab.ANALYST, {"aws:s3:arn": f"arn:aws:s3:::{lab.RAW_BUCKET}/{key}"})
-        last = json.loads((lab.state_dir() / "cloudtrail.jsonl").read_text().splitlines()[-1])
+        last = json.loads((lab.state_dir() / "cloudtrail.jsonl").read_text(encoding="utf-8").splitlines()[-1])
         self.assertEqual((last["eventName"], last["errorCode"], last["userIdentity"]["arn"]),
                          ("Decrypt", "AccessDenied", lab.ANALYST))
         self.assertEqual(last["requestParameters"]["keyId"], env["kms"].arn("alias/tsg-logs-raw"))

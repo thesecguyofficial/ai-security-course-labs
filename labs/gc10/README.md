@@ -141,7 +141,7 @@ Service accounts (identities for software) and their user-managed keys:
   ci-deployer@example-ci.iam.gserviceaccount.com                 no keys
     attached to: Cloud Build pipeline (no keys)
   legacy-etl@example-ci.iam.gserviceaccount.com                  1 key, valid until 9999-12-31 (never expires)
-    attached to: none: a 2025 summarisation job ran on a laptop with a downloaded JSON key
+    attached to: none: a 2025 summarization job ran on a laptop with a downloaded JSON key
   100000000001-compute@developer.gserviceaccount.com             no keys
     attached to: Compute Engine default service account (created automatically)
 

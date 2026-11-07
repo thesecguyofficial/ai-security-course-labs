@@ -17,7 +17,7 @@ code**. In this lab you:
 6. **Prove it**: `make test` runs all of the above as automated tests. Then `make challenge`.
 
 > **Safety.** The "evil" model is a **lab placeholder, not malware**. Its only effect when loaded is
-> to write one clearly-labelled marker file, `state/PWNED_BY_LAB_MODEL.txt`, inside this folder. It
+> to write one clearly labeled marker file, `state/PWNED_BY_LAB_MODEL.txt`, inside this folder. It
 > makes **no network connection** and touches **nothing outside this folder**. The path is baked in
 > at build time, so the file is tied to this directory and is not portable. A real attack would put a
 > reverse shell here; lesson 9.2 covers the 2024–2025 Hugging Face models that did exactly that.

@@ -71,7 +71,7 @@ def sha256(text: str) -> str:
 
 # ---------------------------------------------------------------------------------------------------- fake data
 def _load(name: str) -> dict:
-    d = json.loads((DATA / name).read_text())
+    d = json.loads((DATA / name).read_text(encoding="utf-8"))
     d.pop("_comment", None)
     return d
 
@@ -83,9 +83,9 @@ ORDERS = _load("orders.json")
 def read_jsonl(path: pathlib.Path) -> list[dict]:
     if not path.exists():
         return []
-    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
 def append_jsonl(path: pathlib.Path, row: dict) -> None:
-    with path.open("a") as f:
+    with path.open("a", encoding="utf-8") as f:
         f.write(json.dumps(row, ensure_ascii=False) + "\n")

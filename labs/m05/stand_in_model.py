@@ -5,7 +5,7 @@ It is a few dozen lines of plain, predictable Python, so the lab gives the same 
 model download. It copies the ONE behaviour this lab is about: a model's output is shaped by whatever text it
 was given. A real model does the same thing, just less predictably (lesson 1.2).
 
-What it does: it reads the user's question (and, when asked to summarise, a ticket from the database) and returns
+What it does: it reads the user's question (and, when asked to summarize, a ticket from the database) and returns
 a "plan", a small dictionary that the app then acts on:
 
     {
@@ -52,7 +52,7 @@ def plan(question: str, latest_ticket_text: str = "") -> dict:
         result["answer"] = f"Saving a summary of your latest ticket as {result['filename']}."
         return result
 
-    # 4. "summarise my latest ticket"  ->  the model quotes the ticket it was given.
+    # 4. "summarize my latest ticket"  ->  the model quotes the ticket it was given.
     #    The ticket was written by whoever OPENED it, so someone else's words come out of the
     #    model and into your page. This is how a stranger's text reaches an innocent user.
     if re.search(r"summari[sz]e", q, re.IGNORECASE):
@@ -61,5 +61,5 @@ def plan(question: str, latest_ticket_text: str = "") -> dict:
 
     # 5. Anything else: a polite echo, like a chatbot repeating the question back.
     result["answer"] = (f"You asked: {q}. Try: 'search my tickets for VPN', "
-                        f"'check the status of vpn' or 'summarise my latest ticket'.")
+                        f"'check the status of vpn' or 'summarize my latest ticket'.")
     return result

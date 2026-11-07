@@ -21,7 +21,7 @@ p.add_argument("--bucket", required=True, help="the S3 bucket name for the trail
 p.add_argument("--trail", default="tsg-m20-trail")
 a = p.parse_args()
 
-setup = json.loads((HERE / "setups" / "hardened.json").read_text())
+setup = json.loads((HERE / "setups" / "hardened.json").read_text(encoding="utf-8"))
 text = json.dumps(setup).replace("111122223333", a.account).replace("us-east-1", a.region)
 setup = json.loads(text)
 out = HERE / "out"
@@ -31,9 +31,9 @@ for role, r in setup["roles"].items():
     for st in trust["Statement"]:
         st["Principal"] = {"AWS": a.launcher_arn}
         st["Action"] = ["sts:AssumeRole", "sts:SetSourceIdentity"]   # session tags not used in the guided build
-    (out / f"trust-{role}.json").write_text(json.dumps(trust, indent=2) + "\n")
-    (out / f"policy-{role}.json").write_text(json.dumps(r["policy"], indent=2) + "\n")
-(out / "selectors.json").write_text(json.dumps(setup["cloudtrail"]["advanced_event_selectors"], indent=2) + "\n")
+    (out / f"trust-{role}.json").write_text(json.dumps(trust, indent=2) + "\n", encoding="utf-8")
+    (out / f"policy-{role}.json").write_text(json.dumps(r["policy"], indent=2) + "\n", encoding="utf-8")
+(out / "selectors.json").write_text(json.dumps(setup["cloudtrail"]["advanced_event_selectors"], indent=2) + "\n", encoding="utf-8")
 trail_arn = f"arn:aws:cloudtrail:{a.region}:{a.account}:trail/{a.trail}"
 bucket_policy = {"Version": "2012-10-17", "Statement": [
     {"Sid": "AWSCloudTrailAclCheck", "Effect": "Allow", "Principal": {"Service": "cloudtrail.amazonaws.com"},
@@ -42,6 +42,6 @@ bucket_policy = {"Version": "2012-10-17", "Statement": [
     {"Sid": "AWSCloudTrailWrite", "Effect": "Allow", "Principal": {"Service": "cloudtrail.amazonaws.com"},
      "Action": "s3:PutObject", "Resource": f"arn:aws:s3:::{a.bucket}/AWSLogs/{a.account}/*",
      "Condition": {"StringEquals": {"s3:x-amz-acl": "bucket-owner-full-control", "aws:SourceArn": trail_arn}}}]}
-(out / "bucket-policy.json").write_text(json.dumps(bucket_policy, indent=2) + "\n")
+(out / "bucket-policy.json").write_text(json.dumps(bucket_policy, indent=2) + "\n", encoding="utf-8")
 for f in sorted(out.iterdir()):
     print("wrote", f.relative_to(HERE.parent))

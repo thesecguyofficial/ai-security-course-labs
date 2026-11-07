@@ -40,7 +40,7 @@ def evaluate(setup: str, pack: str = "m16", challenge: bool = True, built: dict 
     """built = simulate.build(setup) to work in memory (the tests); otherwise read out/<setup>/."""
     if built is None:
         tel = detect.Telemetry(setup)
-        truth = json.loads((detect.HERE / "out" / setup / "truth.json").read_text())
+        truth = json.loads((detect.HERE / "out" / setup / "truth.json").read_text(encoding="utf-8"))
     else:
         tel, truth = detect.Telemetry.from_build(built), built["truth"]
     alerts = detect.run(tel, pack, challenge)

@@ -68,7 +68,7 @@ def run_job(s3: LocalS3, setup: dict) -> dict:
             if per_type:
                 findings.append(_finding(bucket, key, per_type, category_of, s3.object_info(bucket, key)))
     out = {"jobType": "ONE_TIME", "results": results, "findings": findings}
-    (lab.state_dir() / "macie-findings.json").write_text(json.dumps(out, indent=1))
+    (lab.state_dir() / "macie-findings.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
     return out
 
 

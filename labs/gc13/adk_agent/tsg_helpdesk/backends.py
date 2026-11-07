@@ -22,7 +22,7 @@ import sys
 LAB = pathlib.Path(__file__).resolve().parents[2]
 MODE = os.environ.get("TSG_MODE", "offline")
 HERE = pathlib.Path(__file__).resolve().parent
-TICKETS = {k: v for k, v in json.loads((HERE / "tickets.json").read_text()).items() if not k.startswith("_")}
+TICKETS = {k: v for k, v in json.loads((HERE / "tickets.json").read_text(encoding="utf-8")).items() if not k.startswith("_")}
 OUTBOX: list[dict] = []
 STATE = {"tickets": copy.deepcopy(TICKETS)}
 

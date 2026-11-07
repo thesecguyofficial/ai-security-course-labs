@@ -26,6 +26,23 @@ def run(sid, mode):
     return attack.run_step(STEP[sid], mode)
 
 
+
+# Folders that are not part of the lab: the lab's own .venv (after `make setup`), caches, tool state and output.
+# `.github` stays in: some labs ship sample workflows as lab files.
+_NOT_LAB = {"__pycache__", "node_modules", "out"}
+
+
+def _lab_files(pattern="*"):
+    """The lab's own files under HERE: skips .venv, .git, .terraform, __pycache__, node_modules and out/."""
+    for p in sorted(HERE.rglob(pattern)):
+        if not p.is_file():
+            continue
+        folders = p.relative_to(HERE).parts[:-1]
+        if any(d in _NOT_LAB or (d.startswith(".") and d != ".github") for d in folders):
+            continue
+        yield p
+
+
 class T1_Vulnerable(unittest.TestCase):
     def test_01_leaked_keys_work(self):
         """vulnerable: keys copied from the public repo list models and chat on BOTH Foundry resources, no role checked"""
@@ -161,10 +178,10 @@ class T5_DataHygiene(unittest.TestCase):
                    "c883944f-8b7b-4483-af10-35834be79c4a", "eadc314b-1a2d-4efa-be10-5d325db5065e"}
         guid = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", re.I)
         ipv4 = re.compile(r"\b(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})\b")
-        files = [p for p in HERE.rglob("*") if p.is_file() and p.suffix in (".json", ".env", ".sh", ".yml", ".bicep", ".md", ".py")
+        files = [p for p in _lab_files() if p.is_file() and p.suffix in (".json", ".env", ".sh", ".yml", ".bicep", ".md", ".py")
                  and "__pycache__" not in p.parts]
         for f in files:
-            text = f.read_text()
+            text = f.read_text(encoding="utf-8")
             for g in guid.findall(text):
                 self.assertIn(g.lower(), doc_guids | builtin, f"{f.name}: {g}")
             for m in ipv4.finditer(text):

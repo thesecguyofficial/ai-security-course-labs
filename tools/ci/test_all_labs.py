@@ -15,10 +15,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 LABS = ROOT / "labs"
 WINDOWS = os.name == "nt"
-# The capstones run their tests through unittest (see their Makefiles).
+# The capstones: normal use (test_functional.py) and the lab's own test (run_tests.py) must pass on the
+# starting point. Their security tests (tests/test_security.py) fail on purpose until the student fixes the
+# app, so CI never runs them here.
+FUNCTIONAL = ["-m", "unittest", "discover", "-s", "tests", "-t", ".", "-v", "-p", "test_functional.py"]
 SPECIAL = {
-    "m19": ["-m", "unittest", "discover", "-s", "tests", "-t", ".", "-v"],
-    "m32": ["-m", "unittest", "discover", "-s", "tests", "-t", ".", "-v", "-p", "test_functional.py"],
+    "m19": [FUNCTIONAL, ["run_tests.py"]],
+    "m32": [FUNCTIONAL, ["run_tests.py"]],
 }
 
 
@@ -37,16 +40,19 @@ def lab_python(lab: Path) -> str:
 
 def run(lab: Path):
     if lab.name in SPECIAL:
-        args = SPECIAL[lab.name]
+        commands = SPECIAL[lab.name]
     elif (lab / "run_tests.py").exists():
-        args = ["run_tests.py"]
+        commands = [["run_tests.py"]]
     else:
         return "SKIP", "no tests in this lab", 0.0
     start = time.time()
     try:
         py = lab_python(lab)
         env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUTF8="1")
-        p = subprocess.run([py, *args], cwd=lab, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=1200, env=env)
+        for args in commands:
+            p = subprocess.run([py, *args], cwd=lab, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=1200, env=env)
+            if p.returncode != 0:
+                break
     except subprocess.CalledProcessError as e:
         return "FAIL", f"setup failed: {e}", time.time() - start
     except subprocess.TimeoutExpired:

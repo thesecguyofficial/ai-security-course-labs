@@ -23,7 +23,7 @@ DIRECTIVE = re.compile(r"<!--\s*LAB-PLACEHOLDER-INJECTED-INSTRUCTION\s+(\{.*?\})
 
 
 def tasks():
-    return {t["task_id"]: t for t in json.loads(TASKS.read_text())}
+    return {t["task_id"]: t for t in json.loads(TASKS.read_text(encoding="utf-8"))}
 
 
 def model_plan(task, page_text=None):

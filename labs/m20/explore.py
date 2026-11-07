@@ -32,12 +32,12 @@ import jwtlite  # noqa: E402
 import oauth  # noqa: E402
 
 HERE = pathlib.Path(__file__).resolve().parent
-USERS = json.loads((HERE / "data" / "users.json").read_text())
+USERS = json.loads((HERE / "data" / "users.json").read_text(encoding="utf-8"))
 SECRETS_SHOWN = "(not shown)"
 
 
 def load(*parts) -> dict:
-    return json.loads(HERE.joinpath(*parts).read_text())
+    return json.loads(HERE.joinpath(*parts).read_text(encoding="utf-8"))
 
 
 def short(token: str, keep: int = 24) -> str:
@@ -270,7 +270,7 @@ def cmd_agent(a) -> int:
 
 # ---- 7. AWS: one CloudTrail record -----------------------------------------------------------------------------
 def records():
-    return [json.loads(x) for x in (HERE / "aws" / "data" / "cloudtrail.jsonl").read_text().splitlines() if x.strip()]
+    return [json.loads(x) for x in (HERE / "aws" / "data" / "cloudtrail.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
 
 
 def cmd_trail(a) -> int:
@@ -304,7 +304,7 @@ def cmd_trail(a) -> int:
 
 # ---- 8. AWS: the launcher's own log ----------------------------------------------------------------------------
 def cmd_launcher(a) -> int:
-    rows = [json.loads(x) for x in (HERE / "aws" / "data" / "app-log.jsonl").read_text().splitlines() if x.strip()]
+    rows = [json.loads(x) for x in (HERE / "aws" / "data" / "app-log.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
     r = next((x for x in rows if x["run_id"] == a.run), rows[0])
     print(f"The launcher's own log row for run {r['run_id']} (aws/data/app-log.jsonl, {len(rows)} rows)\n")
     print(f"   ts               {r['ts']:<30} when the launcher started the run")

@@ -179,7 +179,8 @@ def cmd_call(a) -> None:
         print(f"  POST https://{C['region']}-aiplatform.googleapis.com/v1/{C['endpoint']}:predict")
     print("  body     the ticket text in an instances list; an OAuth access token for the caller")
     print(f"  caller   {twin.member(who)}")
-    print(f"  from     {'the internet (a laptop outside ExampleCo)' if origin == 'internet' else "inside ExampleCo's network"}")
+    inside = "inside ExampleCo's network"
+    print(f"  from     {'the internet (a laptop outside ExampleCo)' if origin == 'internet' else inside}")
     if kind == "psc" and origin == "internet":
         print("\n  A private IP address isn't reachable from the internet: the request never arrives.")
         print("  (Through the public API name instead, the checks below apply.)")
@@ -224,7 +225,7 @@ def cmd_identity(a) -> None:
 
 def cmd_record(a) -> None:
     name = a[0] if a else "Predict"
-    entries = json.loads(LOGS.read_text())["entries"]
+    entries = json.loads(LOGS.read_text(encoding="utf-8"))["entries"]
     e = next((x for x in entries if x["protoPayload"]["methodName"].endswith("." + name)), None)
     if e is None:
         raise SystemExit(f"no {name} entry in {LOGS.name}; try Predict, UploadModel, DeployModel, MergeVersionAliases, CreateServiceAccountKey")

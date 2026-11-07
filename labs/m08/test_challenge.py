@@ -23,7 +23,7 @@ STATE = LAB / "state"
 
 def set_release(v: str) -> None:
     STATE.mkdir(exist_ok=True)
-    (STATE / "facts_release.txt").write_text(v)
+    (STATE / "facts_release.txt").write_text(v, encoding="utf-8")
 
 
 class Challenge(unittest.TestCase):

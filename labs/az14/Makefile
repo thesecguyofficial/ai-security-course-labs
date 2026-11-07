@@ -65,6 +65,9 @@ grant-narrow:  ## G6: undo it
 direct-call:   ## G6b: call send_email on the toolbox directly: require_approval doesn't block it
 	./cloud/cloud.sh direct-call
 
+toolbox-v2:    ## G6b optional: toolbox helpdesk-tools v2 with require_approval never (promote it yourself)
+	./cloud/cloud.sh toolbox-v2
+
 down:          ## G8: delete the agent, toolbox, Foundry resource (purged) and the resource group
 	./cloud/cloud.sh down
 

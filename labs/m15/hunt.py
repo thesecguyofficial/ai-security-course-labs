@@ -24,7 +24,7 @@ C = twin.COMPANY
 
 
 def load(path: pathlib.Path = HERE / "data" / "incident" / "cloudtrail.json") -> list[dict]:
-    return json.loads(path.read_text())["Records"]
+    return json.loads(path.read_text(encoding="utf-8"))["Records"]
 
 
 def role_of(record: dict) -> str:

@@ -275,7 +275,7 @@ Scan of stacks/first-draft  (files read: compose, k8s, cluster, gateway, nodes, 
 make scan
 ```
 
-Same as `python3 scan.py stacks/first-draft`.
+Same as `.venv/bin/python scan.py stacks/first-draft`.
 
 The first lines and the last line of the real output (33 findings in between, worst first):
 
@@ -447,7 +447,7 @@ Q3  management calls not from the deployment pipeline:
 make test
 ```
 
-Same as `python3 run_tests.py`.
+Same as `.venv/bin/python run_tests.py`.
 
 ```output
 [PASS] 01 scan: the first draft trips every lesson's rules (exposure, auth, code, versions, cache, nodes, models)
@@ -462,7 +462,7 @@ ALL TESTS PASSED (19 run)
 make challenge
 ```
 
-Same as `python3 run_tests.py --challenge`.
+Same as `.venv/bin/python run_tests.py --challenge`.
 
 ```output
 [FAIL] C1 (26.1) scan: RAY-01 flags the first draft's Ray head and stays quiet on the hardened one

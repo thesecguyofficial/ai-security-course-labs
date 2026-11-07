@@ -70,7 +70,7 @@ SECURE_BY_DEFAULT_DATE = dt.datetime(2024, 5, 3, tzinfo=dt.timezone.utc)
 
 
 def load_json(path):
-    return json.loads(pathlib.Path(path).read_text())
+    return json.loads(pathlib.Path(path).read_text(encoding="utf-8"))
 
 
 def role_grants(role, permission):

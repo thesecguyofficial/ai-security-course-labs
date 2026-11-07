@@ -141,9 +141,9 @@ class TC_Lab(unittest.TestCase):
     def test_16_report_example(self):
         """the worked S3 report passes the check; the empty template does not"""
         ids = report.all_ids(detect.Telemetry.from_build(HARD))
-        ex = (report.HERE / "report" / "EXAMPLE-S3-hijacked-agent.md").read_text()
+        ex = (report.HERE / "report" / "EXAMPLE-S3-hijacked-agent.md").read_text(encoding="utf-8")
         self.assertEqual(report.check(ex, "S3", ids), [])
-        self.assertGreater(len(report.check((report.HERE / "report" / "TEMPLATE.md").read_text(), "S1", ids)), 5)
+        self.assertGreater(len(report.check((report.HERE / "report" / "TEMPLATE.md").read_text(encoding="utf-8"), "S1", ids)), 5)
 
     def test_17_pivot_and_cost(self):
         """pivot on etl-batch: 281 records hardened, 6 first draft; 120 Gemini calls costed, 30 Claude calls that
@@ -155,7 +155,7 @@ class TC_Lab(unittest.TestCase):
 
     def test_18_no_truth_in_rules(self):
         """the rules never read the answer key (truth.json)"""
-        self.assertNotIn("truth", (report.HERE / "detect.py").read_text().split('"""', 2)[2].replace("truth.json", ""))
+        self.assertNotIn("truth", (report.HERE / "detect.py").read_text(encoding="utf-8").split('"""', 2)[2].replace("truth.json", ""))
 
 
 if __name__ == "__main__":

@@ -396,7 +396,7 @@ Real output (Linux, Python 3.13):
 Read it by lesson:
 
 - **12.1 filters:** the template the app uses has prompt injection **disabled** (GC12-05) and no URL filter (GC12-06);
-  its SDP is the US-centred basic config while customers are in India and the EU (GC12-10).
+  its SDP is the US-centered basic config while customers are in India and the EU (GC12-10).
 - **12.2 the self-hosted path:** `app_guard.py` screens only the user's own words (GC12-11), never the answer (GC12-08),
   lets traffic through when a filter is skipped or Model Armor is down (GC12-12, found by **probing the code**), and
   reaches the regional endpoint through a path that doesn't serve `*.rep.googleapis.com` (GC12-14, GC11's lesson).

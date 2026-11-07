@@ -25,8 +25,8 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 
 HERE = pathlib.Path(__file__).resolve().parent
-COMPANY = json.loads((HERE / "contoso.json").read_text())
-BASELINES = {k: v for k, v in json.loads((HERE / "data" / "baselines.json").read_text()).items() if not k.startswith("_")}
+COMPANY = json.loads((HERE / "contoso.json").read_text(encoding="utf-8"))
+BASELINES = {k: v for k, v in json.loads((HERE / "data" / "baselines.json").read_text(encoding="utf-8")).items() if not k.startswith("_")}
 TUNE = COMPANY["detection_tuning"]
 SOURCES = ["activity", "foundry", "gateway", "llm", "alerts", "traces", "blob", "deploy", "metrics", "app"]
 
@@ -57,7 +57,7 @@ class Telemetry:
 
 
 def load(path: pathlib.Path) -> list[dict]:
-    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()] if path.exists() else []
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()] if path.exists() else []
 
 
 def ts(s: str) -> datetime:

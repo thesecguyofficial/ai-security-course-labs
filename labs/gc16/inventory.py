@@ -33,10 +33,10 @@ INFERENCE_PORTS = {"11434": "ollama", "8000": "vllm"}
 
 
 def load():
-    assets = json.loads((INV / "ai-assets.json").read_text())["assets"]
-    reg = json.loads((INV / "sanctioned.json").read_text())
-    dns = [json.loads(x) for x in (INV / "dns.jsonl").read_text().splitlines() if x.strip()]
-    fw = json.loads((INV / "firewall.json").read_text())
+    assets = json.loads((INV / "ai-assets.json").read_text(encoding="utf-8"))["assets"]
+    reg = json.loads((INV / "sanctioned.json").read_text(encoding="utf-8"))
+    dns = [json.loads(x) for x in (INV / "dns.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
+    fw = json.loads((INV / "firewall.json").read_text(encoding="utf-8"))
     return assets, reg, dns, fw
 
 

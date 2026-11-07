@@ -32,7 +32,7 @@ def load_cloudtrail(path: pathlib.Path) -> list[dict]:
     rows = []
     files = sorted(path.rglob("*.json.gz")) + sorted(path.rglob("*.jsonl")) if path.is_dir() else [path]
     for f in files:
-        text = gzip.open(f, "rt").read() if f.suffix == ".gz" else f.read_text()
+        text = gzip.open(f, "rt").read() if f.suffix == ".gz" else f.read_text(encoding="utf-8")
         if text.lstrip().startswith("{\"Records\""):
             rows += json.loads(text)["Records"]
         else:
@@ -41,7 +41,7 @@ def load_cloudtrail(path: pathlib.Path) -> list[dict]:
 
 
 def load_jsonl(path: pathlib.Path) -> list[dict]:
-    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()] if path.exists() else []
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()] if path.exists() else []
 
 
 def role_and_session(record: dict) -> tuple[str, str]:

@@ -54,7 +54,7 @@ class LocalKMS:
         self.dir.mkdir(parents=True, exist_ok=True)
         self.keys_file = self.dir / "keys.json"
         self.trail = (state or lab.state_dir()) / "cloudtrail.jsonl"
-        self.keys = json.loads(self.keys_file.read_text()) if self.keys_file.exists() else {}
+        self.keys = json.loads(self.keys_file.read_text(encoding="utf-8")) if self.keys_file.exists() else {}
 
     # ---- set-up ----------------------------------------------------------------------------------------------------
     def create(self, alias: str, policy: dict, iam: dict | None = None) -> str:
@@ -67,7 +67,7 @@ class LocalKMS:
         return key_id
 
     def _save(self):
-        self.keys_file.write_text(json.dumps(self.keys, indent=1))
+        self.keys_file.write_text(json.dumps(self.keys, indent=1), encoding="utf-8")
 
     def arn(self, alias: str) -> str:
         return self.keys[alias]["arn"]
@@ -107,7 +107,7 @@ class LocalKMS:
         }
         if error:
             event["errorCode"] = error
-        with self.trail.open("a") as f:
+        with self.trail.open("a", encoding="utf-8") as f:
             f.write(json.dumps(event) + "\n")
 
     # ---- operations ------------------------------------------------------------------------------------------------

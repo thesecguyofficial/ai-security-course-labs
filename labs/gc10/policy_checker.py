@@ -188,13 +188,13 @@ def scan_for_keys(root):
     files = [root] if root.is_file() else [p for p in root.rglob("*") if p.is_file()]
     for f in sorted(files):
         try:
-            text = f.read_text(errors="ignore")
+            text = f.read_text(errors="ignore", encoding="utf-8")
         except OSError:
             continue
         for n, line in enumerate(text.splitlines(), 1):
             for m in API_KEY_PATTERN.finditer(line):
                 shown = m.group(0)[:8] + "..." + m.group(0)[-4:]
-                out.append(Finding("HIGH", "GC10-16", f"{f.relative_to(root.parent) if root.is_dir() else f.name}:{n}",
+                out.append(Finding("HIGH", "GC10-16", f"{f.relative_to(root.parent).as_posix() if root.is_dir() else f.name}:{n}",
                                    f"Google API key string {shown} in source code.",
                                    "Treat it as leaked: restrict or delete the key in the console, then remove it from the code and history."))
     return out

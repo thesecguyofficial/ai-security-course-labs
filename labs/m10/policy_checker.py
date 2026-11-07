@@ -197,7 +197,7 @@ def run(with_fixes: bool = False) -> list[Finding]:
     scp_files = list(org["organization"]["scps_on_root"])
     scps = [(f, load(f"anycompany/{f}")) for f in scp_files]
     if with_fixes:
-        scps += [(f"../fixes/{f.name}", json.loads(f.read_text())) for f in sorted((HERE / "fixes").glob("scp-*.json"))]
+        scps += [(f"../fixes/{f.name}", json.loads(f.read_text(encoding="utf-8"))) for f in sorted((HERE / "fixes").glob("scp-*.json"))]
     for n, s in scps:
         findings += check_scp(n, s)
     findings += check_org_scps(scps)
@@ -222,9 +222,9 @@ def main() -> None:
     ap.add_argument("--severity", choices=list(SEVERITY_ORDER), help="print only findings of this severity (the totals still count all)")
     a = ap.parse_args()
     if a.policy:
-        print_findings(check_identity_policy(a.policy, json.loads(pathlib.Path(a.policy).read_text())), a.policy)
+        print_findings(check_identity_policy(a.policy, json.loads(pathlib.Path(a.policy).read_text(encoding="utf-8"))), a.policy)
     elif a.scp:
-        doc = json.loads(pathlib.Path(a.scp).read_text())
+        doc = json.loads(pathlib.Path(a.scp).read_text(encoding="utf-8"))
         print_findings(check_scp(a.scp, doc) + check_org_scps([(a.scp, doc)]), a.scp + " (as if it were the only deny SCP)")
     else:
         print_findings(run(a.with_fixes), "AnyCompany" + (" + fixes/ SCPs" if a.with_fixes else " today"), a.severity or "")

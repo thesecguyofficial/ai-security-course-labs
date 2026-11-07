@@ -93,7 +93,7 @@ class TestPinning(unittest.TestCase):
         os.remove(target)
 
     def test_7_pin_refuses_unpinned(self):
-        "pinning: an artefact with no pin is refused (fail closed)"
+        "pinning: an artifact with no pin is refused (fail closed)"
         self.assertFalse(pin.verify_pin(os.path.join(MODELS, "benign_model.pkl")))
 
 

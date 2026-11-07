@@ -30,7 +30,7 @@ class Challenge(unittest.TestCase):
         for name in ("refund_within_order_total", "stop_after_denial"):
             self.assertTrue((d / f"{name}.cedar").exists(), f"missing {name}.cedar")
         text, _ = pdp.load_policy_text(d)
-        self.assertTrue(cedarpy.validate_policies(text, lab.SCHEMA.read_text()).validation_passed)
+        self.assertTrue(cedarpy.validate_policies(text, lab.SCHEMA.read_text(encoding="utf-8")).validation_passed)
 
     def test_c2_order_total(self):
         """challenge 1: A13 (two refunds adding up to more than the order) is stopped"""

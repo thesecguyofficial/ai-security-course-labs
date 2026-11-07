@@ -25,7 +25,7 @@ META_TYPE = "type.googleapis.com/google.cloud.audit.VpcServiceControlAuditMetada
 
 
 def load(path: pathlib.Path) -> list[dict]:
-    text = path.read_text().strip()
+    text = path.read_text(encoding="utf-8").strip()
     if text.startswith("["):
         return json.loads(text)
     return [json.loads(line) for line in text.splitlines() if line.strip()]

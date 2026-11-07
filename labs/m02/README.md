@@ -84,7 +84,7 @@ data stores (knowledge base, memory, order database, logs) and data flows (arrow
 Tip: number every arrow (F1, F2, …). You will refer to them in the table.
 New to data-flow diagrams? Do **Step 1b** first: it reads a starter diagram of part of this system with you.
 
-**Optional: draw it in OWASP Threat Dragon.** Threat Dragon is OWASP's free, open-source (Apache-2.0) threat-modelling tool. In local mode it needs no account and sends nothing anywhere.
+**Optional: draw it in OWASP Threat Dragon.** Threat Dragon is OWASP's free, open-source (Apache-2.0) threat-modeling tool. In local mode it needs no account and sends nothing anywhere.
 
 1. Install the desktop app from the [Threat Dragon releases](https://github.com/OWASP/threat-dragon/releases), or run the official container (Docker): `docker run -d -p 127.0.0.1:3000:3000 -e ENCRYPTION_KEYS='[{"isPrimary": true, "id": 0, "value": "11223344556677889900aabbccddeeff"}]' -e ENCRYPTION_JWT_SIGNING_KEY=change-me -e ENCRYPTION_JWT_REFRESH_SIGNING_KEY=change-me-too -e NODE_ENV=production -e SERVER_API_PROTOCOL=http owasp/threat-dragon:v2.6.2`, then open http://localhost:3000 and choose the local session. The keys in that command are examples; for anything other than this lab, generate your own.
 2. **Create a new threat model** called `TSG Helpdesk` and add a **STRIDE** diagram. Or choose **Open an existing threat model** and open `tsg-helpdesk-starter.json`, which already has the chat path and the nightly import; then add the rest.

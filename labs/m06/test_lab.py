@@ -72,7 +72,7 @@ class T2_SafeIngestion(unittest.TestCase):
         self.assertFalse([c for c in self.store.all_chunks() if "refund-policy-update" in c["source"]])
 
     def test_06_clean_upload_kept_and_labelled(self):
-        """safe: a clean upload is still indexed, labelled trust=upload (curated docs are trust=curated)"""
+        """safe: a clean upload is still indexed, labeled trust=upload (curated docs are trust=curated)"""
         trust = {c["source"]: c["trust"] for c in self.store.all_chunks()}
         self.assertEqual(trust["inbox/alpha/warehouse-move.md"], "upload")
         self.assertEqual(trust["docs/alpha/refund-policy.md"], "curated")

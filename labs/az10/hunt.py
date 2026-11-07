@@ -65,7 +65,7 @@ class Logs:
 
 
 def load_logs(folder: pathlib.Path = LOGS) -> Logs:
-    j = lambda n: json.loads((folder / n).read_text())
+    j = lambda n: json.loads((folder / n).read_text(encoding="utf-8"))
     return Logs(j("activity-log.json")["value"], j("azurediagnostics-requestresponse.json")["rows"],
                 j("azuremetrics-tokens.json")["rows"])
 

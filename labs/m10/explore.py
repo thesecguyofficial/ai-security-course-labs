@@ -121,7 +121,7 @@ def _show(values) -> str:
 
 def cmd_policy(a) -> None:
     path = pathlib.Path(a.file)
-    doc = json.loads((path if path.is_absolute() or path.exists() else HERE / path).read_text())
+    doc = json.loads((path if path.is_absolute() or path.exists() else HERE / path).read_text(encoding="utf-8"))
     print(f"{a.file}\n")
     print(json.dumps(doc, indent=2))
     print(f"\nRead it statement by statement (Version {doc.get('Version', 'missing')} is the policy language version):")
@@ -196,7 +196,7 @@ def cmd_decide(a) -> None:
 
 def cmd_call(a) -> None:
     host = f"bedrock-runtime.{a.region}.amazonaws.com"
-    body = {"messages": [{"role": "user", "content": [{"text": "Summarise ticket 4521 in one line."}]}]}
+    body = {"messages": [{"role": "user", "content": [{"text": "Summarize ticket 4521 in one line."}]}]}
     print("One Converse call, as the app would send it (illustrative; nothing is sent):\n")
     print(f"  POST https://{host}/model/{a.model}/converse")
     print(f"  Authorization: {'Bearer <a Bedrock API key>' if a.api_key else 'AWS4-HMAC-SHA256 Credential=... (SigV4, as in sign)'}")
@@ -240,7 +240,7 @@ def _get(rec: dict, dotted: str):
 
 
 def cmd_event(a) -> None:
-    records = json.loads(CLOUDTRAIL.read_text())["Records"]
+    records = json.loads(CLOUDTRAIL.read_text(encoding="utf-8"))["Records"]
     hits = [(i, r) for i, r in enumerate(records, 1) if r.get("eventName") == a.name
             and (not a.source_ip or r.get("sourceIPAddress") == a.source_ip)]
     if not hits:

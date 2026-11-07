@@ -54,7 +54,7 @@ TRAIN = [("Can you take gift cards as payment", "ESCALATE"),
 # ---------------------------------------------------------------------------------------------------- helpers
 def _need(path):
     if not path.exists():
-        sys.exit(f"{path.relative_to(lab.HERE)} not found: run `make setup` first")
+        sys.exit(f"{path.relative_to(lab.HERE).as_posix()} not found: run `make setup` first")
 
 
 def _load(name: str) -> toymodel.Guard:
@@ -278,7 +278,7 @@ def cmd_sign(a) -> int:
     print("\n2. A key pair, made by make setup (ECDSA P-256):")
     mode = oct((lab.KEYS / "ci.priv").stat().st_mode & 0o777)[2:]
     print(f"   keys/ci.priv  private key: signs. Permissions {mode} (only you). Never shared, never shown.")
-    pub = (lab.KEYS / "ci.pub").read_text().splitlines()
+    pub = (lab.KEYS / "ci.pub").read_text(encoding="utf-8").splitlines()
     print(f"   keys/ci.pub   public key: checks. Safe to share: {pub[1][:44]}...")
     priv = serialization.load_pem_private_key((lab.KEYS / "ci.priv").read_bytes(), None)
     sig = priv.sign(blob, ec.ECDSA(hashes.SHA256()))
@@ -318,7 +318,7 @@ def cmd_bundle(a) -> int:
         shutil.copytree(BASE, model)
         sig = pathlib.Path(tmp) / "model.sig"
         model_signing.signing.Config().use_elliptic_key_signer(private_key=lab.KEYS / "ci.priv").sign(model, sig)
-        b = json.loads(sig.read_text())
+        b = json.loads(sig.read_text(encoding="utf-8"))
         st = json.loads(base64.b64decode(b["dsseEnvelope"]["payload"]))
         print("model_signing signed a copy of models/tsg-guard-base (in a temporary folder) with keys/ci.priv.")
         print(f"The signature file, model.sig ({sig.stat().st_size} bytes of JSON), part by part:\n")

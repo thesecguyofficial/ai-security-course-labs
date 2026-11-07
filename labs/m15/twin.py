@@ -25,8 +25,8 @@ import sys
 import model_files
 
 HERE = pathlib.Path(__file__).resolve().parent
-COMPANY = json.loads((HERE / "anycompany.json").read_text())
-IMAGES = json.loads((HERE / "images.json").read_text())
+COMPANY = json.loads((HERE / "anycompany.json").read_text(encoding="utf-8"))
+IMAGES = json.loads((HERE / "images.json").read_text(encoding="utf-8"))
 ACCOUNT = COMPANY["account"]
 REGION = COMPANY["region"]
 
@@ -55,9 +55,9 @@ class Setup:
         if not base.is_dir():
             raise SystemExit(f"no such setup: {name} (choose first-draft or hardened)")
         for f in self.FILES:
-            setattr(self, f.replace("-", "_"), json.loads((base / f"{f}.json").read_text()))
+            setattr(self, f.replace("-", "_"), json.loads((base / f"{f}.json").read_text(encoding="utf-8")))
         scp_file = base / "scp.json"
-        self.scps = json.loads(scp_file.read_text()) if scp_file.exists() else {"Statement": []}
+        self.scps = json.loads(scp_file.read_text(encoding="utf-8")) if scp_file.exists() else {"Statement": []}
 
     def copy(self) -> "Setup":
         c = copy.copy(self)

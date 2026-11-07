@@ -12,7 +12,7 @@ already done, so "run it again" is also the fix for most half-finished installs.
 
 | Step | macOS | Ubuntu / Debian (and WSL) | Windows |
 |---|---|---|---|
-| 1. Look at this computer | OS, chip (Apple silicon or Intel), RAM, free disk, work-laptop hints | same | same, plus WSL 2 and virtualisation |
+| 1. Look at this computer | OS, chip (Apple silicon or Intel), RAM, free disk, work-laptop hints | same | same, plus WSL 2 and virtualization |
 | 2. Package manager | Homebrew (installed only if you say yes) | apt (already there) | winget (already there on Windows 10/11) |
 | 3. git, make, curl | Apple Command Line Tools or Homebrew | apt | winget `Git.Git` |
 | 4. Python 3.11+ | `brew install python@3.13` | apt `python3` + `python3-venv` (Ubuntu 22.04: `python3.11`) | winget `Python.Python.3.13` |
@@ -32,8 +32,9 @@ when you have it, because every lab is tested on 3.13. Two edges to know:
 - **Python 3.14** works for most labs, but the pinned packages in M4 and M9 are tested up to 3.13.
 
 **Why one shared `.venv`?** It gives every lab the same, right Python, even when your system's `python3` is
-older. The core labs need nothing else. Labs M4, M6, M8 and M9 pin their own packages and install them in their
-own folder with `make setup`, so one lab's versions can never break another lab.
+older. The core labs need nothing else. Labs M2, M4, M6, M8, M9, M21, M22, M25, M26 and M28 to M31 make their own
+`.venv` in their folder with `make setup` (most pin a few packages there), so one lab's versions can never break
+another lab.
 
 ## Options
 
@@ -44,7 +45,7 @@ own folder with `make setup`, so one lab's versions can never break another lab.
 | `--no-docker` | `-NoDocker` | Skip Docker (the doctor skips it too) |
 | `--no-ollama` | `-NoOllama` | Skip Ollama and the models |
 | `--no-models` | `-NoModels` | Install Ollama but don't download the models yet |
-| `--docker=desktop`, `--docker=colima`, `--docker=engine` | | Pick the Docker flavour without the question (`engine` = inside WSL) |
+| `--docker=desktop`, `--docker=colima`, `--docker=engine` | | Pick the Docker flavor without the question (`engine` = inside WSL) |
 | `--uninstall` | `-Uninstall` | Remove what the script made in this repo (see Uninstall) |
 
 Exit codes: `0` ready (warnings are fine), `1` something failed (the doctor says what), `2` wrong option or
@@ -111,12 +112,12 @@ The doctor's "next step" line is the first thing to try. These are the usual pro
   user may not use it: use `sudo docker`, or join the docker group (above) and log out and back in.
 - **WSL:** install Docker Desktop on Windows, then Settings, Resources, WSL integration, and tick your distro.
 
-### Windows: WSL 2, virtualisation and the restart
+### Windows: WSL 2, virtualization and the restart
 - The script turns WSL 2 on with `wsl --install --no-distribution`, which needs administrator rights and a
   restart. **Restart Windows, then run the same command again.** The script remembers it stopped there
   (`.setup-state.json`) and carries on.
 - Still "WSL 2 is missing" after a restart: run `wsl --update` in an administrator PowerShell, restart again.
-- "Virtualisation looks OFF": restart into your BIOS/UEFI settings (often F2, F10, Del or Esc at power-on) and turn
+- "Virtualization looks OFF": restart into your BIOS/UEFI settings (often F2, F10, Del or Esc at power-on) and turn
   on **Intel VT-x** / **Intel Virtualization Technology** or **AMD-V** / **SVM Mode**. On a work laptop this
   setting is often locked: ask IT.
 - After Docker Desktop installs, sign out of Windows and back in once if Docker says your user is not allowed.
@@ -179,7 +180,7 @@ The doctor's "next step" line is the first thing to try. These are the usual pro
 
 `./setup.sh --uninstall` (Windows: `setup.ps1 -Uninstall`) asks, then removes:
 
-- the shared `.venv` and any lab's own `.venv` (M4, M6, M8, M9);
+- the shared `.venv` and every lab's own `.venv` (`labs/*/.venv`);
 - the two lab models (`ollama rm gemma3:1b embeddinggemma`).
 
 It leaves Docker, Ollama, Python, git and Homebrew installed, because you may use them for other things. To

@@ -37,7 +37,7 @@ def main():
     found = False
     for f in sorted(STORE.rglob("*")):
         if f.is_file() and b"CANARY-BRAVO-7731" in f.read_bytes():
-            print(f"   {f.relative_to(app.HERE)}  ({f.stat().st_size:,} bytes)")
+            print(f"   {f.relative_to(app.HERE).as_posix()}  ({f.stat().st_size:,} bytes)")
             found = True
     if not found:
         print("   none found in plain bytes (the text may be compressed or encoded; the vectors are still there)")

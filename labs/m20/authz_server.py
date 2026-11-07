@@ -35,7 +35,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import jwtlite
 
 HERE = pathlib.Path(__file__).resolve().parent
-USERS = json.loads((HERE / "data" / "users.json").read_text())
+USERS = json.loads((HERE / "data" / "users.json").read_text(encoding="utf-8"))
 _KEY = None
 _KEY_LOCK = threading.Lock()
 
@@ -53,7 +53,7 @@ def load_policy(setup: str) -> dict:
     path = HERE / "setups" / setup / "authz.json"
     if not path.exists():
         raise SystemExit(f"No setup called {setup!r} (looked for {path})")
-    return json.loads(path.read_text())
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 class AuthorizationServer:

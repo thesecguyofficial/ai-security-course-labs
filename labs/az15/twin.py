@@ -36,8 +36,8 @@ import sys
 import model_files
 
 HERE = pathlib.Path(__file__).resolve().parent
-COMPANY = json.loads((HERE / "contoso.json").read_text())
-ENVIRONMENTS = json.loads((HERE / "environments.json").read_text())
+COMPANY = json.loads((HERE / "contoso.json").read_text(encoding="utf-8"))
+ENVIRONMENTS = json.loads((HERE / "environments.json").read_text(encoding="utf-8"))
 SUB = "/subscriptions/" + COMPANY["subscription_id"]
 ML = "Microsoft.MachineLearningServices"
 STORAGE_RG = {"sttsgml": "rg-tsg-ml", "sttsgmldev": "rg-tsg-ml-dev", "stcontosomlreg": "rg-tsg-ml-registry",
@@ -149,7 +149,7 @@ class Setup:
             raise SystemExit(f"no such setup: {name} (try first-draft or hardened)")
         for f in FILES:
             p = folder / f"{f}.json"
-            setattr(self, f.replace("-", "_"), json.loads(p.read_text()) if p.exists() else {})
+            setattr(self, f.replace("-", "_"), json.loads(p.read_text(encoding="utf-8")) if p.exists() else {})
         _fill_hashes(self.models)
 
     def copy(self) -> "Setup":
@@ -564,7 +564,7 @@ def _main(argv: list[str]) -> int:
         print(f"{'REACHABLE' if ok else 'BLOCKED'}: {why}")
         return 0
     if len(argv) == 3 and argv[0] == "policy":
-        r = policy_check(Setup(argv[1]), json.loads(pathlib.Path(argv[2]).read_text()))
+        r = policy_check(Setup(argv[1]), json.loads(pathlib.Path(argv[2]).read_text(encoding="utf-8")))
         print(json.dumps(r))
         return 0
     print(__doc__)

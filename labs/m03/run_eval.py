@@ -40,7 +40,7 @@ def print_summary(path: str):
         data = json.load(open(path, encoding="utf-8"))
     except (OSError, ValueError):
         return
-    print("\nPer test (from " + os.path.relpath(path) + "):")
+    print("\nPer test (from " + os.path.relpath(path).replace(os.sep, "/") + "):")
     for row in data["results"]["results"]:
         name = row["testCase"].get("description", "?")
         failed = [c["assertion"].get("metric") or c["assertion"].get("type")

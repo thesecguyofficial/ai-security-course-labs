@@ -52,7 +52,7 @@ class TestMyAssessment(unittest.TestCase):
         self.assertIsNotNone(pack, "pack refused: fix the errors from 'govlab.py check my-assessment' first")
         # the pack stays in out/ so you can open it
         self.assertEqual(govlab.verify_pack(pack), [])
-        self.assertIn("Ready for sign-off", (pack / "README.md").read_text())
+        self.assertIn("Ready for sign-off", (pack / "README.md").read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

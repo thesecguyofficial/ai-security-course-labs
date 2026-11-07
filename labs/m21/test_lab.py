@@ -122,10 +122,10 @@ class Hardened(LabTest):
         a = pep.handle(SAM, "issue_refund", BIG).approval_id
         approvals.decide(a, "alice")
         p = lab.state_dir() / "approvals.json"
-        db = json.loads(p.read_text())
+        db = json.loads(p.read_text(encoding="utf-8"))
         bigger = {"order_id": "O-1002", "amount_cents": 95000, "currency": "USD"}
         db[a]["args"], db[a]["args_sha256"] = bigger, lab.sha256(lab.canonical(bigger))
-        p.write_text(json.dumps(db))
+        p.write_text(json.dumps(db), encoding="utf-8")
         out = pep.handle(SAM, "issue_refund", json.dumps(bigger))
         self.assertNotEqual(out.decision, "ALLOW")
 
@@ -164,7 +164,7 @@ class Hardened(LabTest):
                 shutil.copytree(old, d, dirs_exist_ok=True)
                 for setup in ("hardened", "first-draft"):
                     (lab.pathlib.Path(d) / setup / "policies" / "zz_broken.cedar").write_text(
-                        '@id("zz_broken")\npermit (principal, action resource);')
+                        '@id("zz_broken")\npermit (principal, action resource);', encoding="utf-8")
                 lab.SETUPS = lab.pathlib.Path(d)
                 s = Session("bob", "T-501", "sam@customer.example")
                 call = '{"order_id": "O-1001", "amount_cents": 4500, "currency": "USD"}'
@@ -194,24 +194,24 @@ class CedarEngine(LabTest):
     def test_17_hardened_policies_validate_against_schema(self):
         """cedar: every hardened policy validates against schema/tsg.cedarschema"""
         text, defer = pdp.load_policy_text(lab.SETUPS / "hardened" / "policies")
-        self.assertTrue(cedarpy.validate_policies(text, lab.SCHEMA.read_text()).validation_passed)
+        self.assertTrue(cedarpy.validate_policies(text, lab.SCHEMA.read_text(encoding="utf-8")).validation_passed)
         self.assertEqual(defer, {"refund_over_100_needs_approval"})
 
     def test_18_validator_catches_unguarded_optional(self):
         """cedar: reading an optional argument without `has` fails validation, before anything is deployed"""
         bad = ('@id("x")\nforbid (principal, action == TSG::Action::"issue_refund", resource)\n'
                'when { context.input.reason == "goodwill" };')
-        self.assertFalse(cedarpy.validate_policies(bad, lab.SCHEMA.read_text()).validation_passed)
+        self.assertFalse(cedarpy.validate_policies(bad, lab.SCHEMA.read_text(encoding="utf-8")).validation_passed)
 
     def test_19_valid_is_not_safe(self):
         """cedar: the first draft's policies VALIDATE against the schema too: valid policies can still be wrong"""
         text, _ = pdp.load_policy_text(lab.SETUPS / "first-draft" / "policies")
-        self.assertTrue(cedarpy.validate_policies(text, lab.SCHEMA.read_text()).validation_passed)
+        self.assertTrue(cedarpy.validate_policies(text, lab.SCHEMA.read_text(encoding="utf-8")).validation_passed)
 
     def test_20_cloud_policies_parse(self):
         """cedar: the guided build's Cedar policies parse (placeholders filled in)"""
         for f in sorted((lab.LAB / "cloud" / "policies").glob("*.cedar")):
-            text = f.read_text().replace("GATEWAY_ARN", "arn:aws:bedrock-agentcore:us-east-1:111122223333:gateway/x")
+            text = f.read_text(encoding="utf-8").replace("GATEWAY_ARN", "arn:aws:bedrock-agentcore:us-east-1:111122223333:gateway/x")
             json.loads(cedarpy.policies_to_json_str(text))
 
 
@@ -229,10 +229,10 @@ class Audit(LabTest):
         """audit: changing a decision, or deleting a receipt, is detected"""
         self._some_receipts()
         p = lab.state_dir() / "receipts.jsonl"
-        lines = p.read_text().splitlines()
-        p.write_text("\n".join([lines[0].replace('"ALLOW"', '"DENY"')] + lines[1:]) + "\n")
+        lines = p.read_text(encoding="utf-8").splitlines()
+        p.write_text("\n".join([lines[0].replace('"ALLOW"', '"DENY"')] + lines[1:]) + "\n", encoding="utf-8")
         self.assertTrue(any("changed" in x for x in receipts.verify()))
-        p.write_text("\n".join([lines[0], lines[2]]) + "\n")
+        p.write_text("\n".join([lines[0], lines[2]]) + "\n", encoding="utf-8")
         self.assertTrue(receipts.verify())
 
 

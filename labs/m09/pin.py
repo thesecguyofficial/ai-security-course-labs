@@ -28,7 +28,7 @@ def sha256(path: str) -> str:
 
 def load_pins() -> dict:
     if os.path.exists(PINS):
-        with open(PINS) as f:
+        with open(PINS, encoding="utf-8") as f:
             return json.load(f)
     return {}
 
@@ -37,7 +37,7 @@ def write_pin(path: str) -> str:
     pins = load_pins()
     digest = sha256(path)
     pins[os.path.basename(path)] = f"sha256:{digest}"
-    with open(PINS, "w") as f:
+    with open(PINS, "w", encoding="utf-8") as f:
         json.dump(pins, f, indent=2, sort_keys=True)
     return digest
 

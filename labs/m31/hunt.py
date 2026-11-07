@@ -20,11 +20,11 @@ HERE = Path(__file__).resolve().parent
 
 
 def read(path):
-    return [json.loads(line) for line in Path(path).read_text().splitlines() if line.strip()]
+    return [json.loads(line) for line in Path(path).read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
 def known_payees():
-    return set(json.loads((HERE / "data" / "payee-history.json").read_text())["known_payees"])
+    return set(json.loads((HERE / "data" / "payee-history.json").read_text(encoding="utf-8"))["known_payees"])
 
 
 def refusals_by_rule(entries):
@@ -66,7 +66,7 @@ def main(argv):
     path = argv[argv.index("--file") + 1] if "--file" in argv else HERE / "data" / "hunt-log.jsonl"
     entries = read(path)
     known = known_payees()
-    print(f"{len(entries)} decisions in {os.path.relpath(path)}\n")
+    print(f"{len(entries)} decisions in {os.path.relpath(path).replace(os.sep, '/')}\n")
     print("Q1  refused or held, by rule:")
     for rule, n in refusals_by_rule(entries).most_common():
         print(f"      {n:>3}  {rule}")

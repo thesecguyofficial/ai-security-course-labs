@@ -24,7 +24,7 @@ from dataclasses import dataclass, field
 import plan as P
 from iam_eval import DEFAULT_ENDPOINT_POLICY, Decision, Request, evaluate_all
 
-COMPANY = json.loads((P.HERE / "anycompany.json").read_text())
+COMPANY = json.loads((P.HERE / "anycompany.json").read_text(encoding="utf-8"))
 ORG_ACCOUNTS = COMPANY["organization"]["accounts_in_org"]
 REGION = "us-east-1"
 

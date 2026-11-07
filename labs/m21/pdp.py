@@ -49,7 +49,7 @@ def load_policy_text(policy_dir: pathlib.Path) -> tuple[str, set]:
         raise PolicyLoadError(f"no .cedar files in {policy_dir}")
     parts = []
     for f in files:
-        t = f.read_text()
+        t = f.read_text(encoding="utf-8")
         ids = ID_RE.findall(t)
         if ids != [f.stem]:
             raise PolicyLoadError(f'{f.name}: must contain exactly one policy with @id("{f.stem}")')
@@ -73,7 +73,7 @@ class CedarPDP:
 
     def __init__(self, policy_dir: pathlib.Path, use_schema: bool):
         self.text, self.defer_ids = load_policy_text(policy_dir)
-        self.schema = lab.SCHEMA.read_text() if use_schema else None
+        self.schema = lab.SCHEMA.read_text(encoding="utf-8") if use_schema else None
         if self.schema:
             v = cedarpy.validate_policies(self.text, self.schema)
             if not v.validation_passed:

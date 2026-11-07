@@ -129,7 +129,7 @@ def _show(values) -> str:
 
 def cmd_role(a) -> None:
     path = pathlib.Path(a.file)
-    doc = json.loads((path if path.is_absolute() or path.exists() else HERE / path).read_text())
+    doc = json.loads((path if path.is_absolute() or path.exists() else HERE / path).read_text(encoding="utf-8"))
     print(f"{a.file}\n")
     print(json.dumps({k: v for k, v in doc.items() if k != "source"}, indent=2))
     print("\nRead it field by field:\n")
@@ -205,7 +205,7 @@ def cmd_call(a) -> None:
     if acct is None:
         sys.exit(f"no deployment called {a.deployment}")
     host = f"{acct['properties']['customSubDomainName']}.openai.azure.com"
-    body = {"model": a.deployment, "messages": [{"role": "user", "content": "Summarise ticket 4521 in one line."}]}
+    body = {"model": a.deployment, "messages": [{"role": "user", "content": "Summarize ticket 4521 in one line."}]}
     print("One chat call, as the app would send it (illustrative; nothing is sent):\n")
     print(f"  POST https://{host}/openai/v1/chat/completions")
     print(f"  {'api-key: <the resource key>' if a.key else 'Authorization: Bearer <Entra ID token for https://cognitiveservices.azure.com>'}")
@@ -224,7 +224,7 @@ def cmd_call(a) -> None:
 
 def cmd_event(a) -> None:
     name = a.name.lower()
-    acts = json.loads(ACTIVITY.read_text())["value"]
+    acts = json.loads(ACTIVITY.read_text(encoding="utf-8"))["value"]
     hits = [(i, r) for i, r in enumerate(acts, 1) if name in r["operationName"]["value"].lower()
             and (not a.source_ip or r["httpRequest"]["clientIpAddress"] == a.source_ip)]
     if hits:
@@ -246,7 +246,7 @@ def cmd_event(a) -> None:
             print(f"  {g:<7}{k:<17}{v}")
         print("\n  not here: any model call. The Activity Log covers the control plane (managing), not the data plane.")
         return
-    reqs = json.loads(REQUESTS.read_text())["rows"]
+    reqs = json.loads(REQUESTS.read_text(encoding="utf-8"))["rows"]
     hits = [(i, r) for i, r in enumerate(reqs, 1) if r["OperationName"].lower() == name
             and (not a.source_ip or r["CallerIPAddress"] == a.source_ip)]
     if not hits:

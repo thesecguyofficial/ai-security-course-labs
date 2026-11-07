@@ -5,6 +5,7 @@ Agent Platform integration, fail-open behaviour, Terraform matching the hardened
 """
 
 import json
+import pathlib
 import re
 import unittest
 
@@ -23,6 +24,23 @@ TPL = {"filterConfig": {"piAndJailbreakFilterSettings": {"filterEnforcement": "E
 
 def suite(profile):
     return run_suite.evaluate(profile)
+
+
+
+# Folders that are not part of the lab: the lab's own .venv (after `make setup`), caches, tool state and output.
+# `.github` stays in: some labs ship sample workflows as lab files.
+_NOT_LAB = {"__pycache__", "node_modules", "out"}
+
+
+def _lab_files(pattern="*"):
+    """The lab's own files under HERE: skips .venv, .git, .terraform, __pycache__, node_modules and out/."""
+    for p in sorted(HERE.rglob(pattern)):
+        if not p.is_file():
+            continue
+        folders = p.relative_to(HERE).parts[:-1]
+        if any(d in _NOT_LAB or (d.startswith(".") and d != ".github") for d in folders):
+            continue
+        yield p
 
 
 class T1_Checker(unittest.TestCase):
@@ -45,7 +63,7 @@ class T1_Checker(unittest.TestCase):
 
         def fake(path):
             data = orig(path)
-            if str(path).endswith("hardened/app.json"):
+            if pathlib.Path(path).as_posix().endswith("hardened/app.json"):
                 data = copy.deepcopy(data)
                 data["inline"]["service_agent_roles"] = []
             return data
@@ -183,7 +201,7 @@ class T4_AgentPlatform(unittest.TestCase):
 class T5_TerraformAndSafety(unittest.TestCase):
     def test_22_terraform_matches_hardened(self):
         """terraform: floor setting and template match the hardened twin"""
-        tf = "".join(p.read_text() for p in (HERE / "terraform").glob("*.tf"))
+        tf = "".join(p.read_text(encoding="utf-8") for p in (HERE / "terraform").glob("*.tf"))
         floor = armor_twin.load_json(HERE / "twin/hardened/floor.json")
         self.assertIn('integrated_services              = ["AI_PLATFORM"]', tf)
         self.assertTrue(floor["aiPlatformFloorSetting"]["inspectAndBlock"])
@@ -199,7 +217,7 @@ class T5_TerraformAndSafety(unittest.TestCase):
 
     def test_23_no_real_secrets_or_identities(self):
         """safety: only fake keys, documentation domains and placeholder numbers in the lab"""
-        text = "\n".join(p.read_text(encoding="utf-8") for p in HERE.rglob("*")
+        text = "\n".join(p.read_text(encoding="utf-8") for p in _lab_files()
                          if p.is_file() and p.suffix in (".py", ".json", ".tf", ".sh", ".md", ".txt", ".example")
                          and not p.name.startswith("test_"))
         for key in re.findall(r"AIza[0-9A-Za-z_\-]{35}", text):

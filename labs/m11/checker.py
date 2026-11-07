@@ -26,7 +26,7 @@ from dataclasses import dataclass
 import plan as P
 from iam_eval import action_matches
 
-COMPANY = json.loads((P.HERE / "anycompany.json").read_text())
+COMPANY = json.loads((P.HERE / "anycompany.json").read_text(encoding="utf-8"))
 SEV_ORDER = {"HIGH": 0, "MEDIUM": 1, "LOW": 2}
 
 # Actions a chatbot's role never needs (lesson 11.1): they change logging, spend money or enable models.

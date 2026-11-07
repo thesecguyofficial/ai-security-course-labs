@@ -36,11 +36,11 @@ def _path():
 
 def load() -> dict:
     p = _path()
-    return json.loads(p.read_text()) if p.exists() else {}
+    return json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
 
 
 def _save(db: dict) -> None:
-    _path().write_text(json.dumps(db, indent=2, ensure_ascii=False))
+    _path().write_text(json.dumps(db, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 def _sign(rec: dict) -> str:

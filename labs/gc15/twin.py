@@ -28,9 +28,9 @@ import sys
 import model_files
 
 HERE = pathlib.Path(__file__).resolve().parent
-COMPANY = json.loads((HERE / "exampleco.json").read_text())
-ROLES = json.loads((HERE / "roles.json").read_text())
-IMAGES = json.loads((HERE / "images.json").read_text())
+COMPANY = json.loads((HERE / "exampleco.json").read_text(encoding="utf-8"))
+ROLES = json.loads((HERE / "roles.json").read_text(encoding="utf-8"))
+IMAGES = json.loads((HERE / "images.json").read_text(encoding="utf-8"))
 PROD = COMPANY["prod_project"]
 EP = COMPANY["endpoint"]
 MODEL = COMPANY["model"]
@@ -64,7 +64,7 @@ class Setup:
         if not base.is_dir():
             raise SystemExit(f"no such setup: {name} (choose first-draft or hardened)")
         for f in self.FILES:
-            setattr(self, f, json.loads((base / f"{f}.json").read_text()))
+            setattr(self, f, json.loads((base / f"{f}.json").read_text(encoding="utf-8")))
 
     def copy(self) -> "Setup":
         c = copy.copy(self)

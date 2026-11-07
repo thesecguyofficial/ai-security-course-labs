@@ -31,7 +31,7 @@ import sys
 from datetime import datetime, timedelta, timezone
 
 HERE = pathlib.Path(__file__).resolve().parent
-CO = json.loads((HERE / "exampleco.json").read_text())
+CO = json.loads((HERE / "exampleco.json").read_text(encoding="utf-8"))
 P = CO["project"]
 PN = CO["project_number"]
 REGION = CO["region"]
@@ -463,7 +463,7 @@ def when(rec: dict) -> str:
 
 
 def build(setup_name: str) -> dict:
-    setup = json.loads((HERE / "setups" / f"{setup_name}.json").read_text())
+    setup = json.loads((HERE / "setups" / f"{setup_name}.json").read_text(encoding="utf-8"))
     d = Day(setup)
     normal_day(d)
     for fn in ATTACKS.values():
@@ -482,9 +482,9 @@ def write(setup_name: str) -> pathlib.Path:
     counts = {}
     for k, rows in res["out"].items():
         if rows:
-            (folder / f"{k}.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
+            (folder / f"{k}.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
         counts[k] = len(rows)
-    (folder / "truth.json").write_text(json.dumps(res["truth"], indent=1) + "\n")
+    (folder / "truth.json").write_text(json.dumps(res["truth"], indent=1) + "\n", encoding="utf-8")
     print(f"{setup_name:12} " + "  ".join(f"{k} {v}" for k, v in counts.items()) + f"   -> out/{setup_name}/")
     return folder
 

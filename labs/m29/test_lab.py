@@ -22,6 +22,23 @@ def honey_rule(setup: str) -> dict:
     return next(r for r in load_setup(setup)["rules"] if r["name"] == "honeytoken-key-used")
 
 
+
+# Folders that are not part of the lab: the lab's own .venv (after `make setup`), caches, tool state and output.
+# `.github` stays in: some labs ship sample workflows as lab files.
+_NOT_LAB = {"__pycache__", "node_modules", "out"}
+
+
+def _lab_files(pattern="*"):
+    """The lab's own files under HERE: skips .venv, .git, .terraform, __pycache__, node_modules and out/."""
+    for p in sorted(HERE.rglob(pattern)):
+        if not p.is_file():
+            continue
+        folders = p.relative_to(HERE).parts[:-1]
+        if any(d in _NOT_LAB or (d.startswith(".") and d != ".github") for d in folders):
+            continue
+        yield p
+
+
 class Suite(unittest.TestCase):
     def test_01_first_draft(self):
         """first draft: 14 of 15 missed (only D0 caught), 5 of 5 normal cases work"""
@@ -158,9 +175,9 @@ class Safety(unittest.TestCase):
     def test_19_no_real_key_formats(self):
         """no file in this lab holds a string in a real AWS, OpenAI or Bedrock API key format"""
         real = re.compile(r"\b(AKIA|ASIA)[0-9A-Z]{16}\b|\bsk-[A-Za-z0-9_-]{20,}|\bABSK[A-Za-z0-9+/=]{20,}")
-        for path in HERE.rglob("*"):
+        for path in _lab_files():
             if path.is_file() and ".venv" not in path.parts and "__pycache__" not in path.parts:
-                text = path.read_text(errors="ignore")
+                text = path.read_text(errors="ignore", encoding="utf-8")
                 self.assertIsNone(real.search(text), f"{path.name} holds a real-looking key")
 
     def test_20_documentation_ips(self):

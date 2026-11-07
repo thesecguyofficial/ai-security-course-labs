@@ -24,7 +24,7 @@ WRITES = {"send", "DELETE"}
 
 
 def load(path: str | pathlib.Path) -> list[dict]:
-    return [json.loads(line) for line in pathlib.Path(path).read_text().splitlines() if line.strip()]
+    return [json.loads(line) for line in pathlib.Path(path).read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
 def find_shared_tokens(rows: list[dict]) -> dict[str, list[str]]:

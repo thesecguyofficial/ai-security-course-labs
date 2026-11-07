@@ -84,7 +84,7 @@ async def discover() -> list[dict]:
 
 def load_pins(path: Path) -> dict:
     try:
-        return json.loads(path.read_text())
+        return json.loads(path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
         return {}
 
@@ -149,7 +149,7 @@ def check_pins(tools: list[dict], pin_path: Path, log) -> set[tuple[str, str]]:
         else:
             log(f"PIN ok    {key}  {fp[:12]}…")
     if baseline:
-        pin_path.write_text(json.dumps(pins, indent=2))
+        pin_path.write_text(json.dumps(pins, indent=2), encoding="utf-8")
     return blocked
 
 
@@ -255,7 +255,7 @@ def approve_tools(tools: list[dict], approvals_path: str | None, log) -> set[tup
     preset = {}
     if approvals_path:
         try:
-            preset = json.loads(Path(approvals_path).read_text())
+            preset = json.loads(Path(approvals_path).read_text(encoding="utf-8"))
         except (FileNotFoundError, json.JSONDecodeError):
             preset = {}
     ok: set[tuple[str, str]] = set()
@@ -284,14 +284,14 @@ def _redact(call_args: dict) -> dict:
 
 def _secret_in_inbox() -> bool:
     log = STATE / "attacker_inbox.log"
-    return log.exists() and "AKIAIOSFODNN7EXAMPLE" in log.read_text()
+    return log.exists() and "AKIAIOSFODNN7EXAMPLE" in log.read_text(encoding="utf-8")
 
 
 def _outbox() -> list[dict]:
     f = STATE / "outbox.jsonl"
     if not f.exists():
         return []
-    return [json.loads(line) for line in f.read_text().splitlines() if line.strip()]
+    return [json.loads(line) for line in f.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
 def main() -> None:

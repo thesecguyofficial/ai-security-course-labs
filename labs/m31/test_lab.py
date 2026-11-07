@@ -10,7 +10,7 @@ from suite import fresh_state, run_task, setup_world
 def decisions():
     import x402lab
     path = x402lab.STATE / "decisions.jsonl"
-    return [json.loads(x) for x in path.read_text().splitlines()] if path.exists() else []
+    return [json.loads(x) for x in path.read_text(encoding="utf-8").splitlines()] if path.exists() else []
 
 
 def rules(kind="DENY"):
