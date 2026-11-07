@@ -1,0 +1,42 @@
+# Lab M5, optional Step 4b: three Semgrep rules for the three sinks in this lab. They look for the CODE SHAPE of
+# each bug (text glued into SQL, a shell string, HTML), so they flag the vulnerable functions and stay quiet on
+# the safe ones. Run them with: make semgrep  (or the command in the README). They run locally: --metrics=off
+# sends nothing, and no rules are downloaded.
+rules:
+  - id: tsg-m5-sql-built-from-text
+    languages: [python]
+    severity: ERROR
+    message: >-
+      SQL text is built with an f-string and then executed. If any part comes from a model (or a user), it can
+      change the query itself. Use a fixed SQL string with ? placeholders and pass the values separately.
+    metadata:
+      owasp: "LLM05:2025 Improper Output Handling; A03:2021 Injection"
+      cwe: "CWE-89"
+    patterns:
+      - pattern-either:
+          - pattern: $DB.execute(f"...")
+          - pattern: |
+              $SQL = f"..."
+              ...
+              $DB.execute($SQL)
+  - id: tsg-m5-shell-string
+    languages: [python]
+    severity: ERROR
+    message: >-
+      A command string goes to the system shell (shell=True). Shell characters in model output (; & | $( ) `)
+      start extra commands. Pass an argument list with shell=False, after an allow-list check.
+    metadata:
+      owasp: "LLM05:2025 Improper Output Handling"
+      cwe: "CWE-78"
+    pattern: subprocess.run(..., shell=True, ...)
+  - id: tsg-m5-html-without-escaping
+    languages: [python]
+    severity: WARNING
+    message: >-
+      An HTML string is built with an f-string from a variable that is not HTML-encoded. If the value is model
+      output, a <script> or <img onerror=...> in it runs in the browser. Encode it with html.escape(...) first.
+    metadata:
+      owasp: "LLM05:2025 Improper Output Handling"
+      cwe: "CWE-79"
+    # An f-string that starts with an HTML tag and puts in a value that is not wrapped in html.escape(...).
+    pattern-regex: return f"\s*<[^"\n]*\{(?!html\.escape\()[^}]+\}

@@ -39,6 +39,7 @@ green **Code → Download ZIP** button on the repository page and unzip it.
 | `test_lab.py` | 13 automated tests: 3 prove the attacks work in vulnerable mode, 10 prove the fixes hold |
 | `test_challenge.py` | 5 tests for the challenge. 4 fail until you fix the code |
 | `run_tests.py` | Runs the tests with one line per result |
+| `semgrep/model-output-sinks.yml` | Optional Step 4b: three Semgrep rules that find this lab's three sinks in the code |
 | `Makefile` | Shortcuts for Mac/Linux |
 
 **About the stand-in model.** `stand_in_model.py` is *not* an AI model. It copies the one behavior this lab is
@@ -411,6 +412,72 @@ show that each check can catch the bug; tests 4 to 10 show the fix holds against
 start the real web server on a free `127.0.0.1` port and attack it over HTTP (test 12 also checks the Content Security
 Policy); test 13 checks the app refuses to listen on any address except `127.0.0.1`. The safe tests also check that normal
 questions still work, because a "fix" that breaks the feature gets reverted.
+
+## Step 4b (optional) · Find the same bugs in the code with Semgrep
+
+The tests above prove the bugs by attacking the app. A **static analysis** tool finds them by reading the code,
+before anything runs, which is how you catch them in every pull request. [Semgrep](https://github.com/semgrep/semgrep)
+is an open-source scanner (LGPL 2.1) that matches code shapes. `semgrep/model-output-sinks.yml` holds three rules,
+one per sink in this lab: SQL built from text, a command string for the shell, and HTML built without encoding.
+
+Install it once, in a virtual environment for this folder (Mac and Linux; on Windows, Semgrep's own installer is
+still in beta, so use WSL if `pip install` fails):
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python3 -m pip install semgrep==1.184.0
+make semgrep
+```
+
+- `--metrics=off`: Semgrep sends no usage data. The rules come from this folder, so nothing is downloaded either
+- `--error`: exit with code 1 when anything is found, so a CI job fails (the `-` in the Makefile keeps `make` quiet about it)
+
+Real output:
+
+```text
+
+
+┌─────────────────┐
+│ 3 Code Findings │
+└─────────────────┘
+
+    helpdesk_app.py
+    ❯❱ semgrep.tsg-m5-html-without-escaping
+          ❰❰ Blocking ❱❱
+          An HTML string is built with an f-string from a variable that is not HTML-encoded. If the value is
+          model output, a <script> or <img onerror=...> in it runs in the browser. Encode it with
+          html.escape(...) first.
+
+          142┆ return f"<p class='answer'>{answer}</p>"
+
+   ❯❯❱ semgrep.tsg-m5-sql-built-from-text
+          ❰❰ Blocking ❱❱
+          SQL text is built with an f-string and then executed. If any part comes from a model (or a user), it
+          can change the query itself. Use a fixed SQL string with ? placeholders and pass the values
+          separately.
+
+          159┆ sql = f"SELECT id, assignee, title FROM tickets WHERE assignee = '{user}' AND title LIKE
+               '%{term}%'"
+          160┆ log.info("SQL sent: %s", sql)
+          161┆ return DB.execute(sql).fetchall()
+
+   ❯❯❱ semgrep.tsg-m5-shell-string
+          ❰❰ Blocking ❱❱
+          A command string goes to the system shell (shell=True). Shell characters in model output (; & | $( )
+          `) start extra commands. Pass an argument list with shell=False, after an allow-list check.
+
+          189┆ done = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=LAB_DIR,
+               timeout=10)
+```
+
+Three findings, one per vulnerable function, and **none** on the safe versions next to them: the SQL rule stops
+matching once the values travel separately, the shell rule once `shell=False`, and the HTML rule once the value is
+wrapped in `html.escape(...)`. Open the rules file and read one: each is a few lines of YAML, with the fix in the
+message.
+
+Two limits to remember. A rule finds a **shape**, not proof: the tests in Step 4 show the bug is real. And a rule
+only finds what it was written for, so a scanner is a net under your code review, never the review itself.
 
 ## Step 5 · Your turn: `make challenge`
 
