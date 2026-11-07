@@ -9,3 +9,6 @@ labs/az10/azure-twin/.twin-key
 setup.log
 .setup-state.json
 .ollama-serve.log
+# Files the M16 Azure and Google Cloud labs write when you run them
+labs/az16/out/
+labs/gc16/out/
