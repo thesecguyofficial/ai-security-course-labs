@@ -46,7 +46,7 @@ orderly-set==5.5.0
 orjson==3.13.0
 ormsgpack==1.13.0
 packaging==26.3
-pyasn1==0.6.4
+pyasn1==0.6.5
 pyasn1_modules==0.4.2
 pycparser==3.12
 pydantic==2.14.1
