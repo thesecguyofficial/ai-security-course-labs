@@ -17,7 +17,20 @@ from mcp.server.fastmcp import FastMCP
 from starlette.responses import JSONResponse
 
 KEY = os.environ["MCP_API_KEY"]          # from a Container Apps secret (secretref), never baked into the image
-mcp = FastMCP("helpdesk-actions", stateless_http=True)
+
+# DNS-rebinding protection: recent MCP SDK 1.x releases accept only localhost Host headers by default, so behind
+# Container Apps every call got "421 Invalid Host header" (seen 9 Nov 2026). Keep the protection ON and allow only
+# this app's own hostname: Container Apps sets CONTAINER_APP_NAME and CONTAINER_APP_ENV_DNS_SUFFIX in every replica.
+HOSTS = [h for h in os.environ.get("MCP_ALLOWED_HOSTS", "").split(",") if h]
+if os.environ.get("CONTAINER_APP_NAME") and os.environ.get("CONTAINER_APP_ENV_DNS_SUFFIX"):
+    HOSTS.append(f"{os.environ['CONTAINER_APP_NAME']}.{os.environ['CONTAINER_APP_ENV_DNS_SUFFIX']}")
+HOSTS += [f"{h}:*" for h in HOSTS] + ["localhost", "localhost:*", "127.0.0.1:*"]
+try:
+    from mcp.server.transport_security import TransportSecuritySettings
+    SECURITY = {"transport_security": TransportSecuritySettings(enable_dns_rebinding_protection=True, allowed_hosts=HOSTS)}
+except ImportError:                       # older SDKs have no Host check at all
+    SECURITY = {}
+mcp = FastMCP("helpdesk-actions", stateless_http=True, **SECURITY)
 TICKETS = {"4471": "Dock not detected after update (bob)", "4480": "Outlook keeps prompting (priya)"}
 
 

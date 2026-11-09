@@ -46,7 +46,7 @@ CRANE="$TOOLS/crane"
 # 2. the layer: /app/<your code> and /app/deps/<packages built for linux/amd64, CPython 3.12>
 echo "== installing $SRC/requirements.txt for linux/amd64, Python 3.12"
 mkdir -p "$WORK/layer/app/deps"
-python3 -m pip install -q --no-cache-dir --target "$WORK/layer/app/deps" -r "$SRC/requirements.txt" $PRE \
+python3 -m pip install -q --no-cache-dir --no-warn-conflicts --disable-pip-version-check --target "$WORK/layer/app/deps" -r "$SRC/requirements.txt" $PRE \
   --python-version 3.12 --implementation cp --only-binary=:all: \
   --platform manylinux2014_x86_64 --platform manylinux_2_17_x86_64 --platform manylinux_2_28_x86_64
 cp "$SRC"/*.py "$WORK/layer/app/"
@@ -55,7 +55,7 @@ tar -C "$WORK/layer" -cf "$WORK/layer.tar" app
 # 3. sign in to the registry with a short-lived Entra token (never printed), append the layer, set how it starts
 echo "== pushing $REG.azurecr.io/$IMG"
 TOKEN="$(az acr login -n "$REG" --expose-token --query accessToken -o tsv 2>/dev/null)"
-"$CRANE" auth login "$REG.azurecr.io" -u 00000000-0000-0000-0000-000000000000 --password-stdin <<<"$TOKEN" >/dev/null
+"$CRANE" auth login "$REG.azurecr.io" -u 00000000-0000-0000-0000-000000000000 --password-stdin <<<"$TOKEN" >/dev/null 2>&1
 unset TOKEN
 "$CRANE" append --platform linux/amd64 -b "$BASE" -f "$WORK/layer.tar" -t "$REG.azurecr.io/$IMG.tmp" >/dev/null 2>"$WORK/crane.log" || { cat "$WORK/crane.log"; exit 1; }
 "$CRANE" mutate "$REG.azurecr.io/$IMG.tmp" -t "$REG.azurecr.io/$IMG" --workdir /app \

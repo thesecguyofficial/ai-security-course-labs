@@ -3,7 +3,7 @@
 # GUIDED-BUILD.md explains every command. Needs: Azure CLI 2.80+ (az login), Python 3.10+, and
 #   pip install "azure-ai-projects>=2.3.0" azure-identity requests "mcp<2"
 # No Docker needed: the image is built in the cloud with `az acr build`.
-# Usage: ./cloud.sh cost | up | kb | mcp | toolbox | agent | grant | ask | grant-wide | grant-narrow | direct-call | down
+# Usage: ./cloud.sh cost | up | kb | mcp | mcp-update | toolbox | agent | grant | ask | grant-wide | grant-narrow | direct-call | down
 # Not run by the course team (no Azure subscription in the build): treat the output as yours to verify.
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -104,6 +104,13 @@ TXT
     FQDN="$(az containerapp show -n "ca-$AZ14_NAME" -g "$RG" --query properties.configuration.ingress.fqdn -o tsv)"
     { echo "MCP_URL=https://$FQDN/mcp"; echo "MCP_KEY=$KEY"; } >> .state/env     # .state is git-ignored
     echo "MCP server: https://$FQDN/mcp (401 without x-api-key). Logs: az containerapp logs show -n ca-$AZ14_NAME -g $RG"
+    ;;
+
+  mcp-update)  # rebuild your MCP server after a code change and roll the Container App to it (new tag each time)
+    TAG="helpdesk-mcp:$(date +%Y%m%d%H%M%S)"
+    build_image "$TAG" mcp server.py
+    az containerapp update -n "ca-$AZ14_NAME" -g "$RG" --image "$ACR.azurecr.io/$TAG" -o none
+    echo "MCP server now runs $TAG"
     ;;
 
   toolbox)       python3 build.py toolbox ;;
