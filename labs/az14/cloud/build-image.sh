@@ -57,9 +57,9 @@ echo "== pushing $REG.azurecr.io/$IMG"
 TOKEN="$(az acr login -n "$REG" --expose-token --query accessToken -o tsv 2>/dev/null)"
 "$CRANE" auth login "$REG.azurecr.io" -u 00000000-0000-0000-0000-000000000000 --password-stdin <<<"$TOKEN" >/dev/null
 unset TOKEN
-"$CRANE" append --platform linux/amd64 -b "$BASE" -f "$WORK/layer.tar" -t "$REG.azurecr.io/$IMG.tmp" >/dev/null
+"$CRANE" append --platform linux/amd64 -b "$BASE" -f "$WORK/layer.tar" -t "$REG.azurecr.io/$IMG.tmp" >/dev/null 2>"$WORK/crane.log" || { cat "$WORK/crane.log"; exit 1; }
 "$CRANE" mutate "$REG.azurecr.io/$IMG.tmp" -t "$REG.azurecr.io/$IMG" --workdir /app \
-  --env PYTHONPATH=/app/deps --env PYTHONUNBUFFERED=1 --entrypoint python --cmd "$ENTRY" >/dev/null
+  --env PYTHONPATH=/app/deps --env PYTHONUNBUFFERED=1 --entrypoint python --cmd "$ENTRY" >/dev/null 2>"$WORK/crane.log" || { cat "$WORK/crane.log"; exit 1; }
 "$CRANE" delete "$REG.azurecr.io/$IMG.tmp" >/dev/null 2>&1 || true
-echo "== done: $REG.azurecr.io/$IMG@$("$CRANE" digest "$REG.azurecr.io/$IMG")"
+echo "== done: $REG.azurecr.io/$IMG, digest $("$CRANE" digest "$REG.azurecr.io/$IMG" 2>/dev/null)"
 "$CRANE" auth logout "$REG.azurecr.io" >/dev/null 2>&1 || true
