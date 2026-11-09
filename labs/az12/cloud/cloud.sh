@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # AZ12 cloud path (OPTIONAL): real guardrails in YOUR OWN subscription. README Step 9 explains every command.
-# Needs: Azure CLI (az login), Python 3.10+. guardrail-* also need the AZ11 build to be up (AZ11_NAME, its terraform/).
-# Usage: ./cloud.sh cost | cs-up | cs-try | cs-suite | blocklist-up | guardrail-up | guardrail-probe | evidence | down
+# Needs: Azure CLI (az login), Python 3.10+. guardrail-* use the AZ11 build if AZ11_NAME is set (its terraform/),
+# otherwise this lab's own Foundry resource from foundry-up.
+# Usage: ./cloud.sh cost | foundry-up | cs-up | cs-try | cs-suite | blocklist-up | guardrail-up | guardrail-probe | evidence | down
 # Not run by the course team (no Azure subscription in the build): treat the output as yours to verify.
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -14,7 +15,10 @@ RAPI="2025-12-01"                        # reads of RAI policies: first stable s
 POLICY="contoso-helpdesk-v2"
 BLOCKLIST="contoso-codenames"
 
-foundry_id() { : "${AZ11_NAME:?set AZ11_NAME to the name you used in lab AZ11}"; az cognitiveservices account show -n "$AZ11_NAME" -g "rg-$AZ11_NAME" --query id -o tsv; }
+# Which Foundry resource gets the blocklist and guardrail: your AZ11 build (AZ11_NAME set), or, without it, a small
+# Foundry resource of this lab's own (make foundry-up: public network access, keys off, Entra ID only).
+FDY="${AZ11_NAME:-$AZ12_NAME-fdy}"; FRG="rg-${AZ11_NAME:-$AZ12_NAME}"
+foundry_id() { az cognitiveservices account show -n "$FDY" -g "$FRG" --query id -o tsv; }
 tfout() { "${TF:-terraform}" -chdir=../../az11/terraform output -raw "$1"; }
 
 case "${1:-}" in
@@ -41,6 +45,20 @@ TXT
     az role assignment create --assignee "$(az ad signed-in-user show --query id -o tsv)" \
       --role "Cognitive Services User" --scope "$ID" -o none
     echo "Created $AZ12_NAME (F0, keys disabled). Role assignments can take up to 5 minutes to apply: wait, then ./cloud.sh cs-suite"
+    ;;
+  foundry-up)  # only when your AZ11 build is down: our own Foundry resource with one helpdesk-chat deployment
+    [ -z "${AZ11_NAME:-}" ] || { echo "AZ11_NAME is set: the guardrail goes on your AZ11 resource, nothing to create"; exit 0; }
+    az group create -n "$RG" -l "$REGION" -o none
+    az cognitiveservices account create -n "$FDY" -g "$RG" -l "$REGION" --kind AIServices --sku S0 \
+      --custom-domain "$FDY" --yes -o none
+    FID="$(foundry_id)"
+    az resource update --ids "$FID" --set properties.disableLocalAuth=true -o none      # keys off: Entra ID only
+    az cognitiveservices account deployment create -n "$FDY" -g "$RG" --deployment-name helpdesk-chat \
+      --model-name gpt-5-mini --model-version "${MODEL_VERSION:-2025-08-07}" --model-format OpenAI \
+      --sku-name GlobalStandard --sku-capacity "${CAPACITY:-50}" -o none
+    az role assignment create --assignee "$(az ad signed-in-user show --query id -o tsv)" \
+      --role "Cognitive Services OpenAI User" --scope "$FID" -o none
+    echo "Created $FDY with helpdesk-chat (gpt-5-mini, keys disabled). The role can take up to 5 minutes to apply."
     ;;
   cs-try)      # four single calls, raw JSON printed: read the fields yourself (README Step 9, G2)
     python3 cs_suite.py --endpoint "https://$AZ12_NAME.cognitiveservices.azure.com" --examples
@@ -89,8 +107,7 @@ PY
     rm -f .rai-body.json .dep.json .dep-body.json
     echo "helpdesk-chat now uses $POLICY (Violence on input: ${VIOLENCE_INPUT:-Medium}). Next: make guardrail-probe"
     ;;
-  guardrail-probe)   # suite cases from INSIDE the VNet (the AZ11 resource has public access disabled)
-    : "${AZ11_NAME:?set AZ11_NAME}"
+  guardrail-probe)   # AZ11 build: from INSIDE the VNet (public access disabled); our own Foundry: from here
     CASES="$(PICK="${PICK:-B01,A01,A05,A12,A14}" python3 - <<'PY'
 import base64, json, os, sys
 sys.path.insert(0, "..")
@@ -102,6 +119,11 @@ out = [{"id": c["id"], "user": c["user"],
 print(base64.b64encode(json.dumps(out).encode()).decode())
 PY
 )"
+    if [ -z "${AZ11_NAME:-}" ]; then      # our own Foundry resource: run the probe right here with your az login token
+      sed -e "s/__NAME__/$FDY/" -e "s/__CLIENT_ID__/LOCAL/" -e "s/__DEPLOYMENT__/helpdesk-chat/" \
+          -e "s#__CASES_B64__#$CASES#" probe_guardrail.py > .probe.py
+      python3 .probe.py; rm -f .probe.py; exit 0
+    fi
     sed -e "s/__NAME__/$AZ11_NAME/" -e "s/__CLIENT_ID__/$(tfout jump_identity_client_id)/" \
         -e "s/__DEPLOYMENT__/helpdesk-chat/" -e "s#__CASES_B64__#$CASES#" probe_guardrail.py > .probe.py
     printf '#!/bin/bash\ncat > /tmp/probe.py <<"EOF"\n%s\nEOF\npython3 /tmp/probe.py\n' "$(cat .probe.py)" > .probe.sh
@@ -118,7 +140,7 @@ PY
     az cognitiveservices account show -n "$AZ12_NAME" -g "$RG" --query "{kind:kind, sku:sku.name, keysDisabled:properties.disableLocalAuth}" -o table
     ;;
   down)
-    if [ -n "${AZ11_NAME:-}" ] && FID="$(foundry_id 2>/dev/null)"; then
+    if FID="$(foundry_id 2>/dev/null)" && [ -n "$FID" ]; then
       az rest --method get --url "https://management.azure.com$FID/deployments/helpdesk-chat?api-version=$API" > .dep.json
       python3 -c 'import json; d=json.load(open(".dep.json")); p={k:v for k,v in d["properties"].items() if k in ("model","versionUpgradeOption")}; p["raiPolicyName"]="Microsoft.DefaultV2"; print(json.dumps({"sku":d["sku"],"properties":p}))' > .dep-body.json
       az rest --method put --url "https://management.azure.com$FID/deployments/helpdesk-chat?api-version=$API" --body @.dep-body.json -o none || true
@@ -128,8 +150,12 @@ PY
     fi
     az cognitiveservices account delete -n "$AZ12_NAME" -g "$RG" 2>/dev/null || true
     az cognitiveservices account purge -n "$AZ12_NAME" -g "$RG" -l "$REGION" 2>/dev/null || true   # Microsoft: a deleted name can't be reused for 48 hours unless purged
+    if [ -z "${AZ11_NAME:-}" ]; then      # our own Foundry resource from foundry-up
+      az cognitiveservices account delete -n "$FDY" -g "$RG" 2>/dev/null || true
+      az cognitiveservices account purge -n "$FDY" -g "$RG" -l "$REGION" 2>/dev/null || true
+    fi
     az group delete -n "$RG" --yes --no-wait 2>/dev/null || true
     echo "Done: helpdesk-chat is back on Microsoft.DefaultV2; $POLICY, $BLOCKLIST and $AZ12_NAME are gone. Now run lab AZ11's make down if you're finished."
     ;;
-  *) echo "usage: $0 cost | cs-up | cs-try | cs-suite | blocklist-up | guardrail-up | guardrail-probe | evidence | down"; exit 2 ;;
+  *) echo "usage: $0 cost | foundry-up | cs-up | cs-try | cs-suite | blocklist-up | guardrail-up | guardrail-probe | evidence | down"; exit 2 ;;
 esac

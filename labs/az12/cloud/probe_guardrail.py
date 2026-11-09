@@ -21,6 +21,10 @@ CASES = json.loads(base64.b64decode("__CASES_B64__"))
 
 
 def token():
+    if CLIENT_ID == "LOCAL":   # run from your own shell: use your az login (needs a data role on the resource)
+        import subprocess
+        return subprocess.check_output(["az", "account", "get-access-token", "--resource", "https://cognitiveservices.azure.com",
+                                        "--query", "accessToken", "-o", "tsv"], text=True).strip()
     for aud in ("https://ai.azure.com", "https://cognitiveservices.azure.com"):
         req = urllib.request.Request("http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01"
                                      f"&resource={aud}&client_id={CLIENT_ID}", headers={"Metadata": "true"})

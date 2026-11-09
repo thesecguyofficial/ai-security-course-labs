@@ -743,15 +743,19 @@ fields, change one setting and watch a false positive appear. About 60 minutes.
 > illustrative)**: the field names match the documented schemas (cited under each one), the values are invented. Your
 > real output is what counts: paste it into your findings notebook.
 
-**Before you start.** Set a budget alert (lab AZ10). Read `make cost`. The Foundry part needs your AZ11 build up (it
-bills hourly while it exists). You need the **Owner** or **Contributor** role on the resource groups, and **Foundry
+**Before you start.** Set a budget alert (lab AZ10). Read `make cost`. The Foundry part uses your AZ11 build if it's
+still up (it bills hourly while it exists). If you already tore it down, leave `AZ11_NAME` unset and run
+`make foundry-up` first: it creates a small Foundry resource of this lab's own (public network access, keys off,
+Entra ID only) with one `helpdesk-chat` deployment of `gpt-5-mini`, and gives you **Cognitive Services OpenAI User**
+on it. Then `guardrail-probe` runs from your own shell instead of the AZ11 jump VM. You need the **Owner** or **Contributor** role on the resource groups, and **Foundry
 Account Owner** on the AZ11 resource to create guardrails ("Foundry Account Owner role or higher", create guardrails
 page). Blocklists need "Cognitive Services Contributor or Owner" (blocklist how-to).
 
 ```bash
 export AZ12_NAME=az12-cs-<your initials><4 digits>
-export AZ11_NAME=<the name you used in lab AZ11>
+export AZ11_NAME=<the name you used in lab AZ11>     # skip this line if your AZ11 build is gone
 make cost
+make foundry-up                                      # only without the AZ11 build
 ```
 
 - `AZ12_NAME`: globally unique: becomes `<name>.cognitiveservices.azure.com`

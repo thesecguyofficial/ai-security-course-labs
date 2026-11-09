@@ -2,7 +2,7 @@
 # Offline part: Python standard library only. No packages, no network, no Azure subscription.
 PY := python3
 
-.PHONY: check check-fixed attack attack-safe compare selfhosted hunt test challenge llmguard cost cs-up cs-try cs-suite blocklist-up guardrail-up guardrail-probe evidence down clean
+.PHONY: check check-fixed attack attack-safe compare selfhosted hunt test challenge llmguard cost foundry-up cs-up cs-try cs-suite blocklist-up guardrail-up guardrail-probe evidence down clean
 
 check:        ## review Contoso's guardrail setup before anyone attacks it (15 findings)
 	$(PY) checker.py
@@ -37,6 +37,9 @@ llmguard:     ## OPTIONAL: the suite with LLM Guard's ML classifier (pip install
 # ---------------- optional: your own Azure subscription (README Step 9). Small costs; read `make cost` first.
 cost:            ## what the cloud path bills
 	./cloud/cloud.sh cost
+
+foundry-up:      ## only without your AZ11 build: a small Foundry resource with helpdesk-chat, keys disabled
+	./cloud/cloud.sh foundry-up
 
 cs-up:           ## a free-tier (F0) Content Safety resource, keys disabled
 	./cloud/cloud.sh cs-up
