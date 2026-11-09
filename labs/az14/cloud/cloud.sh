@@ -2,7 +2,8 @@
 # AZ14 guided build (OPTIONAL): the TSG Helpdesk as a Foundry HOSTED agent in YOUR OWN subscription.
 # GUIDED-BUILD.md explains every command. Needs: Azure CLI 2.80+ (az login), Python 3.10+, and
 #   pip install "azure-ai-projects>=2.3.0" azure-identity requests "mcp<2"
-# No Docker needed: the image is built in the cloud with `az acr build`.
+# No Docker needed: the image is built in the cloud with `az acr build`, or by cloud/build-image.sh (pip + crane)
+# where ACR Tasks are refused.
 # Usage: ./cloud.sh cost | up | kb | mcp | mcp-update | toolbox | agent | grant | ask | grant-wide | grant-narrow | direct-call | down
 # Not run by the course team (no Azure subscription in the build): treat the output as yours to verify.
 set -euo pipefail
@@ -71,9 +72,15 @@ TXT
     az acr create -n "$ACR" -g "$RG" -l "$AZ14_REGION" --sku Basic -o none
     az role assignment create --assignee "$ME" --role "Container Registry Repository Writer" --scope "$(acr_id)" -o none
     PMI="$(az rest --method get --url "https://management.azure.com$(foundry_id)/projects/$PROJECT?api-version=$PROJ_API" --query identity.principalId -o tsv)"
-    # the PROJECT identity pulls the image. Not the agent identity, and not AcrPull if the newer role works for you.
+    # the PROJECT identity pulls the image (not the agent identity). Which pull role works depends on the registry's
+    # permissions mode: "Container Registry Repository Reader" needs ABAC repository permissions; a registry in
+    # LegacyRegistryPermissions mode (our 9 Nov 2026 run) only honors AcrPull, and the agent version fails with
+    # "Container registry authentication failed ... AcrPull" without it.
+    MODE="$(az acr show -n "$ACR" --query roleAssignmentMode -o tsv 2>/dev/null)"
+    PULL_ROLE="Container Registry Repository Reader"; [ "$MODE" = "AbacRepositoryPermissions" ] || PULL_ROLE="AcrPull"
+    echo "registry permissions mode: ${MODE:-unknown} -> project identity gets $PULL_ROLE"
     az role assignment create --assignee-object-id "$PMI" --assignee-principal-type ServicePrincipal \
-      --role "Container Registry Repository Reader" --scope "$(acr_id)" -o none
+      --role "$PULL_ROLE" --scope "$(acr_id)" -o none
     {
       echo "PROJECT_ENDPOINT=https://$AZ14_NAME.services.ai.azure.com/api/projects/$PROJECT"
       echo "STORAGE=$ST"
