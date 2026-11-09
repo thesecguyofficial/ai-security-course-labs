@@ -7,7 +7,8 @@ lock it down, and prove every fix with a request that should now fail. About 75 
 Cost: a few US cents (table in G7). Teardown is the last step: do it today.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an Azure subscription,
-> so **no response in this file comes from a real run**. Every response block is labeled **"Example response (shape
+> so the response blocks are illustrative; **what really happened in our 9 November 2026 run is in the table near the
+> end**. Every response block is labeled **"Example response (shape
 > from Microsoft docs, values illustrative)"** and names the page its shape comes from. Field names, error codes and
 > error texts are copied from Microsoft Learn (October 2026). **The values (names, IDs, times, counts) are our
 > guesses.** Write your real results into the table in G5.
@@ -544,6 +545,22 @@ rm -f /tmp/az10-publisher.json
 
 The role assignments you made on the resource go with it. Tomorrow, check: `az group show -n $RG` should say
 `ResourceGroupNotFound`, and `az cognitiveservices account list-deleted -o table` shouldn't list your resource.
+
+## What happened in our real run (9 November 2026, Sweden Central)
+
+The course team ran this guide end to end in a free-credit subscription and recorded it for the lab videos. The
+example blocks above stay illustrative; this is what we saw.
+
+| Step | Real result |
+|---|---|
+| G2 Q1 | `az graph query ... -o table` printed only a count; add `--query data` to see the rows |
+| G3 step 3 | Data Zone Standard quota for gpt-5-mini was **0** in this subscription, so we kept Global Standard and recorded why as a tag |
+| T1 | As subscription Owner: 401, the principal lacks the data action. Owner and Contributor have no data actions |
+| T1 again | With Foundry User: the Responses route on `openai.azure.com` kept answering 401, while chat completions with the same token answered 200, and the v1 route on `cognitiveservices.azure.com` worked (its 429 was the capacity of 1). Test the exact route your app uses |
+| T2 | The old key was refused after about a minute, with **403** (`AuthenticationTypeDisabled`), not 401 |
+| T3 | The approved-models policy still allowed an unapproved model at 15 and 27 minutes (we deleted it at once); hours later it was refused (`NonCompliant ... az10-approved-models`). Test a guardrail again later |
+| T4 | Switching keys back on as Owner: refused by `az10-deny-key-access`; the setting stayed `True` |
+| T5 | The Activity Log showed every step, including the `listKeys` action from the start |
 
 ## What we could not verify (October 2026)
 

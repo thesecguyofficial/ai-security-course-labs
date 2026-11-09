@@ -47,7 +47,7 @@ TXT
     az rest --method put --url "https://management.azure.com$(foundry_id)/projects/$PROJECT?api-version=$PROJ_API" \
       --body "{\"location\": \"$AZ13_REGION\", \"identity\": {\"type\": \"SystemAssigned\"}, \"properties\": {}}" -o none
     az cognitiveservices account deployment create -g "$RG" -n "$AZ13_NAME" --deployment-name helpdesk-chat \
-      --model-name "$MODEL" --model-version "$MODEL_VERSION" --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1 -o none
+      --model-name "$MODEL" --model-version "$MODEL_VERSION" --model-format OpenAI --sku-name GlobalStandard --sku-capacity 200 -o none
     # Foundry User (formerly Azure AI User), by role definition ID as Microsoft recommends during the rename
     az role assignment create --assignee "$ME" --role 53ca6127-db72-4b80-b1b0-d745d6d5456d --scope "$(foundry_id)" -o none
     PMI="$(az rest --method get --url "https://management.azure.com$(foundry_id)/projects/$PROJECT?api-version=$PROJ_API" --query identity.principalId -o tsv)"
