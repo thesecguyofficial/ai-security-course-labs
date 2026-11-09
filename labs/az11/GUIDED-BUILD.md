@@ -9,7 +9,8 @@ and all three privatelink zones (11.2), a customer-managed key in a same-region 
 hours. It has hourly charges while it exists (G6), so teardown is the last step: do it today.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an Azure subscription,
-> so **no response in this file comes from a real run**. Every response block is labeled **"Example response (shape
+> so **no response block in this file comes from a real run** (our real run of 9 November 2026 is summarized in a
+> table at the end). Every response block is labeled **"Example response (shape
 > from Microsoft docs, values illustrative)"** and names the page its shape comes from. Field names, error codes and
 > texts are copied from Microsoft Learn (October 2026) unless the block says otherwise. **The values (addresses, IDs,
 > versions, counts) are our guesses.** Write your real results into the table in G4.
@@ -319,7 +320,8 @@ Wait 5 to 10 minutes, then:
 ./cloud/cloud.sh probe-inside
 ```
 
-The DNS lines stay private; the call doesn't get through. This is lab step A3 the other way round: the network is the
+The DNS lines stay private; the call should stop getting through. In our real run it still returned 200 seven
+minutes after the role was removed, so if you still see 200, wait and run it again before you conclude anything. This is lab step A3 the other way round: the network is the
 first door, the role on **this one resource** is the second.
 
 **Example response (shape from Microsoft docs, values illustrative)** ([keyless authentication, troubleshooting
@@ -503,10 +505,27 @@ notes: "Storage-related charges for CMK encryption continue during soft-deleted 
 Tomorrow, check: `az group show -n $RG` says `ResourceGroupNotFound`, `az keyvault list-deleted -o table` lists only
 the vault you expect, and Cost Management shows the session.
 
+## What happened in our real run (9 November 2026, Sweden Central)
+
+The course team ran Path A (portal) plus the Cloud Shell steps in a free-credit subscription and recorded it for the
+lab videos. The example blocks above stay illustrative; this is what we saw.
+
+| Step | Real result |
+|---|---|
+| Key Vault | Purge protection on, RBAC, firewall: our client address plus trusted Microsoft services; Key Vault Crypto Officer for us, Key Vault Crypto User for `id-…-cmk`; key `cmk-foundry`, RSA 2048 |
+| Foundry create wizard | Every step succeeded except the private endpoint deployment inside it: `Conflict`, `DeploymentFailed`, no clear reason. The CMK patch carried on |
+| Private endpoint | Created again on its own from the resource's Networking page: deployed; DNS configuration listed three names at `10.20.2.4`, `.5` and `.6` |
+| Model deployment | `DataZoneStandard` quota for `gpt-5-mini` was 0 in this subscription, so we deployed `GlobalStandard` from the CLI (the portal can't reach a resource with public access off). Your Data Zone policy (G2) would refuse that: request Data Zone quota first |
+| Test VM | `Standard_B1ls` and `Standard_B2ats_v2`: `AllocationFailed` (no capacity). `Standard_B2ts_v2` worked, private address `10.20.3.4`, no public IP |
+| T1 outside | All three names resolved to a public address; `401 PermissionDenied`. Still 401 after we gave ourselves Foundry User |
+| T2 inside | Through Run Command: all three names private (`10.20.2.x`), `POST /openai/v1/responses` → 200 |
+| T3 | Foundry User removed from `id-jump` (its role list empty): the inside request still returned **200 seven minutes later**. Wait longer than 10 minutes, and re-test before you trust a revocation |
+| T5 logs | Key Vault `AuditEvent` rows `KeyUnwrap`, `KeyGet`, `KeySign`, `Authentication`; Foundry `RequestResponse` rows `ChatCompletions_Create` |
+
 ## What we could not verify (October 2026)
 
-- **No real run, and the Terraform was never planned or applied** (fact-check U1). Every response above is
-  illustrative. Before release the course team runs this guide in a sandbox and replaces them with real output.
+- **One real run so far** (table above; Path A, not the Terraform). The example responses stay illustrative.
+  The Terraform was still never planned or applied (fact-check U1).
 - Portal labels for the VNet, Key Vault, managed identity, VM and private DNS screens, and whether the Foundry create
   wizard shows its encryption step under that name (marked "label may differ slightly").
 - The status code and body of a network refusal (T1, G4). Microsoft Learn doesn't document them.
