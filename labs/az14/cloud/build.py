@@ -74,7 +74,7 @@ def agent():
     a = project.agents.create_version(agent_name=AGENT, definition=HostedAgentDefinition(
         protocol_versions=[ProtocolVersionRecord(protocol=AgentEndpointProtocol.INVOCATIONS, version="2.0.0")],
         cpu="0.5", memory="1Gi",                                  # the smallest sandbox: billed per active session
-        container_configuration=ContainerConfiguration(image=ENV["IMAGE"]),
+        container_configuration=ContainerConfiguration(image=os.environ.get("IMAGE", ENV["IMAGE"])),
         environment_variables={"MODEL_DEPLOYMENT_NAME": "helpdesk-chat", "PROJECT_ENDPOINT": PE,
                                "STORAGE_ACCOUNT": ENV["STORAGE"],
                                "TOOLBOX_MCP_ENDPOINT": f"{PE}/toolboxes/helpdesk-tools/mcp?api-version=v1"}))
@@ -109,6 +109,8 @@ def ask(pick: str | None):
         out = invoke({"message": msg})
         for c in out.get("tool_calls", []):
             print(f"   tool_call {c['tool']} {json.dumps(c['args'])}  policy: {c['policy']}")
+            if c.get("result"):
+                print(f"      -> {c['result']}")
         while out.get("status") == "needs_confirmation":
             p = out["pending"]
             print(f"   needs_confirmation: {p['tool']} {json.dumps(p['args'])}")

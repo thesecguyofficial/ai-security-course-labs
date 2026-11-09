@@ -118,8 +118,9 @@ TXT
 
   agent)       # G4: build the image IN THE CLOUD (no local Docker), then create the hosted agent version
     cp ../policy.py agent/policy.py                      # YOUR lab policy runs in the cloud too
-    build_image helpdesk-agent:1 agent main.py --pre
-    python3 build.py agent
+    TAG="helpdesk-agent:$(date +%Y%m%d%H%M%S)"      # a new tag per build, so a new agent version never reuses a cached image
+    build_image "$TAG" agent main.py --pre
+    IMAGE="$ACR.azurecr.io/$TAG" python3 build.py agent
     ;;
 
   grant)       # G4.3: the agent identity READS ONE CONTAINER. Nothing else.

@@ -122,6 +122,7 @@ async def handle(request):
                     return JSONResponse({"status": "needs_confirmation",
                                          "pending": {"tool": item.name, "args": args}, "tool_calls": calls})
                 result = r.get("output", r.get("error", ""))[:4000]
+            calls[-1]["result"] = result[:160]            # shown by `cloud.sh ask`, so you see what each tool returned
             outputs.append({"type": "function_call_output", "call_id": item.call_id, "output": result})
         if not outputs:
             break
