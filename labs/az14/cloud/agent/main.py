@@ -79,7 +79,8 @@ async def toolbox_call(tool: str, args: dict, approved: bool) -> dict:
         async with ClientSession(read, write) as s:
             await s.initialize()
             listed = {t.name: t for t in (await s.list_tools()).tools}
-            name = next((n for n in listed if n.endswith("." + tool) or n == tool), None)
+            # the toolbox prefixes each tool with its server label: "helpdesk-actions___search_tickets" (seen 9 Nov 2026)
+            name = next((n for n in listed if n == tool or n.endswith("___" + tool) or n.endswith("." + tool)), None)
             if name is None:
                 return {"error": f"{tool} not offered by the toolbox (allowed_tools?)"}
             meta = ((listed[name].meta or {}).get("tool_configuration") or {})
