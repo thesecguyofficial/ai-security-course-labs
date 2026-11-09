@@ -22,6 +22,15 @@ me()         { az ad signed-in-user show --query id -o tsv; }
 foundry_id() { az cognitiveservices account show -n "$AZ14_NAME" -g "$RG" --query id -o tsv; }
 st_id()      { az storage account show -n "$ST" -g "$RG" --query id -o tsv; }
 acr_id()     { az acr show -n "$ACR" -g "$RG" --query id -o tsv; }
+# Build an image in your registry. ACR Tasks (`az acr build`) first; free-credit and trial subscriptions refuse it
+# (TasksOperationsNotAllowed), so fall back to build-image.sh: same image, built with pip + crane, no Docker needed.
+build_image() {  # <name:tag> <folder> <entry file> [--pre]
+  if az acr build -r "$ACR" -t "$1" --platform linux/amd64 "$2" -o none 2>/tmp/acr-build.err; then return 0; fi
+  if grep -q TasksOperationsNotAllowed /tmp/acr-build.err; then
+    echo "ACR Tasks aren't allowed on this subscription (normal on free credit): building with build-image.sh instead"
+    ./build-image.sh "$ACR" "$1" "$2" "$3" ${4:-}
+  else cat /tmp/acr-build.err; return 1; fi
+}
 
 case "${1:-}" in
   cost)
@@ -42,6 +51,10 @@ TXT
 
   up)          # G1: resource group, Foundry resource + project + model, storage, registry, roles
     ME="$(me)"
+    # a fresh subscription may not have these providers registered yet (one-time, free)
+    for p in Microsoft.CognitiveServices Microsoft.Storage Microsoft.ContainerRegistry Microsoft.App Microsoft.OperationalInsights; do
+      az provider register -n "$p" --wait -o none
+    done
     az group create -n "$RG" -l "$AZ14_REGION" -o none
     az cognitiveservices account create -n "$AZ14_NAME" -g "$RG" -l "$AZ14_REGION" --kind AIServices --sku S0 \
       --custom-domain "$AZ14_NAME" --allow-project-management true --assign-identity --yes -o none
@@ -49,7 +62,7 @@ TXT
     az rest --method put --url "https://management.azure.com$(foundry_id)/projects/$PROJECT?api-version=$PROJ_API" \
       --body "{\"location\": \"$AZ14_REGION\", \"identity\": {\"type\": \"SystemAssigned\"}, \"properties\": {}}" -o none
     az cognitiveservices account deployment create -g "$RG" -n "$AZ14_NAME" --deployment-name helpdesk-chat \
-      --model-name "$MODEL" --model-version "$MODEL_VERSION" --model-format OpenAI --sku-name GlobalStandard --sku-capacity 1 -o none
+      --model-name "$MODEL" --model-version "$MODEL_VERSION" --model-format OpenAI --sku-name GlobalStandard --sku-capacity 200 -o none   # 1 = 1,000 tokens/min: far too small for an agent (429s). Capacity is free; tokens are billed
     # You deploy agents: Foundry Project Manager at project scope (Microsoft: needed "to deploy a hosted agent")
     az role assignment create --assignee "$ME" --role "Foundry Project Manager" --scope "$(foundry_id)/projects/$PROJECT" -o none
     az storage account create -n "$ST" -g "$RG" -l "$AZ14_REGION" --sku Standard_LRS --kind StorageV2 \
@@ -71,18 +84,18 @@ TXT
     ;;
 
   kb)          # G2: the 'RAG store': two containers, four blobs (one with a lab-placeholder injection)
-    for c in kb hr-exports; do az storage container create -n "$c" --account-name "$ST" --auth-mode login -o none; done
+    for c in kb-articles hr-exports; do az storage container create -n "$c" --account-name "$ST" --auth-mode login -o none; done
     for f in KB-1001.md KB-1002.md KB-1007.md; do
-      az storage blob upload --account-name "$ST" --auth-mode login -c kb -f "kb/$f" -n "$f" --overwrite -o none
+      az storage blob upload --account-name "$ST" --auth-mode login -c kb-articles -f "kb/$f" -n "$f" --overwrite -o none
     done
     az storage blob upload --account-name "$ST" --auth-mode login -c hr-exports -f kb/paybands-2027.csv \
       -n paybands-2027.csv --overwrite -o none
-    az storage blob list --account-name "$ST" --auth-mode login -c kb --query "[].name" -o tsv
+    az storage blob list --account-name "$ST" --auth-mode login -c kb-articles --query "[].name" -o tsv
     ;;
 
   mcp)         # G3a: YOUR MCP actions server on Container Apps, its key in a Container Apps secret
     KEY="$(python3 -c 'import secrets; print(secrets.token_urlsafe(32))')"
-    az acr build -r "$ACR" -t helpdesk-mcp:1 --platform linux/amd64 mcp
+    build_image helpdesk-mcp:1 mcp server.py
     az containerapp env create -n "cae-$AZ14_NAME" -g "$RG" -l "$AZ14_REGION" -o none
     az containerapp create -n "ca-$AZ14_NAME" -g "$RG" --environment "cae-$AZ14_NAME" \
       --image "$ACR.azurecr.io/helpdesk-mcp:1" --registry-server "$ACR.azurecr.io" --registry-identity system \
@@ -98,14 +111,14 @@ TXT
 
   agent)       # G4: build the image IN THE CLOUD (no local Docker), then create the hosted agent version
     cp ../policy.py agent/policy.py                      # YOUR lab policy runs in the cloud too
-    az acr build -r "$ACR" -t helpdesk-agent:1 --platform linux/amd64 agent
+    build_image helpdesk-agent:1 agent main.py --pre
     python3 build.py agent
     ;;
 
   grant)       # G4.3: the agent identity READS ONE CONTAINER. Nothing else.
     : "${AGENT_IDENTITY_ID:?export AGENT_IDENTITY_ID=<object ID of the agent identity> (GUIDED-BUILD.md G4.3)}"
     az role assignment create --assignee-object-id "$AGENT_IDENTITY_ID" --assignee-principal-type ServicePrincipal \
-      --role "Storage Blob Data Reader" --scope "$(st_id)/blobServices/default/containers/kb" -o none
+      --role "Storage Blob Data Reader" --scope "$(st_id)/blobServices/default/containers/kb-articles" -o none
     az role assignment list --assignee "$AGENT_IDENTITY_ID" --all --query "[].{role:roleDefinitionName, scope:scope}" -o table
     ;;
 
