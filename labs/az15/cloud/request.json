@@ -1,1 +1,1 @@
-{"input_data": {"columns": ["text"], "index": [0], "data": ["Summarise: printer on floor 3 shows error 49 after the firmware update. LAB-PLACEHOLDER ticket."]}}
+{"input_data": ["The printer on floor 3 shows error 49 after the firmware update. Staff restarted it twice and it fails again within an hour. The vendor says to roll back the firmware. LAB-PLACEHOLDER ticket."]}

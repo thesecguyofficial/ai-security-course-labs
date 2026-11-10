@@ -39,8 +39,10 @@ up)
   az network private-endpoint dns-zone-group add -g "$RG" --endpoint-name "pe-$WS" -n default \
      --private-dns-zone privatelink.notebooks.azure.net --zone-name notebooks -o none
   echo "== A5 a small client VM with no public IP and a managed identity (it plays the Helpdesk app)"
-  # Small sizes run out of capacity in some regions (our AZ11 run: B1ls and B2ats_v2 failed, B2ts_v2 worked).
-  for SIZE in ${VM_SIZES:-Standard_B1s Standard_B2ts_v2 Standard_B2s}; do
+  # Small sizes run out of capacity in some regions (our AZ11 run: B1ls and B2ats_v2 failed, B2ts_v2 worked;
+  # our AZ15 run, East US, 10 Nov 2026: every B size was restricted, Standard_D2as_v4 worked).
+  # See what your subscription may use: az vm list-skus -l <region> --resource-type virtualMachines
+  for SIZE in ${VM_SIZES:-Standard_B1s Standard_B2ts_v2 Standard_B2s Standard_D2as_v4 Standard_D2s_v4}; do
     echo "   trying $SIZE"
     az vm create -g "$RG" -n "$VM" --image Canonical:ubuntu-24_04-lts:server:latest --size "$SIZE" --vnet-name "$VNET" --subnet "$SUBNET" \
        --public-ip-address "" --nsg "" --assign-identity '[system]' --generate-ssh-keys -o none && break
@@ -62,9 +64,20 @@ deploy)
   az role assignment create --assignee-object-id "$TIMER_OID" --assignee-principal-type ServicePrincipal \
      --role "AzureML Data Scientist" --scope "$(ws_id)" -o none
   echo "   the timer fires at $START (UTC) and deletes $EP"
+  # Our AZ15 run (10 Nov 2026): a fresh subscription without Microsoft.PolicyInsights failed endpoint create with
+  # "SubscriptionNotRegistered: Resource provider [N/A] isn't registered". Register it first.
+  if [ "$(az provider show -n Microsoft.PolicyInsights --query registrationState -o tsv)" != "Registered" ]; then
+    echo "   registering Microsoft.PolicyInsights (managed online endpoints need it)"
+    az provider register -n Microsoft.PolicyInsights --wait
+  fi
   echo "== B2 the endpoint: aad_token auth, public_network_access disabled"
   sed "s#__EP__#$EP#" "$HERE/endpoint.yml" > "$OUT/endpoint.yml"
-  az ml online-endpoint create -g "$RG" -w "$WS" -f "$OUT/endpoint.yml" -o none
+  if [ "$(az ml online-endpoint show -g "$RG" -w "$WS" -n "$EP" --query provisioning_state -o tsv 2>/dev/null)" = "Succeeded" ]; then
+    echo "   $EP already exists (a re-run): keeping it"
+  else
+    az ml online-endpoint delete -g "$RG" -w "$WS" -n "$EP" --yes -o none 2>/dev/null || true
+    az ml online-endpoint create -g "$RG" -w "$WS" -f "$OUT/endpoint.yml" -o none
+  fi
   echo "== B3 the deployment (this is the part that bills by the hour)"
   sed -e "s#__EP__#$EP#" -e "s#__MODEL_ID__#$MODEL_ID#" -e "s#Standard_DS3_v2#${INSTANCE:-Standard_DS3_v2}#" "$HERE/deployment.yml" > "$OUT/deployment.yml"
   echo "   instance type: ${INSTANCE:-Standard_DS3_v2} (Azure Machine Learning reserves 20% extra quota for upgrades)"
