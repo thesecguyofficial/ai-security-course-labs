@@ -18,7 +18,12 @@ up)
   echo "== A1 resource group (tagged, so you can find it again)"
   az group create -n "$RG" -l "$LOC" --tags purpose=tsg-az15-lab delete-by="$(date -u -d '+1 day' +%F 2>/dev/null || date -u -v+1d +%F)" -o none
   echo "== A2 workspace: managed VNet in approved-outbound mode, no FQDN rules (so no Azure Firewall)"
-  az ml workspace create -g "$RG" -n "$WS" -l "$LOC" --managed-network allow_only_approved_outbound -o none
+  if az ml workspace show -g "$RG" -n "$WS" -o none 2>/dev/null; then
+    echo "   $WS already exists (you made it in the portal, Part A.1): checking its outbound mode"
+    az ml workspace show -g "$RG" -n "$WS" --query managed_network.isolation_mode -o tsv
+  else
+    az ml workspace create -g "$RG" -n "$WS" -l "$LOC" --managed-network allow_only_approved_outbound -o none
+  fi
   echo "== A3 provision the managed network now (otherwise it waits for the first compute)"
   az ml workspace provision-network -g "$RG" -n "$WS" -o none
   echo "== A4 a client network with a private endpoint to the workspace"
@@ -34,8 +39,13 @@ up)
   az network private-endpoint dns-zone-group add -g "$RG" --endpoint-name "pe-$WS" -n default \
      --private-dns-zone privatelink.notebooks.azure.net --zone-name notebooks -o none
   echo "== A5 a small client VM with no public IP and a managed identity (it plays the Helpdesk app)"
-  az vm create -g "$RG" -n "$VM" --image Canonical:ubuntu-24_04-lts:server:latest --size Standard_B1s --vnet-name "$VNET" --subnet "$SUBNET" \
-     --public-ip-address "" --nsg "" --assign-identity '[system]' --generate-ssh-keys -o none
+  # Small sizes run out of capacity in some regions (our AZ11 run: B1ls and B2ats_v2 failed, B2ts_v2 worked).
+  for SIZE in ${VM_SIZES:-Standard_B1s Standard_B2ts_v2 Standard_B2s}; do
+    echo "   trying $SIZE"
+    az vm create -g "$RG" -n "$VM" --image Canonical:ubuntu-24_04-lts:server:latest --size "$SIZE" --vnet-name "$VNET" --subnet "$SUBNET" \
+       --public-ip-address "" --nsg "" --assign-identity '[system]' --generate-ssh-keys -o none && break
+    az vm delete -g "$RG" -n "$VM" --yes -o none 2>/dev/null || true
+  done
   echo "== A6 a Log Analytics workspace for the endpoint's logs"
   az monitor log-analytics workspace create -g "$RG" -n "$LAW" -l "$LOC" -o none
   echo "Done. Next: MODEL_ID=... make cloud-deploy"
@@ -56,7 +66,8 @@ deploy)
   sed "s#__EP__#$EP#" "$HERE/endpoint.yml" > "$OUT/endpoint.yml"
   az ml online-endpoint create -g "$RG" -w "$WS" -f "$OUT/endpoint.yml" -o none
   echo "== B3 the deployment (this is the part that bills by the hour)"
-  sed -e "s#__EP__#$EP#" -e "s#__MODEL_ID__#$MODEL_ID#" "$HERE/deployment.yml" > "$OUT/deployment.yml"
+  sed -e "s#__EP__#$EP#" -e "s#__MODEL_ID__#$MODEL_ID#" -e "s#Standard_DS3_v2#${INSTANCE:-Standard_DS3_v2}#" "$HERE/deployment.yml" > "$OUT/deployment.yml"
+  echo "   instance type: ${INSTANCE:-Standard_DS3_v2} (Azure Machine Learning reserves 20% extra quota for upgrades)"
   az ml online-deployment create -g "$RG" -w "$WS" -f "$OUT/deployment.yml" --all-traffic -o none
   echo "== B4 the client VM may score this endpoint and do nothing else"
   sed "s#__SUB__#$SUB#" "$HERE/scorer-role.json" > "$OUT/scorer-role.json"
