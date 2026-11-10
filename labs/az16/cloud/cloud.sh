@@ -62,8 +62,9 @@ ask)
     echo "== request $i: $p"; ask "$p"
   done
   ;;
-ask2)
-  echo "== request 2 again"; ask "$(grep -v '^#' "$HERE/requests.txt" | sed -n 2p)"
+ask2|ask3)
+  n=${1#ask}; echo "== request $n again"; ask "$(grep -v '^#' "$HERE/requests.txt" | sed -n ${n}p)"
+  echo "   raw error body (if any):"; python3 -c "import json; d=json.load(open('/tmp/az16-out.json')); print('  ', json.dumps(d.get('error',{}))[:400])"
   ;;
 annotate|block)
   [ "$1" = annotate ] && B=false || B=true
