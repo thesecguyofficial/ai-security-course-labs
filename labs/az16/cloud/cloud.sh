@@ -58,7 +58,8 @@ activity)
 ask)
   i=0
   grep -v '^#' "$HERE/requests.txt" | while IFS= read -r p; do
-    i=$((i+1)); echo "== request $i: $p"; ask "$p"
+    i=$((i+1)); [ $i -gt 1 ] && sleep 20   # Azure counts max_completion_tokens against the per-minute quota up front
+    echo "== request $i: $p"; ask "$p"
   done
   ;;
 ask2)
