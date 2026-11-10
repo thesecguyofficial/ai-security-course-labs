@@ -31,7 +31,9 @@ if "error" in d:
 else:
     pf = d.get("prompt_filter_results", [{}])[0].get("content_filter_results", {})
     print("  prompt filters:", {k: v for k, v in pf.items() if isinstance(v, dict) and (v.get("filtered") or v.get("detected"))} or "nothing flagged")
-    print("  answer:", (d["choices"][0]["message"]["content"] or "").strip().splitlines()[0][:110] if d.get("choices") else "")
+    c = d["choices"][0] if d.get("choices") else {}
+    text = ((c.get("message") or {}).get("content") or "").strip()
+    print("  answer:", (text.splitlines() or ["(empty, finish_reason " + str(c.get("finish_reason")) + ")"])[0][:110])
 PY
 }
 export HERE
