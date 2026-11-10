@@ -738,10 +738,10 @@ resource** (Prompt Shields and text analysis), a **custom blocklist**, and a **F
 `helpdesk-chat` deployment from lab AZ11, each with **portal clicks and CLI**. Then send real requests, read the filter
 fields, change one setting and watch a false positive appear. About 60 minutes.
 
-> **About the responses below.** The course team has no Azure subscription in its build, so nothing in this step was
-> run by us. Every response shown here is labeled **Example response (shape from Microsoft docs, values
-> illustrative)**: the field names match the documented schemas (cited under each one), the values are invented. Your
-> real output is what counts: paste it into your findings notebook.
+> **About the responses below.** They are labeled **Example response (shape from Microsoft docs, values
+> illustrative)**: the field names match the documented schemas (cited under each one), the values are invented. What we
+> really saw on 10 November 2026 is in the table that follows. Your real output is what counts: paste it into your
+> findings notebook.
 
 **What happened in our real run (10 November 2026, East US, a demo subscription).** We built it portal first:
 Content Safety (F0) and a separate Foundry resource in the portal, `helpdesk-chat` (gpt-5-mini, Global Standard)
