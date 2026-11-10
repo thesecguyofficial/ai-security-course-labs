@@ -5,20 +5,39 @@ managed VNet allows only approved outbound traffic (with no FQDN rules, so no Az
 accepts only Entra tokens and only through the workspace's private endpoint, a client VM that plays the Helpdesk, and
 the endpoint's traffic log in Log Analytics. Then five requests, one changed setting, and teardown.
 
-**Status:** written from Microsoft's documentation and checked for shell syntax. It hasn't been run end to end in a
-sandbox yet, so every response below is labeled "Example response (shape from the provider's docs, values
-illustrative)". Before this lab is released, it gets one real run and the examples are replaced with real output.
+**Status:** run end to end on 10 November 2026 in East US, in a personal sandbox subscription. The table below shows
+what really happened, including four things that didn't work the first time. The responses in Part C are from that run.
+
+## What happened in our real run (10 November 2026, East US)
+
+| Step | What we expected | What really happened | What we changed |
+|---|---|---|---|
+| A.1 portal workspace | Approved outbound, managed network provisions | The workspace made in the portal never provisioned its managed network: "InternalServerError: Received 404 from a service request", three times, with Basic and with Standard firewall SKU | A workspace made with the CLI (`az ml workspace create --managed-network allow_only_approved_outbound`) in the same group provisioned in about 6 minutes. We used that one. |
+| A.5 client VM | `Standard_B1s` | Every B size was restricted for this subscription in East US | `Standard_D2as_v4` (2 vCPU). `cloud.sh` now tries D sizes after B sizes |
+| B.2 endpoint create | Endpoint created | "SubscriptionNotRegistered: Resource provider [N/A] isn't registered" | Registered `Microsoft.PolicyInsights`; `cloud.sh` now does it |
+| B.2 instance type | `Standard_DS3_v2` | The curated model only accepts its own list of SKUs (`Standard_DS2_v2` was refused). DS3_v2 needed 8 cores of Azure Machine Learning quota; the DSv2 limit was 6 | `Standard_E2s_v3` is on the model's list and the ESv3 limit was 20. Cheaper too |
+| B.2 deployment | Curated model works without FQDN rules | The container crashed (liveness probe 502). Its log: it installs conda packages when it starts, from `conda.anaconda.org`, then `repo.anaconda.com`, and approved outbound blocks both | Four FQDN rules (`conda.anaconda.org`, `repo.anaconda.com`, `pypi.org`, `files.pythonhosted.org`). FQDN rules bring in a managed Azure Firewall, which bills by the hour |
+| C1 first calls | HTTP 200 | HTTP 408 twice: the default request timeout is 5 seconds and the first summary on 2 vCPU took longer | `request_settings.request_timeout_ms=90000`, then 200 |
+| C2 to C4 | 403, 401, 404 | 403, 401, 404 | Nothing |
+| C5 logs | Request 2 missing (the network refuses it first) | Request 2 IS in `AmlOnlineEndpointTrafficLog` with ResponseCode 403, a minute after the call | The text in C5 now says so |
+| Part D | Request 2 gets through | HTTP 200 from the internet with our own token, and a real summary back | Put back to `disabled` |
+| Timer | Deletes the endpoint after 60 minutes | It did: our first endpoint was gone at the timer's time, and the next `make cloud-deploy` made a new one | We paused it once (`properties.state=Disabled`) while a deployment update rolled, then ran teardown |
+
+The lesson behind the B.2 row: "curated" doesn't mean "needs no internet". Read the deployment log before you open
+egress, and open only the hosts the log names.
 
 ## Before you start: cost and safety
 
-- **The endpoint bills for its VM every hour it exists, called or not.** This guide uses one `Standard_DS3_v2`
-  instance. Look up its hourly price for your region on the
+- **The endpoint bills for its VM every hour it exists, called or not.** Our run used one `Standard_E2s_v3`
+  instance (the model's list of allowed SKUs and our quota decided it; see the table above). Look up its hourly price for your region on the
   [Azure Machine Learning pricing page](https://azure.microsoft.com/pricing/details/machine-learning/) before you
   start. The Azure Machine Learning managed VNet itself "is free"; private endpoints are charged
   ([Microsoft](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-managed-network?view=azureml-api-2)).
-- Smaller items: one `Standard_B1s` client VM, one private endpoint, Log Analytics ingestion, the workspace's storage
-  account and key vault. No Azure Firewall: Microsoft deploys one only "if an FQDN outbound rule is created", and this
-  guide creates none (same page).
+- **The FQDN rules this model needs bring in a managed Azure Firewall**, billed by the hour while the workspace exists
+  (Standard SKU in our run). Run teardown the same day.
+- Smaller items: one small client VM (`Standard_D2as_v4` in our run), one private endpoint, Log Analytics ingestion, the workspace's storage
+  account and key vault. Microsoft deploys the firewall only "if an FQDN outbound rule is created" (same page); we
+  planned for none, but the model in our run needed four (Part B.1).
 - **Auto-teardown:** `make cloud-deploy` creates a Logic App timer before it creates the endpoint. Sixty minutes later
   it sends a DELETE for the endpoint with its own managed identity. It stops the hourly VM cost; it doesn't delete the
   rest. `make cloud-down` deletes everything. Run it the same day.
@@ -35,8 +54,13 @@ subscription selected (`az account set -s <id>`). Check with `make cloud-check-t
 2. **Basics:** a new resource group `rg-tsg-az15-lab`, name `tsg-az15-lab`, your region.
 3. **Networking:** choose **Private with Approved Outbound**. Don't add any user-defined outbound rules. Then add a
    **private endpoint** in a new VNet `vnet-tsg-az15` (subnet `clients`, `10.15.1.0/24`), with private DNS integration.
-4. **Review + create.** Then open the workspace and, under **Networking**, check that the managed network shows
-   approved outbound and only the required rules.
+4. **Review + create.** Then open the workspace and, under **Networking** > **Workspace managed outbound access**,
+   check that it shows **Allow Only Approved Outbound** and only the required rules (ours listed 13, all "Inactive"
+   until the network is provisioned).
+
+In our run the portal-made workspace then refused to provision its managed network ("Received 404 from a service
+request", three tries). If that happens to you, make the workspace with the CLI instead (`make cloud-up` creates it
+when the name is new, for example `make cloud-up WS=tsg-az15-cli`) and pass the same `WS=` to every later `make`.
 
 Portal labels move between releases. If a label differs, the CLI below is the reference.
 
@@ -65,17 +89,34 @@ What it runs, in order (`cloud/cloud.sh`, section `up`):
 
 ## Part B · An open model, the timer, the endpoint
 
-### B.1 Pick a model you can deploy without FQDN rules
+### B.1 Pick a model, and find out what it needs from the internet
 
-In approved-outbound mode, the models curated by Azure Machine Learning work without extra rules: the managed VNet
+Microsoft's page says the models curated by Azure Machine Learning work in approved-outbound mode: the managed VNet
 "uses a Service Endpoint Policy to Azure Machine Learning managed storage accounts" and "has default outbound to the
 Microsoft Container Registry that contains the docker image used to deploy the models"
 ([Microsoft](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-network-isolation-model-catalog?view=azureml-api-2)).
 Hugging Face collection models don't: their weights come "directly from Hugging Face hub", which needs FQDN rules and
 so a firewall (same page).
 
+Our run says: check. We used `sshleifer-distilbart-cnn-12-6` version 13 (Apache-2.0, text summarization). Its
+container installed conda packages at start-up, approved outbound blocked them, and the deployment crashed. Read the
+log with `az ml online-deployment get-logs ... --lines 400`, list the hosts it tried, and add one FQDN rule per host:
+
+```bash
+for d in conda.anaconda.org repo.anaconda.com pypi.org files.pythonhosted.org; do
+  az ml workspace outbound-rule set -g rg-tsg-az15-lab --workspace-name "$WS" --rule "allow-${d//./-}" \
+     --type fqdn --destination "$d"
+done
+```
+
+Each rule took about 6 minutes in our run, and the first one brings in the managed firewall. This is the egress review
+from lesson 15.2 done for real: four named hosts, nothing else. `repo.anaconda.com` is Anaconda's own channel; check
+its terms of service for your organization before you allow it at work.
+
 1. In the studio (ml.azure.com), open **Model catalog** and filter to the collection curated by Azure Machine Learning.
-2. Pick a small text model whose model card lists a CPU SKU for online endpoints. Read its **license** on the card:
+2. Pick a small text model whose model card lists a CPU SKU for online endpoints. The list is enforced: our model
+   refused `Standard_DS2_v2` because it wasn't on it. Check your quota for the size you pick (Machine Learning quota
+   per VM family); a 4-core size needs 8 cores of quota for a single instance. Read its **license** on the card:
    "Model providers set the license terms and price for their models"
    ([Microsoft](https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-catalog?view=azureml-api-2)).
 3. Copy its asset ID, `azureml://registries/azureml/models/<name>/versions/<version>`. The request format differs
@@ -92,7 +133,15 @@ so a firewall (same page).
 ### B.2 Deploy, timer first
 
 ```bash
-MODEL_ID=azureml://registries/azureml/models/<name>/versions/<version> make cloud-deploy
+INSTANCE=Standard_E2s_v3 MODEL_ID=azureml://registries/azureml/models/<name>/versions/<version> make cloud-deploy
+```
+
+If the first requests in Part C come back `HTTP 408`, the model is slower than the default 5-second request timeout
+(ours was, on 2 vCPU). Raise it:
+
+```bash
+az ml online-deployment update -g rg-tsg-az15-lab -w "$WS" -e tsg-az15-summariser -n blue \
+   --set request_settings.request_timeout_ms=90000
 ```
 
 What it runs (`cloud/cloud.sh`, section `deploy`):
@@ -129,7 +178,7 @@ make cloud-ask
    `https://ml.azure.com` from its managed identity and posts `cloud/request.json` to the scoring URI.
 
    ```output
-   Example response (shape from the provider's docs, values illustrative)
+   Our run (10 Nov 2026), after the timeout change
    HTTP 200
    ```
 
@@ -137,7 +186,7 @@ make cloud-ask
    doesn't matter: the network refuses first.
 
    ```output
-   Example response (shape from the provider's docs, values illustrative)
+   Our run (10 Nov 2026)
    HTTP 403
    ```
 
@@ -145,7 +194,7 @@ make cloud-ask
    expects a Microsoft Entra token.
 
    ```output
-   Example response (shape from the provider's docs, values illustrative)
+   Our run (10 Nov 2026)
    HTTP 401
    ```
 
@@ -155,7 +204,7 @@ make cloud-ask
    there's no `debug` here, so the request fails. In a real endpoint with a test deployment at 0%, it would answer.
 
    ```output
-   Example response (shape from the provider's docs, values illustrative)
+   Our run (10 Nov 2026)
    HTTP 404
    ```
 
@@ -171,14 +220,20 @@ make cloud-ask
    ```
 
    ```output
-   Example response (shape from the provider's docs, values illustrative)
-   TimeGenerated         EndpointName          DeploymentName  AuthType  IdentityData                          ResponseCode
-   2027-01-30T10:02:11Z  tsg-az15-summariser   blue            AADToken  <object ID of the VM's identity>      200
+   Our run (10 Nov 2026), columns trimmed; the logs showed up within minutes, not an hour
+   TimeGenerated (UTC)   DeploymentName  AuthType  ResponseCode
+   07:50:16              blue            AADToken  200     request 1, the Helpdesk VM
+   07:50:49              blue            AADToken  403     request 2, from outside
+   07:50:54              blue            AADToken  401     request 3, the made-up key
+   07:51:26                              AADToken  404     request 4, no deployment named debug
+   07:54:11              blue            AADToken  200     Part D, request 1
+   07:54:43              blue            AADToken  200     Part D, request 2 from outside: now it gets in
    ```
 
-   Read it like a reviewer: request 1 is there with the VM's object ID in `IdentityData`. Request 2 isn't: the network
-   refused it before the endpoint saw it. Whether requests 3 and 4 appear depends on where the endpoint refused them;
-   write down what you see. There's no prompt text in this table, by design: the column list has no request body
+   Read it like a reviewer: request 1 is there; check `IdentityData` for the VM's object ID. We expected request 2 to be
+   missing, because the network refuses it. It isn't: the refusal at the endpoint's front door is logged with
+   ResponseCode 403, so the table shows outside attempts too. That's useful for detection: a 403 here means someone
+   outside your network holds a valid token and tried. Request 4 has no deployment name, because no deployment got it. There's no prompt text in this table, by design: the column list has no request body
    ([table reference](https://learn.microsoft.com/azure/azure-monitor/reference/tables/amlonlineendpointtrafficlog)).
    Then check the Activity Log for the endpoint and deployment `write` operations you made, with your object ID as the
    caller.
