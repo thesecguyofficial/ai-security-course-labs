@@ -3,7 +3,7 @@
 PY := python3
 ENTITY ?= sp-contoso-ci
 
-.PHONY: setup simulate old old-rules old-logs detect inventory posture posture-hardened pivot cost report-check test challenge clean
+.PHONY: setup simulate old old-rules old-logs detect inventory posture posture-hardened pivot cost report-check test challenge clean cloud-check cloud-deploy cloud-activity cloud-ask cloud-annotate cloud-ask2 cloud-block cloud-down
 
 simulate:          ## write one day of telemetry for both logging setups into out/
 	$(PY) simulate.py
@@ -52,3 +52,21 @@ clean:             ## remove generated telemetry and caches
 # Every lab answers `make setup` (the repo-wide setup.sh calls it). This one needs nothing installed.
 setup:             ## nothing to install: checks your Python is 3.11 or newer
 	$(PY) ../../tools/check_python.py 3.11
+
+# ---- guided build (GUIDED-BUILD.md, your own subscription, costs cents): needs AZ16_NAME exported
+cloud-check:      ## the Foundry resource and the Defender for AI services plan
+	bash cloud/cloud.sh check
+cloud-deploy:     ## the model deployment (gpt-5-mini, Global Standard, name chat)
+	bash cloud/cloud.sh deploy
+cloud-activity:   ## the subscription's Activity log to the workspace (for D03)
+	bash cloud/cloud.sh activity
+cloud-ask:        ## the four requests with user_security_context
+	bash cloud/cloud.sh ask
+cloud-annotate:   ## Part D: Prompt Shields for user prompts from block to annotate
+	bash cloud/cloud.sh annotate
+cloud-ask2:       ## Part D: request 2 again
+	bash cloud/cloud.sh ask2
+cloud-block:      ## Part D: back to block
+	bash cloud/cloud.sh block
+cloud-down:       ## Part F: Defender plan to Free, activity export off, resource group deleted
+	bash cloud/cloud.sh down
