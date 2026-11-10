@@ -81,6 +81,10 @@ deploy)
   echo "== B3 the deployment (this is the part that bills by the hour)"
   sed -e "s#__EP__#$EP#" -e "s#__MODEL_ID__#$MODEL_ID#" -e "s#Standard_DS3_v2#${INSTANCE:-Standard_DS3_v2}#" "$HERE/deployment.yml" > "$OUT/deployment.yml"
   echo "   instance type: ${INSTANCE:-Standard_DS3_v2} (Azure Machine Learning reserves 20% extra quota for upgrades)"
+  # A re-run after a failed deployment: remove the failed one first (create refuses an existing name).
+  if az ml online-deployment show -g "$RG" -w "$WS" -e "$EP" -n blue -o none 2>/dev/null; then
+    az ml online-deployment delete -g "$RG" -w "$WS" -e "$EP" -n blue --yes -o none
+  fi
   az ml online-deployment create -g "$RG" -w "$WS" -f "$OUT/deployment.yml" --all-traffic -o none
   echo "== B4 the client VM may score this endpoint and do nothing else"
   sed "s#__SUB__#$SUB#" "$HERE/scorer-role.json" > "$OUT/scorer-role.json"
