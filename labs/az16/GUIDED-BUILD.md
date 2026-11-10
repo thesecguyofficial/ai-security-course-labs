@@ -14,9 +14,28 @@ You will:
 | E | An alert rule for **every** AI alert, two hunting queries, and the AI inventory query | 16.3, 16.4 |
 | F | Cost and teardown | all |
 
-Every response below that wasn't captured from a real run is labeled **Example response (shape from the provider's
-docs, values illustrative)** and uses Microsoft's field names exactly. Before this module is released, the guide is
-run once for real in a sandbox subscription and the examples are replaced with real output.
+Run for real on 10 November 2026 in East US, in a personal sandbox subscription, portal first. The table below is
+what happened; the commands are in `cloud/cloud.sh` (`make cloud-deploy`, `cloud-activity`, `cloud-ask`,
+`cloud-annotate`, `cloud-ask2`, `cloud-block`, `cloud-down`, with `AZ16_NAME` exported).
+
+## What happened in our real run (10 November 2026, East US)
+
+| Step | What we expected | What really happened | What we changed |
+|---|---|---|---|
+| Before you start | Defender plans page loads | `az security pricing show` said "Please register to Microsoft.Security" | `az provider register -n Microsoft.Security --wait` |
+| A: model | `--sku-capacity 1` is enough for four requests | At 1K tokens per minute, request 1 came back **empty** (`finish_reason: length`, every token spent on reasoning) and requests 2 to 4 got **HTTP 429** | Capacity 100 (Global Standard is billed per token, so capacity costs nothing extra) and `reasoning_effort: minimal` in the body |
+| B: continuous export | Saves | The first save failed: "The subscription is not registered to use namespace 'Microsoft.OperationsManagement'". The second save worked (the portal registered it) | Nothing; if yours fails, register it and save again |
+| B: prompt evidence | Toggle it on | Already **On** by default when we turned the plan on, together with **AI Model Security (Preview)** | Nothing |
+| C: request 2 | HTTP 400 `content_filter` | **400**, `jailbreak: detected, filtered` | Nothing |
+| C: request 3 | HTTP 200 | **429** every time it ran right after the blocked request 2; **200** on its own, and the model refused to store the card number | The script waits 20 s between requests; run `cloud.sh ask3` alone if you see it |
+| C: the alert | Within an hour | "A Jailbreak attempt on your Azure AI model deployment was blocked by Prompt Shields", **Medium**, about 30 minutes later. Related entities: two accounts (our `end_user_id` and the caller) and the `source_ip` we sent; supporting evidence shows the prompt and the caller's IP | Nothing |
+| D: annotate | HTTP 200 with `detected: true` | First try right after the switch: **200**, `detected: false`. Second try: **200**, `detected: true, filtered: false`; the model refused on its own. Then the twin alert: "...was **detected** by Prompt Shields", Medium | Wait a minute after switching before you test |
+| E: logs | Rows within minutes | Only `AzureActivity` for the first 40 minutes. `AzureDiagnostics` and `SecurityAlert` arrived after about 45 minutes | Run Part E last |
+| E: D02 | Every call from Part C | Only the **two 200s** were in `RequestResponse`; the blocked and throttled calls weren't. `CallerIPAddress` had the last octet masked (`135.13.134.**`) | Match on the first three octets |
+| E: export | Both alerts | Only the **detected** alert (18:40 IST) reached `SecurityAlert`; the blocked one (18:12) didn't, though the export was saved before it | Don't rely on the export alone for the first hour; check the Security alerts page |
+| E: alert rule | Fires on the export | Fired three times (Severity 3) on the exported alert | Nothing |
+| E: inventory | The Foundry resource | The resource and its project, `publicNetworkAccess: Enabled`, `disableLocalAuth` empty (keys allowed): two posture findings in one row | Nothing |
+
 
 ## Before you start
 
@@ -71,7 +90,7 @@ export FID=$(az cognitiveservices account show -n $AZ16_NAME -g $RG --query id -
 export EP=https://$AZ16_NAME.openai.azure.com
 az cognitiveservices account deployment create -g $RG -n $AZ16_NAME --deployment-name chat \
   --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI \
-  --sku-name GlobalStandard --sku-capacity 1
+  --sku-name GlobalStandard --sku-capacity 100
 az monitor log-analytics workspace create -g $RG -n law-$AZ16_NAME -l $AZ16_REGION -o none
 export LAW=$(az monitor log-analytics workspace show -g $RG -n law-$AZ16_NAME --query id -o tsv)
 az monitor diagnostic-settings create -n to-law --resource $FID --workspace $LAW \
