@@ -80,11 +80,11 @@ print(json.dumps({"properties": {"basePolicyName": "Microsoft.DefaultV2", "mode"
 PY
 )
   az rest --method put --url "https://management.azure.com$FID/raiPolicies/tsg-az16-$1?api-version=$API" --body "$BODY" -o none
-  DEP=$(az rest --method get --url "https://management.azure.com$FID/deployments/chat?api-version=$API")
-  python3 - "$1" > /tmp/az16-dep.json <<PY
+  az rest --method get --url "https://management.azure.com$FID/deployments/chat?api-version=$API" > /tmp/az16-dep-now.json
+  python3 - "$1" > /tmp/az16-dep.json <<'PY'
 import json, sys
-d = json.loads('''$DEP''')
-print(json.dumps({"sku": d["sku"], "properties": {"model": d["properties"]["model"], "raiPolicyName": "tsg-az16-$1"}}))
+d = json.load(open("/tmp/az16-dep-now.json"))
+print(json.dumps({"sku": d["sku"], "properties": {"model": d["properties"]["model"], "raiPolicyName": "tsg-az16-" + sys.argv[1]}}))
 PY
   az rest --method put --url "https://management.azure.com$FID/deployments/chat?api-version=$API" --body @/tmp/az16-dep.json \
     --query "{deployment:name, guardrail:properties.raiPolicyName}" -o json
