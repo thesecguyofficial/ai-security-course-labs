@@ -46,7 +46,7 @@ check)
 deploy)
   echo "== A the model: gpt-5-mini 2025-08-07, Global Standard, deployment name chat"
   az cognitiveservices account deployment create -g "$RG" -n "$AZ16_NAME" --deployment-name chat \
-    --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 20 \
+    --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI --sku-name GlobalStandard --sku-capacity 100 \
     --query "{deployment:name, model:properties.model.name, state:properties.provisioningState, guardrail:properties.raiPolicyName}" -o json
   ;;
 activity)
