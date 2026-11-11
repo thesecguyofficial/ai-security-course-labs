@@ -104,10 +104,20 @@ TXT
     KEY="$(python3 -c 'import secrets; print(secrets.token_urlsafe(32))')"
     build_image helpdesk-mcp:1 mcp server.py
     az containerapp env create -n "cae-$AZ14_NAME" -g "$RG" -l "$AZ14_REGION" -o none
-    az containerapp create -n "ca-$AZ14_NAME" -g "$RG" --environment "cae-$AZ14_NAME" \
+    if az containerapp show -n "ca-$AZ14_NAME" -g "$RG" -o none 2>/dev/null; then   # a re-run: new key, same app
+      az containerapp secret set -n "ca-$AZ14_NAME" -g "$RG" --secrets "mcpkey=$KEY" -o none
+      az containerapp update -n "ca-$AZ14_NAME" -g "$RG" --image "$ACR.azurecr.io/helpdesk-mcp:1" \
+        --set-env-vars "MCP_API_KEY=secretref:mcpkey" -o none
+    elif ! az containerapp create -n "ca-$AZ14_NAME" -g "$RG" --environment "cae-$AZ14_NAME" \
       --image "$ACR.azurecr.io/helpdesk-mcp:1" --registry-server "$ACR.azurecr.io" --registry-identity system \
       --ingress external --target-port 8000 --cpu 0.25 --memory 0.5Gi --min-replicas 0 --max-replicas 1 \
-      --secrets "mcpkey=$KEY" --env-vars "MCP_API_KEY=secretref:mcpkey" -o none
+      --secrets "mcpkey=$KEY" --env-vars "MCP_API_KEY=secretref:mcpkey" -o none; then
+      # our 12 Nov re-run: create answered InternalServerError, yet the app finished provisioning. Check before failing.
+      sleep 30
+      [ "$(az containerapp show -n "ca-$AZ14_NAME" -g "$RG" --query properties.provisioningState -o tsv 2>/dev/null)" = Succeeded ] \
+        || { echo "Container App create failed: run ./cloud.sh mcp again"; exit 1; }
+      echo "   (create reported an error, but the app is Succeeded: carrying on)"
+    fi
     FQDN="$(az containerapp show -n "ca-$AZ14_NAME" -g "$RG" --query properties.configuration.ingress.fqdn -o tsv)"
     { echo "MCP_URL=https://$FQDN/mcp"; echo "MCP_KEY=$KEY"; } >> .state/env     # .state is git-ignored
     echo "MCP server: https://$FQDN/mcp (401 without x-api-key). Logs: az containerapp logs show -n ca-$AZ14_NAME -g $RG"
