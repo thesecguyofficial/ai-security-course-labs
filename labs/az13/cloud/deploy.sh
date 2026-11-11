@@ -87,11 +87,13 @@ case "${1:-}" in
 
     say "T1 The index trims by permission: your token sees staff documents, never HR-7001"
     out=$(py index 2>&1) || true; grep -E '^--- |KB-|HR-|odata.count' <<<"$out" || true
-    q1=$(awk '/--- Q1/,/--- Q2/' <<<"$out"); q3=$(awk '/--- Q3/,0' <<<"$out")
-    if grep -q 'KB-2040' <<<"$q1" && ! grep -q 'HR-7001' <<<"$out" && grep -q '"@odata.count": 0' <<<"$q3"; then
-      rec PASS "T1 Q1 has KB-2040 and no HR-7001; Q3 (HR document by name) 0 results"
+    q3=$(awk '/--- Q3/,0' <<<"$out")
+    q1=$(awk '/--- Q1/,/--- Q2/' <<<"$out")
+    if grep -q 'HR-7001' <<<"$q1$q3"; then rec FAIL "T1 HR-7001 came back to you: the permission filter isn't working"
+    elif ! grep -q '"@odata.count": 0' <<<"$q3"; then rec FAIL "T1 Q3 returned results: see above"
+    elif grep -q 'KB-2040' <<<"$q1"; then rec PASS "T1 Q1 has KB-2040 (staff) and no HR-7001; Q3 (HR document by name) 0 results"
     elif grep -q 'HTTP 403' <<<"$out"; then rec WAIT "T1 403: a role may still be spreading"
-    else rec FAIL "T1 see the output above"; fi
+    else rec WAIT "T1 no HR-7001, but no KB-2040 either: your sign-in token was issued before you joined tsg-az13-staff. It refreshes within about an hour (or sign in again)"; fi
 
     say "T2 Knowledge base retrieve with your token: no pay band canary"
     out=$(py kb 2>&1) || true
