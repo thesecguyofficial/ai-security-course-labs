@@ -83,7 +83,7 @@ case "${1:-}" in
     s=$(az cognitiveservices account show -n "$AZ11_NAME" -g "$RG" --query \
       "[properties.publicNetworkAccess, properties.disableLocalAuth, properties.encryption.keySource]" -o tsv | tr '\n\t' '  ')
     echo "public network access, keys disabled, key source: $s"
-    [ "$s" = "Disabled True Microsoft.KeyVault " ] && rec PASS "T3 public access Disabled, keys off, your own key" \
+    [ "${s,,}" = "disabled true microsoft.keyvault " ] && rec PASS "T3 public access Disabled, keys off, your own key" \
                                                    || rec FAIL "T3 got: $s"
 
     say "T4 Nobody can switch keys back on, not even the subscription Owner (policy, 15 min or more after up)"
