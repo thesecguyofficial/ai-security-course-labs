@@ -105,11 +105,13 @@ resource "azurerm_cognitive_account_rai_blocklist" "codenames" {
   description          = "Contoso internal code names (lab AZ12)"
 }
 
-resource "azapi_resource" "nightjar" { # one term; Microsoft: new terms can take about 5 minutes to take effect
-  type      = "Microsoft.CognitiveServices/accounts/raiBlocklists/raiBlocklistItems@2024-10-01"
-  name      = "nightjar"
-  parent_id = azurerm_cognitive_account_rai_blocklist.codenames.id
-  body      = { properties = { pattern = "NIGHTJAR", isRegex = false } }
+# One term. A PUT action rather than azapi_resource: the item's existence check (GET before create) answers 400, not
+# 404, and azapi stops there. The term goes when the blocklist does. Microsoft: new terms take about 5 minutes.
+resource "azapi_resource_action" "nightjar" {
+  type        = "Microsoft.CognitiveServices/accounts/raiBlocklists/raiBlocklistItems@2024-10-01"
+  resource_id = "${azurerm_cognitive_account_rai_blocklist.codenames.id}/raiBlocklistItems/nightjar"
+  method      = "PUT"
+  body        = { properties = { pattern = "NIGHTJAR", isRegex = false } }
 }
 
 # ---------------------------------------------------------------- G4: the guardrail, from fixes/rai-policies.json
@@ -131,7 +133,7 @@ resource "azapi_resource" "helpdesk_v2" {
       }]
     }
   }
-  depends_on = [azapi_resource.nightjar]
+  depends_on = [azapi_resource_action.nightjar]
 }
 
 resource "azurerm_cognitive_deployment" "chat" {
