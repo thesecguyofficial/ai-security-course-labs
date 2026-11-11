@@ -770,10 +770,12 @@ page). Blocklists need "Cognitive Services Contributor or Owner" (blocklist how-
 
 ```bash
 export AZ12_NAME=az12-cs-<your initials><4 digits>
-export AZ11_NAME=<the name you used in lab AZ11>     # skip this line if your AZ11 build is gone
+export AZ11_NAME=<the name you used in lab AZ11>
 make cost
-make foundry-up                                      # only without the AZ11 build
+make foundry-up
 ```
+
+Skip the `AZ11_NAME` line if your AZ11 build is gone; run `make foundry-up` only without the AZ11 build.
 
 - `AZ12_NAME`: globally unique: becomes `<name>.cognitiveservices.azure.com`
 
