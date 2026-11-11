@@ -124,7 +124,7 @@ resource "azurerm_security_center_automation" "export" { # alerts live in Defend
   location            = azurerm_resource_group.lab.location
   scopes              = [data.azurerm_subscription.current.id]
   action {
-    type        = "loganalytics"
+    type        = "Workspace"
     resource_id = azurerm_log_analytics_workspace.law.id
   }
   source {
