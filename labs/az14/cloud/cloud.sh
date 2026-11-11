@@ -104,7 +104,14 @@ TXT
     KEY="$(python3 -c 'import secrets; print(secrets.token_urlsafe(32))')"
     build_image helpdesk-mcp:1 mcp server.py
     az containerapp env create -n "cae-$AZ14_NAME" -g "$RG" -l "$AZ14_REGION" -o none
+    pull_role() {   # create --registry-identity system normally grants this; when create fails half-way it may not
+      local P; P="$(az containerapp show -n "ca-$AZ14_NAME" -g "$RG" --query identity.principalId -o tsv)"
+      [ -n "$P" ] && az role assignment create --assignee-object-id "$P" --assignee-principal-type ServicePrincipal \
+        --role AcrPull --scope "$(acr_id)" -o none 2>/dev/null || true
+    }
     if az containerapp show -n "ca-$AZ14_NAME" -g "$RG" -o none 2>/dev/null; then   # a re-run: new key, same app
+      pull_role; sleep 30
+      az containerapp registry set -n "ca-$AZ14_NAME" -g "$RG" --server "$ACR.azurecr.io" --identity system -o none
       az containerapp secret set -n "ca-$AZ14_NAME" -g "$RG" --secrets "mcpkey=$KEY" -o none
       az containerapp update -n "ca-$AZ14_NAME" -g "$RG" --image "$ACR.azurecr.io/helpdesk-mcp:1" \
         --set-env-vars "MCP_API_KEY=secretref:mcpkey" -o none
@@ -117,6 +124,7 @@ TXT
       [ "$(az containerapp show -n "ca-$AZ14_NAME" -g "$RG" --query properties.provisioningState -o tsv 2>/dev/null)" = Succeeded ] \
         || { echo "Container App create failed: run ./cloud.sh mcp again"; exit 1; }
       echo "   (create reported an error, but the app is Succeeded: carrying on)"
+      pull_role
     fi
     FQDN="$(az containerapp show -n "ca-$AZ14_NAME" -g "$RG" --query properties.configuration.ingress.fqdn -o tsv)"
     { echo "MCP_URL=https://$FQDN/mcp"; echo "MCP_KEY=$KEY"; } >> .state/env     # .state is git-ignored
