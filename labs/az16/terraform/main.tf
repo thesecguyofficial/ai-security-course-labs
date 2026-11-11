@@ -153,6 +153,10 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "ai_any_severity" { # 
   severity             = 3
   evaluation_frequency = "PT5M"
   window_duration      = "PT15M"
+  # SecurityAlert only exists once the first alert is exported: a fresh workspace fails the query check ("Failed to
+  # resolve table ... 'SecurityAlert'", our first Terraform test), so the check is skipped.
+  skip_query_validation = true
+  depends_on            = [azurerm_security_center_automation.export]
   criteria {
     query                   = "SecurityAlert | where AlertType startswith \"AI.\""
     time_aggregation_method = "Count"
