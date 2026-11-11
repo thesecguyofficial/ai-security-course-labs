@@ -5,6 +5,8 @@
 #   curl -fsSLO https://raw.githubusercontent.com/thesecguyofficial/ai-security-course-labs/main/labs/az10/cloud/deploy.sh
 #   AZ10_NAME=az10-ab1234 bash deploy.sh test             # the same 5 checks as the script
 #   terraform destroy -var name=az10-ab1234
+#   (our 11 Nov 2026 run: destroy sat on the Foundry resource for over 20 minutes. If it does, stop it with Ctrl+C
+#    and run: AZ10_NAME=az10-ab1234 bash deploy.sh down   It deletes the group and purges the name.)
 #
 # Works with Terraform 1.6+ or OpenTofu 1.6+ (Azure Cloud Shell has Terraform). Signs in with your Azure CLI login.
 # Builds the "after" state only: keys off, Foundry User on one resource (no Contributor), logs on, approved models on

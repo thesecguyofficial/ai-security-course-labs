@@ -3,7 +3,8 @@
 #
 #   bash deploy.sh up      # build the secure end state (about 10 minutes, most of it Azure)
 #   bash deploy.sh test    # prove it: 5 checks, each prints PASS or WAIT or FAIL
-#   bash deploy.sh down    # delete everything this script made (do it today)
+#   bash deploy.sh down    # delete everything this script made (do it today). Also works for the Terraform build:
+#                          # AZ10_NAME=<your name> bash deploy.sh down
 #
 # Runs in Azure Cloud Shell (Bash) or any shell with the Azure CLI signed in (az login). One file, no other files
 # needed. Your names are saved in ~/.az10.env so test and down find the same estate.
@@ -190,7 +191,10 @@ case "${1:-}" in
       az group delete -n "$RG" --yes
     fi
     say "Purging the soft-deleted Foundry resource (frees the name now, not in 48 hours)"
-    az cognitiveservices account purge -l "$AZ10_REGION" -g "$RG" -n "$AZ10_NAME" -o none 2>/dev/null || true
+    if az cognitiveservices account list-deleted --query "[?name=='$AZ10_NAME'] | length(@)" -o tsv | grep -q '^[1-9]'; then
+      az cognitiveservices account purge -l "$AZ10_REGION" -g "$RG" -n "$AZ10_NAME" -o none || \
+        echo "Purge refused for now; it frees itself after 48 hours."
+    fi
     rm -f "$ENVFILE"
     echo "Done. Tomorrow: az group show -n $RG should say ResourceGroupNotFound."
     ;;
