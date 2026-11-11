@@ -93,6 +93,12 @@ case "${1:-}" in
 
   content)
     repo; load
+    say "Check the four egress rules first (a missing one makes the container fail 40 minutes later)"
+    have=$(az ml workspace outbound-rule list -g "$RG" --workspace-name "$WS" --query "[?type=='FQDN'].destination" -o tsv)
+    for d in conda.anaconda.org repo.anaconda.com pypi.org files.pythonhosted.org; do
+      grep -qx "$d" <<<"$have" || { echo "Missing egress rule for $d: run terraform apply again (or bash deploy.sh up)."; exit 1; }
+    done
+    echo "All four present."
     say "Provision the managed network now (its firewall too)"
     az ml workspace provision-network -g "$RG" -n "$WS" -o none
     endpoint

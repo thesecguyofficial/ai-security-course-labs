@@ -122,11 +122,30 @@ resource "azurerm_machine_learning_workspace" "ws" {
 
 # The egress review from lesson 15.2, done for real: the curated model's container installs conda packages when it
 # starts. Four named hosts, nothing else. The first FQDN rule brings in the managed Azure Firewall (hourly).
-resource "azurerm_machine_learning_workspace_network_outbound_rule_fqdn" "allow" {
-  for_each         = toset(["conda.anaconda.org", "repo.anaconda.com", "pypi.org", "files.pythonhosted.org"])
-  name             = "allow-${replace(each.value, ".", "-")}"
+# One rule at a time, on purpose: each write replaces the workspace's whole rule list, so four parallel writes
+# lost one rule in our 12 Nov test (Terraform said "created", Azure kept three, and the container failed with 502).
+resource "azurerm_machine_learning_workspace_network_outbound_rule_fqdn" "conda" {
+  name             = "allow-conda-anaconda-org"
   workspace_id     = azurerm_machine_learning_workspace.ws.id
-  destination_fqdn = each.value
+  destination_fqdn = "conda.anaconda.org"
+}
+resource "azurerm_machine_learning_workspace_network_outbound_rule_fqdn" "repo" {
+  name             = "allow-repo-anaconda-com"
+  workspace_id     = azurerm_machine_learning_workspace.ws.id
+  destination_fqdn = "repo.anaconda.com"
+  depends_on       = [azurerm_machine_learning_workspace_network_outbound_rule_fqdn.conda]
+}
+resource "azurerm_machine_learning_workspace_network_outbound_rule_fqdn" "pypi" {
+  name             = "allow-pypi-org"
+  workspace_id     = azurerm_machine_learning_workspace.ws.id
+  destination_fqdn = "pypi.org"
+  depends_on       = [azurerm_machine_learning_workspace_network_outbound_rule_fqdn.repo]
+}
+resource "azurerm_machine_learning_workspace_network_outbound_rule_fqdn" "pythonhosted" {
+  name             = "allow-files-pythonhosted-org"
+  workspace_id     = azurerm_machine_learning_workspace.ws.id
+  destination_fqdn = "files.pythonhosted.org"
+  depends_on       = [azurerm_machine_learning_workspace_network_outbound_rule_fqdn.pypi]
 }
 
 # ---------------------------------------------------------------- the client network and its private door (A4)
