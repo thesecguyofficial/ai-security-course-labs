@@ -93,12 +93,17 @@ case "${1:-}" in
     elif grep -qi policy <<<"$out"; then rec PASS "T4 refused by policy"
     else rec FAIL "T4 refused, but not by policy: $(head -c 200 <<<"$out")"; fi
 
-    say "T5 The key's own log: Key Vault AuditEvent rows (logs can take 15 minutes or more)"
+    say "T5 The key's own log: Key Vault AuditEvent goes to the workspace"
+    # Rows appear only when the key is used, and Foundry caches the unwrapped key, so a fresh build can show 0 rows
+    # for hours (our 12 Nov re-run). The setting is what you check; the rows are the evidence when they come.
+    KV=$(az keyvault list -g "$RG" --query "[0].id" -o tsv)
+    a=$(az monitor diagnostic-settings list --resource "$KV" --query "[].logs[?enabled && category=='AuditEvent'].category | []" -o tsv)
     WS=$(az monitor log-analytics workspace show -g "$RG" -n "law-$AZ11_NAME" --query customerId -o tsv)
     n=$(az monitor log-analytics query -w "$WS" --analytics-query \
       "AzureDiagnostics | where ResourceProvider == 'MICROSOFT.KEYVAULT' | summarize count()" --query "[0].count_" -o tsv 2>/dev/null || echo 0)
-    [ "${n:-0}" -gt 0 ] 2>/dev/null && rec PASS "T5 $n Key Vault log rows (who used the key)" \
-                                    || rec WAIT "T5 no Key Vault log rows yet: try again in 15 minutes"
+    echo "AuditEvent setting: ${a:-none}   Key Vault rows so far: ${n:-0}"
+    if [ "$a" = AuditEvent ]; then rec PASS "T5 Key Vault AuditEvent goes to law-$AZ11_NAME (${n:-0} rows so far)"
+    else rec FAIL "T5 no AuditEvent diagnostic setting on the Key Vault"; fi
 
     say "Result: $PASS of 5 passed"
     printf '  %s\n' "${RES[@]}"

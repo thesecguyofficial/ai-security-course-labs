@@ -80,6 +80,8 @@ TXT
     set -a; . ./.state/env 2>/dev/null || true; set +a
     [ -n "${STAFF_GROUP:-}" ] && az ad group delete --group "$STAFF_GROUP" || true
     [ -n "${HR_GROUP:-}" ] && az ad group delete --group "$HR_GROUP" || true
+    # the account refuses to delete while its project exists (CannotDeleteResource), so the project goes first
+    az rest --method delete --url "https://management.azure.com$(foundry_id)/projects/$PROJECT?api-version=$PROJ_API" -o none 2>/dev/null || true
     az cognitiveservices account delete -n "$AZ13_NAME" -g "$RG" 2>/dev/null || true
     az cognitiveservices account purge -n "$AZ13_NAME" -g "$RG" -l "$AZ13_REGION" 2>/dev/null || true   # frees the name
     az group delete -n "$RG" --yes --no-wait

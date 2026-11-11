@@ -174,9 +174,11 @@ TXT
 
   down)        # G8: everything this build created
     python3 build.py down || true
+    # the account refuses to delete while its project exists (CannotDeleteResource), so the project goes first
+    az rest --method delete --url "https://management.azure.com$(foundry_id)/projects/$PROJECT?api-version=$PROJ_API" -o none || true
     az cognitiveservices account delete -n "$AZ14_NAME" -g "$RG" || true
-    az cognitiveservices account purge -n "$AZ14_NAME" -g "$RG" -l "$AZ14_REGION" || true
     az group delete -n "$RG" --yes
+    az cognitiveservices account purge -n "$AZ14_NAME" -g "$RG" -l "$AZ14_REGION" -o none 2>/dev/null || true   # frees the name
     echo "Check in the Microsoft Entra admin center: Entra ID > Agents > Agent identities. Nothing named"
     echo "helpdesk-agent should be left from this build. Microsoft doesn't document whether deleting the agent removes it."
     rm -rf .state agent/policy.py
