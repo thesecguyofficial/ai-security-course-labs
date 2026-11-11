@@ -42,5 +42,5 @@ variable "deployment_sku" {
 variable "jump_vm_size" {
   description = "Size of the small test VM inside the VNet. Change it if your region has no capacity for this size."
   type        = string
-  default     = "Standard_B1s"
+  default     = "Standard_B2ts_v2" # our 9 Nov 2026 run: B1ls and B2ats_v2 had no capacity in swedencentral
 }
