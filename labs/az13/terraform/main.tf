@@ -118,6 +118,7 @@ resource "azapi_resource" "project" { # the project the agent lives in, with its
 resource "azurerm_cognitive_deployment" "chat" {
   name                 = "helpdesk-chat"
   cognitive_account_id = azurerm_cognitive_account.foundry.id
+  depends_on           = [azapi_resource.project] # one change at a time on the account: 409 RequestConflict otherwise
   model {
     format  = "OpenAI"
     name    = "gpt-5-mini"
