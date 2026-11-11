@@ -151,11 +151,10 @@ resource "azurerm_private_dns_zone" "z" {
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "z" {
-  for_each              = azurerm_private_dns_zone.z
-  name                  = "link-vnet-tsg-az15"
-  resource_group_name   = azurerm_resource_group.lab.name
-  private_dns_zone_name = each.value.name
-  virtual_network_id    = azurerm_virtual_network.client.id
+  for_each            = azurerm_private_dns_zone.z
+  name                = "link-vnet-tsg-az15"
+  private_dns_zone_id = each.value.id
+  virtual_network_id  = azurerm_virtual_network.client.id
 }
 
 resource "azurerm_private_endpoint" "ws" {
