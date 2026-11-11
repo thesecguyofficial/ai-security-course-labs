@@ -62,7 +62,15 @@ resource "azurerm_search_service" "search" {
   location                     = azurerm_resource_group.lab.location
   sku                          = "free" # one free service per subscription
   local_authentication_enabled = false  # Entra ID only: no admin or query keys
-  semantic_search_sku          = "free" # knowledge bases need semantic ranking; the provider leaves it off otherwise
+}
+
+# Knowledge bases need semantic ranking ("Knowledge Base requires Semantic Search to be enabled", our first Terraform
+# test). The CLI's free service has it on; azurerm leaves it off and refuses semantic_search_sku on the Free tier, so
+# this sets the service's own property to the free plan.
+resource "azapi_update_resource" "semantic" {
+  type        = "Microsoft.Search/searchServices@2025-05-01"
+  resource_id = azurerm_search_service.search.id
+  body        = { properties = { semanticSearch = "free" } }
 }
 
 resource "azurerm_role_assignment" "me_search_service" { # create the index, knowledge source and knowledge base
