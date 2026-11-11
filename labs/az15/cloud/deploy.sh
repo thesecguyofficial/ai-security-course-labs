@@ -6,6 +6,7 @@
 #   bash deploy.sh test    # prove it: 5 checks, each prints PASS, WAIT or FAIL (run it within 60 minutes of up)
 #   bash deploy.sh down    # delete everything this script made (do it today)
 #   bash deploy.sh content # only after `terraform apply`: timer, endpoint, deployment, scorer role, logs
+#   bash deploy.sh timer   # give the endpoint another 60 minutes before the timer deletes it
 #
 # Runs in Azure Cloud Shell (Bash): it has the Azure CLI; the script adds the ml extension. It downloads the course
 # labs repo (public, read-only) into ~/tsg-labs. Your names are saved in ~/.az15.env.
@@ -17,7 +18,7 @@
 #
 # COST: this is the expensive lab. The endpoint's VM, the client VM and the managed firewall (the egress rules bring it
 # in) bill every hour they exist, called or not: a few US dollars for the hour this takes. A Logic App timer deletes
-# the endpoint 60 minutes after `up` starts it; `down` deletes the rest. Use a subscription you own, never your
+# the endpoint 60 minutes after it is ready; `down` deletes the rest. Use a subscription you own, never your
 # employer's.
 set -euo pipefail
 
@@ -96,6 +97,10 @@ case "${1:-}" in
     az ml workspace provision-network -g "$RG" -n "$WS" -o none
     endpoint
     say "Done. The timer deletes the endpoint in 60 minutes. Now: bash deploy.sh test"
+    ;;
+
+  timer)
+    repo; load; timer_reset
     ;;
 
   test)
