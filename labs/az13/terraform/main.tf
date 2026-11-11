@@ -62,6 +62,7 @@ resource "azurerm_search_service" "search" {
   location                     = azurerm_resource_group.lab.location
   sku                          = "free" # one free service per subscription
   local_authentication_enabled = false  # Entra ID only: no admin or query keys
+  semantic_search_sku          = "free" # knowledge bases need semantic ranking; the provider leaves it off otherwise
 }
 
 resource "azurerm_role_assignment" "me_search_service" { # create the index, knowledge source and knowledge base
