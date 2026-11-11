@@ -93,7 +93,7 @@ case "${1:-}" in
     elif ! grep -q '"@odata.count": 0' <<<"$q3"; then rec FAIL "T1 Q3 returned results: see above"
     elif grep -q 'KB-2040' <<<"$q1"; then rec PASS "T1 Q1 has KB-2040 (staff) and no HR-7001; Q3 (HR document by name) 0 results"
     elif grep -q 'HTTP 403' <<<"$out"; then rec WAIT "T1 403: a role may still be spreading"
-    else rec WAIT "T1 no HR-7001, but no KB-2040 either: your sign-in token was issued before you joined tsg-az13-staff. It refreshes within about an hour (or sign in again)"; fi
+    else rec WAIT "T1 no HR-7001, but no KB-2040 either: your new membership of tsg-az13-staff has not reached Search yet: run test again in a while"; fi
 
     say "T2 Knowledge base retrieve with your token: no pay band canary"
     out=$(py kb 2>&1) || true
