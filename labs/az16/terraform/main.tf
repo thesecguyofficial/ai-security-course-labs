@@ -10,7 +10,7 @@
 #   - Log Analytics law-<name>, with Audit, RequestResponse and Trace from the resource
 #   - Defender for AI services (subscription-wide) with user prompt evidence
 #   - continuous export of security alerts of EVERY severity to the workspace
-#   - the subscription's Activity log to the workspace, and an alert rule on exported jailbreak alerts
+#   - the subscription's Activity log to the workspace, and an alert rule for every exported AI alert (any severity)
 # Defender for AI services is subscription-wide: if your subscription already uses it, import it instead of letting
 # destroy turn it off. Cost: a few US cents of tokens, plus Defender's per-token price after any free trial.
 
@@ -145,8 +145,8 @@ resource "azurerm_monitor_diagnostic_setting" "activity" { # the subscription's 
 }
 
 # ---------------------------------------------------------------- Part E: an alert on the exported alert (16.3)
-resource "azurerm_monitor_scheduled_query_rules_alert_v2" "jailbreak" {
-  name                 = "az16-jailbreak-alert"
+resource "azurerm_monitor_scheduled_query_rules_alert_v2" "ai_any_severity" { # every Defender for AI alert
+  name                 = "az16-defender-ai-any-severity"
   resource_group_name  = azurerm_resource_group.lab.name
   location             = azurerm_resource_group.lab.location
   scopes               = [azurerm_log_analytics_workspace.law.id]
@@ -154,7 +154,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "jailbreak" {
   evaluation_frequency = "PT5M"
   window_duration      = "PT15M"
   criteria {
-    query                   = "SecurityAlert | where AlertName has 'Jailbreak'"
+    query                   = "SecurityAlert | where AlertType startswith \"AI.\""
     time_aggregation_method = "Count"
     threshold               = 0
     operator                = "GreaterThan"
