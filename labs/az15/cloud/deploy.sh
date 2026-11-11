@@ -49,6 +49,22 @@ endpoint() {
     say "4/4 Request timeout 90 s (the default 5 s gave us 408s on 2 vCPU)"
     az ml online-deployment update -g "$RG" -w "$WS" -e "$EP" -n blue \
       --set request_settings.request_timeout_ms=90000 -o none
+    timer_reset
+}
+timer_reset() {   # the deployment alone took about 40 minutes in our runs: give the test a full hour from now
+  local U; U="https://management.azure.com/subscriptions/$(az account show --query id -o tsv)/resourceGroups/$RG"
+  U="$U/providers/Microsoft.Logic/workflows/la-tsg-az15-teardown?api-version=2019-05-01"
+  az rest --method get --url "$U" > "$HOME/.az15-timer.json"
+  python3 - "$HOME/.az15-timer.json" "$(date -u -d '+60 min' +%Y-%m-%dT%H:%M:%SZ)" <<'PY'
+import json, sys
+d = json.load(open(sys.argv[1]))
+d["properties"]["definition"]["triggers"]["after_60_minutes"]["recurrence"]["startTime"] = sys.argv[2]
+body = {"location": d["location"], "identity": {"type": "SystemAssigned"},
+        "properties": {"state": "Enabled", "definition": d["properties"]["definition"]}}
+json.dump(body, open(sys.argv[1], "w"))
+PY
+  az rest --method put --url "$U" --body @"$HOME/.az15-timer.json" -o none && rm -f "$HOME/.az15-timer.json"
+  echo "   the timer now deletes the endpoint at $(date -u -d '+60 min' +%H:%M) UTC"
 }
 
 case "${1:-}" in
@@ -71,7 +87,7 @@ case "${1:-}" in
         --type fqdn --destination "$d" -o none
     done
     endpoint
-    say "Done. The timer deletes the endpoint 60 minutes after step 3 started. Now: bash deploy.sh test"
+    say "Done. The timer deletes the endpoint 60 minutes from now. Now: bash deploy.sh test"
     ;;
 
   content)
