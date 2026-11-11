@@ -62,6 +62,9 @@ resource "azurerm_search_service" "search" {
   location                     = azurerm_resource_group.lab.location
   sku                          = "free" # one free service per subscription
   local_authentication_enabled = false  # Entra ID only: no admin or query keys
+  lifecycle {
+    ignore_changes = [semantic_search_sku] # set below, through azapi
+  }
 }
 
 # Knowledge bases need semantic ranking ("Knowledge Base requires Semantic Search to be enabled", our first Terraform
