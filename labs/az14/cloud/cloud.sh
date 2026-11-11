@@ -119,10 +119,13 @@ TXT
       --image "$ACR.azurecr.io/helpdesk-mcp:1" --registry-server "$ACR.azurecr.io" --registry-identity system \
       --ingress external --target-port 8000 --cpu 0.25 --memory 0.5Gi --min-replicas 0 --max-replicas 1 \
       --secrets "mcpkey=$KEY" --env-vars "MCP_API_KEY=secretref:mcpkey" -o none; then
-      # our 12 Nov re-run: create answered InternalServerError, yet the app finished provisioning. Check before failing.
-      sleep 30
-      [ "$(az containerapp show -n "ca-$AZ14_NAME" -g "$RG" --query properties.provisioningState -o tsv 2>/dev/null)" = Succeeded ] \
-        || { echo "Container App create failed: run ./cloud.sh mcp again"; exit 1; }
+      # our 12 Nov re-runs: create answered InternalServerError twice, and the app still finished provisioning a few
+      # minutes later. Wait for it before giving up.
+      for _ in $(seq 1 20); do
+        st="$(az containerapp show -n "ca-$AZ14_NAME" -g "$RG" --query properties.provisioningState -o tsv 2>/dev/null || true)"
+        [ "$st" = Succeeded ] && break; sleep 30
+      done
+      [ "$st" = Succeeded ] || { echo "Container App create failed (state: ${st:-missing}): run ./cloud.sh mcp again"; exit 1; }
       echo "   (create reported an error, but the app is Succeeded: carrying on)"
       pull_role
     fi
