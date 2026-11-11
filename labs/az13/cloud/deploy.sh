@@ -87,8 +87,8 @@ case "${1:-}" in
 
     say "T1 The index trims by permission: your token sees staff documents, never HR-7001"
     out=$(py index 2>&1) || true; grep -E '^--- |KB-|HR-|odata.count' <<<"$out" || true
-    q3=$(awk '/--- Q3/,0' <<<"$out")
-    q1=$(awk '/--- Q1/,/--- Q2/' <<<"$out")
+    q3=$(awk '/--- Q3/,0' <<<"$out" | grep -v '^--- ')       # the headings name HR-7001 themselves
+    q1=$(awk '/--- Q1/,/--- Q2/' <<<"$out" | grep -v '^--- ')
     if grep -q 'HR-7001' <<<"$q1$q3"; then rec FAIL "T1 HR-7001 came back to you: the permission filter isn't working"
     elif ! grep -q '"@odata.count": 0' <<<"$q3"; then rec FAIL "T1 Q3 returned results: see above"
     elif grep -q 'KB-2040' <<<"$q1"; then rec PASS "T1 Q1 has KB-2040 (staff) and no HR-7001; Q3 (HR document by name) 0 results"
