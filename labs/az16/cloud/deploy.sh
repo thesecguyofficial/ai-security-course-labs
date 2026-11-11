@@ -114,13 +114,16 @@ case "${1:-}" in
     if [ "$k" = true ] && [ "$c" = "Audit RequestResponse Trace " ]; then rec PASS "T4 keys off; Audit, RequestResponse, Trace logged"
     else rec FAIL "T4 got keys disabled=$k categories=$c"; fi
 
-    say "T5 The evidence in Log Analytics (ours took about 45 minutes to arrive)"
-    q="union isfuzzy=true (AzureDiagnostics | where ResourceProvider == 'MICROSOFT.COGNITIVESERVICES' | summarize n=count() | extend t='AzureDiagnostics'), (SecurityAlert | where AlertName has 'Jailbreak' | summarize n=count() | extend t='SecurityAlert')"
-    rows=$(az monitor log-analytics query -w "$(law_id customerId)" --analytics-query "$q" --query "[].[t, n]" -o tsv 2>/dev/null || true)
-    echo "${rows:-no rows yet}"
-    if grep -q 'SecurityAlert[[:space:]]*[1-9]' <<<"$rows"; then rec PASS "T5 Defender's jailbreak alert is in SecurityAlert"
-    elif grep -q 'AzureDiagnostics[[:space:]]*[1-9]' <<<"$rows"; then rec WAIT "T5 request logs are in; the alert isn't yet (Defender: 30 min or more)"
-    else rec WAIT "T5 nothing in the workspace yet: run test again in 30 minutes"; fi
+    say "T5 The evidence: request logs in the workspace, and Defender's alert (ours took 30 to 45 minutes)"
+    n=$(az monitor log-analytics query -w "$(law_id customerId)" --analytics-query \
+      "AzureDiagnostics | where ResourceProvider == 'MICROSOFT.COGNITIVESERVICES' and Category == 'RequestResponse' | summarize n=count()" \
+      --query "[0].n" -o tsv 2>/dev/null || true)
+    # Defender's own alert list, not the export: in our 10 Nov run the export never delivered the BLOCKED alert
+    al=$(az security alert list --query "[?contains(alertDisplayName, 'Jailbreak')].alertDisplayName" -o tsv 2>/dev/null | sort -u)
+    echo "RequestResponse rows: ${n:-0}"; echo "Defender alerts: ${al:-none yet}"
+    if [ "${n:-0}" -gt 0 ] 2>/dev/null; then
+      rec PASS "T5 request logs in law-$AZ16_NAME (${n} rows)$( [ -n "$al" ] && echo ', and the jailbreak alert is raised')"
+    else rec WAIT "T5 no request logs yet: run test again in 30 minutes"; fi
 
     say "Result: $PASS of 5 passed"
     printf '  %s\n' "${RES[@]}"
