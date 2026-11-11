@@ -2,7 +2,8 @@
 #
 #   terraform init
 #   terraform apply -var name=az10-ab1234 [-var budget_email=you@example.com]
-#   AZ10_NAME=az10-ab1234 bash ../cloud/deploy.sh test     # the same 5 checks as the script
+#   curl -fsSLO https://raw.githubusercontent.com/thesecguyofficial/ai-security-course-labs/main/labs/az10/cloud/deploy.sh
+#   AZ10_NAME=az10-ab1234 bash deploy.sh test             # the same 5 checks as the script
 #   terraform destroy -var name=az10-ab1234
 #
 # Works with Terraform 1.6+ or OpenTofu 1.6+ (Azure Cloud Shell has Terraform). Signs in with your Azure CLI login.
@@ -203,5 +204,5 @@ output "endpoint" {
 }
 
 output "next" {
-  value = "Wait 15 minutes for the policies, then: AZ10_NAME=${var.name} AZ10_REGION=${var.region} bash ../cloud/deploy.sh test"
+  value = "Wait 15 minutes for the policies, then: AZ10_NAME=${var.name} AZ10_REGION=${var.region} bash deploy.sh test (deploy.sh downloaded next to main.tf)"
 }
