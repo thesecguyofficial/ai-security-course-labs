@@ -113,34 +113,31 @@ resource "azapi_resource" "nightjar" { # one term; Microsoft: new terms can take
 }
 
 # ---------------------------------------------------------------- G4: the guardrail, from fixes/rai-policies.json
-resource "azurerm_cognitive_account_rai_policy" "helpdesk_v2" {
-  name                 = "contoso-helpdesk-v2"
-  cognitive_account_id = azurerm_cognitive_account.fdy.id
-  base_policy_name     = local.policy.basePolicyName
-  mode                 = local.policy.mode
-
-  dynamic "content_filter" {
-    for_each = local.filters
-    content {
-      name               = content_filter.value.name
-      filter_enabled     = content_filter.value.enabled
-      block_enabled      = content_filter.value.blocking
-      severity_threshold = try(content_filter.value.severityThreshold, "High")
-      source             = content_filter.value.source
+# The provider's own rai_policy resource has no field for custom blocklists, so the guardrail is written with azapi,
+# in the same body cloud.sh sends (ARM schema 2024-10-01: contentFilters + customBlocklists).
+resource "azapi_resource" "helpdesk_v2" {
+  type      = "Microsoft.CognitiveServices/accounts/raiPolicies@2024-10-01"
+  name      = "contoso-helpdesk-v2"
+  parent_id = azurerm_cognitive_account.fdy.id
+  body = {
+    properties = {
+      basePolicyName = local.policy.basePolicyName
+      mode           = local.policy.mode
+      contentFilters = [for f in local.filters : { for k, v in f : k => v if !startswith(k, "x-") }]
+      customBlocklists = [{
+        blocklistName = azurerm_cognitive_account_rai_blocklist.codenames.name
+        blocking      = true
+        source        = "Completion"
+      }]
     }
   }
-
-  custom_block_list {
-    rai_blocklist_id = azurerm_cognitive_account_rai_blocklist.codenames.id
-    block_enabled    = true
-    source           = "Completion"
-  }
+  depends_on = [azapi_resource.nightjar]
 }
 
 resource "azurerm_cognitive_deployment" "chat" {
   name                 = "helpdesk-chat"
   cognitive_account_id = azurerm_cognitive_account.fdy.id
-  rai_policy_name      = azurerm_cognitive_account_rai_policy.helpdesk_v2.name # starts on Microsoft.DefaultV2 otherwise
+  rai_policy_name      = azapi_resource.helpdesk_v2.name # starts on Microsoft.DefaultV2 otherwise
   model {
     format  = "OpenAI"
     name    = "gpt-5-mini"
