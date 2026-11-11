@@ -119,7 +119,7 @@ case "${1:-}" in
       "AzureDiagnostics | where ResourceProvider == 'MICROSOFT.COGNITIVESERVICES' and Category == 'RequestResponse' | summarize n=count()" \
       --query "[0].n" -o tsv 2>/dev/null || true)
     # Defender's own alert list, not the export: in our 10 Nov run the export never delivered the BLOCKED alert
-    al=$(az security alert list --query "[?contains(alertDisplayName, 'Jailbreak')].alertDisplayName" -o tsv 2>/dev/null | sort -u)
+    al=$(az security alert list --query "[?contains(alertDisplayName, 'Jailbreak') && contains(to_string(@), '$AZ16_NAME')].alertDisplayName" -o tsv 2>/dev/null | sort -u)
     echo "RequestResponse rows: ${n:-0}"; echo "Defender alerts: ${al:-none yet}"
     if [ "${n:-0}" -gt 0 ] 2>/dev/null; then
       rec PASS "T5 request logs in law-$AZ16_NAME (${n} rows)$( [ -n "$al" ] && echo ', and the jailbreak alert is raised')"
