@@ -26,7 +26,8 @@ PY
 import json
 d = json.load(open("/tmp/az16-out.json"))
 if "error" in d:
-    e = d["error"]; inner = (e.get("innererror") or {}).get("content_filter_result", {})
+    e = d["error"]; ie = e.get("innererror") or e.get("inner_error") or {}   # both spellings exist (docs vs REST spec)
+    inner = ie.get("content_filter_result") or ie.get("content_filter_results") or {}
     print("  error:", e.get("code"), {k: v for k, v in inner.items() if isinstance(v, dict) and (v.get("filtered") or v.get("detected"))})
 else:
     pf = d.get("prompt_filter_results", [{}])[0].get("content_filter_results", {})

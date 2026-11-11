@@ -105,13 +105,15 @@ resource "azurerm_cognitive_account_rai_blocklist" "codenames" {
   description          = "Contoso internal code names (lab AZ12)"
 }
 
-# One term. A PUT action rather than azapi_resource: the item's existence check (GET before create) answers 400, not
-# 404, and azapi stops there. The term goes when the blocklist does. Microsoft: new terms take about 5 minutes.
+# One term, added with the blocklist's own batch action (POST addRaiBlocklistItems). Not azapi_resource on the item:
+# its existence check (a GET before create) answers 400, not 404, and azapi stops there. The term goes when the
+# blocklist does. Microsoft: new terms can take about 5 minutes to take effect.
 resource "azapi_resource_action" "nightjar" {
-  type        = "Microsoft.CognitiveServices/accounts/raiBlocklists/raiBlocklistItems@2024-10-01"
-  resource_id = "${azurerm_cognitive_account_rai_blocklist.codenames.id}/raiBlocklistItems/nightjar"
-  method      = "PUT"
-  body        = { properties = { pattern = "NIGHTJAR", isRegex = false } }
+  type        = "Microsoft.CognitiveServices/accounts/raiBlocklists@2024-10-01"
+  resource_id = azurerm_cognitive_account_rai_blocklist.codenames.id
+  action      = "addRaiBlocklistItems"
+  method      = "POST"
+  body        = [{ name = "nightjar", properties = { pattern = "NIGHTJAR", isRegex = false } }]
 }
 
 # ---------------------------------------------------------------- G4: the guardrail, from fixes/rai-policies.json
