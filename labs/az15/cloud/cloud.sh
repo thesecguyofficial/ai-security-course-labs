@@ -81,11 +81,24 @@ deploy)
   echo "== B3 the deployment (this is the part that bills by the hour)"
   sed -e "s#__EP__#$EP#" -e "s#__MODEL_ID__#$MODEL_ID#" -e "s#Standard_DS3_v2#${INSTANCE:-Standard_DS3_v2}#" "$HERE/deployment.yml" > "$OUT/deployment.yml"
   echo "   instance type: ${INSTANCE:-Standard_DS3_v2} (Azure Machine Learning reserves 20% extra quota for upgrades)"
-  # A re-run after a failed deployment: remove the failed one first (create refuses an existing name).
-  if az ml online-deployment show -g "$RG" -w "$WS" -e "$EP" -n blue -o none 2>/dev/null; then
-    az ml online-deployment delete -g "$RG" -w "$WS" -e "$EP" -n blue --yes -o none
+  dep_state() { az ml online-deployment show -g "$RG" -w "$WS" -e "$EP" -n blue --query provisioning_state -o tsv 2>/dev/null || true; }
+  case "$(dep_state)" in
+    Succeeded) echo "   blue already exists and Succeeded (a re-run): keeping it" ;;
+    "") CREATE=1 ;;
+    *) # a re-run after a failed deployment: remove the failed one first (create refuses an existing name)
+       az ml online-deployment delete -g "$RG" -w "$WS" -e "$EP" -n blue --yes -o none; CREATE=1 ;;
+  esac
+  if [ -n "${CREATE:-}" ] && ! az ml online-deployment create -g "$RG" -w "$WS" -f "$OUT/deployment.yml" --all-traffic -o none; then
+    # Our runs (10 and 12 Nov 2026): the CLI's own wait died on a token error after 30+ minutes while the deployment
+    # carried on. Ask Azure for its state instead of giving up.
+    echo "   the CLI's wait failed; asking Azure for the deployment's state"
+    for _ in $(seq 1 60); do
+      case "$(dep_state)" in Succeeded) break ;; Failed|Canceled) echo "   blue failed: read its log (GUIDED-BUILD B.2)"; exit 1 ;; esac
+      sleep 30
+    done
+    [ "$(dep_state)" = Succeeded ] || { echo "   blue isn't ready after 30 more minutes"; exit 1; }
   fi
-  az ml online-deployment create -g "$RG" -w "$WS" -f "$OUT/deployment.yml" --all-traffic -o none
+  az ml online-endpoint update -g "$RG" -w "$WS" -n "$EP" --traffic "blue=100" -o none
   echo "== B4 the client VM may score this endpoint and do nothing else"
   sed "s#__SUB__#$SUB#" "$HERE/scorer-role.json" > "$OUT/scorer-role.json"
   az role definition create --role-definition @"$OUT/scorer-role.json" -o none 2>/dev/null || echo "   (role already exists)"
