@@ -1,0 +1,5 @@
+project_id  = "your-sandbox-project"
+region      = "europe-west4"
+alert_email = "you@example.com"
+# my_ip           = "203.0.113.7"
+# flood_threshold = 100   # Part E

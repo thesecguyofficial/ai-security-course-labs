@@ -7,6 +7,7 @@
 #                           #   to trip the flood alert, one hunting query; each prints PASS, WAIT or FAIL
 #   bash deploy.sh raise    # Part E: flood threshold 20 -> 100, the same 30 calls, no new alert expected
 #   bash deploy.sh down     # delete the alerts, the metric, the channel and the template; Data Access logs off
+#   bash deploy.sh tf apply|destroy   # the same pieces as `up`/`down`, from terraform/ (test and raise work the same)
 #
 # Runs in Google Cloud Shell in the project you're signed in to; downloads the course labs repo into ~/tsg-labs.
 # Optional before `up`: export GC16_EMAIL=you@example.com (default: your gcloud account) GC16_MY_IP=203.0.113.7
@@ -37,6 +38,18 @@ load() {
   MA="https://modelarmor.$R.rep.googleapis.com/v1/projects/$P/locations/$R/templates/$TPL"
   export CLOUDSDK_API_ENDPOINT_OVERRIDES_MODELARMOR="https://modelarmor.$R.rep.googleapis.com/"
   gcloud config set project "$P" >/dev/null 2>&1
+}
+need_terraform() {   # Cloud Shell stopped shipping Terraform (12 Nov 2026): install HashiCorp's zip into ~/bin
+  export PATH="$HOME/bin:$PATH"
+  terraform version 2>/dev/null | grep -q '^Terraform v' && return 0
+  local v=1.13.4 d; d=$(mktemp -d)
+  echo "Terraform is not installed here: installing $v from releases.hashicorp.com into ~/bin (checksum verified)"
+  curl -sSfo "$d/tf.zip" "https://releases.hashicorp.com/terraform/$v/terraform_${v}_linux_amd64.zip"
+  curl -sSfo "$d/sums" "https://releases.hashicorp.com/terraform/$v/terraform_${v}_SHA256SUMS"
+  (cd "$d" && grep "linux_amd64.zip" sums | sed "s/terraform_${v}_linux_amd64.zip/tf.zip/" | sha256sum -c --quiet) ||
+    { echo "Checksum mismatch: not installing."; exit 1; }
+  mkdir -p "$HOME/bin" && unzip -oq "$d/tf.zip" terraform -d "$HOME/bin" && rm -rf "$d"
+  terraform version | head -1 || true
 }
 audit_logs() {   # $1 on|off: DATA_READ + DATA_WRITE for aiplatform.googleapis.com, every binding and the etag kept
   gcloud projects get-iam-policy "$P" --format=json > "$HOME/.gc16-policy.json"
@@ -196,5 +209,21 @@ PY
     echo "Done. Check Billing > Reports tomorrow."
     ;;
 
-  *) sed -n '2,10p' "$0"; exit 1;;
+  tf)
+    repo; load; need_terraform
+    gcloud services enable cloudresourcemanager.googleapis.com serviceusage.googleapis.com
+    printf 'GC16_PROJECT=%s\nGC16_REGION=%s\n' "$P" "$R" > "$ENVFILE"
+    cd "$LAB/terraform"
+    terraform init -input=false >/dev/null
+    v=(-var "project_id=$P" -var "region=$R" -var "alert_email=$EMAIL" -var "my_ip=$MYIP")
+    if [ "${2:-apply}" = destroy ]; then
+      terraform destroy -input=false -auto-approve "${v[@]}"
+      rm -f "$ENVFILE"
+    else
+      terraform apply -input=false -auto-approve "${v[@]}"
+      echo "Give the audit log config a minute, then: bash deploy.sh test"
+    fi
+    ;;
+
+  *) sed -n '2,11p' "$0"; exit 1;;
 esac
