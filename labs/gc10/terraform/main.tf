@@ -1,7 +1,7 @@
 # GC10 as Terraform: the locked-down AI footprint from lesson 10.6 (GUIDED-BUILD.md), in one apply.
 #
 #   cd labs/gc10/terraform
-#   gcloud services enable cloudresourcemanager.googleapis.com cloudbilling.googleapis.com billingbudgets.googleapis.com
+#   gcloud services enable cloudresourcemanager.googleapis.com cloudbilling.googleapis.com billingbudgets.googleapis.com iam.googleapis.com
 #   terraform init
 #   terraform apply -var project=PROJECT_ID -var me=YOUR_EMAIL
 #   bash ../cloud/deploy.sh test      # the same R1 to R5 checks as the script build

@@ -196,7 +196,7 @@ PY
     need_terraform
     printf 'GC10_PROJECT=%s\n' "$P" > "$ENVFILE"
     # Terraform's project and billing lookups need these first (a new project has them off: our 12 Nov run)
-    gcloud services enable cloudresourcemanager.googleapis.com cloudbilling.googleapis.com billingbudgets.googleapis.com \
+    gcloud services enable cloudresourcemanager.googleapis.com cloudbilling.googleapis.com billingbudgets.googleapis.com iam.googleapis.com \
       --project="$P"
     cd "$REPO/labs/gc10/terraform"
     terraform init -input=false >/dev/null
