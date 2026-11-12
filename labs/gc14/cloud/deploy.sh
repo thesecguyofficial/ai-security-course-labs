@@ -60,7 +60,7 @@ gw_logs() {
     --limit=12 --freshness=30m \
     --format="table(timestamp.date('%H:%M:%S'):label=TIME, httpRequest.status:label=STATUS, httpRequest.requestUrl.slice(0:60).join(''):label=URL)" || true
   say "IAP's decisions that said no (in DRY_RUN: would deny, nothing blocked)"
-  gcloud logging read 'protoPayload.serviceName="iap.googleapis.com" AND protoPayload.authorizationInfo.granted=false' \
+  gcloud logging read 'protoPayload.serviceName="iap.googleapis.com" AND NOT protoPayload.authorizationInfo.granted=true' \
     --limit=12 --freshness=30m \
     --format="table(timestamp.date('%H:%M:%S'):label=TIME, protoPayload.request.dryRun:label=DRY_RUN, protoPayload.request.mcp_method:label=MCP, protoPayload.request.httpRequest.url.slice(0:50).join(''):label=URL)" || true
 }
