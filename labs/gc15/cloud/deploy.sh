@@ -189,7 +189,7 @@ PY
     fi
     echo "   endpoint $ENDPOINT_ID"
     say "D2 The auto-undeploy job, BEFORE the deployment: it undeploys 60 minutes from now"
-    WHEN=$(date -u -d '+60 min' '+%M %H %d %m')
+    WHEN=$(date -u -d '+60 min' '+%M %H %d %m'); AT=$(date -u -d '+60 min' +%H:%M)
     sed "s/DEPLOYED_MODEL_ID/$DEPLOYED_ID/" "$LAB/cloud/requests/undeploy-schedule-body.json" > "$HOME/.gc15-undeploy.json"
     gcloud scheduler jobs delete tsg-gc15-undeploy --location="$R" --quiet >/dev/null 2>&1 || true
     gcloud scheduler jobs create http tsg-gc15-undeploy --location="$R" --schedule="$WHEN *" --time-zone=Etc/UTC \
@@ -224,7 +224,7 @@ PY
     gcloud compute forwarding-rules describe tsg-gc15-psc --region="$R" --format='table(IPAddress,pscConnectionStatus)'
     say "D6 Data Access audit logs on for Agent Platform"
     audit_logs on
-    say "Done. Then: bash deploy.sh test   (the auto-undeploy job fires at $(date -u -d '+60 min' +%H:%M) UTC)"
+    say "Done. Then: bash deploy.sh test   (the auto-undeploy job fires at $AT UTC)"
     ;;
 
   test)
