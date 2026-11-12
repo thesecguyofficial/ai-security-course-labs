@@ -167,3 +167,22 @@ Working notes for the recording script. Console in the owner's account; Cloud Sh
   (here version 4 after the earlier rotation; in a fresh project it's 1) > **Disable** > dialog "Disable key version
   4?" ("there is a delay of up to a few hours during which it can still operate on data") > **Disable** > State
   "Disabled and primary". Disabled at 02:19 IST; BigQuery result below.
+- Result: the 02:19 IST query still read 2 rows; at **02:24 IST** (the next 5-minute check) it failed with
+  `.../cryptoKeys/helpdesk-data/cryptoKeyVersions/4 is not enabled, current state is: DISABLED.` Within 5 minutes,
+  much faster than BigQuery's "within an hour".
+- Turn it back on: the page now shows Status **Not available** and a banner "To operate on data with this key, enable
+  primary version or select a new primary version"; the banner pushes the table down, so re-aim the click. Tick
+  version 4 > **Enable** > "Enable key version 4?" > **Enable** > "Enabled and primary".
+
+## Teardown
+- The console's **Connect endpoint** creates the same regional endpoint as gcloud (`regional-endpoints list` shows
+  `aiplatform-eu`, 10.10.0.10, plus an auto-made forwarding rule `rep-autogen-fr-aiplatform-eu`) **and** the named
+  address `aiplatform-eu-ip`. The guide's teardown works; add `gcloud compute addresses delete aiplatform-eu-ip
+  --region=europe-west4 --quiet` after the endpoint delete (done in the guide).
+- Ran the guide's teardown in Cloud Shell (destroy version 4, the enabled one). Check: no datasets, no egress rules,
+  no VMs, no addresses; all four key versions DESTROY_SCHEDULED; role deleted; both service accounts deleted.
+  Data Access audit logs left on for GC12.
+
+## GC11 result
+Console rehearsal **passed** (13 Nov 2026): 1a to 1d and the VM by clicks, Test 1 and the trap by clicks, Test 4 and 5
+by clicks, Cloud Shell only for the cache, request-response logging and Tests 2 and 3 (impersonation).

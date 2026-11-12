@@ -505,6 +505,7 @@ gcloud compute firewall-rules delete deny-all-egress allow-aiplatform-eu-egress 
 gcloud dns record-sets delete aiplatform.eu.rep.googleapis.com. --zone=aiplatform-eu-rep --type=A
 gcloud dns managed-zones delete aiplatform-eu-rep
 gcloud network-connectivity regional-endpoints delete aiplatform-eu --region=europe-west4 --quiet
+gcloud compute addresses delete aiplatform-eu-ip --region=europe-west4 --quiet   # only if the console reserved it
 gcloud compute networks subnets delete helpdesk-eu --region=europe-west4 --quiet
 gcloud compute networks delete helpdesk-vpc --quiet
 bq rm -r -f -d PROJECT_ID:ai_logs
