@@ -233,9 +233,13 @@ resource "google_project_iam_member" "agent" {
   member  = var.agent_principal
 }
 
-resource "google_bigquery_dataset_iam_member" "agent_reads_helpdesk" {
+# Read on the tickets table only. A dataset-level grant doesn't work here: the provider's dataset IAM resource
+# couldn't parse a principal:// member in our 12 Nov 2026 run ("Failed to parse BigQuery Dataset IAM member type");
+# table IAM is ordinary IAM and takes it.
+resource "google_bigquery_table_iam_member" "agent_reads_tickets" {
   count      = local.agent ? 1 : 0
   dataset_id = google_bigquery_dataset.helpdesk.dataset_id
+  table_id   = google_bigquery_table.tickets.table_id
   role       = "roles/bigquery.dataViewer"
   member     = var.agent_principal
 }

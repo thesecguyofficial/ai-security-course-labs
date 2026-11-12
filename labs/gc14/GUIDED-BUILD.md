@@ -268,7 +268,7 @@ This second pass adds, for **this agent's principal only**:
 | | rule `deny-execute-sql` (**DENY**): `destination.agent_registry.mcp_server.tool.name == 'execute_sql'` |
 | `google_iam_projects_policy_binding` | `policy_kind = "ACCESS"`, target `//networkservices.googleapis.com/projects/PROJECT/locations/REGION/agentGateways/tsg-gc14-egress` |
 | `google_project_iam_member` x4 | `roles/browser`, `roles/serviceusage.serviceUsageConsumer` (Google's Agent Identity page, which also says not to grant `roles/aiplatform.expressUser` or `roles/aiplatform.user` to agent identities), `roles/bigquery.jobUser`, `roles/mcp.toolUser` (Google's BigQuery MCP page) |
-| `google_bigquery_dataset_iam_member` | `roles/bigquery.dataViewer` on dataset `helpdesk` only |
+| `google_bigquery_table_iam_member` | `roles/bigquery.dataViewer` on the table `helpdesk.tickets` only (our 12 Nov 2026 run: the provider's dataset IAM resource couldn't parse a `principal://` member; table IAM takes it) |
 
 The ALLOW rule for BigQuery includes `execute_sql` on purpose: Google's overview says "deny rules override allow
 rules", so the DENY rule wins. Nothing allows an unregistered host, so `fetch_page` meets the default deny.
