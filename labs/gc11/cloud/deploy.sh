@@ -301,7 +301,7 @@ PY
 
   serial)
     repo; load
-    gcloud compute instances get-serial-port-output helpdesk-vm --zone="$Z" 2>/dev/null | grep -A9 "generateContent HTTP" | head -12
+    gcloud compute instances get-serial-port-output helpdesk-vm --zone="$Z" 2>/dev/null | grep -E "TSG-SMOKE|\"code\"|\"message\"|\"reason\"" | tail -"${2:-8}" | cut -c1-200
     ;;
 
   keyon)
