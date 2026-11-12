@@ -122,6 +122,14 @@ PY
       n=$(curl -s -H "Authorization: Bearer $(tok)" "https://$R-aiplatform.googleapis.com/v1/$1/ragFiles" |
           python3 -c 'import json,sys; print(len(json.load(sys.stdin).get("ragFiles", [])))')
       echo "   kb-$2 holds $n files"
+      want=$(gcloud storage ls "gs://$P-tsg-kb-$2/" | wc -l)
+      if [ "$n" -lt "$want" ]; then   # our 12 Nov run: the first import took 2 of 4 files, silently; the second the rest
+        echo "   fewer files than the bucket holds ($want): importing again (already-imported files are skipped)"
+        # shellcheck disable=SC2046
+        op=$(bash "$LAB/terraform/scripts/import_files.sh" "$R" "$1" $(gcloud storage ls "gs://$P-tsg-kb-$2/") |
+          python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("name") or json.dumps(d)[:300])')
+        [[ "$op" == projects/* ]] && wait_op "$op"
+      fi
     done
     say "2 The agent's own service account: Agent Platform User + Model Armor User, nothing else"
     gcloud iam service-accounts describe "$AGENT" >/dev/null 2>&1 ||
