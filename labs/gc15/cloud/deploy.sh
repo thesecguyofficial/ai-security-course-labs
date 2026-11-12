@@ -337,7 +337,9 @@ PY
 
   tf)
     repo; load; need_terraform
-    gcloud services enable cloudresourcemanager.googleapis.com iam.googleapis.com serviceusage.googleapis.com
+    # Service Usage allows a limited number of changes a minute; our run hit 429 RESOURCE_EXHAUSTED once, so wait and retry.
+    gcloud services enable cloudresourcemanager.googleapis.com iam.googleapis.com serviceusage.googleapis.com ||
+      { echo "   API quota: trying again in 60 s"; sleep 60; gcloud services enable cloudresourcemanager.googleapis.com iam.googleapis.com serviceusage.googleapis.com; }
     TFD="$LAB/terraform"; TFV=(-var "project_id=$P" -var "region=$R")
     # "tf apply rrlog" creates the endpoint with request-response logging on (Part F; a PSC endpoint takes it only here).
     [ "${3:-}" = rrlog ] || [ "${TF_VAR_request_response_logging:-}" = true ] && TFV+=(-var "request_response_logging=true")
