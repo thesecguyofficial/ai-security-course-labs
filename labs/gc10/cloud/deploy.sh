@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # GC10 in one go: the locked-down AI footprint from lesson 10.6 (GUIDED-BUILD.md), its proof, and its teardown.
 #
-#   bash deploy.sh up      # budget alert, APIs, two test service accounts, Data Access logs, one restricted API key,
+#   bash deploy.sh up      # budget alert, APIs, two test service accounts, Data Access logs, two restricted API keys,
 #                          #   prompt caching off
 #   bash deploy.sh test    # prove it: R1 to R5 from the guide, each prints PASS, WAIT or FAIL
 #   bash deploy.sh down    # delete what `up` made (keys, accounts, binding, budget); caching back on, logs back off
@@ -38,7 +38,7 @@ load() {
   BODY='{"contents":[{"role":"user","parts":[{"text":"Say hello in five words."}]}],"generationConfig":{"maxOutputTokens":50}}'
   BA=$(gcloud billing projects describe "$P" --format="value(billingAccountName)" | sed 's#billingAccounts/##')
 }
-key_name() { gcloud services api-keys list --project="$P" --filter="displayName=gc10-build" --format="value(name)" | head -1; }
+key_name() { gcloud services api-keys list --project="$P" --filter="displayName=${1:-gc10-build}" --format="value(name)" 2>/dev/null | head -1; }
 cache() { curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
   "https://us-central1-aiplatform.googleapis.com/v1/projects/$P/cacheConfig"; }
 set_cache() { curl -s -o /dev/null -w "%{http_code}" -X PATCH -H "Authorization: Bearer $(gcloud auth print-access-token)" \
@@ -89,6 +89,10 @@ case "${1:-}" in
     say "2c One API key: Agent Platform only, and only from 192.0.2.10 (a documentation address)"
     [ -n "$(key_name)" ] || gcloud services api-keys create --project="$P" --display-name=gc10-build \
       --api-target=service=aiplatform.googleapis.com --allowed-ips=192.0.2.10 --format="value(name)" 2>&1 | tail -1
+    say "2c (bound) The kind of key Agent Platform accepts: bound to gc10-caller, same two restrictions (lesson 10.4)"
+    [ -n "$(key_name gc10-bound)" ] || gcloud services api-keys create --project="$P" --display-name=gc10-bound \
+      --service-account="$CALLER" --api-target=service=aiplatform.googleapis.com --allowed-ips=192.0.2.10 \
+      --format="value(name)" 2>&1 | tail -1
     say "2d Prompt caching off"
     echo "PATCH cacheConfig: HTTP $(set_cache true)"
     say "Done. IAM takes a few minutes to reach every service. Then: bash deploy.sh test"
@@ -113,17 +117,18 @@ case "${1:-}" in
     elif grep -q 'HTTP 403' <<<"$out"; then rec WAIT "R2 403: the role may still be spreading (a few minutes)"
     else rec FAIL "R2 see the output above"; fi
 
-    say "R3 the API key from the wrong place (the key string is used, never printed)"
+    say "R3 two API keys from the wrong place (key strings are used, never printed)"
     K=$(gcloud services api-keys get-key-string "$(key_name)" --format="value(keyString)")
-    echo "key string read: ${#K} characters (not shown)"
-    out=$(call -H "x-goog-api-key: $K"); echo "$out" | grep -E '"(code|status|reason|message)"|HTTP' | head -5
-    echo "-- the same key on the express-mode address (no project in the path):"
-    EXP="https://aiplatform.googleapis.com/v1/publishers/google/models/$MODEL:generateContent"
-    curl -s -w "\nHTTP %{http_code}" -X POST -H "x-goog-api-key: $K" -H "Content-Type: application/json" "$EXP" \
-      -d "$BODY" | grep -E '"(code|status|reason|message)"|HTTP' | head -5
-    unset K
-    if grep -q 'HTTP 403' <<<"$out" && grep -q API_KEY_IP_ADDRESS_BLOCKED <<<"$out"; then rec PASS "R3 403 API_KEY_IP_ADDRESS_BLOCKED"
-    else rec FAIL "R3 expected 403 API_KEY_IP_ADDRESS_BLOCKED"; fi
+    echo "-- plain key gc10-build:"
+    out=$(call -H "x-goog-api-key: $K"); echo "$out" | grep -E '"(status|reason|message)"|HTTP' | head -4
+    plain=$(grep -c 'API keys are not supported' <<<"$out" || true)
+    K=$(gcloud services api-keys get-key-string "$(key_name gc10-bound)" --format="value(keyString)")
+    echo "-- key bound to gc10-caller, gc10-bound:"
+    out=$(call -H "x-goog-api-key: $K"); unset K; echo "$out" | grep -E '"(status|reason|message)"|HTTP' | head -4
+    if [ "$plain" -gt 0 ] && grep -q 'HTTP 403' <<<"$out" && grep -q API_KEY_IP_ADDRESS_BLOCKED <<<"$out"; then
+      rec PASS "R3 plain key 401 (API keys not supported), bound key 403 API_KEY_IP_ADDRESS_BLOCKED"
+    elif [ "$plain" -gt 0 ] && grep -q 'HTTP 200' <<<"$out"; then rec FAIL "R3 the bound key WORKED from here: check its IP restriction"
+    else rec FAIL "R3 see the output above"; fi
 
     say "R4 the trail: R1 and R2 in the Data Access audit log (minutes to arrive)"
     gcloud logging read 'log_id("cloudaudit.googleapis.com/data_access") AND protoPayload.serviceName="aiplatform.googleapis.com"' \
@@ -159,7 +164,9 @@ PY
   down)
     repo; load
     say "Delete the key, the binding, both accounts and the budget; caching back on; Data Access logs back off"
-    k=$(key_name); [ -z "$k" ] || gcloud services api-keys delete "$k" --project="$P" --quiet 2>&1 | tail -1
+    for kn in gc10-build gc10-bound; do
+      k=$(key_name $kn); [ -z "$k" ] || gcloud services api-keys delete "$k" --project="$P" --quiet 2>&1 | tail -1
+    done
     gcloud projects remove-iam-policy-binding "$P" --member="serviceAccount:$CALLER" --role="roles/aiplatform.user" \
       --condition=None --format="value(etag)" >/dev/null 2>&1 || true
     for SA in "$CALLER" "$NOBODY"; do gcloud iam service-accounts delete "$SA" --project="$P" --quiet 2>/dev/null || true; done
