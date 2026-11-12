@@ -65,14 +65,14 @@ case "${1:-}" in
     printf 'GC10_PROJECT=%s\n' "$P" > "$ENVFILE"
     echo "Project: $P   Model: $MODEL"
     say "0 Budget alert (lesson 10.5: it only emails you, hours late), APIs"
+    gcloud services enable billingbudgets.googleapis.com --project="$P"   # the budget command needs it first
     CUR=$(gcloud billing accounts describe "$BA" --format="value(currencyCode)")
     AMT=5; [ "$CUR" = INR ] && AMT=500
     gcloud billing budgets list --billing-account="$BA" --format="value(displayName)" | grep -qx "gc10-build alerts" ||
       gcloud billing budgets create --billing-account="$BA" --display-name="gc10-build alerts" \
         --budget-amount="${AMT}${CUR}" --filter-projects="projects/$P" \
         --threshold-rule=percent=0.5 --threshold-rule=percent=0.9 --threshold-rule=percent=1.0 --format="value(name)"
-    gcloud services enable aiplatform.googleapis.com apikeys.googleapis.com cloudasset.googleapis.com \
-      billingbudgets.googleapis.com --project="$P"
+    gcloud services enable aiplatform.googleapis.com apikeys.googleapis.com cloudasset.googleapis.com --project="$P"
     say "2a Two test identities: gc10-caller (Agent Platform User) and gc10-nobody (no AI role)"
     for SA in gc10-caller gc10-nobody; do
       gcloud iam service-accounts describe "$SA@$P.iam.gserviceaccount.com" --project="$P" >/dev/null 2>&1 ||
