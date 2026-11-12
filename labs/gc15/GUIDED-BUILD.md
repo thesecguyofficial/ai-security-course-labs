@@ -177,11 +177,12 @@ safetensors format works.
    You want `SAFE FORMATS ONLY`. A `.bin` or `.pt` file, or `.py` files, mean stop and find out why.
 3. **Record the hashes and the license as labels** (Model Registry labels allow lowercase letters, digits, `_` and
    `-`, under 64 characters; a hex sha256 is 64, so the manifest keeps the first 63. Our first try with all 64 got
-   "Label values must be less than 64 characters"):
+   "Label values must be less than 64 characters"). No dots either: the license `apache-2.0` is recorded as
+   `apache-2_0`, and our run was refused until it was:
 
    ```bash
    python3 model_files.py manifest "$MODEL_DIR" | jq -r 'to_entries | map("\(.key)=\(.value)") | join(",")' > cloud/out/labels
-   export LICENCE=<what you read in step 1, for example apache-2.0>
+   export LICENCE=<what you read in step 1, label-safe: apache-2.0 becomes apache-2_0>
    ```
 
 4. **Upload the folder, then register a version from it:**

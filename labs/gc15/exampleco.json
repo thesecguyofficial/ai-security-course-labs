@@ -33,7 +33,7 @@
     "ds-bob"
   ],
   "approved_licences": [
-    "apache-2.0",
+    "apache-2_0",
     "mit"
   ],
   "_approved_licences_note": "ExampleCo's own list, agreed with its legal team. The lab does not judge any licence; it checks that the recorded licence is on the company's list.",
