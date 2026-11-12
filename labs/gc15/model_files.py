@@ -17,7 +17,8 @@ The rules (lesson 15.3; Module 9 taught why):
   * .npy/.npz can hold pickled objects too (NumPy's allow_pickle)
   * .py files in a model folder are code (custom model code a loader may import)
   * every file's sha256 must match what was recorded on the Model Registry version (labels sha256-<file>) when it
-    was uploaded. A label value can be up to 64 characters, so one hex sha256 fits in one label.
+    was uploaded. A label value must be under 64 characters (Model Registry refused 64 in our run, 12 Nov 2026), so
+    the label holds the first 63 of the 64 hex characters: 252 bits, still far beyond any collision attack.
 """
 
 from __future__ import annotations
@@ -45,6 +46,7 @@ ALLOWED_GLOBALS = {
     ("torch", "FloatStorage"), ("torch", "HalfStorage"), ("torch", "BFloat16Storage"),
 }
 HASH_PREFIX = "sha256-"
+LABEL_HASH_CHARS = 63   # label values must be less than 64 characters
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -198,9 +200,14 @@ def label_key(name: str) -> str:
     return HASH_PREFIX + re.sub(r"[^a-z0-9_-]", "_", name.lower())
 
 
+def label_hash(data: bytes) -> str:
+    """The value we store: the first 63 hex characters of the sha256 (compare with the start of `sha256sum`)."""
+    return sha256(data)[:LABEL_HASH_CHARS]
+
+
 def manifest(files: dict[str, bytes]) -> dict[str, str]:
     """Model Registry labels sha256-<file> for one version (lesson 15.3)."""
-    return {label_key(n): sha256(d) for n, d in sorted(files.items())}
+    return {label_key(n): label_hash(d) for n, d in sorted(files.items())}
 
 
 def hash_mismatches(files: dict[str, bytes], recorded: dict[str, str]) -> list[str]:
@@ -209,7 +216,7 @@ def hash_mismatches(files: dict[str, bytes], recorded: dict[str, str]) -> list[s
     if not want:
         return ["no hashes recorded"]
     have = {label_key(n): n for n in files}
-    bad = [n for n, d in sorted(files.items()) if want.get(label_key(n)) != sha256(d)]
+    bad = [n for n, d in sorted(files.items()) if want.get(label_key(n)) != label_hash(d)]
     bad += [f"{k[len(HASH_PREFIX):]} (missing)" for k in sorted(set(want) - set(have))]
     return bad
 

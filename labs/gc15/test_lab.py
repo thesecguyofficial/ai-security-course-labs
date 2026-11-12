@@ -77,13 +77,13 @@ class TC_Lab(unittest.TestCase):
         boom.assert_not_called()
 
     def test_07_hashes_as_labels(self):
-        """hashes: version 3's files match its sha256-* labels; a swapped folder does not; every label fits in 64 characters"""
+        """hashes: version 3's files match its sha256-* labels; a swapped folder does not; every label value is under 64 characters"""
         labels = twin.version(shipped("hardened"), "3")["labels"]
         files = model_files.build("v3-safe")
         self.assertEqual(model_files.hash_mismatches(files, labels), [])
         self.assertEqual(model_files.hash_mismatches(model_files.swapped(files), labels), ["model.safetensors", "pytorch_model.bin"])
         self.assertEqual(model_files.hash_mismatches(files, {}), ["no hashes recorded"])
-        self.assertTrue(all(len(k) <= 64 and len(v) <= 64 for k, v in model_files.manifest(files).items()))
+        self.assertTrue(all(len(k) < 64 and len(v) < 64 for k, v in model_files.manifest(files).items()))
 
     def test_08_upload_copies_what_is_there(self):
         """registry: models.upload copies the folder at upload time; a hash check before upload refuses a swap (A2)"""

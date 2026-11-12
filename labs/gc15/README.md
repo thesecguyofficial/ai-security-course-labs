@@ -497,14 +497,15 @@ python3 model_files.py manifest artifacts/v4-safe
 
 ```output
 {
-  "sha256-config_json": "868bbc0cf24d7065e5d606c8f519af00e5ed068ccaf8b1a10bb64a32c498e5f0",
-  "sha256-model_safetensors": "854cc1147ef708ee71ba6957304d8982d95b229aba8b80dd103c9832fd2fac9d",
-  "sha256-tokenizer_json": "ea991de3c734d41384ad6b47bf781c803c1550b381b435823b9232ec03ee380d"
+  "sha256-config_json": "868bbc0cf24d7065e5d606c8f519af00e5ed068ccaf8b1a10bb64a32c498e5f",
+  "sha256-model_safetensors": "854cc1147ef708ee71ba6957304d8982d95b229aba8b80dd103c9832fd2fac9",
+  "sha256-tokenizer_json": "ea991de3c734d41384ad6b47bf781c803c1550b381b435823b9232ec03ee380"
 }
 ```
 
-Model Registry label keys and values can be up to 64 characters, lowercase letters, digits, `_` and `-`, so one hex
-sha256 fits in one label value and the file name becomes the key.
+Model Registry label keys and values must be under 64 characters, lowercase letters, digits, `_` and `-`. A hex
+sha256 is 64 characters, one too many (the real registry refused it in our run), so the label keeps the first 63: still
+252 bits, and you compare it with the start of `sha256sum`. The file name becomes the key.
 
 ## Step 4 · The hardened setup
 
@@ -676,7 +677,7 @@ Same as `python3 run_tests.py`.
 [PASS] hardened: only A14 and A15 still work (the challenge), and 6 of 6 normal requests still work
 [PASS] scanner: the pickle's builtins.print import is flagged; the PyTorch import on the allow-list is not
 [PASS] scanner: works with pickle.load and pickle.loads disabled (it only parses opcodes)
-[PASS] hashes: version 3's files match its sha256-* labels; a swapped folder does not; every label fits in 64 characters
+[PASS] hashes: version 3's files match its sha256-* labels; a swapped folder does not; every label value is under 64 characters
 [PASS] registry: models.upload copies the folder at upload time; a hash check before upload refuses a swap (A2)
 [PASS] VPC-SC: inside an enforced perimeter the serving environment has no internet; without one it does
 [PASS] VPC-SC: an endpoint created before the project joined the perimeter can't take a deployment (Google)
@@ -715,7 +716,7 @@ Before you start, 6 of 27 fail (test 22 is a guard that already passes):
 [PASS] hardened: only A14 and A15 still work (the challenge), and 6 of 6 normal requests still work
 [PASS] scanner: the pickle's builtins.print import is flagged; the PyTorch import on the allow-list is not
 [PASS] scanner: works with pickle.load and pickle.loads disabled (it only parses opcodes)
-[PASS] hashes: version 3's files match its sha256-* labels; a swapped folder does not; every label fits in 64 characters
+[PASS] hashes: version 3's files match its sha256-* labels; a swapped folder does not; every label value is under 64 characters
 [PASS] registry: models.upload copies the folder at upload time; a hash check before upload refuses a swap (A2)
 [PASS] VPC-SC: inside an enforced perimeter the serving environment has no internet; without one it does
 [PASS] VPC-SC: an endpoint created before the project joined the perimeter can't take a deployment (Google)
