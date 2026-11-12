@@ -50,7 +50,13 @@ wait_op() {   # wait_op <operation name>, up to 10 minutes
   local i d
   for i in $(seq 1 60); do
     d=$(curl -s -H "Authorization: Bearer $(tok)" "https://$R-aiplatform.googleapis.com/v1/$1")
-    grep -q '"done": true' <<<"$d" && { grep -q '"error"' <<<"$d" && echo "${d:0:400}"; return 0; }
+    if grep -q '"done": true' <<<"$d"; then
+      python3 -c 'import json,sys
+d=json.loads(sys.argv[1]); r=d.get("response",{}); e=d.get("error")
+keep={k:v for k,v in r.items() if "Count" in k or k in ("partialFailuresGcsSink",)}
+print("   done:", json.dumps(e)[:300] if e else (json.dumps(keep) if keep else "ok"))' "$d" || true
+      return 0
+    fi
     sleep 10
   done
   echo "still running after 10 minutes: $1"
@@ -120,9 +126,12 @@ PY
     say "2 The agent's own service account: Agent Platform User + Model Armor User, nothing else"
     gcloud iam service-accounts describe "$AGENT" >/dev/null 2>&1 ||
       gcloud iam service-accounts create helpdesk-agent --display-name="TSG Helpdesk agent (GC13)"
-    for RL in roles/aiplatform.user roles/modelarmor.user; do
-      gcloud projects add-iam-policy-binding "$P" --member="serviceAccount:$AGENT" --role="$RL" --condition=None \
-        --format="value(etag)" >/dev/null
+    for RL in roles/aiplatform.user roles/modelarmor.user; do   # a new account takes a moment to be visible to IAM
+      for i in 1 2 3 4 5 6; do
+        gcloud projects add-iam-policy-binding "$P" --member="serviceAccount:$AGENT" --role="$RL" --condition=None \
+          --format="value(etag)" >/dev/null 2>&1 && break
+        sleep 10
+      done
     done
     say "3 A Model Armor template for the agent"
     gcloud model-armor templates describe "$TPL" --location="$R" >/dev/null 2>&1 ||
