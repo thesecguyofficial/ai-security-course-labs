@@ -150,7 +150,7 @@ case "${1:-}" in
     echo "cacheConfig (in memory only): HTTP $(cache EPHEMERAL)"
     say "1d Data Access logs (read + write) and request-response logging into ai_logs (v1beta1, Preview)"
     audit_logs on
-    bash "$LAB/terraform/scripts/request_response_logging.sh" on "$P" "$R" | head -c 300; echo
+    rr_out=$(bash "$LAB/terraform/scripts/request_response_logging.sh" on "$P" "$R"); echo "${rr_out:0:300}"
     say "1g The test VM: no external IP, runs as chatbot-runtime, calls Gemini once at boot through the private path"
     smoke regional
     exists gcloud compute instances describe helpdesk-vm --zone="$Z" ||
@@ -297,7 +297,7 @@ PY
       terraform destroy -input=false -auto-approve -var "project_id=$P" -var "region=$R" -var create_test_vm=true
     else
       terraform apply -input=false -auto-approve -var "project_id=$P" -var "region=$R" -var create_test_vm=true
-      bash scripts/request_response_logging.sh on "$P" "$R" | head -c 300; echo
+      rr_out=$(bash scripts/request_response_logging.sh on "$P" "$R"); echo "${rr_out:0:300}"
       echo "cacheConfig (in memory only): HTTP $(cache EPHEMERAL)"   # the Data Access logs are in logging.tf
       echo "Then: bash ../cloud/deploy.sh test"
     fi
