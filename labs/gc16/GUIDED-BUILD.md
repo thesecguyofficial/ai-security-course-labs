@@ -90,12 +90,13 @@ Make one model call (wait a minute or two after saving: configuration changes ta
 
 ```bash
 curl -s -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" \
-  "https://aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/global/publishers/google/models/gemini-3.1-flash-lite-preview:generateContent" \
+  "https://aiplatform.eu.rep.googleapis.com/v1/projects/PROJECT_ID/locations/eu/publishers/google/models/gemini-3.1-flash-lite:generateContent" \
   -d '{"contents":[{"role":"user","parts":[{"text":"Say hello in five words."}]}],"generationConfig":{"maxOutputTokens":20},"labels":{"end_user":"lab-user-1"}}'
 ```
 
-Google lists this model as `gemini-3.1-flash-lite-preview` (Preview), available in the `global` location, so the call
-uses the global endpoint rather than `REGION`.
+The call goes to the `eu` multi-region endpoint, not `REGION`: in our 12 November 2026 run `gemini-3.1-flash-lite`
+answered only on the `global`, `eu` and `us` locations, and every single region returned 404 (GC11 lesson 11.5 has the
+details). `eu` keeps the request in the EU; `global` works too.
 
 Then in **Logging**, **Logs Explorer**, run:
 
@@ -116,7 +117,7 @@ Example response (shape from the provider's docs, values illustrative), one entr
     "methodName": "google.cloud.aiplatform.v1.PredictionService.GenerateContent",
     "authenticationInfo": {"principalEmail": "you@example.com"},
     "requestMetadata": {"callerIp": "198.51.100.7"},
-    "resourceName": "projects/PROJECT_ID/locations/global/publishers/google/models/gemini-3.1-flash-lite-preview"
+    "resourceName": "projects/PROJECT_ID/locations/eu/publishers/google/models/gemini-3.1-flash-lite"
   }
 }
 ```
