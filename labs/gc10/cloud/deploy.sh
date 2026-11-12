@@ -115,7 +115,13 @@ case "${1:-}" in
 
     say "R3 the API key from the wrong place (the key string is used, never printed)"
     K=$(gcloud services api-keys get-key-string "$(key_name)" --format="value(keyString)")
-    out=$(call -H "x-goog-api-key: $K"); unset K; echo "$out" | grep -E '"(code|status|reason)"|HTTP' | head -4
+    echo "key string read: ${#K} characters (not shown)"
+    out=$(call -H "x-goog-api-key: $K"); echo "$out" | grep -E '"(code|status|reason|message)"|HTTP' | head -5
+    echo "-- the same key on the express-mode address (no project in the path):"
+    EXP="https://aiplatform.googleapis.com/v1/publishers/google/models/$MODEL:generateContent"
+    curl -s -w "\nHTTP %{http_code}" -X POST -H "x-goog-api-key: $K" -H "Content-Type: application/json" "$EXP" \
+      -d "$BODY" | grep -E '"(code|status|reason|message)"|HTTP' | head -5
+    unset K
     if grep -q 'HTTP 403' <<<"$out" && grep -q API_KEY_IP_ADDRESS_BLOCKED <<<"$out"; then rec PASS "R3 403 API_KEY_IP_ADDRESS_BLOCKED"
     else rec FAIL "R3 expected 403 API_KEY_IP_ADDRESS_BLOCKED"; fi
 
