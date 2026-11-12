@@ -8,9 +8,11 @@
 #                          #    the deployment (20 to 40 minutes), predict-only access for the app, the PSC address
 #   bash deploy.sh test    # E: a VM inside the network calls three tickets privately; you call the public host; the
 #                          #    Data Access trail. Each prints PASS, WAIT or FAIL
-#   bash deploy.sh rrlog   # F: request-response logging on (100%) into a BigQuery dataset, one more call, the row
+#   bash deploy.sh rrlog   # F: request-response logging. On a PSC endpoint it can't be switched on later: rrlog shows
+#                          #    the refusal, or the newest BigQuery rows if the endpoint was made with it
+#                          #    (RRLOG=on bash deploy.sh up, or bash deploy.sh tf apply rrlog)
 #   bash deploy.sh down    # G: undeploy, then delete everything (the key ring stays: Google never deletes them)
-#   bash deploy.sh tf apply|destroy   # Part A, the endpoint and the audit logs from terraform/, then the rest of `up`
+#   bash deploy.sh tf apply [rrlog]|destroy   # Part A, the endpoint and the audit logs from terraform/, then `up`
 #
 # COST: the deployed model bills every hour it's deployed, called or not (e2-standard-4: about $0.15 an hour in
 # us-central1). The auto-undeploy job undeploys it 60 minutes after `up` starts the deployment. Run `down` today.
@@ -292,7 +294,7 @@ PY
       rm -f "$HOME/.gc15-rr.json"
       echo "   On a Private Service Connect endpoint it is set when the endpoint is created (our run, 12 Nov 2026:"
       echo "   FAILED_PRECONDITION). To see it: bash deploy.sh down, then RRLOG=on bash deploy.sh up, or"
-      echo "   bash deploy.sh tf apply with TF_VAR_request_response_logging=true."
+      echo "   bash deploy.sh tf apply rrlog."
     else
       echo "   On. The newest rows (they arrive a few minutes after the calls):"
       bq query --quiet --use_legacy_sql=false --format=pretty "SELECT logging_time, LEFT(TO_JSON_STRING(request_payload), 120) AS request FROM \`$P.tsg_gc15_audit.requests\` ORDER BY logging_time DESC LIMIT 3" 2>&1 | tail -8
@@ -337,6 +339,8 @@ PY
     repo; load; need_terraform
     gcloud services enable cloudresourcemanager.googleapis.com iam.googleapis.com serviceusage.googleapis.com
     TFD="$LAB/terraform"; TFV=(-var "project_id=$P" -var "region=$R")
+    # "tf apply rrlog" creates the endpoint with request-response logging on (Part F; a PSC endpoint takes it only here).
+    [ "${3:-}" = rrlog ] || [ "${TF_VAR_request_response_logging:-}" = true ] && TFV+=(-var "request_response_logging=true")
     (cd "$TFD" && terraform init -input=false >/dev/null)
     if [ "${2:-apply}" = destroy ]; then
       say "First what Terraform doesn't own: the deployment, the model, the VM, the forwarding rule, the job"
@@ -382,5 +386,5 @@ PY
     fi
     ;;
 
-  *) sed -n '2,14p' "$0"; exit 1;;
+  *) sed -n '2,16p' "$0"; exit 1;;
 esac
