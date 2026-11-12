@@ -72,7 +72,9 @@ case "${1:-}" in
     say "0 APIs"
     gcloud services enable aiplatform.googleapis.com modelarmor.googleapis.com storage.googleapis.com
     say "1a RAG Engine tier: Basic (Spanner mode, the cheapest provisioned tier)"
-    bash "$LAB/terraform/scripts/rag_tier.sh" "$P" "$R" basic | head -c 300; echo
+    t=$(bash "$LAB/terraform/scripts/rag_tier.sh" "$P" "$R" basic)   # captured: a pipe into head would end the script
+    op=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1].split("\nCheck it")[0]).get("name",""))' "$t" 2>/dev/null || true)
+    echo "   tier operation: ${op:-?}"; [[ "$op" == projects/* ]] && wait_op "$op"
     say "1b Two buckets, one per audience; the poisoned refund update goes into kb-staff ON PURPOSE (request G3)"
     mkdir -p "$HOME/.gc13-docs" && rm -f "$HOME/.gc13-docs"/*
     python3 - "$LAB/data/docs.json" "$HOME/.gc13-docs" <<'PY'
@@ -224,7 +226,7 @@ if "error" in d: print("  ", d["error"].get("code"), d["error"].get("message",""
     done
     gcloud iam service-accounts delete "$AGENT" --quiet 2>/dev/null || true
     say "RAG Engine tier: Unprovisioned (deletes the managed database and stops its billing; can't be undone)"
-    bash "$LAB/terraform/scripts/rag_tier.sh" "$P" "$R" unprovisioned | head -c 300; echo
+    t=$(bash "$LAB/terraform/scripts/rag_tier.sh" "$P" "$R" unprovisioned); echo "${t:0:300}"
     rm -f "$ENVFILE" "$LAB/adk_agent/tsg_helpdesk/.env" "$HOME/.gc13-run.txt"; rm -rf "$HOME/.gc13-docs"
     echo "Done. The virtual environment ~/.gc13-venv stays (rm -rf it if you like)."
     ;;
