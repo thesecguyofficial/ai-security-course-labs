@@ -139,20 +139,22 @@ print("   vulnerabilities by severity:", {k: len(x) for k, x in v.items()} or "n
     if [ -z "${MODEL_ID:-}" ]; then
       [ -d "$VENV" ] || python3 -m venv "$VENV"
       "$VENV/bin/pip" install -q huggingface_hub
-      MD="$HOME/.gc15-model"; rm -rf "$MD"
+      MD="$HOME/.gc15-model"
+      # A run that stopped after the download keeps the folder: reuse it instead of fetching 1.4 GiB again.
+      [ -f "$MD/model.safetensors" ] && echo "   reusing the download in $MD" || {
       # Progress bars on: with --quiet our run (12 Nov 2026) sat silent for over 10 minutes and looked stuck. Plain HTTPS
       # (no Xet) keeps the transfer simple to follow; the 1.4 GiB upload after it ran at about 2 MiB/s.
-      HF_HUB_DISABLE_XET=1 "$VENV/bin/hf" download "$MODEL_REPO" --local-dir "$MD" >/dev/null
+      HF_HUB_DISABLE_XET=1 "$VENV/bin/hf" download "$MODEL_REPO" --local-dir "$MD" >/dev/null; }
       rm -rf "$MD/.cache"
       python3 "$LAB/model_files.py" scan "$MD" | tail -4
       python3 "$LAB/model_files.py" scan "$MD" | grep -q "SAFE FORMATS ONLY" || { echo "Not safe formats only: stopping."; exit 1; }
       LIC=$(python3 -c 'import re,sys; t=open(sys.argv[1]).read(); m=re.search(r"^license:\s*([\w.-]+)", t, re.M); print((m.group(1) if m else "unknown").lower())' "$MD/README.md" 2>/dev/null || echo unknown)
       LABELS=$(python3 "$LAB/model_files.py" manifest "$MD" | python3 -c 'import json,sys; print(",".join(f"{k}={v}" for k,v in json.load(sys.stdin).items()))')
       echo "   licence (from the model card): $LIC"
-      gcloud storage cp --recursive "$MD"/* "gs://$P-tsg-gc15-models/qwen3-0.6b/v1/" --quiet
+      gcloud storage rsync "$MD" "gs://$P-tsg-gc15-models/qwen3-0.6b/v1/" --recursive --quiet   # skips files already there
       gcloud ai models upload --region="$R" --display-name=tsg-gc15-summariser --container-image-uri="$IMAGE" \
         --artifact-uri="gs://$P-tsg-gc15-models/qwen3-0.6b/v1/" --container-ports=8080 --container-predict-route=/predict \
-        --container-health-route=/health --labels="licence=$LIC,$LABELS" 2>&1 | tail -2
+        --container-health-route=/health --labels="licence=$LIC,$LABELS" 2>&1 | tail -6
       MODEL_ID=$(gcloud ai models list --region="$R" --filter='displayName=tsg-gc15-summariser' --format='value(name)')
       MODEL_ID=$(basename "${MODEL_ID%%$'\n'*}")
       rm -rf "$MD"; save
