@@ -226,8 +226,9 @@ lines = ["#!/bin/bash",
          'T=$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token | sed -E \'s/.*"access_token":"([^"]+)".*/\\1/\')']
 for name in ("normal", "personal-data", "injection"):
     body = pathlib.Path(d, f"predict-{name}.json").read_text().strip().replace("'", "'\\''")
-    lines.append(f"echo \"TSG-GC15 {name}: $(curl -s -m 60 -w ' HTTP %{{http_code}}' -H \"Authorization: Bearer $T\" "
-                 f"-H 'Content-Type: application/json' -d '{body}' {url} | tr -d '\\n' | head -c 400)\" > /dev/ttyS0")
+    # The status first, then the start of the answer on one line (the answer spans many lines).
+    lines.append(f"echo \"TSG-GC15 {name}: $(curl -s -m 60 -o /tmp/r -w 'HTTP %{{http_code}}' -H \"Authorization: Bearer $T\" "
+                 f"-H 'Content-Type: application/json' -d '{body}' {url}) $(tr -d '\\n' < /tmp/r | head -c 300)\" > /dev/ttyS0")
 print("\n".join(lines))
 PY
     if exists gcloud compute instances describe tsg-gc15-client --zone="$Z"; then
