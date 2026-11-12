@@ -17,10 +17,15 @@ import urllib.request
 import google.auth
 import google.auth.transport.requests
 from google.adk.agents import LlmAgent
+from google.adk.models import Gemini
 from google.adk.tools.mcp_tool import McpToolset, StreamableHTTPConnectionParams
 
 PROJECT = os.environ.get("TSG_PROJECT") or os.environ.get("GOOGLE_CLOUD_PROJECT", "")
-MODEL = os.environ.get("TSG_MODEL", "gemini-3.5-flash")
+MODEL = os.environ.get("TSG_MODEL", "gemini-3.1-flash-lite")
+# Where the model is called. In our 12 Nov 2026 run gemini-3.1-flash-lite answered only on global, eu and us, never on
+# a single region such as us-central1, so the agent (which runs in your region) calls the global endpoint, which is
+# also one of the Agent Registry endpoints the gateway allows.
+MODEL_LOCATION = os.environ.get("TSG_MODEL_LOCATION", "global")
 
 
 def bigquery_headers(_context=None) -> dict:
@@ -47,7 +52,7 @@ def fetch_page(url: str) -> dict:
 
 root_agent = LlmAgent(
     name="tsg_helpdesk_gc14",
-    model=MODEL,
+    model=Gemini(model=MODEL, client_kwargs={"enterprise": True, "location": MODEL_LOCATION}),
     description="TSG Helpdesk (GC14 guided build): answers questions about helpdesk tickets in BigQuery.",
     instruction=(
         f"You are the TSG Helpdesk assistant for project {PROJECT}. Tickets are in the BigQuery table "

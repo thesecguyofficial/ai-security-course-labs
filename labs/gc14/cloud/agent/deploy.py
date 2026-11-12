@@ -15,6 +15,7 @@ APIs without it, write down why before you add it (lab rule GC14-02).
 
 import argparse
 import json
+import os
 
 import vertexai
 from vertexai import agent_engines, types
@@ -38,7 +39,9 @@ def main():
         "staging_bucket": a.staging_bucket,
         "requirements": ["google-adk[gcp]==2.12.0", "google-cloud-aiplatform[agent_engines,adk]>=1.112"],
         "extra_packages": ["helpdesk"],
-        "env_vars": {"TSG_PROJECT": a.project},
+        "env_vars": {"TSG_PROJECT": a.project,
+                     "TSG_MODEL": os.environ.get("TSG_MODEL", "gemini-3.1-flash-lite"),
+                     "TSG_MODEL_LOCATION": os.environ.get("TSG_MODEL_LOCATION", "global")},
         "identity_type": types.IdentityType.AGENT_IDENTITY,
         "agent_gateway_config": {"agent_to_anywhere_config": {"agent_gateway": a.gateway}},
     })
