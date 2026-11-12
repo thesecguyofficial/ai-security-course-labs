@@ -304,6 +304,17 @@ PY
     gcloud compute instances get-serial-port-output helpdesk-vm --zone="$Z" 2>/dev/null | grep -E "TSG-SMOKE|\"code\"|\"message\"|\"reason\"" | tail -"${2:-8}" | cut -c1-200
     ;;
 
+  probe)   # EXPERIMENT: what the eu calls left behind (Data Access rows) and request-response logging for location eu
+    repo; load
+    gcloud logging read 'log_id("cloudaudit.googleapis.com/data_access") AND protoPayload.methodName:"GenerateContent"' \
+      --project="$P" --freshness=3h --limit=6 \
+      --format="table(timestamp.date('%H:%M'),protoPayload.authenticationInfo.principalEmail.split('@').slice(0),protoPayload.requestMetadata.callerIp,protoPayload.resourceName.split('/locations/').slice(1),protoPayload.status.code)"
+    out=$(bash "$LAB/terraform/scripts/request_response_logging.sh" on "$P" eu 2>&1); echo "rr on eu: ${out:0:300}"
+    sleep 20
+    out=$(bash "$LAB/terraform/scripts/request_response_logging.sh" show "$P" eu 2>&1); echo "rr show eu: ${out:0:400}"
+    gcloud compute instances reset helpdesk-vm --zone="$Z" --quiet
+    ;;
+
   keyon)
     repo; load
     for v in $(gcloud kms keys versions list --key=helpdesk-data --keyring=helpdesk-eu --location="$R" --filter="state=DISABLED" --format="value(name)"); do
