@@ -245,6 +245,8 @@ PY
     if grep -q "normal:.*HTTP 200" <<<"$out"; then rec PASS "E1 a summary through the private address, as the app account"
     elif [ -z "$out" ]; then rec WAIT "E1 nothing on the serial port yet: run test again"
     else rec FAIL "E1 see the line above"; fi
+    if grep -q "personal-data:.*HTTP 200" <<<"$out"; then rec PASS "E3 the ticket with personal data reached the model as written: nothing redacted it"
+    else rec WAIT "E3 no answer yet"; fi
     if grep -q "injection:.*HTTP 200" <<<"$out"; then rec PASS "E4 the injected ticket went straight to the model: nothing screened it (GC12 would)"
     else rec WAIT "E4 no answer yet"; fi
     say "E2 The same call from Cloud Shell, through the public API host (a PSC endpoint: expect an error)"
