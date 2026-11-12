@@ -262,6 +262,17 @@ PY
     serial 4
     ;;
 
+  models)   # which Gemini models answer on this region's endpoint (as you, from Cloud Shell)
+    repo; load
+    for m in ${2:-gemini-3.1-flash-lite gemini-3-flash gemini-2.5-flash-lite gemini-2.5-flash gemini-2.0-flash-lite-001}; do
+      c=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+        -H "Content-Type: application/json" \
+        "https://$R-aiplatform.googleapis.com/v1/projects/$P/locations/$R/publishers/google/models/$m:generateContent" \
+        -d '{"contents":[{"role":"user","parts":[{"text":"Reply with OK"}]}],"generationConfig":{"maxOutputTokens":5}}')
+      echo "$R  $m  HTTP $c"
+    done
+    ;;
+
   serial)
     repo; load
     gcloud compute instances get-serial-port-output helpdesk-vm --zone="$Z" 2>/dev/null | grep -A9 "generateContent HTTP" | head -12
