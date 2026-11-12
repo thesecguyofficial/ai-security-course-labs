@@ -284,7 +284,7 @@ safetensors format works.
 5. **Connect your VPC to it.** Read the service attachment, reserve an internal address, create the forwarding rule:
 
    ```bash
-   SA_URI=$(gcloud ai endpoints describe $ENDPOINT_ID --region=$REGION --format='value(privateServiceConnectConfig.serviceAttachment)')
+   SA_URI=$(gcloud ai endpoints describe $ENDPOINT_ID --region=$REGION --format='value(deployedModels[0].privateEndpoints.serviceAttachment)')
    gcloud compute addresses create tsg-gc15-psc-ip --region=$REGION --subnet=default
    gcloud compute forwarding-rules create tsg-gc15-psc --region=$REGION --network=default \
      --address=tsg-gc15-psc-ip --target-service-attachment=$SA_URI

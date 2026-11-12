@@ -193,7 +193,11 @@ print("   vulnerabilities by severity:", {k: len(x) for k, x in v.items()} or "n
       -d "{\"policy\": {\"bindings\": [{\"role\": \"projects/$P/roles/tsgGc15PredictOnly\", \"members\": [\"serviceAccount:$APP\"]}]}}" \
       "https://$R-aiplatform.googleapis.com/v1beta1/projects/$P/locations/$R/endpoints/$ENDPOINT_ID:setIamPolicy"
     say "D5 Your network's door to it: an internal address and a forwarding rule to the service attachment"
-    SA_URI=$(gcloud ai endpoints describe "$ENDPOINT_ID" --region="$R" --format='value(privateServiceConnectConfig.serviceAttachment)')
+    # The service attachment exists only once a model is deployed, and sits on the deployed model, not on the
+    # endpoint's privateServiceConnectConfig (empty in our run, 12 Nov 2026).
+    SA_URI=$(gcloud ai endpoints describe "$ENDPOINT_ID" --region="$R" --format='value(deployedModels[0].privateEndpoints.serviceAttachment)')
+    [ -n "$SA_URI" ] || { echo "No service attachment on the endpoint yet: is the model deployed?"; exit 1; }
+    echo "   service attachment ${SA_URI##*/}"
     exists gcloud compute addresses describe tsg-gc15-psc-ip --region="$R" ||
       gcloud compute addresses create tsg-gc15-psc-ip --region="$R" --subnet=tsg-gc15-subnet
     exists gcloud compute forwarding-rules describe tsg-gc15-psc --region="$R" ||
