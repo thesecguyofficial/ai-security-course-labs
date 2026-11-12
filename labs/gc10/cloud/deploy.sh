@@ -40,7 +40,8 @@ load() {
   BA=$(gcloud billing projects describe "$P" --format="value(billingAccountName)" | sed 's#billingAccounts/##')
 }
 need_terraform() {   # Cloud Shell stopped shipping Terraform (our 12 Nov 2026 run): install HashiCorp's zip into ~/bin
-  command -v terraform >/dev/null && return 0
+  export PATH="$HOME/bin:$PATH"
+  terraform version 2>/dev/null | grep -q '^Terraform v' && return 0   # Cloud Shell's stub only prints install help
   local v=1.13.4 d; d=$(mktemp -d)
   echo "Terraform is not installed here: installing $v from releases.hashicorp.com into ~/bin (checksum verified)"
   curl -sSfo "$d/tf.zip" "https://releases.hashicorp.com/terraform/$v/terraform_${v}_linux_amd64.zip"
