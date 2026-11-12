@@ -151,12 +151,14 @@ print("   vulnerabilities by severity:", {k: len(x) for k, x in v.items()} or "n
       LIC=$(python3 -c 'import re,sys; t=open(sys.argv[1]).read(); m=re.search(r"^license:\s*([\w.-]+)", t, re.M); print((m.group(1) if m else "unknown").lower())' "$MD/README.md" 2>/dev/null || echo unknown)
       LABELS=$(python3 "$LAB/model_files.py" manifest "$MD" | python3 -c 'import json,sys; print(",".join(f"{k}={v}" for k,v in json.load(sys.stdin).items()))')
       echo "   licence (from the model card): $LIC"
-      gcloud storage rsync "$MD" "gs://$P-tsg-gc15-models/qwen3-0.6b/v1/" --recursive --quiet   # skips files already there
+      gcloud storage rsync "$MD" "gs://$P-tsg-gc15-models/qwen3-0.6b/v1/" --recursive --checksums-only --quiet   # skips files already there
       gcloud ai models upload --region="$R" --display-name=tsg-gc15-summariser --container-image-uri="$IMAGE" \
         --artifact-uri="gs://$P-tsg-gc15-models/qwen3-0.6b/v1/" --container-ports=8080 --container-predict-route=/predict \
         --container-health-route=/health --labels="licence=$LIC,$LABELS" 2>&1 | tail -6
       MODEL_ID=$(gcloud ai models list --region="$R" --filter='displayName=tsg-gc15-summariser' --format='value(name)')
       MODEL_ID=$(basename "${MODEL_ID%%$'\n'*}")
+      # Registration failed: keep the download so the next run doesn't fetch and upload it again.
+      [ -n "$MODEL_ID" ] || { echo "Model registration failed (above). The download stays in $MD for the next run."; exit 1; }
       rm -rf "$MD"; save
     fi
     echo "   model $MODEL_ID"
