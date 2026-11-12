@@ -5,6 +5,7 @@
 #                           #   three alerts (Model Armor match, key from an unknown address, request flood)
 #   bash deploy.sh test     # Parts A to D: one model call in the audit log, four sanitize requests in the log, 30 calls
 #                           #   to trip the flood alert, one hunting query; each prints PASS, WAIT or FAIL
+#   bash deploy.sh logs     # the newest Model Armor sanitize entry, in full
 #   bash deploy.sh raise    # Part E: flood threshold 20 -> 100, the same 30 calls, no new alert expected
 #   bash deploy.sh down     # delete the alerts, the metric, the channel and the template; Data Access logs off
 #   bash deploy.sh tf apply|destroy   # the same pieces as `up`/`down`, from terraform/ (test and raise work the same)
@@ -85,7 +86,9 @@ open_incidents() {   # policy display name -> number of open alerts (the Alerts 
   curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
     "https://monitoring.googleapis.com/v3/projects/$P/alerts?filter=state%3D%22OPEN%22" |
     python3 -c 'import json,sys
-d=json.load(sys.stdin); print(sum(1 for a in d.get("alerts",[]) if a.get("policy",{}).get("displayName")==sys.argv[1]))' "$1" 2>/dev/null || echo "?"
+d=json.load(sys.stdin)
+if "error" in d: print("? (" + d["error"].get("message", "")[:80] + ")")
+else: print(sum(1 for a in d.get("alerts", []) if a.get("policy", {}).get("displayName") == sys.argv[1]))' "$1" 2>/dev/null || echo "?"
 }
 
 case "${1:-}" in
@@ -149,7 +152,7 @@ case "${1:-}" in
       s=$(sanitize "$T"); got="$got $s"; printf '   %-62.62s %s\n' "$T" "$s"
     done
     sleep 30
-    n=$(gcloud logging read 'jsonPayload.@type="type.googleapis.com/google.cloud.modelarmor.logging.v1.SanitizeOperationLogEntry"' \
+    n=$(gcloud logging read 'jsonPayload.@type="type.googleapis.com/google.cloud.modelarmor.logging.v1.SanitizeOperationLogEntry" AND resource.labels.template_id="'"$TPL"'"' \
       --freshness=10m --format="value(timestamp)" 2>/dev/null | wc -l)
     echo "   sanitize log entries in the last 10 minutes: $n"
     if [ "$got" = " NO_MATCH_FOUND MATCH_FOUND MATCH_FOUND NO_MATCH_FOUND" ] && [ "$n" -ge 4 ]; then
@@ -162,9 +165,9 @@ case "${1:-}" in
     echo "   $ok of 30 returned 200"
     m=$(open_incidents "GC16 Model Armor match"); f=$(open_incidents "GC16 request flood on Agent Platform")
     echo "   open alerts now: Model Armor match $m, request flood $f (an email goes to the channel too)"
-    if [ "$m" != "?" ] && [ "${m:-0}" -gt 0 ]; then rec PASS "C1 the Model Armor match alert is open"
+    if [[ "$m" =~ ^[0-9]+$ ]] && [ "$m" -gt 0 ]; then rec PASS "C1 the Model Armor match alert is open"
     else rec WAIT "C1 no open Model Armor alert yet (log alerts take a few minutes): run test again"; fi
-    if [ "$f" != "?" ] && [ "${f:-0}" -gt 0 ]; then rec PASS "C2 the request flood alert is open"
+    if [[ "$f" =~ ^[0-9]+$ ]] && [ "$f" -gt 0 ]; then rec PASS "C2 the request flood alert is open"
     else rec WAIT "C2 no open flood alert yet (the metric needs a few minutes): run test again in 5 minutes"; fi
 
     say "D Hunting: d04 (inference by anyone not on the list), with the lab's example names, in the last hour"
@@ -177,6 +180,13 @@ case "${1:-}" in
     say "Result: $PASS of 5 passed"
     printf '  %s\n' "${RES[@]}"
     echo "WAIT means Google Cloud hasn't caught up (audit logs and alerts take minutes). Then Part E: bash deploy.sh raise"
+    ;;
+
+  logs)
+    repo; load
+    say "The newest Model Armor sanitize entry (what the log keeps, raw text included)"
+    gcloud logging read 'jsonPayload.@type="type.googleapis.com/google.cloud.modelarmor.logging.v1.SanitizeOperationLogEntry"' \
+      --freshness=1h --limit=1 --format=yaml || true
     ;;
 
   raise)
@@ -225,5 +235,5 @@ PY
     fi
     ;;
 
-  *) sed -n '2,11p' "$0"; exit 1;;
+  *) sed -n '2,12p' "$0"; exit 1;;
 esac
