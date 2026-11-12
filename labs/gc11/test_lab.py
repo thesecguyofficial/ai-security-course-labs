@@ -140,7 +140,7 @@ class T3_Hardened(unittest.TestCase):
     def test_14_model_calls_go_through_psc(self):
         """hardened: the Helpdesk reaches Gemini through the Private Service Connect endpoint, not the internet"""
         d = attack.run_step(STEP["L1"], "hardened")
-        self.assertTrue(any("Private Service Connect endpoint 10.100.0.2" in n for n in d.notes))
+        self.assertTrue(any("regional endpoint 10.10.0.10 for aiplatform.eu.rep.googleapis.com" in n for n in d.notes))
 
     def test_15_auditor_answers_everything(self):
         """hardened: all four auditor questions can be answered"""
@@ -153,11 +153,12 @@ class T4_Residency(unittest.TestCase):
         self.assertIn("GC11-14", {f.rule for f in checker.run("today")})
         self.assertNotIn("GC11-14", {f.rule for f in checker.run("hardened")})
 
-    def test_17_eu_multiregion_breaks_the_private_path(self):
-        """residency: switching to aiplatform.eu.rep.googleapis.com breaks the Helpdesk (PGA and the global PSC bundle don't cover rep endpoints)"""
-        d = attack.run_step(STEP["L1"], "eu-multiregion")
+    def test_17_global_endpoint_is_blocked_by_the_network(self):
+        """residency: switching the Helpdesk to the global endpoint fails: the network only reaches the EU host"""
+        d = attack.run_step(STEP["L1"], "global-endpoint")
         self.assertFalse(d.allowed)
-        self.assertIn("rep.googleapis.com", d.why)
+        self.assertIn("no private path to aiplatform.googleapis.com", d.why)
+        self.assertIn("GC11-14", {f.rule for f in checker.run("global-endpoint")})
 
 
 class T5_DryRunReport(unittest.TestCase):

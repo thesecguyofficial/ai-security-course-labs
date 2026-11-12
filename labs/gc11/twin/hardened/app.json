@@ -3,8 +3,9 @@
   "runtime": "helpdesk-vm",
   "service_account": "chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com",
   "model": "publishers/google/models/gemini-3.1-flash-lite",
-  "location": "europe-west4",
-  "endpoint_host": "europe-west4-aiplatform.googleapis.com",
+  "location": "eu",
+  "endpoint_host": "aiplatform.eu.rep.googleapis.com",
+  "bigquery_host": "bigquery.europe-west4.rep.googleapis.com",
   "request_response_logging": {
     "enabled": true,
     "sampling_rate": 1.0,

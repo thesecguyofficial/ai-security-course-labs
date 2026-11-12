@@ -12,12 +12,13 @@ depends on, each taken from Google's documentation (links in the README):
      Token Creator on the project lets a principal mint tokens for the project's service accounts.
   3. Organization Policy vertexai.allowedModels: no policy = every model and action allowed; an allow-list denies
      every value it doesn't list (values look like publishers/P/models/M:ACTION).
-  4. Network path from a VM. An external IP or Cloud NAT = a route to the internet. With neither, Google APIs are
-     reached through a Private Service Connect (PSC) endpoint (with a private googleapis.com zone) or Private Google
+  4. Network path from a VM. An external IP or Cloud NAT = a route to the internet. With neither, a Google host is
+     reached through a regional Private Service Connect endpoint that targets exactly that host (with a private zone
+     for that name), a PSC endpoint for global Google APIs (with a private googleapis.com zone) or Private Google
      Access on the subnet. Private Google Access doesn't support endpoints that end in rep.googleapis.com, the
      all-apis PSC bundle excludes *.rep.googleapis.com, and Google doesn't document the vpc-sc bundle reaching them
-     (the twin treats them as unreachable through it). An egress deny-all firewall rule blocks
-     everything not explicitly allowed.
+     (the twin treats them as unreachable through it); a regional endpoint is the way to them. An egress deny-all
+     firewall rule blocks everything not explicitly allowed.
   5. VPC Service Controls. For a restricted service on a project in the perimeter: access from outside (the
      internet, an office) needs an ingress rule; a copy to a project outside needs an egress rule. A perimeter in
      DRY RUN only logs the violation (metadata.dryRun = true); the enforced config (status) denies it.
@@ -218,6 +219,23 @@ class Deployment:
         cname_ok = any(r.get("type") == "CNAME" and r.get("name") == "*.googleapis.com." for r in recs)
         return a_ok and cname_ok
 
+    def regional_endpoints(self) -> list[dict]:
+        """Regional PSC endpoints (google_network_connectivity_regional_endpoint): each serves exactly one host."""
+        return self.values("google_network_connectivity_regional_endpoint")
+
+    def regional_endpoint_for(self, host: str) -> dict | None:
+        """The regional endpoint for this host, if one exists AND a private zone resolves the name to its address."""
+        recs = self.values("google_dns_record_set")
+        zones = {z.get("name") for z in self.values("google_dns_managed_zone")
+                 if z.get("dns_name") == f"{host}." and z.get("visibility") == "private"}
+        for ep in self.regional_endpoints():
+            if ep.get("target_google_api") != host:
+                continue
+            if any(r.get("type") == "A" and r.get("name") == f"{host}." and r.get("managed_zone") in zones
+                   and ep.get("address") in r.get("rrdatas", []) for r in recs):
+                return ep
+        return None
+
     def pga_on(self, subnet: str | None) -> bool:
         return any(v.get("private_ip_google_access") for v in self.values("google_compute_subnetwork")
                    if subnet is None or v.get("name") == subnet)
@@ -239,11 +257,18 @@ class Deployment:
         internet = vm["external_ip"] or self.has_nat()
         if not google:
             if allowed_ranges is not None:
-                return False, "none", "egress firewall denies all traffic except the PSC endpoint"
+                return False, "none", "egress firewall denies all traffic except the private endpoints"
             if internet:
                 return True, "internet", "the VM has a route to the internet (external IP or Cloud NAT)"
             return False, "none", "no external IP and no Cloud NAT: no route to the internet"
         rep = host.endswith(".rep.googleapis.com")
+        reg = self.regional_endpoint_for(host)
+        if reg:
+            ip = reg["address"]
+            if allowed_ranges is not None and not any(
+                    ipaddress.ip_address(ip) in ipaddress.ip_network(r) for r in allowed_ranges):
+                return False, "none", f"egress firewall blocks the regional endpoint {ip}"
+            return True, "psc", f"Private Service Connect regional endpoint {ip} for {host}"
         psc = self.psc_endpoint()
         if not rep and psc and self.private_googleapis_zone():
             ip = self.psc_ip()
@@ -256,9 +281,13 @@ class Deployment:
         if not rep and self.pga_on(vm["subnetwork"]) and allowed_ranges is None:
             return True, "pga", "Private Google Access on the subnet"
         if rep:
-            return False, "none", (f"{host} ends in rep.googleapis.com: Private Google Access doesn't support it, "
-                                   "the all-apis bundle excludes *.rep.googleapis.com and Google doesn't document "
-                                   "vpc-sc reaching them")
+            return False, "none", (f"{host} ends in rep.googleapis.com and no regional endpoint targets it: Private "
+                                   "Google Access doesn't support it, the all-apis bundle excludes "
+                                   "*.rep.googleapis.com and Google doesn't document vpc-sc reaching them")
+        served = sorted(e.get("target_google_api", "") for e in self.regional_endpoints())
+        if served:
+            return False, "none", (f"no private path to {host}: this network's endpoints serve only "
+                                   f"{', '.join(served)}, and the egress firewall blocks everything else")
         return False, "none", "no private path to Google APIs and no internet route"
 
     # ---- VPC Service Controls ---------------------------------------------------------------------------------------
@@ -406,7 +435,8 @@ def evaluate(r: Request, d: Deployment) -> Decision:
         if r.credential == "attached" and f"serviceAccount:{vm['sa']}" != principal:
             return Decision(False, f"{vm['name']} runs as {vm['sa']}, not {email}")
         host = r.host or (d.app.get("endpoint_host") if r.service == "aiplatform.googleapis.com" else
-                          ("bigquery.googleapis.com" if r.service == "bigquery.googleapis.com" else "attacker.example"))
+                          (d.app.get("bigquery_host", "bigquery.googleapis.com") if r.service == "bigquery.googleapis.com"
+                           else "attacker.example"))
         ok, path, why = d.route_to(vm, host)
         if not ok:
             return Decision(False, f"network: {why}")

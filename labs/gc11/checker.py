@@ -103,33 +103,47 @@ def rule_external_ip(d):
             out.append(Finding("HIGH", "GC11-05", f"google_compute_instance {vm['name']}",
                                f"AI workload {how}: model calls cross the internet, and a hijacked app can post "
                                "data anywhere.",
-                               "Remove the external IP and NAT; reach Google APIs through a PSC endpoint; add an "
-                               "egress deny-all firewall rule with an allow for the endpoint."))
+                               "Remove the external IP and NAT; reach Google APIs through PSC endpoints; add an "
+                               "egress deny-all firewall rule with an allow for each endpoint."))
     return out
 
 
 def rule_psc(d):
-    if not d.psc_endpoint():
-        return [Finding("MEDIUM", "GC11-06", "google_compute_global_forwarding_rule",
+    regional = d.regional_endpoints()
+    if not d.psc_endpoint() and not regional:
+        return [Finding("MEDIUM", "GC11-06", "Private Service Connect",
                         "No Private Service Connect endpoint for Google APIs.",
-                        "Add a global internal address (purpose PRIVATE_SERVICE_CONNECT) and a forwarding rule with "
-                        "target vpc-sc (or all-apis), plus a private googleapis.com zone.")]
-    if not d.private_googleapis_zone():
-        return [Finding("MEDIUM", "GC11-06", "google_dns_managed_zone googleapis.com",
-                        "A PSC endpoint exists but no private googleapis.com zone points at it: clients still "
-                        "resolve the public addresses.",
-                        "Private zone googleapis.com: an A record to the endpoint IP and a CNAME *.googleapis.com.")]
-    return []
+                        "Add a regional endpoint for each Google host the app calls "
+                        "(google_network_connectivity_regional_endpoint, target_google_api = the host) with a private "
+                        "zone for that name; or, for *.googleapis.com hosts, a PSC endpoint for global Google APIs "
+                        "with a private googleapis.com zone.")]
+    out = []
+    for ep in regional:
+        host = ep.get("target_google_api", "")
+        if not d.regional_endpoint_for(host):
+            out.append(Finding("MEDIUM", "GC11-06", f"google_dns_managed_zone {host}",
+                               f"A regional endpoint for {host} exists but no private zone points that name at "
+                               f"{ep.get('address')}: clients still resolve the public addresses.",
+                               f"Private zone {host}. with an A record to {ep.get('address')}."))
+    if d.psc_endpoint() and not d.private_googleapis_zone():
+        out.append(Finding("MEDIUM", "GC11-06", "google_dns_managed_zone googleapis.com",
+                           "A PSC endpoint exists but no private googleapis.com zone points at it: clients still "
+                           "resolve the public addresses.",
+                           "Private zone googleapis.com: an A record to the endpoint IP and a CNAME *.googleapis.com."))
+    return out
 
 
 def rule_pga(d):
+    if d.psc_endpoint() or d.regional_endpoints():
+        return []
     out = []
     for v in d.values("google_compute_subnetwork"):
         if not v.get("private_ip_google_access"):
             out.append(Finding("LOW", "GC11-07", f"google_compute_subnetwork {v['name']}",
-                               "Private Google Access is off: VMs without an external IP can't reach Google APIs "
-                               "if the PSC path fails.",
-                               "Set private_ip_google_access = true (it doesn't cover *.rep.googleapis.com)."))
+                               "No private path at all: Private Google Access is off and there is no PSC endpoint, "
+                               "so VMs without an external IP can't reach Google APIs.",
+                               "Prefer PSC endpoints (GC11-06). Private Google Access is the fallback, and it doesn't "
+                               "cover *.rep.googleapis.com."))
     return out
 
 
@@ -240,19 +254,24 @@ def rule_location(d):
 
 
 # ---- GC11-16: YOUR TURN (README, Step 7) ---------------------------------------------------------------------------
-def rule_rep_endpoint_private_path(d):
-    """GC11-16 (challenge): flag an app whose endpoint_host ends in .rep.googleapis.com when the only private
-    paths are Private Google Access or a PSC endpoint for GLOBAL Google APIs (neither reaches rep endpoints).
+def rule_model_host_private_path(d):
+    """GC11-16 (challenge): flag an app whose model host (app.json endpoint_host) the network can't reach privately.
+
+    When the deployment has no internet route (no external IP on its AI workloads, no Cloud NAT), the model host
+    must be served by a private path: a regional endpoint that targets exactly that host (with its private zone), or,
+    for a host that does NOT end in .rep.googleapis.com, a PSC endpoint for global Google APIs (with its zone) or
+    Private Google Access. Otherwise every model call fails, and the quickest "fix" under pressure is to open egress.
 
     Return a list with one Finding("MEDIUM", "GC11-16", ...) when that's the case, else [].
-    Hints: d.app["endpoint_host"], d.psc_endpoint(), d.pga_on(None), d.vms().
+    Hints: d.app["endpoint_host"], d.regional_endpoint_for(host), d.psc_endpoint(), d.private_googleapis_zone(),
+    d.pga_on(None), d.vms(), d.has_nat().
     """
     return []
 
 
 RULES = [rule_sa_keys, rule_default_compute_sa, rule_broad_ai_role, rule_allowed_models, rule_external_ip, rule_psc,
          rule_pga, rule_perimeter, rule_dataset_cmek, rule_key_rotation, rule_durable_cache, rule_data_access_logs,
-         rule_rr_logging, rule_location, rule_impersonation, rule_rep_endpoint_private_path]
+         rule_rr_logging, rule_location, rule_impersonation, rule_model_host_private_path]
 
 
 def run(twin="today", plan=None, app=None) -> list[Finding]:

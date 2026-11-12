@@ -53,7 +53,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `dryrun_report.py` | Groups VPC Service Controls dry-run entries by caller, method and reason |
 | `twin/today/` | The Helpdesk as it runs today: `plan.json` (shaped like `terraform show -json`) and `app.json` (settings Terraform can't express: location, endpoint, request-response logging, cache) |
 | `twin/hardened/` | What `terraform/` builds, plus its `app.json` |
-| `twin/eu-multiregion/` | The hardened twin after a developer moved the app to the `eu` multi-region endpoint |
+| `twin/global-endpoint/` | The hardened twin after a developer moved the app to the `global` endpoint |
 | `twin/requirements.json`, `twin/groups.json` | ExampleCo's rules (EU processing, CMEK at rest, logging) and who is in which group |
 | `logs/vpcsc-dryrun-week.jsonl` | 44 **fake** Policy Denied dry-run entries from one week |
 | `terraform/` | The optional cloud path: `*.tf`, `terraform.tfvars.example`, `scripts/` |
@@ -64,29 +64,30 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 rules this lab depends on, each taken from Google's documentation (Sources, below): a stolen key only works if a
 user-managed key exists; IAM needs a role containing the permission, and Agent Platform User contains
 `aiplatform.endpoints.predict` **and** `aiplatform.endpoints.create`/`deploy`; `vertexai.allowedModels` allows
-everything when no policy exists; a VM with no external IP and no Cloud NAT reaches Google APIs only through a PSC
-endpoint (with a private `googleapis.com` zone) or Private Google Access, neither of which reaches
+everything when no policy exists; a VM with no external IP and no Cloud NAT reaches a Google host only through a
+regional PSC endpoint that targets exactly that host (with a private zone for its name), a PSC endpoint for global
+Google APIs (with a private `googleapis.com` zone) or Private Google Access, and only the first reaches
 `*.rep.googleapis.com`; a VPC Service Controls perimeter denies access from outside and copies to outside projects
 unless an ingress or egress rule allows them, and in dry run it only logs. It does **not** model IAM deny policies,
 conditions, VPC-SC method-level rules, quotas or real routing, and its role-to-permission map is a small subset.
 
-**Tested in a real project, 12 November 2026.** The cloud build (`cloud/deploy.sh`, `terraform/`, `GUIDED-BUILD.md`)
-changed after a real run, and the twin still shows the earlier design. What we found: `gemini-3.1-flash-lite` answered
-only on `global`, `eu` and `us`, never on `europe-west4`; a PSC endpoint for global Google APIs with the `vpc-sc`
-bundle returned `503` "VPC network mapping unavailable" in a project with no organization. So the cloud build calls
-`aiplatform.eu.rep.googleapis.com` (`locations/eu`) through a PSC endpoint for that one host at `10.10.0.10`, and the
-residency trap becomes the global endpoint, which the network blocks. Request-response logging into a dataset with a
-CMEK default key worked. The assumptions below are the ones the twin was written with.
+**Tested in a real project, 12 November 2026, and the twin follows it.** What the real run found:
+`gemini-3.1-flash-lite` answered only on `global`, `eu` and `us`, never on `europe-west4`, and a PSC endpoint for
+global Google APIs with the `vpc-sc` bundle returned `503` "VPC network mapping unavailable" in a project with no
+organization. So the cloud build calls `aiplatform.eu.rep.googleapis.com` (`locations/eu`) through a **regional**
+PSC endpoint for that one host at `10.10.0.10`, and the hardened twin does the same. The twin's Helpdesk also reads
+tickets from BigQuery, so the twin adds a second regional endpoint, `bigquery.europe-west4.rep.googleapis.com` at
+`10.10.0.11` (Google's [BigQuery regional endpoints](https://docs.cloud.google.com/bigquery/docs/regional-endpoints)
+page lists `europe-west4`); the cloud build doesn't need it, because its test VM only calls the model. The residency
+trap (Step 6) is now the global endpoint, which the network blocks. Request-response logging into a dataset with a
+CMEK default key worked.
 
-**Three assumptions, said plainly.** (1) The hardened design reaches `europe-west4-aiplatform.googleapis.com` through a
-PSC endpoint for global Google APIs with the `vpc-sc` bundle. Google says the `all-apis` bundle covers `*.googleapis.com` names
-except `*.rep.googleapis.com`, and that `vpc-sc` serves APIs that support VPC Service Controls (Agent Platform does);
-we found no page that names the regional Agent Platform host explicitly, so verify it with the optional smoke test.
-(2) Google's request-response logging page couldn't be read when this lab was written; the lab relies on Google's
-published API definitions (`setPublisherModelConfig`, v1beta1) and on the zero-data-retention page. Check the
-feature's launch stage and limitations before you depend on it, including inside a perimeter. (Update, 22 Oct 2026: the page now opens. It marks the feature **Preview** and says nothing about VPC Service Controls or CMEK.) (3) We didn't test that
-request-response logging writes into a dataset with a CMEK default key; the BigQuery service account has the key role,
-so it should, but confirm it in your project.
+**Two assumptions, said plainly.** (1) Google's request-response logging page couldn't be read when this lab was
+first written; the lab relies on Google's published API definitions (`setPublisherModelConfig`, v1beta1) and on the
+zero-data-retention page. The page now opens: it marks the feature **Preview** and says nothing about VPC Service
+Controls. Check its launch stage before you depend on it, including inside a perimeter. (2) The twin's perimeter treats
+calls through the regional endpoints as coming from inside the network. Google documents VPC Service Controls for
+regional endpoints on the regional endpoints page; test your own perimeter in dry run before you enforce it.
 
 **About the data and safety.** Every IP address is a documentation range from
 [RFC 5737](https://www.rfc-editor.org/rfc/rfc5737) or private `10.x` space; every identity is on `example.com`;
@@ -225,12 +226,14 @@ One generateContent call from helpdesk-vm with location global
 ExampleCo's rule: ML processing must stay in the EU (approved: europe-west4, europe-west1, eu)
 Verdict: BREAKS the rule
 
-Can the hardened Helpdesk VM reach it privately?  yes
-  Private Service Connect endpoint 10.100.0.2 (vpc-sc bundle)
+Can the hardened Helpdesk VM reach it privately?  NO
+  no private path to aiplatform.googleapis.com:
+  this network's endpoints serve only aiplatform.eu.rep.googleapis.com, bigquery.europe-west4.rep.googleapis.com,
+  and the egress firewall blocks everything else
 ```
 
-Then try `python3 explore.py route eu`: it fits the EU rule, but the hardened VM can't reach a `rep.googleapis.com`
-endpoint privately (Step 6).
+Then try `python3 explore.py route eu`: it fits the EU rule, and the hardened VM reaches it through its regional
+endpoint `10.10.0.10`. `global` fails twice: it breaks the rule, and the hardened network can't reach it (Step 6).
 
 **5. The network.** Today the Helpdesk VM can send data anywhere:
 
@@ -254,23 +257,25 @@ Where can the Helpdesk VM send data?
   REACHES  attacker.example                         the VM has a route to the internet (external IP or Cloud NAT)
 ```
 
-`python3 explore.py network hardened`: no external IP, no Cloud NAT, egress denied except the private endpoint, and
-`blocked  attacker.example`.
+`python3 explore.py network hardened`: no external IP, no Cloud NAT, egress denied except the two private endpoints,
+and `blocked  attacker.example`.
 
-**6. The private door and the fence.** The hardened twin's Private Service Connect endpoint, its DNS records, and a
-VPC Service Controls perimeter still in dry run:
+**6. The private doors and the fence.** The hardened twin's two regional Private Service Connect endpoints (one per
+Google host), their DNS records, and a VPC Service Controls perimeter still in dry run:
 
 ```bash
 python3 explore.py endpoint hardened
 ```
 
 ```text
-The private door to Google APIs, hardened
+The private doors to Google APIs, hardened
 
-  Private Service Connect endpoint tsgapis at 10.100.0.2  bundle vpc-sc   (only APIs that support VPC Service Controls)
-  private DNS zone googleapis.com. (private) for helpdesk-vpc
-      A      googleapis.com.      -> 10.100.0.2
-      CNAME  *.googleapis.com.    -> googleapis.com.
+  regional PSC endpoint aiplatform-eu at 10.10.0.10  serves only aiplatform.eu.rep.googleapis.com
+  regional PSC endpoint bigquery-eu  at 10.10.0.11  serves only bigquery.europe-west4.rep.googleapis.com
+  private DNS zone aiplatform.eu.rep.googleapis.com. (private) for helpdesk-vpc
+  private DNS zone bigquery.europe-west4.rep.googleapis.com. (private) for helpdesk-vpc
+      A      aiplatform.eu.rep.googleapis.com. -> 10.10.0.10
+      A      bigquery.europe-west4.rep.googleapis.com. -> 10.10.0.11
 
 The fence: VPC Service Controls
   perimeter helpdesk: DRY RUN (logs violations, blocks nothing)
@@ -396,10 +401,10 @@ Real output (Linux, Python 3.13):
           fix: Create one service account per workload and attach it.
   HIGH    GC11-05  google_compute_instance helpdesk-vm
           AI workload has an external IP: model calls cross the internet, and a hijacked app can post data anywhere.
-          fix: Remove the external IP and NAT; reach Google APIs through a PSC endpoint; add an egress deny-all firewall rule with an allow for the endpoint.
+          fix: Remove the external IP and NAT; reach Google APIs through PSC endpoints; add an egress deny-all firewall rule with an allow for each endpoint.
   HIGH    GC11-05  google_compute_instance ticket-summariser
           AI workload reaches the internet through Cloud NAT: model calls cross the internet, and a hijacked app can post data anywhere.
-          fix: Remove the external IP and NAT; reach Google APIs through a PSC endpoint; add an egress deny-all firewall rule with an allow for the endpoint.
+          fix: Remove the external IP and NAT; reach Google APIs through PSC endpoints; add an egress deny-all firewall rule with an allow for each endpoint.
   HIGH    GC11-12  auditConfigs aiplatform.googleapis.com
           Data Access (DATA_READ) audit logs are off for aiplatform.googleapis.com: model calls leave no audit record.
           fix: google_project_iam_audit_config with DATA_READ for the service (or at the folder or organization).
@@ -415,9 +420,9 @@ Real output (Linux, Python 3.13):
   MEDIUM  GC11-04  vertexai.allowedModels
           No model allow-list in this deployment: every model and action, including new ones, is allowed for anyone with the IAM permission.
           fix: Set an allow-list (publishers/P/models/M:predict) on the prod folder; dry run first (GC10).
-  MEDIUM  GC11-06  google_compute_global_forwarding_rule
+  MEDIUM  GC11-06  Private Service Connect
           No Private Service Connect endpoint for Google APIs.
-          fix: Add a global internal address (purpose PRIVATE_SERVICE_CONNECT) and a forwarding rule with target vpc-sc (or all-apis), plus a private googleapis.com zone.
+          fix: Add a regional endpoint for each Google host the app calls (google_network_connectivity_regional_endpoint, target_google_api = the host) with a private zone for that name; or, for *.googleapis.com hosts, a PSC endpoint for global Google APIs with a private googleapis.com zone.
   MEDIUM  GC11-08  VPC Service Controls
           No service perimeter restricts aiplatform.googleapis.com: a stolen token works from anywhere and a hijacked workload can copy data to any project.
           fix: Create a perimeter for the project restricting aiplatform, bigquery and storage; dry run first, then enforce.
@@ -434,8 +439,8 @@ Real output (Linux, Python 3.13):
           group:helpdesk-devs@example.com holds roles/iam.serviceAccountTokenCreator on the whole project: it can act as every service account in it, including the Helpdesk's.
           fix: Grant it on the one service account that needs it (google_service_account_iam_member), or not at all.
   LOW     GC11-07  google_compute_subnetwork helpdesk-eu
-          Private Google Access is off: VMs without an external IP can't reach Google APIs if the PSC path fails.
-          fix: Set private_ip_google_access = true (it doesn't cover *.rep.googleapis.com).
+          No private path at all: Private Google Access is off and there is no PSC endpoint, so VMs without an external IP can't reach Google APIs.
+          fix: Prefer PSC endpoints (GC11-06). Private Google Access is the fallback, and it doesn't cover *.rep.googleapis.com.
 
 6 HIGH, 9 MEDIUM, 1 LOW, 0 WARNING  (16 findings)
 ```
@@ -519,12 +524,12 @@ Open `twin/hardened/plan.json` next to `terraform/` (they describe the same thin
 |---|---|---|
 | `identity.tf` | `chatbot-runtime` and `ticket-summariser` service accounts, **no keys**; custom role `helpdeskModelCaller` with only `aiplatform.endpoints.predict`; Service Account User on the one account, for deployers only | A1, A2, A5 |
 | `orgpolicy.tf` | `vertexai.allowedModels` on the prod folder: `publishers/google/models/gemini-3.1-flash-lite:predict` (needs an organization) | any model nobody approved |
-| `network.tf` | No external IPs, no Cloud NAT; a PSC endpoint for one host, `aiplatform.eu.rep.googleapis.com`, at `10.10.0.10`; a private zone for that name; egress deny-all plus an allow to `10.10.0.10:443` (the twin's `plan.json` still shows the earlier global-API endpoint `tsgapis` at `10.100.0.2`) | A4, stolen tokens no longer travel the internet path, and code can't drift to the global endpoint |
+| `network.tf` | No external IPs, no Cloud NAT; a PSC endpoint for one host, `aiplatform.eu.rep.googleapis.com`, at `10.10.0.10`; a private zone for that name; egress deny-all plus an allow to `10.10.0.10:443` (the twin adds `bigquery.europe-west4.rep.googleapis.com` at `10.10.0.11` for its ticket reads) | A4, stolen tokens no longer travel the internet path, and code can't drift to the global endpoint |
 | `perimeter.tf` | VPC Service Controls perimeter around the project, restricting `aiplatform`, `bigquery`, `storage`, **in dry run** (needs an organization) | logs A3 (blocks it once enforced) |
 | `encryption.tf` | Cloud KMS key ring `helpdesk-eu`, key `helpdesk-data` (90-day rotation); BigQuery service account may use it; `helpdesk_tickets` and `ai_logs` with that default key | Q4 |
 | `logging.tf` | `DATA_READ` and `DATA_WRITE` audit logs for `aiplatform.googleapis.com` | Q1 |
 | `scripts/request_response_logging.sh` | `setPublisherModelConfig` (v1beta1), 100% sampling into `ai_logs` | Q2 |
-| `twin/hardened/app.json` | `location: europe-west4`, `endpoint_host: europe-west4-aiplatform.googleapis.com` | Q3 |
+| `twin/hardened/app.json` | `location: eu`, `endpoint_host: aiplatform.eu.rep.googleapis.com` | Q3 |
 
 ## Step 4 · Fix it: replay against the hardened twin
 
@@ -564,11 +569,11 @@ Attackers
          why: no user-managed key exists for chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com: there is nothing to steal
   [A3] ALLOWED  Prompt-injected Helpdesk copies the tickets table to a project outside ExampleCo
          why: every check passed
-         · path: Private Service Connect endpoint 10.100.0.2 (vpc-sc bundle)
+         · path: Private Service Connect regional endpoint 10.10.0.11 for bigquery.europe-west4.rep.googleapis.com
          · IAM: bigquery.tables.getData via roles/bigquery.dataViewer on dataset helpdesk_tickets
          · VPC Service Controls DRY RUN would block this, but only logs it: copy to projects/999999999999, outside the perimeter (RESOURCE_NOT_IN_SAME_SERVICE_PERIMETER)
   [A4] DENIED   Prompt-injected Helpdesk posts ticket text to an attacker's HTTPS webhook
-         why: network: egress firewall denies all traffic except the PSC endpoint
+         why: network: egress firewall denies all traffic except the private endpoints
   [A5] DENIED   A developer's stolen laptop session mints a token for chatbot-runtime from 203.0.113.80
          why: can't mint a token for the service account: no role grants iam.serviceAccounts.getAccessToken to user:dev1@example.com
 
@@ -589,7 +594,7 @@ The auditor's questions
   [Q2] YES  Can we see what each prompt and answer said?
          request-response logging at 1.0 to bq://example-chatbot-prod.ai_logs.request_response_logging
   [Q3] YES  Can we show EU tickets were processed only in the EU?
-         calls use location 'europe-west4', an approved EU location
+         calls use location 'eu', an approved EU location
   [Q4] YES  Can we make stored prompts and tickets unreadable in one step (disable the key)?
          every dataset has a customer-managed default key
 
@@ -633,17 +638,17 @@ On your own logs: `python3 dryrun_report.py --file my-export.json` (the export c
 
 ## Step 6 · The residency trap
 
-A developer reads that multi-region endpoints have better availability and switches the Helpdesk to
-`aiplatform.eu.rep.googleapis.com`. Still EU, so the checker's residency rule is happy:
+A developer reads that the global endpoint has the best availability, and that new models often arrive there first,
+and switches the Helpdesk to `aiplatform.googleapis.com` with `locations/global`:
 
 ```bash
 make residency-trap
 ```
 
-Same as `python3 attack.py --twin eu-multiregion`.
+Same as `python3 attack.py --twin global-endpoint`.
 
 ```text
---- GC11 lab · twin: eu-multiregion · TSG Helpdesk in example-chatbot-prod ---
+--- GC11 lab · twin: global-endpoint · TSG Helpdesk in example-chatbot-prod ---
     (twin.py: a teaching model of Google Cloud's rules; nothing is sent to Google)
 
 Attackers
@@ -653,42 +658,43 @@ Attackers
          why: no user-managed key exists for chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com: there is nothing to steal
   [A3] ALLOWED  Prompt-injected Helpdesk copies the tickets table to a project outside ExampleCo
          why: every check passed
-         · path: Private Service Connect endpoint 10.100.0.2 (vpc-sc bundle)
+         · path: Private Service Connect regional endpoint 10.10.0.11 for bigquery.europe-west4.rep.googleapis.com
          · IAM: bigquery.tables.getData via roles/bigquery.dataViewer on dataset helpdesk_tickets
          · VPC Service Controls DRY RUN would block this, but only logs it: copy to projects/999999999999, outside the perimeter (RESOURCE_NOT_IN_SAME_SERVICE_PERIMETER)
   [A4] DENIED   Prompt-injected Helpdesk posts ticket text to an attacker's HTTPS webhook
-         why: network: egress firewall denies all traffic except the PSC endpoint
+         why: network: egress firewall denies all traffic except the private endpoints
   [A5] DENIED   A developer's stolen laptop session mints a token for chatbot-runtime from 203.0.113.80
          why: can't mint a token for the service account: no role grants iam.serviceAccounts.getAccessToken to user:dev1@example.com
 
 Legitimate traffic · must keep working
   [L1] DENIED   Helpdesk VM: GenerateContent on the approved Gemini model as chatbot-runtime
-         why: network: aiplatform.eu.rep.googleapis.com ends in rep.googleapis.com: Private Google Access doesn't support it, the all-apis bundle excludes *.rep.googleapis.com and Google doesn't document vpc-sc reaching them
+         why: network: no private path to aiplatform.googleapis.com: this network's endpoints serve only aiplatform.eu.rep.googleapis.com, bigquery.europe-west4.rep.googleapis.com, and the egress firewall blocks everything else
   [L2] ALLOWED  Helpdesk VM: read ticket history from BigQuery
          why: every check passed
   [L3] ALLOWED  Analyst in the office (198.51.100.21): query the tickets dataset
          why: every check passed
          · VPC Service Controls DRY RUN would block this, but only logs it: ingress from 198.51.100.21 has no matching ingress rule (NO_MATCHING_ACCESS_LEVEL)
   [L4] DENIED   Ticket summariser VM: GenerateContent on the approved Gemini model
-         why: network: aiplatform.eu.rep.googleapis.com ends in rep.googleapis.com: Private Google Access doesn't support it, the all-apis bundle excludes *.rep.googleapis.com and Google doesn't document vpc-sc reaching them
+         why: network: no private path to aiplatform.googleapis.com: this network's endpoints serve only aiplatform.eu.rep.googleapis.com, bigquery.europe-west4.rep.googleapis.com, and the egress firewall blocks everything else
 
 The auditor's questions
   [Q1] YES  Can we see who called Gemini, as which identity, from which IP?
          Data Access (DATA_READ) audit logs for aiplatform.googleapis.com are on
   [Q2] YES  Can we see what each prompt and answer said?
          request-response logging at 1.0 to bq://example-chatbot-prod.ai_logs.request_response_logging
-  [Q3] YES  Can we show EU tickets were processed only in the EU?
-         calls use location 'eu', an approved EU location
+  [Q3] NO   Can we show EU tickets were processed only in the EU?
+         calls use location 'global': the global endpoint gives no data residency guarantee
   [Q4] YES  Can we make stored prompts and tickets unreadable in one step (disable the key)?
          every dataset has a customer-managed default key
 
-1 of 5 attacker requests allowed; 2 of 4 legitimate requests allowed; 4 of 4 auditor questions answerable.
+1 of 5 attacker requests allowed; 2 of 4 legitimate requests allowed; 3 of 4 auditor questions answerable.
 ```
 
-The Helpdesk and the summariser are down. Private Google Access doesn't support `rep.googleapis.com` endpoints and the
-PSC endpoint is for global Google APIs. Under pressure, the quickest "fix" is `global`, and EU processing is gone.
-The right fixes: stay on the regional endpoint, or add a Private Service Connect endpoint for regional Google APIs and
-check it supports the service. The checker didn't warn you. That's the challenge.
+The Helpdesk and the summariser are down, and that's the network doing its job: the only Google hosts it reaches are
+the two EU ones, so a drift to `global` fails loudly instead of sending tickets to any region. The real run showed the
+same (lesson 11.6: `000`). Under pressure, the quickest "fix" is to open egress, and EU processing is gone. The right
+fix: point the app back at `aiplatform.eu.rep.googleapis.com`. The checker's residency rule (GC11-14) catches
+`global`, but nothing tells you the change also takes the Helpdesk down. That's the challenge.
 
 ## Step 7 · Your turn: `make challenge`
 
@@ -725,11 +731,11 @@ ALL TESTS PASSED (21 run)
 [FAIL] challenge: the hijacked Helpdesk's copy to an outside project is DENIED by the enforced perimeter
 [PASS] challenge: the office analysts can still query the tickets dataset once the perimeter is enforced
 [PASS] challenge: the Helpdesk and the summariser keep working inside the perimeter
-[FAIL] challenge: GC11-16 flags the eu-multiregion twin (rep endpoint, only PGA / global-API PSC)
+[FAIL] challenge: GC11-16 flags the global-endpoint twin (the network has no private path to its model host)
 [PASS] challenge: GC11-16 stays quiet on the today and hardened twins
 [FAIL] challenge: the hardened twin no longer allows durable caching (no GC11-11)
   why test_22_perimeter_blocks_the_copy: AssertionError: True is not false : A3 is still ALLOWED: the perimeter is only in dry run
-  why test_25_gc11_16_flags_rep_endpoint: AssertionError: 0 != 1 : GC11-16 didn't fire on twin/eu-multiregion
+  why test_25_gc11_16_flags_unreachable_host: AssertionError: 0 != 1 : GC11-16 didn't fire on twin/global-endpoint
   why test_27_no_durable_cache: AssertionError: 'GC11-11' unexpectedly found in ['GC11-08', 'GC11-11'] : set cache_config in twin/hardened/app.json
 ----------------------------------------------------------------------
 
@@ -745,10 +751,11 @@ FAILED (failures=3)
    `bigquery.googleapis.com`. The field names follow the Terraform provider's `google_access_context_manager_*`
    resources; `terraform/perimeter.tf` already has the same ingress rule behind `office_ranges`. Then do it for real:
    change `terraform/perimeter.tf` from `spec` to `status` only after your own dry-run week is clean.
-2. **Write GC11-16 (tests 25 and 26).** In `checker.py`, `rule_rep_endpoint_private_path()` should return one
-   `MEDIUM` finding when `app.json`'s `endpoint_host` ends in `.rep.googleapis.com` and the deployment has no internet
-   route, so its only private paths are PGA or a PSC endpoint for global Google APIs. It must stay quiet on `today` and
-   `hardened`.
+2. **Write GC11-16 (tests 25 and 26).** In `checker.py`, `rule_model_host_private_path()` should return one
+   `MEDIUM` finding when the deployment has no internet route and nothing private reaches `app.json`'s
+   `endpoint_host`: no regional endpoint targets it, and (for a host that isn't `*.rep.googleapis.com`) no PSC endpoint
+   for global Google APIs or Private Google Access either. It must fire on `global-endpoint` and stay quiet on `today`
+   and `hardened`. `d.regional_endpoint_for(host)` does most of the work.
 3. **Close the cache gap (test 27).** ExampleCo's policy forbids customer data at rest without its own key, and
    durable caching doesn't support CMEK. In `twin/hardened/app.json`, set `cache_config` to what the project should
    be: `{"retention_type": "EPHEMERAL"}` (in-memory caching only) or `{"disable_cache": true}`. Lesson 11.3 has the

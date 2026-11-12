@@ -16,7 +16,7 @@ twin (twin/<name>/plan.json and app.json, twin/requirements.json, twin/groups.js
     python3 explore.py record                  # 9. one Helpdesk call in two records, side by side
 
 Most commands take a twin name: today (the default, the Helpdesk as it runs now), hardened (what terraform/ builds)
-or eu-multiregion (the hardened twin after a developer's change, README Step 6).
+or global-endpoint (the hardened twin after a developer's change, README Step 6).
 Everything is fake: example.com identities, placeholder project numbers, documentation IP ranges.
 twin.py, which role, route, network and endpoint use, is a teaching model of Google Cloud's rules, not Google.
 """
@@ -28,7 +28,7 @@ import collections
 
 from twin import Deployment, ROLE_PERMISSIONS
 
-TWINS = ("today", "hardened", "eu-multiregion")
+TWINS = ("today", "hardened", "global-endpoint")
 SA = "serviceAccount:chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com"
 
 # What each kind of location promises about ML processing (Google's data residency page, checked 3 Nov 2026).
@@ -139,7 +139,8 @@ def cmd_route(a) -> None:
     vm = d.vms()["helpdesk-vm"]
     reach, path, why = d.route_to(vm, host)
     print(f"\nCan the hardened Helpdesk VM reach it privately?  {'yes' if reach else 'NO'}")
-    print("  " + why.replace(": Private Google Access", ":\n  Private Google Access").replace(", the all-apis", ",\n  the all-apis"))
+    print("  " + why.replace(": Private Google Access", ":\n  Private Google Access").replace(", the all-apis", ",\n  the all-apis")
+          .replace(": this network's", ":\n  this network's").replace(", and the egress", ",\n  and the egress"))
 
 
 # ---------------------------------------------------------------- 5. network
@@ -159,10 +160,10 @@ def cmd_network(a) -> None:
     if allowed is None:
         print("  egress firewall    no deny-all rule: VMs may send to any address they can route to")
     else:
-        print(f"  egress firewall    deny all, except {', '.join(allowed)} (the private endpoint)")
+        print(f"  egress firewall    deny all, except {', '.join(allowed)} (the private endpoints)")
     print("\nWhere can the Helpdesk VM send data?")
     vm = d.vms()["helpdesk-vm"]
-    for host in (d.app["endpoint_host"], "bigquery.googleapis.com", "attacker.example"):
+    for host in (d.app["endpoint_host"], d.app.get("bigquery_host", "bigquery.googleapis.com"), "attacker.example"):
         ok, _, why = d.route_to(vm, host)
         print(f"  {'REACHES' if ok else 'blocked':<8} {host:<40} {why}")
 
@@ -172,12 +173,16 @@ def cmd_network(a) -> None:
 def cmd_endpoint(a) -> None:
     d = _d(a.twin)
     psc = d.psc_endpoint()
-    print(f"The private door to Google APIs, {a.twin}\n")
-    if not psc:
+    regional = d.regional_endpoints()
+    print(f"The private doors to Google APIs, {a.twin}\n")
+    if not psc and not regional:
         print("  Private Service Connect endpoint: NONE (calls to *.googleapis.com use public addresses)")
     else:
-        print(f"  Private Service Connect endpoint {psc['name']} at {d.psc_ip()}  bundle {psc['target']}"
-              f"   ({'only APIs that support VPC Service Controls' if psc['target'] == 'vpc-sc' else 'most Google APIs'})")
+        for ep in regional:
+            print(f"  regional PSC endpoint {ep['name']:<12} at {ep['address']}  serves only {ep['target_google_api']}")
+        if psc:
+            print(f"  Private Service Connect endpoint {psc['name']} at {d.psc_ip()}  bundle {psc['target']}"
+                  f"   ({'only APIs that support VPC Service Controls' if psc['target'] == 'vpc-sc' else 'most Google APIs'})")
         for z in d.values("google_dns_managed_zone"):
             print(f"  private DNS zone {z['dns_name']} ({z['visibility']}) for {z['private_visibility_config'][0]['networks'][0]['network_url']}")
         for r in d.values("google_dns_record_set"):

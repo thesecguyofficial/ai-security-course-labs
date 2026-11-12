@@ -2,7 +2,7 @@
 test_challenge.py: `make challenge`. Three of these fail until you finish the challenge (README, Step 7).
 
 1. Enforce the VPC Service Controls perimeter in twin/hardened/plan.json, without locking out the office analysts.
-2. Write rule_rep_endpoint_private_path() (GC11-16) in checker.py.
+2. Write rule_model_host_private_path() (GC11-16) in checker.py.
 3. Take durable caching off the table for the Helpdesk project (twin/hardened/app.json, cache_config).
 No solution is included.
 """
@@ -32,10 +32,10 @@ class T7_Challenge(unittest.TestCase):
         for sid in ("L1", "L2", "L4"):
             self.assertTrue(attack.run_step(STEP[sid], "hardened").allowed, sid)
 
-    def test_25_gc11_16_flags_rep_endpoint(self):
-        """challenge: GC11-16 flags the eu-multiregion twin (rep endpoint, only PGA / global-API PSC)"""
-        rules = [f.rule for f in checker.run("eu-multiregion")]
-        self.assertEqual(rules.count("GC11-16"), 1, "GC11-16 didn't fire on twin/eu-multiregion")
+    def test_25_gc11_16_flags_unreachable_host(self):
+        """challenge: GC11-16 flags the global-endpoint twin (the network has no private path to its model host)"""
+        rules = [f.rule for f in checker.run("global-endpoint")]
+        self.assertEqual(rules.count("GC11-16"), 1, "GC11-16 didn't fire on twin/global-endpoint")
 
     def test_26_gc11_16_quiet_elsewhere(self):
         """challenge: GC11-16 stays quiet on the today and hardened twins"""

@@ -251,46 +251,34 @@
             "region": "europe-west4",
             "ip_cidr_range": "10.10.0.0/24",
             "network": "helpdesk-vpc",
-            "private_ip_google_access": true
+            "private_ip_google_access": false
           }
         },
         {
-          "address": "google_compute_global_address.psc_apis",
+          "address": "google_network_connectivity_regional_endpoint.aiplatform_eu",
           "mode": "managed",
-          "type": "google_compute_global_address",
-          "name": "psc_apis",
+          "type": "google_network_connectivity_regional_endpoint",
+          "name": "aiplatform_eu",
           "values": {
             "project": "example-chatbot-prod",
-            "name": "psc-google-apis",
-            "address_type": "INTERNAL",
-            "purpose": "PRIVATE_SERVICE_CONNECT",
-            "address": "10.100.0.2",
-            "network": "helpdesk-vpc"
-          }
-        },
-        {
-          "address": "google_compute_global_forwarding_rule.psc_apis",
-          "mode": "managed",
-          "type": "google_compute_global_forwarding_rule",
-          "name": "psc_apis",
-          "values": {
-            "project": "example-chatbot-prod",
-            "name": "tsgapis",
-            "target": "vpc-sc",
+            "name": "aiplatform-eu",
+            "location": "europe-west4",
+            "target_google_api": "aiplatform.eu.rep.googleapis.com",
+            "access_type": "REGIONAL",
+            "address": "10.10.0.10",
             "network": "helpdesk-vpc",
-            "ip_address": "10.100.0.2",
-            "load_balancing_scheme": ""
+            "subnetwork": "helpdesk-eu"
           }
         },
         {
-          "address": "google_dns_managed_zone.googleapis",
+          "address": "google_dns_managed_zone.aiplatform_eu",
           "mode": "managed",
           "type": "google_dns_managed_zone",
-          "name": "googleapis",
+          "name": "aiplatform_eu",
           "values": {
             "project": "example-chatbot-prod",
-            "name": "googleapis-private",
-            "dns_name": "googleapis.com.",
+            "name": "aiplatform-eu",
+            "dns_name": "aiplatform.eu.rep.googleapis.com.",
             "visibility": "private",
             "private_visibility_config": [
               {
@@ -304,32 +292,69 @@
           }
         },
         {
-          "address": "google_dns_record_set.googleapis_a",
+          "address": "google_dns_record_set.aiplatform_eu_a",
           "mode": "managed",
           "type": "google_dns_record_set",
-          "name": "googleapis_a",
+          "name": "aiplatform_eu_a",
           "values": {
             "project": "example-chatbot-prod",
-            "managed_zone": "googleapis-private",
-            "name": "googleapis.com.",
+            "managed_zone": "aiplatform-eu",
+            "name": "aiplatform.eu.rep.googleapis.com.",
             "type": "A",
             "rrdatas": [
-              "10.100.0.2"
+              "10.10.0.10"
             ]
           }
         },
         {
-          "address": "google_dns_record_set.googleapis_cname",
+          "address": "google_network_connectivity_regional_endpoint.bigquery_eu",
           "mode": "managed",
-          "type": "google_dns_record_set",
-          "name": "googleapis_cname",
+          "type": "google_network_connectivity_regional_endpoint",
+          "name": "bigquery_eu",
           "values": {
             "project": "example-chatbot-prod",
-            "managed_zone": "googleapis-private",
-            "name": "*.googleapis.com.",
-            "type": "CNAME",
+            "name": "bigquery-eu",
+            "location": "europe-west4",
+            "target_google_api": "bigquery.europe-west4.rep.googleapis.com",
+            "access_type": "REGIONAL",
+            "address": "10.10.0.11",
+            "network": "helpdesk-vpc",
+            "subnetwork": "helpdesk-eu"
+          }
+        },
+        {
+          "address": "google_dns_managed_zone.bigquery_eu",
+          "mode": "managed",
+          "type": "google_dns_managed_zone",
+          "name": "bigquery_eu",
+          "values": {
+            "project": "example-chatbot-prod",
+            "name": "bigquery-eu",
+            "dns_name": "bigquery.europe-west4.rep.googleapis.com.",
+            "visibility": "private",
+            "private_visibility_config": [
+              {
+                "networks": [
+                  {
+                    "network_url": "helpdesk-vpc"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "address": "google_dns_record_set.bigquery_eu_a",
+          "mode": "managed",
+          "type": "google_dns_record_set",
+          "name": "bigquery_eu_a",
+          "values": {
+            "project": "example-chatbot-prod",
+            "managed_zone": "bigquery-eu",
+            "name": "bigquery.europe-west4.rep.googleapis.com.",
+            "type": "A",
             "rrdatas": [
-              "googleapis.com."
+              "10.10.0.11"
             ]
           }
         },
@@ -355,18 +380,19 @@
           }
         },
         {
-          "address": "google_compute_firewall.allow_google_apis_egress",
+          "address": "google_compute_firewall.allow_regional_endpoints_egress",
           "mode": "managed",
           "type": "google_compute_firewall",
-          "name": "allow_google_apis_egress",
+          "name": "allow_regional_endpoints_egress",
           "values": {
             "project": "example-chatbot-prod",
-            "name": "allow-google-apis-egress",
+            "name": "allow-regional-endpoints-egress",
             "network": "helpdesk-vpc",
             "direction": "EGRESS",
             "priority": 1000,
             "destination_ranges": [
-              "10.100.0.2/32"
+              "10.10.0.10/32",
+              "10.10.0.11/32"
             ],
             "allow": [
               {

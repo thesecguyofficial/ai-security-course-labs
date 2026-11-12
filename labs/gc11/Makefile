@@ -16,8 +16,8 @@ attack:         ## what attackers, users and an auditor get TODAY (5 of 5 attack
 attack-safe:    ## the same against the hardened twin (1 of 5: the dry-run perimeter)
 	$(PY) attack.py --twin hardened
 
-residency-trap: ## a developer moves to the eu multi-region endpoint: watch the private path break
-	$(PY) attack.py --twin eu-multiregion
+residency-trap: ## a developer moves to the global endpoint: watch the network stop it
+	$(PY) attack.py --twin global-endpoint
 
 dryrun-report:  ## a week of VPC Service Controls dry-run logs: who would you block?
 	$(PY) dryrun_report.py

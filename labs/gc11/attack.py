@@ -3,7 +3,7 @@ attack.py: replay what attackers, legitimate users and an auditor can do against
 
     python3 attack.py --twin today        # make attack:       ExampleCo as it runs today
     python3 attack.py --twin hardened     # make attack-safe:  what terraform/ builds
-    python3 attack.py --twin eu-multiregion
+    python3 attack.py --twin global-endpoint
 
 Nothing is sent anywhere: twin.py decides each request with a teaching model of Google's rules.
 """
@@ -100,7 +100,7 @@ def questions(d: Deployment) -> list[tuple[str, str, bool, str]]:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--twin", default="today", help="today | hardened | eu-multiregion | path to a twin folder")
+    ap.add_argument("--twin", default="today", help="today | hardened | global-endpoint | path to a twin folder")
     args = ap.parse_args(argv)
     d = Deployment.load(args.twin)
     print(f"--- GC11 lab · twin: {d.name} · TSG Helpdesk in {d.project} ---")

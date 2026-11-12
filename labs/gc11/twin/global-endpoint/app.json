@@ -1,10 +1,11 @@
 {
-  "_comment": "A developer's change: 'use the EU multi-region endpoint for better availability'. Same network as hardened/.",
+  "_comment": "A developer's change: 'the global endpoint has the best availability, and the newest models come there first'. Same network as hardened/.",
   "runtime": "helpdesk-vm",
   "service_account": "chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com",
   "model": "publishers/google/models/gemini-3.1-flash-lite",
-  "location": "eu",
-  "endpoint_host": "aiplatform.eu.rep.googleapis.com",
+  "location": "global",
+  "endpoint_host": "aiplatform.googleapis.com",
+  "bigquery_host": "bigquery.europe-west4.rep.googleapis.com",
   "request_response_logging": {
     "enabled": true,
     "sampling_rate": 1.0,
