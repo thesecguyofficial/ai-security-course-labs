@@ -250,6 +250,18 @@ PY
     [ "$1" = trap ] && echo "Anything but 200 is the trap: the private path breaks. Put it back: bash deploy.sh untrap"
     ;;
 
+  bundle)   # swap the PSC endpoint's target bundle (vpc-sc | all-apis), restart the VM, show its call
+    repo; load
+    B="${2:?vpc-sc or all-apis}"
+    gcloud compute forwarding-rules delete tsgapis --global --quiet
+    gcloud compute forwarding-rules create tsgapis --global --network=helpdesk-vpc --address=psc-google-apis \
+      --target-google-apis-bundle="$B"
+    gcloud compute instances reset helpdesk-vm --zone="$Z" --quiet
+    echo "Waiting 120 s for the VM to boot and call once..."; sleep 120
+    gcloud compute instances get-serial-port-output helpdesk-vm --zone="$Z" 2>/dev/null | grep -A6 "generateContent HTTP" | tail -7
+    serial 4
+    ;;
+
   serial)
     repo; load
     gcloud compute instances get-serial-port-output helpdesk-vm --zone="$Z" 2>/dev/null | grep -A9 "generateContent HTTP" | head -12
