@@ -25,8 +25,10 @@ repo() {
   LAB="$REPO/labs/gc11"
 }
 load() {
+  local r_in="${GC11_REGION:-}" m_in="${GC11_MODEL:-}"   # what you export wins over the saved file
   # shellcheck source=/dev/null
   if [ -z "${GC11_PROJECT:-}" ] && [ -f "$ENVFILE" ]; then . "$ENVFILE"; fi
+  GC11_REGION="${r_in:-${GC11_REGION:-}}"; GC11_MODEL="${m_in:-${GC11_MODEL:-}}"
   P="${GC11_PROJECT:-$(gcloud config get project 2>/dev/null)}"
   [ -n "$P" ] || { echo "No project: gcloud config set project PROJECT_ID"; exit 1; }
   R="${GC11_REGION:-europe-west4}"; Z="$R-a"
