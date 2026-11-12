@@ -217,14 +217,16 @@ PY
     internal=$(python3 -c "import json;r=json.load(open('$HOME/.gc11-audit.json'));print(sum(1 for e in r if e.get('protoPayload',{}).get('requestMetadata',{}).get('callerIp','') in ('gce-internal-ip',) or e.get('protoPayload',{}).get('requestMetadata',{}).get('callerIp','').startswith('10.10.')))")
     rm -f "$HOME/.gc11-audit.json"
     rr=$(bq query --use_legacy_sql=false --format=csv -q \
-      "SELECT COUNT(*) FROM \`$P.ai_logs.request_response_logging\`" 2>/dev/null | tail -1 || echo 0)
+      "SELECT COUNT(*) FROM \`$P.ai_logs.request_response_logging\`" 2>&1 | tail -1 || true)
+    if grep -qi "not enabled\|DISABLED" <<<"$rr"; then rr=locked; fi   # Test 5 already switched the key off
     echo "VM calls with an internal callerIp: $internal   request-response rows: ${rr:-0}"
-    if [ "$internal" -gt 0 ] && [ "${rr:-0}" -gt 0 ] 2>/dev/null; then rec PASS "T4 internal callerIp in Data Access + a request-response row"
+    if [ "$internal" -gt 0 ] && [ "$rr" = locked ]; then rec PASS "T4 internal callerIp in Data Access; the request-response table is locked by your key (Test 5)"
+    elif [ "$internal" -gt 0 ] && [ "${rr:-0}" -gt 0 ] 2>/dev/null; then rec PASS "T4 internal callerIp in Data Access + a request-response row"
     else rec WAIT "T4 logs not there yet (Data Access: minutes; request-response: minutes after the config, maybe reset the VM)"; fi
 
     say "Test 5 Your key, switched off: the logged prompts become unreadable"
     st=$(gcloud kms keys versions list --key=helpdesk-data --keyring=helpdesk-eu --location="$R" --format="value(state)" | sort -u | tr '\n' ' ')
-    if ! grep -q DISABLED <<<"$st" && [ "${rr:-0}" = 0 ]; then
+    if ! grep -q DISABLED <<<"$st" && ! [ "${rr:-0}" -gt 0 ] 2>/dev/null; then
       rec WAIT "T5 waits for T4's request-response rows (nothing to lock away yet)"
     elif ! grep -q DISABLED <<<"$st"; then
       v=$(gcloud kms keys versions list --key=helpdesk-data --keyring=helpdesk-eu --location="$R" --filter="state=ENABLED" --format="value(name)" | head -1 || true)
