@@ -298,8 +298,7 @@ PY
     else
       terraform apply -input=false -auto-approve -var "project_id=$P" -var "region=$R" -var create_test_vm=true
       bash scripts/request_response_logging.sh on "$P" "$R" | head -c 300; echo
-      echo "cacheConfig (in memory only): HTTP $(cache EPHEMERAL)"
-      audit_logs on
+      echo "cacheConfig (in memory only): HTTP $(cache EPHEMERAL)"   # the Data Access logs are in logging.tf
       echo "Then: bash ../cloud/deploy.sh test"
     fi
     ;;
