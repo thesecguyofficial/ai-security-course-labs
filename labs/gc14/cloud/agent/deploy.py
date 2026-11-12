@@ -37,7 +37,8 @@ def main():
     remote = client.agent_engines.create(agent=app, config={
         "display_name": "tsg-gc14-helpdesk",
         "staging_bucket": a.staging_bucket,
-        "requirements": ["google-adk[gcp,mcp]==2.12.0", "google-cloud-aiplatform[agent_engines,adk]>=1.112"],
+        "requirements": ["google-adk[gcp,mcp]==2.12.0", "google-cloud-aiplatform[agent_engines,adk]>=1.112",
+                         "cloudpickle", "pydantic"],   # the SDK warns when these two are missing
         "extra_packages": ["helpdesk"],
         "env_vars": {"TSG_PROJECT": a.project,
                      "TSG_MODEL": os.environ.get("TSG_MODEL", "gemini-3.1-flash-lite"),

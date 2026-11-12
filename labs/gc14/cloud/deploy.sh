@@ -82,14 +82,27 @@ case "${1:-}" in
       "INSERT INTO finance_exports.payroll (employee, band) VALUES ('test-user-1', 'B2'), ('test-user-2', 'B3')" >/dev/null
     say "2 The agent: Agent Runtime, Agent Identity, bound to the gateway (several minutes)"
     venv
+    if [ -z "${AGENT:-}" ]; then   # an agent from an earlier run? (deploying twice makes two agents)
+      found=$(curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+        "https://$R-aiplatform.googleapis.com/v1beta1/projects/$P/locations/$R/reasoningEngines" |
+        python3 -c 'import json,sys
+for e in json.load(sys.stdin).get("reasoningEngines", []):
+    if e.get("displayName") == "tsg-gc14-helpdesk":
+        print(e["name"], (e.get("spec") or {}).get("effectiveIdentity", "")); break' || true)
+      if [ -n "$found" ]; then AGENT=${found%% *}; AGENT_PRINCIPAL=${found#* }; echo "   found the agent from an earlier run"; fi
+    fi
     if [ -z "${AGENT:-}" ]; then
       out=$(cd "$LAB/cloud/agent" && "$VENV/bin/python" deploy.py --project "$P" --region "$R" --gateway "$GATEWAY" \
             --staging-bucket "$STAGING" 2>&1 | grep -v "Warning\|warn(") || { echo "$out" | tail -20; exit 1; }
       echo "$out" | tail -8
-      AGENT=$(python3 -c 'import json,re,sys; m=re.search(r"\{.*?\}", sys.stdin.read(), re.S); print(json.loads(m.group(0))["name"])' <<<"$out")
-      AGENT_PRINCIPAL=$(python3 -c 'import json,re,sys; m=re.search(r"\{.*?\}", sys.stdin.read(), re.S); print(json.loads(m.group(0))["effectiveIdentity"] or "")' <<<"$out")
-      save
+      # deploy.py prints one JSON object that starts with "name" (warnings above it can hold braces too)
+      read -r AGENT AGENT_PRINCIPAL < <(python3 -c 'import json,re,sys
+m = re.search(r"\{\s*\"name\".*?\}", sys.stdin.read(), re.S); d = json.loads(m.group(0))
+print(d["name"], d["effectiveIdentity"] or "")' <<<"$out")
     fi
+    # The API gives the identity without its scheme; IAM wants principal://...
+    [ -z "${AGENT_PRINCIPAL:-}" ] || [[ "$AGENT_PRINCIPAL" == principal://* ]] || AGENT_PRINCIPAL="principal://$AGENT_PRINCIPAL"
+    save
     echo "AGENT=$AGENT"; echo "AGENT_PRINCIPAL=${AGENT_PRINCIPAL:0:60}..."
     say "3 Terraform pass 2: the access policy (one DENY rule) bound to the gateway, the agent's IAM"
     tf apply -auto-approve
