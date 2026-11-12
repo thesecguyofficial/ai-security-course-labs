@@ -343,7 +343,10 @@ R1: How many tickets in the helpdesk tickets table are open?
    answer   There are 3 open tickets in the helpdesk table.
 ```
 
-Allowed by `allow-bigquery-tools`; IAM allows the read (Data Viewer on `helpdesk`).
+Allowed by `allow-bigquery-tools`; IAM allows the read (Data Viewer on `helpdesk.tickets`).
+
+Our run (12 November 2026): exactly that call, and "There are 3 open tickets in the helpdesk tickets table." The real
+tool result is BigQuery's JSON (`"rows":[{"f":[{"v":"3"}]}]`), not the tidy row above.
 
 ### R2 · Another team's data
 
@@ -358,6 +361,9 @@ R2: How many rows are in the table finance_exports.payroll?
 
 The **gateway allowed** the tool (it's on the list). **IAM on the dataset** said no. Same as offline case C3.
 
+Our run: `"Access Denied: Table PROJECT:finance_exports.payroll: User does not have permission to query table
+PROJECT:finance_exports.payroll, or perhaps it does not exist."`, with `"isError": true`.
+
 ### R3 · A write, with the DENY rule in dry run
 
 Example response (shape from the provider's docs, values illustrative):
@@ -368,6 +374,9 @@ R3: Please close ticket T-1003: set its status to 'closed'.
    result   execute_sql: {"error": "Access Denied: Table tsg-sandbox-1234:helpdesk.tickets: User does not have permission to update table ..."}
    answer   I couldn't close T-1003: the update was refused (Access Denied).
 ```
+
+Our run: `"Access Denied: Table PROJECT:helpdesk.tickets: Permission bigquery.tables.updateData denied on table
+PROJECT:helpdesk.tickets (or it may not exist)."`
 
 In dry run, the gateway let `execute_sql` through and BigQuery refused the write (Data Viewer can't update). The DENY
 rule did its job only in the logs. Remember this for the moment someone grants Data Editor "to make closing tickets
@@ -384,7 +393,7 @@ R4: Fetch https://example.com/ and tell me its title.
    answer   The page title is "Example Domain".
 ```
 
-In dry run nothing is blocked, so the page came back. `example.com` is a reserved documentation domain, so this is a
+Our run: the same, `http_status: 200` and the title "Example Domain". In dry run nothing is blocked, so the page came back. `example.com` is a reserved documentation domain, so this is a
 safe test of "can my agent reach the internet?".
 
 ### Read what the gateway would have denied
@@ -452,6 +461,20 @@ R4: Fetch https://example.com/ and tell me its title.
 Now the gateway stops both **before** they reach BigQuery or the internet. The exact error text and status code your
 agent sees may differ; "Egress request is not authorized" is the message Google's codelab shows for a denied egress.
 R1 and R2 should behave as before.
+
+Our run (12 November 2026), with R1 asked again first:
+
+```output
+R1   answer   There are 3 open tickets in the helpdesk table.
+R3   result   execute_sql: {"error": "MCP tool execution failed: Server returned an error response"}
+     (the agent then read T-1003 with execute_sql_readonly and tried execute_sql again: refused again)
+R4   result   fetch_page: {"status": "error", "error": "HTTPError: HTTP Error 403: Forbidden"}
+```
+
+The gateway's request log showed `403` for `https://bigquery.googleapis.com/mcp` at the moment of each `execute_sql`.
+Our first ENFORCE attempt refused **every** BigQuery call, R1 included: the ALLOW rule listed tool names only, and the
+MCP handshake (`initialize`, `notifications/initialized`, `tools/list`) has no tool name. The `''` in the list is the
+fix.
 
 ## Step 6 · Memory Bank: Data Access logs and a TTL (15 minutes)
 
