@@ -5,6 +5,7 @@
 #                          #   prompt caching off
 #   bash deploy.sh test    # prove it: R1 to R5 from the guide, each prints PASS, WAIT or FAIL
 #   bash deploy.sh down    # delete what `up` made (keys, accounts, binding, budget); caching back on, logs back off
+#   bash deploy.sh tf apply|destroy   # the Terraform build instead of `up`/`down` (labs/gc10/terraform), same test
 #
 # Runs in Google Cloud Shell (it has gcloud, Python and git) in the project you're signed in to. It downloads the
 # course labs repo (public, read-only) into ~/tsg-labs. The project is saved in ~/.gc10.env so test and down use it.
@@ -178,5 +179,13 @@ PY
     echo "Done. Deleted API keys can be restored for 30 days; deleted service accounts for 30 days (undelete)."
     ;;
 
-  *) sed -n '2,8p' "$0"; exit 1;;
+  tf)
+    repo; load
+    printf 'GC10_PROJECT=%s\n' "$P" > "$ENVFILE"
+    cd "$REPO/labs/gc10/terraform"
+    terraform init -input=false >/dev/null
+    terraform "${2:-apply}" -input=false -auto-approve -var "project=$P" -var "me=$ME"
+    ;;
+
+  *) sed -n '2,9p' "$0"; exit 1;;
 esac
