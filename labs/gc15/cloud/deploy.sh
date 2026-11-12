@@ -352,6 +352,8 @@ PY
       gcloud compute addresses delete tsg-gc15-psc-ip --region="$R" --quiet 2>/dev/null || true
       gcloud scheduler jobs delete tsg-gc15-undeploy --location="$R" --quiet 2>/dev/null || true
       bq rm -r -f -d "$P:tsg_gc15_audit" 2>/dev/null || true
+      gcloud projects remove-iam-policy-binding "$P" --member="serviceAccount:$APP" \
+        --role="projects/$P/roles/tsgGc15PredictOnly" --condition=None --format="value(etag)" >/dev/null 2>&1 || true
       say "terraform destroy"
       (cd "$TFD" && terraform destroy -input=false -auto-approve "${TFV[@]}") ||
         { echo "terraform destroy failed: trying once more in 30 s"; sleep 30; (cd "$TFD" && terraform destroy -input=false -auto-approve "${TFV[@]}"); }
