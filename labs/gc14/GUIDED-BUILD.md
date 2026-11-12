@@ -409,7 +409,7 @@ gcloud logging read "logName=\"projects/$PROJECT/logs/networkservices.googleapis
 What our run showed, in dry run: every call the agent made went through the gateway. Its own Google API calls go to
 `*.mtls.googleapis.com` hosts (`us-central1-aiplatform.mtls.googleapis.com`, `aiplatform.mtls.googleapis.com`,
 `telemetry.mtls.googleapis.com`); BigQuery's MCP server shows up as `https://bigquery.googleapis.com/mcp` with the MCP
-method (`initialize`, `tools/list`, `tools/call`) and `AUTHZ: ALLOWED`; and `fetch_page` shows up as a plain
+method (we saw `tools/list`) and `AUTHZ: ALLOWED`; and `fetch_page` shows up as a plain
 `GET https://example.com/` with status `200` and user agent `Python-urllib/3.12`. The full entry
 (`--format=yaml`) also names the registry resource the call matched
 (`agentRegistryResource: projects/PROJECT_NUMBER/locations/global/mcpServers/agentregistry-...`).
