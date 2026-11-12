@@ -373,7 +373,8 @@ TLS and 443 with a self-signed certificate on this address).
 
 ## Part F · Change one setting: request-response logging (15 minutes)
 
-Turn on request-response logging for a 100 percent sample into a BigQuery dataset only you can read:
+Request-response logging keeps a copy of what the model saw and said in BigQuery. Try to switch it on for the
+endpoint you have:
 
 ```bash
 bq --location=$REGION mk --dataset $PROJECT:tsg_gc15_audit
@@ -382,10 +383,17 @@ curl -s -X PATCH -H "Authorization: Bearer $(gcloud auth print-access-token)" -H
   "https://$REGION-aiplatform.googleapis.com/v1/projects/$PROJECT/locations/$REGION/endpoints/$ENDPOINT_ID?updateMask=predictRequestResponseLoggingConfig"
 ```
 
-Send request 3 again from the VM, wait a few minutes, then query the table in **BigQuery > tsg_gc15_audit**. The
-trade-off: you now have evidence of what the model saw and said, and you also have a second copy of personal data
-that needs its own access rules, key and retention. In the lab's first draft that table was readable by all staff
-(attack A8). Turn it back off (`"enabled": false`) or keep a small sample and lock the dataset down.
+In our run (12 November 2026) this answered `400 FAILED_PRECONDITION`: "PSC or dedicated endpoint ... does not
+support update request-response logging." On a Private Service Connect endpoint the setting goes in when the endpoint
+is created: add the same `predictRequestResponseLoggingConfig` block to `cloud/requests/create-endpoint.json` before
+Part D, or use the script (`RRLOG=on bash deploy.sh up`) or Terraform
+(`TF_VAR_request_response_logging=true bash deploy.sh tf apply`). That's a decision to make before launch, not a
+switch to flip during an incident.
+
+With it on, send request 3 again from the VM, wait a few minutes, then query the table in
+**BigQuery > tsg_gc15_audit**. The trade-off: you now have evidence of what the model saw and said, and you also have
+a second copy of personal data that needs its own access rules, key and retention. In the lab's first draft that table
+was readable by all staff (attack A8). Keep a small sample, or none, and lock the dataset down.
 
 ## Part G · Teardown (10 minutes, today)
 

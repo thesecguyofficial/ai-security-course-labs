@@ -108,7 +108,26 @@ resource "google_vertex_ai_endpoint" "summariser" {
   encryption_spec {
     kms_key_name = google_kms_crypto_key.ai.id
   }
+  # Part F. On a Private Service Connect endpoint this can't be changed later: changing the variable replaces it.
+  dynamic "predict_request_response_logging_config" {
+    for_each = var.request_response_logging ? [1] : []
+    content {
+      enabled       = true
+      sampling_rate = 1.0
+      bigquery_destination {
+        output_uri = "bq://${var.project_id}.${google_bigquery_dataset.audit[0].dataset_id}.requests"
+      }
+    }
+  }
   depends_on = [google_kms_crypto_key_iam_member.aiplatform_uses_key]
+}
+
+resource "google_bigquery_dataset" "audit" {
+  count                      = var.request_response_logging ? 1 : 0
+  dataset_id                 = "tsg_gc15_audit"
+  location                   = var.region
+  delete_contents_on_destroy = true
+  depends_on                 = [google_project_service.apis]
 }
 
 # ---- D6: Data Access audit logs (Data Read) for Agent Platform: who called predict --------------------------------

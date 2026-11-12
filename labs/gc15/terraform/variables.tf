@@ -14,3 +14,9 @@ variable "endpoint_id" {
   type        = string
   default     = "1501500001"
 }
+
+variable "request_response_logging" {
+  description = "Part F: keep a copy of every request and answer in BigQuery. A PSC endpoint takes this only when it is created."
+  type        = bool
+  default     = false
+}

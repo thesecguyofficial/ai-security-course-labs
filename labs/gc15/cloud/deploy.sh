@@ -166,6 +166,19 @@ print("   vulnerabilities by severity:", {k: len(x) for k, x in v.items()} or "n
     say "D1 A Private Service Connect endpoint, encrypted with your key, open to this project only"
     if [ -z "${ENDPOINT_ID:-}" ]; then
       sed -e "s/PROJECT_ID/$P/g" -e "s#locations/us-central1#locations/$R#" "$LAB/cloud/requests/create-endpoint.json" > "$HOME/.gc15-ep.json"
+      if [ "${RRLOG:-off}" = on ]; then
+        # Part F: on a PSC endpoint request-response logging can only be set when the endpoint is created.
+        exists bq show "$P:tsg_gc15_audit" || bq --location="$R" mk --dataset "$P:tsg_gc15_audit" >/dev/null
+        python3 - "$HOME/.gc15-ep.json" "$P" <<'PY'
+import json, sys
+f, p = sys.argv[1:]
+d = json.load(open(f))
+d["predictRequestResponseLoggingConfig"] = {"enabled": True, "samplingRate": 1.0,
+    "bigqueryDestination": {"outputUri": f"bq://{p}.tsg_gc15_audit.requests"}}
+json.dump(d, open(f, "w"))
+PY
+        echo "   with request-response logging: 100% into $P.tsg_gc15_audit.requests"
+      fi
       op=$(curl -s -X POST -H "Authorization: Bearer $(tok)" -H "Content-Type: application/json" -d @"$HOME/.gc15-ep.json" "$API/endpoints" |
         python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("name") or json.dumps(d)[:400])')
       rm -f "$HOME/.gc15-ep.json"; echo "   $op"; [[ "$op" == projects/* ]] || exit 1
@@ -268,14 +281,22 @@ PY
 
   rrlog)
     repo; load
-    say "F Request-response logging: 100% of calls into tsg_gc15_audit.requests (a second copy of every prompt)"
-    exists bq show "$P:tsg_gc15_audit" || bq --location="$R" mk --dataset "$P:tsg_gc15_audit" >/dev/null
-    curl -s -o "$HOME/.gc15-rr.json" -w "   PATCH endpoint: HTTP %{http_code}\n" -X PATCH -H "Authorization: Bearer $(tok)" -H "Content-Type: application/json" \
-      -d "{\"predictRequestResponseLoggingConfig\": {\"enabled\": true, \"samplingRate\": 1.0, \"bigqueryDestination\": {\"outputUri\": \"bq://$P.tsg_gc15_audit.requests\"}}}" \
-      "$API/endpoints/$ENDPOINT_ID?updateMask=predictRequestResponseLoggingConfig"
-    grep -q '"error"' "$HOME/.gc15-rr.json" && sed -n '1,8p' "$HOME/.gc15-rr.json"; rm -f "$HOME/.gc15-rr.json"
-    echo "   now run: bash deploy.sh test   then, a few minutes later:"
-    echo "   bq query --use_legacy_sql=false 'SELECT logging_time, LEFT(TO_JSON_STRING(request_payload), 160) FROM \`$P.tsg_gc15_audit.requests\` ORDER BY logging_time DESC LIMIT 3'"
+    say "F Request-response logging: a second copy of every prompt and answer, in BigQuery"
+    on=$(gcloud ai endpoints describe "$ENDPOINT_ID" --region="$R" --format='value(predictRequestResponseLoggingConfig.enabled)' 2>/dev/null)
+    if [ "$on" != True ]; then
+      echo "   Off on this endpoint. Try to switch it on:"
+      curl -s -o "$HOME/.gc15-rr.json" -w "   PATCH endpoint: HTTP %{http_code}\n" -X PATCH -H "Authorization: Bearer $(tok)" -H "Content-Type: application/json" \
+        -d "{\"predictRequestResponseLoggingConfig\": {\"enabled\": true, \"samplingRate\": 1.0, \"bigqueryDestination\": {\"outputUri\": \"bq://$P.tsg_gc15_audit.requests\"}}}" \
+        "$API/endpoints/$ENDPOINT_ID?updateMask=predictRequestResponseLoggingConfig"
+      python3 -c 'import json,sys; print("   " + json.load(open(sys.argv[1])).get("error", {}).get("message", "no error"))' "$HOME/.gc15-rr.json"
+      rm -f "$HOME/.gc15-rr.json"
+      echo "   On a Private Service Connect endpoint it is set when the endpoint is created (our run, 12 Nov 2026:"
+      echo "   FAILED_PRECONDITION). To see it: bash deploy.sh down, then RRLOG=on bash deploy.sh up, or"
+      echo "   bash deploy.sh tf apply with TF_VAR_request_response_logging=true."
+    else
+      echo "   On. The newest rows (they arrive a few minutes after the calls):"
+      bq query --quiet --use_legacy_sql=false --format=pretty "SELECT logging_time, LEFT(TO_JSON_STRING(request_payload), 120) AS request FROM \`$P.tsg_gc15_audit.requests\` ORDER BY logging_time DESC LIMIT 3" 2>&1 | tail -8
+    fi
     ;;
 
   down)
