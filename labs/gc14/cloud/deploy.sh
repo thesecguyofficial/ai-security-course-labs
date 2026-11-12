@@ -135,8 +135,8 @@ print(d["name"], d["effectiveIdentity"] or "")' <<<"$out")
     say "Gateway to ENFORCE"
     ENF=ENFORCE tf apply -auto-approve
     echo "Waiting 3 minutes for enforcement to reach the gateway..."; sleep 180
-    say "R3 and R4 again"
-    ask --pick 3; ask --pick 4
+    say "R1, R3 and R4 again: the allowed tool still works; the DENY rule and the unregistered host are refused"
+    ask --pick 1; ask --pick 3; ask --pick 4
     gw_logs
     ;;
 

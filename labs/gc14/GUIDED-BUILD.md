@@ -264,7 +264,7 @@ This second pass adds, for **this agent's principal only**:
 | Resource | What it says |
 |---|---|
 | `google_iam_project_access_policy` `tsg-gc14-egress` | rule `allow-google-endpoints`: `destination.agent_registry.resource_type == 'ENDPOINT'` |
-| | rule `allow-bigquery-tools`: `resource_type == 'MCP_SERVER'` and `tool.name in [the six BigQuery tools]` |
+| | rule `allow-bigquery-tools`: `resource_type == 'MCP_SERVER'` and `tool.name in ['', the six BigQuery tools]`: the empty name is the MCP handshake (`initialize`, `tools/list`), which carries no tool name; leave it out and ENFORCE refuses every BigQuery call (our 12 Nov 2026 run) |
 | | rule `deny-execute-sql` (**DENY**): `destination.agent_registry.mcp_server.tool.name == 'execute_sql'` |
 | `google_iam_projects_policy_binding` | `policy_kind = "ACCESS"`, target `//networkservices.googleapis.com/projects/PROJECT/locations/REGION/agentGateways/tsg-gc14-egress` |
 | `google_project_iam_member` x4 | `roles/browser`, `roles/serviceusage.serviceUsageConsumer` (Google's Agent Identity page, which also says not to grant `roles/aiplatform.expressUser` or `roles/aiplatform.user` to agent identities), `roles/bigquery.jobUser`, `roles/mcp.toolUser` (Google's BigQuery MCP page) |
@@ -286,7 +286,7 @@ cat > policy.json <<EOF
    "conditions": {"iap.googleapis.com": {"expression": "destination.agent_registry.resource_type == 'ENDPOINT'"}}},
   {"description": "allow-bigquery-tools", "effect": "ALLOW", "principals": ["$AGENT_PRINCIPAL"],
    "operation": {"permissions": ["iap.googleapis.com/resources.egressViaIAP"]},
-   "conditions": {"iap.googleapis.com": {"expression": "destination.agent_registry.resource_type == 'MCP_SERVER' && destination.agent_registry.mcp_server.tool.name in ['list_dataset_ids', 'list_table_ids', 'get_dataset_info', 'get_table_info', 'execute_sql_readonly', 'execute_sql']"}}},
+   "conditions": {"iap.googleapis.com": {"expression": "destination.agent_registry.resource_type == 'MCP_SERVER' && destination.agent_registry.mcp_server.tool.name in ['', 'list_dataset_ids', 'list_table_ids', 'get_dataset_info', 'get_table_info', 'execute_sql_readonly', 'execute_sql']"}}},
   {"description": "deny-execute-sql", "effect": "DENY", "principals": ["$AGENT_PRINCIPAL"],
    "operation": {"permissions": ["iap.googleapis.com/resources.egressViaIAP"]},
    "conditions": {"iap.googleapis.com": {"expression": "destination.agent_registry.mcp_server.tool.name == 'execute_sql'"}}}

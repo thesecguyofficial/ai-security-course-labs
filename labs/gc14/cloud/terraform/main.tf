@@ -22,7 +22,10 @@ locals {
   ])
 
   bigquery_tools     = ["list_dataset_ids", "list_table_ids", "get_dataset_info", "get_table_info", "execute_sql_readonly", "execute_sql"]
-  bigquery_tool_list = join(", ", [for t in local.bigquery_tools : "'${t}'"])
+  # '' lets the MCP handshake through: initialize, notifications/initialized and tools/list carry no tool name.
+  # Without it our ENFORCE run (12 Nov 2026) refused every BigQuery call with 403, even the allowed tools (Google's
+  # "Secure AI Agent MCP Tools with Agent Gateway" codelab lists '' for the same reason).
+  bigquery_tool_list = join(", ", [for t in concat([""], local.bigquery_tools) : "'${t}'"])
 }
 
 # ---- APIs ----------------------------------------------------------------------------------------------------
