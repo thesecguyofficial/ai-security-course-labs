@@ -145,8 +145,10 @@ print(d["name"], d["effectiveIdentity"] or "")' <<<"$out")
       sleep 30
     fi
     say "terraform destroy"
-    # one retry: our run hit a passing "connection refused" from the BigQuery API while Terraform refreshed state
-    tf destroy -auto-approve || { echo "terraform destroy failed: trying once more in 30 s"; sleep 30; tf destroy -auto-approve; }
+    # Our runs hit "connection refused" from Cloud Shell to the BigQuery API while Terraform refreshed state (twice,
+    # different datasets). Destroy doesn't need the refresh, so the retry skips it.
+    tf destroy -auto-approve || { echo "terraform destroy failed: trying again without the refresh"; sleep 15
+                                  tf destroy -auto-approve -refresh=false; }
     rm -f "$ENVFILE"
     echo "Done. The agent's principal stops existing with the agent; check the billing report tomorrow."
     ;;
