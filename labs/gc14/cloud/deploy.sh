@@ -145,7 +145,8 @@ print(d["name"], d["effectiveIdentity"] or "")' <<<"$out")
       sleep 30
     fi
     say "terraform destroy"
-    tf destroy -auto-approve
+    # one retry: our run hit a passing "connection refused" from the BigQuery API while Terraform refreshed state
+    tf destroy -auto-approve || { echo "terraform destroy failed: trying once more in 30 s"; sleep 30; tf destroy -auto-approve; }
     rm -f "$ENVFILE"
     echo "Done. The agent's principal stops existing with the agent; check the billing report tomorrow."
     ;;
