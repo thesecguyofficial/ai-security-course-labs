@@ -1,6 +1,7 @@
 # GC10 as Terraform: the locked-down AI footprint from lesson 10.6 (GUIDED-BUILD.md), in one apply.
 #
 #   cd labs/gc10/terraform
+#   gcloud services enable cloudresourcemanager.googleapis.com cloudbilling.googleapis.com billingbudgets.googleapis.com
 #   terraform init
 #   terraform apply -var project=PROJECT_ID -var me=YOUR_EMAIL
 #   bash ../cloud/deploy.sh test      # the same R1 to R5 checks as the script build
@@ -11,6 +12,8 @@
 # (Agent Platform refuses it: "API keys are not supported by this API") and the key Agent Platform accepts, gc10-bound,
 # bound to gc10-caller. Both keys only work from 192.0.2.10. Prompt caching has no Terraform resource, so a
 # terraform_data step sends the same PATCH the guide shows (and turns caching back on at destroy).
+# Cloud Shell no longer ships Terraform (12 Nov 2026): `bash ../cloud/deploy.sh tf apply` installs it into ~/bin and
+# runs this file with your project and account filled in.
 # Cost: cents at most. Use a project you own, never your employer's.
 
 terraform {
