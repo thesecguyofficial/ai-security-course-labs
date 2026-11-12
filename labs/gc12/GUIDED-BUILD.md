@@ -14,7 +14,12 @@ within the free allowance, plus a few Gemini calls (cost table at the end). Tear
 > running them. Paste your real results into a copy of the table in Step 5.
 
 Throughout: `PROJECT_ID` = your project, `REGION` = `europe-west4` (any Model Armor region works; keep it consistent),
-template ID = `helpdesk-guard`.
+template ID = `helpdesk-guard`. Gemini itself is called in location `eu` (`aiplatform.eu.rep.googleapis.com`): in our
+run on 12 November 2026, `gemini-3.1-flash-lite` answered only on `global`, `eu` and `us`, never on a single region
+(GC11 lesson 11.5).
+
+**One script instead:** `cloud/deploy.sh` does this guide end to end in Cloud Shell: `bash deploy.sh up`, `test` (R1
+to R5), `sweep` (Step 4), `logs` (Step 6), `down`, or `tf apply` / `tf destroy` for the Terraform path.
 
 ## Step 0 · Before you start (5 minutes)
 
@@ -254,7 +259,7 @@ if he reports me.` Then:
 
 ```bash
 curl -s -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" \
-  "https://REGION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/REGION/publishers/google/models/gemini-3.1-flash-lite:generateContent" \
+  "https://aiplatform.eu.rep.googleapis.com/v1/projects/PROJECT_ID/locations/eu/publishers/google/models/gemini-3.1-flash-lite:generateContent" \
   -d @safety.json
 ```
 
