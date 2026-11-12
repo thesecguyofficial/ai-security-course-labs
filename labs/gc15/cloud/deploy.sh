@@ -270,9 +270,10 @@ PY
     repo; load
     say "F Request-response logging: 100% of calls into tsg_gc15_audit.requests (a second copy of every prompt)"
     exists bq show "$P:tsg_gc15_audit" || bq --location="$R" mk --dataset "$P:tsg_gc15_audit" >/dev/null
-    curl -s -o /dev/null -w "   PATCH endpoint: HTTP %{http_code}\n" -X PATCH -H "Authorization: Bearer $(tok)" -H "Content-Type: application/json" \
+    curl -s -o "$HOME/.gc15-rr.json" -w "   PATCH endpoint: HTTP %{http_code}\n" -X PATCH -H "Authorization: Bearer $(tok)" -H "Content-Type: application/json" \
       -d "{\"predictRequestResponseLoggingConfig\": {\"enabled\": true, \"samplingRate\": 1.0, \"bigqueryDestination\": {\"outputUri\": \"bq://$P.tsg_gc15_audit.requests\"}}}" \
       "$API/endpoints/$ENDPOINT_ID?updateMask=predictRequestResponseLoggingConfig"
+    grep -q '"error"' "$HOME/.gc15-rr.json" && sed -n '1,8p' "$HOME/.gc15-rr.json"; rm -f "$HOME/.gc15-rr.json"
     echo "   now run: bash deploy.sh test   then, a few minutes later:"
     echo "   bq query --use_legacy_sql=false 'SELECT logging_time, LEFT(TO_JSON_STRING(request_payload), 160) FROM \`$P.tsg_gc15_audit.requests\` ORDER BY logging_time DESC LIMIT 3'"
     ;;
