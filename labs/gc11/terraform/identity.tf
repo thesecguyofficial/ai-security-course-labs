@@ -1,7 +1,7 @@
 # Lesson 11.1: one service account per workload, no keys, a predict-only custom role.
 
 locals {
-  apis = ["aiplatform", "bigquery", "cloudkms", "compute", "dns", "iam", "servicedirectory"]
+  apis = ["aiplatform", "bigquery", "cloudkms", "compute", "dns", "iam", "networkconnectivity"]
 }
 
 resource "google_project_service" "apis" {

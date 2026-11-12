@@ -4,7 +4,7 @@ variable "project_id" {
 }
 
 variable "region" {
-  description = "Region for the VPC subnet, KMS key ring and BigQuery datasets. Check the model is offered here."
+  description = "Region for the VPC subnet, the PSC endpoint, the KMS key ring and the BigQuery datasets."
   type        = string
   default     = "europe-west4"
 }
@@ -15,10 +15,22 @@ variable "model" {
   default     = "publishers/google/models/gemini-3.1-flash-lite"
 }
 
-variable "psc_ip" {
-  description = "Internal IPv4 address for the Private Service Connect endpoint. Must be outside every subnet range."
+variable "model_location" {
+  description = "Where the model is called: eu (our run: gemini-3.1-flash-lite answered only on global, eu and us)."
   type        = string
-  default     = "10.100.0.2"
+  default     = "eu"
+}
+
+variable "model_host" {
+  description = "The Agent Platform host for model_location, reached through the PSC endpoint."
+  type        = string
+  default     = "aiplatform.eu.rep.googleapis.com"
+}
+
+variable "endpoint_ip" {
+  description = "Internal IPv4 address of the PSC endpoint for model_host, inside the helpdesk-eu subnet."
+  type        = string
+  default     = "10.10.0.10"
 }
 
 variable "org_id" {

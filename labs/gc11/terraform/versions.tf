@@ -7,20 +7,10 @@ terraform {
       source  = "hashicorp/google"
       version = ">= 8.0, < 9.0"
     }
-    # The PSC global address (purpose PRIVATE_SERVICE_CONNECT) and the Google APIs forwarding rule need google-beta.
-    google-beta = {
-      source  = "hashicorp/google-beta"
-      version = ">= 8.0, < 9.0"
-    }
   }
 }
 
 provider "google" {
-  project = var.project_id
-  region  = var.region
-}
-
-provider "google-beta" {
   project = var.project_id
   region  = var.region
 }

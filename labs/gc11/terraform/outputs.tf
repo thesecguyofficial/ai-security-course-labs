@@ -2,8 +2,8 @@ output "runtime_service_account" {
   value = google_service_account.chatbot_runtime.email
 }
 
-output "psc_endpoint_ip" {
-  value = var.psc_ip
+output "psc_endpoint" {
+  value = "${var.endpoint_ip} -> ${var.model_host} (locations/${var.model_location})"
 }
 
 output "kms_key" {

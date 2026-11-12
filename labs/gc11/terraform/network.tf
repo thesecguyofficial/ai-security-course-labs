@@ -1,4 +1,10 @@
-# Lesson 11.2: no internet path; Google APIs through a Private Service Connect endpoint and a private DNS zone.
+# Lesson 11.2 + 11.5: no internet path. The one way out is a Private Service Connect endpoint for the EU Agent Platform
+# host (aiplatform.eu.rep.googleapis.com), so the network itself holds the residency pin.
+#
+# Why not a PSC endpoint for global Google APIs (the earlier version of this lab): in our 12 Nov 2026 run
+# gemini-3.1-flash-lite answered only on global, eu and us, never on a single region, so the Helpdesk calls location
+# eu. Google's all-apis bundle "excludes *.rep.googleapis.com", and the vpc-sc bundle returned 503 "VPC network mapping
+# unavailable" in a project with no organization. A regional endpoint targets exactly one host.
 
 resource "google_compute_network" "helpdesk" {
   name                    = "helpdesk-vpc"
@@ -7,38 +13,33 @@ resource "google_compute_network" "helpdesk" {
 }
 
 resource "google_compute_subnetwork" "helpdesk_eu" {
-  name                     = "helpdesk-eu"
-  region                   = var.region
-  network                  = google_compute_network.helpdesk.id
-  ip_cidr_range            = "10.10.0.0/24"
-  private_ip_google_access = true # fallback path; it doesn't support *.rep.googleapis.com endpoints
+  name          = "helpdesk-eu"
+  region        = var.region
+  network       = google_compute_network.helpdesk.id
+  ip_cidr_range = "10.10.0.0/24"
+  # no Private Google Access: it "doesn't support regional and multi-regional endpoints", and nothing here needs it
 }
 
-# No google_compute_router_nat and no external IPs: the only way out is the PSC endpoint below.
+# No google_compute_router_nat and no external IPs: the only way out is the endpoint below.
 
-resource "google_compute_global_address" "psc_apis" {
-  provider     = google-beta
-  name         = "psc-google-apis"
-  address_type = "INTERNAL"
-  purpose      = "PRIVATE_SERVICE_CONNECT"
-  network      = google_compute_network.helpdesk.id
-  address      = var.psc_ip
+resource "google_network_connectivity_regional_endpoint" "aiplatform_eu" {
+  name              = "aiplatform-eu"
+  location          = var.region
+  target_google_api = var.model_host
+  access_type       = "REGIONAL"
+  address           = var.endpoint_ip
+  network           = google_compute_network.helpdesk.id
+  subnetwork        = google_compute_subnetwork.helpdesk_eu.id
+  depends_on        = [google_project_service.apis]
 }
 
-resource "google_compute_global_forwarding_rule" "psc_apis" {
-  provider              = google-beta
-  name                  = "tsgapis" # 1-20 lowercase letters and digits, starting with a letter
-  target                = "vpc-sc" # only APIs that support VPC Service Controls; use all-apis if you need others
-  network               = google_compute_network.helpdesk.id
-  ip_address            = google_compute_global_address.psc_apis.id
-  load_balancing_scheme = ""
-}
-
-# Default API names (REGION-aiplatform.googleapis.com, bigquery.googleapis.com) resolve to the endpoint.
-resource "google_dns_managed_zone" "googleapis" {
-  name       = "googleapis-private"
-  dns_name   = "googleapis.com."
-  visibility = "private"
+# The model host resolves to the endpoint inside the VPC; every other name keeps resolving to public addresses,
+# which the firewall then refuses.
+resource "google_dns_managed_zone" "aiplatform_eu" {
+  name        = "aiplatform-eu-rep"
+  dns_name    = "${var.model_host}."
+  description = "The EU Agent Platform host through its PSC endpoint"
+  visibility  = "private"
   private_visibility_config {
     networks {
       network_url = google_compute_network.helpdesk.id
@@ -47,20 +48,12 @@ resource "google_dns_managed_zone" "googleapis" {
   depends_on = [google_project_service.apis]
 }
 
-resource "google_dns_record_set" "googleapis_a" {
-  managed_zone = google_dns_managed_zone.googleapis.name
-  name         = "googleapis.com."
+resource "google_dns_record_set" "aiplatform_eu_a" {
+  managed_zone = google_dns_managed_zone.aiplatform_eu.name
+  name         = "${var.model_host}."
   type         = "A"
   ttl          = 300
-  rrdatas      = [var.psc_ip]
-}
-
-resource "google_dns_record_set" "googleapis_cname" {
-  managed_zone = google_dns_managed_zone.googleapis.name
-  name         = "*.googleapis.com."
-  type         = "CNAME"
-  ttl          = 300
-  rrdatas      = ["googleapis.com."]
+  rrdatas      = [var.endpoint_ip]
 }
 
 resource "google_compute_firewall" "deny_all_egress" {
@@ -74,12 +67,12 @@ resource "google_compute_firewall" "deny_all_egress" {
   }
 }
 
-resource "google_compute_firewall" "allow_google_apis_egress" {
-  name               = "allow-google-apis-egress"
+resource "google_compute_firewall" "allow_aiplatform_eu_egress" {
+  name               = "allow-aiplatform-eu-egress"
   network            = google_compute_network.helpdesk.id
   direction          = "EGRESS"
   priority           = 1000
-  destination_ranges = ["${var.psc_ip}/32"]
+  destination_ranges = ["${var.endpoint_ip}/32"]
   allow {
     protocol = "tcp"
     ports    = ["443"]

@@ -1,5 +1,5 @@
 # Optional (create_test_vm = true): one small VM with NO external IP that calls Gemini once at boot through the
-# private path and prints the result to its serial port. Billed per second while it exists; delete it after the test.
+# PSC endpoint (EU host, locations/eu) and prints the result to its serial port. Billed per second while it exists; delete it after the test.
 resource "google_compute_instance" "helpdesk_vm" {
   count        = var.create_test_vm ? 1 : 0
   name         = "helpdesk-vm"
@@ -31,7 +31,9 @@ resource "google_compute_instance" "helpdesk_vm" {
     startup-script = templatefile("${path.module}/scripts/smoke_call.sh.tftpl", {
       project = var.project_id
       region  = var.region
-      model   = var.model
+      model    = var.model
+      host     = var.model_host
+      location = var.model_location
     })
   }
 }
