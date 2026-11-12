@@ -6,6 +6,7 @@
 #                            #   fake rows, the agent deployed with Agent Identity, then pass 2 (its access policy + IAM)
 #   bash deploy.sh test      # R1 to R4 through the agent, then what the gateway and IAP logged (would-be denials)
 #   bash deploy.sh enforce   # gateway to ENFORCE, then R3 and R4 again: refused before BigQuery or the internet
+#   bash deploy.sh logs      # the newest gateway and IAP entries in full
 #   bash deploy.sh down      # delete the agent, then terraform destroy
 #
 # Runs in Google Cloud Shell in the project you're signed in to; downloads the course labs repo into ~/tsg-labs.
@@ -119,6 +120,15 @@ print(d["name"], d["effectiveIdentity"] or "")' <<<"$out")
     echo "run but listed as would-be denials (the DENY rule, and default deny for an unregistered host)."
     ;;
 
+  logs)
+    repo; load
+    say "The newest gateway entries for BigQuery's MCP server and for example.com, in full"
+    gcloud logging read "logName=\"projects/$P/logs/networkservices.googleapis.com%2Fgateway_requests\" AND (httpRequest.requestUrl:\"bigquery\" OR httpRequest.requestUrl:\"example.com\")" \
+      --limit=2 --freshness=1h --format=yaml || true
+    say "The newest IAP decisions, in full"
+    gcloud logging read 'protoPayload.serviceName="iap.googleapis.com"' --limit=2 --freshness=1h --format=yaml || true
+    ;;
+
   enforce)
     repo; load; need_terraform
     say "Gateway to ENFORCE"
@@ -143,5 +153,5 @@ print(d["name"], d["effectiveIdentity"] or "")' <<<"$out")
     echo "Done. The agent's principal stops existing with the agent; check the billing report tomorrow."
     ;;
 
-  *) sed -n '2,11p' "$0"; exit 1;;
+  *) sed -n '2,12p' "$0"; exit 1;;
 esac
