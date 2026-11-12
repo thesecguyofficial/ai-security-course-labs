@@ -140,3 +140,30 @@ Working notes for the recording script. Console in the owner's account; Cloud Sh
 ## Cloud Shell
 - After a reconnect, Cloud Shell asks **Authorize Cloud Shell**; Authorize opens a Google popup: the owner clicks it.
   Rejecting or closing leaves gcloud with "No credentialed accounts".
+
+## Cloud Shell steps (13 Nov 2026 rehearsal)
+- Cache PATCH: operation `done: true`, response `CacheConfig` (name only). Request-response logging `on`: a
+  `SetPublisherModelConfigOperationMetadata` operation; `show` right after: `"enabled": true`, `"samplingRate": 1`,
+  `outputUri: bq://PROJECT_ID.ai_logs.request_response_logging`.
+- **Test 2 and 3 timing:** right after the Token Creator grant, impersonation fails ("Failed to impersonate ... Make sure
+  the account ... has access to the service account"), and the public call returns 401. It worked about **60 s** after
+  the grant. On camera: grant, wait a minute (cut), then run. The guide should say so.
+- Test 2: `PERMISSION_DENIED: Permission 'aiplatform.endpoints.create' denied ...`. Test 3: `200`. Grant removed.
+- The Token Creator grant can also be clicked: IAM and admin > Service accounts > chatbot-runtime > Principals with
+  access > Grant access (not rehearsed; the shell step is shorter and needs the shell for impersonation anyway).
+
+## Test 4 in the console
+- Logging > **Logs Explorer** > **Show query** > paste the guide's filter (the editor auto-closes quotes and
+  brackets: paste, don't type) > **Run query**. Time range "Last 30 minutes" by default; widen to 1 hour if needed.
+  Rows: `Vertex AI API`, `GenerateContent`, `eu:google:gemini-3.1-flash-lite`, principal `chatbot-runtime@...`.
+- Expand an entry to show `requestMetadata.callerIp`: VM calls say `gce-internal-ip`; Test 3 shows Cloud Shell's
+  public IP plus `serviceAccountDelegationInfo` with the owner's email (**mask it**). VM calls also carry a delegation
+  entry naming `service-NUMBER@compute-system.iam.gserviceaccount.com` (the VM's metadata server; mask the number).
+- Request-response table: two rows a minute after logging went on: the VM's "Reply with the single word: private"
+  and Test 3's "Reply with one word: public". Run the guide's SQL in **BigQuery > SQL editor** for the take.
+
+## Test 5 in the console
+- Security > Key management > helpdesk-eu > helpdesk-data > **Versions**: tick the **Enabled and primary** version
+  (here version 4 after the earlier rotation; in a fresh project it's 1) > **Disable** > dialog "Disable key version
+  4?" ("there is a delay of up to a few hours during which it can still operate on data") > **Disable** > State
+  "Disabled and primary". Disabled at 02:19 IST; BigQuery result below.
