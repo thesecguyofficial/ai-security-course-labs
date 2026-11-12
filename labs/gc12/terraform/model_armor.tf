@@ -58,7 +58,8 @@ resource "google_model_armor_template" "helpdesk_guard" {
 }
 
 # Project floor setting: applies to every Gemini generateContent call in the project, even without a template.
-# deletion_policy ABANDON: `terraform destroy` leaves it alone; scripts/reset_floor.sh switches it off explicitly.
+# It's a per-project singleton: after `terraform destroy`, scripts/reset_floor.sh switches it off explicitly.
+# (The provider we tested on 12 Nov 2026 has no deletion_policy argument on this resource.)
 resource "google_model_armor_floorsetting" "project" {
   parent   = "projects/${var.project_id}"
   location = "global"
@@ -96,6 +97,5 @@ resource "google_model_armor_floorsetting" "project" {
     enable_cloud_logging = true
   }
 
-  deletion_policy = "ABANDON"
-  depends_on      = [google_project_service.apis]
+  depends_on = [google_project_service.apis]
 }
