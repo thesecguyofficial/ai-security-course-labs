@@ -176,19 +176,22 @@ class T6_Terraform(unittest.TestCase):
         tf = tf_text()
         declared = set(re.findall(r'^resource "(\w+)"', tf, re.M))
         twin_types = {r["type"] for r in Deployment.load("hardened").resources()}
+        # the cloud build replaced the twin's global-API PSC endpoint with one for the EU model host (real run, 12 Nov 2026)
+        twin_types -= {"google_compute_global_address", "google_compute_global_forwarding_rule"}
         self.assertEqual(twin_types - declared, set())
+        self.assertIn("google_network_connectivity_regional_endpoint", declared)
         for banned in ("google_service_account_key", "google_compute_router_nat"):
             self.assertNotIn(banned, declared)
         self.assertNotRegex(tf, r"(?m)^\s*access_config\s*\{")
 
     def test_20_terraform_control_values(self):
-        """terraform: predict-only role, DATA_READ logs, vpc-sc PSC bundle, PGA, CMEK datasets, rotation, dry-run perimeter"""
+        """terraform: predict-only role, DATA_READ logs, PSC endpoint for the EU host, CMEK datasets, rotation, dry-run perimeter"""
         tf = tf_text()
         for pattern in (r'permissions\s*=\s*\["aiplatform\.endpoints\.predict"\]',
                         r'service\s*=\s*"aiplatform\.googleapis\.com"', r'log_type\s*=\s*"DATA_READ"',
-                        r'target\s*=\s*"vpc-sc"', r'purpose\s*=\s*"PRIVATE_SERVICE_CONNECT"',
-                        r'private_ip_google_access\s*=\s*true', r'dns_name\s*=\s*"googleapis\.com\."',
-                        r'name\s*=\s*"\*\.googleapis\.com\."', r'rotation_period\s*=\s*"\d+s"',
+                        r'default\s*=\s*"aiplatform\.eu\.rep\.googleapis\.com"',
+                        r'target_google_api\s*=\s*var\.model_host', r'dns_name\s*=\s*"\$\{var\.model_host\}\."',
+                        r'destination_ranges\s*=\s*\["\$\{var\.endpoint_ip\}/32"\]', r'rotation_period\s*=\s*"\d+s"',
                         r'use_explicit_dry_run_spec\s*=\s*true', r'roles/cloudkms\.cryptoKeyEncrypterDecrypter'):
             self.assertRegex(tf, pattern)
         self.assertEqual(len(re.findall(r"default_encryption_configuration\s*\{", tf)), 2)

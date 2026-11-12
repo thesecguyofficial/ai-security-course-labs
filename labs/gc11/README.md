@@ -70,6 +70,14 @@ endpoint (with a private `googleapis.com` zone) or Private Google Access, neithe
 unless an ingress or egress rule allows them, and in dry run it only logs. It does **not** model IAM deny policies,
 conditions, VPC-SC method-level rules, quotas or real routing, and its role-to-permission map is a small subset.
 
+**Tested in a real project, 12 November 2026.** The cloud build (`cloud/deploy.sh`, `terraform/`, `GUIDED-BUILD.md`)
+changed after a real run, and the twin still shows the earlier design. What we found: `gemini-3.1-flash-lite` answered
+only on `global`, `eu` and `us`, never on `europe-west4`; a PSC endpoint for global Google APIs with the `vpc-sc`
+bundle returned `503` "VPC network mapping unavailable" in a project with no organization. So the cloud build calls
+`aiplatform.eu.rep.googleapis.com` (`locations/eu`) through a PSC endpoint for that one host at `10.10.0.10`, and the
+residency trap becomes the global endpoint, which the network blocks. Request-response logging into a dataset with a
+CMEK default key worked. The assumptions below are the ones the twin was written with.
+
 **Three assumptions, said plainly.** (1) The hardened design reaches `europe-west4-aiplatform.googleapis.com` through a
 PSC endpoint for global Google APIs with the `vpc-sc` bundle. Google says the `all-apis` bundle covers `*.googleapis.com` names
 except `*.rep.googleapis.com`, and that `vpc-sc` serves APIs that support VPC Service Controls (Agent Platform does);
@@ -511,7 +519,7 @@ Open `twin/hardened/plan.json` next to `terraform/` (they describe the same thin
 |---|---|---|
 | `identity.tf` | `chatbot-runtime` and `ticket-summariser` service accounts, **no keys**; custom role `helpdeskModelCaller` with only `aiplatform.endpoints.predict`; Service Account User on the one account, for deployers only | A1, A2, A5 |
 | `orgpolicy.tf` | `vertexai.allowedModels` on the prod folder: `publishers/google/models/gemini-3.1-flash-lite:predict` (needs an organization) | any model nobody approved |
-| `network.tf` | No external IPs, no Cloud NAT; PSC endpoint `tsgapis` at `10.100.0.2` with the `vpc-sc` bundle; private `googleapis.com` zone (A + `*.googleapis.com` CNAME); PGA on; egress deny-all plus an allow to `10.100.0.2:443` | A4, and stolen tokens no longer travel the internet path |
+| `network.tf` | No external IPs, no Cloud NAT; a PSC endpoint for one host, `aiplatform.eu.rep.googleapis.com`, at `10.10.0.10`; a private zone for that name; egress deny-all plus an allow to `10.10.0.10:443` (the twin's `plan.json` still shows the earlier global-API endpoint `tsgapis` at `10.100.0.2`) | A4, stolen tokens no longer travel the internet path, and code can't drift to the global endpoint |
 | `perimeter.tf` | VPC Service Controls perimeter around the project, restricting `aiplatform`, `bigquery`, `storage`, **in dry run** (needs an organization) | logs A3 (blocks it once enforced) |
 | `encryption.tf` | Cloud KMS key ring `helpdesk-eu`, key `helpdesk-data` (90-day rotation); BigQuery service account may use it; `helpdesk_tickets` and `ai_logs` with that default key | Q4 |
 | `logging.tf` | `DATA_READ` and `DATA_WRITE` audit logs for `aiplatform.googleapis.com` | Q1 |

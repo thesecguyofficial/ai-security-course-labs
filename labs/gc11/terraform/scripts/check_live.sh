@@ -8,8 +8,9 @@ gcloud iam service-accounts keys list --iam-account="chatbot-runtime@${PROJECT}.
   --managed-by=user --project="$PROJECT"
 echo "== 11.1 custom role permissions (expect only aiplatform.endpoints.predict)"
 gcloud iam roles describe helpdeskModelCaller --project="$PROJECT" --format="value(includedPermissions)"
-echo "== 11.2 PSC endpoint for Google APIs"
-gcloud compute forwarding-rules describe tsgapis --global --project="$PROJECT" --format="value(target,IPAddress)"
+echo "== 11.2 PSC endpoint for the EU model host (expect 10.10.0.10 aiplatform.eu.rep.googleapis.com)"
+gcloud network-connectivity regional-endpoints describe aiplatform-eu --region="$REGION" --project="$PROJECT" \
+  --format="value(address,targetGoogleApi)"
 echo "== 11.3 dataset default keys"
 for ds in helpdesk_tickets ai_logs; do
   bq --project_id="$PROJECT" show --format=prettyjson "$ds" | grep -A2 -i "defaultEncryptionConfiguration" || echo "$ds: none"
