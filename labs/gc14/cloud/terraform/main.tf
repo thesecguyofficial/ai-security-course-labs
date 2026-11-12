@@ -9,7 +9,7 @@ data "google_project" "this" {
 
 locals {
   number   = data.google_project.this.number
-  org_id   = data.google_project.this.org_id
+  org_id   = coalesce(data.google_project.this.org_id, "")   # null for a project with no organization
   trust    = local.org_id != "" ? "agents.global.org-${local.org_id}.system.id.goog" : "agents.global.proj-${local.number}.system.id.goog"
   all_ours = "principalSet://${local.trust}/attribute.platformContainer/aiplatform/projects/${local.number}"
   agent    = var.agent_principal != ""
