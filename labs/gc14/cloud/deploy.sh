@@ -58,7 +58,7 @@ gw_logs() {
   say "The gateway's request log, last 30 minutes (telemetry and logging calls left out)"
   gcloud logging read "logName=\"projects/$P/logs/networkservices.googleapis.com%2Fgateway_requests\" AND NOT httpRequest.requestUrl:(\"telemetry\" OR \"logging\" OR \"monitoring\" OR \"cloudtrace\")" \
     --limit=12 --freshness=30m \
-    --format="table(timestamp.date('%H:%M:%S'):label=TIME, httpRequest.status:label=STATUS, httpRequest.requestUrl.slice(0:60).join(''):label=URL)" || true
+    --format="table(timestamp.date('%H:%M:%S'):label=TIME, httpRequest.status:label=STATUS, jsonPayload.authzPolicyInfo.result:label=AUTHZ, jsonPayload.agentGatewayInfo.mcpInfo.method:label=MCP, httpRequest.requestUrl.slice(0:45).join(''):label=URL)" || true
   say "IAP's decisions that said no (in DRY_RUN: would deny, nothing blocked)"
   gcloud logging read 'protoPayload.serviceName="iap.googleapis.com" AND NOT protoPayload.authorizationInfo.granted=true' \
     --limit=12 --freshness=30m \
