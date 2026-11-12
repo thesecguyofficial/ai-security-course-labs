@@ -50,7 +50,7 @@ wait_op() {   # wait_op <operation name>, up to 10 minutes
   local i d
   for i in $(seq 1 60); do
     d=$(curl -s -H "Authorization: Bearer $(tok)" "https://$R-aiplatform.googleapis.com/v1/$1")
-    grep -q '"done": true' <<<"$d" && { grep -q '"error"' <<<"$d" && echo "$d" | head -c 400; return 0; }
+    grep -q '"done": true' <<<"$d" && { grep -q '"error"' <<<"$d" && echo "${d:0:400}"; return 0; }
     sleep 10
   done
   echo "still running after 10 minutes: $1"
