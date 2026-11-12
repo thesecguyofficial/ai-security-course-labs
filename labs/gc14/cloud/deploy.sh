@@ -126,8 +126,9 @@ print(d["name"], d["effectiveIdentity"] or "")' <<<"$out")
     say "The newest gateway entries for BigQuery's MCP server and for example.com, in full"
     gcloud logging read "logName=\"projects/$P/logs/networkservices.googleapis.com%2Fgateway_requests\" AND (httpRequest.requestUrl:\"bigquery\" OR httpRequest.requestUrl:\"example.com\")" \
       --limit=2 --freshness=1h --format=yaml || true
-    say "The newest IAP decisions, in full"
-    gcloud logging read 'protoPayload.serviceName="iap.googleapis.com"' --limit=2 --freshness=1h --format=yaml || true
+    say "IAP's decision on the newest execute_sql call, and on the newest example.com call, in full"
+    gcloud logging read 'protoPayload.serviceName="iap.googleapis.com" AND "execute_sql"' --limit=1 --freshness=1h --format=yaml || true
+    gcloud logging read 'protoPayload.serviceName="iap.googleapis.com" AND "example.com"' --limit=1 --freshness=1h --format=yaml || true
     ;;
 
   enforce)
