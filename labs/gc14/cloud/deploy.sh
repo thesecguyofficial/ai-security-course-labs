@@ -4,9 +4,9 @@
 #
 #   bash deploy.sh up        # pass 1 (APIs, datasets, bucket, Agent Registry endpoints, the gateway in DRY RUN), the
 #                            #   fake rows, the agent deployed with Agent Identity, then pass 2 (its access policy + IAM)
-#   bash deploy.sh test      # R1 to R4 through the agent, then what the gateway and IAP logged (would-be denials)
-#   bash deploy.sh enforce   # gateway to ENFORCE, then R3 and R4 again: refused before BigQuery or the internet
-#   bash deploy.sh logs      # the newest gateway and IAP entries in full
+#   bash deploy.sh test      # R1 to R4 through the agent, then the gateway's request log
+#   bash deploy.sh enforce   # gateway to ENFORCE, then R1, R3, R4 again: R3 and R4 refused at the gateway
+#   bash deploy.sh logs      # the newest gateway and IAP entries in full (what each field holds)
 #   bash deploy.sh down      # delete the agent, then terraform destroy
 #
 # Runs in Google Cloud Shell in the project you're signed in to; downloads the course labs repo into ~/tsg-labs.
@@ -59,10 +59,6 @@ gw_logs() {
   gcloud logging read "logName=\"projects/$P/logs/networkservices.googleapis.com%2Fgateway_requests\" AND NOT httpRequest.requestUrl:(\"telemetry\" OR \"logging\" OR \"monitoring\" OR \"cloudtrace\")" \
     --limit=12 --freshness=30m \
     --format="table(timestamp.date('%H:%M:%S'):label=TIME, httpRequest.status:label=STATUS, jsonPayload.authzPolicyInfo.result:label=AUTHZ, jsonPayload.agentGatewayInfo.mcpInfo.method:label=MCP, httpRequest.requestUrl.slice(0:45).join(''):label=URL)" || true
-  say "IAP's decisions that said no (in DRY_RUN: would deny, nothing blocked)"
-  gcloud logging read 'protoPayload.serviceName="iap.googleapis.com" AND NOT protoPayload.authorizationInfo.granted=true' \
-    --limit=12 --freshness=30m \
-    --format="table(timestamp.date('%H:%M:%S'):label=TIME, protoPayload.request.dryRun:label=DRY_RUN, protoPayload.request.mcp_method:label=MCP, protoPayload.request.httpRequest.url.slice(0:50).join(''):label=URL)" || true
 }
 
 case "${1:-}" in
@@ -117,8 +113,8 @@ print(d["name"], d["effectiveIdentity"] or "")' <<<"$out")
     ask
     gw_logs
     echo
-    echo "Read it: R1 allowed; R2 allowed by the gateway, refused by IAM on finance_exports; R3 and R4 allowed in dry"
-    echo "run but listed as would-be denials (the DENY rule, and default deny for an unregistered host)."
+    echo "Read it: R1 allowed; R2 allowed by the gateway, refused by IAM on finance_exports; R3 and R4 go through in dry"
+    echo "run (BigQuery's IAM refuses R3's write; example.com answers 200). Then: bash deploy.sh enforce"
     ;;
 
   logs)
@@ -126,9 +122,8 @@ print(d["name"], d["effectiveIdentity"] or "")' <<<"$out")
     say "The newest gateway entries for BigQuery's MCP server and for example.com, in full"
     gcloud logging read "logName=\"projects/$P/logs/networkservices.googleapis.com%2Fgateway_requests\" AND (httpRequest.requestUrl:\"bigquery\" OR httpRequest.requestUrl:\"example.com\")" \
       --limit=2 --freshness=1h --format=yaml || true
-    say "IAP's decision on the newest execute_sql call, and on the newest example.com call, in full"
-    gcloud logging read 'protoPayload.serviceName="iap.googleapis.com" AND "execute_sql"' --limit=1 --freshness=1h --format=yaml || true
-    gcloud logging read 'protoPayload.serviceName="iap.googleapis.com" AND "example.com"' --limit=1 --freshness=1h --format=yaml || true
+    say "The newest IAP decision, in full (IAP writes them to the Data Access audit log)"
+    gcloud logging read 'protoPayload.serviceName="iap.googleapis.com"' --limit=1 --freshness=1h --format=yaml || true
     ;;
 
   enforce)

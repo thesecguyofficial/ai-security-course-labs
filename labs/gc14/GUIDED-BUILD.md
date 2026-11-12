@@ -396,39 +396,39 @@ R4: Fetch https://example.com/ and tell me its title.
 Our run: the same, `http_status: 200` and the title "Example Domain". In dry run nothing is blocked, so the page came back. `example.com` is a reserved documentation domain, so this is a
 safe test of "can my agent reach the internet?".
 
-### Read what the gateway would have denied
+### Read what the gateway saw
 
-The gateway's request log (log name and fields from Google's Agent Gateway codelab):
+The gateway's request log (log name from Google's Agent Gateway codelab; field names from our 12 November 2026 run):
 
 ```bash
 gcloud logging read "logName=\"projects/$PROJECT/logs/networkservices.googleapis.com%2Fgateway_requests\"" \
   --project=$PROJECT --limit=20 --freshness=1h \
-  --format="table(timestamp.date('%H:%M:%S'):label=TIME, httpRequest.requestMethod:label=METHOD, httpRequest.status:label=STATUS, jsonPayload.authzPolicyInfo.result:label=AUTHZ, httpRequest.requestUrl:label=URL)"
+  --format="table(timestamp.date('%H:%M:%S'):label=TIME, httpRequest.status:label=STATUS, jsonPayload.authzPolicyInfo.result:label=AUTHZ, jsonPayload.agentGatewayInfo.mcpInfo.method:label=MCP, httpRequest.requestUrl:label=URL)"
 ```
 
-IAP's audit log, where dry-run denials are recorded (Google's overview: in `DRY_RUN`, IAP writes disallowed agent
-traffic to Cloud Audit Logs and blocks nothing):
+What our run showed, in dry run: every call the agent made went through the gateway. Its own Google API calls go to
+`*.mtls.googleapis.com` hosts (`us-central1-aiplatform.mtls.googleapis.com`, `aiplatform.mtls.googleapis.com`,
+`telemetry.mtls.googleapis.com`); BigQuery's MCP server shows up as `https://bigquery.googleapis.com/mcp` with the MCP
+method (`initialize`, `tools/list`, `tools/call`) and `AUTHZ: ALLOWED`; and `fetch_page` shows up as a plain
+`GET https://example.com/` with status `200` and user agent `Python-urllib/3.12`. The full entry
+(`--format=yaml`) also names the registry resource the call matched
+(`agentRegistryResource: projects/PROJECT_NUMBER/locations/global/mcpServers/agentregistry-...`).
+
+IAP writes its decisions to the **Data Access** audit log (method `AuthorizeUser`, permission
+`iap.resources.egressViaIAP`, the agent's `principal://` identity, and in `request` the fields `dryRun`, `mcp_method`
+and `httpRequest.url`):
 
 ```bash
-gcloud logging read 'protoPayload.serviceName="iap.googleapis.com" AND protoPayload.metadata.iapPolicyVersion="v2"' \
-  --project=$PROJECT --limit=20 --freshness=1h \
-  --format="table(timestamp.date('%H:%M:%S'), protoPayload.authenticationInfo.principalSubject.basename(), protoPayload.authorizationInfo[0].granted, protoPayload.metadata.dryRun, protoPayload.requestMetadata.requestAttributes.host)"
+gcloud logging read 'protoPayload.serviceName="iap.googleapis.com"' --project=$PROJECT --limit=5 --freshness=1h --format=yaml
 ```
 
-Example response (shape from the provider's docs, values illustrative):
+Google's overview says that in `DRY_RUN` IAP records the traffic it would have refused and blocks nothing. In our run
+we couldn't find those would-deny entries: every IAP entry we read said `granted: true`, and a search for entries that
+weren't granted came back empty, both in dry run and after enforcing. So check this in your own run, and don't rely
+on the dry-run log alone before you enforce: send each request you care about and read the gateway's log.
 
-```output
-TIMESTAMP  PRINCIPAL_SUBJECT     GRANTED  DRY_RUN  HOST
-09:41:07   1234567890123456789   False    true     example.com
-09:40:52   1234567890123456789   False    true     bigquery.googleapis.com
-09:40:31   1234567890123456789   True              bigquery.googleapis.com
-09:40:12   1234567890123456789   True              us-central1-aiplatform.googleapis.com
-```
-
-You should find two would-be denials: `execute_sql` (the DENY rule) and `example.com` (default deny). **Also look for
-denials you didn't expect**, for example a Google host the agent needs that isn't registered. Fix those first
-(register the host, then re-run), because enforcing with a missing endpoint breaks the agent: Google says invocations
-then fail with a `498` error.
+**Also look for calls you didn't expect**, for example a Google host the agent needs that isn't registered. Register
+it before you enforce: Google says invocations fail with a `498` error when a needed endpoint is missing.
 
 ### Enforce
 
