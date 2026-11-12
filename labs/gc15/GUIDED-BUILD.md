@@ -269,16 +269,16 @@ safetensors format works.
    `gcloud ai endpoints describe $ENDPOINT_ID --region=$REGION --format='value(deployedModels[0].id)'` and update the
    job's body (`gcloud scheduler jobs update http tsg-gc15-undeploy --location=$REGION --message-body=...`) at once.
 
-4. **Let the app account call this endpoint only.** A role on the endpoint, not the project. gcloud has no IAM
-   command for endpoints, so use the REST `setIamPolicy` method Google documents (it's on `v1beta1`, and it replaces
-   the endpoint's whole policy, which is empty on a new endpoint:
-   [endpoint access control](https://docs.cloud.google.com/vertex-ai/docs/general/endpoint-access-control)):
+4. **Let the app account call predict, and nothing else.** A custom role with one permission, granted on the project.
+   Google's [endpoint access control](https://docs.cloud.google.com/vertex-ai/docs/general/endpoint-access-control)
+   page says "Endpoint-level IAM is not supported" for these endpoints. We tried it anyway (12 November 2026): the
+   endpoint's `setIamPolicy` answered 200, and every call from the app account still got 403. A project grant reaches
+   every endpoint in the project, so keep one production model per project when callers must be kept apart.
 
    ```bash
    gcloud iam roles create tsgGc15PredictOnly --project=$PROJECT --title="GC15 predict only" --permissions=aiplatform.endpoints.predict
-   curl -s -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" \
-     -d "{\"policy\": {\"bindings\": [{\"role\": \"projects/$PROJECT/roles/tsgGc15PredictOnly\", \"members\": [\"serviceAccount:tsg-gc15-app@$PROJECT.iam.gserviceaccount.com\"]}]}}" \
-     "https://$REGION-aiplatform.googleapis.com/v1beta1/projects/$PROJECT/locations/$REGION/endpoints/$ENDPOINT_ID:setIamPolicy"
+   gcloud projects add-iam-policy-binding $PROJECT --member=serviceAccount:tsg-gc15-app@$PROJECT.iam.gserviceaccount.com \
+     --role=projects/$PROJECT/roles/tsgGc15PredictOnly --condition=None
    ```
 
 5. **Connect your VPC to it.** Read the service attachment, reserve an internal address, create the forwarding rule:
