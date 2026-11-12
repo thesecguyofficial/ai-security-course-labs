@@ -276,7 +276,9 @@ if "error" in d: print("  ", d["error"].get("code"), d["error"].get("message",""
     [[ "$op" == projects/* ]] && wait_op "$op"
     gcloud services enable aiplatform.googleapis.com modelarmor.googleapis.com storage.googleapis.com cloudresourcemanager.googleapis.com
     (cd "$TFD" && terraform apply -input=false -auto-approve -var "project_id=$P" -var "region=$R")
-    STAFF=$(cd "$TFD" && terraform output -raw corpus_staff); FIN=$(cd "$TFD" && terraform output -raw corpus_finance)
+    # the outputs are corpus numbers; the API wants the full resource name
+    STAFF="projects/$P/locations/$R/ragCorpora/$(cd "$TFD" && terraform output -raw corpus_staff)"
+    FIN="projects/$P/locations/$R/ragCorpora/$(cd "$TFD" && terraform output -raw corpus_finance)"
     say "Imports (Terraform made the buckets, files and corpora; importing is an API call)"
     sleep 30
     for pair in "$STAFF staff" "$FIN finance"; do
@@ -284,8 +286,11 @@ if "error" in d: print("  ", d["error"].get("code"), d["error"].get("message",""
       for attempt in 1 2; do
         # shellcheck disable=SC2046
         op=$(bash "$LAB/terraform/scripts/import_files.sh" "$R" "$1" $(gcloud storage ls "gs://$P-tsg-kb-$2/") |
-          python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("name") or json.dumps(d)[:300])')
-        [[ "$op" == projects/* ]] && wait_op "$op"
+          python3 -c 'import json,sys
+t=sys.stdin.read()
+try: d=json.loads(t); print(d.get("name") or json.dumps(d)[:300])
+except ValueError: print("import answered: " + t[:300])' || true)
+        [[ "$op" == projects/* ]] && wait_op "$op" || echo "   $op"
         n=$(curl -s -H "Authorization: Bearer $(tok)" "https://$R-aiplatform.googleapis.com/v1/$1/ragFiles" |
             python3 -c 'import json,sys; print(len(json.load(sys.stdin).get("ragFiles", [])))')
         echo "   kb-$2 holds $n files"
