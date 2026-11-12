@@ -20,7 +20,8 @@ output "env_lines" {
     "TSG_MODE=cloud",
     "GOOGLE_GENAI_USE_VERTEXAI=TRUE",
     "GOOGLE_CLOUD_PROJECT=${var.project_id}",
-    "GOOGLE_CLOUD_LOCATION=${var.region}",
+    "GOOGLE_CLOUD_LOCATION=eu",
+    "TSG_RAG_LOCATION=${var.region}",
     "TSG_CORPUS_STAFF=${google_vertex_ai_rag_corpus.kb["staff"].name}",
     "TSG_CORPUS_FINANCE=${google_vertex_ai_rag_corpus.kb["finance"].name}",
   ])

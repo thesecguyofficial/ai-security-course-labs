@@ -8,6 +8,7 @@
 #                          #   retrieval of kb-finance AS the agent's account; each prints PASS, NOTE or FAIL
 #   bash deploy.sh off     # Step 5: the same G3 and G5 with tool-output screening off
 #   bash deploy.sh down    # delete everything, then the RAG Engine tier to Unprovisioned (stops the hourly charge)
+#   bash deploy.sh tf apply|destroy   # the Terraform build (labs/gc13/terraform) plus the imports, same test
 #
 # COST: RAG Engine's managed database (Spanner mode, Basic tier) bills BY THE HOUR from `up` until `down` sets the tier
 # to Unprovisioned (about $0.09 an hour at Spanner's Iowa list price). Run `down` the same day.
@@ -40,6 +41,16 @@ load() {
   gcloud config set project "$P" >/dev/null 2>&1
 }
 tok() { gcloud auth print-access-token; }
+need_terraform() {   # Cloud Shell stopped shipping Terraform (12 Nov 2026): install HashiCorp's zip into ~/bin
+  export PATH="$HOME/bin:$PATH"
+  terraform version 2>/dev/null | grep -q '^Terraform v' && return 0
+  local v=1.13.4 d; d=$(mktemp -d)
+  curl -sSfo "$d/tf.zip" "https://releases.hashicorp.com/terraform/$v/terraform_${v}_linux_amd64.zip"
+  curl -sSfo "$d/sums" "https://releases.hashicorp.com/terraform/$v/terraform_${v}_SHA256SUMS"
+  (cd "$d" && grep "linux_amd64.zip" sums | sed "s/terraform_${v}_linux_amd64.zip/tf.zip/" | sha256sum -c --quiet) ||
+    { echo "Checksum mismatch: not installing."; exit 1; }
+  mkdir -p "$HOME/bin" && unzip -oq "$d/tf.zip" terraform -d "$HOME/bin" && rm -rf "$d"
+}
 corpus() {   # corpus <display name> -> its full name, or nothing
   curl -s -H "Authorization: Bearer $(tok)" "$API/ragCorpora" | python3 -c '
 import json, sys
@@ -246,6 +257,48 @@ if "error" in d: print("  ", d["error"].get("code"), d["error"].get("message",""
     t=$(bash "$LAB/terraform/scripts/rag_tier.sh" "$P" "$R" unprovisioned); echo "${t:0:300}"
     rm -f "$ENVFILE" "$LAB/adk_agent/tsg_helpdesk/.env" "$HOME/.gc13-run.txt"; rm -rf "$HOME/.gc13-docs"
     echo "Done. The virtual environment ~/.gc13-venv stays (rm -rf it if you like)."
+    ;;
+
+  tf)
+    repo; load; need_terraform
+    printf 'GC13_PROJECT=%s\nGC13_REGION=%s\n' "$P" "$R" > "$ENVFILE"
+    TFD="$LAB/terraform"; (cd "$TFD" && terraform init -input=false >/dev/null)
+    if [ "${2:-apply}" = destroy ]; then
+      (cd "$TFD" && terraform destroy -input=false -auto-approve -var "project_id=$P" -var "region=$R")
+      say "RAG Engine tier: Unprovisioned (stops the hourly charge)"
+      t=$(bash "$LAB/terraform/scripts/rag_tier.sh" "$P" "$R" unprovisioned); echo "${t:0:300}"
+      rm -f "$ENVFILE" "$LAB/adk_agent/tsg_helpdesk/.env"
+      exit 0
+    fi
+    say "RAG Engine tier Basic first (Terraform doesn't manage the tier)"
+    t=$(bash "$LAB/terraform/scripts/rag_tier.sh" "$P" "$R" basic)
+    op=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1].split("\nCheck it")[0]).get("name",""))' "$t" 2>/dev/null || true)
+    [[ "$op" == projects/* ]] && wait_op "$op"
+    gcloud services enable aiplatform.googleapis.com modelarmor.googleapis.com storage.googleapis.com cloudresourcemanager.googleapis.com
+    (cd "$TFD" && terraform apply -input=false -auto-approve -var "project_id=$P" -var "region=$R")
+    STAFF=$(cd "$TFD" && terraform output -raw corpus_staff); FIN=$(cd "$TFD" && terraform output -raw corpus_finance)
+    say "Imports (Terraform made the buckets, files and corpora; importing is an API call)"
+    sleep 30
+    for pair in "$STAFF staff" "$FIN finance"; do
+      set -- $pair
+      for attempt in 1 2; do
+        # shellcheck disable=SC2046
+        op=$(bash "$LAB/terraform/scripts/import_files.sh" "$R" "$1" $(gcloud storage ls "gs://$P-tsg-kb-$2/") |
+          python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("name") or json.dumps(d)[:300])')
+        [[ "$op" == projects/* ]] && wait_op "$op"
+        n=$(curl -s -H "Authorization: Bearer $(tok)" "https://$R-aiplatform.googleapis.com/v1/$1/ragFiles" |
+            python3 -c 'import json,sys; print(len(json.load(sys.stdin).get("ragFiles", [])))')
+        echo "   kb-$2 holds $n files"
+        [ "$n" -ge "$(gcloud storage ls "gs://$P-tsg-kb-$2/" | wc -l)" ] && break
+      done
+    done
+    [ -d "$VENV" ] || python3 -m venv "$VENV"
+    "$VENV/bin/pip" install -q -r "$LAB/adk_agent/requirements.txt"
+    { (cd "$TFD" && terraform output -raw env_lines); echo
+      echo "TSG_MODEL=gemini-3.1-flash-lite"
+      echo "TSG_MODEL_ARMOR_TEMPLATE=$(cd "$TFD" && terraform output -raw model_armor_template)"
+      echo "TSG_SCREEN_TOOL_OUTPUT=1"; } > "$LAB/adk_agent/tsg_helpdesk/.env"
+    say "Done. Now: bash deploy.sh test   (and bash deploy.sh tf destroy today)"
     ;;
 
   *) sed -n '2,10p' "$0"; exit 1;;
