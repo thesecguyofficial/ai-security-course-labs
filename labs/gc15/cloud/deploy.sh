@@ -311,7 +311,8 @@ PY
       gcloud scheduler jobs delete tsg-gc15-undeploy --location="$R" --quiet 2>/dev/null || true
       bq rm -r -f -d "$P:tsg_gc15_audit" 2>/dev/null || true
       say "terraform destroy"
-      (cd "$TFD" && terraform destroy -input=false -auto-approve "${TFV[@]}")
+      (cd "$TFD" && terraform destroy -input=false -auto-approve "${TFV[@]}") ||
+        { echo "terraform destroy failed: trying once more in 30 s"; sleep 30; (cd "$TFD" && terraform destroy -input=false -auto-approve "${TFV[@]}"); }
       for v in $(gcloud kms keys versions list --key=tsg-gc15-ai --keyring=tsg-gc15 --location="$R" \
                  --filter="state=ENABLED OR state=DISABLED" --format="value(name)" 2>/dev/null); do
         gcloud kms keys versions destroy "${v##*/}" --key=tsg-gc15-ai --keyring=tsg-gc15 --location="$R" --format="value(state)"; done
