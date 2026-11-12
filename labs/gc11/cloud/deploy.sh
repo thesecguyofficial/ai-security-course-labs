@@ -327,11 +327,26 @@ PY
     printf 'GC11_PROJECT=%s\nGC11_REGION=%s\n' "$P" "$R" > "$ENVFILE"
     cd "$LAB/terraform"
     terraform init -input=false >/dev/null
+    TFV=(-var "project_id=$P" -var "region=$R" -var create_test_vm=true)
+    if [ "${2:-apply}" != destroy ]; then
+      # Key rings and keys can't be deleted, so an earlier run (or `up`) left them behind: adopt them instead of
+      # failing with "already exists", and make sure the key has one enabled version for BigQuery to use.
+      if gcloud kms keys describe helpdesk-data --keyring=helpdesk-eu --location="$R" >/dev/null 2>&1; then
+        terraform state list 2>/dev/null | grep -q google_kms_key_ring.helpdesk_eu ||
+          terraform import -input=false "${TFV[@]}" google_kms_key_ring.helpdesk_eu "projects/$P/locations/$R/keyRings/helpdesk-eu" >/dev/null
+        terraform state list 2>/dev/null | grep -q google_kms_crypto_key.helpdesk_data ||
+          terraform import -input=false "${TFV[@]}" google_kms_crypto_key.helpdesk_data "$KEY" >/dev/null
+        gcloud kms keys versions list --key=helpdesk-data --keyring=helpdesk-eu --location="$R" --filter="state=ENABLED" \
+          --format="value(name)" | grep -q . || gcloud kms keys versions create --key=helpdesk-data --keyring=helpdesk-eu \
+            --location="$R" --primary --format="value(name)"
+        echo "Adopted the existing key ring and key helpdesk-eu/helpdesk-data"
+      fi
+    fi
     if [ "${2:-apply}" = destroy ]; then
       bash scripts/request_response_logging.sh off "$P" "$LOC" >/dev/null 2>&1 || true
-      terraform destroy -input=false -auto-approve -var "project_id=$P" -var "region=$R" -var create_test_vm=true
+      terraform destroy -input=false -auto-approve "${TFV[@]}"
     else
-      terraform apply -input=false -auto-approve -var "project_id=$P" -var "region=$R" -var create_test_vm=true
+      terraform apply -input=false -auto-approve "${TFV[@]}"
       rr_out=$(bash scripts/request_response_logging.sh on "$P" "$LOC"); echo "${rr_out:0:300}"
       echo "cacheConfig (in memory only): HTTP $(cache EPHEMERAL)"   # the Data Access logs are in logging.tf
       echo "Then: bash ../cloud/deploy.sh test"
