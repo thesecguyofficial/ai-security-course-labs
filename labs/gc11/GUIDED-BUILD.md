@@ -7,9 +7,9 @@ Connect endpoint, a customer-managed key on the data, Data Access and request-re
 regional endpoint. About 90 minutes in **your own** sandbox project (the GC10 project is fine). Cost: cents, plus a
 small VM while it runs (table at the end). Teardown is the last section: do it the same day.
 
-> **Read this first: about the responses shown below.** We wrote this guide without access to a Google Cloud
-> project, so **no response in this file comes from a real run**. Every response block is labeled
-> **"Example response (shape from Google docs, values illustrative)"**. Field names come from Google's API
+> **Tested for real on 12 November 2026** (`europe-west4`, a Free Trial project with no organization): `cloud/deploy.sh`
+> and the Terraform both built this and passed Tests 1 to 5 and the Step 3 trap. Blocks labeled **"Our response"**
+> are from that run. The rest are still labeled **"Example response (shape from Google docs, values illustrative)"**. Field names come from Google's API
 > definitions and reference pages: Gemini
 > ([`prediction_service.proto`](https://github.com/googleapis/googleapis/blob/master/google/cloud/aiplatform/v1/prediction_service.proto)),
 > errors ([`error_reason.proto`](https://github.com/googleapis/googleapis/blob/master/google/api/error_reason.proto)),
@@ -20,9 +20,8 @@ small VM while it runs (table at the end). Teardown is the last section: do it t
 
 Throughout: `PROJECT_ID`, `PROJECT_NUMBER` (`gcloud projects describe PROJECT_ID --format="value(projectNumber)"`),
 `REGION` = `europe-west4` (zone `europe-west4-a`), model `gemini-3.1-flash-lite`, and you run commands from
-`labs/gc11`. The names (`chatbot-runtime`, `helpdesk-vpc`, `tsgapis`, `10.100.0.2`, `helpdesk-eu`, `ai_logs`) match
-the Terraform, so you can switch paths at any point. Check the model is offered in your region on Google's model page
-before you start: we couldn't read the location table for it.
+`labs/gc11`. The names (`chatbot-runtime`, `helpdesk-vpc`, `aiplatform-eu`, `10.10.0.10`, `helpdesk-eu`, `ai_logs`)
+match the Terraform, so you can switch paths at any point. The model is called in location `eu` (1b says why).
 
 ## Step 0 · Before you start (10 minutes)
 
@@ -186,11 +185,11 @@ terraform/scripts/request_response_logging.sh on PROJECT_ID eu
 terraform/scripts/request_response_logging.sh show PROJECT_ID eu
 ```
 
-Example response (shape from Google docs, values illustrative), from `on`:
+Our response, from `on` (trimmed):
 
 ```json
 {
-  "name": "projects/PROJECT_ID/locations/europe-west4/operations/1234567890123456789",
+  "name": "projects/PROJECT_NUMBER/locations/eu/operations/4769272422966755328",
   "metadata": {
     "@type": "type.googleapis.com/google.cloud.aiplatform.v1beta1.SetPublisherModelConfigOperationMetadata",
     "genericMetadata": {"createTime": "2026-10-22T09:00:00.000000Z", "updateTime": "2026-10-22T09:00:00.000000Z"}
@@ -282,7 +281,7 @@ gcloud iam service-accounts add-iam-policy-binding "$SA" --member="user:YOUR_EMA
 gcloud ai endpoints create --region=europe-west4 --display-name=should-fail --impersonate-service-account="$SA"
 ```
 
-Example response (shape from Google docs, values illustrative):
+Our response (trimmed: it also carries a Troubleshooter link and says impersonation was used):
 
 ```text
 ERROR: (gcloud.ai.endpoints.create) PERMISSION_DENIED: Permission 'aiplatform.endpoints.create' denied on resource '//aiplatform.googleapis.com/projects/PROJECT_ID/locations/europe-west4' (or it may not exist).
@@ -396,10 +395,10 @@ page: **Key Management**, the key ring, the key, tick version 1, **Disable**, co
 disabling is "consistent within one minute", but BigQuery's CMEK page says the effect on BigQuery "doesn't take place
 instantly, but happens within an hour". Re-run the `bq query` from Test 4 every ten minutes until it fails.
 
-Example response (shape from Google docs, values illustrative):
+Our response, about 20 minutes after the disable:
 
 ```text
-BigQuery error in query operation: Error processing job 'PROJECT_ID:bqjob_r1a2b3c4d5_0000019a2b3c4d5e_1': The Cloud KMS key projects/PROJECT_ID/locations/europe-west4/keyRings/helpdesk-eu/cryptoKeys/helpdesk-data is disabled.
+... projects/PROJECT_ID/locations/europe-west4/keyRings/helpdesk-eu/cryptoKeys/helpdesk-data/cryptoKeyVersions/2 is not enabled, current state is: DISABLED.
 ```
 
 Read it: one command made a whole dataset unreadable, for you and for anyone who copied your credentials. That's the
