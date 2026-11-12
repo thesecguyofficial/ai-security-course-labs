@@ -276,9 +276,7 @@ if "error" in d: print("  ", d["error"].get("code"), d["error"].get("message",""
     [[ "$op" == projects/* ]] && wait_op "$op"
     gcloud services enable aiplatform.googleapis.com modelarmor.googleapis.com storage.googleapis.com cloudresourcemanager.googleapis.com
     (cd "$TFD" && terraform apply -input=false -auto-approve -var "project_id=$P" -var "region=$R")
-    # the outputs are corpus numbers; the API wants the full resource name
-    STAFF="projects/$P/locations/$R/ragCorpora/$(cd "$TFD" && terraform output -raw corpus_staff)"
-    FIN="projects/$P/locations/$R/ragCorpora/$(cd "$TFD" && terraform output -raw corpus_finance)"
+    STAFF=$(cd "$TFD" && terraform output -raw corpus_staff); FIN=$(cd "$TFD" && terraform output -raw corpus_finance)
     say "Imports (Terraform made the buckets, files and corpora; importing is an API call)"
     sleep 30
     for pair in "$STAFF staff" "$FIN finance"; do

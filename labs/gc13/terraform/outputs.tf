@@ -1,9 +1,10 @@
+# The provider's `name` is only the corpus number; `id` is the full resource name the APIs and the agent need.
 output "corpus_staff" {
-  value = google_vertex_ai_rag_corpus.kb["staff"].name
+  value = google_vertex_ai_rag_corpus.kb["staff"].id
 }
 
 output "corpus_finance" {
-  value = google_vertex_ai_rag_corpus.kb["finance"].name
+  value = google_vertex_ai_rag_corpus.kb["finance"].id
 }
 
 output "agent_service_account" {
@@ -22,7 +23,7 @@ output "env_lines" {
     "GOOGLE_CLOUD_PROJECT=${var.project_id}",
     "GOOGLE_CLOUD_LOCATION=eu",
     "TSG_RAG_LOCATION=${var.region}",
-    "TSG_CORPUS_STAFF=${google_vertex_ai_rag_corpus.kb["staff"].name}",
-    "TSG_CORPUS_FINANCE=${google_vertex_ai_rag_corpus.kb["finance"].name}",
+    "TSG_CORPUS_STAFF=${google_vertex_ai_rag_corpus.kb["staff"].id}",
+    "TSG_CORPUS_FINANCE=${google_vertex_ai_rag_corpus.kb["finance"].id}",
   ])
 }
