@@ -188,10 +188,13 @@ print("   vulnerabilities by severity:", {k: len(x) for k, x in v.items()} or "n
         --deployed-model-id="$DEPLOYED_ID" --machine-type=e2-standard-4 --min-replica-count=1 --max-replica-count=1 \
         --service-account="$RUNTIME" --enable-access-logging 2>&1 | tail -3
     fi
-    say "D4 Only the app account may call this endpoint (a role on the endpoint, not the project)"
-    curl -s -o /dev/null -w "   setIamPolicy: HTTP %{http_code}\n" -X POST -H "Authorization: Bearer $(tok)" -H "Content-Type: application/json" \
-      -d "{\"policy\": {\"bindings\": [{\"role\": \"projects/$P/roles/tsgGc15PredictOnly\", \"members\": [\"serviceAccount:$APP\"]}]}}" \
-      "https://$R-aiplatform.googleapis.com/v1beta1/projects/$P/locations/$R/endpoints/$ENDPOINT_ID:setIamPolicy"
+    say "D4 The app account may call predict, and nothing else (a predict-only role)"
+    # Google: "Endpoint-level IAM is not supported for Gemini Enterprise Agent Platform endpoints" (endpoint access
+    # control page). Our run (12 Nov 2026) confirmed it: a role set on the endpoint with setIamPolicy answered HTTP 200,
+    # and every call from the app account still got 403 on 'projects/<project>'. So the role is granted on the project,
+    # and it holds one permission. Keep one model per project when callers must be kept apart.
+    gcloud projects add-iam-policy-binding "$P" --member="serviceAccount:$APP" \
+      --role="projects/$P/roles/tsgGc15PredictOnly" --condition=None --format='value(etag)' >/dev/null && echo "   granted on the project"
     say "D5 Your network's door to it: an internal address and a forwarding rule to the service attachment"
     # The service attachment exists only once a model is deployed, and sits on the deployed model, not on the
     # endpoint's privateServiceConnectConfig (empty in our run, 12 Nov 2026).
@@ -294,6 +297,8 @@ PY
       gcloud kms keys versions destroy "${v##*/}" --key=tsg-gc15-ai --keyring=tsg-gc15 --location="$R" --format="value(state)"; done
     gcloud projects remove-iam-policy-binding "$P" --member="serviceAccount:$TEARDOWN" \
       --role="projects/$P/roles/tsgGc15Undeploy" --condition=None --format="value(etag)" >/dev/null 2>&1 || true
+    gcloud projects remove-iam-policy-binding "$P" --member="serviceAccount:$APP" \
+      --role="projects/$P/roles/tsgGc15PredictOnly" --condition=None --format="value(etag)" >/dev/null 2>&1 || true
     for sa in tsg-gc15-runtime tsg-gc15-app tsg-gc15-teardown; do
       gcloud iam service-accounts delete "$sa@$P.iam.gserviceaccount.com" --quiet 2>/dev/null || true; done
     for r in tsgGc15Undeploy tsgGc15PredictOnly; do gcloud iam roles delete "$r" --project="$P" --quiet >/dev/null 2>&1 || true; done
