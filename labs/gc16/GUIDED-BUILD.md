@@ -4,6 +4,11 @@ Optional. The laptop lab (`README.md`) teaches everything at $0. This guide buil
 **your own sandbox project** (lesson 0.7: never a work project), in `europe-west4`, and tears them down at the end.
 About 60 minutes.
 
+Two shortcuts, both tested in our project on 12 November 2026: `cloud/deploy.sh` builds Parts A to C, runs A to E
+with PASS, WAIT or FAIL lines and tears down (`bash deploy.sh up`, `test`, `raise`, `down`); `terraform/` is the same
+Parts A to C as code (`bash deploy.sh tf apply`, then `test`, then `bash deploy.sh tf destroy`). Doing the parts by
+hand once is still the way to learn them.
+
 | Part | What you build | Lesson |
 |---|---|---|
 | A | Data Access audit logs for Agent Platform, and proof they record a model call | 16.1 |
@@ -127,6 +132,10 @@ Read it: who (`principalEmail`), from where (`callerIp`), which call (`methodNam
 `methodName` you see: the lab's rules and the saved queries assume `...PredictionService.GenerateContent`, taken from
 Google's API definitions, because Google's audit logging page doesn't list it.
 
+Our run (12 November 2026, Cloud Shell): `google.cloud.aiplatform.v1.PredictionService.GenerateContent`, `callerIp` a
+Google Cloud address (Cloud Shell's), `resourceName` `projects/PROJECT_ID/locations/eu/publishers/google/models/gemini-3.1-flash-lite`.
+The entry was there within a minute of the call.
+
 ## Part B · Model Armor sanitize logging and four requests (16.1, 16.2)
 
 You need a template. If you kept GC12's `helpdesk-guard`, use it; otherwise follow `labs/gc12/GUIDED-BUILD.md` Step 0
@@ -149,6 +158,8 @@ done
 Example response (shape from the provider's docs, values illustrative): `NO_MATCH_FOUND`, `MATCH_FOUND`,
 `MATCH_FOUND` (Sensitive Data Protection), `NO_MATCH_FOUND`. The poem is off-topic for a helpdesk but not
 something a filter matches: topic control is your app's job.
+
+Our run (12 November 2026): exactly that, `NO_MATCH_FOUND`, `MATCH_FOUND`, `MATCH_FOUND`, `NO_MATCH_FOUND`.
 
 Read the log entries in **Logs Explorer** with Google's own filter:
 
@@ -176,6 +187,12 @@ Two things to notice. The entry holds the text you sent: Google's logging page s
 payload, such as the prompt or response text", and warns the data "might include sensitive user data, personally
 identifiable information (PII), or confidential information". So the card number from request 3 is now in your
 logs. And the entry knows nothing about which customer sent it: your app has to log that.
+
+Our run (12 November 2026), the poem's entry, cut: `logName` `projects/PROJECT_ID/logs/modelarmor.googleapis.com%2Fsanitize_operations`,
+`resource.type` `modelarmor.googleapis.com/SanitizeOperation` with the labels `location`, `resource_container` and
+`template_id: helpdesk-guard` (filter on that label to see one template's traffic), `jsonPayload.sanitizationInput.text`
+holding the prompt word for word, and `sanitizationVerdict: MODEL_ARMOR_SANITIZATION_VERDICT_ALLOW` with the reason
+"The prompt did not violate any safety settings."
 
 ## Part C · Three alerts (16.4)
 
@@ -214,11 +231,17 @@ logs. And the entry knows nothing about which customer sent it: your app has to 
    **GC16 request flood on Agent Platform** with the condition "More than 20 model calls in 5 minutes" and the metric
    value at the time it fired.
 
+   Our run (12 November 2026): straight after the 30 calls, no alert was open yet, for either policy. About six
+   minutes later both were open: the Model Armor match alert (from Part B's two matches) and the request flood.
+   Give it that long before you decide an alert doesn't work.
+
 ## Part D · Hunting (16.4)
 
 In **Logs Explorer**, paste each `.txt` file from `queries/` in turn, change the ExampleCo names and addresses to
 yours, set the time range to the last hour and **Run query**. `d04-unapproved-inference.txt` with your own account
-removed from the list should show your Part A and Part C calls. Save the ones you'd want on a bad day (**Save**).
+removed from the list should show your Part A and Part C calls. In our run it also showed one call from GC11's
+`chatbot-runtime` account: the example names are in another project, so your own service accounts count as
+"not on the list" until you add them. Save the ones you'd want on a bad day (**Save**).
 
 If you also kept GC11's request-response logging table, run `queries/d06-tokens-by-model.sql` in **BigQuery** and see
 your 30 calls in one hour's row. Look for your `end_user` label in `full_request`: that's what lets
@@ -248,6 +271,8 @@ minute).
 gcloud monitoring policies list --filter='displayName~"^GC16"' --format="value(name)" \
   | xargs -r -n1 gcloud monitoring policies delete --quiet
 gcloud logging metrics delete gc16_ai_calls --quiet
+gcloud beta monitoring channels list --filter='displayName="GC16 lab email"' --format="value(name)" \
+  | xargs -r -n1 gcloud beta monitoring channels delete --force --quiet
 ```
 
 Part A: remove the auditConfigs block from /tmp/policy.yaml (fresh copy from get-iam-policy) and set it again, or untick Data Read and Data Write in IAM & Admin > Audit Logs.
