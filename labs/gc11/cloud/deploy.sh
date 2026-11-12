@@ -249,7 +249,7 @@ PY
     gcloud compute instances add-metadata helpdesk-vm --zone="$Z" --metadata-from-file=startup-script="$HOME/.gc11-smoke.sh"
     gcloud compute instances reset helpdesk-vm --zone="$Z" --quiet
     echo "Waiting 120 s for the VM to boot and call once..."; sleep 120
-    serial 4
+    serial 3
     [ "$1" = trap ] && echo "000 is the network holding the pin: the global host resolves to a public address, and the only egress rule points at $EPIP. Put it back: bash deploy.sh untrap"
     ;;
 

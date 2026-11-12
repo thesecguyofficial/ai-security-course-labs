@@ -434,10 +434,16 @@ gcloud compute instances get-serial-port-output helpdesk-vm --zone=europe-west4-
 (Path C users: render `smoke.sh` with the `sed` line from 1g first.) The script does both steps for you:
 `bash cloud/deploy.sh trap`, then `bash cloud/deploy.sh untrap`.
 
-RESULT_STEP3
+Our response (12 November 2026):
 
-Read it: the global host resolves to a public Google address (your private zone only covers the EU host), and the
-only egress rule points at `10.10.0.10`, so the call never leaves the VM. That's the network holding the pin: on a
+```text
+TSG-SMOKE resolve: 2a00:1450:4013:c14::5f aiplatform.googleapis.com
+TSG-SMOKE generateContent HTTP 000 (aiplatform.googleapis.com, locations/global)
+TSG-SMOKE internet test: 000blocked
+```
+
+Read it: the global host resolves to a public Google address (an IPv6 one in our run: your private zone only covers
+the EU host), and the only egress rule points at `10.10.0.10`, so the call never leaves the VM. That's the network holding the pin: on a
 laptop or with a NAT, the same change would have worked, and prompts would be processed "in any Google Cloud
 location around the world". The tempting fix under pressure is to open egress to Google; the right answer is to keep
 the code on the EU host. Put the EU script back:
