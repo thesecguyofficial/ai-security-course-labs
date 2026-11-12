@@ -10,6 +10,7 @@
 #                          #    Data Access trail. Each prints PASS, WAIT or FAIL
 #   bash deploy.sh rrlog   # F: request-response logging on (100%) into a BigQuery dataset, one more call, the row
 #   bash deploy.sh down    # G: undeploy, then delete everything (the key ring stays: Google never deletes them)
+#   bash deploy.sh tf apply|destroy   # Part A, the endpoint and the audit logs from terraform/, then the rest of `up`
 #
 # COST: the deployed model bills every hour it's deployed, called or not (e2-standard-4: about $0.15 an hour in
 # us-central1). The auto-undeploy job undeploys it 60 minutes after `up` starts the deployment. Run `down` today.
@@ -55,6 +56,18 @@ wait_op() {   # wait_op <operation name>, up to 20 minutes
     sleep 10
   done
   echo "still running after 20 minutes: $1"
+}
+need_terraform() {   # Cloud Shell stopped shipping Terraform (12 Nov 2026): install HashiCorp's zip into ~/bin
+  export PATH="$HOME/bin:$PATH"
+  terraform version 2>/dev/null | grep -q '^Terraform v' && return 0
+  local v=1.13.4 d; d=$(mktemp -d)
+  echo "Terraform is not installed here: installing $v from releases.hashicorp.com into ~/bin (checksum verified)"
+  curl -sSfo "$d/tf.zip" "https://releases.hashicorp.com/terraform/$v/terraform_${v}_linux_amd64.zip"
+  curl -sSfo "$d/sums" "https://releases.hashicorp.com/terraform/$v/terraform_${v}_SHA256SUMS"
+  (cd "$d" && grep "linux_amd64.zip" sums | sed "s/terraform_${v}_linux_amd64.zip/tf.zip/" | sha256sum -c --quiet) ||
+    { echo "Checksum mismatch: not installing."; exit 1; }
+  mkdir -p "$HOME/bin" && unzip -oq "$d/tf.zip" terraform -d "$HOME/bin" && rm -rf "$d"
+  terraform version | head -1 || true
 }
 audit_logs() {   # $1 on|off: DATA_READ for aiplatform.googleapis.com, every other setting kept
   gcloud projects get-iam-policy "$P" --format=json > "$HOME/.gc15-policy.json"
@@ -278,5 +291,51 @@ PY
     echo "Done. The key ring tsg-gc15 stays (Google never deletes key rings); destroyed versions are free after 30 days."
     ;;
 
-  *) sed -n '2,13p' "$0"; exit 1;;
+  tf)
+    repo; load; need_terraform
+    gcloud services enable cloudresourcemanager.googleapis.com iam.googleapis.com serviceusage.googleapis.com
+    TFD="$LAB/terraform"; TFV=(-var "project_id=$P" -var "region=$R")
+    (cd "$TFD" && terraform init -input=false >/dev/null)
+    if [ "${2:-apply}" = destroy ]; then
+      say "First what Terraform doesn't own: the deployment, the model, the VM, the forwarding rule, the job"
+      EP=$(cd "$TFD" && terraform output -raw endpoint_id 2>/dev/null || true)
+      if [ -n "$EP" ]; then
+        dms=$(gcloud ai endpoints describe "$EP" --region="$R" --format='value(deployedModels[].id)' 2>/dev/null || true)
+        for dm in ${dms//;/ }; do gcloud ai endpoints undeploy-model "$EP" --region="$R" --deployed-model-id="$dm" --quiet; done
+      fi
+      for m in $(gcloud ai models list --region="$R" --filter='displayName=tsg-gc15-summariser' --format='value(name)' 2>/dev/null); do
+        gcloud ai models delete "$m" --region="$R" --quiet; done
+      gcloud compute instances delete tsg-gc15-client --zone="$Z" --quiet 2>/dev/null || true
+      gcloud compute forwarding-rules delete tsg-gc15-psc --region="$R" --quiet 2>/dev/null || true
+      gcloud compute addresses delete tsg-gc15-psc-ip --region="$R" --quiet 2>/dev/null || true
+      gcloud scheduler jobs delete tsg-gc15-undeploy --location="$R" --quiet 2>/dev/null || true
+      bq rm -r -f -d "$P:tsg_gc15_audit" 2>/dev/null || true
+      say "terraform destroy"
+      (cd "$TFD" && terraform destroy -input=false -auto-approve "${TFV[@]}")
+      for v in $(gcloud kms keys versions list --key=tsg-gc15-ai --keyring=tsg-gc15 --location="$R" \
+                 --filter="state=ENABLED OR state=DISABLED" --format="value(name)" 2>/dev/null); do
+        gcloud kms keys versions destroy "${v##*/}" --key=tsg-gc15-ai --keyring=tsg-gc15 --location="$R" --format="value(state)"; done
+      rm -f "$ENVFILE" "$HOME/.gc15-client.sh"
+      echo "Done. The key ring stays (Google never deletes key rings); Terraform let go of it."
+    else
+      # Key rings and keys can't be deleted, so an earlier run left them behind: adopt them, and give the key an
+      # enabled version (an earlier teardown destroyed the old ones).
+      if gcloud kms keys describe tsg-gc15-ai --keyring=tsg-gc15 --location="$R" >/dev/null 2>&1; then
+        st=$(cd "$TFD" && terraform state list 2>/dev/null || true)
+        [[ "$st" == *google_kms_key_ring.gc15* ]] ||
+          (cd "$TFD" && terraform import -input=false "${TFV[@]}" google_kms_key_ring.gc15 "projects/$P/locations/$R/keyRings/tsg-gc15" >/dev/null)
+        [[ "$st" == *google_kms_crypto_key.ai* ]] ||
+          (cd "$TFD" && terraform import -input=false "${TFV[@]}" google_kms_crypto_key.ai "$KEY" >/dev/null)
+        on=$(gcloud kms keys versions list --key=tsg-gc15-ai --keyring=tsg-gc15 --location="$R" --filter="state=ENABLED" --format="value(name)")
+        [ -n "$on" ] || gcloud kms keys versions create --key=tsg-gc15-ai --keyring=tsg-gc15 --location="$R" --primary --format="value(name)"
+        echo "Adopted the existing key ring and key tsg-gc15/tsg-gc15-ai"
+      fi
+      (cd "$TFD" && terraform apply -input=false -auto-approve "${TFV[@]}")
+      ENDPOINT_ID=$(cd "$TFD" && terraform output -raw endpoint_id); save
+      say "Terraform made Part A, the endpoint and the audit logs; up does the image, the model and the deployment"
+      bash "$0" up
+    fi
+    ;;
+
+  *) sed -n '2,14p' "$0"; exit 1;;
 esac
