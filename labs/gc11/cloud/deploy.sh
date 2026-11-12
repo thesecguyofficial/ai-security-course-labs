@@ -176,7 +176,8 @@ case "${1:-}" in
     say "Test 2 chatbot-runtime can't deploy anything (you act as it with Token Creator on that one account)"
     gcloud iam service-accounts add-iam-policy-binding "$RUNTIME" --member="user:$ME" \
       --role="roles/iam.serviceAccountTokenCreator" --format="value(etag)" >/dev/null
-    sleep 20
+    for i in $(seq 1 18); do   # Token Creator can take a few minutes to reach the token service
+      gcloud auth print-access-token --impersonate-service-account="$RUNTIME" >/dev/null 2>&1 && break; sleep 10; done
     out=$(gcloud ai endpoints create --region="$R" --display-name=should-fail --impersonate-service-account="$RUNTIME" 2>&1 || true)
     echo "$out" | grep -v WARNING | head -3
     if grep -q "aiplatform.endpoints.create" <<<"$out" && grep -qi "denied" <<<"$out"; then
@@ -220,7 +221,9 @@ PY
 
     say "Test 5 Your key, switched off: the logged prompts become unreadable"
     st=$(gcloud kms keys versions list --key=helpdesk-data --keyring=helpdesk-eu --location="$R" --format="value(state)" | sort -u | tr '\n' ' ')
-    if ! grep -q DISABLED <<<"$st"; then
+    if ! grep -q DISABLED <<<"$st" && [ "${rr:-0}" = 0 ]; then
+      rec WAIT "T5 waits for T4's request-response rows (nothing to lock away yet)"
+    elif ! grep -q DISABLED <<<"$st"; then
       v=$(gcloud kms keys versions list --key=helpdesk-data --keyring=helpdesk-eu --location="$R" --filter="state=ENABLED" --format="value(name)" | head -1)
       gcloud kms keys versions disable "${v##*/}" --key=helpdesk-data --keyring=helpdesk-eu --location="$R" --format="value(state)"
       rec WAIT "T5 key version disabled just now: BigQuery follows 'within an hour'; run test again (then: bash deploy.sh keyon)"
@@ -245,6 +248,11 @@ PY
     echo "Waiting 120 s for the VM to boot and call once..."; sleep 120
     serial 4
     [ "$1" = trap ] && echo "Anything but 200 is the trap: the private path breaks. Put it back: bash deploy.sh untrap"
+    ;;
+
+  serial)
+    repo; load
+    gcloud compute instances get-serial-port-output helpdesk-vm --zone="$Z" 2>/dev/null | grep -A2 TSG-SMOKE | tail -"${2:-12}"
     ;;
 
   keyon)
