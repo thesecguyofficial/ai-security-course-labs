@@ -67,7 +67,7 @@ agent_run() {   # agent_run [run_requests.py args] -> output in ~/.gc13-run.txt
   (cd "$LAB/adk_agent" && set -a && . tsg_helpdesk/.env && set +a && python3 run_requests.py --audit "$@") \
     > "$HOME/.gc13-run.txt" 2>&1 || true
   deactivate
-  grep -v "^WARNING\|UserWarning\|warnings.warn\|^  " "$HOME/.gc13-run.txt" | sed 's/^/  /' | cut -c1-170
+  grep -v "^WARNING\|UserWarning\|warnings.warn\|^  warnings\|site-packages" "$HOME/.gc13-run.txt" | sed 's/^/  /' | cut -c1-170 || true
 }
 
 case "${1:-}" in
