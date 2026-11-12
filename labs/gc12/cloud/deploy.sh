@@ -158,7 +158,7 @@ PY
     elif [[ "$o" == *"finishReason: STOP"* ]]; then rec NOTE "R5 the model refused in its own words (STOP): its behavior, not a filter"
     else rec FAIL "R5 see the line above"; fi
 
-    say "Result: $PASS of 5 passed (NOTE = what Google's service actually did; record it, it isn't a failure)"
+    say "Result: $PASS of 5 passed; NOTE is an expected outcome the guide describes (record it, it isn't a failure)"
     printf '  %s\n' "${RES[@]}"
     ;;
 
