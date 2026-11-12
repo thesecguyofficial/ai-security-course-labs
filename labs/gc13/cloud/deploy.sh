@@ -304,5 +304,5 @@ except ValueError: print("import answered: " + t[:300])' || true)
     say "Done. Now: bash deploy.sh test   (and bash deploy.sh tf destroy today)"
     ;;
 
-  *) sed -n '2,10p' "$0"; exit 1;;
+  *) sed -n '2,11p' "$0"; exit 1;;
 esac
