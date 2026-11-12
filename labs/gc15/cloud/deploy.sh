@@ -97,9 +97,9 @@ case "${1:-}" in
     exists gcloud kms keyrings describe tsg-gc15 --location="$R" || gcloud kms keyrings create tsg-gc15 --location="$R"
     exists gcloud kms keys describe tsg-gc15-ai --keyring=tsg-gc15 --location="$R" ||
       gcloud kms keys create tsg-gc15-ai --keyring=tsg-gc15 --location="$R" --purpose=encryption
-    gcloud kms keys versions list --key=tsg-gc15-ai --keyring=tsg-gc15 --location="$R" --filter="state=ENABLED" \
-      --format="value(name)" | grep -q . || gcloud kms keys versions create --key=tsg-gc15-ai --keyring=tsg-gc15 \
-        --location="$R" --primary --format="value(name)"
+    on=$(gcloud kms keys versions list --key=tsg-gc15-ai --keyring=tsg-gc15 --location="$R" --filter="state=ENABLED" \
+      --format="value(name)")
+    [ -n "$on" ] || gcloud kms keys versions create --key=tsg-gc15-ai --keyring=tsg-gc15 --location="$R" --primary --format="value(name)"
     gcloud beta services identity create --service=aiplatform.googleapis.com --format="value(email)" 2>/dev/null || true
     gcloud kms keys add-iam-policy-binding tsg-gc15-ai --keyring=tsg-gc15 --location="$R" \
       --member="serviceAccount:service-$PN@gcp-sa-aiplatform.iam.gserviceaccount.com" \
@@ -138,7 +138,8 @@ print("   vulnerabilities by severity:", {k: len(x) for k, x in v.items()} or "n
       gcloud ai models upload --region="$R" --display-name=tsg-gc15-summariser --container-image-uri="$IMAGE" \
         --artifact-uri="gs://$P-tsg-gc15-models/qwen3-0.6b/v1/" --container-ports=8080 --container-predict-route=/predict \
         --container-health-route=/health --labels="licence=$LIC,$LABELS" 2>&1 | tail -2
-      MODEL_ID=$(gcloud ai models list --region="$R" --filter='displayName=tsg-gc15-summariser' --format='value(name)' | head -1 | xargs basename)
+      MODEL_ID=$(gcloud ai models list --region="$R" --filter='displayName=tsg-gc15-summariser' --format='value(name)')
+      MODEL_ID=$(basename "${MODEL_ID%%$'\n'*}")
       rm -rf "$MD"; save
     fi
     echo "   model $MODEL_ID"
@@ -161,7 +162,8 @@ print("   vulnerabilities by severity:", {k: len(x) for k, x in v.items()} or "n
       --message-body-from-file="$HOME/.gc15-undeploy.json" --oauth-service-account-email="$TEARDOWN" --format="value(schedule)"
     rm -f "$HOME/.gc15-undeploy.json"
     say "D3 Deploy, as the role-free runtime account, access logging on (20 to 40 minutes)"
-    if ! gcloud ai endpoints describe "$ENDPOINT_ID" --region="$R" --format='value(deployedModels[].id)' | grep -q "$DEPLOYED_ID"; then
+    dms=$(gcloud ai endpoints describe "$ENDPOINT_ID" --region="$R" --format='value(deployedModels[].id)')
+    if [[ "$dms" != *"$DEPLOYED_ID"* ]]; then
       gcloud ai endpoints deploy-model "$ENDPOINT_ID" --region="$R" --model="$MODEL_ID" --display-name=tsg-gc15-summariser \
         --deployed-model-id="$DEPLOYED_ID" --machine-type=e2-standard-4 --min-replica-count=1 --max-replica-count=1 \
         --service-account="$RUNTIME" --enable-access-logging 2>&1 | tail -3
