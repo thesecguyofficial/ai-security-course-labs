@@ -73,47 +73,51 @@ done
 No `keys create` anywhere: the VM gets credentials from its attached account (lesson 11.1, "the preferred method for
 finding credentials in a production environment on Google Cloud").
 
-### 1b. Network: no internet route, Google APIs through Private Service Connect (lesson 11.2)
+### 1b. Network: no internet route, one private door to the EU model host (lessons 11.2 and 11.5)
 
-**Console.** **VPC network** > **Create VPC network**: name `helpdesk-vpc`, subnet creation mode **Custom**, one
-subnet `helpdesk-eu` in your region, range `10.10.0.0/24`, **Private Google Access** On, **Create** (label may
-differ slightly). The endpoint, from Google's
-[configure PSC for Google APIs](https://docs.cloud.google.com/vpc/docs/configure-private-service-connect-apis) page:
-**Private Service Connect** > **Connected endpoints** tab > **Connect endpoint**, **Target** **VPC-SC**, **Endpoint
-name** `tsgapis` (1 to 20 lowercase letters and numbers, starting with a letter), **Network** `helpdesk-vpc`, **IP
-Address** > **Create IP address** `10.100.0.2`, **Save**, **Add endpoint**. Then **Cloud DNS** > **Create zone**:
-**Private**, DNS name `googleapis.com.`, network `helpdesk-vpc`; add an **A** record for `googleapis.com.` to
-`10.100.0.2` and a **CNAME** `*.googleapis.com.` to `googleapis.com.`. Last, two firewall rules under **VPC network**
-> **Firewall** (labels may differ slightly): egress deny all to `0.0.0.0/0` at priority 65000, and egress allow
-TCP 443 to `10.100.0.2/32` at priority 1000.
+First, the fact that shapes this part. In our run on 12 November 2026, `gemini-3.1-flash-lite` answered only on the
+`global`, `eu` and `us` endpoints; every single region, `europe-west4` included, returned `404` "Publisher model ...
+was not found". Lesson 11.5 warned about this ("the newest model is only global or multi-region"). So the Helpdesk
+calls the `eu` multi-region: host `aiplatform.eu.rep.googleapis.com`, location `eu`. Check your own model with
+`bash cloud/deploy.sh models` (it tries each one and prints the HTTP code).
+
+That host ends in `rep.googleapis.com`, which Private Google Access doesn't support and the `all-apis` bundle
+excludes (lesson 11.2). So instead of a PSC endpoint for global Google APIs, this build makes a **regional endpoint**:
+a PSC endpoint for exactly one Google host, with an address in your own subnet. We tried the global kind first: with
+the `vpc-sc` bundle in a project with no organization, the VM got `503` "VPC network mapping unavailable".
 
 **gcloud.**
 
 ```bash
+gcloud services enable networkconnectivity.googleapis.com
 gcloud compute networks create helpdesk-vpc --subnet-mode=custom
-gcloud compute networks subnets create helpdesk-eu --network=helpdesk-vpc --region=europe-west4 \
-  --range=10.10.0.0/24 --enable-private-ip-google-access
-gcloud compute addresses create psc-google-apis --global --purpose=PRIVATE_SERVICE_CONNECT \
-  --addresses=10.100.0.2 --network=helpdesk-vpc
-gcloud compute forwarding-rules create tsgapis --global --network=helpdesk-vpc \
-  --address=psc-google-apis --target-google-apis-bundle=vpc-sc
-gcloud dns managed-zones create googleapis-private --dns-name=googleapis.com. --visibility=private \
-  --networks=helpdesk-vpc --description="Google APIs through the PSC endpoint"
-gcloud dns record-sets create googleapis.com. --zone=googleapis-private --type=A --ttl=300 --rrdatas=10.100.0.2
-gcloud dns record-sets create "*.googleapis.com." --zone=googleapis-private --type=CNAME --ttl=300 \
-  --rrdatas=googleapis.com.
+gcloud compute networks subnets create helpdesk-eu --network=helpdesk-vpc --region=europe-west4 --range=10.10.0.0/24
+gcloud network-connectivity regional-endpoints create aiplatform-eu --region=europe-west4 --address=10.10.0.10 \
+  --network=projects/PROJECT_ID/global/networks/helpdesk-vpc \
+  --subnetwork=projects/PROJECT_ID/regions/europe-west4/subnetworks/helpdesk-eu \
+  --target-google-api=aiplatform.eu.rep.googleapis.com
+gcloud dns managed-zones create aiplatform-eu-rep --dns-name=aiplatform.eu.rep.googleapis.com. --visibility=private \
+  --networks=helpdesk-vpc --description="The EU Agent Platform host through its PSC endpoint"
+gcloud dns record-sets create aiplatform.eu.rep.googleapis.com. --zone=aiplatform-eu-rep --type=A --ttl=300 \
+  --rrdatas=10.10.0.10
 gcloud compute firewall-rules create deny-all-egress --network=helpdesk-vpc --direction=EGRESS \
   --action=DENY --rules=all --destination-ranges=0.0.0.0/0 --priority=65000
-gcloud compute firewall-rules create allow-google-apis-egress --network=helpdesk-vpc --direction=EGRESS \
-  --action=ALLOW --rules=tcp:443 --destination-ranges=10.100.0.2/32 --priority=1000
-gcloud compute forwarding-rules describe tsgapis --global
+gcloud compute firewall-rules create allow-aiplatform-eu-egress --network=helpdesk-vpc --direction=EGRESS \
+  --action=ALLOW --rules=tcp:443 --destination-ranges=10.10.0.10/32 --priority=1000
+gcloud network-connectivity regional-endpoints describe aiplatform-eu --region=europe-west4
 ```
 
-- `gcloud compute forwarding-rules describe tsgapis --global`: Google's own check
+- `regional-endpoints create`: the private door; `--target-google-api` names the one host it serves
+- `dns managed-zones create` + `record-sets create`: inside `helpdesk-vpc`, that one name now resolves to `10.10.0.10`;
+  every other name still resolves to public addresses
+- the two firewall rules: nothing leaves the network except TCP 443 to `10.10.0.10`
 
-Why `vpc-sc` and not `all-apis`: it only reaches APIs that support VPC Service Controls, which is what you'd put in a
-perimeter. One open question from lesson 11.2: no Google page we found says the `vpc-sc` bundle serves the regional
-host `europe-west4-aiplatform.googleapis.com`. Test 1 in Step 2 answers it for your project.
+What this buys: the network itself holds the residency pin. The VM can reach the EU host and nothing else, so code
+that drifts to the global endpoint fails instead of quietly sending prompts anywhere (Step 3 shows it).
+
+**Console.** **VPC network** > **Create VPC network** (`helpdesk-vpc`, custom subnet `helpdesk-eu`, `10.10.0.0/24`),
+then **Network services** > **Private Service Connect** for the endpoint, **Cloud DNS** for the zone and **VPC
+network** > **Firewall** for the two rules. The exact console labels are in the lesson 11.6 video steps.
 
 ### 1c. Encryption: your own key on the data, and the cache (lesson 11.3)
 
@@ -178,8 +182,8 @@ Our script sends `setPublisherModelConfig` (v1beta1) with `samplingRate` 1 into
 `bq://PROJECT_ID.ai_logs.request_response_logging`; "the Dataset must exist and table must not exist" (lesson 11.4):
 
 ```bash
-terraform/scripts/request_response_logging.sh on PROJECT_ID europe-west4
-terraform/scripts/request_response_logging.sh show PROJECT_ID europe-west4
+terraform/scripts/request_response_logging.sh on PROJECT_ID eu
+terraform/scripts/request_response_logging.sh show PROJECT_ID eu
 ```
 
 Example response (shape from Google docs, values illustrative), from `on`:
@@ -199,10 +203,11 @@ effect". Run `show` a few minutes later: you want `loggingConfig` with `"enabled
 
 ### 1e. Region pinning (lesson 11.5)
 
-The pin is the **host and location your code calls**: `europe-west4-aiplatform.googleapis.com` and
-`locations/europe-west4`, never `aiplatform.googleapis.com` with `locations/global`. In this build it lives in the
-VM's startup script (1g); in a real app it's one reviewed setting, like the twin's `app.json`. The KMS key ring and
-datasets in 1c are in the same region, so data at rest stays there too. With an organization, the allow-list
+The pin has two halves. The **host and location your code calls**: `aiplatform.eu.rep.googleapis.com` with
+`locations/eu`, never `aiplatform.googleapis.com` with `locations/global`. In this build it lives in the VM's startup
+script (1g); in a real app it's one reviewed setting, like the twin's `app.json`. And the **network** from 1b: the
+only host the VM can reach is the EU one, so a drift to global fails loudly. The KMS key ring and datasets in 1c are
+in `europe-west4`, so data at rest stays there too. With an organization, the allow-list
 (`publishers/google/models/gemini-3.1-flash-lite:predict`) is `terraform/orgpolicy.tf`, or the GC10 guided build 2g
 steps on your folder.
 
@@ -219,12 +224,13 @@ offline rehearsal). Terraform: set `access_policy_id` in `terraform.tfvars`.
 
 ### 1g. The test VM: the Helpdesk's stand-in
 
-One small VM with **no external IP**, running as `chatbot-runtime`. At boot it calls Gemini once through the private
-path and writes the result to its serial port. Render the lab's startup script, then create the VM:
+One small VM with **no external IP**, running as `chatbot-runtime`. At boot it calls Gemini once through the PSC
+endpoint (EU host, `locations/eu`) and writes the result to its serial port. Render the lab's startup script, then create the VM:
 
 ```bash
 sed -e 's/${project}/PROJECT_ID/g' -e 's/${region}/europe-west4/g' \
-    -e 's#${model}#publishers/google/models/gemini-3.1-flash-lite#g' -e 's/%%/%/g' \
+    -e 's#${model}#publishers/google/models/gemini-3.1-flash-lite#g' \
+    -e 's/${host}/aiplatform.eu.rep.googleapis.com/g' -e 's/${location}/eu/g' -e 's/%%/%/g' \
     terraform/scripts/smoke_call.sh.tftpl > smoke.sh
 gcloud compute instances create helpdesk-vm --zone=europe-west4-a --machine-type=e2-small \
   --subnet=helpdesk-eu --no-address --shielded-secure-boot \
@@ -249,21 +255,19 @@ Wait two minutes after the VM starts, then:
 gcloud compute instances get-serial-port-output helpdesk-vm --zone=europe-west4-a | grep TSG-SMOKE
 ```
 
-Example response (shape from the lab's startup script, values illustrative):
+Our response (12 November 2026):
 
 ```text
-TSG-SMOKE resolve: 10.100.0.2      googleapis.com europe-west4-aiplatform.googleapis.com
-TSG-SMOKE generateContent HTTP 200
-{"candidates": [{"content": {"role": "model", "parts": [{"text": "private"}]}, "finishReason": "STOP"}], ...
+TSG-SMOKE resolve: 10.10.0.10      aiplatform.eu.rep.googleapis.com
+TSG-SMOKE generateContent HTTP 200 (aiplatform.eu.rep.googleapis.com, locations/eu)
 TSG-SMOKE internet test: 000blocked
 ```
 
-Read it, line by line: the Agent Platform hostname resolves to **your** endpoint, `10.100.0.2` (the private zone did
-that); the call came back `200` as `chatbot-runtime`; `https://example.com` got no answer at all (`000`, then the
-script's `blocked`), because the only egress rule that allows anything points at the endpoint. If you see `HTTP 403`,
-check the custom role binding (1a); if the resolve line is empty or the call hangs, check the DNS records and the
-allow rule (1b). If DNS and firewall are right and it still fails, that's the `vpc-sc` bundle question from 1b:
-write it down and try `--target-google-apis-bundle=all-apis` on a new endpoint.
+Read it, line by line: the EU model host resolves to **your** endpoint, `10.10.0.10` (the private zone did that); the
+call came back `200` as `chatbot-runtime`; `https://example.com` got no answer at all (`000`, then the script's
+`blocked`), because the only egress rule that allows anything points at the endpoint. If you see `HTTP 403`, check
+the custom role binding (1a); `404` means the model isn't offered in `eu` (run `bash cloud/deploy.sh models`); if the
+resolve line is empty or the call hangs, check the DNS record and the allow rule (1b).
 
 ### Test 2 · The workload identity can't do more than predict
 
@@ -294,14 +298,14 @@ Now call the model as `chatbot-runtime` from Cloud Shell or your laptop, outside
 ```bash
 TOKEN=$(gcloud auth print-access-token --impersonate-service-account="$SA")
 curl -s -o /dev/null -w "%{http_code}\n" -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-  "https://europe-west4-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/europe-west4/publishers/google/models/gemini-3.1-flash-lite:generateContent" \
+  "https://aiplatform.eu.rep.googleapis.com/v1/projects/PROJECT_ID/locations/eu/publishers/google/models/gemini-3.1-flash-lite:generateContent" \
   -d '{"contents": [{"role": "user", "parts": [{"text": "Reply with one word: public"}]}], "generationConfig": {"maxOutputTokens": 10}}'
 gcloud iam service-accounts remove-iam-policy-binding "$SA" --member="user:YOUR_EMAIL" \
   --role="roles/iam.serviceAccountTokenCreator"
 ```
 
-Without a perimeter, expect `200`. That's the honest result, and the point of lesson 11.2: the private path keeps the
-**VM** off the internet, but a stolen token still works from anywhere until VPC Service Controls checks where the call
+Without a perimeter, expect `200` (ours: `200`). That's the honest result, and the point of lesson 11.2: the private
+path keeps the **VM** off the internet, but a stolen token still works from anywhere until VPC Service Controls checks where the call
 comes from. With an **enforced** perimeter (1f, after the dry run), the same call is refused, and the record lands in
 the Policy Denied log:
 
@@ -339,27 +343,25 @@ gcloud logging read 'log_id("cloudaudit.googleapis.com/data_access") AND protoPa
   --project=PROJECT_ID --freshness=2h --format=json > my-audit.json
 ```
 
-Example response (shape from Google docs, values illustrative), the VM's call, trimmed:
+Our response (12 November 2026), the VM's call, trimmed to the fields that matter:
 
 ```json
 {
   "protoPayload": {
     "serviceName": "aiplatform.googleapis.com",
     "methodName": "google.cloud.aiplatform.v1.PredictionService.GenerateContent",
-    "resourceName": "projects/PROJECT_ID/locations/europe-west4/publishers/google/models/gemini-3.1-flash-lite",
+    "resourceName": "projects/PROJECT_NUMBER/locations/eu/publishers/google/models/gemini-3.1-flash-lite",
     "authenticationInfo": {"principalEmail": "chatbot-runtime@PROJECT_ID.iam.gserviceaccount.com"},
-    "requestMetadata": {"callerIp": "10.10.0.2"},
-    "authorizationInfo": [{"permission": "aiplatform.endpoints.predict", "granted": true}]
+    "requestMetadata": {"callerIp": "gce-internal-ip"}
   }
 }
 ```
 
-Read it: `callerIp` is the VM's **internal** address. Google's AuditLog reference says that for a VM without an
-external IP in the same project, `callerIp` "will be the VM's internal IPv4 address". Test 3's entry shows your
-public address and a `serviceAccountDelegationInfo` naming you: that's what a stolen token used from outside looks
-like (lesson 11.1, "the workload's account calling from an address that isn't the workload's"). `resourceName` names
-`locations/europe-west4`: your residency evidence (lesson 11.5). Check the real `methodName` against the lab's
-assumption, as in GC10.
+Read it: `callerIp` isn't an address at all. For our VM with no external IP it said `gce-internal-ip`, not the
+`10.10.0.x` address Google's AuditLog reference led us to expect, so search for that string. Test 3's entry shows
+Cloud Shell's public address and a `serviceAccountDelegationInfo` naming you: that's what a stolen token used from
+outside looks like (lesson 11.1, "the workload's account calling from an address that isn't the workload's").
+`resourceName` names `locations/eu`: your residency evidence (lesson 11.5).
 
 **What was said** (request-response log, a few minutes after Test 1; Google says logging config "can take a few
 minutes to take effect", so if the table is empty, reset the VM with `gcloud compute instances reset helpdesk-vm
@@ -375,7 +377,9 @@ bq query --use_legacy_sql=false \
 The column names are from Google's request-response logging page (`endpoint`, `deployed_model_id`, `logging_time`,
 `request_id`, `request_payload`, `response_payload`, `model`, `model_version`, `api_method`, `full_request`,
 `full_response`, `metadata`, `otel_log`); we didn't see their types, which is why the query wraps them in
-`TO_JSON_STRING`. You should find the VM's "Reply with the single word: private" and the answer. That row is customer
+`TO_JSON_STRING`. Ours had a row about a minute after logging went on: `model` `publishers/google/models/gemini-3.1-flash-lite`,
+`api_method` `GenerateContent`, and the VM's "Reply with the single word: private" in `full_request`. The dataset is
+in `europe-west4` and the model is called in `eu`; that combination worked. That row is customer
 data in your own dataset, under your key: lesson 11.4's trade-off.
 
 ### Test 5 · Your key, switched off
@@ -411,40 +415,32 @@ expect a gap and check the table.
 
 ## Step 3 · Change one setting and re-run: the residency trap
 
-Lesson 11.5's trap, for real. A developer moves the Helpdesk from the regional endpoint to the `eu` multi-region one
-"for availability". Change only the host and location in the VM's script and restart it:
+Lesson 11.5's trap, for real. A developer moves the Helpdesk to the global endpoint, because every SDK sample uses it
+and it has the newest models first. Change only the host and location in the VM's script and restart it:
 
 ```bash
-sed -e 's#https://europe-west4-aiplatform.googleapis.com#https://aiplatform.eu.rep.googleapis.com#' \
-    -e 's#locations/europe-west4#locations/eu#' \
-    -e 's#getent hosts europe-west4-aiplatform.googleapis.com#getent hosts aiplatform.eu.rep.googleapis.com#' \
-    smoke.sh > smoke-eu.sh
-gcloud compute instances add-metadata helpdesk-vm --zone=europe-west4-a --metadata-from-file=startup-script=smoke-eu.sh
+sed -e 's#aiplatform.eu.rep.googleapis.com#aiplatform.googleapis.com#g' -e 's#locations/eu#locations/global#' \
+    smoke.sh > smoke-global.sh
+gcloud compute instances add-metadata helpdesk-vm --zone=europe-west4-a --metadata-from-file=startup-script=smoke-global.sh
 gcloud compute instances reset helpdesk-vm --zone=europe-west4-a
 ```
 
 Two minutes later:
 
 ```bash
-gcloud compute instances get-serial-port-output helpdesk-vm --zone=europe-west4-a | grep TSG-SMOKE | tail -4
+gcloud compute instances get-serial-port-output helpdesk-vm --zone=europe-west4-a | grep TSG-SMOKE | tail -3
 ```
 
-(Path C users: render `smoke.sh` with the `sed` line from 1g first.)
+(Path C users: render `smoke.sh` with the `sed` line from 1g first.) The script does both steps for you:
+`bash cloud/deploy.sh trap`, then `bash cloud/deploy.sh untrap`.
 
-Example response (shape from the lab's startup script, values illustrative):
+RESULT_STEP3
 
-```text
-TSG-SMOKE resolve: 10.100.0.2      googleapis.com aiplatform.eu.rep.googleapis.com
-TSG-SMOKE generateContent HTTP 000
-TSG-SMOKE internet test: 000blocked
-```
-
-Read it: the wildcard record in your private zone sends the `rep` hostname to the same endpoint, but that endpoint
-is for global Google APIs (lesson 11.2: `all-apis` "Excludes `*.rep.googleapis.com`", and nothing says `vpc-sc`
-covers them), and Private Google Access "doesn't support regional and multi-regional endpoints". Any code other than
-`200` is the trap working: the private path breaks. Whatever code you get, write it down. The tempting fix under
-pressure is the global endpoint, and residency is gone. The right fix is a PSC endpoint for regional Google APIs
-(lesson 11.5), which this guide doesn't build. Put the regional script back:
+Read it: the global host resolves to a public Google address (your private zone only covers the EU host), and the
+only egress rule points at `10.10.0.10`, so the call never leaves the VM. That's the network holding the pin: on a
+laptop or with a NAT, the same change would have worked, and prompts would be processed "in any Google Cloud
+location around the world". The tempting fix under pressure is to open egress to Google; the right answer is to keep
+the code on the EU host. Put the EU script back:
 
 ```bash
 gcloud compute instances add-metadata helpdesk-vm --zone=europe-west4-a --metadata-from-file=startup-script=smoke.sh
@@ -455,12 +451,12 @@ gcloud compute instances reset helpdesk-vm --zone=europe-west4-a
 
 | Test | What you expected | What you got | Same as the twin? |
 |---|---|---|---|
-| 1 Private path (resolve / HTTP / internet) | `10.100.0.2` / 200 / blocked | | L1 |
+| 1 Private path (resolve / HTTP / internet) | `10.10.0.10` / 200 / blocked | | L1 |
 | 2 Deploy as `chatbot-runtime` | `PERMISSION_DENIED` on `aiplatform.endpoints.create` | | A2 |
 | 3 Public path as `chatbot-runtime` | 200 without perimeter | | A1, A5 |
-| 4 Data Access `callerIp` and `methodName` / request-response row | internal IP / a row | | Q1, Q2 |
+| 4 Data Access `callerIp` and `methodName` / request-response row | `gce-internal-ip` / a row | | Q1, Q2 |
 | 5 Query with key disabled (minutes until it failed) | error | | Q4 |
-| Step 3 `eu` endpoint from the VM | not 200 | | residency trap |
+| Step 3 global endpoint from the VM | 000, blocked | | residency trap |
 
 Then run the live check and feed your real plan to the checker if you used Terraform:
 
@@ -472,7 +468,7 @@ terraform/scripts/check_live.sh PROJECT_ID europe-west4
 
 | Item | Price | This guide (about 3 hours) |
 |---|---|---|
-| PSC endpoint for Google APIs | $0.01 per hour, "No data charge" ([VPC pricing](https://cloud.google.com/vpc/pricing)) | $0.03 |
+| PSC endpoint (regional endpoint for the EU host) | check [VPC pricing](https://cloud.google.com/vpc/pricing), Private Service Connect section | cents |
 | Cloud DNS private zone | $0.000273973 per zone per hour, billed by the hour (about $0.20 a month); queries $0.40 per million ([Cloud DNS pricing](https://cloud.google.com/dns/pricing)) | under $0.01 |
 | Cloud KMS key version | $0.000082192 per hour; versions scheduled for destruction count as active for the default 30 days ([KMS pricing](https://cloud.google.com/kms/pricing)) | about $0.06 including the 30 days |
 | KMS operations | $0.03 per 10,000 | well under $0.01 |
@@ -489,21 +485,19 @@ Free Trial: "You will not be billed for any Google Cloud usage during your Free 
 **Path C (Terraform):**
 
 ```bash
-terraform/scripts/request_response_logging.sh off PROJECT_ID europe-west4
+terraform/scripts/request_response_logging.sh off PROJECT_ID eu
 make down
 ```
 
 **Paths A and B**, in this order:
 
 ```bash
-terraform/scripts/request_response_logging.sh off PROJECT_ID europe-west4
+terraform/scripts/request_response_logging.sh off PROJECT_ID eu
 gcloud compute instances delete helpdesk-vm --zone=europe-west4-a --quiet
-gcloud compute firewall-rules delete deny-all-egress allow-google-apis-egress --quiet
-gcloud dns record-sets delete "*.googleapis.com." --zone=googleapis-private --type=CNAME
-gcloud dns record-sets delete googleapis.com. --zone=googleapis-private --type=A
-gcloud dns managed-zones delete googleapis-private
-gcloud compute forwarding-rules delete tsgapis --global --quiet
-gcloud compute addresses delete psc-google-apis --global --quiet
+gcloud compute firewall-rules delete deny-all-egress allow-aiplatform-eu-egress --quiet
+gcloud dns record-sets delete aiplatform.eu.rep.googleapis.com. --zone=aiplatform-eu-rep --type=A
+gcloud dns managed-zones delete aiplatform-eu-rep
+gcloud network-connectivity regional-endpoints delete aiplatform-eu --region=europe-west4 --quiet
 gcloud compute networks subnets delete helpdesk-eu --region=europe-west4 --quiet
 gcloud compute networks delete helpdesk-vpc --quiet
 bq rm -r -f -d PROJECT_ID:ai_logs
@@ -523,5 +517,5 @@ gcloud access-context-manager perimeters delete helpdesk --policy=ACCESS_POLICY_
 If the key rotated while you worked, destroy every enabled version (`gcloud kms keys versions list --key=helpdesk-data
 --keyring=helpdesk-eu --location=europe-west4`). The key ring and key stay forever ("Key rings can't be deleted",
 lesson 11.3); a destroyed key costs nothing once the 30 days pass. Leave Data Access logs on if you'll do GC12 here.
-Delete `smoke.sh`, `smoke-eu.sh` and `my-audit.json`. If the project was only for this course, `gcloud projects delete
+Delete `smoke.sh`, `smoke-global.sh` and `my-audit.json`. If the project was only for this course, `gcloud projects delete
 PROJECT_ID` is the cleanest end.

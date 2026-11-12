@@ -99,9 +99,11 @@ case "${1:-}" in
       exists gcloud iam service-accounts describe "$SA@$P.iam.gserviceaccount.com" ||
         gcloud iam service-accounts create "$SA" --display-name="GC11 $SA"
     done
-    exists gcloud iam roles describe helpdeskModelCaller --project="$P" ||
-      gcloud iam roles create helpdeskModelCaller --project="$P" --title="Helpdesk model caller" \
-        --description="Call Agent Platform models. Nothing else." --permissions=aiplatform.endpoints.predict --stage=GA
+    case "$(gcloud iam roles describe helpdeskModelCaller --project="$P" --format='value(deleted)' 2>/dev/null || echo none)" in
+      True) gcloud iam roles undelete helpdeskModelCaller --project="$P" --format="value(name)";;   # deleted < 7 days ago
+      none) gcloud iam roles create helpdeskModelCaller --project="$P" --title="Helpdesk model caller" \
+        --description="Call Agent Platform models. Nothing else." --permissions=aiplatform.endpoints.predict --stage=GA;;
+    esac
     for SA in "$RUNTIME" "$SUMM"; do
       gcloud projects add-iam-policy-binding "$P" --role="$ROLE" --member="serviceAccount:$SA" --condition=None \
         --format="value(etag)" >/dev/null
