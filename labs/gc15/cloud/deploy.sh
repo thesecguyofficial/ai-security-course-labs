@@ -227,7 +227,7 @@ lines = ["#!/bin/bash",
 for name in ("normal", "personal-data", "injection"):
     body = pathlib.Path(d, f"predict-{name}.json").read_text().strip().replace("'", "'\\''")
     lines.append(f"echo \"TSG-GC15 {name}: $(curl -s -m 60 -w ' HTTP %{{http_code}}' -H \"Authorization: Bearer $T\" "
-                 f"-H 'Content-Type: application/json' -d '{body}' {url} | head -c 400)\" > /dev/ttyS0")
+                 f"-H 'Content-Type: application/json' -d '{body}' {url} | tr -d '\\n' | head -c 400)\" > /dev/ttyS0")
 print("\n".join(lines))
 PY
     if exists gcloud compute instances describe tsg-gc15-client --zone="$Z"; then
@@ -255,7 +255,8 @@ PY
     say "E5 The trail: Predict in the Data Access log"
     rows=$(gcloud logging read 'protoPayload.serviceName="aiplatform.googleapis.com" AND protoPayload.methodName:"Predict"' \
       --freshness=30m --limit=4 --format="value(protoPayload.authenticationInfo.principalEmail,protoPayload.requestMetadata.callerIp,protoPayload.status.code)" || true)
-    echo "$rows" | sed 's/^/   /'
+    # A person's sign-in shows as "a person (you)" and their IP is hidden, so no email or address ends up on screen.
+    echo "$rows" | awk 'NF { if ($1 !~ /gserviceaccount\.com$/) { $1 = "a person (you)"; $2 = "<ip hidden>" } print "   " $0 }'
     if grep -q "tsg-gc15-app" <<<"$rows"; then rec PASS "E5 the app's calls are in the Data Access log"
     else rec WAIT "E5 no rows yet (minutes): run test again"; fi
     say "Result: $PASS of 5 passed"
