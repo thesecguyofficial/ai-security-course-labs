@@ -54,7 +54,7 @@ def _offline_retrieve(corpus: str, query: str) -> list[dict]:
 def _cloud_retrieve(corpus: str, query: str) -> list[dict]:
     import agentplatform     # google-cloud-agentplatform, installed with google-adk[gcp]
     client = agentplatform.Client(project=os.environ["GOOGLE_CLOUD_PROJECT"],
-                                  location=os.environ.get("GOOGLE_CLOUD_LOCATION", "europe-west4"))
+                                  location=os.environ.get("TSG_RAG_LOCATION", "europe-west4"))   # RAG Engine: a region
     resp = client.rag.retrieve_contexts(
         vertex_rag_store={"rag_resources": [{"rag_corpus": corpus}]},
         query={"text": query, "rag_retrieval_config": {"top_k": 3}},
