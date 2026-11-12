@@ -39,6 +39,17 @@ load() {
   BODY='{"contents":[{"role":"user","parts":[{"text":"Say hello in five words."}]}],"generationConfig":{"maxOutputTokens":50}}'
   BA=$(gcloud billing projects describe "$P" --format="value(billingAccountName)" | sed 's#billingAccounts/##')
 }
+need_terraform() {   # Cloud Shell stopped shipping Terraform (our 12 Nov 2026 run): install HashiCorp's zip into ~/bin
+  command -v terraform >/dev/null && return 0
+  local v=1.13.4 d; d=$(mktemp -d)
+  echo "Terraform is not installed here: installing $v from releases.hashicorp.com into ~/bin (checksum verified)"
+  curl -sSfo "$d/tf.zip" "https://releases.hashicorp.com/terraform/$v/terraform_${v}_linux_amd64.zip"
+  curl -sSfo "$d/sums" "https://releases.hashicorp.com/terraform/$v/terraform_${v}_SHA256SUMS"
+  (cd "$d" && grep "linux_amd64.zip" sums | sed "s/terraform_${v}_linux_amd64.zip/tf.zip/" | sha256sum -c --quiet) ||
+    { echo "Checksum mismatch: not installing."; exit 1; }
+  mkdir -p "$HOME/bin" && unzip -oq "$d/tf.zip" terraform -d "$HOME/bin" && rm -rf "$d"
+  export PATH="$HOME/bin:$PATH"; terraform version | head -1
+}
 key_name() { gcloud services api-keys list --project="$P" --filter="displayName=${1:-gc10-build}" --format="value(name)" 2>/dev/null | head -1; }
 cache() { curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
   "https://us-central1-aiplatform.googleapis.com/v1/projects/$P/cacheConfig"; }
@@ -181,6 +192,7 @@ PY
 
   tf)
     repo; load
+    need_terraform
     printf 'GC10_PROJECT=%s\n' "$P" > "$ENVFILE"
     cd "$REPO/labs/gc10/terraform"
     terraform init -input=false >/dev/null
