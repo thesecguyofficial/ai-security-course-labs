@@ -20,12 +20,12 @@ Hugging Face Hub to your laptop.
 | F | One setting changed: request-response logging on | 15.4 |
 | G | Teardown | 15.5 |
 
-> **Read this first: about the responses shown below.** We wrote this guide without running it in a Google Cloud
-> project, so **no response from Google Cloud in this file comes from a real run**. Every such block is labeled
-> **"Example response (shape from the provider's docs, values illustrative)"**. Field names come from Google's REST
-> and audit log references; values (IDs, timings, error wording, what the model writes) are ours. Commands were
-> checked against the gcloud reference pages for `ai endpoints deploy-model`, `ai models upload` and the Private
-> Service Connect page, not run. Write down what you really see.
+> **Tested 12 November 2026.** The one-shot script (`cloud/deploy.sh up`, `test`, `rrlog`, `down`) and the Terraform
+> (`deploy.sh tf apply rrlog`, `test`, `tf destroy`) both ran end to end in our project, `test` 5 of 5 each time. What
+> the real run changed is written into the steps: label limits (Part C), the predict-only role on the project and the
+> service attachment's place (Part D), and request-response logging only at creation (Part F). Response blocks still
+> labeled "Example response" were not replaced with our output; compare with what you see. The script builds its own
+> network `tsg-gc15-vpc` with subnet `tsg-gc15-subnet` (10.15.0.0/24); the steps below use `default`. Either works.
 
 **What this build does NOT include:** a VPC Service Controls perimeter. A perimeter needs an organization (an access
 policy lives at the organization or is scoped to its folders and projects), and most sandbox projects have none. If
