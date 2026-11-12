@@ -140,8 +140,8 @@ print("   vulnerabilities by severity:", {k: len(x) for k, x in v.items()} or "n
       [ -d "$VENV" ] || python3 -m venv "$VENV"
       "$VENV/bin/pip" install -q huggingface_hub
       MD="$HOME/.gc15-model"; rm -rf "$MD"
-      # Plain HTTPS, not Hugging Face's Xet transfer: in our Cloud Shell run (12 Nov 2026) Xet stalled at 32 MB for
-      # 10 minutes. The progress bars stay on so you can see it move.
+      # Progress bars on: with --quiet our run (12 Nov 2026) sat silent for over 10 minutes and looked stuck. Plain HTTPS
+      # (no Xet) keeps the transfer simple to follow; the 1.4 GiB upload after it ran at about 2 MiB/s.
       HF_HUB_DISABLE_XET=1 "$VENV/bin/hf" download "$MODEL_REPO" --local-dir "$MD" >/dev/null
       rm -rf "$MD/.cache"
       python3 "$LAB/model_files.py" scan "$MD" | tail -4
