@@ -140,7 +140,7 @@ for e in rows[:6]:
     p = e.get("protoPayload", {}); a = p.get("authenticationInfo", {})
     deleg = [d.get("firstPartyPrincipal", {}).get("principalEmail", "") for d in a.get("serviceAccountDelegationInfo", [])]
     granted = [z.get("granted") for z in p.get("authorizationInfo", [])]
-    print(f'{p.get("methodName","?").split(".")[-1]:<16} {a.get("principalEmail","?").split("@")[0]:<12} '
+    print(f'{p.get("methodName","?")} {a.get("principalEmail","?").split("@")[0]:<12} '
           f'via={"you" if deleg else "-":<4} granted={granted} status={p.get("status",{}).get("code",0)}')
 print(f"rows: {len(rows)}")
 PY
