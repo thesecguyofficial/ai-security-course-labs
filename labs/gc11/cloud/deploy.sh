@@ -64,7 +64,7 @@ smoke() {   # render the VM's startup script ($1 = eu: the pinned host | global:
   sed -e "s/\${project}/$P/g" -e "s/\${region}/$R/g" -e "s#\${model}#$MODEL#g" -e "s/\${host}/$h/g" \
     -e "s/\${location}/$l/g" -e 's/%%/%/g' "$LAB/terraform/scripts/smoke_call.sh.tftpl" > "$HOME/.gc11-smoke.sh"
 }
-serial() { gcloud compute instances get-serial-port-output helpdesk-vm --zone="$Z" 2>/dev/null | grep TSG-SMOKE | tail -"${1:-4}"; }
+serial() { gcloud compute instances get-serial-port-output helpdesk-vm --zone="$Z" 2>/dev/null | grep TSG-SMOKE | tail -"${1:-4}" || true; }
 audit_logs() {   # $1 on|off: DATA_READ + DATA_WRITE for aiplatform.googleapis.com, everything else untouched
   gcloud projects get-iam-policy "$P" --format=json > "$HOME/.gc11-policy.json"
   python3 - "$HOME/.gc11-policy.json" "$1" <<'PY'
@@ -181,7 +181,7 @@ case "${1:-}" in
     for i in $(seq 1 18); do   # Token Creator can take a few minutes to reach the token service
       gcloud auth print-access-token --impersonate-service-account="$RUNTIME" >/dev/null 2>&1 && break; sleep 10; done
     out=$(gcloud ai endpoints create --region="$R" --display-name=should-fail --impersonate-service-account="$RUNTIME" 2>&1 || true)
-    echo "$out" | grep -v WARNING | head -3
+    echo "$out" | grep -v WARNING | head -3 || true   # head closes the pipe early: never let that end the script
     if grep -q "aiplatform.endpoints.create" <<<"$out" && grep -qi "denied" <<<"$out"; then
       rec PASS "T2 PERMISSION_DENIED on aiplatform.endpoints.create"
     elif grep -qi "serviceAccountTokenCreator\|getAccessToken" <<<"$out"; then
@@ -227,12 +227,12 @@ PY
     if ! grep -q DISABLED <<<"$st" && [ "${rr:-0}" = 0 ]; then
       rec WAIT "T5 waits for T4's request-response rows (nothing to lock away yet)"
     elif ! grep -q DISABLED <<<"$st"; then
-      v=$(gcloud kms keys versions list --key=helpdesk-data --keyring=helpdesk-eu --location="$R" --filter="state=ENABLED" --format="value(name)" | head -1)
+      v=$(gcloud kms keys versions list --key=helpdesk-data --keyring=helpdesk-eu --location="$R" --filter="state=ENABLED" --format="value(name)" | head -1 || true)
       gcloud kms keys versions disable "${v##*/}" --key=helpdesk-data --keyring=helpdesk-eu --location="$R" --format="value(state)"
       rec WAIT "T5 key version disabled just now: BigQuery follows 'within an hour'; run test again (then: bash deploy.sh keyon)"
     else
       out=$(bq query --use_legacy_sql=false -q "SELECT COUNT(*) FROM \`$P.ai_logs.request_response_logging\`" 2>&1 || true)
-      echo "$out" | tail -2
+      echo "$out" | tail -2 || true
       if grep -qi "disabled\|kms" <<<"$out"; then rec PASS "T5 query refused: the key is disabled (bash deploy.sh keyon to restore)"
       else rec WAIT "T5 key disabled, BigQuery still reads (it can take up to an hour)"; fi
     fi
