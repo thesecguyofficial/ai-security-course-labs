@@ -127,6 +127,9 @@ resource "google_network_services_authz_extension" "iap" {
     { iapPolicyVersion = "V2" },
     var.enforcement == "DRY_RUN" ? { iamEnforcementMode = "DRY_RUN" } : {},
   )
+  # Our first run (12 Nov 2026) got 403 SERVICE_DISABLED here: the Network Services API was enabled seconds earlier.
+  # Waiting for the gateway (about 3 minutes) gives the API time to reach every backend.
+  depends_on = [time_sleep.gateway_ready]
 }
 
 resource "google_network_security_authz_policy" "iap" {
