@@ -276,6 +276,29 @@ PY
     done
     ;;
 
+  rep)   # EXPERIMENT: a PSC endpoint for the eu multi-region host (aiplatform.eu.rep.googleapis.com) in the subnet
+    repo; load
+    gcloud services enable networkconnectivity.googleapis.com
+    exists gcloud network-connectivity regional-endpoints describe aiplatform-eu --region="$R" ||
+      gcloud network-connectivity regional-endpoints create aiplatform-eu --region="$R" --address=10.10.0.10 \
+        --network="projects/$P/global/networks/helpdesk-vpc" \
+        --subnetwork="projects/$P/regions/$R/subnetworks/helpdesk-eu" --target-google-api=aiplatform.eu.rep.googleapis.com
+    exists gcloud dns managed-zones describe aiplatform-eu-rep ||
+      gcloud dns managed-zones create aiplatform-eu-rep --dns-name=aiplatform.eu.rep.googleapis.com. --visibility=private \
+        --networks=helpdesk-vpc --description="Agent Platform eu multi-region through its PSC endpoint"
+    exists gcloud dns record-sets describe aiplatform.eu.rep.googleapis.com. --zone=aiplatform-eu-rep --type=A ||
+      gcloud dns record-sets create aiplatform.eu.rep.googleapis.com. --zone=aiplatform-eu-rep --type=A --ttl=300 --rrdatas=10.10.0.10
+    exists gcloud compute firewall-rules describe allow-aiplatform-eu-egress ||
+      gcloud compute firewall-rules create allow-aiplatform-eu-egress --network=helpdesk-vpc --direction=EGRESS \
+        --action=ALLOW --rules=tcp:443 --destination-ranges=10.10.0.10/32 --priority=1000
+    gcloud network-connectivity regional-endpoints describe aiplatform-eu --region="$R" --format="value(address,targetGoogleApi,state)" 2>&1 | tail -2
+    smoke eu
+    gcloud compute instances add-metadata helpdesk-vm --zone="$Z" --metadata-from-file=startup-script="$HOME/.gc11-smoke.sh"
+    gcloud compute instances reset helpdesk-vm --zone="$Z" --quiet
+    echo "Waiting 120 s for the VM to boot and call the eu endpoint once..."; sleep 120
+    gcloud compute instances get-serial-port-output helpdesk-vm --zone="$Z" 2>/dev/null | grep -A6 "TSG-SMOKE" | grep -v google_ | tail -9
+    ;;
+
   serial)
     repo; load
     gcloud compute instances get-serial-port-output helpdesk-vm --zone="$Z" 2>/dev/null | grep -A9 "generateContent HTTP" | head -12
