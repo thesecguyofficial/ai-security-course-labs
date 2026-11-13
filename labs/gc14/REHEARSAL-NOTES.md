@@ -49,3 +49,45 @@ Region `us-central1`, BigQuery datasets in `US`. In progress: sections are added
   principal set; **Select resource(s)**: Standard / Custom, then Registry / Agent / **MCP server** / **Endpoint** /
   **Unregistered endpoint**. "For this policy to have an effect, it will separately need to be enforced by an Agent
   Gateway."
+
+## Step 3 · Deploy (Cloud Shell)
+- `deploy.py` took about **10 minutes**; the agent appears in Agent Platform > **Deployments** (`tsg-gc14-helpdesk`,
+  framework google-adk, us-central1) while the script is still waiting. Output `identityType: AGENT_IDENTITY`,
+  `effectiveIdentity: agents.global.proj-PROJECT_NUMBER.system.id.goog/...` (no organization, so `proj-`; **no
+  `principal://` prefix**: add it yourself). The binding check returned `agentToAnywhereConfig.agentGateway` = our gateway.
+- Grants (Cloud Shell loop, as the guide): browser, serviceUsageConsumer, bigquery.jobUser, mcp.toolUser on the
+  project; `bq add-iam-policy-binding` Data Viewer on `helpdesk.tickets` only.
+
+## Step 4 · The access policy (console) - three rules
+- Policy name and ID `tsg-gc14-egress` (click **Edit** next to "Policy ID: default-policy").
+- Rule 1 `allow-google-endpoints`: Allow; **Individual agents** > **Select principal agent(s)** lists
+  `tsg-gc14-helpdesk` with its principal: tick it and press **OK** (Escape cancels the pick: "An agent is required");
+  resource **Endpoint** > **Select endpoint** > Vertex AI Platform > **OK**. Stored as
+  `destination.agent_registry.endpoint.name == 'projects/.../endpoints/...'` (that one endpoint, not "any endpoint").
+- Rule 2 `allow-bigquery-tools`: Allow; the agent; resource **MCP server** > **Add condition** > **Condition editor**:
+  type (don't paste: pasted text didn't register and later doubled) with **double quotes** and **no resource_type
+  clause**: `destination.agent_registry.mcp_server.tool.name in ["", "list_dataset_ids", "list_table_ids",
+  "get_dataset_info", "get_table_info", "execute_sql_readonly", "execute_sql"]` > **Save**. The guide's
+  single-quoted expression with `resource_type == 'MCP_SERVER' &&` failed: "Condition expression is required" and
+  "Unable to display the condition builder due to an error in the condition editor".
+- Condition builder types for MCP servers: Name, Method, Tool name, Prompt name, Resource name, Read only, Destructive,
+  Idempotent, Open world (MCP tool annotations); operators equals / not equals.
+- Rule 3 `deny-execute-sql`: **Deny**; the agent; MCP server > Add condition > builder **Tool name** equals
+  `execute_sql` (the editor shows `destination.agent_registry.mcp_server.tool.name == "execute_sql"`).
+- **Save** each rule, **Create** > "Rules added". **The console binds the policy to the project**
+  (`//cloudresourcemanager.googleapis.com/projects/PROJECT_ID`, binding `tsg-gc14-egress-PROJECT_ID-binding`), not
+  to the gateway as the guide does. It took effect for the DENY rule (R3 below).
+
+## Step 5 · Dry run (real run 13 Nov 2026)
+- R1: `execute_sql_readonly` > 3 open tickets. R2: BigQuery `Access Denied ... finance_exports.payroll`. R3:
+  `execute_sql` reached BigQuery, IAM refused `bigquery.tables.updateData`. R4: example.com 200.
+- Gateway log: BigQuery calls matched `locations/global/mcpServers/...` (the global registry fix mattered); Vertex AI
+  calls matched our endpoint; telemetry hosts had no registry match and passed. IAP: `granted: true` entries.
+
+## Enforce
+- No console control after creation (gateway and extension pages are read-only). Cloud Shell: describe the extension,
+  change the metadata, import.
+- With `iamEnforcementMode: ENFORCE` (09:45 IST): R1 3 open tickets; R3 `execute_sql` > "MCP tool execution failed:
+  Server returned an error response" (refused before BigQuery, as the guide's run); **R4 example.com still 200** at
+  09:49 and 09:50. Gateway log for R4: `enforcedGatewaySecurityPolicy.matchedRules = [{"action": "ALLOWED", "name":
+  "default_denied"}]`, IAP result ALLOWED. Next try: remove the `iamEnforcementMode` line (Google's documented way).
