@@ -53,22 +53,25 @@ CSAM is always on. Pick **one** of the three paths.
 
 ### Path A: console clicks
 
-Menu names from Google's [manage templates](https://docs.cloud.google.com/model-armor/manage-templates) page:
+Rehearsed in the console on 13 November 2026. The form has three steps:
 
-1. In the Google Cloud console, go to the **Model Armor** page (search "Model Armor" in the top search bar). Check the
-   project picker shows your sandbox project.
-2. Click **Create Template**.
-3. **Template ID**: `helpdesk-guard`.
-4. **Location type**: choose **Region**, then your region. You can't change this later.
-5. **Filter version**: leave the default. If the page asks for a modality, keep **Text**.
-6. **Detections**: tick **Malicious URL detection**, **Prompt injection and jailbreak detection** (set its confidence
-   level to **Medium and above**) and **Sensitive Data Protection** (choose the basic configuration; Google's page
-   describes basic and advanced modes but doesn't name the console labels).
-7. **Responsible AI**: set each content filter to **Medium and above**. (If you leave one unset, the console defaults
-   it to **High**.)
-8. Expand **Additional configurations (optional)**: turn on **Configure logging** if you want sanitize results in
-   Cloud Logging (they contain the raw text you send; Step 6). Leave **Enforcement mode** at its default.
-9. Click **Create**.
+1. In the Google Cloud console, go to **Security** > **Model Armor** (or search "Model Armor"). Check the project
+   picker shows your sandbox project. Click **Create template**.
+2. **Template details**: **Template ID** `helpdesk-guard`; **Location type** **Region**; **Region** your region (it
+   can't be changed later). With **Enforce data residency** ticked (the default), the console turns image checks off
+   and sets **Modality** to **Text**: that's what this lab needs. Click **Continue**.
+3. **Detector configuration**: only prompt injection is ticked to begin with. Tick **Malicious URL detection** and
+   **Sensitive Data Protection** (Detection type **Basic**); keep **Prompt injection and jailbreak detection** at
+   **Medium and above**. Under **Responsible AI** the four filters start at **High**: click **Set confidence level for
+   all content filters** > **Medium and above**. Leave **Filter rules** empty. Click **Continue**.
+4. **Additional configuration**: under **Configure logging** tick **Prompts and responses** if you want sanitize
+   results in Cloud Logging (they contain the raw text you send; Step 6). Leave the filter version (**Stable**) and
+   **Enforcement mode** (**Inspect and block**) at their defaults.
+5. Click **Create**. The template's page lists every setting.
+
+The template page also has a **Test** button: type a prompt, **Run test**, and read **Overview** (which filter
+matched) or **JSON** (the full `sanitizationResult`). It tests prompts only, so Step 3's model-answer check still
+needs gcloud or REST.
 
 ### Path B: gcloud
 
@@ -294,7 +297,10 @@ own behavior, not a filter.
 
 **Our run:** the model refused in its own words: `finishReason` `STOP`, no rating marked `blocked`, and the text
 began "I cannot fulfill this request. I am programmed to be a helpful and harmless AI assistant." That's the third
-case above. Your safety settings were sent, they just didn't have to act.
+case above. Your safety settings were sent, they just didn't have to act. **It varies run to run:** on 13 November
+2026, three more REST calls gave `STOP`, but one console run with **Block some** came back "The response could not be
+completed because it potentially contains unsafe content (finishReason: SAFETY)", and a second one gave `STOP`. Run it
+a few times and record what you get.
 
 Optional: run the same text through `sanitize-user-prompt`. With your template you'd expect the `harassment` (and
 perhaps `dangerous`) responsible-AI category to report a `confidenceLevel`.
@@ -308,7 +314,7 @@ gcloud model-armor templates update helpdesk-guard --location=REGION \
   --pi-and-jailbreak-filter-settings-confidence-level=low-and-above
 ```
 
-(Console: open the template, click **Edit**, change the level, click **Save**.) Now run these two legitimate
+(Console: open the template, click **Edit** > **Continue**, change the first level, click **Save and test** to save and open the Test panel.) Now run these two legitimate
 requests before and after the change, and R2 again:
 
 ```bash
