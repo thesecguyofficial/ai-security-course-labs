@@ -91,3 +91,31 @@ Region `us-central1`, BigQuery datasets in `US`. In progress: sections are added
   Server returned an error response" (refused before BigQuery, as the guide's run); **R4 example.com still 200** at
   09:49 and 09:50. Gateway log for R4: `enforcedGatewaySecurityPolicy.matchedRules = [{"action": "ALLOWED", "name":
   "default_denied"}]`, IAP result ALLOWED. Next try: remove the `iamEnforcementMode` line (Google's documented way).
+- Removing the line (09:52 IST, Google's documented way): R4 still 200 at 09:56. Adding the guide's **gateway** binding
+  next to the console's project binding (10:01): R4 still 200 at 10:05; R1 3 open tickets.
+- Gateway log: only the 09:49 example.com request went through the gateway (`default_denied` / ALLOWED). The later
+  R4 fetches (09:56, 10:04) returned 200 but have **no** gateway log entry: they left by another path. Not solved in
+  this rehearsal. On 12 Nov the scripted Terraform build got `HTTP Error 403: Forbidden` for R4 under ENFORCE.
+- Checked and ruled out: the project's leftover `roles/aiplatform.agentDefaultAccess` grant to all agents (no `iap.`
+  permissions); the gateway itself (same fields as Terraform's: protocols, google_managed, both registries); the authz
+  policy (same as the guide's).
+
+## Recommendation for the GC14 recording
+- Build the gateway, extension, policy and binding with the **tested path** (Terraform, `bash cloud/deploy.sh up`, or
+  the guide's gcloud YAML), not the console's Add gateway: the console's version failed open, registered one registry,
+  bound the policy to the project, and its R4 wasn't blocked in this rehearsal.
+- Use the console to **show** what was built: Gateways (details, Service extensions), Agent Registry (MCP Servers tab
+  with BigQuery's 9 tools in `global`, Endpoints), Policies (the three rules in the rule builder), Deployments, Memory
+  Bank. Point at the console's defaults on camera as the warning (fail open, regional registry only).
+- Before the takes: re-run R4 under ENFORCE on the Terraform build to confirm the 403 still happens.
+
+## Step 6 · Memory Bank (Cloud Shell, real run)
+- `memory.py ttl --days 30` > "default_ttl set to 2592000s (30 days) for memories created from now on"; `write`;
+  `read --user alice` > 1 memory "Alice prefers replies before 10:00." **with `expireTime: None`** (the guide expects a
+  date: record it); `read --user bob` > 0 memories.
+- Data Access log (on since GC11): two `google.cloud.aiplatform.v1beta1.MemoryBankService.RetrieveMemories` entries.
+- Console Agent Platform > **Memory Bank**: charts (Retrieved memories count, Generate memories token count, Memory LRO
+  latency) and **Create memory bank**.
+
+## Step 7
+- Not rehearsed (one IAM grant to the all-agents principal set; Terraform-tested on 12 Nov).
