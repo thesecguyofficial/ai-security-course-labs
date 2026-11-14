@@ -21,7 +21,7 @@ jobs:
     env:
       SCENARIO: ${{ inputs.scenario || 'm00-0.6-linux' }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: recorder tools (off camera)
         run: python3 -m pip install --user --break-system-packages asciinema==2.4.0 pexpect==4.9.0
       - name: prepare a clean machine (off camera)
