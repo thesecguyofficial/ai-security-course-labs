@@ -230,6 +230,7 @@ class T5_TerraformAndSafety(unittest.TestCase):
             self.assertTrue(host.endswith((".example.com", ".example.net", "googleapis.com", "google.com",
                                            "github.com", "arxiv.org", "rfc-editor.org", "thesecguy.com"))
                             or host == "testsafebrowsing.appspot.com"     # Google's Safe Browsing test page
+                            or host == "releases.hashicorp.com"           # Terraform download in deploy.sh (checksum verified)
                             or host in ("example.com",) or host.endswith("."), host)   # "x." = templated host
 
 
