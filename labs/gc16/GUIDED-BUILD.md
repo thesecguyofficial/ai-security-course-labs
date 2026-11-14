@@ -129,8 +129,8 @@ Example response (shape from the provider's docs, values illustrative), one entr
 
 Read it: who (`principalEmail`), from where (`callerIp`), which call (`methodName`) and which model
 (`resourceName`). Look for what isn't there: the prompt, the answer and your `end_user` label. Write down the exact
-`methodName` you see: the lab's rules and the saved queries assume `...PredictionService.GenerateContent`, taken from
-Google's API definitions, because Google's audit logging page doesn't list it.
+`methodName` you see: the lab's rules and the saved queries use `...PredictionService.GenerateContent`, taken from
+Google's API definitions (Google's audit logging page doesn't list it), and our run confirmed it.
 
 Our run (12 November 2026, Cloud Shell): `google.cloud.aiplatform.v1.PredictionService.GenerateContent`, `callerIp` a
 Google Cloud address (Cloud Shell's), `resourceName` `projects/PROJECT_ID/locations/eu/publishers/google/models/gemini-3.1-flash-lite`.

@@ -237,7 +237,7 @@ def cmd_record(a) -> None:
     print(f"  who      {p['authenticationInfo']['principalEmail']}")
     print(f"  what     {p['serviceName']}  {p['methodName']}")
     print(f"  on       {p['resourceName']}")
-    print(f"  from     {rm.get('callerIp')}  network {rm.get('callerNetwork', 'none (not from a VPC)').rsplit('/', 1)[-1]}")
+    print(f"  from     {rm.get('callerIp')}  network {rm.get('callerNetwork', 'none').rsplit('/', 1)[-1]}")
     print(f"  agent    {rm.get('callerSuppliedUserAgent')}")
     print(f"  when     {e['timestamp']}")
     req = {k: v for k, v in p.get("request", {}).items() if k != "@type"}

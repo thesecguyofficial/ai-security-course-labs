@@ -99,6 +99,15 @@ def check_file(p, errors, warnings):
             warnings.append(f"{p}:{n}: stacked 'Not X. Not Y.' pattern")
         if re.search(r"[a-z0-9]!(\s|$)", line) and not is_code_file:
             warnings.append(f"{p}:{n}: exclamation mark")
+        # Structure patterns that read as machine-made (voice guide; course review 14 Nov 2026). Warnings only: a
+        # bold label is right where the reader scans (steps, controls), so these count, they don't block.
+        if not is_code_file:
+            if re.match(r"^\s*[-*] \*\*[^*]{2,60}[.:]\*\*", line):
+                warnings.append(f"{p}:{n}: bullet opens with a bold label (fine for steps and controls; else a sentence)")
+            if re.search(r", not (just |only )?[a-z][a-z ]{2,40}[.!]$", line):
+                warnings.append(f"{p}:{n}: sentence ends 'X, not Y.' (use sparingly)")
+            if re.match(r"^\s*(say:\s*)?(\[[^\]]*\]\s*)?Hi, I'm The Sec Guy\.", line):
+                warnings.append(f"{p}:{n}: video opens 'Hi, I'm The Sec Guy.' (vary the opening)")
 
 
 def main(argv):

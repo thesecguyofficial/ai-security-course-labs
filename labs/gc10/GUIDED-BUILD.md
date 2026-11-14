@@ -355,6 +355,13 @@ Read it: the reason `API_KEY_IP_ADDRESS_BLOCKED` is Google's documented code for
 violates API key IP address restrictions". No model ran, so this cost nothing. A stolen copy of this key is useless
 anywhere but `192.0.2.10`.
 
+Our run (12 November 2026, Cloud Shell, a Free Trial project with no organization): a plain standard key restricted to
+Agent Platform didn't even reach the IP check. It got `401` "API keys are not supported by this API. Expected OAuth2
+access token or other authentication credentials that assert a principal." The console also refused to create an
+Agent Platform key without a service account ("Service account required"). Only a key bound to a service account got
+as far as `403` `API_KEY_IP_ADDRESS_BLOCKED`. So test which kind your project accepts before you rely on either. The
+offline twin still lets a standard key through (its A1, A2 and L2), as Google's key page describes.
+
 ### R4 · The trail: R1 and R2 in your audit logs
 
 Give the logs a few minutes, then:

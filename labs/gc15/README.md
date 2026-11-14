@@ -763,7 +763,9 @@ FAILED (failures=5, errors=1)
    `setups/hardened/app.json` (A15).
 3. **15.4, the hunt.** Write `find_outside_predictions()` in `hunt.py`: the Predict entries whose
    `requestMetadata.callerNetwork` isn't ExampleCo's VPC. Report the caller IP and the
-   `authenticationInfo.serviceAccountKeyName`.
+   `authenticationInfo.serviceAccountKeyName`. (That's the twin's log. In our real run on 13 November 2026, calls
+   through a Private Service Connect endpoint showed `callerIp` as the word `private` and no `callerNetwork` at all,
+   so in a real project hunt for public caller IPs and unknown keys instead.)
 
 When all three are right, `make check-hardened` prints 0 findings and `make hardened` prints 0 of 15.
 

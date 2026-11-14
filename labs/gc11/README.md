@@ -798,7 +798,7 @@ cd ..
 make plan
 make up
 terraform/scripts/check_live.sh YOUR_PROJECT_ID europe-west4
-terraform/scripts/request_response_logging.sh on YOUR_PROJECT_ID europe-west4
+terraform/scripts/request_response_logging.sh on YOUR_PROJECT_ID eu
 ```
 
 - `make cost`: prints the table above
@@ -822,7 +822,7 @@ again.
 ### Teardown
 
 ```bash
-terraform/scripts/request_response_logging.sh off YOUR_PROJECT_ID europe-west4
+terraform/scripts/request_response_logging.sh off YOUR_PROJECT_ID eu
 make down
 ```
 
