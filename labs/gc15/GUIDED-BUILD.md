@@ -375,7 +375,9 @@ TLS and 443 with a self-signed certificate on this address).
    `callerNetwork`. Your request 2 attempt from the laptop shows up too, as you, with your public address and status
    `9` (FAILED_PRECONDITION). Each of our three VM calls took about 23 seconds on CPU, and Qwen3's answers started
    with a `<think>` block: in request 4 it repeated the planted instruction in its reasoning before summarizing, and
-   that reasoning text went back to the caller unscreened.
+   that reasoning text went back to the caller unscreened. Since 14 November 2026 the lab's `server.py` turns Qwen3's
+   thinking off and strips any `<think>` block, so your summaries should start with the summary. If you still see
+   one, you built from an older copy: rebuild the image.
 
    Then look for the access log entries: search Logs Explorer for your endpoint ID and the deployed model ID 150101.
    Compare with the lab's hunt: which fields would catch the 203.0.113.50 calls?

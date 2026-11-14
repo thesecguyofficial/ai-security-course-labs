@@ -134,7 +134,11 @@ class TC_Lab(unittest.TestCase):
         fd, hd = shipped("first-draft"), shipped("hardened")
         self.assertTrue(twin.decide(fd, "ds-bob", "aiplatform.endpoints.predict", EP)[0])
         self.assertTrue(twin.decide(hd, "tsg-helpdesk-app", "aiplatform.endpoints.predict", EP)[0])
-        self.assertFalse(twin.decide(hd, "tsg-helpdesk-app", "aiplatform.endpoints.predict", "endpoint:projects/example-summariser-prod/locations/us-central1/endpoints/9999")[0])
+        # Endpoint-level IAM isn't supported for these endpoints (Google; our 13 Nov 2026 run), so the predict-only
+        # role sits on the project and reaches every endpoint in it: one permission, not one endpoint.
+        self.assertTrue(twin.decide(hd, "tsg-helpdesk-app", "aiplatform.endpoints.predict", "endpoint:projects/example-summariser-prod/locations/us-central1/endpoints/9999")[0])
+        self.assertFalse(twin.decide(hd, "tsg-helpdesk-app", "aiplatform.endpoints.deploy", EP)[0])
+        self.assertFalse(twin.decide(hd, "tsg-helpdesk-app", "aiplatform.endpoints.predict", "endpoint:projects/example-summariser-dev/locations/us-central1/endpoints/1")[0])
         self.assertTrue(twin.decide(fd, "ds-alice", "storage.objects.get", "bucket:example-tsg-analytics/x.csv")[0])
 
     def test_14_workbench_reach_and_constraints(self):

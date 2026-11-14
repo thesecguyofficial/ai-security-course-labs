@@ -596,8 +596,13 @@ python3 twin.py decide hardened tsg-helpdesk-app aiplatform.endpoints.predict --
   }
 }
 DENY: VPC Service Controls: request from outside the perimeter tsg_ai
-ALLOW: tsgPredictOnly on the endpoint
+ALLOW: tsgPredictOnly on the project example-summariser-prod
 ```
+
+The predict-only role sits on the project, not the endpoint: Google's endpoint access page says "Endpoint-level IAM
+is not supported" for these endpoints, and our real run (13 November 2026) agreed. So the role reaches every endpoint
+in the project. It holds one permission, and keeping production endpoints in their own project limits what "every
+endpoint" means.
 
 **What stopped what**, one line each: A1 safetensors-only versions; A2 a release bucket only the pipeline writes, plus
 a hash check before `models.upload`; A3 and A4 data scientists hold no roles in production; A5 the perimeter blocks
@@ -649,7 +654,7 @@ The attack lines don't change. The normal requests do (the end of the output):
 
 ```output
   N1   BROKEN   The Helpdesk gets a ticket summary
-         . the Helpdesk asks for a ticket summary (psc path, from ExampleCo's VPC): allowed (tsgPredictOnly on the endpoint); endpoint: the endpoint was created on 2027-01-05, before the project joined the perimeter on 2027-01-10: deploying to it fails
+         . the Helpdesk asks for a ticket summary (psc path, from ExampleCo's VPC): allowed (tsgPredictOnly on the project example-summariser-prod); endpoint: the endpoint was created on 2027-01-05, before the project joined the perimeter on 2027-01-10: deploying to it fails
   N2   works    The pipeline uploads and deploys a release
   N3   works    The ML lead promotes a clean version
   N4   works    A data scientist opens her own notebook
