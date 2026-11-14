@@ -279,9 +279,11 @@ your own Google account email for `YOUR_EMAIL`:
 SA=chatbot-runtime@PROJECT_ID.iam.gserviceaccount.com
 gcloud iam service-accounts add-iam-policy-binding "$SA" --member="user:YOUR_EMAIL" \
   --role="roles/iam.serviceAccountTokenCreator"
-sleep 60   # the new grant takes about a minute: before that, "Failed to impersonate"
+sleep 60
 gcloud ai endpoints create --region=europe-west4 --display-name=should-fail --impersonate-service-account="$SA"
 ```
+
+The `sleep 60` is there because the new grant takes about a minute to work: before that, the command fails with "Failed to impersonate".
 
 Our response (trimmed: it also carries a Troubleshooter link and says impersonation was used):
 
@@ -505,7 +507,7 @@ gcloud compute firewall-rules delete deny-all-egress allow-aiplatform-eu-egress 
 gcloud dns record-sets delete aiplatform.eu.rep.googleapis.com. --zone=aiplatform-eu-rep --type=A
 gcloud dns managed-zones delete aiplatform-eu-rep
 gcloud network-connectivity regional-endpoints delete aiplatform-eu --region=europe-west4 --quiet
-gcloud compute addresses delete aiplatform-eu-ip --region=europe-west4 --quiet   # only if the console reserved it
+gcloud compute addresses delete aiplatform-eu-ip --region=europe-west4 --quiet
 gcloud compute networks subnets delete helpdesk-eu --region=europe-west4 --quiet
 gcloud compute networks delete helpdesk-vpc --quiet
 bq rm -r -f -d PROJECT_ID:ai_logs
@@ -519,6 +521,8 @@ done
 gcloud iam roles delete helpdeskModelCaller --project=PROJECT_ID
 gcloud access-context-manager perimeters delete helpdesk --policy=ACCESS_POLICY_ID
 ```
+
+Run the `aiplatform-eu-ip` delete only if the console reserved that address for you.
 
 - `gcloud access-context-manager perimeters delete helpdesk`: only if you did 1f
 

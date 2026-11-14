@@ -410,12 +410,14 @@ was readable by all staff (attack A8). Keep a small sample, or none, and lock th
 make cloud-down PROJECT=$PROJECT
 gcloud compute instances delete tsg-gc15-client --zone=$REGION-a --quiet
 gcloud compute firewall-rules delete tsg-gc15-iap-ssh --quiet
-gcloud storage rm -r gs://${PROJECT}_cloudbuild   # Cloud Build's staging bucket from Part B
+gcloud storage rm -r gs://${PROJECT}_cloudbuild
 bq rm -r -f -d $PROJECT:tsg_gc15_audit
 gcloud kms keys versions destroy 1 --key=tsg-gc15-ai --keyring=tsg-gc15 --location=$REGION
 for sa in tsg-gc15-runtime tsg-gc15-app tsg-gc15-teardown; do gcloud iam service-accounts delete $sa@$PROJECT.iam.gserviceaccount.com --quiet; done
 make cloud-check PROJECT=$PROJECT
 ```
+
+The `gs://${PROJECT}_cloudbuild` bucket is Cloud Build's staging bucket from Part B.
 
 The `cloud-down` target undeploys the model first (an endpoint must be undeployed before it can be deleted), then
 deletes the forwarding rule, the address, the endpoint, the model, the scheduler job, the bucket contents and the
