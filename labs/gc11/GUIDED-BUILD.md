@@ -237,7 +237,8 @@ gcloud compute instances create helpdesk-vm --zone=europe-west4-a --machine-type
   --image-family=debian-12 --image-project=debian-cloud --metadata-from-file=startup-script=smoke.sh
 ```
 
-Console: **Compute Engine** > **VM instances** > **Create instance**, `e2-small`, Debian 12, under networking set
+Console: **Compute Engine** > **VM instances** > **Create instance**, `e2-small`, Debian 12 or the default Debian 13
+(both passed), **Data protection** > **No backups**, under **Observability** untick **Install Ops Agent**, under networking set
 **External IPv4 address** to **None** on the `helpdesk-eu` subnet, under security pick `chatbot-runtime` as the service
 account, paste `smoke.sh` into the startup script box (labels may differ slightly).
 
@@ -278,6 +279,7 @@ your own Google account email for `YOUR_EMAIL`:
 SA=chatbot-runtime@PROJECT_ID.iam.gserviceaccount.com
 gcloud iam service-accounts add-iam-policy-binding "$SA" --member="user:YOUR_EMAIL" \
   --role="roles/iam.serviceAccountTokenCreator"
+sleep 60   # the new grant takes about a minute: before that, "Failed to impersonate"
 gcloud ai endpoints create --region=europe-west4 --display-name=should-fail --impersonate-service-account="$SA"
 ```
 
@@ -503,6 +505,7 @@ gcloud compute firewall-rules delete deny-all-egress allow-aiplatform-eu-egress 
 gcloud dns record-sets delete aiplatform.eu.rep.googleapis.com. --zone=aiplatform-eu-rep --type=A
 gcloud dns managed-zones delete aiplatform-eu-rep
 gcloud network-connectivity regional-endpoints delete aiplatform-eu --region=europe-west4 --quiet
+gcloud compute addresses delete aiplatform-eu-ip --region=europe-west4 --quiet   # only if the console reserved it
 gcloud compute networks subnets delete helpdesk-eu --region=europe-west4 --quiet
 gcloud compute networks delete helpdesk-vpc --quiet
 bq rm -r -f -d PROJECT_ID:ai_logs

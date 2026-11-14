@@ -212,9 +212,13 @@ safetensors format works.
      "https://$REGION-aiplatform.googleapis.com/v1/projects/$PROJECT/locations/$REGION/endpoints"
    ```
 
-   Console: **Agent Platform (Vertex AI) > Online prediction > Create**, name it, choose **Private**, then **Private
-   Service Connect**, **Select project IDs** (your project only), **Continue**. The console doesn't set CMEK the same
-   way, so use REST if you want the key.
+   Console (rehearsed 13 November 2026): **Agent Platform > Endpoints > Create**, name it, **Private** > **Private
+   Service Connect**, **Select project IDs** (your project only), **Advanced options > Encryption > Cloud KMS key** >
+   `tsg-gc15-ai`, **Continue**. The console won't create an endpoint without a model, so step 2 deploys it at the same
+   time (Version 1, `e2-standard-4`, 1 replica, service account `tsg-gc15-runtime`), and the console picks the
+   deployed model ID: read it on the endpoint's page and create the step 2 job straight after. The console has no
+   access-logging switch (only "Disable container logging"): deploy with the gcloud line in step 3 if you want
+   access logs. Deploying took about 22 minutes in our run.
 
    Example response (shape from the provider's docs, values illustrative):
 
@@ -359,14 +363,19 @@ TLS and 443 with a self-signed certificate on this address).
    protoPayload.methodName:"Predict"
    ```
 
-   Example entry (shape from Google's AuditLog reference, values illustrative):
+   Our entry (13 November 2026), trimmed:
 
    ```output
-   protoPayload.authenticationInfo.principalEmail: tsg-gc15-app@tsg-sandbox-1234.iam.gserviceaccount.com
-   protoPayload.requestMetadata.callerIp: 10.128.0.5
-   protoPayload.requestMetadata.callerNetwork: //compute.googleapis.com/projects/tsg-sandbox-1234/global/networks/default
+   protoPayload.authenticationInfo.principalEmail: tsg-gc15-app@PROJECT_ID.iam.gserviceaccount.com
+   protoPayload.requestMetadata.callerIp: private
    protoPayload.methodName: google.cloud.aiplatform.v1.PredictionService.Predict
    ```
+
+   Read it: through the PSC address `callerIp` is the word `private`, not the VM's `10.x` address, and there's no
+   `callerNetwork`. Your request 2 attempt from the laptop shows up too, as you, with your public address and status
+   `9` (FAILED_PRECONDITION). Each of our three VM calls took about 23 seconds on CPU, and Qwen3's answers started
+   with a `<think>` block: in request 4 it repeated the planted instruction in its reasoning before summarizing, and
+   that reasoning text went back to the caller unscreened.
 
    Then look for the access log entries: search Logs Explorer for your endpoint ID and the deployed model ID 150101.
    Compare with the lab's hunt: which fields would catch the 203.0.113.50 calls?
@@ -401,6 +410,7 @@ was readable by all staff (attack A8). Keep a small sample, or none, and lock th
 make cloud-down PROJECT=$PROJECT
 gcloud compute instances delete tsg-gc15-client --zone=$REGION-a --quiet
 gcloud compute firewall-rules delete tsg-gc15-iap-ssh --quiet
+gcloud storage rm -r gs://${PROJECT}_cloudbuild   # Cloud Build's staging bucket from Part B
 bq rm -r -f -d $PROJECT:tsg_gc15_audit
 gcloud kms keys versions destroy 1 --key=tsg-gc15-ai --keyring=tsg-gc15 --location=$REGION
 for sa in tsg-gc15-runtime tsg-gc15-app tsg-gc15-teardown; do gcloud iam service-accounts delete $sa@$PROJECT.iam.gserviceaccount.com --quiet; done
