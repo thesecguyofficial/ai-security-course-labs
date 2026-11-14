@@ -5,9 +5,18 @@ Optional. The laptop lab (`README.md`) teaches everything at $0. This guide buil
 About 60 minutes.
 
 Two shortcuts, both tested in our project on 12 November 2026: `cloud/deploy.sh` builds Parts A to C, runs A to E
-with PASS, WAIT or FAIL lines and tears down (`bash deploy.sh up`, `test`, `raise`, `down`); `terraform/` is the same
-Parts A to C as code (`bash deploy.sh tf apply`, then `test`, then `bash deploy.sh tf destroy`). Doing the parts by
-hand once is still the way to learn them.
+with PASS, WAIT or FAIL lines and tears down (`bash cloud/deploy.sh up`, `test`, `raise`, `down`, run from
+`labs/gc16` like every command in this guide); `terraform/` is the same Parts A to C as code
+(`bash cloud/deploy.sh tf apply`, then `test`, then `bash cloud/deploy.sh tf destroy`). Doing the parts by hand once
+is still the way to learn them.
+
+**If you reuse the GC11 or GC12 project,** two things in it may already exist: the Model Armor template
+`helpdesk-guard` (GC12) and Data Access audit logs for Agent Platform (GC11, GC14 and GC15 switch them on). Since
+15 November 2026 `up` records which of the two it made, and `down` removes only those; it tells you what it kept and
+how to remove it by hand. The Terraform shortcut is different. Terraform doesn't adopt a template it didn't create, so
+expect `tf apply` to stop with an "already exists" error if `helpdesk-guard` is there (we haven't run that case), and
+`tf destroy` switches the Agent Platform Data Access logs off even if they were on before (`tf apply` prints a note
+when it sees that). Use Terraform in a project where neither exists, or switch the logs back on afterwards (Part A).
 
 | Part | What you build | Lesson |
 |---|---|---|
@@ -16,7 +25,7 @@ hand once is still the way to learn them.
 | C | Three alerts: a Model Armor match, a key used from outside, a request flood | 16.4 |
 | D | Hunting with the saved queries in Logs Explorer | 16.4 |
 | E | Change one setting (the flood threshold) and re-run | 16.4 |
-| F | Security Command Center: what you can see on Standard, and why Premium stays on the video | 16.2, 16.3 |
+| F | Security Command Center: what you can see on Standard, and why Premium stays off | 16.2, 16.3 |
 | G | Cost and teardown | all |
 
 > **About the responses below.** We ran this guide's script and Terraform on 12 November 2026 (`europe-west4`, a Free
@@ -37,7 +46,8 @@ Throughout: `PROJECT_ID` = your sandbox project, `REGION` = `europe-west4`.
    ```
 
 3. One notification channel for the alerts (an email address you read). Console: the **Alerting** page, **Edit
-   notification channels**, in the **Email** section **Add New**, enter the address, **Save**. Copy its ID
+   notification channels**, in the **Email** section **Add New**, enter the address and the **Display Name**
+   `GC16 lab email` (the teardown in Part G finds the channel by that name), **Save**. Copy its ID
    (`projects/PROJECT_ID/notificationChannels/...`) and put it in place of `CHANNEL` in the three JSON files in
    `cloud/`.
 4. **If your project is in an organization whose security team runs Security Command Center, stop and ask them
@@ -52,7 +62,7 @@ Throughout: `PROJECT_ID` = your sandbox project, `REGION` = `europe-west4`.
 | User-defined log-based metric | "a class of Cloud Monitoring custom metrics and are chargeable" | one metric for an hour: cents at most |
 | Alerting policies | Google will charge for alerting "no sooner than September 1, 2027" ($0.35 per metric reference per month) | $0 today |
 | Model Armor | "no cost for using Model Armor up to 2 million tokens per month" standalone | $0 |
-| Gemini 3.1 Flash-Lite (Preview) calls | Agent Platform pricing page | 30 short calls: under $0.05 |
+| Gemini 3.1 Flash-Lite (Preview) calls | Agent Platform pricing page | About 60 short calls (1 in Part A, 30 in Part C, 30 in Part E): a few cents |
 
 Sources: [Cloud Observability pricing](https://cloud.google.com/stackdriver/pricing),
 [Data Access audit logs](https://docs.cloud.google.com/logging/docs/audit/configure-data-access),
@@ -138,10 +148,19 @@ The entry was there within a minute of the call.
 
 ## Part B · Model Armor sanitize logging and four requests (16.1, 16.2)
 
-You need a template. If you kept GC12's `helpdesk-guard`, use it; otherwise follow `labs/gc12/GUIDED-BUILD.md` Step 0
-(the regional endpoint override) and Step 1 Path B, which already includes `--template-metadata-log-sanitize-operations`.
-To switch logging on for an existing template, open it on the **Model Armor** page, **Edit**, turn on **Configure
-logging** under **Additional configurations (optional)**, **Save**.
+First point `gcloud` at Model Armor's regional endpoint. You need this even if you did GC12, because GC12's teardown
+unsets it (the command is GC12's Step 0; our 12 November run went through `cloud/deploy.sh`, which sets the same
+override, so we haven't seen what `gcloud` answers without it):
+
+```bash
+gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.REGION.rep.googleapis.com/"
+```
+
+You need a template. If you kept GC12's `helpdesk-guard`, use it, and remember at teardown that it isn't this lab's
+to delete; otherwise follow `labs/gc12/GUIDED-BUILD.md` Step 1 Path B, which already includes
+`--template-metadata-log-sanitize-operations`. To switch logging on for an existing template, open it on the
+**Model Armor** page, **Edit**, turn on **Configure logging** under **Additional configurations (optional)**,
+**Save**.
 
 Now four requests (the lab placeholders below are harmless test strings):
 
@@ -224,8 +243,19 @@ holding the prompt word for word, and `sanitizationVerdict: MODEL_ARMOR_SANITIZA
    gcloud monitoring policies create --policy-from-file=cloud/alert-request-flood.json
    ```
 
-   Then send 30 short calls (the same `curl` as Part A in a loop, `maxOutputTokens` 20). Within a few minutes the
-   metric passes 20 in a 5-minute window and the email arrives.
+   Then send 30 short calls, the Part A call in a loop (each line printed is the HTTP code; you want `200`):
+
+   ```bash
+   for i in $(seq 1 30); do
+     curl -s -o /dev/null -w "%{http_code}\n" -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+       -H "Content-Type: application/json" \
+       "https://aiplatform.eu.rep.googleapis.com/v1/projects/PROJECT_ID/locations/eu/publishers/google/models/gemini-3.1-flash-lite:generateContent" \
+       -d '{"contents":[{"role":"user","parts":[{"text":"Reply with the number '"$i"'."}]}],"generationConfig":{"maxOutputTokens":20},"labels":{"end_user":"flood-test"}}'
+   done
+   ```
+
+   This is the loop `cloud/deploy.sh test` runs. Within a few minutes the metric passes 20 in a 5-minute window and
+   the email arrives.
 
    Example response (shape from the provider's docs, values illustrative): an incident titled
    **GC16 request flood on Agent Platform** with the condition "More than 20 model calls in 5 minutes" and the metric
@@ -250,7 +280,7 @@ your 30 calls in one hour's row. Look for your `end_user` label in `full_request
 ## Part E · Change one setting and re-run (16.4)
 
 Raise the flood threshold from 20 to 100 (edit `thresholdValue` in the policy: **Monitoring**, **Alerting**, the
-policy, **Edit**), then send the same 30 calls again. No alert this time. That's the trade-off you tune on your own
+policy, **Edit**), then send the same 30 calls again (the Part C loop). No alert this time. That's the trade-off you tune on your own
 traffic: a low threshold pages you for every batch job (the lab's N1 false alarm on the data science batch), a high
 one lets a slow, steady LLMjacking run all afternoon (the lab's S1 made 120 calls over 90 minutes, under two a
 minute).
@@ -262,8 +292,9 @@ minute).
   Gemini models, so expect your Gemini calls not to show as models there.
 - **Premium** is what runs Event Threat Detection's AI rules ("New Geography for AI Service" and the others in lesson
   16.2), and Agent Platform Threat Detection is Preview. Premium is a subscription (minimum "$15,000" a year) or
-  pay-as-you-go per project or organization. **Don't turn it on for a personal account to try it.** The module's video
-  shows the findings; the laptop lab gives you their shape, from Google's example findings.
+  pay-as-you-go per project or organization. **Don't turn it on for a personal account to try it.** We never
+  produced a real Premium finding for this course; the laptop lab's simulator gives you their shape, from Google's
+  example findings.
 
 ## Part G · Teardown (do it today)
 
@@ -275,14 +306,29 @@ gcloud beta monitoring channels list --filter='displayName="GC16 lab email"' --f
   | xargs -r -n1 gcloud beta monitoring channels delete --force --quiet
 ```
 
-Part A: remove the auditConfigs block from /tmp/policy.yaml (fresh copy from get-iam-policy) and set it again, or untick Data Read and Data Write in IAM & Admin > Audit Logs.
+The channel line finds the channel by the display name `GC16 lab email`. If you made yours in the console without
+that name, delete it there: **Alerting**, **Edit notification channels**.
 
-Part B: switch template logging off (Edit, Configure logging) or delete the template if you made it here:
+Part A: only if Data Access logs for Agent Platform were **off** before this lab. GC11, GC14 and GC15 switch them on
+too; if you still use those builds, leave them. To switch them off, remove the auditConfigs block from
+/tmp/policy.yaml (fresh copy from get-iam-policy) and set it again, or untick Data Read and Data Write in
+IAM & Admin > Audit Logs.
+
+Part B: if you reused GC12's template, keep it and switch its logging off if GC12 had it off (Edit, Configure
+logging). Delete the template only if you made it here:
 
 ```bash
 gcloud model-armor templates delete helpdesk-guard --location=REGION
+```
+
+Either way, undo the endpoint override:
+
+```bash
 gcloud config unset api_endpoint_overrides/modelarmor
 ```
+
+If you used the script, `bash cloud/deploy.sh down` does this teardown and applies the same two rules: it removes the
+template and the audit config only when its own `up` made them.
 
 Or delete the whole sandbox project (`gcloud projects delete PROJECT_ID`), which removes everything above.
 Check the next day in **Billing**, **Reports** that nothing is still running.

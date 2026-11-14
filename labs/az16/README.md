@@ -85,7 +85,7 @@ where real rows carry object IDs.
 
 New to detection and response? Do this before Step 1 (lesson 16.6 calls it Step 1b; lesson 16.0 explains each idea). `explore.py` shows,
 one idea at a time, the records, the rules and the response on Contoso's day, the Azure version of the AWS stream's Module 16.
-Real output below is from a fresh Ubuntu machine (recording run 41618020516). Run it from `labs/az16`.
+Real output below is from a fresh Ubuntu machine. Run it from `labs/az16`.
 
 **What it really runs.** Nothing that changes anything: `explore.py` builds the simulated day in memory with
 `simulate.py`, runs the lab's own functions on it (`detect.py`, `inventory.py`, `posture.py`, `report.py`) and prints.
@@ -164,6 +164,11 @@ Hardened today: 6 Activity log rows, 885 resource log rows (735 from the gateway
 First draft today: 6 Activity log rows, 0 resource log rows.
 Neither kind of record holds the prompt or the answer.
 ```
+
+The simulator is kinder than the real service in two ways. It writes a `RequestResponse` row for blocked calls too
+(the 885 include them), and it shows full caller addresses. In our real run (10 November 2026, GUIDED-BUILD.md) only
+the calls that returned 200 were in `RequestResponse`: the blocked (400) and throttled (429) calls were missing, and
+`CallerIPAddress` had its last octet masked (`135.13.134.**`).
 
 **3. What was said.** The API Management gateway's LLM log holds the prompt, the answer and the tokens, as two rows per call. The caller is in the gateway log and your app log, joined on `CorrelationId`.
 

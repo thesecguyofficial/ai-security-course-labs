@@ -52,10 +52,11 @@ class TC_Challenge(unittest.TestCase):
 
     # ---------------------------------------------------------------- 2. the approval gate
     def test_24_gate_refuses_version_3(self):
-        """challenge 2: version 3 is refused, with a reason for the pickle file, the missing licence and the missing hashes"""
+        """challenge 2: version 3 is refused, with a reason for the pickle file, the missing license and the missing hashes"""
         reasons = " ".join(gate_says(3)).lower()
-        for word in ("pytorch_model.bin", "licence", "hash"):
+        for word in ("pytorch_model.bin", "hash"):
             self.assertIn(word, reasons)
+        self.assertTrue("license" in reasons or "licence" in reasons, "no reason mentions the license")
 
     def test_25_gate_passes_a_clean_version_only(self):
         """challenge 2: clean version 4 passes for the approver; refused if its registrant approves it, or if a file was swapped"""

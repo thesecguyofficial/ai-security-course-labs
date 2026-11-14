@@ -13,7 +13,7 @@ You get **TSG Helpdesk**, a tiny web app with an AI assistant. The assistant tur
 | A **helper program** | Checks a service's status | Command injection: the answer starts extra commands on the server |
 
 First you attack the vulnerable version and watch all three happen. Then you read the four fixes (output encoding,
-a parameterised query, an allow-list, a contained subprocess), attack the safe version, and **prove** the fixes with
+a parameterized query, an allow-list, a contained subprocess), attack the safe version, and **prove** the fixes with
 automated tests that also prove each attack worked before. Finally, a challenge with no solution included.
 
 ## Get the lab
@@ -23,8 +23,9 @@ git clone https://github.com/thesecguyofficial/ai-security-course-labs.git
 cd ai-security-course-labs/labs/m05
 ```
 
-Already cloned it for an earlier module? Run `git pull` inside `ai-security-course-labs` instead. No git? Use the
-green **Code → Download ZIP** button on the repository page and unzip it.
+Already cloned it for an earlier module? Run `git pull` inside `ai-security-course-labs` instead, then
+`cd labs/m05`. No git? Use the green **Code → Download ZIP** button on the repository page, unzip it, and open a
+terminal in its `labs/m05` folder. Every command below is run from `labs/m05`.
 
 ## What's in this folder
 
@@ -36,7 +37,7 @@ green **Code → Download ZIP** button on the repository page and unzip it.
 | `data/fake_secrets.env` | Fake secrets the app should never reveal. Nothing in it works anywhere |
 | `attack.py` | Sends the three attack questions and reports what happened. `--only html`, `--only sql` or `--only shell` runs one of them |
 | `explore.py` | Changes nothing in the app (but its `shell` step really runs what you type): shows each step on its own (the data, the model's plan, the page, Markdown, the SQL, the shell). Step 1b |
-| `test_lab.py` | 13 automated tests: 3 prove the attacks work in vulnerable mode, 10 prove the fixes hold |
+| `test_lab.py` | 13 automated tests: 3 prove the attacks work in vulnerable mode, 7 prove the fixes hold, 3 check the real web server |
 | `test_challenge.py` | 5 tests for the challenge. 4 fail until you fix the code |
 | `run_tests.py` | Runs the tests with one line per result |
 | `semgrep/model-output-sinks.yml` | Optional Step 4b: three Semgrep rules that find this lab's three sinks in the code |
@@ -64,23 +65,21 @@ The attacks only target this app, on your machine. Only attack systems you own o
 - A web browser, for one optional step.
 - Optional, last step only: Ollama with a small model (lessons 0.6 and 1.8).
 
-Open a terminal in this folder and run the setup check:
+You are already in `labs/m05` (the `cd` under "Get the lab" put you there). Run the setup check:
 
 ```bash
-cd labs/m05
 make -n setup
 make setup
 ```
 
-- `cd labs/m05`: run it from the course labs repository folder (`ai-security-course-labs`)
 - `make -n setup`: prints what `make setup` would run, without running it ("look before you run")
-- `make setup`: same as `python3 ../../tools/check_python.py 3.11`
+- `make setup`: same as `python3 ../../tools/check_python.py 3.11` (Windows: `py ..\..\tools\check_python.py 3.11`)
 
-Real output of `make setup` (Linux):
+Real output of `make setup` (Linux, Python 3.13):
 
 ```text
 python3 ../../tools/check_python.py 3.11
-Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
+Nothing to install for this lab: Python 3.13 and its standard library are all it needs.
 ```
 
 There is nothing to install: no virtual environment and no `pip install`, because everything this lab uses ships
@@ -88,7 +87,7 @@ with Python (its *standard library*: `sqlite3`, `html`, `subprocess`, `http.serv
 
 ## Step 1b · Look at each step before you attack it (about 10 minutes)
 
-New to web apps? Do this first. `explore.py` shows, one at a time, what happens to the model's output after the
+This step comes before Step 1. New to web apps? Do this first. `explore.py` shows, one at a time, what happens to the model's output after the
 model has written it. Nothing here changes the app. But the `shell` step (without `--safe`) really runs what you
 type, so only try harmless commands, like `echo`. On Windows, use `py` instead of `python3`.
 
@@ -243,8 +242,8 @@ VPN</p>`. The second prints the headers, the label on the parcel:
 
 ```text
 HTTP/1.0 200 OK
-Server: BaseHTTP/0.6 Python/3.12.3
-Date: Thu, 29 Oct 2026 08:51:45 GMT
+Server: BaseHTTP/0.6 Python/3.13.18
+Date: Sat, 14 Nov 2026 22:21:24 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 721
 ```
@@ -390,7 +389,7 @@ Real output:
 [PASS] vulnerable: model output rewrites the SQL query and leaks bob's tickets
 [PASS] vulnerable: model output runs an extra shell command that reads the secrets file
 [PASS] safe: the payload is HTML-encoded, so the browser shows it instead of running it
-[PASS] safe: parameterised query returns only alice's tickets, and nothing for the injection string
+[PASS] safe: parameterized query returns only alice's tickets, and nothing for the injection string
 [PASS] safe: the search runs read-only, and query_only is switched back off afterwards
 [PASS] safe: the allow-list blocks the injected command, and the secret never appears
 [PASS] safe: the helper runs with no inherited environment variables (no tokens or keys to steal)
@@ -512,6 +511,9 @@ FAILED (failures=4)
 4 of 18 TESTS FAILED (18 run)
 ```
 
+`make` then adds one line of its own, starting `make: ***` and ending `Error 1`. That is `make` reporting that
+tests failed, which is expected until you fix the code. It does not mean the tool broke.
+
 The last failure really wrote `escaped.txt` one folder above `exports/` (still inside this lab folder): that file
 is your proof of the bug. Edit `safe_export_path()` where the **YOUR TURN** comment is until all 18 tests pass.
 Hints are in the comment. No solution is included. `make clean` deletes `exports/` and `escaped.txt`.
@@ -539,8 +541,9 @@ questions in the browser. What to expect, honestly:
 - **The safe version doesn't depend on the model behaving.** Encoding, parameters and the allow-list hold
   whatever the model returns. That's why the tests use the stand-in: they test *your code*, not the model's mood.
 
-We tested this code path against a local mock of the Ollama API (the vulnerable app leaked the fake secret; the
-safe app blocked it). We did not run it against a live model for this README, so your output will differ.
+Status on 15 November 2026: this code path was tested against a local mock of the Ollama API (the vulnerable app
+leaked the fake secret; the safe app blocked it). It has not been run against a live model, so your output will
+differ.
 
 ## Troubleshooting
 
@@ -558,7 +561,7 @@ safe app blocked it). We did not run it against a live model for this README, so
 ## What to write in your findings notebook (lesson 0.5)
 
 Three lines: what you broke (model output became HTML, SQL and a shell command), how you fixed it (encode,
-parameterise, allow-list, contain), and how you'd spot it (the `SQL sent` and `BLOCKED` log lines, a CSP violation
+parameterize, allow-list, contain), and how you'd spot it (the `SQL sent` and `BLOCKED` log lines, a CSP violation
 report, a test in CI that replays the attack questions).
 
 ## Sources

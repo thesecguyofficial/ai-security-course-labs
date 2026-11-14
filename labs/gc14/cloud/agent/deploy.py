@@ -51,7 +51,11 @@ def main():
     print(json.dumps({"name": res.name,
                       "effectiveIdentity": getattr(spec, "effective_identity", None),
                       "identityType": str(getattr(spec, "identity_type", ""))}, indent=2))
-    print("\nNext: put effectiveIdentity into cloud/terraform/terraform.tfvars as agent_principal (Step 4).")
+    # The API returns the identity without its scheme (our 12 and 13 Nov 2026 runs); IAM and Terraform want principal://
+    ident = getattr(spec, "effective_identity", None) or ""
+    principal = ident if ident.startswith("principal://") or not ident else "principal://" + ident
+    print("\nNext: put this line into cloud/terraform/terraform.tfvars (Step 4):")
+    print(f'  agent_principal = "{principal}"')
 
 
 if __name__ == "__main__":

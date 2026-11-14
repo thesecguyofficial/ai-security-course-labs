@@ -2,7 +2,7 @@
 pep.py: the policy enforcement point. Every tool call the agent proposes goes through PEP.handle() before any tool
 runs. The model proposes; this code decides what is asked of the policy engine, and what happens with the answer.
 
-    parse the arguments -> is the tool in OUR catalogue? -> who is asking (from the session) -> load the resource
+    parse the arguments -> is the tool in OUR catalog? -> who is asking (from the session) -> load the resource
     (from our database) -> build the context (ticket, counters, approval) -> ask the PDP -> ALLOW / DENY / DEFER
     -> run the tool with the arguments the policy saw -> write a signed receipt
 
@@ -153,9 +153,9 @@ class PEP:
         if tool not in self.catalogue:
             ann = self.partner.get(tool, {}).get("annotations", {})
             if cfg["unknown_tools"] == "trust-annotations" and tool in self.partner and ann.get("readOnlyHint"):
-                return self._finish(rec, "ALLOW", "not in our catalogue; the server says readOnlyHint=true, so allowed "
+                return self._finish(rec, "ALLOW", "not in our catalog; the server says readOnlyHint=true, so allowed "
                                     "without a policy check", [], [], tool_args, None, s, partner=True)
-            return self._finish(rec, "DENY", "not in our tool catalogue (deny by default; server annotations are "
+            return self._finish(rec, "DENY", "not in our tool catalog (deny by default; server annotations are "
                                 "not trusted)", [], [], None, None, s)
 
         # 4. The policy engine must be loaded.

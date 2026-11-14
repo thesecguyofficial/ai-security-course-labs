@@ -1,23 +1,31 @@
 #!/usr/bin/env bash
 # AZ15 guided build helper. Read GUIDED-BUILD.md first: it explains every step and what it costs.
-# Usage: cloud.sh up|deploy|ask|down <resource-group> <location> <workspace> [endpoint]
+# Usage: cloud.sh up|deploy|timer|ask|down <resource-group> <location> <workspace> [endpoint]
 # Needs: Azure CLI signed in to YOUR sandbox subscription, the ml extension (az extension add -n ml), and for
 # `deploy`, MODEL_ID=azureml://registries/azureml/models/<name>/versions/<version>.
 set -euo pipefail
 
-CMD=${1:?up|deploy|ask|down}; RG=${2:?resource group}; LOC=${3:?location}; WS=${4:?workspace}; EP=${5:-tsg-az15-summariser}
+CMD=${1:?up|deploy|timer|ask|down}; RG=${2:?resource group}; LOC=${3:?location}; WS=${4:?workspace}; EP=${5:-tsg-az15-summariser}
 HERE=$(cd "$(dirname "$0")" && pwd); OUT="$HERE/out"; mkdir -p "$OUT"
 SUB=$(az account show --query id -o tsv)
 VNET=vnet-tsg-az15; SUBNET=clients; VM=vm-tsg-az15-client; TIMER=la-tsg-az15-teardown; LAW=log-tsg-az15
 
 ws_id()  { az ml workspace show -g "$RG" -n "$WS" --query id -o tsv; }
 ep_id()  { echo "$(ws_id)/onlineEndpoints/$EP"; }
+# Create the teardown timer, or set it again: the same PUT both times, with a start time 60 minutes from now.
+timer_put() {
+  START=$(date -u -d '+60 min' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -v+60M +%Y-%m-%dT%H:%M:%SZ)
+  sed -e "s#__START__#$START#" -e "s#__LOCATION__#$LOC#" -e "s#__ENDPOINT_ID__#$(ep_id)#" "$HERE/teardown-timer.json" \
+    | python3 -c 'import json,sys; d=json.load(sys.stdin); d.pop("_note"); print(json.dumps(d))' > "$OUT/timer.json"
+  az rest --method put --url "https://management.azure.com/subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Logic/workflows/$TIMER?api-version=2019-05-01" \
+     --body @"$OUT/timer.json" -o none
+}
 
 case "$CMD" in
 up)
   echo "== A1 resource group (tagged, so you can find it again)"
   az group create -n "$RG" -l "$LOC" --tags purpose=tsg-az15-lab delete-by="$(date -u -d '+1 day' +%F 2>/dev/null || date -u -v+1d +%F)" -o none
-  echo "== A2 workspace: managed VNet in approved-outbound mode, no FQDN rules (so no Azure Firewall)"
+  echo "== A2 workspace: managed VNet in approved-outbound mode (no FQDN rules yet: the model in our run needed four, GUIDED-BUILD B.1)"
   if az ml workspace show -g "$RG" -n "$WS" -o none 2>/dev/null; then
     echo "   $WS already exists (you made it in the portal, Part A.1): checking its outbound mode"
     az ml workspace show -g "$RG" -n "$WS" --query managed_network.isolation_mode -o tsv
@@ -55,11 +63,7 @@ up)
 deploy)
   : "${MODEL_ID:?set MODEL_ID=azureml://registries/azureml/models/<name>/versions/<version> (GUIDED-BUILD Part B)}"
   echo "== B1 the teardown timer FIRST: a Logic App that deletes the endpoint 60 minutes from now"
-  START=$(date -u -d '+60 min' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -v+60M +%Y-%m-%dT%H:%M:%SZ)
-  sed -e "s#__START__#$START#" -e "s#__LOCATION__#$LOC#" -e "s#__ENDPOINT_ID__#$(ep_id)#" "$HERE/teardown-timer.json" \
-    | python3 -c 'import json,sys; d=json.load(sys.stdin); d.pop("_note"); print(json.dumps(d))' > "$OUT/timer.json"
-  az rest --method put --url "https://management.azure.com/subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Logic/workflows/$TIMER?api-version=2019-05-01" \
-     --body @"$OUT/timer.json" -o none
+  timer_put
   TIMER_OID=$(az rest --method get --url "https://management.azure.com/subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Logic/workflows/$TIMER?api-version=2019-05-01" --query identity.principalId -o tsv)
   az role assignment create --assignee-object-id "$TIMER_OID" --assignee-principal-type ServicePrincipal \
      --role "AzureML Data Scientist" --scope "$(ws_id)" -o none
@@ -99,6 +103,9 @@ deploy)
     [ "$(dep_state)" = Succeeded ] || { echo "   blue isn't ready after 30 more minutes"; exit 1; }
   fi
   az ml online-endpoint update -g "$RG" -w "$WS" -n "$EP" --traffic "blue=100" -o none
+  # Our 12 Nov 2026 run: the deployment alone took about 40 minutes of the timer's hour. Start the hour again now.
+  timer_put
+  echo "   the deployment is ready: the timer now fires at $START (UTC). More time later: make cloud-timer"
   echo "== B4 the client VM may score this endpoint and do nothing else"
   sed "s#__SUB__#$SUB#" "$HERE/scorer-role.json" > "$OUT/scorer-role.json"
   az role definition create --role-definition @"$OUT/scorer-role.json" -o none 2>/dev/null || echo "   (role already exists)"
@@ -110,6 +117,11 @@ deploy)
      --workspace "$(az monitor log-analytics workspace show -g "$RG" -n "$LAW" --query id -o tsv)" \
      --logs '[{"category":"AmlOnlineEndpointTrafficLog","enabled":true},{"category":"AmlOnlineEndpointEventLog","enabled":true},{"category":"AmlOnlineEndpointConsoleLog","enabled":true}]' -o none
   echo "Done. Next: make cloud-ask"
+  ;;
+timer)
+  echo "== the teardown timer: another 60 minutes from now"
+  timer_put
+  echo "   the timer now fires at $START (UTC) and deletes $EP"
   ;;
 ask)
   URI=$(az ml online-endpoint show -g "$RG" -w "$WS" -n "$EP" --query scoring_uri -o tsv)
@@ -139,5 +151,5 @@ down)
   az role definition delete --name "TSG AZ15 lab scorer" || true
   echo "Done. Check with: make cloud-check"
   ;;
-*) echo "usage: cloud.sh up|deploy|ask|down <rg> <location> <workspace> [endpoint]"; exit 2;;
+*) echo "usage: cloud.sh up|deploy|timer|ask|down <rg> <location> <workspace> [endpoint]"; exit 2;;
 esac

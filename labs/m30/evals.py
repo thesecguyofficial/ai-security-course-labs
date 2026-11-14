@@ -6,7 +6,7 @@ evals.py: run the security eval suite against one release and write its score ca
     python3 evals.py --release r42 --out results/r42.json
 
 The score card (results/<release>.json) has everything a reviewer needs to trust or reject the numbers: which model,
-which prompt version, which defences and tools, which suite (name, version and SHA-256 of the exact file), how many
+which prompt version, which defenses and tools, which suite (name, version and SHA-256 of the exact file), how many
 trials, the three AgentDojo-style scores (benign utility, utility under attack, attack success rate), the attack
 success rate per family and per goal with 95% Wilson intervals, how many cases were hit at least once, and the
 result of every single case, so two cards can be compared case by case.
@@ -136,7 +136,7 @@ def show(card: dict) -> None:
     print(f"SCORE CARD  release {card['release']} | model {card['model']} | prompt {card['system_prompt']}")
     print(f"  suite {s['name']} v{s['version']} sha256 {s['sha256'][:12]} | {s['security_cases']} security cases, "
           f"{s['user_tasks']} user tasks | {card['trials']} trial{'s' if card['trials'] != 1 else ''} each")
-    print(f"  defences: data marking on {', '.join(card['defences']['spotlight']) or 'nothing'}; "
+    print(f"  defenses: data marking on {', '.join(card['defences']['spotlight']) or 'nothing'}; "
           f"controls: {', '.join(card['defences']['controls']) or 'none'}")
     bu, ua, a = card["benign_utility"], card["utility_under_attack"], card["asr"]["overall"]
     print(f"  benign utility       {pct(bu['rate'])}  ({bu['successes']}/{bu['n']})")

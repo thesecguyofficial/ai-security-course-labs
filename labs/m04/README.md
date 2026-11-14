@@ -46,14 +46,18 @@ docs at [presidio.dataprivacystack.org](https://presidio.dataprivacystack.org/in
 
 ## Step 1 · Set up (once)
 
-Mac / Linux:
+Go into the lab folder first. Run this from the course labs repository folder (`ai-security-course-labs`); it is
+the same on Mac, Linux and Windows:
 
 ```bash
 cd labs/m04
-make setup
 ```
 
-- `cd labs/m04`: run it from the course labs repository folder (`ai-security-course-labs`)
+Mac / Linux:
+
+```bash
+make setup
+```
 
 `make setup` runs these three commands (run them yourself if you don't have `make`):
 
@@ -71,12 +75,12 @@ py -m venv .venv
 .venv\Scripts\python -m spacy download en_core_web_sm
 ```
 
-On Windows, replace `make X` below with the matching command from the Makefile, using `.venv\Scripts\python`
-instead of `.venv/bin/python` (for example `make test` becomes `.venv\Scripts\python run_tests.py`).
+Windows has no `make`. Under each `make` step below there is a "Windows" command that does the same thing with
+`.venv\Scripts\python`.
 
 Why the small spaCy model? Presidio uses a spaCy language model to spot names. Presidio's default is the large
 English model (`en_core_web_lg`, several hundred MB); this lab uses the small one (about 15 MB installed) to keep
-set-up quick. It is worse at names, which you'll see in Step 5.
+set-up quick. It is worse at names, which you'll see in Step 6.
 
 ## Step 1b · Look at each step before you run the lab (about 10 minutes)
 
@@ -84,7 +88,8 @@ New to this? Do this first. `explore.py` shows, one piece at a time, what the ch
 here changes the lab: `trace` writes its logs to a temporary folder and deletes it, so `logs/` is never touched.
 Windows: use `.venv\Scripts\python` instead of `.venv/bin/python`.
 
-**1. Look before you run.** `make -n setup` prints the three commands `make setup` runs, without running them:
+**1. Look before you run.** `make -n setup` prints the three commands `make setup` runs, without running them
+(Mac / Linux; on Windows they are the three commands you typed in Step 1):
 
 ```bash
 make -n setup
@@ -242,6 +247,13 @@ recognizer (Step 7).
 make leak
 ```
 
+Windows:
+
+```powershell
+.venv\Scripts\python chat_app.py --script conversation.txt --fresh
+.venv\Scripts\python check_logs.py
+```
+
 Real output (shortened):
 
 ```text
@@ -259,6 +271,13 @@ Logs written to logs/app.log and logs/provider.log
   LEAK  logs/provider.log line 4: contains 'AKIA…'
 FAIL: 11 of 11 sensitive values found in logs (32 hits) [app.log, provider.log]
 ```
+
+With `make`, one more line follows: `make: [Makefile:14: leak] Error 1 (ignored)`. That is expected. `check_logs.py`
+exits with an error code when it finds a leak (so a CI job would stop), and the Makefile tells `make` to carry on
+here because this step is meant to fail.
+
+To keep `provider.log` readable, the stand-in logs only the newest message of each turn. A real provider receives
+the whole chat history on every turn (lesson 4.0), so a value typed in turn 1 reaches it again in every later turn.
 
 Open `logs/app.log` and `logs/provider.log` and look. Three problems:
 
@@ -292,13 +311,23 @@ Then open `redactor.py`. Notice three decisions:
 make safe
 ```
 
-Real output (shortened):
+Windows:
+
+```powershell
+.venv\Scripts\python chat_app.py --script conversation.txt --fresh --redact
+.venv\Scripts\python check_logs.py
+```
+
+Real output (the `make` command lines and the "Logs written" line are left out):
 
 ```text
 --- support chat · REDACTION ON · stand-in model (stub_llm.py) ---
 
 you> Hi, I'm Jane Doe. My email is jane.doe@example.com and my phone is +1 202-555-0143.
 bot> Thanks, I've noted your message: "Hi, I'm <PERSON>. My email is <EMAIL_ADDRESS> and my phone is <PHONE_NUMBER>.". A support agent will follow up.
+
+you> My card 4242 4242 4242 4242 was charged twice, please refund one.
+bot> Thanks, I've noted your message: "My card <CREDIT_CARD> was charged twice, please refund one.". A support agent will follow up.
 
 you> For the invoice my PAN is ABCPE1234F.
 bot> Thanks, I've noted your message: "For the invoice my PAN is <IN_PAN>.". A support agent will follow up.
@@ -323,13 +352,15 @@ Now `logs/app.log` reads like this, including the careless debug line:
 ```
 
 The labels keep what investigators need (*there was an email here*) without the value. Notice the employee ID
-still went through: hold that thought for Step 6.
+still went through: hold that thought for Step 7.
 
 ## Step 5 · Prove it
 
 ```bash
 make test
 ```
+
+Windows: `.venv\Scripts\python run_tests.py`
 
 Real output:
 
@@ -347,7 +378,8 @@ before you trust it to report "clean". This is the shape of a CI check you can a
 
 ## Step 6 · Find the limits
 
-Chat by hand with redaction on (`make chat`, type `quit` to stop) and try these. Real results:
+Chat by hand with redaction on (`make chat`, or on Windows `.venv\Scripts\python chat_app.py --redact`; type
+`quit` to stop) and try these. Real results:
 
 | You type | The model and the log receive |
 |---|---|
@@ -357,7 +389,8 @@ Chat by hand with redaction on (`make chat`, type `quit` to stop) and try these.
 
 Detection is a best guess. Presidio's own README warns there is "no guarantee that Presidio will find all sensitive
 information". That's why redaction is one layer next to short retention, access control on logs and not collecting
-data you don't need. Try changing `SCORE_THRESHOLD` in `redactor.py` to `0.1` or `0.8` and run `make test` again:
+data you don't need. Try changing `SCORE_THRESHOLD` in `redactor.py` to `0.1` or `0.8` and run `make test` again
+(Windows: `.venv\Scripts\python run_tests.py`):
 what changes?
 
 ## Step 7 · Your turn (challenge)
@@ -367,6 +400,8 @@ Employee IDs look like `EMP-482913`. They must not reach logs. Run:
 ```bash
 make challenge
 ```
+
+Windows: `.venv\Scripts\python run_tests.py --challenge`
 
 It fails, and tells you where:
 
@@ -389,9 +424,12 @@ The redaction works the same with a real model. With Ollama running and a model 
 .venv/bin/python chat_app.py --backend ollama --model gemma3:1b --redact
 ```
 
+Windows: `.venv\Scripts\python chat_app.py --backend ollama --model gemma3:1b --redact`
+
 The script calls only `http://localhost:11434/v1/chat/completions`, Ollama's OpenAI-compatible endpoint
 ([Ollama docs](https://docs.ollama.com/openai)). There is no `provider.log` in this mode: the provider is your own
-laptop. `logs/app.log` is still written, so `make check` still works. Real models answer differently every run, so
+laptop. `logs/app.log` is still written, so `make check` (Windows: `.venv\Scripts\python check_logs.py`) still
+works. Real models answer differently every run, so
 there is no fixed expected output here; look for placeholders like `<PERSON>` in what the model was sent.
 
 ## Troubleshooting
@@ -417,8 +455,12 @@ there is no fixed expected output here; look for placeholders like `<PERSON>` in
 ## Tested
 
 Step 1b was recorded end to end on a fresh Ubuntu machine (GitHub runner, Python 3.12) on 29 Oct 2026; its outputs
-above are copied from that run. Steps 1 to 7 were run end to end from a clean folder on Linux, Python 3.13.16, presidio 2.2.364, spaCy 3.8.16,
-`en_core_web_sm` 3.8.0, on 21 Oct 2026; the outputs above are copied from that run (timestamps will differ).
-The challenge was confirmed solvable with a one-line pattern (not included). Step 8 was tested against a stand-in
-HTTP server that mimics Ollama's `/v1/chat/completions` endpoint, not a real Ollama install: run it once against
-real Ollama before publishing.
+above are copied from that run. Steps 1 to 7 were run end to end from a clean folder on Linux, Python 3.13.16,
+presidio 2.2.364, spaCy 3.8.16, `en_core_web_sm` 3.8.0, on 21 Oct 2026; the outputs in Steps 2 to 7 are copied
+from that run (timestamps will differ). spaCy itself is not pinned in `requirements.txt` (Presidio pulls it in),
+which is why the two runs show different spaCy patch versions (3.8.16 and 3.8.18). Steps 1 to 7 were run again on
+Linux with Python 3.13 and spaCy 3.8.18 on 15 November 2026, with the same output.
+The challenge was confirmed solvable with a one-line pattern (not included).
+
+Step 8 has not been run against real Ollama as of 15 November 2026. It was tested against a stand-in HTTP server
+that mimics Ollama's `/v1/chat/completions` endpoint.

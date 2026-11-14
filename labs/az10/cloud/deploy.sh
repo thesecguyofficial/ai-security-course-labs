@@ -110,7 +110,7 @@ case "${1:-}" in
     az resource update --ids "$FID" --set properties.disableLocalAuth=true -o none
     echo "disableLocalAuth = $(az cognitiveservices account show -n "$AZ10_NAME" -g "$RG" --query properties.disableLocalAuth -o tsv)"
 
-    say "Done. Policies take at least 15 minutes, roles up to 5. Then: bash deploy.sh test"
+    say "Done. Roles take up to 5 minutes. Policies: Microsoft says at least 15 minutes, ours took hours (T3 and T4 print WAIT until then). Then: bash deploy.sh test"
     ;;
 
   test)

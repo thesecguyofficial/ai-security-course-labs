@@ -9,7 +9,7 @@ LLM Guard downloads its model from Hugging Face the first time (several hundred 
 LLM Guard's documentation ("scanner = PromptInjection(threshold=0.5, match_type=MatchType.FULL)" and
 "sanitized_prompt, is_valid, risk_score = scanner.scan(prompt)").
 
-Not run by the course team: Hugging Face downloads are blocked in the course build, so this adapter is untested.
+Untested as of 15 November 2026: Hugging Face downloads are blocked in the course build, so this adapter has not been run.
 Expect DIFFERENT numbers from the stand-ins, in both directions. Write both down: that comparison is the exercise.
 """
 

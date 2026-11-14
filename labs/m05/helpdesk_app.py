@@ -162,13 +162,13 @@ def search_tickets_vulnerable(user: str, term: str) -> list:
 
 
 def search_tickets_safe(user: str, term: str) -> list:
-    # GOOD: a parameterised query. The SQL text is fixed; the values travel separately (the ? marks),
+    # GOOD: a parameterized query. The SQL text is fixed; the values travel separately (the ? marks),
     # so the database always treats them as data, never as SQL.
     # Extra: escape LIKE's own wildcards (% and _) so the term is matched literally.
     like = "%" + term.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
     sql = "SELECT id, assignee, title FROM tickets WHERE assignee = ? AND title LIKE ? ESCAPE '\\'"
     log.info("SQL sent: %s  params=%r", sql, (user, like))
-    # Defence in depth: while the search runs, SQLite refuses CREATE, DELETE, DROP, INSERT and UPDATE on this
+    # Defense in depth: while the search runs, SQLite refuses CREATE, DELETE, DROP, INSERT and UPDATE on this
     # connection. SQLite says query_only is "not truly read-only" (COMMIT and checkpoints still work), so in
     # production give the AI feature its own read-only database login instead.
     DB.execute("PRAGMA query_only = ON")

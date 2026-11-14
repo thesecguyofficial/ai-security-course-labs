@@ -19,7 +19,7 @@ It models only what this lab needs, each rule from Microsoft's documentation:
     of their real policyRule JSON (allOf, anyOf, equals, notEquals, notin, contains, count). String comparisons
     are case-insensitive, as in Azure Policy. Deny refuses the request; Audit lets it through and logs a warning.
 
-Not modelled: deny assignments, conditions (ABAC), PIM, management groups, Conditional Access, network rules,
+Not modeled: deny assignments, conditions (ABAC), PIM, management groups, Conditional Access, network rules,
 the propagation delays (minutes to hours) you will meet in real Azure, and every other policy.
 """
 
@@ -142,7 +142,7 @@ class PolicyEval:
             return low(left) in [low(v) for v in self.value(c["in"])]
         if "contains" in c:
             return left is not None and low(self.value(c["contains"])) in low(left)
-        raise ValueError(f"operator not modelled: {c}")
+        raise ValueError(f"operator not modeled: {c}")
 
     def effect(self) -> str | None:
         """None if the rule doesn't match (compliant), else the effect: Deny / Audit / Disabled."""

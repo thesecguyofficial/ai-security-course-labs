@@ -135,7 +135,7 @@ def cmd_token(a) -> None:
     claims = [
         ("iss", f"https://login.microsoftonline.com/{TENANT}/v2.0", "issuer: who signed it (Contoso's tenant)"),
         ("aud", "api://helpdesk-web", "audience: which API the token is for; check it"),
-        ("tid", TENANT, "tenant ID: which organisation the user signed in to"),
+        ("tid", TENANT, "tenant ID: which organization the user signed in to"),
         ("oid", u["oid"], "object ID: fixed, one per user per tenant (this course uses it)"),
         ("preferred_username", u["upn"], "display only: Microsoft says it can change"),
         ("scp", "Helpdesk.Chat", "what the front end may do for the user"),

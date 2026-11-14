@@ -136,6 +136,9 @@ def cmd_route(a) -> None:
     print(f"\nExampleCo's rule: ML processing must stay in the {req['ml_processing_must_stay_in']} "
           f"(approved: {', '.join(req['approved_locations'])})")
     print(f"Verdict: {'fits the rule' if ok else 'BREAKS the rule'}")
+    if kind == "regional":
+        print("  (the rule is about where the prompt runs, not whether the model is offered there: in our real run on\n"
+              "  12 November 2026, gemini-3.1-flash-lite returned 404 on europe-west4 and answered on eu)")
     vm = d.vms()["helpdesk-vm"]
     reach, path, why = d.route_to(vm, host)
     print(f"\nCan the hardened Helpdesk VM reach it privately?  {'yes' if reach else 'NO'}")
@@ -260,9 +263,9 @@ def cmd_record(a) -> None:
     print("ILLUSTRATIVE: Google's documented field and column names, fake values. Two records of one Helpdesk call.\n")
     print("1. Data Access audit log entry (Cloud Logging, log cloudaudit.googleapis.com/data_access):")
     print("   who      authenticationInfo.principalEmail  chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com")
-    print("   from     requestMetadata.callerIp           10.10.0.5   (the VM's internal address)")
+    print("   from     requestMetadata.callerIp           gce-internal-ip   (our real run: this text, not the VM's 10.x address)")
     print("   what     methodName                         google.cloud.aiplatform.v1.PredictionService.GenerateContent")
-    print("   where    resourceName                       .../locations/europe-west4/publishers/google/models/gemini-3.1-flash-lite")
+    print("   where    resourceName                       .../locations/eu/publishers/google/models/gemini-3.1-flash-lite")
     print("   allowed  authorizationInfo                  aiplatform.endpoints.predict, granted")
     print("   said     (nothing)                          the pages we read don't say audit entries hold the prompt")
     print("\n2. Request-response logging row (BigQuery table ai_logs.request_response_logging):")

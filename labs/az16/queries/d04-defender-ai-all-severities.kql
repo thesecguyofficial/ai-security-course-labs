@@ -1,6 +1,7 @@
 // D04 Every Defender for AI services alert, whatever its severity (SecurityAlert)
 // Needs continuous export (or the Sentinel connector) to bring Defender for Cloud alerts into this workspace,
-// with no severity filter.
+// with no severity filter. In our 10 Nov 2026 run the export delivered one of two alerts in the first hour: compare
+// the count here with Defender for Cloud's own Security alerts page (or `az security alert list`).
 SecurityAlert
 | where TimeGenerated > ago(1d)
 | where AlertType startswith "AI."

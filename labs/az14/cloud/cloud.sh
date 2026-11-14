@@ -5,7 +5,7 @@
 # No Docker needed: the image is built in the cloud with `az acr build`, or by cloud/build-image.sh (pip + crane)
 # where ACR Tasks are refused.
 # Usage: ./cloud.sh cost | up | kb | mcp | mcp-update | toolbox | agent | grant | ask | grant-wide | grant-narrow | direct-call | down
-# Not run by the course team (no Azure subscription in the build): treat the output as yours to verify.
+# Run for real on 9 November 2026 and again on 12 November (Sweden Central): GUIDED-BUILD.md has the real-run table.
 set -euo pipefail
 cd "$(dirname "$0")"
 : "${AZ14_NAME:?set AZ14_NAME, e.g. export AZ14_NAME=az14ab12 (lowercase letters and digits only, 3-20 chars: it names the storage account and registry too)}"
@@ -187,5 +187,5 @@ TXT
     rm -rf .state agent/policy.py
     ;;
 
-  *) sed -n '2,7p' "$0" ;;
+  *) sed -n '2,7p' "$(basename "$0")" ;;   # we already cd'ed into this folder above
 esac

@@ -109,7 +109,7 @@ SMTP "key" are placeholders. Nothing here contacts Azure. Test 18 checks all of 
 
 New to hosted agents? Do this before Step 1 (lesson 14.8 calls it "Before you start"; lesson 14.0 explains each idea).
 `explore.py` takes Contoso's deployment apart one Foundry piece at a time, in all three setups (`contoso`, `v1.1`,
-`fixes`). Real output below is from a fresh Ubuntu machine (recording run 41618426182).
+`fixes`). Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `contoso/`, `fixes/`,
 `data/` and `logs/`, and asks `twin.py` and `policy.py` what Foundry and your agent's code would do. No network, no
@@ -155,7 +155,8 @@ python3 explore.py map contoso
 ```
 
 Run `python3 explore.py map fixes` too: agent-scope Foundry Agent Consumer, the user from the validated token, Storage
-Blob Data Reader on container `kb` only, toolbox v2 with `require_approval always`, your policy check on, egress
+Blob Data Reader on container `kb` only (the twin's short name: real Azure container names need at least 3 characters,
+so the guided build calls it `kb-articles`), toolbox v2 with `require_approval always`, your policy check on, egress
 `Enforced` with default Deny, memory scope `{{$userId}}` with a TTL, a guardrail that exists, trace readers
 `group:helpdesk-security`.
 
@@ -572,7 +573,7 @@ is included.
 Foundry project, a blob "knowledge store" with an HR container next door, **your own MCP actions server** on Azure
 Container Apps (its key in a Container Apps secret), a **toolbox** that reaches it with `require_approval: always`, and a **hosted agent** built from `cloud/agent/` whose identity reads one
 container and whose code enforces approval and runs **your** `policy.py`. Five requests (normal, cross-user HR leak
-attempt, injected article, a write that needs your confirmation, a toolbox call that needs approval), one setting
+attempt, injected article, a write the agent should ask you to confirm, a toolbox call that needs approval), one setting
 changed (the agent's role widened to the whole storage account) and re-run, cost and teardown. Expect under US$1 if you
 tear down the same day.
 

@@ -37,7 +37,7 @@ Step 1, and set them again if you open a new terminal):
    `pip install boto3`.
 3. **Model access from M11.** Step 3's `converse` call uses the M11 model through the US inference profile. If you
    tore M11 down, model access stays enabled; you just won't have M11's invocation logs (Step 6).
-4. **Open a terminal in `labs/m12`** and set the basics:
+4. **Open a terminal in the `ai-security-course-labs` folder**, go to the lab folder and set the basics:
 
    ```bash
    cd labs/m12
@@ -227,6 +227,9 @@ Read the response in this order (fields from the
    text was never checked (lesson 12.1's first-draft bug).
 
 ## Step 3 · Run six requests against version 1
+
+The labels R1 to R6 below are this guide's own six requests. They are not the six `enforce.py` requests that README
+Step 6 and lessons 12.3 and 12.5 also call R1 to R6.
 
 Each command below is copy-paste ready. Cost: each call is about one text unit per configured paid policy (roughly
 US$0.0004 to US$0.0005 a call at list prices).
@@ -666,7 +669,7 @@ names your guardrail **and** version 1. The condition key is `bedrock:GuardrailI
 `Converse`, `ConverseStream`, `InvokeModel` and `InvokeModelWithResponseStream`
 ([AWS](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-permissions-id.html)). The value format,
 `arn:...:guardrail/<id>:1` for version 1 and the bare ARN for `DRAFT`, comes from AWS's example policies (AWS doesn't
-define it in prose; see the fact-check). A request with **no** guardrail is denied too: with `StringNotEquals`, a
+define it in prose). A request with **no** guardrail is denied too: with `StringNotEquals`, a
 missing key makes the condition true.
 
 You'll test it on a throwaway role, not on your own user. The policy is the lab's
@@ -689,7 +692,8 @@ Read `enforce.json` before you continue: an Allow for the one model through the 
 `bedrock:GuardrailIdentifier` = `arn:aws:bedrock:us-east-1:<ACCOUNT>:guardrail/<GR_ID>:1`.
 
 Wait about 10 seconds (IAM changes take a moment), then become the role **in a new terminal tab**, so your own
-credentials stay untouched in the first one:
+credentials stay untouched in the first one. Go to the `ai-security-course-labs` folder in the new tab first (a new
+tab may start somewhere else):
 
 ```bash
 cd labs/m12; export AWS_REGION=us-east-1 MODEL=us.anthropic.claude-haiku-4-5-20251001-v1:0 GR_ID=<your id>
@@ -698,7 +702,7 @@ eval $(aws sts assume-role --role-arn arn:aws:iam::$ACCOUNT:role/tsg-m12-enforce
   --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text \
   | awk '{print "export AWS_ACCESS_KEY_ID="$1" AWS_SECRET_ACCESS_KEY="$2" AWS_SESSION_TOKEN="$3}')
 aws sts get-caller-identity --query Arn --output text
-echo '[{"role":"user","content":[{"guardContent":{"text":{"text":"How do I reset my VPN token?"}}}]}]' > r7.json
+echo '[{"role":"user","content":[{"guardContent":{"text":{"text":"How do I reset my VPN token?"}}}]}]' > step5-messages.json
 ```
 
 What to look for: the ARN from `aws sts get-caller-identity` should end in `assumed-role/tsg-m12-enforce-demo/m12-test`.
@@ -708,20 +712,20 @@ Three calls:
 1. No guardrail at all: denied.
 
 ```bash
-aws bedrock-runtime converse --model-id $MODEL --messages file://r7.json
+aws bedrock-runtime converse --model-id $MODEL --messages file://step5-messages.json
 ```
 
 2. The DRAFT, not version 1: denied.
 
 ```bash
-aws bedrock-runtime converse --model-id $MODEL --messages file://r7.json \
+aws bedrock-runtime converse --model-id $MODEL --messages file://step5-messages.json \
   --guardrail-config guardrailIdentifier=$GR_ID,guardrailVersion=DRAFT
 ```
 
 3. Version 1: allowed, a normal answer.
 
 ```bash
-aws bedrock-runtime converse --model-id $MODEL --messages file://r7.json \
+aws bedrock-runtime converse --model-id $MODEL --messages file://step5-messages.json \
   --guardrail-config guardrailIdentifier=$GR_ID,guardrailVersion=1
 ```
 
@@ -854,7 +858,7 @@ Or, if you used Terraform (Path C), run `make cloud-down` instead.
 
 ```bash
 aws bedrock list-guardrails --query 'guardrails[].[name,id,status]' --output table
-rm -f create.json update.json trust.json enforce.json r6-messages.json r7.json
+rm -f create.json update.json trust.json enforce.json r6-messages.json step5-messages.json
 ```
 
 `delete-guardrail` without a version deletes the guardrail and "all of its versions"

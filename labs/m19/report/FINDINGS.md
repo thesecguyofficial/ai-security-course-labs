@@ -2,6 +2,8 @@
 
 > Fill in every `<...>` and delete every TODO line. One section per finding: the six known ones (F-1 to F-6)
 > and any you found yourself (F-7 onwards). Every finding names the test or eval case that proves the fix.
+> The self-check (R2) wants a `### F-1` to `### F-6` section each, and at least 600 words in the file, not
+> counting code blocks.
 
 ## Summary
 

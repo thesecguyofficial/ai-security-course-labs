@@ -8,8 +8,9 @@ legitimate requests they flag. Needs Python 3.10+, the Azure CLI (az login) and 
 Auth: a Microsoft Entra token for https://cognitiveservices.azure.com from `az account get-access-token`; your user
 needs the Cognitive Services User role on the resource (cs-up grants it). Keys are switched off by cs-up.
 Cost: the free tier includes 5,000 text records a month; this run uses well under 100 (it prints its own estimate).
-Not run by the course team (no Azure subscription in the build): the numbers you get are yours, and they will differ
-from the offline stand-ins. That difference is the lesson.
+Our real runs (East US): 7 of 15 attacks flagged on 10 November 2026, 5 of 15 on 12 November 2026, and 0 of 13
+legitimate requests both days. Your numbers will differ from ours and from the offline stand-ins. That difference is
+the lesson.
 """
 
 import argparse

@@ -6,7 +6,7 @@ hunt.py: hunt for LLMjacking in a CloudTrail export, the way a SOC analyst would
     python3 hunt.py --file other.json
 
 Input: a CloudTrail file ({"Records": [...]}, the format CloudTrail delivers to S3). The sample in cloudtrail/ is
-FAKE: it copies the shape of real records in the AWS docs and the attacker behaviour in Sysdig TRT's LLMjacking
+FAKE: it copies the shape of real records in the AWS docs and the attacker behavior in Sysdig TRT's LLMjacking
 reports, with documentation-only account IDs and IP addresses.
 
 The baseline is everything before --baseline-until (default 2026-10-14T00:00:00Z): who normally calls which

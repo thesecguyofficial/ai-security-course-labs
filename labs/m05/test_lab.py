@@ -59,7 +59,7 @@ class T2_FixesHoldInSafeMode(unittest.TestCase):
         self.assertIn("&lt;img src=x onerror=&quot;", r["answer_html"])
 
     def test_05_sqli_parameterised(self):
-        """safe: parameterised query returns only alice's tickets, and nothing for the injection string"""
+        """safe: parameterized query returns only alice's tickets, and nothing for the injection string"""
         r = app.answer_question(SQLI_Q, safe=True)
         self.assertEqual(r["rows"], [])
         normal = app.answer_question("search my tickets for VPN", safe=True)

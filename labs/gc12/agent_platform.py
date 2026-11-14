@@ -9,7 +9,7 @@ What it models, each from Google's integration page (README, Sources):
       no template, floor + safety settings -> both run, the most restrictive outcome wins
       no template, floor only              -> the floor setting runs
       no template, safety settings only    -> only Gemini's safety filters; Model Armor isn't called
-      nothing                              -> only the model's own behaviour
+      nothing                              -> only the model's own behavior
   - floor settings apply "even if the modelArmorConfig parameter is omitted from the API request"
   - inspect only = record, don't stop; inspect and block = stop, with blockReason / finishReason MODEL_ARMOR
   - fail open: if Model Armor is unavailable, "the request continues without prompt and response sanitization"
@@ -65,7 +65,7 @@ def effective_config(request: dict, project: dict) -> dict:
     if safety:
         return {"source": "Gemini safety filters only (Model Armor not called)", "prompt": None, "response": None,
                 "safety": safety, "log": False}
-    return {"source": "nothing: model behaviour only", "prompt": None, "response": None, "safety": None, "log": False}
+    return {"source": "nothing: model behavior only", "prompt": None, "response": None, "safety": None, "log": False}
 
 
 def generate_content(request: dict, project: dict, available: bool = True) -> dict:

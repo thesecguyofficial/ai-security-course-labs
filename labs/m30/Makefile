@@ -1,6 +1,6 @@
 # M30 lab shortcuts (Mac/Linux). Windows: run the python commands from the README instead (py instead of python3).
 # Needs Python 3.11+ and nothing else: standard library only, no model download, no API key, no network.
-# The agent is a local stand-in (plain Python), the workspace is fake, and attack text is a labelled placeholder.
+# The agent is a local stand-in (plain Python), the workspace is fake, and attack text is a labeled placeholder.
 VENV := .venv
 PY   := $(if $(wildcard $(VENV)/bin/python),$(VENV)/bin/python,python3)
 C    ?= r42-fix
@@ -31,7 +31,7 @@ story:     ## one case, one trial, in both releases: the same document, a differ
 fix:       ## THE FIX: r42-fix (data marking back on documents) SHIPS
 	$(PY) gate.py r41 r42-fix
 
-control:   ## negative control: r41 with every defence off. G3 or G4 must FAIL (this target fails if they don't)
+control:   ## negative control: r41 with every defense off. G3 or G4 must FAIL (this target fails if they don't)
 	$(PY) gate.py r41 weak --expect-fail
 
 new-tool:  ## r43 adds fetch_url: STOPPED, but only because nobody wrote web cases (challenge 1)

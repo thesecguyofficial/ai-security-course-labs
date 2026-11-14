@@ -1,6 +1,6 @@
 """
 test_lab.py: `make test`. The first draft's problems are real, the hardened setup fixes them without breaking the
-Helpdesk, and each AgentCore behaviour the lab relies on works the way AWS documents it.
+Helpdesk, and each AgentCore behavior the lab relies on works the way AWS documents it.
 """
 
 import copy
@@ -135,7 +135,7 @@ class TC_Lab(unittest.TestCase):
         self.assertEqual(sorted(v["owner"] for v in w.sessions.values()), ["alice", "bob"])
 
     def test_16_tooluse_block(self):
-        """runtime: with the prompt check off, a toolUse block still meets the gateway policy (defence in depth)"""
+        """runtime: with the prompt check off, a toolUse block still meets the gateway policy (defense in depth)"""
         s = shipped("hardened").copy()
         s.app["entrypoint_validates_prompt"] = False
         a10 = next(c for c in evaluate.CASES["attacks"] if c["id"] == "A10")

@@ -11,7 +11,7 @@ Write check_before_promotion() so it returns a list of reasons to refuse (an emp
   1. every file passes model_files.scan_files() (safetensors weights only, no pickle, NumPy or code files)
   2. the version records a hash for every file (tags "sha256/<file>"), and they all match
      (model_files.hash_mismatches does the comparison)
-  3. the version records a licence (tag "licence") that is on company["approved_licences"]
+  3. the version records a license (tag "licence") that is on company["approved_licences"]
   4. the person promoting it is not the person who registered it (version["registered_by"])
 
 Then set "approval_gate": true in setups/hardened/app.json. `make challenge` tells you when it's right.

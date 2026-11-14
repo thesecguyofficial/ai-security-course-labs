@@ -21,7 +21,7 @@ test:         ## normal use (F01-F10) and the lab's own integration test: both p
 	$(PY) -m unittest discover -s tests -t . -v -p "test_functional.py"
 	$(PY) run_tests.py
 
-challenge:    ## the six findings as tests (S01-S11): red until you fix crew/guards.py
+challenge:    ## the findings as tests (S01-S11: G-1 to G-7 and HTML escaping): red until you fix crew/guards.py
 	$(PY) -m unittest discover -s tests -t . -v -p "test_security.py"
 
 eval:         ## the security eval gate: core cases + evals/my_cases.json   (python3 evals/run_evals.py)
@@ -56,7 +56,7 @@ unrugpull:    ## back to release 1
 check:        ## the self-check: every objective check in RUBRIC.md   (python3 selfcheck.py)
 	$(PY) selfcheck.py
 
-export:       ## make your own repo: make export DEST=../my-advanced-capstone
+export:       ## make your own repo: make export DEST=~/my-advanced-capstone
 	$(PY) export.py "$(DEST)"
 
 lab-test:     ## (course maintainers) the lab's own integration test

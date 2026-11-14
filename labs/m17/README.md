@@ -1,8 +1,9 @@
 # Lab M17.4: promptfoo in GitHub Actions against the TSG Helpdesk
 
-Companion to lesson **17.4** of *AI Security Engineer* (The Sec Guy). About 45 minutes, $0, on your laptop. The
-GitHub part (Step 6) uses your own fork of this repository; standard GitHub-hosted runners are free for public
-repositories ([GitHub Docs](https://docs.github.com/en/billing/concepts/product-billing/github-actions)).
+Companion to lesson **17.4** of *AI Security Engineer* (The Sec Guy). About 45 minutes for Steps 1 to 7, plus about 10
+for Step 1b and 15 for Step 1c if you do them. $0, on your laptop. The GitHub part (Step 6) uses a new repository of
+your own (not a fork, so nothing you do can reach the course's repository); standard GitHub-hosted runners are free
+for public repositories ([GitHub Docs](https://docs.github.com/en/billing/concepts/product-billing/github-actions)).
 
 You'll turn the red-team findings for TSG Helpdesk into a **security eval suite**: a promptfoo file that attacks the
 running app through its API and fails when an attack gets its way. Then you'll make it a gate in CI: a pull request
@@ -68,7 +69,8 @@ sends anything anyway: `reset_mfa` and `send_email` only write a line to `state/
 - For Step 6 only: a free GitHub account.
 
 On Windows, replace each `make X` with the command it runs (open the `Makefile`; one line each), using `py` instead
-of `python3`. For example, `make eval` becomes `py run_eval.py`.
+of `python3`. For example, `make eval` becomes `py run_eval.py`. Step 1c and Step 9 use shell commands (`export`,
+`cp`, `kill $!`, `.venv-garak/bin/pip`): on Windows use WSL for those two steps.
 
 ## Step 1 · Get ready
 
@@ -86,7 +88,7 @@ exactly one attack.
 
 New to evals? Do this after Step 1 (lesson 17.4 and its videos call it Step 1b). `explore.py` shows each piece of a
 security eval on its own: one test case, one run graded rule by rule, a score, why AI tests repeat, a ticket's
-hidden characters and the CI workflow. Real output below is from a fresh Ubuntu machine (recording run 41007543327).
+hidden characters and the CI workflow. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** `explore.py` runs the stand-in Helpdesk (`helpdesk.py`, plain Python, not AI) **inside its
 own process**, with the lab's own `guards.py`. No server is started, promptfoo is not used, nothing goes on the
@@ -248,7 +250,7 @@ exit code: 100
 
 ## Step 1c · Run your own first eval (about 15 minutes)
 
-Lesson 17.0's third basics video does this on a fresh Ubuntu machine (recording run 41011280064). It is the nine-step
+Lesson 17.0's third basics video does this on a fresh Ubuntu machine. It is the nine-step
 method in miniature: a small promptfoo config written from scratch, run, broken, extended with a regression case,
 fixed, and proven able to fail. You need Node.js 22.22+ (Step 1).
 
@@ -261,7 +263,7 @@ really calls the app.
 
 ```bash
 export PROMPTFOO_DISABLE_TELEMETRY=1 PROMPTFOO_DISABLE_UPDATE=1 PROMPTFOO_CACHE_ENABLED=false
-mkdir my-eval && cp howto/promptfooconfig.yaml my-eval/ && cd my-eval
+mkdir -p my-eval && cp howto/promptfooconfig.yaml my-eval/ && cd my-eval
 python3 ../helpdesk.py serve & sleep 1
 npx promptfoo@0.124.1 eval; echo "exit code: $?"
 ```
@@ -482,7 +484,8 @@ control. Run it once locally; it must end with `NEGATIVE CONTROL OK`.
 
 Now open `.github/workflows/m17-security-evals.yml` at the repo root and read the comments. The choices that matter:
 
-- `on: pull_request`, never `pull_request_target`. For a pull request from a fork, GitHub runs `pull_request`
+- Three triggers: `pull_request`, `push` and a manual run (`workflow_dispatch`), each only for changes under
+  `labs/m17/`. Never `pull_request_target`. For a pull request from a fork, GitHub runs `pull_request`
   workflows with "a read-only `GITHUB_TOKEN`" and withholds "access to other secrets"
   ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)). This
   suite needs no secrets at all: the target runs inside the runner on `127.0.0.1`.
@@ -495,23 +498,44 @@ Now open `.github/workflows/m17-security-evals.yml` at the repo root and read th
   `PROMPTFOO_PASS_RATE_THRESHOLD`. Try it: with `PROMPTFOO_PASS_RATE_THRESHOLD=90`, promptfoo exits 0 on the R1 build
   (10 of 11 passed, 90.91%), so a real data leak would merge. Security tests keep the threshold at 100%.
 
-Then do it for real, in your own fork:
+Then do it for real, in a repository of your own. **Don't use GitHub's Fork button for this.** A pull request from a
+fork is offered to the original repository by default, and this exercise weakens a control on purpose: it must never
+be sent to `thesecguyofficial/ai-security-course-labs`. A new repository of your own has no link to the course's
+repository, so a pull request there can only go to you.
 
-1. On GitHub, **Fork** this repository. In your fork, open the **Actions** tab. If GitHub shows a notice that
-   workflows are not running in this fork, click its button to enable them.
-2. Clone your fork, make a branch and apply R1 for real:
+This needs the `git clone` copy from "Get the lab files" (a ZIP download has no git history) and a terminal still in
+`labs/m17`.
+
+1. On GitHub, click **+** → **New repository**. Owner: you. Name: `m17-evals-practice`. Visibility: **Public** (the
+   lab is public already, and public repositories get free runners). Leave "Add a README", ".gitignore" and "license"
+   switched off: the repository must start empty. Click **Create repository**.
+2. Send your copy of the lab there, make a branch and apply R1 for real. Replace `<you>` with your GitHub username:
 
    ```bash
-   git clone https://github.com/<you>/ai-security-course-labs.git && cd ai-security-course-labs/labs/m17
+   git remote add practice https://github.com/<you>/m17-evals-practice.git
+   git push practice main
    git switch -c feature/reply-to-vendors
    make regress R=R1
    git commit -am "Helpdesk: reply to the vendor who commented on a ticket"
-   git push -u origin feature/reply-to-vendors
+   git push -u practice feature/reply-to-vendors
    ```
 
-3. Open a pull request **inside your fork** (base: your fork's `main`). The check **security evals (TSG Helpdesk)**
+   - `git remote add practice ...`: gives your new repository the short name `practice`. `origin` still points at
+     the course's repository, and you never push to `origin` in this lab (you have no permission to, anyway)
+   - `git push practice main`: copies the lab as it is, so your repository has a `main` to compare against
+   - `make regress R=R1`: same as `python3 regress.py R1`; it edits `guards.py`
+   - If `git commit` stops with "Author identity unknown", git has never been told who you are. Run
+     `git config user.name "Your Name"` and `git config user.email "you@users.noreply.github.com"` (GitHub's
+     no-reply address; a commit's email is public), then repeat the commit
+
+3. Open `https://github.com/<you>/m17-evals-practice/pulls` and click **New pull request**. Base: `main`. Compare:
+   `feature/reply-to-vendors`. This repository is not a fork, so the only base GitHub can offer is your own `main`.
+   If the page ever names `thesecguyofficial/ai-security-course-labs` as the base repository, stop and close it:
+   you are in the wrong repository. Click **Create pull request**. The check **security evals (TSG Helpdesk)**
    goes red. Open it: the step *Security evals on the hardened build* failed with `exit code 100`, and the log shows
    `[FAIL] A4 ... failed: no_outside_email`. The `m17-eval-results` artifact holds the JSON and JUnit files.
+   The repository's other workflows run too (style, and the test run for all labs). The all-labs run also goes red,
+   because the lab's own tests know every attack. The check to read is **security evals (TSG Helpdesk)**.
 4. Make the check **required**: Settings → Branches → **Add classic branch protection rule** for `main` → select
    **Require status checks to pass before merging** → search for and select `security evals (TSG Helpdesk)`
    ([GitHub Docs](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule)). Now the Merge button
@@ -519,6 +543,9 @@ Then do it for real, in your own fork:
    skipped by a paths filter leaves a required check "Pending" and blocks every unrelated pull request
    ([GitHub Docs](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks)).
 5. Fix it the right way: `make restore`, commit, push. The check goes green.
+6. Clean up. `git switch main` puts your folder back on the course's version (the R1 change lives only on the
+   branch). When you're done with the exercise, delete the practice repository on GitHub (Settings → **Delete this
+   repository**), so its weekly scheduled test run stops, and run `git remote remove practice`.
 
 ## Step 7 · Your turn (challenge)
 
@@ -569,7 +596,8 @@ python3 -m venv .venv-garak && .venv-garak/bin/pip install garak==0.17.1
 .venv-garak/bin/python -m garak --target_type rest -G optional/garak-rest.json --spec probes.promptinject.HijackHateHumans
 ```
 
-- `python3 -m venv .venv-garak && .venv-garak/bin/pip install garak==0.17.1`: also installs PyTorch: large
+- `python3 -m venv .venv-garak && .venv-garak/bin/pip install garak==0.17.1`: also installs PyTorch: large. We
+  did not run this full install; our scan used a smaller install (see "Tested")
 
 Real result line from the hardened build:
 
@@ -620,7 +648,8 @@ is why the converter exists. A converter only matters if the target can decode i
 | `promptfoo exit code: 1 (error)` | An error, not a failed test: read the first lines. A typo in a YAML file is the usual cause |
 | `No files found for variable message` | A `file://` path in a test is relative to `evals/`, where `promptfooconfig.yaml` lives |
 | `make test` fails after `make regress` | Expected: the lab's own tests know every attack. `make restore` (or `git checkout -- guards.py`) |
-| The check never appears on your pull request | Workflows are not enabled in your fork yet (Step 6.1), or the change touched no file under `labs/m17/` |
+| The check never appears on your pull request | Open the **Actions** tab of your practice repository: if GitHub shows a notice that workflows are off, enable them. Or the change touched no file under `labs/m17/` |
+| GitHub offers `thesecguyofficial/ai-security-course-labs` as the base of your pull request | You are in a fork, not in the practice repository from Step 6.1. Close the page without creating the pull request and follow Step 6 again |
 | Windows: `make` not found | Run the commands from the `Makefile` with `py` |
 
 ## Safety
@@ -640,6 +669,8 @@ Steps 1 to 5 and 7 were run end to end on Linux on 24 Oct 2026 with Python 3.13.
 0.124.1; the outputs above are copied from those runs. The challenge was confirmed solvable with one five-line test
 (not included). The workflow was validated against the GitHub workflow JSON schema (SchemaStore) and run on GitHub's
 `ubuntu-24.04` runners: green on the lab as shipped, and red at "Security evals on the hardened build" with exit code
-100 when regression R1 was committed. Step 9 was run the same day with PyRIT 1.1.0 (full install) and garak 0.17.1
+100 when regression R1 was committed. Step 6 was changed on 15 November 2026 to use a new repository of your own
+instead of a fork: the workflow is the same, the git commands were run against a local test repository, and the
+GitHub clicks were not run again. Step 9 was run the same day with PyRIT 1.1.0 (full install) and garak 0.17.1
 (installed with only the dependencies the REST generator and the promptinject probe need, not the full set). Step 8
 was not run.

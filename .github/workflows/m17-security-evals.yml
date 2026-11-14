@@ -3,7 +3,7 @@ name: m17-security-evals
 # It runs exactly what `make ci` runs in labs/m17 (README, Step 6), on a fresh GitHub-hosted runner.
 #
 # Design choices (lesson 17.3):
-#   - triggers: pull_request (code from forks runs with a read-only token and no secrets), never pull_request_target
+#   - triggers: pull_request, push and a manual run (pull request code from forks runs with a read-only token and no secrets), never pull_request_target
 #   - permissions: read-only GITHUB_TOKEN, and checkout does not keep the token on disk
 #   - every action pinned to a full commit SHA (the tag is in the comment); promptfoo pinned in run_eval.py
 #   - the paths filter keeps unrelated changes from running this job. If you make this check REQUIRED on a branch,

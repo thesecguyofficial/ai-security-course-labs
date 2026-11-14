@@ -45,7 +45,7 @@ mine-pack:      ## Step 8: build and verify your evidence pack
 	$(PY) govlab.py pack my-assessment
 	$(PY) govlab.py verify-pack out/evidence-pack-tsg-helpdesk-2026-10-24
 
-test:           ## the proof: the toolkit works on the shipped first draft (15 tests)
+test:           ## the proof: the toolkit works on the shipped first draft (16 tests)
 	$(PY) run_tests.py
 
 challenge:      ## the same, plus 5 tests on your own assessment in my-assessment/ (they fail until you finish it)

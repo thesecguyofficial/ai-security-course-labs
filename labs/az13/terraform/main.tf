@@ -6,7 +6,7 @@
 #   AZ13_NAME=az13-ab1234 bash ../cloud/deploy.sh test      # the same 5 checks as the script
 #   AZ13_NAME=az13-ab1234 bash ../cloud/deploy.sh down      # removes the content AND everything below
 #
-# Terraform builds what the portal builds in videos 1 and 2 (G1): Azure AI Search on the Free tier with keys off, a
+# Terraform builds what video 1 builds (G1): Azure AI Search on the Free tier with keys off, a
 # Foundry resource with keys off, its project "helpdesk" with its own identity, the model helpdesk-chat, and four
 # role assignments. The index, knowledge base and agent are data-plane objects with no Terraform resource: deploy.sh
 # content makes them, exactly as the videos do. Cost: a few US cents of tokens. Destroy it today.
@@ -88,7 +88,7 @@ resource "azurerm_role_assignment" "me_search_data" { # upload the four document
   principal_id         = data.azurerm_client_config.me.object_id
 }
 
-# ---------------------------------------------------------------- Foundry resource, project, model (video 2)
+# ---------------------------------------------------------------- Foundry resource, project, model (video 1)
 resource "azurerm_cognitive_account" "foundry" {
   name                       = var.name
   resource_group_name        = azurerm_resource_group.lab.name

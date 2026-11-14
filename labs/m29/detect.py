@@ -4,7 +4,7 @@ detect.py: event-pattern rules over CloudTrail events, the way EventBridge evalu
     python3 detect.py <setup> <scenario>     # which rules fire for one scenario, and why the others don't
     python3 detect.py hardened --patterns    # print the setup's rules as EventBridge patterns
 
-What is modelled, because it decides whether an alert ever fires:
+What is modeled, because it decides whether an alert ever fires:
   - matching: exact values (OR inside a list, AND across fields), {"prefix"}, {"exists"}, {"anything-but"}, {"cidr"}
   - rule state: a rule in state ENABLED does not see read-only management events; only
     ENABLED_WITH_ALL_CLOUDTRAIL_MANAGEMENT_EVENTS does (EventBridge user guide)

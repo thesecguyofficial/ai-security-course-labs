@@ -51,13 +51,13 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | File | What it is |
 |---|---|
 | `setups/first-draft/` | The pull request. A shared public endpoint and no VPC Service Controls perimeter. The deployed model runs as the Compute Engine default service account, which holds Editor. Version 1 has pickle-based weights and a Hugging Face token in `containerSpec.env`, on an image by tag that Artifact Analysis flagged. A shared Workbench instance in the production project with an external IP. Data scientists with Agent Platform User and Service Account User on the whole project. A user-managed key file for the app. Every prompt logged to a dataset all staff can read |
-| `setups/hardened/` | The same summariser, fixed. A Private Service Connect endpoint with a project allow-list and CMEK, an enforced perimeter, and a runtime service account with no project roles. Safetensors versions uploaded by the pipeline with sha256 and license labels, and the image by digest. Single-user Workbench instances in a separate dev project with no external IP. `vertexai.allowedModels`, Data Access audit logs and alerts. Two gaps left on purpose: the challenge |
+| `setups/hardened/` | The same summarizer, fixed. A Private Service Connect endpoint with a project allow-list and CMEK, an enforced perimeter, and a runtime service account with no project roles. Safetensors versions uploaded by the pipeline with sha256 and license labels, and the image by digest. Single-user Workbench instances in a separate dev project with no external IP. `vertexai.allowedModels`, Data Access audit logs and alerts. Two gaps left on purpose: the challenge |
 | `exampleco.json`, `roles.json`, `images.json` | Who is who, a subset of each role's permissions, the image catalog (lab values) |
 | `twin.py` | The **offline stand-in for Agent Platform and Google Cloud**: IAM allow policies with inheritance, VPC Service Controls, what the serving container and a Workbench instance can reach, model uploads and loads, `vertexai.allowedModels`, Workbench org constraints. Read "How faithful is the twin?" below |
 | `model_files.py` | Builds the lab's model files and **scans** any model folder (the lab's or a real download): file formats, pickle imports read without loading, sha256 hashes as Model Registry labels |
 | `explore.py` | Step 1b: shows each piece of the self-deployed model on its own (`pieces`, `endpoint`, `patch`, `reach`, `call`, `identity`, `record`). Read-only: it reads the lab's files and asks `twin.py`; nothing is sent anywhere |
 | `evaluate.py` | 15 attacks and 6 normal requests; prints which attacks worked AND which normal requests still work (`--only <case>`: one case, every step) |
-| `checker.py` | 30 review rules, `GC15-01` to `GC15-30` |
+| `checker.py` | 30 review rules, `GC15-01` to `GC15-30`. `GC15-29` prints two findings (prompts in the container log, and no alerts) |
 | `hunt.py`, `data/incident/` | Three hunting questions over Cloud Audit Logs entries, plus challenge 3 |
 | `gate.py` | The promotion gate you write in challenge 2 |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 20 tests for the lab, 7 for the challenge |
@@ -69,11 +69,16 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
 - Optional, Step 9 only: the `gcloud` CLI, your own sandbox project with billing and a budget alert (GC10), and about
   2 GB free disk for the model download.
+- A terminal in this lab's folder. Every command below runs from there:
+
+```bash
+cd labs/gc15
+```
 
 ## Step 1b · Before you attack: look at each piece (about 10 minutes)
 
-New to Agent Platform? Do this before Step 1 (lesson 15.5 calls it Step 1b). `explore.py` shows ExampleCo's setup one
-piece at a time. Real output below is from a fresh Ubuntu machine (recording run 41615058193).
+New to Agent Platform? Do this before Step 1. `explore.py` shows ExampleCo's setup one piece at a time. Real output
+below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `setups/` and
 `data/incident/` and prints what it finds. `reach`, `call` and `identity` ask `twin.py`, the lab's offline stand-in for
@@ -328,7 +333,6 @@ project allows it, and the endpoint serves version 1 from the copy made at uploa
 ## Step 1 · Review the first draft
 
 ```bash
-cd labs/gc15
 make check
 ```
 
@@ -472,7 +476,10 @@ ALLOW: aiplatform.user on the project example-summariser-prod
 make scan
 ```
 
-- `make scan`: builds artifacts/, then scans version 1 (first draft) and version 3 (hardened)
+- `make scan`: builds artifacts/, then scans version 1 (first draft) and version 3 (hardened). Same as
+  `python3 model_files.py build`, then `python3 model_files.py scan artifacts/v1-pickle` and
+  `python3 model_files.py scan artifacts/v3-safe`. The first scan ends with exit code 1 (`DO NOT SHIP`): that's the
+  point of it, so `make` carries on
 
 ```output
 [OK  ] config.json                  data         
@@ -773,8 +780,10 @@ When all three are right, `make check-hardened` prints 0 findings and `make hard
 
 [`GUIDED-BUILD.md`](GUIDED-BUILD.md): a CPU-only custom container serving a small open model you download, scan and
 upload yourself, on a **Private Service Connect** endpoint with a dedicated service account, CMEK, access logging and
-Data Access audit logs, and a **Cloud Scheduler job that undeploys the model 60 minutes after you deploy it**,
-created first. `make cost` prints the hourly cost from the list prices we read; `make cloud-down` deletes everything.
+Data Access audit logs, and a **Cloud Scheduler job that undeploys the model 60 minutes after you create the job**.
+From the command line you create it before the deployment; in the console, which deploys when it creates the
+endpoint, straight after. Deploying took 22 to 25 minutes in our runs, so that leaves about 35 minutes of deployed
+time unless you move the job later. `make cost` prints the hourly cost from the list prices we read; `make cloud-down` deletes everything.
 
 ## How faithful is the twin?
 
@@ -802,5 +811,7 @@ are ours, and `response._lab_version_id` is a lab simplification.
 - `python3: command not found` or a syntax error: you need Python 3.11+. On Windows use `py -3` instead of `python3`.
 - `make: command not found` (Windows): run the `python3 ...` command shown next to each `make` line.
 - Challenge tests still fail after you edited a JSON file: check it's still valid JSON (`python3 -m json.tool setups/hardened/orgpolicy.json`).
-- You changed a setup and `make test` fails: `make test` pins the shipped hardened setup only for the challenge
-  files. Undo other edits (`git checkout setups/`).
+- You changed a setup and `make test` fails: `make test` ignores your challenge work (the Workbench constraints in
+  `setups/hardened/orgpolicy.json` and the `approval_gate` switch in `setups/hardened/app.json`) and expects
+  everything else in `setups/` as shipped. Undo your other edits (`git checkout setups/`), and use `make challenge`
+  to test your challenge work.

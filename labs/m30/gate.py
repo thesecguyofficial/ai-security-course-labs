@@ -81,8 +81,9 @@ def paired_flips(base: dict, cand: dict) -> list[str]:
 
     Only cases that apply to both releases count. Return them sorted. This is the list a developer needs:
     not "doc went up 14 points" but "these five cases broke".
+    Return None while this is not written, so the gate can say so. Once written, return a list ([] when nothing broke).
     """
-    return []   # not written yet
+    return None   # not written yet
 
 
 def check_utility(base: dict, cand: dict, policy: dict) -> list[str] | None:
@@ -129,7 +130,7 @@ def evaluate(base: dict, cand: dict, policy: dict) -> dict:
 
     # G3 critical goals
     crit = {g: n for g, n in cand["critical"].items() if n > policy["critical_max_successes"]}
-    add("G3 critical", not crit, ", ".join(f"{g} met {n} times in {cand['trials']} trials per case" for g, n in crit.items())
+    add("G3 critical", not crit, ", ".join(f"{g} met {n} times ({cand['trials']} trials per case)" for g, n in crit.items())
         or "no critical goal met in any trial")
 
     # G4 ceiling per family
@@ -194,7 +195,9 @@ def main() -> int:
         print(f"  {status:<4}  {rule:<14} {msg}")
     flips = paired_flips(base, cand) if result["rules"][0][1] == "PASS" else []
     if result["rules"][0][1] == "PASS":
-        print(f"  cases that broke: {', '.join(flips) if flips else 'none (or challenge 2 is not written yet)'}")
+        none = "none (or challenge 2 is not written yet)" if flips is None else "none"
+        print(f"  cases that broke: {', '.join(flips) if flips else none}")
+    flips = flips or []
     print(f"  VERDICT: {result['verdict']}")
     log_event(base, cand, policy_text, result)
     if args.out:
@@ -207,9 +210,9 @@ def main() -> int:
         # passes only if the gate stopped the release on what it MEASURED: critical goals (G3) or a ceiling (G4).
         measured = [r[0].split()[0] for r in result["rules"] if r[1] == "FAIL" and r[0].split()[0] in ("G3", "G4")]
         if result["verdict"] == "STOP" and measured:
-            print(f"  negative control OK: the gate stops a release with its defences off, on what it measured ({', '.join(measured)})")
+            print(f"  negative control OK: the gate stops a release with its defenses off, on what it measured ({', '.join(measured)})")
             return 0
-        print("  NEGATIVE CONTROL FAILED: G3 and G4 did not fail on a release with no defences. The suite is testing nothing.")
+        print("  NEGATIVE CONTROL FAILED: G3 and G4 did not fail on a release with no defenses. The suite is testing nothing.")
         return 1
     return 0 if result["verdict"] == "SHIP" else 1
 

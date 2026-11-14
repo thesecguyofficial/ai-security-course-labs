@@ -55,7 +55,7 @@ data "azurerm_client_config" "current" {}
 
 locals {
   policy      = jsondecode(file("${path.module}/../fixes/rai-policies.json"))["policies"]["contoso-helpdesk-v2"]["properties"]
-  portal_only = ["PII", "Indirect Attack Spotlighting"] # set in the portal (README Step 9, G3)
+  portal_only = ["PII", "Indirect Attack Spotlighting"] # set in the portal (README Step 9, G4)
   filters     = [for f in local.policy.contentFilters : f if !contains(local.portal_only, f.name)]
 }
 

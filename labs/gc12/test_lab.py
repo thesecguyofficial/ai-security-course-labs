@@ -1,7 +1,7 @@
 """
 test_lab.py: `make test`. Proves the lab works as described in the README: the Helpdesk's guardrail gaps today,
 the hardened guard's catch rate AND false positives, the twin's documented limits, the precedence rules of the
-Agent Platform integration, fail-open behaviour, Terraform matching the hardened twin, and no real secrets.
+Agent Platform integration, fail-open behavior, Terraform matching the hardened twin, and no real secrets.
 """
 
 import json

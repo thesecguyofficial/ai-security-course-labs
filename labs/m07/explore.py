@@ -181,7 +181,7 @@ def ask_ollama(req: dict) -> dict:
 
 
 def ask_stand_in(req: dict, ticket: str) -> dict:
-    """The stand-in's next action, wrapped in the same response shape as Ollama's (labelled, not AI)."""
+    """The stand-in's next action, wrapped in the same response shape as Ollama's (labeled, not AI)."""
     hist, pending = [], None
     for m in req["messages"]:
         if m["role"] == "assistant" and m.get("tool_calls"):
@@ -279,7 +279,7 @@ def cmd_memory_write(a):
     d = MEM_DIR()
     d.mkdir(parents=True, exist_ok=True)
     print(f"The run on {a.ticket} is over. A memory layer now decides what to keep for NEXT time.")
-    print("Here it is plain Python (real products ask a model to pick and summarise). Three kinds:\n")
+    print("Here it is plain Python (real products ask a model to pick and summarize). Three kinds:\n")
     labels = {"episodic": "what happened, and when", "procedural": "how to do this task",
               "semantic": "facts"}
     for kind, entry in entries.items():

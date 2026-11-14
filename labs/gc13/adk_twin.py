@@ -1,7 +1,7 @@
 """
 adk_twin.py: a small, offline model of how an ADK runner executes one turn of an agent (GC13). Standard library only.
 
-It is NOT the Agent Development Kit. It copies the ADK behaviours this lab depends on, which we checked against
+It is NOT the Agent Development Kit. It copies the ADK behaviors this lab depends on, which we checked against
 ADK 2.12.0 (README, "About the twins"):
   * Plugin callbacks run BEFORE agent callbacks, and the first one that returns something other than None wins:
     for before_tool that result replaces the tool call (the tool never runs).

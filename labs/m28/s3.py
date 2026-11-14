@@ -5,7 +5,7 @@ Objects are encrypted with a fresh data key from kms.py (AES-256-GCM), bound to 
 {"aws:s3:arn": "arn:aws:s3:::<bucket>/<key>"}, the context S3 uses for SSE-KMS without an S3 Bucket Key. So reading
 an object needs BOTH: the bucket policy must allow s3:GetObject, and the key policy must allow kms:Decrypt.
 
-Lifecycle follows the documented behaviour that matters here: in a versioned bucket, Expiration only turns the current
+Lifecycle follows the documented behavior that matters here: in a versioned bucket, Expiration only turns the current
 version into a noncurrent one behind a delete marker ("Object expiration applies only to an object's current
 version"). The old version stays until a NoncurrentVersionExpiration rule removes it.
 

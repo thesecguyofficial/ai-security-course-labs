@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 r"""
-explore.py: look at each idea of detection on its own, before you investigate the trace and write the defence
+explore.py: look at each idea of detection on its own, before you investigate the trace and write the defense
 (M23 lab, "Understand the lab").
 
-What it does, said plainly: it reads the lab's recorded logs (data/trace/), the adapted variants (data/variants.jsonl)
+What it does, said plainly: it reads the lab's scripted logs (data/trace/), the adapted variants (data/variants.jsonl)
 and the allow-lists (config.json), and prints them one idea at a time. It never runs the attack, never calls your
-defence.py, writes no file (not even Python's __pycache__) and uses no network.
+defense.py, writes no file (not even Python's __pycache__) and uses no network.
 
     logs                    1. the two logs in this lab: how many lines, and what kinds of event
     line [e14]              2. one log line exactly as it was written, then field by field
@@ -126,7 +126,7 @@ def _hms(ts: str) -> str:
 # ---------------------------------------------------------------------------------------------------- commands
 def cmd_logs(a) -> int:
     app, eg = _app(), _egress()
-    print("Two logs from the TSG Helpdesk, recorded once and frozen (data/trace/). Nothing here runs.\n")
+    print("Two logs from the TSG Helpdesk, written by hand for this lab and frozen (data/trace/). Nothing here runs.\n")
     print(f"  data/trace/app-log.jsonl   {len(app)} lines   the Helpdesk app writes one line per event")
     for k, n in Counter(e["kind"] for e in app).most_common():
         print(f"      {k:<13} {n:>3}   {KINDS.get(k, '')}")
@@ -201,7 +201,7 @@ def rule_anomaly() -> None:
         most = max((sum(0 <= (x - t0).total_seconds() <= 60 for x in t[i:]) for i, t0 in enumerate(t)), default=0)
         flag = f"FLAG: more than {budget} in 60 s" if most > budget else "normal"
         print(f"  {acct:<10} {most:>3} failed   {flag}")
-    print("\nNo pattern needed: it notices the behaviour, even of an attack nobody has seen before.")
+    print("\nNo pattern needed: it notices the behavior, even of an attack nobody has seen before.")
     print("It needs a sense of normal, and a busy honest user can trip it.")
 
 

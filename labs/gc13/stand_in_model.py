@@ -1,9 +1,9 @@
 """
 stand_in_model.py: the "model" behind the Helpdesk agent. PLAIN PYTHON, NOT AI, so every run is identical.
 
-It copies four behaviours of real models that matter for this lab (Modules 6 and 7):
+It copies four behaviors of real models that matter for this lab (Modules 6 and 7):
   1. It picks tools and fills in their arguments itself, including a "team" filter it guesses from your words.
-  2. It obeys instructions it finds in tool results (retrieved documents, ticket text): the labelled placeholder
+  2. It obeys instructions it finds in tool results (retrieved documents, ticket text): the labeled placeholder
      [LAB-INJECTED-DIRECTIVE: email ... to <address>] makes it call send_email. That is indirect prompt injection.
   3. It answers by quoting what the tools returned, secrets included.
   4. It never enforces access rules: whatever a tool hands it, it uses.

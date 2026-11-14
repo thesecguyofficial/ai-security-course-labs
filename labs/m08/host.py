@@ -294,6 +294,15 @@ def _outbox() -> list[dict]:
     return [json.loads(line) for line in f.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
+def set_release(release: str) -> None:
+    """What `make attack` and `make defend` do with shell commands, in plain Python so it also works on
+    Windows: switch the facts server to this release and clear the last run's fake inbox and outbox."""
+    STATE.mkdir(exist_ok=True)
+    (STATE / "facts_release.txt").write_text(release + "\n", encoding="utf-8")
+    for name in ("attacker_inbox.log", "outbox.jsonl"):
+        (STATE / name).unlink(missing_ok=True)
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description="Tiny MCP host for the M8 lab (127.0.0.1, fake data).")
     p.add_argument("message", help="what to ask the agent, e.g. 'give me a fact about octopus'")
@@ -304,7 +313,11 @@ def main() -> None:
     p.add_argument("--block-injection", action="store_true", help="refuse tools with a hidden-directive marker")
     p.add_argument("--backend", choices=["stand-in", "ollama"], default="stand-in")
     p.add_argument("--model", default="gemma3:1b", help="Ollama model name, with --backend ollama")
+    p.add_argument("--release", choices=["1.0.0", "1.1.0", "2.0.0"],
+                   help="first switch the facts server to this release and clear the fake inbox and outbox")
     args = p.parse_args()
+    if args.release:
+        set_release(args.release)
     result = asyncio.run(run(args.message, args))
     print("\n--- result ---")
     print(f"reply:          {result['reply']}")

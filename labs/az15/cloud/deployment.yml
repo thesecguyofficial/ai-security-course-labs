@@ -1,7 +1,9 @@
 $schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
 # AZ15 guided build. cloud.sh fills in the endpoint and MODEL_ID (a model from the collection curated by Azure Machine
-# Learning, the azureml registry, which works in approved-outbound mode with no FQDN rules). Pick one whose model card
-# lists a CPU SKU for managed online endpoints; if it needs a bigger one, change instance_type (and the cost).
+# Learning, the azureml registry). Microsoft says these work in approved-outbound mode; the one in our 10 Nov 2026 run
+# still needed four FQDN rules, because its container installs conda packages at start (GUIDED-BUILD.md B.1). Pick one
+# whose model card lists a CPU SKU for managed online endpoints. cloud.sh replaces instance_type with INSTANCE when
+# you set it (our run: Standard_E2s_v3; Standard_DS3_v2 was over our quota).
 name: blue
 endpoint_name: __EP__
 model: __MODEL_ID__

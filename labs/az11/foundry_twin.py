@@ -187,7 +187,7 @@ class PolicyEval:
         if "greater" in c or "less" in c:
             k = "greater" if "greater" in c else "less"
             return left is not None and (left > c[k] if k == "greater" else left < c[k])
-        raise ValueError(f"operator not modelled: {c}")
+        raise ValueError(f"operator not modeled: {c}")
 
     def effect(self) -> str | None:
         """None if the rule doesn't match (compliant). Raises if the rule has no then block."""

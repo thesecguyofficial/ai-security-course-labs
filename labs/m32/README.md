@@ -9,7 +9,8 @@ it goes live. Then you publish it as a public GitHub repo and submit it.
 - **Time:** plan 8 to 12 hours, over two or three weeks.
 - **Cost:** $0. Python **3.11 or newer**, standard library only. No packages, no model download, no API key.
 - **Cloud:** the cloud part (Part 6) reviews an AWS deployment description offline, so you need no AWS account.
-  Azure and Google Cloud versions ship with those streams (`cloud/azure/`, `cloud/gcp/`).
+  Azure and Google Cloud versions are not available yet: every student reviews the AWS file, whichever stream they
+  took (`cloud/azure/` and `cloud/gcp/` hold a note only).
 - **Grading:** automatic. You submit your public repo and commit SHA on the course's capstone page; the grader
   re-runs the course's automated checks on your submitted commit. Pass them to get a Pass; if not, you get Not yet
   with the checks that failed, and you fix them and resubmit. Details: [`RUBRIC.md`](RUBRIC.md). How to submit:
@@ -83,12 +84,13 @@ model to behave does nothing here. A control in code that checks the action does
 
 ```bash
 cd labs/m32
-make export DEST=../../../my-advanced-capstone
-cd ../../../my-advanced-capstone
+make export DEST=~/my-advanced-capstone
+cd ~/my-advanced-capstone
 git init -b main && git add . && git commit -m "TSG Ops Crew advanced capstone: starting point"
 ```
 
-- `make export DEST=../../../my-advanced-capstone`: same as `python3 export.py <folder>`
+- `make export DEST=~/my-advanced-capstone`: same as `python3 export.py ~/my-advanced-capstone`. `~` is your home
+  folder, so the new repo sits outside the course labs folder (a repo inside another repo causes trouble)
 
 Create an **empty public** repo on GitHub (no README, no license), then follow the two `git` lines `export.py`
 printed. Open the repo's **Actions** tab: the `capstone-checks` workflow runs on every push. It is red now. Your
@@ -111,7 +113,8 @@ make run
 ```
 
 - `make attack`: same as `python3 tour.py`: one attack for each known finding
-- `make run`: the web page on http://127.0.0.1:8732 (Ctrl+C to stop)
+- `make ask U=... Q="..."`: same as `python3 -m crew.app --ask dana@initech.example "Any update on my ticket?"`
+- `make run`: same as `python3 -m crew.app`: the web page on http://127.0.0.1:8732 (Ctrl+C to stop)
 
 The six known findings, described by what you can see:
 
@@ -129,8 +132,11 @@ For each one, find the **root cause** (which hook, which boundary, which missing
 `state/app-log.jsonl` as you go: you need its fields in Part 5.
 
 **There is at least one more.** A planted instruction can persist in shared memory and re-fire for a later user on
-the same tenant. Test S10 checks it, so your fixes must stop it to pass. A strong submission also finds an issue
-beyond the six that you explain, fix and cover with a test or eval case of your own.
+the same tenant. This one is **G-7**: it is given to you, and test S10 checks it, so your fixes must stop it to pass.
+Give it its own section in `FINDINGS.md`. A strong submission also finds an issue the course did not name, explains
+it, fixes it and covers it with a test or eval case of its own: number yours from **G-8**. Three things the
+shipped tests already cover do not count as your own finding: a flood of tool calls (S08, part of G-5), markup from
+a CRM record that must be escaped (S11) and the page's Content-Security-Policy header (eval case out-03).
 
 ## Part 3 · Fix (2 to 3 hours)
 
@@ -144,10 +150,13 @@ make attack
 make test
 ```
 
-- `make pin`: record the crm MCP server's tools as they are now (crew/mcp_pins.json)
-- `make challenge`: the findings as tests (S01-S11: G-1 to G-7 and HTML escaping): turn them green
+- `make pin`: same as `python3 -m crew.mcp_client --pin`: record the crm MCP server's tools as they are now
+  (crew/mcp_pins.json)
+- `make challenge`: same as `python3 -m unittest discover -s tests -t . -v -p "test_security.py"`: the findings as
+  tests (S01-S11: G-1 to G-7 and HTML escaping): turn them green
 - `make attack`: every line should now say "held"
-- `make test`: F01-F10 and the lab's own test must stay green
+- `make test`: same as `python3 -m unittest discover -s tests -t . -v -p "test_functional.py"`: F01 to F10 must stay
+  green
 
 Aim for controls that hold **even though every agent obeys the instruction**: a per-agent tool allow-list, a
 hand-off allow-list with a depth limit (a circuit breaker), per-turn tenant scope, MCP tool pinning that fails
@@ -161,8 +170,10 @@ make eval
 make regress
 ```
 
-- `make eval`: the gate: 18 core cases + yours; exit 1 if any fails
-- `make regress`: take your controls away three ways: the gate must FAIL each time
+- `make eval`: same as `python3 evals/run_evals.py`: the gate: 18 core cases + yours; exit 1 if any fails
+- `make regress`: take your controls away three ways: the gate must FAIL each time. Same as
+  `python3 evals/run_evals.py --core-only --regression injection --expect-fail`, then the same line with `handoff`
+  and with `output` in place of `injection`
 
 `evals/cases.json` is the core suite. Add your own cases to `evals/my_cases.json` (same format). Aim for at
 least five, with two new injection variants and two normal requests that a careless fix would break. Push. Keep one
@@ -182,10 +193,13 @@ make detect-check
 make detect LOG=state/app-log.jsonl
 ```
 
-- `make simulate`: write the attack day to detections/logs/attack-day.jsonl
-- `make detect`: your rules on the attack day
-- `make detect-check`: all five incidents on seeds 1, 2 and 3, max 2 false alerts a day
-- `make detect LOG=state/app-log.jsonl`: the same rules on your own Crew's log
+- `make simulate`: same as `python3 detections/attack_sim.py`: write the attack day to
+  detections/logs/attack-day.jsonl
+- `make detect`: same as `python3 detections/detect.py`: your rules on the attack day
+- `make detect-check`: same as `python3 detections/score.py`: all five incidents on seeds 1, 2 and 3, max 2 false
+  alerts a day
+- `make detect LOG=state/app-log.jsonl`: same as `python3 detections/detect.py --log state/app-log.jsonl`: the same
+  rules on your own Crew's log
 
 Each seed changes who the attackers are and what they use, so a rule that names a user, an IP or a request ID will
 miss the next day. The grader also runs your rules on three days you have never seen. Then pick **one** incident
@@ -193,6 +207,9 @@ and write `report/INCIDENT-REPORT.md` (timeline, scope, root cause, containment,
 Lessons 23.2, 23.3 and 24.4.
 
 ## Part 6 · Cloud: your stream (1 hour)
+
+For now this part is the AWS file for every student, whichever cloud stream you took: the Azure and Google Cloud
+versions are not available yet.
 
 `cloud/aws/deployment.json` describes the Ops Crew on AWS as the platform team's first draft: per-agent AgentCore
 identities, a Cedar policy engine, a gateway authorizer, hand-off limits, a sandboxed code interpreter, model
@@ -234,7 +251,7 @@ Fill in `README.md` (your portfolio README), push, wait for a green Actions run,
 | `tests/` | `test_functional.py` (F01 to F10) and `test_security.py` (S01 to S11) |
 | `evals/` | `run_evals.py` (the gate and the regressions), `cases.json` (core), `my_cases.json` (yours) |
 | `detections/` | `attack_sim.py`, `detect.py` (rule engine), `score.py`, `rules.json` (yours), `logs/` |
-| `cloud/` | `cloud_check.py`, `aws/deployment.json` (yours to harden), `azure/` and `gcp/` (coming) |
+| `cloud/` | `cloud_check.py`, `aws/deployment.json` (yours to harden), `azure/` and `gcp/` (a note only: not available yet, use `aws`) |
 | `report/` | Templates: threat model, findings, incident report, governance note, portfolio README |
 | `template/.github/workflows/capstone.yml` | The CI workflow (`export.py` puts it in place) |
 | `selfcheck.py`, `selfcheck.lock.json` | The self-check and the fingerprints of the original files |
@@ -307,7 +324,9 @@ ALL TESTS PASSED (6 run)
 ## Troubleshooting
 
 - **`python3: command not found` or a version below 3.11:** install Python 3.11 or newer (lesson 0.6). On Windows,
-  use `py` instead of `python3` and run the commands from the Makefile by hand.
+  use `py` instead of `python3` and type the plain command this guide gives after "same as" for each `make` step
+  (for `make setup`: `py --version`). `make rugpull`, `make unrugpull` and `make clean` use shell commands
+  (`mkdir -p`, `echo`, `rm`): on Windows use WSL for those three.
 - **H1 fails after you only changed `guards.py`:** your editor may have reformatted another file. `git diff --stat`
   shows which; restore it with `git checkout -- <file>`.
 - **A test hangs:** an MCP server process from an earlier run may still be running. Close the terminal, or

@@ -187,7 +187,7 @@ def cmd_memory(_a):
         print(f"  {e['id']:<5} run {e['session']:<3} written by {e['from']:<7} from {src.get('source', '?'):<11} "
               f"\"{e['message'][:58]}{'...' if len(e['message']) > 58 else ''}\"")
     print()
-    print("Each note came from an email: text from outside the company. None is labelled that way.")
+    print("Each note came from an email: text from outside the company. None is labeled that way.")
 
 
 def cmd_spread(_a):
@@ -306,7 +306,7 @@ def cmd_variants(_a):
         print(f"      a1: \"{wrap(rt, 92, ' ' * 11)}\"")
         print(f"      va: \"{wrap(vt, 92, ' ' * 11)}\"")
         print()
-    print("Changed: the words (relay, dispatch, e-mail, client records) and the domain (.example.co, a look-alike).")
+    print("Changed: the words (relay, dispatch, e-mail, client records) and the domain (attacker-example.example, a look-alike).")
     print("Stayed:  an outside address crossing each boundary, and the mailer asked to send to it.")
 
 

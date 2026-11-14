@@ -210,7 +210,7 @@ def cmd_invert(a) -> int:
     return 0
 
 
-# ---------------------------------------------------------------- 4. memorise (a toy language model)
+# ---------------------------------------------------------------- 4. memorize (a toy language model)
 
 END = "<end>"
 
@@ -436,7 +436,7 @@ def cmd_kms(a) -> int:
     print("\n5. Who may ask KMS to unwrap? The key policy decides (kms:Decrypt on the raw-log key):")
     print(f"   {'role':<30} {'first draft':<44} hardened")
     first = lab.load_setup("first-draft")
-    roles = [lab.ANALYST, lab.REDACTOR, lab.MACIE, lab.BREAK_GLASS]
+    roles = [lab.ANALYST, lab.REDACTOR, lab.MACIE, lab.BREAK_GLASS, lab.ERASURE]
     for p in roles:
         cells = []
         for s in (first, setup):

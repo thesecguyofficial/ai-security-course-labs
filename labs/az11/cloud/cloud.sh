@@ -2,7 +2,8 @@
 # AZ11 cloud path (OPTIONAL): the hardened TSG Helpdesk build in YOUR OWN subscription.
 # Needs: Azure CLI (az login), Terraform 1.6+ or OpenTofu (set TF=tofu), Python 3.11+.
 # Usage: ./cloud.sh cost | up | policy | probe-outside | probe-inside | logs | evidence | down
-# Read README Step 8 first. Not run by the course team (no Azure subscription in the build): treat output as yours to verify.
+# Read README Step 8 first. Run for real on 12 November 2026 in Sweden Central through deploy.sh (up, test 5 of 5, down):
+# that covers policy, probe-outside, probe-inside and down. The results are in GUIDED-BUILD.md, "What happened in our real run".
 set -euo pipefail
 cd "$(dirname "$0")"
 TF="${TF:-terraform}"
@@ -16,9 +17,9 @@ case "${1:-}" in
     cat <<'TXT'
 What this build bills while it exists (look each one up for your region in the Azure pricing calculator):
   - 1 private endpoint (per hour, plus a small per-GB charge for data through it)
-  - 1 small Linux VM (Standard_B1s by default) and its Standard_LRS OS disk (per hour)
+  - 1 small Linux VM (Standard_B2ts_v2 by default) and its Standard_LRS OS disk (per hour)
   - Log Analytics ingestion (per GB; this lab writes a few MB) and Key Vault key operations (per 10,000)
-  - model tokens: probe-inside sends ONE tiny request (a few dozen tokens)
+  - model tokens: probe-inside sends ONE small request each time (a few hundred tokens: a reasoning model counts its reasoning)
   - 3 private DNS zones (billed per zone per month, so a few hours costs a fraction of that)
 No charge for Azure Policy on Azure resources. The Foundry resource has no hourly charge here: the deployment is
 pay-per-token. Plan for a 2-hour session, then run ./cloud.sh down. Set a budget alert first (lab AZ10, budget.bicep).
@@ -53,7 +54,7 @@ TXT
     echo "  --deployment-name test-global --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI \\"
     echo "  --sku-name GlobalStandard --sku-capacity 1     # expect: refused by policy"
     ;;
-  probe-outside)   # from your laptop: public DNS answer, and the network refuses before identity matters
+  probe-outside)   # from your laptop: public DNS answer and a refusal (our run: 401 PermissionDenied, with or without the role)
     for h in $("$TF" -chdir="$DIR" output -json hostnames | python3 -c 'import json,sys; print(" ".join(json.load(sys.stdin)))'); do
       echo "$h -> $(python3 -c 'import socket,sys; print(socket.gethostbyname(sys.argv[1]))' "$h")"
     done

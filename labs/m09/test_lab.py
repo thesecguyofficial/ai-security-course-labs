@@ -87,7 +87,7 @@ class TestPinning(unittest.TestCase):
         shutil.copy(os.path.join(MODELS, "model.safetensors"), target)
         pin.write_pin(target)
         self.assertTrue(pin.verify_pin(target))
-        # Attacker swaps the artefact behind the same name.
+        # Attacker swaps the artifact behind the same name.
         shutil.copy(os.path.join(MODELS, "evil_model.pkl"), target)
         self.assertFalse(pin.verify_pin(target))
         os.remove(target)

@@ -249,7 +249,7 @@ resource "aws_bedrockagentcore_harness" "helpdesk" {
     type = "inline_function"
     config {
       inline_function {
-        description  = "Reset multi-factor authentication for a user so they can enrol a new device."
+        description  = "Reset multi-factor authentication for a user so they can enroll a new device."
         input_schema = jsonencode({ type = "object", properties = { target_email = { type = "string" } }, required = ["target_email"] })
       }
     }

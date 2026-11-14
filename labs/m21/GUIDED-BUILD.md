@@ -17,6 +17,7 @@ a real Amazon Bedrock AgentCore Gateway in **your own** AWS sandbox account (les
 > docs, values illustrative)"** and names the page its shape comes from. Request bodies were checked against the
 > botocore 1.43.118 service model for `bedrock-agentcore-control` (required members, union members, string limits).
 > Where AWS doesn't document what happens, the guide says "write down what you get". Write your real results down.
+> Status on 15 November 2026: this guide has still not been run in an AWS account.
 
 **Why the approval isn't on the gateway.** "Refund over $100 unless approved" has two honest designs. Here the
 gateway refuses any refund over $100 from the agent, whoever is signed in, and the agent can only *ask* for one
@@ -25,6 +26,12 @@ That is human deferral (lesson 21.4). A Dogwood policy *can* require an earlier 
 policy session is bound to one signed-in principal, and AWS's own example notes that `count` "cannot express
 'approved by two different people'". So the approval would come from the same person whose agent is being steered.
 The offline lab shows the other design (a signed approval bound to the exact arguments, checked by the PEP).
+
+**What this build leaves out: whose order is it?** The offline lab's hardened PEP refuses a refund on an order that
+does not belong to the ticket's customer (attacks A1 and A8, lesson 21.1). The gateway cannot make that check: it has
+no order database, so the Cedar policies here only see the token and the arguments. On this gateway bob can refund up
+to $100 on any customer's order. In a real system the owner check has to live in the Lambda, or in a PEP in front of
+it that can look the order up. This build does not do it.
 
 Shell variables used throughout (set them again in a new terminal):
 
@@ -43,10 +50,10 @@ Shell variables used throughout (set them again in a new terminal):
    or OpenTofu, Python 3.11+.
 3. **Region.** AWS lists temporal policies as available in US East (N. Virginia)
    ([Temporal policies](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-temporal.md)).
-4. **Terminal in `labs/m21`:**
+4. **A bash terminal in `labs/m21`** (macOS, Linux, WSL on Windows or AWS CloudShell). If you are not in the lab
+   folder yet, go there first with `cd labs/m21` from the `ai-security-course-labs` folder. Then:
 
    ```bash
-   cd labs/m21
    export AWS_REGION=us-east-1
    aws sts get-caller-identity --query Account --output text
    ```
@@ -172,6 +179,11 @@ Money as integer minor units is what lets Part B count and compare it.
 
    Expect `isError: true`: no permit matches, so default deny.
 
+   Lesson 21.1 says to drop any argument that names a user, and this build keeps one. The difference: the
+   argument is never trusted on its own. The policy compares `caller_username` with the username in the token and
+   refuses when they differ, and the Lambda only uses it to write the caller into its log line (the pattern from
+   lesson 14.5).
+
 5. **The amount as a string.** `"amount_cents": "4500"`. AWS doesn't document whether the gateway rejects a value that
    doesn't match the tool's input schema before Policy runs. Write down what you get, and compare it with lab A7.
 
@@ -272,7 +284,9 @@ def policy_session_id(username: str) -> str:
 ```
 
 The one-hour window is relative, so it still slides inside that day's session; sessions expire after 24 hours of
-inactivity. Two limits to plan for: sessions are bound to the caller's identity on authenticated gateways ("Two
+inactivity. The price of putting the date in the ID: a new session starts at 00:00 UTC and the count starts again
+with it, so around midnight a user can get up to six refunds in one hour (three before, three after). If that
+matters, use a stable per-user ID with no date in it, or back the limit with your own counter. Two limits to plan for: sessions are bound to the caller's identity on authenticated gateways ("Two
 different callers supplying the same session ID get isolated sessions"), and the maximum window is 24 hours.
 
 # Part C · LOG_ONLY for one policy, and what an edit does
@@ -306,11 +320,18 @@ different callers supplying the same session ID get isolated sessions"), and the
    everything else:
 
    ```bash
+   POLICY_ID=$(aws bedrock-agentcore-control list-policies --policy-engine-id "$PE_ID" \
+     --query "policies[?name=='max_3_refunds_per_hour'].policyId | [0]" --output text)
+   echo "$POLICY_ID"
    aws bedrock-agentcore-control delete-policy --policy-engine-id "$PE_ID" --policy-id "$POLICY_ID"
+   for u in alice bob; do aws cognito-idp admin-delete-user --user-pool-id "$POOL" --username "$u"; done
    make cloud-down
-   for u in alice bob; do aws cognito-idp admin-delete-user --user-pool-id "$POOL" --username "$u" 2>/dev/null; done
    ```
 
+   - The first line looks the policy ID up again, so teardown works even if you skipped Part C or opened a new
+     terminal. If `echo` prints `None` or nothing, run `list-policies` on its own and copy the `policyId` by hand
+     (the shape of that response is from the AWS docs, not from a run).
+   - The users are deleted before `make cloud-down`, while the user pool still exists.
    - `make cloud-down`: type yes
 
    If `cloud-down` stops because the policy is still `DELETING`, wait a minute and run it again.

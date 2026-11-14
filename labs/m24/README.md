@@ -2,7 +2,7 @@
 
 Companion to lessons **24.1 to 24.5** of *AI Security Engineer* (The Sec Guy). About 45 minutes, **$0**, all on
 your laptop: **Python 3.11+ only**, no packages, no network, no model download. Nothing in this lab runs the attack
-or calls out anywhere. The attack is a recording.
+or calls out anywhere. The attack is data: a run we wrote by hand, which the lab calls the recording.
 
 This lab is **defensive only**. The lab ships a recorded, illustrative run of a three-agent TSG Ops crew, written as
 data files (events, names, dates and addresses are invented): a planted instruction in one incoming email propagates
@@ -39,7 +39,7 @@ git pull
 
 **No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
 
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m24`.
+Stay in the `ai-security-course-labs` folder: the "Needs" section below takes you into `labs/m24`.
 
 ## The crew
 
@@ -66,14 +66,30 @@ Three agents share a memory channel and a task channel:
 ## Needs
 
 - Python **3.11 or newer**: `python3 --version`. No packages, no internet.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
+- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step (the table below
+  lists them all; they are plain Python, so they work the same on every system).
+
+Go into the lab folder now. Every command below, Step 1b included, is run from here:
+
+```bash
+cd labs/m24
+```
+
+| `make` shortcut | The command it runs (use this on Windows, with `python` in place of `python3`) |
+|---|---|
+| `make setup` | `python3 ../../tools/check_python.py 3.11` |
+| `make trace` | `python3 trace.py` |
+| `make replay` | `python3 replay.py` |
+| `make report` | `python3 replay.py --report` |
+| `make test` | `python3 run_tests.py` |
+| `make challenge` | `python3 run_tests.py --challenge` |
 
 ## Step 1b · Look at each piece first
 
 New to multi-agent systems? Do this before Step 1 (lesson 24.1 and its videos run it). `explore.py` shows one idea at
 a time. **What it really runs:** nothing. It reads `config.json` and the recorded runs and prints them; it runs no
 agent, never opens `ground_truth.json` and writes no file (not even `__pycache__`). Windows: `python explore.py ...`.
-Real output from recording run 41084157140:
+Real output on Linux, checked again on 15 November 2026:
 
 **1. The crew:** three agents, their jobs and tools, and the two channels.
 
@@ -196,15 +212,16 @@ python3 explore.py breaker n2
 
 **8. The adapted attack:** `python3 explore.py variants` puts the recorded attack (`a1`) beside the adapted one
 (`va`) event by event and ends with "Changed: the words (relay, dispatch, e-mail, client records) and the domain
-(.example.co, a look-alike). Stayed: an outside address crossing each boundary, and the mailer asked to send to it."
+(attacker-example.example, a look-alike). Stayed: an outside address crossing each boundary, and the mailer asked to send to it."
 
 ## Step 1 · Trace the spread
 
 ```bash
-cd labs/m24
 make setup
 make trace
 ```
+
+Windows: `python ../../tools/check_python.py 3.11`, then `python trace.py`.
 
 `make -n setup trace` shows what these run, without running them: `python3 ../../tools/check_python.py 3.11` and
 `python3 trace.py`. Nothing is installed: `make setup` says `Nothing to install for this lab: Python 3.12 and its
@@ -238,7 +255,8 @@ ADAPTED VARIANTS contained: NO    caught 0 of 5 controls   false positives 0 of 
 FAIL: the mailer's send to an outside domain still executes. Write containment.py (README Step 3).
 ```
 
-`make` then prints `Error 1`: `replay.py` exits with 1 on a fail, so a CI job stops here too.
+`make` then prints `Error 1`: `replay.py` exits with 1 on a fail, so a CI job stops here too. That is expected
+until your containment passes. Windows: `python replay.py`.
 
 ## Step 3 · Write the containment
 
@@ -247,15 +265,14 @@ docstrings give the exact contract and the `config.json` keys. Build on **behavi
 24.4): the adapted variant paraphrases the instruction and uses a look-alike domain.
 
 1. `boundary_filter(handoff, config)` - block a hand-off whose message carries instruction-like content (an
-   external recipient, a self-forwarding phrase, override phrasing). Allow normal, typed summaries.
+   external recipient, a self-forwarding phrase, override phrasing). Allow normal summaries.
 2. `tool_scope(agent, tool_call, config)` - deny by default; the mailer may `send_email` only to allowed domains,
    and no other agent may send at all.
 3. `circuit_breaker(events, config)` - trip when the same instruction crosses more than one boundary.
 4. `detect(events, config)` - flag the same instruction appearing in more than one agent's traffic.
 
 Tip: write `tool_scope` first and replay. Least privilege alone already makes both runs `contained: YES` (`caught 2
-of 5 controls`); the filter, the breaker and detection add the rest. That is the order the lab video uses (recording
-run 41084174850).
+of 5 controls`); the filter, the breaker and detection add the rest. That is the order the lab video uses.
 
 Then replay:
 
@@ -281,8 +298,8 @@ make report
 make test
 ```
 
-- `make report`: the four-line containment proof
-- `make test`: the recording and the provided trace (6 run)
+- `make report`: the four-line containment proof. Windows: `python replay.py --report`
+- `make test`: the recording and the provided trace (6 run). Windows: `python run_tests.py`
 
 ```output
 Containment report (recorded attack run a1):
@@ -299,7 +316,9 @@ Containment report (recorded attack run a1):
 make challenge
 ```
 
-- `make challenge`: the challenge tests fail until you finish
+- `make challenge`: the tests for Step 3 and for challenges 1 and 2 fail until you finish. Windows:
+  `python run_tests.py --challenge`. The test for challenge 3 already passes on the empty starter, because an empty
+  `detect` and `circuit_breaker` flag nothing. Its job is to stay green once you have written them.
 
 1. **24.2: write `find_unlabelled_crossings()` in `trace.py`.** List every hand-off that carried the instruction
    across a boundary with no provenance label. Those are the crossings a label would have caught.
@@ -324,7 +343,7 @@ change that lets the spread through, or that breaks the crew, fails the build.
 |---|---|---|
 | `transcript.jsonl` event kinds | A generic multi-agent run (ingest, agent-to-agent hand-off over a channel, tool call) | Lab shape; field names chosen for readability, values invented |
 | The crew (intake, planner, mailer) | A common delegation pattern: a reader, a planner, an actor sharing memory | Illustrative; your framework will name things differently |
-| The injected instruction | A clearly marked `LAB-INJECT` placeholder inside an HTML comment | Not a working payload; the self-forwarding line is a string, not code; every address is a `.example` name |
+| The injected instruction | A clearly marked `LAB-INJECT` placeholder inside an HTML comment | Not a working payload; the self-forwarding line is a string, not code; every address is a reserved `.example` name, the variant's look-alike `attacker-example.example` included |
 | Prompt infection / propagation | Lee and Tiwari (arXiv 2410.07283); Morris II (arXiv 2403.02817) | The lessons cite the research; the recording is an illustration, not a captured in-the-wild incident |
 
 ## Troubleshooting
@@ -332,4 +351,6 @@ change that lets the spread through, or that breaks the crew, fails the build.
 - **`make challenge` exits with an error.** Expected until you finish; the last line tells you how many tests fail.
 - **`make replay` still shows contained NO.** You have not saved `containment.py`, or a function still returns the
   starter value. `make report` shows which control is not firing.
-- **Windows:** `python trace.py`, `python replay.py`, `python run_tests.py`, and so on.
+- **Windows:** the table under "Needs" lists the `python` command for every `make` shortcut.
+- **A command says it can't find `explore.py` or the Makefile.** You are not in the lab folder: `cd labs/m24` from the
+  `ai-security-course-labs` folder.

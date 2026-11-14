@@ -39,7 +39,7 @@ Shell variables used throughout (set them again in a new terminal):
    (N. Virginia) ([Supported Regions](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-regions.html)).
 4. **A model.** Part C's agent calls a Bedrock model through the Strands framework. Make sure your account can invoke
    the default model the AgentCore CLI picks (M11 covered model access).
-5. **Terminal in `labs/m14`:**
+5. **Open a terminal in the `ai-security-course-labs` folder** and go to the lab folder:
 
    ```bash
    cd labs/m14
@@ -124,17 +124,18 @@ consoles, with the code in `cloud/lambda/helpdesk_tools.py`).
 
 ## A2 · Users and tokens
 
-1. Create four users (the passwords are yours to choose: at least 12 characters, not reused anywhere):
+1. Create four users. Set the password first: `read -s` waits for you to type it and shows nothing (your choice: at
+   least 12 characters, not reused anywhere). Then run the loop:
 
    ```bash
+   read -s PW_LAB; export PW_LAB
    for u in alice bob ceo dana; do
      aws cognito-idp admin-create-user --user-pool-id "$POOL" --username "$u" --message-action SUPPRESS >/dev/null
      aws cognito-idp admin-set-user-password --user-pool-id "$POOL" --username "$u" --password "$PW_LAB" --permanent
    done
    ```
 
-   Set `PW_LAB` first (`read -s PW_LAB; export PW_LAB`). The emails don't matter here: the policies use the
-   `username` claim.
+   The emails don't matter here: the policies use the `username` claim.
 
 2. Get access tokens. Alice and Bob sign in to the web app; Dana signs in to the partner portal:
 
@@ -308,17 +309,29 @@ policies it generates "are designed for development and testing purposes": fine 
      --allowed-clients "$WEB" --request-header-allowlist Authorization
    ```
 
-2. Replace the generated `app/Helpdesk/main.py` with `../cloud/agent/main.py`, set `GATEWAY_URL` in it, and deploy:
+2. Replace the generated `app/Helpdesk/main.py` with `../cloud/agent/main.py`, set `GATEWAY_URL` in it, and only then
+   deploy. Three separate moves, in this order. First the copy:
 
    ```bash
    cp ../cloud/agent/main.py app/Helpdesk/main.py
-   agentcore deploy
    ```
 
-   - `cp ../cloud/agent/main.py app/Helpdesk/main.py`: then edit GATEWAY_URL
+   Then open `app/Helpdesk/main.py` in your editor and replace the placeholder in the `GATEWAY_URL = "..."` line
+   (`https://REPLACE-WITH-terraform-output-gateway_url/mcp`) with your real gateway URL: `echo "$GATEWAY_URL"` prints
+   it. Check that no placeholder is left, then deploy and go back to `labs/m14`:
 
-   `main.py` was not run by us. It rejects non-string prompts, forwards Bob's own token to the gateway (so Policy sees
-   Bob), and sets the policy session ID itself. If your CLI version generates different imports, keep them and copy
+   ```bash
+   grep -n "REPLACE-WITH" app/Helpdesk/main.py
+   agentcore deploy
+   cd ..
+   ```
+
+   - `grep -n "REPLACE-WITH" app/Helpdesk/main.py`: must print nothing. If it prints a line, the URL is not set yet:
+     fix it before you deploy
+   - `cd ..`: back to `labs/m14`. Everything after this step (Part D, the teardown) runs from there
+
+   `main.py` has not been run in a live account (status on 15 November 2026). It rejects non-string prompts, forwards
+   Bob's own token to the gateway (so Policy sees Bob), and sets the policy session ID itself. If your CLI version generates different imports, keep them and copy
    only the body of `invoke()`. Note the runtime ARN from the output.
 
 3. Three requests. Use the invoke script from AWS's runtime-oauth page (Step 5, `invoke_agent.py`, `requests`
@@ -366,15 +379,22 @@ policies it generates "are designed for development and testing purposes": fine 
    ([enabling-cloudtrail-data-event-logging](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/enabling-cloudtrail-data-event-logging.html)).
    Put the trail's old selectors back at teardown.
 
-4. **Teardown, today.** Remove the runtime first, then everything Terraform made:
+4. **Teardown, today.** Remove the runtime first, then everything Terraform made. Run this from `labs/m14`: `pwd`
+   must end in `labs/m14`. If it ends in `TsgM14`, run `cd ..` first.
 
    ```bash
-   cd TsgM14 && agentcore remove all && agentcore deploy && cd ..
+   (cd TsgM14 && agentcore remove all && agentcore deploy)
    make cloud-down
    ```
 
-   - `cd TsgM14 && agentcore remove all && agentcore deploy && cd ..`: AWS's documented clean-up: remove, then deploy the empty state
+   - `(cd TsgM14 && agentcore remove all && agentcore deploy)`: AWS's documented clean-up: remove, then deploy the
+     empty state. The brackets run it in a subshell, so your terminal stays in `labs/m14` whatever happens. If this
+     line prints an error (for example `No such file or directory`), the runtime is **still running and still
+     billed**: fix the folder and run the line again before you go on
    - `make cloud-down`: type yes
+
+   Check the runtime is gone: the AgentCore console, **Runtime**, should list no `Helpdesk` agent (or run
+   `aws bedrock-agentcore-control list-agent-runtimes`: no entry in `agentRuntimes` should name `Helpdesk`).
 
    Then delete the log groups you no longer need (`/aws/bedrock-agentcore/...`, the Lambda's `/aws/lambda/tsg-m14-...`,
    `aws/spans` if nothing else uses it) and revert the CloudTrail selectors. If you built anything by console (Path B),

@@ -38,7 +38,7 @@ def normalised(text: str) -> bool:
     return PHRASE in " ".join(text.lower().split())
 
 
-print(f"{'form':<18} {'naive filter':<14} normalise, then filter")
+print(f"{'form':<18} {'naive filter':<14} normalize, then filter")
 for name, text in SAMPLES.items():
     print(f"{name:<18} {'BLOCKED' if naive(text) else 'passed':<14} {'BLOCKED' if normalised(text) else 'passed'}")
 

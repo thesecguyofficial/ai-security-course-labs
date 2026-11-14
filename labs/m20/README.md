@@ -88,7 +88,7 @@ py watch.py hardened alice "Summarize T-4711 and email me the summary"
 ```
 
 Read it top to bottom. Each agent swaps the token it received for a new one (an RFC 8693 token exchange) that names
-**one** audience, keeps **fewer** scopes, lives two minutes and records who carried it in the `act` claim. The model
+**one** audience, keeps **the same or fewer** scopes, lives two minutes and records who carried it in the `act` claim. The model
 was fooled; the delete failed anyway, because the only token the mail agent holds is for the mail API. The last line
 is the challenge (Step 9): a token can't tell where one particular email may go.
 
@@ -99,8 +99,8 @@ The `scope` lists hide `openid`, `profile` and the `aud:...` scopes so you can s
 New to OAuth and tokens? Do this first. `explore.py` shows, one at a time, the ideas the chain is built on.
 `roles` only reads the setup files. `signin`, `token`, `client` and `exchange` **start the lab's own authorization
 server on 127.0.0.1 for about two seconds**, use it, and stop it: no agent, no API, no attack runs, and nothing leaves
-your computer. It writes no file. Windows: `py explore.py ...`. The output below is from a fresh Ubuntu machine
-(recording run 41082675258); ports, times and token text differ on every run.
+your computer. It writes no file. Windows: `py explore.py ...`. The output below is from a fresh Ubuntu machine;
+ports, times and token text differ on every run.
 
 **1. Who's who.** OAuth's four roles, as this lab fills them:
 
@@ -482,7 +482,7 @@ apart. Change a setup, run `make realms`, restart Keycloak.
 ## Part C · AgentCore Identity (lesson 20.5)
 
 **Before you run Part C: look at one agent, one record, one log row.** These three `explore.py` commands only read
-files in `aws/` (account IDs left out). Output from a fresh Ubuntu machine (recording run 41077549820):
+files in `aws/` (account IDs left out). Output from a fresh Ubuntu machine:
 
 ```bash
 python3 explore.py agent tickets
@@ -511,7 +511,7 @@ python3 explore.py trail
 ```output
 One CloudTrail record (2 of 22 in aws/data/cloudtrail.jsonl), field by field. Account IDs left out.
 
-   eventTime       2027-01-21T09:00:02Z                 when (UTC)
+   eventTime       2026-10-21T09:00:02Z                 when (UTC)
    eventSource     bedrock-agentcore.amazonaws.com      which AWS service
    eventName       GetWorkloadAccessTokenForJWT         which API call
    eventCategory   Data                                 Data events are off unless the trail asks for them
@@ -523,7 +523,7 @@ One CloudTrail record (2 of 22 in aws/data/cloudtrail.jsonl), field by field. Ac
    userToken       HIDDEN_DUE_TO_SECURITY_REASONS       the user's sign-in token, not written to the log
    resources       tsg-orchestrator                     AWS::BedrockAgentCore::WorkloadIdentity
 
-Sample record: real field names from AWS's documentation, made-up values (aws/make_samples.py).
+Sample record: field names from AWS's documentation where it gives them, made-up values (aws/make_samples.py).
 ```
 
 ```bash
@@ -533,7 +533,7 @@ python3 explore.py launcher
 ```output
 The launcher's own log row for run tickets-run-0901 (aws/data/app-log.jsonl, 8 rows)
 
-   ts               2027-01-21T09:00:10Z           when the launcher started the run
+   ts               2026-10-21T09:00:10Z           when the launcher started the run
    agent            tickets                        which agent it started
    jwt_iss          Cognito user pool (example)    who signed the user's sign-in token
    jwt_sub          u-1001-alice                   the user in the token the launcher VALIDATED
@@ -544,10 +544,20 @@ The launcher's own log row for run tickets-run-0901 (aws/data/app-log.jsonl, 8 r
 
 Then:
 
+**Mac / Linux:**
+
 ```bash
 make aws-check
 make aws-check-hardened
 make aws-hunt
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py aws/check.py first-draft
+py aws/check.py hardened
+py aws/attribution.py
 ```
 
 - `make aws-check`: first draft: 6 HIGH, 5 MEDIUM (11 findings)
@@ -559,11 +569,12 @@ each, the role trust and permissions policies, where the launcher gets the human
 The checker's nine rules each name their source. `aws/attribution.py` reads CloudTrail and the launcher's log and
 answers four questions: who acted for whom (the `sourceIdentity` on each agent's role session), which agent calls
 carry no human, which run claims a different human than the validated JWT, and which identity is shared by two
-agents. The sample records are **illustrative**: field names from AWS's documentation, values made up
-(`aws/make_samples.py`).
+agents. The sample records are **illustrative**: field names from AWS's documentation where it gives them, values made
+up (`aws/make_samples.py`). What AgentCore writes inside `requestParameters` (`workloadName`, `userToken`) is our
+best guess until the guided build is run in a real account; the guide says so too.
 
-Then build it for real: [aws/GUIDED-BUILD.md](aws/GUIDED-BUILD.md) (your sandbox account, AWS CLI, well under one US
-dollar, torn down the same day). `attribution.py --cloudtrail-dir` reads your own trail's files.
+Then build it for real: [aws/GUIDED-BUILD.md](aws/GUIDED-BUILD.md) (your sandbox account, AWS CLI in bash, well under one US
+dollar, torn down the same day). As of 15 November 2026 we have not run that guide in an AWS account. `attribution.py --cloudtrail-dir` reads your own trail's files.
 
 ## Troubleshooting
 

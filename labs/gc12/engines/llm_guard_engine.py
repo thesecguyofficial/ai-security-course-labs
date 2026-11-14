@@ -5,8 +5,8 @@ OPTIONAL: a local open-source guardrail, LLM Guard (Protect AI), as a second opi
     python3 run_suite.py --engine llm-guard
 
 Only its PromptInjection input scanner is wired in here (usage as in LLM Guard's docs:
-docs/input_scanners/prompt_injection.md). Not run by the lab authors: Hugging Face model downloads weren't
-possible in the build environment. Results are mapped onto the Model Armor result shape so app_guard.py works
+docs/input_scanners/prompt_injection.md). As of 15 November 2026 we have not run this engine (it needs a large
+model download): treat it as a starting point. Results are mapped onto the Model Armor result shape so app_guard.py works
 unchanged.
 """
 

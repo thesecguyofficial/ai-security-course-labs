@@ -76,8 +76,9 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 ## Needs
 
 - Python **3.11 or newer**. Nothing else: the lab uses the standard library only.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step from inside a
-  virtual environment (`py -m venv .venv`, then `.venv\Scripts\activate`).
+- Mac or Linux for the `make` shortcuts. Windows: skip `make` and use the plain commands in
+  [Windows commands](#windows-commands) near the end of this guide, from inside a virtual environment
+  (`py -m venv .venv`, then `.venv\Scripts\activate`).
 
 ## Step 1: set up and see the flow
 
@@ -112,9 +113,9 @@ New to payments? Do this before Step 2 (lesson 31.1 and its videos run it). `exp
 network and payment processor; the card number is a public test number, not a real card). Steps 3 to 5 use the
 lab's own code (`mandate.py`, `guard.py`, `x402lab.py`) with its state in a temporary folder outside the lab, which
 is deleted at the end: nothing in `labs/m31` changes, and no network is used. Windows: `py explore.py ...`.
-Real output from recording run 41505526256 (a fresh Ubuntu machine):
+Real output (a fresh Ubuntu machine):
 
-**1. An ordinary online card payment.** Who is involved (the cardholder, the shop, the shop's payment processor, the card network, the issuer), then authorization (the bank approves and holds the money), capture (the shop takes it) and settlement (the money moves).
+**1. An ordinary online card payment.** Who is involved (the cardholder, the shop, the shop's payment processor, the card network, the issuer and the shop's bank, called the acquirer), then authorization (the bank approves and holds the money), capture (the shop takes it) and settlement (the money moves).
 
 ```bash
 python3 explore.py card
@@ -356,6 +357,10 @@ through. The task said one call, so the task's payment count is what stops it.
 make hardened
 ```
 
+Same as `python3 suite.py hardened`. This command exits with code 1 when an attack works or a normal request breaks,
+so it can stop a CI pipeline. (`make attack`, `python3 suite.py first-draft`, is the demonstration and its attacks are
+meant to work: it exits 0 unless a normal request breaks.)
+
 ```output
 A1   stopped injected 'buy' in a product page, unknown merchant (4.99)
 A2   stopped price switch: the 402 asks 4.50 for a 0.01 weather call
@@ -494,8 +499,34 @@ make clean
 - `python3: command not found` or a version below 3.11: install Python 3.11+ (lesson 0.6), then `make setup` again.
 - Odd results after editing: `make clean`, then run the target again. Every suite scenario starts from a fresh state
   folder, but `make flow`, `make story` and `make approve-demo` use `state/`.
-- Windows without `make`: `py -m venv .venv`, `.venv\Scripts\activate`, then `python suite.py first-draft`,
-  `python suite.py hardened`, `python run_tests.py`.
+- Windows without `make`: see [Windows commands](#windows-commands) below.
+
+## Windows commands
+
+Run these in the `labs\m31` folder, after `py -m venv .venv` and `.venv\Scripts\activate`. They are the same
+Python commands the `Makefile` runs. "Reset" below means this one line, which deletes the lab's `state` folder (what
+`rm -rf state` does in the `Makefile`):
+
+```text
+python -c "import shutil; shutil.rmtree('state', ignore_errors=True)"
+```
+
+| Instead of | Run |
+|---|---|
+| `make setup` | Reset, then `python mandate.py issue` |
+| `make flow` | Reset, then `python agent.py hardened T-WEATHER --wire` |
+| `make attack` | `python suite.py first-draft` |
+| `make story` | Reset, then `python agent.py first-draft T-READ-SHOES`. Reset again, then `python agent.py hardened T-READ-SHOES` |
+| `make hardened` | `python suite.py hardened` |
+| `make approve-demo` | Reset, then one at a time: `python agent.py hardened T-QUARTERLY`, `python mandate.py approvals`, `python mandate.py approve APR-0001`, `python agent.py hardened T-QUARTERLY` |
+| `make hunt` | `python hunt.py` |
+| `make log` | `python hunt.py --file state/decisions.jsonl` |
+| `make test` | `python run_tests.py` |
+| `make challenge` | `python run_tests.py --challenge` |
+| `make clean` | Reset, and delete the `__pycache__` folder if there is one |
+
+Skip the reset before `make approve-demo`'s commands and a second run gets a different approval ID, so
+`approve APR-0001` no longer matches.
 
 ## What this lab doesn't model
 

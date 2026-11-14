@@ -13,7 +13,7 @@
   },
   "kms": {
     "alias/tsg-logs-raw": {
-      "_about": "Raw prompts and answers. The account (IAM) may ADMINISTER the key but not use it: kms:Decrypt is granted only to named roles, so an IAM policy that says kms:Decrypt on * opens nothing here.",
+      "_about": "Raw prompts and answers. The account (IAM) may ADMINISTER the key but not use it: kms:Decrypt is granted only to named roles, so an IAM policy that says kms:Decrypt on * opens nothing here. The limit: administration includes kms:PutKeyPolicy and kms:CreateGrant, so whoever may call those on this key can still give themselves decrypt. Keep both to a small admin role and alert on both events.",
       "policy": {
         "Version": "2012-10-17",
         "Statement": [
@@ -209,7 +209,7 @@
       "name": "tsg-invocation-logs-raw",
       "kms_key": "alias/tsg-logs-raw",
       "versioning": true,
-      "_about": "Readers: the redactor, Macie and break-glass. Analysts explicitly denied. Expire after 30 days AND remove the old versions a day later.",
+      "_about": "Readers: the redactor, Macie, break-glass and the erasure role. Analysts explicitly denied. Expire after 30 days AND remove the old versions a day later.",
       "policy": {
         "Version": "2012-10-17",
         "Statement": [

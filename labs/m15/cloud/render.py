@@ -4,9 +4,10 @@ cloud/render.py: fill the request templates in cloud/requests/ with your stack's
     aws cloudformation describe-stacks --stack-name tsg-m15-lab --output json > cloud/out/stack.json
     MODEL_DIR=~/models/qwen3-0.6b python3 cloud/render.py           # writes cloud/out/*.json
 
-Settings (environment variables, all optional except MODEL_DIR for the model package):
+Settings (environment variables, all optional except MODEL_DIR and LICENSE for the model package):
   MODEL_DIR       the model folder you downloaded and scanned (its file hashes go into the registry metadata)
-  LICENCE         the licence you read on the model's page, e.g. apache-2.0 (you must check it yourself)
+  LICENSE         the license you read on the model's page, e.g. apache-2.0 (you must check it yourself).
+                  The old spelling LICENCE still works. Needed for the model package; there is no default
   MODEL_SOURCE    where the files came from, e.g. huggingface.co/Qwen/Qwen3-0.6B
   IMAGE           the inference image (default: the LMI image named on AWS's Available Images page, Oct 2026)
   INSTANCE_TYPE   default ml.g5.xlarge
@@ -37,7 +38,7 @@ def values() -> dict:
     v["SubnetIds"] = v["SubnetIds"].split(",")
     at = dt.datetime.now(dt.timezone.utc) + dt.timedelta(hours=float(os.environ.get("TEARDOWN_HOURS", "2")))
     v.update({"IMAGE": os.environ.get("IMAGE", DEFAULT_IMAGE), "INSTANCE_TYPE": os.environ.get("INSTANCE_TYPE", "ml.g5.xlarge"),
-              "PACKAGE_ARN": os.environ.get("PACKAGE_ARN", "PACKAGE_ARN_NOT_SET"), "LICENCE": os.environ.get("LICENCE", "NOT-CHECKED"),
+              "PACKAGE_ARN": os.environ.get("PACKAGE_ARN", "PACKAGE_ARN_NOT_SET"), "LICENCE": os.environ.get("LICENSE") or os.environ.get("LICENCE") or "NOT-CHECKED",
               "MODEL_SOURCE": os.environ.get("MODEL_SOURCE", "NOT-RECORDED"), "TEARDOWN_AT": at.strftime("%Y-%m-%dT%H:%M:%S")})
     return v
 
@@ -66,6 +67,10 @@ def main() -> int:
             folder = os.environ.get("MODEL_DIR")
             if not folder:
                 print("skipped create-model-package.json: set MODEL_DIR to the folder you scanned")
+                continue
+            if v["LICENCE"] == "NOT-CHECKED":
+                print("skipped create-model-package.json: set LICENSE to the license you read on the model's page "
+                      "(for example: export LICENSE=apache-2.0)")
                 continue
             files = model_files.read_folder(pathlib.Path(folder).expanduser())
             body["CustomerMetadataProperties"].update(model_files.manifest(files))

@@ -1,7 +1,8 @@
 """
 build.py: the Python half of the AZ14 guided build (cloud.sh calls it). Needs:
     pip install "azure-ai-projects>=2.3.0" azure-identity requests "mcp<2"
-Reads cloud/.state/env (written by cloud.sh up and cloud.sh mcp). Not run by the course team: no Azure subscription.
+Reads cloud/.state/env (written by cloud.sh up and cloud.sh mcp). Run for real on 9 and 12 November 2026:
+GUIDED-BUILD.md has the real-run table.
 
     python3 build.py toolbox          G3: key connection + toolbox 'helpdesk-tools' v1 (your MCP server, approval always)
     python3 build.py agent            G4: hosted agent version from the image cloud.sh pushed
@@ -46,7 +47,8 @@ CONN_API = "2025-10-01-preview"      # the connections api-version lab AZ13 used
 def connection():
     """A key-based (CustomKeys) project connection holding YOUR MCP server's key. The agent never sees it.
     Body shape: CustomKeys category with credentials.keys; Microsoft's MCP auth page documents the portal path, not
-    this REST body (GUIDED-BUILD.md says so). If it fails, create it in the portal (G3, Path A)."""
+    this REST body (GUIDED-BUILD.md says so). It worked in our 9 Nov 2026 run. If it fails for you, create it in
+    the portal (G3b)."""
     body = {"properties": {"category": "CustomKeys", "authType": "CustomKeys", "target": ENV["MCP_URL"],
                            "isSharedToAll": False, "credentials": {"keys": {"x-api-key": ENV["MCP_KEY"]}}}}
     r = requests.put(f"https://management.azure.com{ENV['PROJECT_SCOPE']}/connections/{CONN}",

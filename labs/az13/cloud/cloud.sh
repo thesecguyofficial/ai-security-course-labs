@@ -3,7 +3,8 @@
 # subscription. GUIDED-BUILD.md explains every command. Needs: Azure CLI (az login), Python 3.10+, and for the agent
 # steps: pip install "azure-ai-projects>=2.0.0" azure-identity
 # Usage: ./cloud.sh cost | up | index | kb | agent | ask | ask-nohdr | ask-approval | down
-# Not run by the course team (no Azure subscription in the build): treat the output as yours to verify.
+# Run for real on 9 November 2026 (France Central) and through deploy.sh on 12 November 2026; the results are in
+# GUIDED-BUILD.md, "What happened in our real run".
 set -euo pipefail
 cd "$(dirname "$0")"
 : "${AZ13_NAME:?set AZ13_NAME, e.g. export AZ13_NAME=az13-ab1234 (lowercase, globally unique: it becomes <name>.services.ai.azure.com and srch-<name>.search.windows.net)}"
@@ -58,6 +59,7 @@ TXT
     echo "SEARCH_ENDPOINT=https://$SEARCH.search.windows.net" | tee -a .state/env
     echo "PROJECT_ID=$(foundry_id)/projects/$PROJECT" | tee -a .state/env
     echo "Done. Role assignments for managed identities can take a while to apply: if G3/G5 return 403, wait and retry."
+    echo "Your new group membership (next step) can take 30 minutes or more to reach Search: until then Q1 shows two documents, not three."
     ;;
 
   index)       # G2: two groups (you're in one), the index, four documents, three direct queries

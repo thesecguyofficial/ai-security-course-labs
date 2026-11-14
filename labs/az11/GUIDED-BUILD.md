@@ -71,6 +71,20 @@ Microsoft says to "Deploy the key store and the Foundry resource in the same Azu
    table has no `Standard` row for `gpt-5-mini`), and change `terraform/variables.tf` to match (README Step 8
    notes). If the query prints nothing, drop `--query` and read the raw output.
 
+   Offered is not the same as usable: you also need quota. Check it now:
+
+   ```bash
+   az cognitiveservices usage list -l swedencentral \
+     --query "[?ends_with(name.value, '.gpt-5-mini')].{quota:name.value, used:currentValue, limit:limit}" -o table
+   ```
+
+   In our 9 November run, in a free-credit subscription, the `DataZoneStandard` limit for `gpt-5-mini` was **0**; by
+   our 12 November run it was 300. If yours is 0, the `DataZoneStandard` deployment below fails, and the
+   deployment-type policy in G2 refuses a Global one. Request Data Zone quota first
+   ([quota](https://learn.microsoft.com/azure/foundry/openai/how-to/quota)) and wait for it. The Terraform accepts only `DataZoneStandard` or `Standard`, so Path B can't
+   go on without quota. In Path A you can do what we did on 9 November and deploy `GlobalStandard` by hand, knowing
+   it breaks lesson 11.5's rule and that T4's first change then tests a deployment type you already have.
+
 7. **Names.**
 
    ```bash
@@ -111,7 +125,12 @@ Labels quoted from Microsoft Learn where it quotes them; "(label may differ slig
 7. **The key.** In the vault, **Keys**, generate an RSA 2048 key named `cmk-foundry` (Microsoft: "Use an RSA key with a
    minimum size of 2048 bits") (labels may differ slightly).
 8. **The Foundry resource.** Search for **Foundry** and select **Create a resource**. On **Basics**: `rg-<name>`, your
-   region, name `<name>`. Then, quoting Microsoft's network isolation page: "select the **Networking** tab and then
+   region, name `<name>`. **In our run the private endpoint added inside this wizard failed** (`Conflict`,
+   `DeploymentFailed`, no clear reason), while everything else in the wizard succeeded. What worked: set public
+   access to **Disabled** in the wizard, skip its private endpoint section, and after the resource exists open its
+   **Networking** page, private endpoint connections, and add the endpoint there (same region as the VNet, subnet
+   `snet-pe`, target sub-resource `account`). If you added it in the wizard and it failed, do the same: the resource
+   is fine, only the endpoint needs creating again. The documented way, quoting Microsoft's network isolation page: "select the **Networking** tab and then
    select the **Disabled** option for public access", "From the **Private endpoint** section, select **+ Add private
    endpoint**", same **Region** as the VNet, subnet `snet-pe`; the target "should be labeled as an "account"". For
    encryption, Microsoft: "the wizard guides you to use a user-assigned or system-assigned managed identity. It also
@@ -132,13 +151,17 @@ Labels quoted from Microsoft Learn where it quotes them; "(label may differ slig
     - Model: with public access Disabled, the Foundry portal at `ai.azure.com` may not open the resource from your
       laptop. Deploy with the CLI instead (a control-plane call, which doesn't go through the closed door):
       `az cognitiveservices account deployment create -g rg-<name> -n <name> --deployment-name helpdesk-chat --model-name gpt-5-mini --model-version 2025-08-07 --model-format OpenAI --sku-name DataZoneStandard --sku-capacity 1`.
+      Data Zone quota 0 (Step 0.6)? This command fails. On 9 November we used `--sku-name GlobalStandard` instead;
+      Step 0.6 says what that means for G2.
     - Logs: on the Foundry resource, **Monitoring**, **Diagnostic settings**, **Add diagnostic setting**, tick
       **Audit**, **RequestResponse** and **Trace**, **Destination details**: `law-<name>` (Microsoft's
       create-diagnostic-settings page). Do the same on the Key Vault with **AuditEvent**.
     - Roles: on the Foundry resource, **Access control (IAM)**, **Add role assignment**, **Foundry User**, managed
       identities `id-helpdesk-app` and `id-jump`. On this resource only, not the resource group.
-    - Test VM `vm-jump`: Ubuntu Server 22.04 LTS, size `Standard_B1s`, subnet `snet-jump`, **no public IP**, no inbound
-      ports, identity `id-jump` (labels may differ slightly). You'll never sign in to it: G3 uses Run Command.
+    - Test VM `vm-jump`: Ubuntu Server 22.04 LTS, size `Standard_B2ts_v2` (the Terraform default), subnet `snet-jump`,
+      **no public IP**, no inbound ports, identity `id-jump` (labels may differ slightly). In our run `Standard_B1ls`
+      and `Standard_B2ats_v2` failed with `AllocationFailed` (no capacity in the region that day); if your size fails
+      the same way, pick another small one. You'll never sign in to it: G3 uses Run Command.
 
 ### Path B: Terraform (`make up`)
 
@@ -231,21 +254,28 @@ Deny default; the diagnostic policy only checks that **some** log category exist
 ```
 
 It resolves the three hostnames from your laptop, gets a token for you (`--scope https://ai.azure.com/.default`) and
-sends one tiny `POST /openai/v1/responses`. You don't hold Foundry User, but that doesn't matter here: the network
-refuses before identity is checked (lab step A1).
+sends one tiny `POST /openai/v1/responses`. You don't hold Foundry User. In the offline lab (step A1) the network
+refuses before identity is checked. On real Azure you can't see the order of the checks, only the answer, and the
+answer looks like a missing role.
 
-**Example response (shape from Microsoft docs, values illustrative)**. Microsoft's network isolation page: "From
-outside the virtual network, the same name resolves to the public endpoint." Microsoft Learn doesn't document the body
-of a network refusal; the message below is the text users report on Microsoft Q&A, and `403` is our expectation, not
-a documented code:
+**What we saw (9 November 2026; addresses illustrative).** Microsoft's network isolation page: "From outside the
+virtual network, the same name resolves to the public endpoint." Microsoft Learn doesn't document the status or body
+of a network refusal. Ours was `401` with `PermissionDenied`, "Principal does not have access to API/Operation.",
+the same text a missing role gives:
 
 ```text
 az11-ab1234.openai.azure.com -> 198.51.100.20
 az11-ab1234.cognitiveservices.azure.com -> 198.51.100.20
 az11-ab1234.services.ai.azure.com -> 198.51.100.20
-POST /openai/v1/responses from your laptop -> HTTP 403 (expect a refusal: public network access is Disabled)
-... "Public access is disabled. Please configure private endpoint." ...
+POST /openai/v1/responses from your laptop -> HTTP 401 (expect a refusal: public network access is Disabled)
+... "PermissionDenied" ... "Principal does not have access to API/Operation." ...
 ```
+
+We then gave ourselves Foundry User on the resource and asked again: still 401. One caution if you repeat that: a
+new role can take minutes to arrive, so a 401 two minutes after the grant proves little by itself. The stronger
+evidence is the pair T1 and T2: public addresses and a refusal out here, `10.20.2.x` and a 200 in there. Test for
+"refused" (401 or 403), not for one code. And when a private resource answers `PermissionDenied`, check DNS and the
+public-access setting before you hand out more roles.
 
 ### T2 · The private path works, and leaves a log entry
 
@@ -271,9 +301,11 @@ POST /openai/v1/responses from inside the VNet -> HTTP 200 (expect 200)
 {"id": "resp_67cb32528d6881909eb2859a55e18a85", "object": "response", "created_at": 1792656000, "status": "completed", ...
 ```
 
-Two open questions from our fact-check get answered here. **Foundry User is enough for inference**, or you'd get a
-401 (Microsoft's keyless guide still names Cognitive Services User). And **which token audience works**: the
-script tries `https://ai.azure.com` first. Note both.
+Two questions Microsoft's pages leave open are answered here. In our run `id-jump` held **Foundry User only** and
+got 200, so that role is enough for inference (Microsoft's keyless guide still names Cognitive Services User). And
+the **token audience** that worked was `https://ai.azure.com`, the one the script tries first. Note what yours shows.
+One more difference from the example above: our private endpoint gave each name its own address (`10.20.2.4`, `.5`
+and `.6`), not one address for all three.
 
 Now the log entry. Microsoft: data "should start flowing to your selected destinations within 90 minutes".
 
@@ -304,7 +336,10 @@ az monitor log-analytics query -w $WS --analytics-query "AzureDiagnostics
 
 Read the `CallerIPAddress` of the `RequestResponse` row: it should be the VM's `10.20.3.x`, never a public address.
 Then search `properties_s` for "Reply with OK". Microsoft doesn't say whether these categories hold prompt text,
-which is why lesson 11.4 sends prompt-level audit to the API Management gateway. Your answer settles it.
+which is why lesson 11.4 sends prompt-level audit to the API Management gateway. Our run recorded that
+`RequestResponse` rows arrived with the operation name `ChatCompletions_Create` (for a call to
+`/openai/v1/responses`, so don't filter on a name you guessed). It did not record the caller address or whether
+`properties_s` held the prompt, so write down what yours shows.
 
 ### T3 · Right network, wrong identity
 
@@ -315,17 +350,20 @@ JUMP_PID=$(az identity show -g $RG -n id-jump --query principalId -o tsv)
 az role assignment delete --assignee $JUMP_PID --role 53ca6127-db72-4b80-b1b0-d745d6d5456d --scope $FID
 ```
 
-Wait 5 to 10 minutes, then:
+Wait at least 10 minutes, then:
 
 ```bash
 ./cloud/cloud.sh probe-inside
 ```
 
-The DNS lines stay private; the call should stop getting through. In our real run it still returned 200 seven
-minutes after the role was removed, so if you still see 200, wait and run it again before you conclude anything. This is lab step A3 the other way round: the network is the
-first door, the role on **this one resource** is the second.
+The DNS lines stay private; the call should stop getting through. **Pass condition: `HTTP 401`.** In our real run
+it still returned 200 seven minutes after the role was removed (five minutes in the 12 November re-run), and neither
+run recorded the refusal, so we can't tell you how long it takes. If you still see 200, wait 10 minutes and run it again,
+and keep going until you see 401. Until you do, T3 is not passed. For an incident this means: removing a role is not
+an instant stop. Also stop the workload or cut its network path. This is lab step A3 the other way round: the
+network is the first door, the role on **this one resource** is the second.
 
-**Example response (shape from Microsoft docs, values illustrative)** ([keyless authentication, troubleshooting
+**Example response when the removal has taken effect (shape from Microsoft docs, values illustrative)** ([keyless authentication, troubleshooting
 table](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/configure-entra-id); it names the status and
 error, not the full body):
 
@@ -389,7 +427,9 @@ az monitor log-analytics query -w $WS --analytics-query "AzureDiagnostics
 ```
 
 Expect your own `Key<action>` rows from creating the key (from `MY_IP`), and rows from the Foundry resource's identity
-using it. Write down which operation names appear: Microsoft's page lists them on a tab we couldn't read.
+using it. Ours showed `KeyUnwrap`, `KeyGet`, `KeySign` and `Authentication`. Don't expect one row per model call:
+Foundry keeps the unwrapped key for a while, and a fresh build of ours (12 November) still showed 0 Key Vault rows
+more than an hour later. These logs tell you who touched the key, not how many prompts were sent.
 
 Now rotate. Microsoft's CMK page: "Periodically create a new version of your key in your key store. Update the
 Foundry resource to reference the latest key version in its encryption settings."
@@ -448,19 +488,20 @@ inside the virtual network", confirm the zone "exists and is linked to your virt
 az11-ab1234.openai.azure.com -> 198.51.100.20   (expect 10.20.2.x: the private endpoint)
 az11-ab1234.cognitiveservices.azure.com -> 10.20.2.4   (expect 10.20.2.x: the private endpoint)
 az11-ab1234.services.ai.azure.com -> 10.20.2.4   (expect 10.20.2.x: the private endpoint)
-POST /openai/v1/responses from inside the VNet -> HTTP 403 (expect 200)
+POST /openai/v1/responses from inside the VNet -> HTTP 401 (expect 200)
 ```
 
-Same VM, same identity, same role, same model: refused, because one name now leads to the public door, which is shut.
+The last line is a refusal: we show 401 because that is what the shut public door answered in our T1. Our real-run
+table has no G4 row, and 403 would mean the same thing. Same VM, same identity, same role, same model: refused, because one name now leads to the public door, which is shut.
 With public access Enabled (Contoso's version 1), the same mistake would have **worked**, over the internet, and nobody
 would have noticed (lab steps L2 and L3). The tempting fix is to re-open public access; T4 showed the policy won't let
 you, and lesson 11.2 says fix DNS. Restore it with `make up` and run `probe-inside` once more.
 
 | Test | Expected | Your result |
 |---|---|---|
-| T1 laptop, public path | public addresses, refused | |
+| T1 laptop, public path | public addresses, refused (ours: 401 `PermissionDenied`) | |
 | T2 VM, private path; `CallerIPAddress`; prompt text in `properties_s`? | 10.20.2.x, 200, a `RequestResponse` row | |
-| T3 VM without Foundry User | 401 | |
+| T3 VM without Foundry User | 401, possibly after more than 10 minutes (ours: still 200 at 7) | |
 | T4 Global deployment, keys on, internet on | all three refused by policy | |
 | T5 `Key<action>` names; key version before and after | old version until you update it | |
 | G4 one zone link deleted | that hostname public, call refused | |
@@ -478,14 +519,14 @@ small incident group read the workspace.
 | Item | How it bills |
 |---|---|
 | Private endpoint | per hour, plus per GB through it |
-| `vm-jump` (`Standard_B1s`) and its `Standard_LRS` OS disk | per hour |
+| `vm-jump` (`Standard_B2ts_v2`) and its `Standard_LRS` OS disk | per hour |
 | 3 private DNS zones | per zone per month (a few hours is a fraction) |
 | Log Analytics | per GB ingested (a few MB here); "31 days of analytics retention at no extra cost" |
 | Key Vault | per 10,000 key operations; a handful here |
 | Model tokens | `probe-inside` runs a few times, a few hundred tokens each (a reasoning model counts its reasoning tokens) |
 | Foundry resource, Azure Policy | no hourly charge for the resource; "no charges for using Azure Policy on Azure resources" |
 
-We can't give you a total: Microsoft's pricing pages render prices in the browser and we couldn't load them.
+We don't give a total: prices differ by region and change.
 Put the first five lines into the Azure pricing calculator for your region with 2 hours each; the VM and the private
 endpoint are the hourly part, so the clock matters more than the number of tests.
 
@@ -529,8 +570,11 @@ lab videos. The example blocks above stay illustrative; this is what we saw.
   example responses above stay illustrative.
 - Portal labels for the VNet, Key Vault, managed identity, VM and private DNS screens, and whether the Foundry create
   wizard shows its encryption step under that name (marked "label may differ slightly").
-- The status code and body of a network refusal (T1, G4). Microsoft Learn doesn't document them.
-- The role, token audience and prompt-text questions: T2 answers them.
+- How long a removed role keeps working (T3): we saw 200 at 5 and at 7 minutes and have no record of the 401.
+- Whether `RequestResponse` rows hold prompt text, and which caller address they show (T2 asks you to look).
+- G4 (the dropped DNS link), T4's three changes and the T5 rotation commands: our real-run table has no row for
+  them. They are written from the documentation.
+- Whether the status of a network refusal is always 401. Microsoft Learn doesn't document it; ours was 401.
 - Run Command and the metadata endpoint on a subnet without default outbound access.
 - Whether your subscription sees `gpt-5-mini` 2025-08-07 as `DataZoneStandard` in `swedencentral`: Step 0.6
   checks.

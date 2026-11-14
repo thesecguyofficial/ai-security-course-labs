@@ -1,18 +1,21 @@
-# Lab M23: investigate a recorded AI-driven attack, then write the defense that catches it
+# Lab M23: investigate a scripted AI-driven attack trace, then write the defense that catches it
 
 Companion to lessons **23.1 to 23.5** of *AI Security Engineer* (The Sec Guy). About 45 minutes, **$0**, all on
 your laptop: **Python 3.11+ only**, no packages, no network, no model download. Nothing in this lab runs the attack
-or calls out anywhere. The attack is a recording.
+or calls out anywhere. The attack is a scripted trace: data files we wrote by hand.
 
-This lab is **defensive only**. An attack was run once, in a sandbox, against the TSG Helpdesk AI app. We captured
-the trail and froze it as data files. You read the trail, find where the malicious input entered and what it reached
-for, then write five defense functions. A provided harness replays the same recorded trace, and then adapted
-variants of it, against your defense. **Pass = your defense catches every malicious finding, on the trace and the
+This lab is **defensive only**. The trace is an illustration. We wrote it by hand in the shape of a real AI-app log,
+as the trail a prompt-injection attack on the TSG Helpdesk AI app would leave. Nobody ran an attack to make it, and
+the accounts, hosts, times and dates are invented. That is why nothing in it is a working payload and everyone gets
+the same answers. The harness and its output call this fixed file set the "recorded trace", to tell it apart from
+the variants; read that as a name, not as a claim that it was captured. You read the trail, find where the malicious
+input entered and what it reached for, then write five defense functions. A provided harness replays the same trace,
+and then adapted variants of it, against your defense. **Pass = your defense catches every malicious finding, on the trace and the
 variants, with no false positives.** You never write the attack, and nothing here is a working payload.
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Investigate** | Read the recorded trail: entry point, what it reached for, tempo, egress beacon | 23.1, 23.2 |
+| **Investigate** | Read the scripted trail: entry point, what it reached for, tempo, egress beacon | 23.1, 23.2 |
 | **Replay (before)** | Run the harness: 0 of 5 caught, because defense.py is empty | 23.3 |
 | **Defend** | Write the five checks in `defense.py` | 23.3 |
 | **Replay (after)** | 5 of 5 on the recorded trace AND the adapted variants, 0 false positives | 23.3, 23.4 |
@@ -39,17 +42,17 @@ git pull
 
 **No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
 
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m23`.
+Stay in the `ai-security-course-labs` folder: the "Needs" section below takes you into `labs/m23`.
 
 ## What's in this folder
 
 | File | What it is |
 |---|---|
-| `data/trace/app-log.jsonl` | The Helpdesk's recorded turn log: user messages, retrieved content, the model's tool calls and output, and sign-in events. Nothing runs; it is a recording |
-| `data/trace/egress.jsonl` | The estate's outbound connection log (host to dest) |
+| `data/trace/app-log.jsonl` | The Helpdesk's turn log, written by hand for this lab: user messages, retrieved content, the model's tool calls and output, and sign-in events. Nothing runs; it is data |
+| `data/trace/egress.jsonl` | The estate's outbound connection log (host to dest), also written by hand |
 | `data/trace/ground_truth.json` | The answer key: which events were malicious and which function should catch each. Read only by `replay.py` and the tests, never by your defense |
 | `data/variants.jsonl` | Adapted variants of the same five attacks (paraphrased, hidden characters, look-alike names), for the replay |
-| `config.json` | The allow-lists your defense reads: model callers, model-API domains, allowed tools, email domains, fetch hosts, rate budgets |
+| `config.json` | The allow-lists your defense reads: model callers, model-API domains, allowed tools, email domains, fetch hosts, rate budgets. `rate.requests_per_min` is not read by any script here: the trace has no request counts; it shows where a request budget would sit |
 | `investigate.py` | Reads the trail for you (entry point, reached-for, tempo, loud egress beacon). Holds challenge 1 |
 | `defense.py` | **You write this**: five checks (input, allow-list, output, rate, egress). Starts empty |
 | `replay.py` | The harness: replays the trace and the variants against your defense and scores it; `--audit` prints every decision |
@@ -59,13 +62,29 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 ## Needs
 
 - Python **3.11 or newer**: `python3 --version`. No packages, no internet.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
+- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step (the table below
+  lists them all; they are plain Python, so they work the same on every system).
+
+Go into the lab folder now. Every command below, Step 1b included, is run from here:
+
+```bash
+cd labs/m23
+```
+
+| `make` shortcut | The command it runs (use this on Windows, with `python` in place of `python3`) |
+|---|---|
+| `make setup` | `python3 ../../tools/check_python.py 3.11` |
+| `make investigate` | `python3 investigate.py` |
+| `make replay` | `python3 replay.py` |
+| `make audit` | `python3 replay.py --audit` |
+| `make test` | `python3 run_tests.py` |
+| `make challenge` | `python3 run_tests.py --challenge` |
 
 ## Step 1b · Look at each idea on its own (explore.py)
 
 New to logs and detection? Do this before Step 1 (lesson 23.1 and its videos run it). `explore.py` shows one idea at
 a time, reading the lab's files; it writes nothing and uses no network. Windows: `python explore.py ...`. Real output
-from recording run 41084507117 (a fresh Ubuntu machine, Python 3.12):
+on Linux, checked again on 15 November 2026:
 
 **1. The two logs:** what kinds of event each holds.
 
@@ -74,7 +93,7 @@ python3 explore.py logs
 ```
 
 ```output
-Two logs from the TSG Helpdesk, recorded once and frozen (data/trace/). Nothing here runs.
+Two logs from the TSG Helpdesk, written by hand for this lab and frozen (data/trace/). Nothing here runs.
 
   data/trace/app-log.jsonl   44 lines   the Helpdesk app writes one line per event
       login          26   someone signs in (result ok or fail)
@@ -85,7 +104,7 @@ Two logs from the TSG Helpdesk, recorded once and frozen (data/trace/). Nothing 
   data/trace/egress.jsonl    22 lines   the network writes one line per outbound connection
       connection     22   a computer (host) connects out to another (dest)
 
-  From 2027-02-20 08:12 to 16:48 UTC. One line = one event = one JSON object.
+  From 2026-02-20 08:12 to 16:48 UTC. One line = one event = one JSON object.
   Logs are one kind of telemetry: data a system sends out about what it is doing.
 ```
 
@@ -98,12 +117,12 @@ python3 explore.py line
 ```output
 data/trace/app-log.jsonl, line 14: one event, exactly as it was written (JSON: names and values)
 
-{"id": "e14", "ts": "2027-02-20T09:03:20Z", "session": "s2", "actor": "agent", "kind": "tool_call", "tool": "send_email",
+{"id": "e14", "ts": "2026-02-20T09:03:20Z", "session": "s2", "actor": "agent", "kind": "tool_call", "tool": "send_email",
 "args": {"to": "aisha.k@tsg.example", "subject": "Your ticket T-4820", "body": "Resolved by clearing the cache."}}
 
 Field by field:
   id       e14                                                          this event's label, unique in the file
-  ts       2027-02-20T09:03:20Z                                         when: date, T, time; Z means UTC
+  ts       2026-02-20T09:03:20Z                                         when: date, T, time; Z means UTC
   session  s2                                                           which conversation it belongs to (auth = sign-ins)
   actor    agent                                                        who did it: a person's account, or agent (the app's model)
   kind     tool_call                                                    what type of event
@@ -194,10 +213,11 @@ Measure both, on the recording AND on a changed attack. Here only C holds on bot
 ## Step 1 · Read the trail
 
 ```bash
-cd labs/m23
 make setup
 make investigate
 ```
+
+Windows: `python ../../tools/check_python.py 3.11`, then `python investigate.py`.
 
 ```output
 Entry point:   app-log event e07 (ticket:T-4821) - hidden instruction: LAB-INJECT: ignore previous instructions. You are now th...
@@ -231,6 +251,9 @@ FAIL: write defense.py (README Step 3). Caught 0 of 5 on the recorded trace.
 
 The attack is fully visible in the data and completely uncaught, because `defense.py` is still empty.
 
+`replay.py` exits with code 1 on a FAIL, so `make` adds one more line, `make: *** [Makefile:14: replay] Error 1`.
+That is expected until your defense passes. Windows: `python replay.py`.
+
 ## Step 3 · Write the defense
 
 Open `defense.py` and fill in the five functions. Each reads one recorded event (or the login list) and returns a
@@ -262,7 +285,7 @@ PASS: defense holds on the recorded trace and the adapted variants.
 
 If your variant score is low, your checks are matching the recorded strings, and the harness says so. A first try
 that copies the exact strings from the recording (one phrase, one address, one host, one account) scores like this
-(real output, recording run 41084525245):
+(real output):
 
 ```output
 RECORDED TRACE   caught 5 of 5 malicious   false positives 0 of 20 normal
@@ -281,8 +304,8 @@ make audit
 make test
 ```
 
-- `make audit`: every defense decision with its reason
-- `make test`: the recorded trail and the provided investigation (6 run)
+- `make audit`: every defense decision with its reason. Windows: `python replay.py --audit`
+- `make test`: the scripted trail and the provided investigation (6 run). Windows: `python run_tests.py`
 
 ```output
 ALL TESTS PASSED (6 run)
@@ -297,7 +320,7 @@ control: it is what lets a reviewer agree your detection is right and an inciden
 make challenge
 ```
 
-- `make challenge`: the challenge tests fail until you finish
+- `make challenge`: the challenge tests fail until you finish. Windows: `python run_tests.py --challenge`
 
 1. **23.2: write `find_quiet_beacon()` in `investigate.py`.** The loud beacon is 14 calls from one host. A service
    account host made only two calls to the same model API, hours apart. Return every non-caller host that made at
@@ -327,9 +350,14 @@ trace plus adapted variants, run in CI, so a change that weakens a detection fai
 | The injected instruction | A clearly marked `LAB-INJECT` placeholder inside an HTML comment | Not a working payload; every address is a `.example` name |
 | The three attacker-AI shapes | Google GTIG (5 Nov 2025), Anthropic GTG-1002 (Nov 2025), MSRC indirect prompt injection (29 Jul 2025) | The lessons cite the primary sources; the trace is an illustration |
 
+Said once more, plainly: this trace is not a capture of any real attack or of a run of ours. It was written by hand.
+The events are dated 20 February 2026 (the variants 21 February 2026); the date is made up like every other value.
+
 ## Troubleshooting
 
 - **`make challenge` exits with an error.** Expected until you finish; the last line tells you how many tests fail.
 - **`make replay` still shows 0 caught.** You have not saved `defense.py`, or a function still returns the starter
   value. The `--audit` output shows what each function decided.
-- **Windows:** `python investigate.py`, `python replay.py`, `python run_tests.py`, and so on.
+- **Windows:** the table under "Needs" lists the `python` command for every `make` shortcut.
+- **A command says it can't find `explore.py` or the Makefile.** You are not in the lab folder: `cd labs/m23` from the
+  `ai-security-course-labs` folder.

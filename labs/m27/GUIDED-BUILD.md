@@ -26,6 +26,8 @@ US cents at these prices.
 ## Before you start
 
 - AWS CLI v2 signed in to the sandbox account, Region `us-east-1`.
+- A terminal in `labs/m27`: every command below uses paths inside that folder. If you are still in the
+  `ai-security-course-labs` folder, run `cd labs/m27` first.
 - `python3 -m venv .venv && .venv/bin/pip install -r cloud/requirements.txt` (boto3 1.43.118) for Part D.
 - Set these in your shell and keep the terminal open:
 

@@ -3,7 +3,7 @@ llm.py: the "model" that writes answers in the M6 lab.
 
 TWO OPTIONS
 1. StandInModel (default) - a STAND-IN, NOT AI. Plain Python, so every run gives the same answer and the tests
-   are repeatable. It copies three real behaviours of language models that matter for RAG security:
+   are repeatable. It copies three real behaviors of language models that matter for RAG security:
      a. It answers from the context it is given, quoting the sentences that best match the question.
      b. It follows instructions it finds inside that context ("Note for AI assistants: ...").
         Real models do this too: that's indirect prompt injection (lesson 3.4).

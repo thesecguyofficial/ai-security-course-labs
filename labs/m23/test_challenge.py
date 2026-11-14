@@ -2,7 +2,7 @@
 test_challenge.py: `make challenge`. These FAIL until you write defense.py (Step 3) and the three-part
 challenge (Step 5). No solution is included.
 
-  Step 3: the five defence functions in defense.py (replay passes on the recorded trace and the variants).
+  Step 3: the five defense functions in defense.py (replay passes on the recorded trace and the variants).
   Challenge 1 (23.2): find_quiet_beacon() in investigate.py.
   Challenge 2 (23.3): output_check also catches a rendered-image exfiltration (data in the image path, no query).
   Challenge 3 (23.4): input_check stays precise and does NOT flag look-alike normal lines (a negative control).
@@ -23,13 +23,13 @@ class TC_Challenge(unittest.TestCase):
         cls.variants = investigate.load("variants.jsonl", investigate.HERE / "data")
 
     def test_07_recorded_defence_holds(self):
-        """step 3: your defence catches all 5 malicious findings on the recorded trace with 0 false positives"""
+        """step 3: your defense catches all 5 malicious findings on the recorded trace with 0 false positives"""
         r = replay.score_recorded(self.app, self.egress)
         self.assertEqual(r["missed"], [], f"missed: {r['missed']}")
         self.assertEqual(r["fp"], [], f"false positives: {r['fp']}")
 
     def test_08_variant_defence_holds(self):
-        """step 3: your defence also catches all 5 on the ADAPTED variants (behaviour, not wording) with 0 FP"""
+        """step 3: your defense also catches all 5 on the ADAPTED variants (behavior, not wording) with 0 FP"""
         r = replay.score_variants(self.variants, self.app, self.egress)
         self.assertEqual(r["missed"], [], f"missed on variants: {r['missed']}")
         self.assertEqual(r["fp"], [], f"false positives: {r['fp']}")

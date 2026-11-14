@@ -94,7 +94,7 @@ class Lab(unittest.TestCase):
         self.assertTrue(all(h["parent_id"].startswith("KB-1") for h in hits), [h["chunk_id"] for h in hits])
 
     def test_10_any_field_authorises(self):
-        """10 native trimming: a document is authorised if ANY permission field matches ('all' opens it)"""
+        """10 native trimming: a document is authorized if ANY permission field matches ('all' opens it)"""
         idx = {"fields": [{"name": "UserIds"}, {"name": "GroupIds"}]}
         tok = {"oid": "u1", "groups": ["g1"]}
         rows = [{"UserIds": ["none"], "GroupIds": ["g1"]}, {"UserIds": ["u2"], "GroupIds": ["g2"]},
@@ -103,7 +103,7 @@ class Lab(unittest.TestCase):
         self.assertEqual(len(twin.native_trim(rows, idx, None)), 1)
 
     def test_11_labels(self):
-        """11 Purview trimming drops labels the user can't extract, and lets unlabelled chunk rows through"""
+        """11 Purview trimming drops labels the user can't extract, and lets unlabeled chunk rows through"""
         idx = {"purviewEnabled": True}
         tok = {"labels": ["General", "Confidential"]}
         rows = [{"sensitivityLabel": "Highly Confidential"}, {"sensitivityLabel": None}, {"sensitivityLabel": "General"}]
@@ -158,7 +158,7 @@ class Lab(unittest.TestCase):
         self.assertEqual([e["turn_id"] for e in hunt.h3_outside_email(ev)], ["turn-0044"])
 
     def test_18_safety(self):
-        """18 safety: injected lines are labelled placeholders, addresses are reserved test domains, no secrets"""
+        """18 safety: injected lines are labeled placeholders, addresses are reserved test domains, no secrets"""
         src = open(os.path.join(HERE, "data", "source-docs.json"), encoding="utf-8").read()
         for line in re.findall(r"\[[A-Z-]+ TOOL REQUEST[^\]]*\]", src):
             self.assertTrue(line.startswith("[LAB-PLACEHOLDER"), line)

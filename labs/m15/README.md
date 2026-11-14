@@ -1,7 +1,7 @@
 # Lab M15: a private endpoint for an open model on SageMaker AI
 
-Companion to lessons **15.0 to 15.5** of *AI Security Engineer* (The Sec Guy). About 70 minutes for Steps 1 to 8,
-**$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no model download. Step 9 is optional
+Companion to lessons **15.0 to 15.5** of *AI Security Engineer* (The Sec Guy). About 70 minutes for Steps 1 to 8
+(plus about 10 for the optional Step 1b), **$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no model download. Step 9 is optional
 and **costs money every hour**: [`GUIDED-BUILD.md`](GUIDED-BUILD.md) builds a private, network-isolated endpoint for an
 open model in **your own** sandbox account, with an auto-teardown schedule created before the endpoint.
 
@@ -43,7 +43,11 @@ git pull
 
 **No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
 
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m15`.
+Then go into this lab's folder. Every command in this README is run from `labs/m15`:
+
+```bash
+cd labs/m15
+```
 
 ## What's in this folder
 
@@ -67,14 +71,15 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 ## Needs
 
 - Python **3.11 or newer**: `python3 --version`. No packages, no internet.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
+- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step (type `python`
+  where a step shows `python3`).
 - Optional, Step 9 only: the AWS CLI v2, your own sandbox account (lesson 0.7) with a budget alarm, a GPU quota for
   SageMaker AI endpoints, and about 2 GB free disk for the model download.
 
 ## Step 1b · Before you attack: look at each piece (about 10 minutes)
 
 New to SageMaker AI? Do this before Step 1 (lesson 15.5 and its videos call it Step 1b). `explore.py` shows AnyCompany's
-setup one piece at a time. Real output below is from a fresh Ubuntu machine (recording run 41116260706).
+setup one piece at a time. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `setups/` and
 `data/incident/` and prints what it finds. `reach`, `call` and `role` ask `twin.py`, the lab's offline stand-in for
@@ -94,6 +99,7 @@ python3 ../../tools/check_python.py 3.11
 Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
 clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
 standard library, so `make setup` just checks your Python version and says "Nothing to install for this lab".
+Windows (no `make`): `python ..\..\tools\check_python.py 3.11` does the same check.
 
 **1. The pieces.** Every SageMaker AI piece AnyCompany uses, in one list:
 
@@ -313,7 +319,6 @@ to `N6`.
 ## Step 1 · Review the first draft
 
 ```bash
-cd labs/m15
 make check
 ```
 
@@ -419,7 +424,10 @@ path to SageMaker AI carried the call because nobody wrote an endpoint policy.
 make scan
 ```
 
-- `make scan`: builds the lab's files in artifacts/, then: python3 model_files.py scan artifacts/v1-pickle ...
+- `make scan`: builds the lab's files in `artifacts/`, then scans both folders. By hand, in this order (the first
+  line is needed once: without it the scans answer "no such folder"):
+  `python3 model_files.py build`, `python3 model_files.py scan artifacts/v1-pickle`,
+  `python3 model_files.py scan artifacts/v2-safe`
 
 ```output
 [OK  ] config.json                  data
@@ -460,7 +468,7 @@ make check-hardened
 make hardened
 ```
 
-- `make check-hardened`: 0 HIGH, 2 MEDIUM (M15-22, M15-23: the challenge)
+- `make check-hardened`: same as `python3 checker.py hardened`. 0 HIGH, 2 MEDIUM (M15-22, M15-23: the challenge)
 - `make hardened`: same as `python3 evaluate.py hardened`
 
 ```output
@@ -568,7 +576,7 @@ challenge work doesn't break it.
 make challenge
 ```
 
-You should see:
+Same as `python3 run_tests.py --challenge`. You should see:
 
 ```text
 7 of 28 TESTS FAILED (28 run)
@@ -633,4 +641,6 @@ models (`sagemaker`, `scheduler`): required members, unknown members, enums, len
 
 - **`make challenge` exits with an error.** Expected until you finish: the last line tells you how many tests fail.
 - **`make test` fails after you edited a setup.** `git diff setups/` shows what you changed; `git checkout setups/` undoes it.
-- **Windows:** `python run_tests.py`, `python checker.py first-draft`, and so on.
+- **Windows:** `python run_tests.py`, `python checker.py first-draft`, and so on. `make challenge` is
+  `python run_tests.py --challenge`. Step 9 (the optional cloud build) uses `make` and shell loops: on Windows use WSL
+  for that step.

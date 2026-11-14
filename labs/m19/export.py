@@ -7,6 +7,7 @@ Copies everything you need into a NEW folder, laid out as a repo of its own:
   README.md            <- report/README-TEMPLATE.md (your portfolio README; fill it in)
   CAPSTONE-GUIDE.md    <- this lab's README.md (the brief, kept for readers)
   .github/workflows/   <- template/.github/workflows/capstone.yml (the CI that runs the self-check)
+  LICENSE              <- the labs repository's MIT license (the notice has to stay with the code you publish)
 Leaves out state/, results/ and caches. Refuses to write into a folder that already has files in it.
 Then: cd into it, git init, commit, and push to a new PUBLIC GitHub repo (the printed steps).
 """
@@ -46,6 +47,9 @@ def main() -> int:
     (dest / "report" / "README-TEMPLATE.md").unlink()
     shutil.copytree(HERE / "template" / ".github", dest / ".github")
     (dest / ".gitignore").write_text(GITIGNORE, encoding="utf-8")
+    license_file = HERE.parent.parent / "LICENSE"      # the labs repo's MIT notice; absent in a bare copy of this folder
+    if license_file.is_file():
+        shutil.copy2(license_file, dest / "LICENSE")
     mk = dest / "Makefile"           # the maintainers' target needs files that are not exported
     mk.write_text("".join(ln for ln in mk.read_text(encoding="utf-8").splitlines(True)
                           if "lab-test" not in ln and "run_tests.py" not in ln), encoding="utf-8")
@@ -56,7 +60,7 @@ Next (Mac/Linux; on Windows type the same in PowerShell):
   git init -b main
   git add .
   git commit -m "TSG Helpdesk capstone: starting point"
-Then create an EMPTY public repo on github.com (no README, no licence) and push:
+Then create an EMPTY public repo on github.com (no README, no license) and push:
   git remote add origin https://github.com/<you>/<repo>.git
   git push -u origin main
 Open the repo's Actions tab: the capstone-checks workflow runs on every push.""")

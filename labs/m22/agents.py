@@ -3,7 +3,7 @@ agents.py: the two email agents, as AgentDojo pipelines, so AgentDojo's own task
 
   SingleAgent   BEFORE. One model plans, reads every tool result, and calls tools. It is the obedient stand-in, so
                 any attacker goal it reads, it carries out (standin.injected_goals).
-                taint=True adds the coarse defence: once anything untrusted has entered the context, every sink is
+                taint=True adds the coarse defense: once anything untrusted has entered the context, every sink is
                 refused ("trusted action": the decision to call it was made after reading untrusted text).
 
   DualAgent     AFTER. The dual-LLM pattern with a controller in plain code:

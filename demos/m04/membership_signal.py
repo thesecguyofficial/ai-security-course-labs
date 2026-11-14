@@ -27,7 +27,7 @@ non_members = [make_record() for _ in range(N)]
 
 w, b = [0.0] * FEATURES, 0.0
 sigmoid = lambda z: 1 / (1 + math.exp(-max(-30, min(30, z))))
-for epoch in range(2000):                      # many passes over a small set: it starts to memorise
+for epoch in range(2000):                      # many passes over a small set: it starts to memorize
     for x, y in members:
         p = sigmoid(sum(wi * xi for wi, xi in zip(w, x)) + b)
         g = p - y

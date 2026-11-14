@@ -156,7 +156,7 @@ class Test4HuntAndSafety(unittest.TestCase):
         self.assertNotIn("modeling_custom", sys.modules)
 
     def test_19_lab_data_is_placeholder(self):
-        """19 safety: the only token-looking values in the lab are labelled placeholders"""
+        """19 safety: the only token-looking values in the lab are labeled placeholders"""
         text = (HERE / "stacks" / "first-draft" / "docker-compose.yml").read_text(encoding="utf-8")
         self.assertIn("hf_LABPLACEHOLDER", text)
         gw = json.loads((HERE / "stacks" / "hardened" / "gateway.json").read_text(encoding="utf-8"))

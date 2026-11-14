@@ -95,7 +95,7 @@ SETS = {
     # set name: what it is (shown by `build`)
     "v1-pickle": "v1: the first draft's fine-tuned export (pickle-based weights)",
     "v2-safe": "v2: safetensors weights, hashes recorded at approval (hardened)",
-    "v3-unvetted": "v3: a new upload waiting for approval: pickle weights, no licence, no hashes",
+    "v3-unvetted": "v3: a new upload waiting for approval: pickle weights, no license, no hashes",
     "v4-safe": "v4: a clean new version waiting for approval",
     "bob-experiment": "a data scientist's own experiment (not registered)",
     "hub-pull": "what a container gets when it downloads from the Hub at start",

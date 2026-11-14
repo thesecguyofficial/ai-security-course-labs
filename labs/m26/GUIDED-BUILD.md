@@ -18,6 +18,8 @@ breaks.
 
 ## Before you start
 
+- The $0 lab set up (`make setup` in `labs/m26`, README Step 1): Part A uses its `.venv`.
+- A terminal in `labs/m26`. If you are still in the `ai-security-course-labs` folder, run `cd labs/m26` first.
 - Tools: AWS CLI v2, `eksctl`, `kubectl`, all signed in to the sandbox account (`aws sts get-caller-identity`).
 - **GPU quota.** New accounts often have 0. Console: **Service Quotas** → **AWS services** → **Amazon Elastic Compute
   Cloud (Amazon EC2)** → search **Running On-Demand G and VT instances** → it must be 4 or more (it's counted in
@@ -39,7 +41,6 @@ below does the same in one file, so most people use it.
 1. Read `cloud/cluster.yaml`, then create everything (about 20 minutes):
 
    ```bash
-   cd labs/m26
    eksctl create cluster -f cloud/cluster.yaml
    ```
 

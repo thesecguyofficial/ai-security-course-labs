@@ -10,7 +10,7 @@ contains the lab's placeholder instruction, it acts on it. The one exception: wh
 the placeholder sits inside an <<UNTRUSTED ...>> block, this stand-in treats it as data. Real models only
 sometimes respect labels like that (lesson 7.3), which is why the lab never relies on spotlighting alone.
 
-The only "attack" in this lab is the labelled placeholder in data/workspace/attachments/. It is not a
+The only "attack" in this lab is the labeled placeholder in data/workspace/attachments/. It is not a
 working payload: the stand-in reacts to the marker text and nothing else.
 """
 

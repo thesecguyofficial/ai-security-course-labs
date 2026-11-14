@@ -3,7 +3,7 @@ policy.py: the deterministic check your hosted agent runs BEFORE any tool call e
 
 Azure has no managed twin of a rule engine on tool calls. The toolbox hands your runtime a require_approval flag and
 then "Enforcement is entirely the agent runtime's responsibility". In a hosted agent, the runtime is your code. So the
-last line of defence is a small, boring function like this one: tool name + arguments in, allow or deny out. No model.
+last line of defense is a small, boring function like this one: tool name + arguments in, allow or deny out. No model.
 
 The hardened build already calls check(). It stops attack A5 (an outside address). It does NOT stop A6.
 

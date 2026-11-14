@@ -2,7 +2,7 @@
 twin.py: the OFFLINE stand-in for the AWS pieces of the M13 port. Standard-library Python, no AWS account.
 
 It reads a setup folder (setups/<name>/: the request bodies, policies and app notes under review) and copies the
-DOCUMENTED behaviour of each AWS feature the lab needs. Every rule below cites the page it comes from; the README's
+DOCUMENTED behavior of each AWS feature the lab needs. Every rule below cites the page it comes from; the README's
 "How faithful is the twin?" table lists them again.
 
   * Knowledge base ingestion and Retrieve, for both kinds of knowledge base:

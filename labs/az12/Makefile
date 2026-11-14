@@ -38,7 +38,7 @@ llmguard:     ## OPTIONAL: the suite with LLM Guard's ML classifier (pip install
 cost:            ## what the cloud path bills
 	./cloud/cloud.sh cost
 
-foundry-up:      ## only without your AZ11 build: a small Foundry resource with helpdesk-chat, keys disabled
+foundry-up:      ## this lab's own small Foundry resource with helpdesk-chat, keys disabled (skipped if AZ11_NAME is set)
 	./cloud/cloud.sh foundry-up
 
 cs-up:           ## a free-tier (F0) Content Safety resource, keys disabled
@@ -50,13 +50,13 @@ cs-try:          ## four single Content Safety calls, raw JSON printed
 cs-suite:        ## the same 28 requests against the REAL Prompt Shields and text analysis
 	./cloud/cloud.sh cs-suite
 
-blocklist-up:    ## a custom blocklist (one term) on your AZ11 resource
+blocklist-up:    ## a custom blocklist (one term) on the Foundry resource
 	./cloud/cloud.sh blocklist-up
 
-guardrail-up:    ## contoso-helpdesk-v2 as a real guardrail on your AZ11 deployment (needs AZ11_NAME)
+guardrail-up:    ## contoso-helpdesk-v2 as a real guardrail on helpdesk-chat
 	./cloud/cloud.sh guardrail-up
 
-guardrail-probe: ## 5 suite cases (PICK=... to choose) from inside the AZ11 VNet, through the real guardrail
+guardrail-probe: ## 5 suite cases (PICK=... to choose) through the real guardrail (from the AZ11 VNet if AZ11_NAME is set)
 	./cloud/cloud.sh guardrail-probe
 
 evidence:        ## the settings an auditor asks for, read back from Azure

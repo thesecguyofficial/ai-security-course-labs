@@ -1,12 +1,15 @@
 """
-suite.py: 15 things the defence should catch, and 5 normal things it must not break.
+suite.py: 15 things the defense should catch, and 5 normal things it must not break.
 
     python3 suite.py first-draft
     python3 suite.py hardened
     python3 suite.py hardened --challenge     # adds case H4 (challenge 2)
 
-Each case answers one question: did the defence miss it? MISSED is bad, caught is good. Normal cases answer: does
+Each case answers one question: did the defense miss it? MISSED is bad, caught is good. Normal cases answer: does
 normal work still work (no false alarm, nothing broken)?
+
+Exit code (so it works in CI): 1 when a case is MISSED or a normal case is BROKEN, otherwise 0. One exception: the
+first draft is the demonstration and is meant to miss, so `suite.py first-draft` exits 1 only for a BROKEN normal case.
 """
 
 from __future__ import annotations
@@ -29,7 +32,7 @@ def _alerted(setup, records, rule=None):
     return any(rule is None or a["rule"] == rule for a in detect.alerts(setup, records))
 
 
-# (id, what, lesson, function(setup) -> True when the defence MISSED it)
+# (id, what, lesson, function(setup) -> True when the defense MISSED it)
 CASES = [
     ("D0", "unregistered model, prod account, InvokeModel", "29.1",
      lambda s: not _hunt_has(s, "bedrock:222222222222:us-east-1:deepseek.r1-v1:0")),
@@ -102,7 +105,7 @@ def evaluate(setup_name: str, challenge: bool = False) -> dict:
             "cases": cases}
 
 
-def main(argv: list[str]) -> None:
+def main(argv: list[str]) -> int:
     if not argv:
         raise SystemExit(__doc__)
     name, challenge = argv[0], "--challenge" in argv
@@ -116,7 +119,9 @@ def main(argv: list[str]) -> None:
     missed = [k for k, v in r["missed"].items() if v]
     print(f"\nMissed: {len(missed)} of {len(r['missed'])}  ({', '.join(missed) or 'none'}) | normal work that still "
           f"works: {sum(r['normal'].values())} of {len(r['normal'])}")
+    broken = [k for k, v in r["normal"].items() if not v]
+    return 1 if broken or (missed and name != "first-draft") else 0
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    sys.exit(main(sys.argv[1:]))

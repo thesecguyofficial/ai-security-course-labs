@@ -37,7 +37,7 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 -m unittest discover -s tests -t . -v -p "test_functional.py"
 
-      - name: The six findings (must be fixed)
+      - name: The known findings as tests (must be fixed)
         if: ${{ !cancelled() }}
         run: python3 -m unittest discover -s tests -t . -v -p "test_security.py"
 

@@ -39,7 +39,7 @@ Throughout: `AWS_REGION` = `us-east-1` and these shell variables (set them again
 3. **Region.** AWS lists us-east-1 for both Bedrock Managed Knowledge Base
    ([AWS ML blog, 16 Jul 2026](https://aws.amazon.com/blogs/machine-learning/build-enterprise-search-for-agents-with-amazon-bedrock-managed-knowledge-base/))
    and the AgentCore harness ([Supported Regions](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-regions.html)).
-4. **Open a terminal in `labs/m13`:**
+4. **Open a terminal in the `ai-security-course-labs` folder** and go to the lab folder:
 
    ```bash
    cd labs/m13
@@ -365,7 +365,7 @@ export HARNESS_ARN=$(cd cloud/terraform && terraform output -raw harness_arn)
 
 ## B2 · The backend, and who may call it
 
-`cloud/helpdesk_cloud.py` is the backend. Read it before you run it (80 lines). The rules it follows are the lesson:
+`cloud/helpdesk_cloud.py` is the backend. Read it before you run it (about 130 lines). The rules it follows are the lesson:
 
 - `--as` stands in for your identity provider. In production the email comes from the verified token on the server.
 - `search_kb` comes back to the backend, which calls `Retrieve` with `userContext.userId` = the signed-in user. The
@@ -529,6 +529,12 @@ aws iam delete-role --role-name tsg-m13-harness-execution
 ```
 
 AgentCore CLI path: also delete the role the CLI created (IAM console, search "harness")
+
+Console path (A1, Path A): the role lines above find nothing, because the console made its own service role when you
+chose **Create and use a new service role**. Delete that one by hand: IAM console, **Roles**, sort by creation time,
+open the role created when you made the knowledge base, check its trust policy names `bedrock.amazonaws.com`, then
+**Delete**. If you set up ingestion log delivery in A1, remove it too: CloudWatch console, **Log groups**, delete the
+log group you picked for the ingestion logs (labels may differ slightly).
 
 ```bash
 rm -f global-acl.json

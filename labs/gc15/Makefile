@@ -59,7 +59,7 @@ cloud-down:     ## DELETE the guided build: undeploy, endpoint, forwarding rule,
 	-gcloud scheduler jobs delete tsg-gc15-undeploy --location=$(REGION) --quiet
 	-gcloud storage rm --recursive gs://$(PROJECT)-tsg-gc15-models
 	-gcloud artifacts repositories delete tsg-gc15 --location=$(REGION) --quiet
-	@echo "Done. The KMS key versions: destroy them by hand (GUIDED-BUILD.md Step 9); key rings can't be deleted. Then: make cloud-check"
+	@echo "Done. The KMS key versions: destroy them by hand (GUIDED-BUILD.md Part G); key rings can't be deleted. Then: make cloud-check"
 
 cloud-check:    ## after cloud-down: list anything with the guided build's names that still exists
 	-gcloud ai endpoints list --region=$(REGION) --filter='displayName~tsg-gc15' --format='table(name,displayName)'

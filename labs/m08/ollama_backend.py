@@ -3,9 +3,11 @@ ollama_backend.py: OPTIONAL. Swap the deterministic stand-in for a real local mo
 
 Used only when you run the host with `--backend ollama` (see the README's optional step). It sends the
 user's message and the tool definitions to a small local model through Ollama's OpenAI-compatible API on
-127.0.0.1:11434, and asks for a short JSON plan. A real model is non-deterministic, so the attack may
-work sometimes, after rewording, or not at all; the SAFE controls hold whichever way it goes, which is
-the point. The tests never use this path: they use the stand-in so results are repeatable.
+127.0.0.1:11434, and asks for a short JSON plan. The lab's hidden directive is an inert placeholder token,
+not real instructions, so a real model has nothing in it to follow: this path shows the controls working
+with a real model in the loop, not a model resisting an attack. A real model is non-deterministic, so its
+plan varies; the SAFE controls hold whichever way it goes. The tests never use this path: they use the
+stand-in so results are repeatable.
 
 This is best-effort glue, not a full agent. If the model returns something unexpected, the plan is empty.
 """
@@ -37,7 +39,7 @@ def system_prompt(tools: list[dict]) -> str:
 
 def decide(user_message: str, tools: list[dict], model: str = "gemma3:1b") -> Plan:
     plan = Plan()
-    plan.saw_injection = any(TOKEN in full_text(t) for t in tools)
+    plan.saw_injection = any(TOKEN in full_text(t) for t in tools)  # the HOST's substring check, not the model's
 
     system = system_prompt(tools)
     body = {}

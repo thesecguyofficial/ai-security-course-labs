@@ -68,7 +68,7 @@ class T2_EvalGate(unittest.TestCase):
         self.assertNotIn("normal", r["failed_categories"])
 
     def test_regression_swaps(self):
-        """eval gate: each regression puts back the vulnerable behaviour"""
+        """eval gate: each regression puts back the vulnerable behavior"""
         sys.path.insert(0, str(HERE / "evals"))
         import run_evals
         inj = run_evals.regressed_guards("injection")
@@ -193,6 +193,8 @@ class T5_Selfcheck(unittest.TestCase):
                       "helpdesk/guards.py", "report/FINDINGS.md"):
                 self.assertTrue((dest / f).exists(), f)
             self.assertFalse((dest / "report" / "README-TEMPLATE.md").exists())
+            if (HERE.parent.parent / "LICENSE").is_file():      # the MIT notice travels with the exported code
+                self.assertIn("MIT License", (dest / "LICENSE").read_text(encoding="utf-8"))
             self.assertNotIn("lab-test", (dest / "Makefile").read_text())
             self.assertEqual(py("export.py", str(dest))[0], 1)
             code, out = py("selfcheck.py", cwd=dest)

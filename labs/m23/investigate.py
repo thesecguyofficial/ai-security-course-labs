@@ -1,14 +1,16 @@
 """
-investigate.py: read the recorded, inert attack trace in data/trace/. Offline, standard library only.
+investigate.py: read the scripted, inert attack trace in data/trace/. Offline, standard library only.
 
     python3 investigate.py            # make investigate
 
   app-log.jsonl   the TSG Helpdesk AI app's turn log: user messages, retrieved content, the model's
-                  tool calls and output, and sign-in (login) events. Nothing here runs; it is a recording.
+                  tool calls and output, and sign-in (login) events. Nothing here runs; it is data.
   egress.jsonl    the estate's outbound connection log (host -> dest).
 
-The attack was run once, in a sandbox, and frozen. These functions read the trail for you so you can see
-where the malicious input entered and what it reached for, before you write the defence in defense.py.
+The trace is scripted: we wrote it by hand in the shape of a real AI-app log. Nobody ran an attack to make it, and
+the accounts, hosts and times are invented. The harness calls it the "recorded trace" to tell it apart from the
+variants. These functions read the trail for you so you can see where the malicious input entered and what it
+reached for, before you write the defense in defense.py.
 
 Four questions are answered. One (find_quiet_beacon, challenge 1) is left for you to write.
 All addresses use reserved .example names (RFC 2606); the injected text is a clearly marked LAB-INJECT

@@ -2,7 +2,7 @@
 # AZ16 guided build helper (GUIDED-BUILD.md). Portal first: make the Foundry resource, the workspace, the diagnostic
 # setting, the Defender plan, continuous export and the alert rule in the portal; this script does only what the
 # portal can't do quickly (a model deployment by CLI, the four requests, the guardrail switch, the activity log export).
-# Usage: AZ16_NAME=... bash cloud/cloud.sh check|deploy|activity|ask|annotate|block|down
+# Usage: AZ16_NAME=... bash cloud/cloud.sh check|deploy|activity|ask|ask2|ask3|annotate|block|down
 set -euo pipefail
 : "${AZ16_NAME:?export AZ16_NAME=az16-<yours> first}"
 RG=${RG:-rg-$AZ16_NAME}; HERE=$(cd "$(dirname "$0")" && pwd)
@@ -39,7 +39,7 @@ PY
 }
 export HERE
 
-case "${1:?check|deploy|activity|ask|annotate|block|down}" in
+case "${1:?check|deploy|activity|ask|ask2|ask3|annotate|block|down}" in
 check)
   az cognitiveservices account show -n "$AZ16_NAME" -g "$RG" --query "{name:name, kind:kind, sku:sku.name, endpoint:properties.endpoint}" -o json
   az security pricing show -n AI --query "{plan:name, tier:pricingTier, extensions:extensions[].{name:name, on:isEnabled}}" -o json
@@ -97,5 +97,5 @@ down)
   az group delete -n "$RG" --yes
   echo "   done; remove continuous export in the portal (Environment settings > subscription > Continuous export)"
   ;;
-*) echo "usage: cloud.sh check|deploy|activity|ask|ask2|annotate|block|down"; exit 2;;
+*) echo "usage: cloud.sh check|deploy|activity|ask|ask2|ask3|annotate|block|down"; exit 2;;
 esac

@@ -1,5 +1,5 @@
 """
-checker.py: review a SageMaker AI deployment of the Helpdesk summariser the way you'd review the pull request.
+checker.py: review a SageMaker AI deployment of the Helpdesk summarizer the way you'd review the pull request.
 Offline, standard library only.
 
     python3 checker.py first-draft     # make check
@@ -192,7 +192,7 @@ def rule_13(s):
 
 
 # --------------------------------------------------------------------------------------------------------------------
-# 15.3 Endpoints, model files and licences, registry approvals
+# 15.3 Endpoints, model files and licenses, registry approvals
 # --------------------------------------------------------------------------------------------------------------------
 def rule_14(s):
     out = []
@@ -264,13 +264,13 @@ def rule_21(s):
         out.append(Finding("M15-21", "MEDIUM", "15.3", "no file hashes recorded for the deployed model: nobody can prove the files running are the ones approved"))
     lic = meta.get("licence")
     if lic not in C["approved_licences"]:
-        out.append(Finding("M15-21", "MEDIUM", "15.3", f"licence {'not recorded' if not lic else lic + ' is not on the approved list'}: AWS says reviewing model licences is your job"))
+        out.append(Finding("M15-21", "MEDIUM", "15.3", f"license {'not recorded' if not lic else lic + ' is not on the approved list'}: AWS says reviewing model licenses is your job"))
     return out
 
 
 def rule_22(s):
     if not s.app.get("approval_gate"):
-        return [Finding("M15-22", "MEDIUM", "15.3", "no approval gate: nothing checks formats, hashes, licence and approver before a version becomes Approved (challenge 2)")]
+        return [Finding("M15-22", "MEDIUM", "15.3", "no approval gate: nothing checks formats, hashes, license and approver before a version becomes Approved (challenge 2)")]
     return []
 
 
@@ -293,7 +293,7 @@ def rule_24(s):
         out.append(Finding("M15-24", "MEDIUM", "15.4", "data capture (full prompts and answers) is written without a KmsKeyId of yours"))
     bucket = dc["DestinationS3Uri"][5:].split("/", 1)[0]
     if bucket != C["buckets"]["capture"]:
-        out.append(Finding("M15-24", "MEDIUM", "15.4", f"data capture goes to {bucket}, a bucket other teams read: captured prompts are as sensitive as the tickets they summarise"))
+        out.append(Finding("M15-24", "MEDIUM", "15.4", f"data capture goes to {bucket}, a bucket other teams read: captured prompts are as sensitive as the tickets they summarize"))
     return out
 
 

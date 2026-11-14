@@ -43,7 +43,7 @@ git pull
 
 **No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
 
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m12`.
+Stay in the `ai-security-course-labs` folder: the first step below (Step 1b) starts by taking you into `labs/m12`.
 
 ## What's in this folder
 
@@ -76,17 +76,25 @@ reporting both numbers.
 ## Needs
 
 - Python **3.11 or newer**: `python3 --version`. No packages, no internet.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
+- Mac or Linux for the `make` shortcuts. Windows: run the `python3 ...` command shown under each step, typing `python`
+  in place of `python3`. Steps 1 to 7 and 9 are plain Python and need nothing else.
 - Optional, Step 8 only: Terraform 1.6+ (or OpenTofu), the AWS CLI v2, `pip install boto3`, and your own sandbox account (lesson 0.7).
 
 ## Step 1b · Before you attack: look at each piece (about 10 minutes)
 
 New to Bedrock Guardrails? Do this before Step 1 (lesson 12.5 and its videos call it Step 1b). `explore.py` shows each
-piece of a guardrail on its own. Real output below is from a fresh Ubuntu machine (recording run 41121403341).
+piece of a guardrail on its own. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `guardrails/`, `app/` and
 `policies/`, asks `guardrail_twin.py` (the lab's offline stand-in for Bedrock Guardrails) and prints. No network, no AWS
 account.
+
+**Go to the lab folder first.** Run this once, from the course labs repository folder (`ai-security-course-labs`).
+Every command in this lab, from here to the end, runs from `labs/m12`:
+
+```bash
+cd labs/m12
+```
 
 **0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
 
@@ -101,6 +109,8 @@ python3 ../../tools/check_python.py 3.11
 python3 ../../tools/check_python.py 3.11
 Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
 ```
+
+The last line names the Python on your machine, so your version number may differ.
 
 Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
 clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
@@ -316,8 +326,10 @@ Try your own sentences with `check` and `strength`. Then go to Step 1.
 
 ## Step 1 · Review the first draft
 
+You are already in `labs/m12` (the first command of Step 1b). If you skipped Step 1b, run `cd labs/m12` from the
+`ai-security-course-labs` folder first.
+
 ```bash
-cd labs/m12
 make check
 ```
 
@@ -392,6 +404,8 @@ Read `guardrails/tuned.json` and `app/integration.tuned.json` (the `_about` line
 make tuned
 ```
 
+Same as `python3 evaluate.py --guardrail tuned`.
+
 ```
 A01  stopped          prompt injection                         Sorry, I can't help with that request. If you think this is a
 ...
@@ -430,6 +444,8 @@ Standard tier too (omit `tierConfig` and you get Classic). Use it where answers 
 make sweep
 ```
 
+Same as `python3 evaluate.py --sweep`.
+
 ```
 prompt attack  misconduct+violence  attacks worked  catch rate  false positives
 LOW            LOW                   8 of 15         47%         1 of 14 (7%)
@@ -457,6 +473,8 @@ before you block anything.
 make cost
 ```
 
+Same as `python3 evaluate.py --cost`.
+
 ```
 guardContent on the question only (tuned)        units per question {'content': 2, 'topic': 2, 'sensitive': 2, 'grounding': 3}  ->  $66.00 a month
 no guardContent: question + article evaluated    units per question {'content': 3, 'topic': 3, 'sensitive': 3, 'grounding': 3}  ->  $90.00 a month
@@ -474,8 +492,8 @@ make enforce
 make enforce-fixed
 ```
 
-- `make enforce`: first-draft role, first-draft org policy
-- `make enforce-fixed`: enforced role, fixed org policy
+- `make enforce`: first-draft role, first-draft org policy. Same as `python3 enforce.py --role first-draft --org first-draft`
+- `make enforce-fixed`: enforced role, fixed org policy. Same as `python3 enforce.py --role enforced --org fixed`
 
 `make enforce-fixed`:
 
@@ -500,6 +518,20 @@ Guardrails as not supported there (R6, challenge 2).
 Compare `make enforce`: the first-draft org policy names a guardrail without a version (AWS: "The guardrail must have a
 version, and that version cannot be `DRAFT`") and excludes the Helpdesk's own model.
 
+**A common half-fix (not in the first draft).** `policies/helpdesk-role.any-version.json` matches the guardrail with
+`ArnLike` and no version, which is what checker rule M12-13 looks for. Run it and watch R3:
+
+```bash
+python3 enforce.py --role any-version --org fixed
+```
+
+```
+R3 DRAFT version                          ALLOWED  tsghelpdesk01 on the prompt; org baseline on everything (comprehensive)
+```
+
+The deny names the guardrail, so R2 and R4 are still refused, but the editable `DRAFT` version gets through. The
+enforced role pins version 1 (R3 `DENIED` above).
+
 **About `iam_eval.py`.** It is a teaching model, not the AWS policy engine: implicit deny, explicit deny wins, wildcards,
 six condition operators, and the documented rule for missing keys ("If the policy condition requires that the key is
 *not* matched ... and the right key is not present, the condition is *true*"). Step 8 checks the same policy with the
@@ -510,6 +542,8 @@ real IAM policy simulator.
 ```bash
 make test
 ```
+
+Same as `python3 run_tests.py`.
 
 ```
 [PASS] no guardrail: all 15 attacks work against the worst-case stand-in model
@@ -576,6 +610,8 @@ The Terraform was checked offline with OpenTofu 1.13.2 and AWS provider 6.70.0 (
 make challenge
 ```
 
+Same as `python3 run_tests.py --challenge`.
+
 You should see:
 
 ```text
@@ -621,7 +657,8 @@ Nothing in Steps 1 to 7 contacts AWS or anything else. Test 17 fails if a real-l
 ## Troubleshooting
 
 - `python3: command not found` or a version below 3.11: install Python 3.11+ and use `python3.11` in place of `python3`.
-- `make: command not found` (Windows): run the command after `#` on each line, e.g. `python3 evaluate.py --guardrail tuned`.
+- `make: command not found` (Windows): run the "Same as" command under each `make` step, with `python` in place of
+  `python3`, for example `python evaluate.py --guardrail tuned`.
 - `make cloud-up` says the guardrail profile is invalid: you are not in a US Region. Set `region` and
   `guardrail_profile_id` to a pair from the [guardrail profiles table](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-cross-region-support.html).
 - `make cloud-eval` returns `AccessDeniedException`: your identity needs `bedrock:ApplyGuardrail` on the guardrail and on

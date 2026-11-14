@@ -6,13 +6,13 @@ This file turns text like
 into
     "I'm <PERSON>, <EMAIL_ADDRESS>"
 
-It uses Presidio, an open-source PII (personally identifiable information) toolkit, MIT licence.
+It uses Presidio, an open-source PII (personally identifiable information) toolkit, MIT license.
 Presidio has two parts:
   * the ANALYZER finds sensitive things in text (it returns "what, where, how sure")
   * the ANONYMIZER replaces what the analyzer found (here: with a label like <EMAIL_ADDRESS>)
 
 Important: Presidio's own README warns that automated detection can't guarantee it finds ALL
-sensitive data. Redaction is one layer, not the whole defence.
+sensitive data. Redaction is one layer, not the whole defense.
 """
 
 import logging
@@ -55,7 +55,7 @@ SCORE_THRESHOLD = 0.35
 NLP_CONFIG = {
     "nlp_engine_name": "spacy",
     "models": [{"lang_code": "en", "model_name": "en_core_web_sm"}],
-    # Ignore spaCy labels we don't care about (organisations, quantities...), as Presidio's default config does.
+    # Ignore spaCy labels we don't care about (organizations, quantities...), as Presidio's default config does.
     "ner_model_configuration": {
         "labels_to_ignore": ["ORG", "ORGANIZATION", "CARDINAL", "EVENT", "LANGUAGE", "LAW", "MONEY",
                              "ORDINAL", "PERCENT", "PRODUCT", "QUANTITY", "WORK_OF_ART"],

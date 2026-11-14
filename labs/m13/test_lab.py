@@ -41,7 +41,7 @@ def shipped(name):
 
 @contextlib.contextmanager
 def before_challenge():
-    """Pin the pre-challenge behaviour, so these tests keep passing after you finish the challenge."""
+    """Pin the pre-challenge behavior, so these tests keep passing after you finish the challenge."""
     rules_without_20 = [r for r in checker.RULES if r.__name__ != "rule_20"]
     with mock.patch.object(helpdesk, "authorise_write", lambda *a: True), \
             mock.patch.object(helpdesk, "screen_chunks", lambda chunks, setup: chunks), \
@@ -90,7 +90,7 @@ class T1_FirstDraft(unittest.TestCase):
 
 
 class T2_KnowledgeBaseRules(unittest.TestCase):
-    """The documented behaviour of ACL-aware retrieval on a managed knowledge base (S3 data source)."""
+    """The documented behavior of ACL-aware retrieval on a managed knowledge base (S3 data source)."""
 
     def setUp(self):
         self.s = twin.Setup("ported")
@@ -148,7 +148,7 @@ class T3_PortedClassic(unittest.TestCase):
         self.assertEqual([(x.rule, x.severity) for x in f], [("M13-17", "LOW")])
 
     def test_13_one_attack_left_nothing_broken(self):
-        """ported: only A5 still works (confirmation isn't authorisation), and all 5 normal requests still work"""
+        """ported: only A5 still works (confirmation isn't authorization), and all 5 normal requests still work"""
         sc = evaluate.score(PORTED)
         self.assertEqual(sc["worked_ids"], ["A5"])
         self.assertEqual(sc["normal_working"], 5)
@@ -167,7 +167,7 @@ class T3_PortedClassic(unittest.TestCase):
         self.assertFalse(helpdesk.lambda_invocable_by(s, twin.COMPANY["outside_agent_arn"]))
 
     def test_16_parity(self):
-        """ported: 8 of 10 local controls kept, 2 partial (screening, authorisation), none lost"""
+        """ported: 8 of 10 local controls kept, 2 partial (screening, authorization), none lost"""
         st = [r["status"] for r in parity.run(shipped("ported"))]
         self.assertEqual((st.count("KEPT"), st.count("PARTIAL"), st.count("LOST")), (8, 2, 0))
 

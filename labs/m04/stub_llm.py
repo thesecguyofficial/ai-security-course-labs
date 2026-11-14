@@ -3,7 +3,7 @@ M4.6 lab: a STAND-IN for a real AI model.
 
 !!! This is NOT an AI model. !!!
 It is a few lines of ordinary Python that pretend to be one, so the redaction exercise runs on any laptop
-with no model download and gives the same output every time. It copies two real-world behaviours:
+with no model download and gives the same output every time. It copies two real-world behaviors:
 
   1. Models often repeat back what you told them ("Thanks Jane, I've noted jane.doe@example.com").
   2. Models connected to company data (RAG, tools) can return OTHER people's records in an answer
@@ -43,10 +43,13 @@ def stub_llm(messages: list[dict]) -> str:
     """Take OpenAI-style messages [{"role": ..., "content": ...}] and return a canned reply."""
     _setup_provider_log()
     last = messages[-1]["content"]
-    provider_log.info(last)  # the "provider" keeps a copy of exactly what it was sent
+    # A real provider receives the WHOLE message list on every turn (lesson 4.0), so a value from turn 1 reaches
+    # it again on every later turn. To keep provider.log short and readable, this stand-in logs only the newest
+    # message.
+    provider_log.info(last)
 
     if "look up" in last.lower() or "lookup" in last.lower():
-        # Behaviour 2: the answer contains someone else's personal data.
+        # Behavior 2: the answer contains someone else's personal data.
         return f"Here is what I found. {FAKE_CRM_RECORD}"
-    # Behaviour 1: repeat the user's words back.
+    # Behavior 1: repeat the user's words back.
     return f"Thanks, I've noted your message: \"{last}\". A support agent will follow up."

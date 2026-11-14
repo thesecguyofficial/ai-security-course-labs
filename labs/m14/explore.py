@@ -19,7 +19,7 @@ Cedar files and asks the offline twin (twin.py, cedar.py) what AgentCore would d
     python3 explore.py logs hardened                   # 9. what gets recorded, and one gateway span
 
 Everything is fake: AWS documentation example account IDs and ARNs, example.com users. cedar.py is a small teaching
-evaluator, not AWS's Cedar engine; twin.py copies documented behaviour and cites the AWS page for each rule.
+evaluator, not AWS's Cedar engine; twin.py copies documented behavior and cites the AWS page for each rule.
 """
 
 from __future__ import annotations

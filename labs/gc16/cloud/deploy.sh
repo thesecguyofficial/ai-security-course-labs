@@ -7,13 +7,15 @@
 #                           #   to trip the flood alert, one hunting query; each prints PASS, WAIT or FAIL
 #   bash deploy.sh logs     # the newest Model Armor sanitize entry, in full
 #   bash deploy.sh raise    # Part E: flood threshold 20 -> 100, the same 30 calls, no new alert expected
-#   bash deploy.sh down     # delete the alerts, the metric, the channel and the template; Data Access logs off
+#   bash deploy.sh down     # delete the alerts, the metric and the channel. The template and the Data Access audit
+#                           #   config are removed only if `up` made them: a helpdesk-guard kept from GC12, or Data
+#                           #   Access logs that were already on (GC11, GC14, GC15), are left as they were
 #   bash deploy.sh tf apply|destroy   # the same pieces as `up`/`down`, from terraform/ (test and raise work the same)
 #
 # Runs in Google Cloud Shell in the project you're signed in to; downloads the course labs repo into ~/tsg-labs.
 # Optional before `up`: export GC16_EMAIL=you@example.com (default: your gcloud account) GC16_MY_IP=203.0.113.7
 # Gemini is called in location eu: in our 12 Nov 2026 run gemini-3.1-flash-lite answered only on global, eu and us.
-# Cost: cents (about 35 short Gemini calls; Model Armor and Cloud Logging inside their free allowances).
+# Cost: cents (31 short Gemini calls in `test`, 30 more in `raise`; Model Armor and Cloud Logging inside their free allowances).
 set -euo pipefail
 
 ENVFILE="$HOME/.gc16.env"
@@ -33,6 +35,10 @@ load() {
   P="${GC16_PROJECT:-$(gcloud config get project 2>/dev/null)}"
   [ -n "$P" ] || { echo "No project: gcloud config set project PROJECT_ID"; exit 1; }
   R="${GC16_REGION:-europe-west4}"
+  # What `up` recorded about this project (see `up`). Read even when GC16_PROJECT was exported by hand.
+  if [ -f "$ENVFILE" ] && grep -qx "GC16_PROJECT=$P" "$ENVFILE"; then
+    GC16_AUDIT_MADE=$(sed -n 's/^GC16_AUDIT_MADE=//p' "$ENVFILE"); GC16_TPL_MADE=$(sed -n 's/^GC16_TPL_MADE=//p' "$ENVFILE")
+  else GC16_AUDIT_MADE=""; GC16_TPL_MADE=""; fi
   EMAIL="${GC16_EMAIL:-$(gcloud config get account 2>/dev/null)}"
   MYIP="${GC16_MY_IP:-203.0.113.7}"
   GEM="https://aiplatform.eu.rep.googleapis.com/v1/projects/$P/locations/eu/publishers/google/models/gemini-3.1-flash-lite:generateContent"
@@ -66,6 +72,18 @@ PY
   gcloud projects set-iam-policy "$P" "$HOME/.gc16-policy.json" --format="value(etag)" >/dev/null
   rm -f "$HOME/.gc16-policy.json"
 }
+audit_was_on() {   # yes if the project already has a Data Access audit config for Agent Platform (not made by this lab)
+  gcloud projects get-iam-policy "$P" --format=json | python3 -c 'import json,sys
+p = json.load(sys.stdin)
+print("yes" if any(c.get("service") == "aiplatform.googleapis.com" and c.get("auditLogConfigs") for c in p.get("auditConfigs", [])) else "no")'
+}
+remove() {   # remove yes|no|"" "question": 0 = delete it. "" = no record of who made it (an `up` from before
+             # 15 Nov 2026, or ~/.gc16.env is gone): ask, and keep it when nobody is there to answer
+  case "$1" in yes) return 0;; no) return 1;; esac
+  [ -t 0 ] || return 1
+  local a; read -r -p "   $2 [y/N] " a
+  [ "$a" = y ] || [ "$a" = Y ]
+}
 gemini() {   # gemini "text" [end_user] -> HTTP code
   local body
   body=$(python3 -c 'import json,sys; print(json.dumps({"contents":[{"role":"user","parts":[{"text":sys.argv[1]}]}],
@@ -94,15 +112,30 @@ else: print(sum(1 for a in d.get("alerts", []) if a.get("policy", {}).get("displ
 case "${1:-}" in
   up)
     repo; load
-    printf 'GC16_PROJECT=%s\nGC16_REGION=%s\n' "$P" "$R" > "$ENVFILE"
+    # What `up` makes, `down` removes. Things that were here before (GC12's template, Data Access logs from GC11,
+    # GC14 or GC15) are recorded as "no" and left alone by `down`. A second `up` keeps the first run's record.
+    AUDIT_MADE="${GC16_AUDIT_MADE:-}"; TPL_MADE="${GC16_TPL_MADE:-}"
+    save() { printf 'GC16_PROJECT=%s\nGC16_REGION=%s\nGC16_AUDIT_MADE=%s\nGC16_TPL_MADE=%s\n' "$P" "$R" "$AUDIT_MADE" "$TPL_MADE" > "$ENVFILE"; }
     echo "Project: $P   Region: $R   Alerts go to: the email address you pass in GC16_EMAIL (default: your account)"
     say "0 APIs"
     gcloud services enable aiplatform.googleapis.com modelarmor.googleapis.com logging.googleapis.com monitoring.googleapis.com
     say "A Data Access audit logs (Data Read + Data Write) for Agent Platform"
+    if [ -z "$AUDIT_MADE" ]; then
+      if [ "$(audit_was_on)" = yes ]; then AUDIT_MADE=no; echo "   already on in this project: \`down\` will leave them on"
+      else AUDIT_MADE=yes; fi
+    fi
+    save
     audit_logs on
     gcloud projects get-iam-policy "$P" --format="yaml(auditConfigs)"
     say "B A Model Armor template that logs every sanitize call"
-    gcloud model-armor templates describe "$TPL" --location="$R" >/dev/null 2>&1 ||
+    if gcloud model-armor templates describe "$TPL" --location="$R" >/dev/null 2>&1; then
+      if [ -z "$TPL_MADE" ]; then
+        TPL_MADE=no
+        echo "   $TPL is already here (from GC12?): using it, and \`down\` will leave it. If B in \`test\` finds no log"
+        echo "   entries, switch on its logging: Model Armor > $TPL > Edit > Configure logging."
+      fi
+    else
+      TPL_MADE=yes; save
       gcloud model-armor templates create "$TPL" --location="$R" \
         --rai-settings-filters='[{"filterType":"HATE_SPEECH","confidenceLevel":"MEDIUM_AND_ABOVE"},{"filterType":"HARASSMENT","confidenceLevel":"MEDIUM_AND_ABOVE"},{"filterType":"SEXUALLY_EXPLICIT","confidenceLevel":"MEDIUM_AND_ABOVE"},{"filterType":"DANGEROUS","confidenceLevel":"MEDIUM_AND_ABOVE"}]' \
         --pi-and-jailbreak-filter-settings-enforcement=enabled \
@@ -110,6 +143,8 @@ case "${1:-}" in
         --malicious-uri-filter-settings-enforcement=enabled \
         --basic-config-filter-enforcement=enabled \
         --template-metadata-log-sanitize-operations
+    fi
+    save
     say "C An email notification channel, then three alerts and one log-based metric"
     [ -n "$(channel)" ] || gcloud beta monitoring channels create --display-name="GC16 lab email" --type=email \
       --channel-labels=email_address="$EMAIL" --format="value(name)"
@@ -207,14 +242,26 @@ PY
 
   down)
     repo; load
-    say "Alerts, metric, channel, template; Data Access logs off"
+    say "Alerts, metric, channel; then the template and the Data Access audit config, if this lab made them"
     for n in "GC16 Model Armor match" "GC16 service account key used from an unknown address" "GC16 request flood on Agent Platform"; do
       p=$(policy "$n"); [ -z "$p" ] || gcloud monitoring policies delete "$p" --quiet
     done
     gcloud logging metrics delete gc16_ai_calls --quiet 2>/dev/null || true
     c=$(channel); [ -z "$c" ] || gcloud beta monitoring channels delete "$c" --force --quiet
-    gcloud model-armor templates delete "$TPL" --location="$R" --quiet 2>/dev/null || true
-    audit_logs off
+    if remove "${GC16_TPL_MADE:-}" "No record that this lab made the Model Armor template $TPL (GC12 makes one with the same name). Delete it?"; then
+      gcloud model-armor templates delete "$TPL" --location="$R" --quiet 2>/dev/null || true
+      echo "   Model Armor template $TPL: deleted"
+    else
+      echo "   Model Armor template $TPL: KEPT (no record that this lab made it). To delete it yourself:"
+      echo "     gcloud model-armor templates delete $TPL --location=$R"
+    fi
+    if remove "${GC16_AUDIT_MADE:-}" "No record that this lab switched on Data Access audit logs for Agent Platform (GC11, GC14 and GC15 switch them on too). Switch them off?"; then
+      audit_logs off
+      echo "   Data Access audit logs for Agent Platform: off"
+    else
+      echo "   Data Access audit logs for Agent Platform: LEFT ON (no record that this lab switched them on)."
+      echo "     To switch them off: IAM & Admin > Audit Logs > Agent Platform, untick Data Read and Data Write."
+    fi
     rm -f "$ENVFILE"
     echo "Done. Check Billing > Reports tomorrow."
     ;;
@@ -230,10 +277,15 @@ PY
       terraform destroy -input=false -auto-approve "${v[@]}"
       rm -f "$ENVFILE"
     else
+      if [ "$(audit_was_on)" = yes ] && ! terraform state list 2>/dev/null | grep -q google_project_iam_audit_config; then
+        echo "NOTE: Data Access audit logs for Agent Platform are already on in this project (GC11, GC14 or GC15?)."
+        echo "      Terraform takes that setting over, and \`tf destroy\` will switch it OFF. Switch it back on afterwards"
+        echo "      if you still need it: IAM & Admin > Audit Logs > Agent Platform, tick Data Read and Data Write."
+      fi
       terraform apply -input=false -auto-approve "${v[@]}"
       echo "Give the audit log config a minute, then: bash deploy.sh test"
     fi
     ;;
 
-  *) sed -n '2,12p' "$0"; exit 1;;
+  *) sed -n '2,14p' "$0"; exit 1;;
 esac

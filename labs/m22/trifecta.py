@@ -8,7 +8,7 @@ The legs (Simon Willison, 16 Jun 2025): access to private data, exposure to untr
 communicate externally. Meta's Agents Rule of Two (31 Oct 2025) asks that one session hold no more than two of them
 without supervision. A leg counts for a MODEL when the model reads what the tool returns (private data, untrusted
 content) or can make the call (a way out). A component that is plain code holds legs too, but it can't be talked into
-anything, so its rules, not its judgement, are the boundary.
+anything, so its rules, not its judgment, are the boundary.
 """
 
 from __future__ import annotations

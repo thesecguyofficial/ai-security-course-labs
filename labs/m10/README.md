@@ -16,7 +16,7 @@ lets staff try models in a sandbox account. In one sitting you will:
 | **Check** | Run a small policy checker over AnyCompany's IAM policies, SCPs and Bedrock API key inventory, and read why each finding matters | 10.3, 10.4 |
 | **Break** | Replay what a thief could do with a leaked long-term Bedrock API key and with the chatbot's stolen role: 10 of 11 requests work | 10.3 to 10.5 |
 | **Fix** | Add three SCPs (model allow-list, API-key rules, audit-trail and spend protection) and replay: legitimate traffic still works | 10.3 to 10.5 |
-| **Hunt** | Search five days of sample CloudTrail for the LLMjacking timeline: recon, probe, logging switched off, unapproved models, new source, volume | 10.5 |
+| **Hunt** | Search sample CloudTrail from 9 to 14 October for the LLMjacking timeline: recon, probe, logging switched off, unapproved models, new source, volume | 10.5 |
 | **Challenge** | Close two gaps the "safe" setup still has, and write one detection. No solution included | 10.3 to 10.5 |
 
 ## Get the lab files
@@ -39,7 +39,7 @@ git pull
 
 **No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
 
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m10`.
+Stay in the `ai-security-course-labs` folder: the first step below (Step 1b) starts by taking you into `labs/m10`.
 
 ## What's in this folder
 
@@ -100,12 +100,19 @@ if a real-looking account ID, IP or access key ever creeps in.
 
 New to AWS? Do this before Step 1 (lesson 10.3 and its videos call it Step 1b). `explore.py` shows, one step at a
 time, how AWS signs, decides and records a single API call, using AnyCompany's files. Real output below is from a
-fresh Ubuntu machine (recording run 40919500492).
+fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `anycompany/`,
 `fixes/`, `examples/` and `cloudtrail/` and prints what it finds. `decide` and `call` ask `iam_eval.py`, the lab's
 teaching model of AWS policy evaluation. `sign` computes a signature with AWS's documentation example keys and sends
 nothing. No network, no AWS account.
+
+**Go to the lab folder first.** Run this once, from the course labs repository folder (`ai-security-course-labs`).
+Every command in this lab, from here to the end, runs from `labs/m10`:
+
+```bash
+cd labs/m10
+```
 
 **0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
 
@@ -342,12 +349,13 @@ with its verdict, the **why** line (each check it passed, or the policy and `Sid
 
 ## Step 1 · Check: find the over-broad permissions
 
+You are already in `labs/m10` (the first command of Step 1b). If you skipped Step 1b, run `cd labs/m10` from the
+`ai-security-course-labs` folder first.
+
 ```bash
-cd labs/m10
 make check
 ```
 
-- `cd labs/m10`: run it from the course labs repository folder (`ai-security-course-labs`)
 - `make check`: same as `python3 policy_checker.py`
 
 Real output (Linux, Python 3.12, the same run as the video):
@@ -502,8 +510,8 @@ Three design points:
   refused until someone approves it. The deny-list did the opposite.
 - **Scope the action.** The allow-list denies `bedrock:InvokeModel*` only, so Guardrails, Knowledge Bases and the
   model catalog keep working. Step 5 shows the alternative.
-- **SCPs are a ceiling, not the fix.** Run `make check-fixed`: the org-level findings are gone, but every identity
-  finding is still there. The real fix for the chatbot is `fixes/helpdesk-app-role.least-privilege.json` (zero
+- **SCPs are a ceiling, not the fix.** Run `make check-fixed`: the org-level findings `M10-08`, `M10-10` and
+  `M10-11` are gone, one new org finding, `M10-13`, points at the challenge, and every identity finding is still there. The real fix for the chatbot is `fixes/helpdesk-app-role.least-privilege.json` (zero
   findings: `python3 policy_checker.py --policy fixes/helpdesk-app-role.least-privilege.json`). You want both: the
   least-privilege role, and the SCP that holds when someone gets a role wrong.
 
@@ -820,7 +828,8 @@ A $5 monthly cost budget that emails you at 80% of actual spend and at 100% of f
 Budgets data is "updated up to three times a day", so an alert is a smoke detector, not a sprinkler.
 
 **8c · Attach the model allow-list SCP to a sandbox member account** (only if you run an AWS Organization with a
-separate sandbox account; SCPs never affect the management account). First edit the approved model IDs in the file to
+separate sandbox account; SCPs never affect the management account). In the commands below, replace
+`p-examplepolicyid111` with the policy ID that `create-policy` prints and `444455556666` with your sandbox account ID. First edit the approved model IDs in the file to
 models you use, then, from the management account:
 
 ```bash
@@ -864,7 +873,7 @@ aws budgets delete-budget --account-id 111122223333 --budget-name m10-ai-sandbox
 ## What to write in your findings notebook (lesson 0.5)
 
 Three lines: what you found (a chatbot role with `bedrock:*`, a never-expiring long-term key in production with a
-policy that can run any model and buy capacity, and no org-level guardrail), how you fixed it (a least-privilege role,
+policy that can run any model and buy capacity, and no org-level deny policy), how you fixed it (a least-privilege role,
 plus SCPs for a model allow-list on both endpoints, API-key limits and audit-trail protection), and how you'd spot it
 (recon calls from a new principal, `ValidationException` probes, `DeleteModelInvocationLoggingConfiguration`,
 `callWithBearerToken` from a new IP, unapproved model IDs, mantle `CreateInference` data events, volume spikes).

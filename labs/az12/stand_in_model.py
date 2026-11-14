@@ -6,7 +6,7 @@ message or inside a document, unless the document reaches it spotlighted (base-6
 Real models are less predictable: sometimes they obey a planted instruction and sometimes not. An attacker can retry
 as often as they like, so the lab designs for the worst case.
 
-Two behaviours copied from Microsoft's documentation on purpose:
+Two behaviors copied from Microsoft's documentation on purpose:
   - Spotlighting: documents arrive base-64 encoded and the model treats them as lower-trust data.
   - Its known side effect: "the model response mentions the document content was base-64 encoded, even when neither
     the user nor the system prompt asks about encodings" (Prompt Shields concept page, Microsoft Learn).

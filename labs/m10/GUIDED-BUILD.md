@@ -6,7 +6,7 @@ Cost: a few US cents if you follow it as written (cost table at the end). Teardo
 
 You'll do what lesson 10.1 calls "build the inventory before you build the controls": find which AI services run in
 the account, who can call the models, which Bedrock API keys exist and which logs are on. Then you'll lock it down:
-invocation logging on, a usage alarm, a least-privilege app role, a guardrail policy against long-term keys, logging
+invocation logging on, a usage alarm, a least-privilege app role, a deny policy against long-term keys, logging
 tampering and unapproved models, and a test key you'll watch being refused.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an AWS account, so **no
@@ -56,7 +56,7 @@ Throughout: Region `us-east-1`, and these shell variables (set them in Step 0, a
    `iam:CreateServiceSpecificCredential`, `iam:PassRole` (for the logging role),
    `bedrock:PutModelInvocationLoggingConfiguration`, `sns:CreateTopic`, `sns:Subscribe`, `cloudwatch:PutMetricAlarm`,
    `budgets:ModifyBudget`, `sts:AssumeRole`; plus the matching delete actions for the teardown.
-5. **Open a terminal in `labs/m10`** and set the basics:
+5. **Open a terminal in the `ai-security-course-labs` folder**, go to the lab folder and set the basics:
 
    ```bash
    cd labs/m10
@@ -353,15 +353,20 @@ aws cloudwatch put-metric-alarm --alarm-name tsg-m10-bedrock-invocations \
 
 - `aws sns subscribe`: your address; confirm the email
 
-Twenty calls in five minutes is far above anything this guide does, and far below what an LLMjacking proxy does
-(lesson 10.5's hunt sees 61 in one hour from one key). In production, set it from your own baseline. Mantle traffic
+Twenty calls in five minutes is far above anything this guide does, and a busy LLMjacking proxy goes past it. A slow
+one does not: the attacker in the lab's sample CloudTrail makes 61 calls in one hour from one key, and never more
+than 9 in any five minutes, so this alarm would stay quiet. To catch that pace, add a second alarm with
+`--period 3600` and the same threshold (the lab's hunt rule H08 also starts at 20 an hour). In production, set both
+from your own baseline. Mantle traffic
 lives in `AWS/BedrockMantle` and this alarm won't see it (lesson 10.5).
 
-### 2c · The guardrail policy: no long-term keys, no logging changes, no capacity, approved models only
+### 2c · The deny policy: no long-term keys, no logging changes, no capacity, approved models only
 
 With an AWS Organization, these rules belong in SCPs: the three files in `fixes/` (README Step 8c shows how to attach
 one to a sandbox member account). Most personal sandboxes are a single account with no Organization, so here you'll
-write the same rules as a **customer managed IAM policy** and attach it to every non-admin identity. Be clear about
+write the same rules as a **customer managed IAM policy** and attach it to every non-admin identity. This guide calls
+it the **deny policy**. Its name, `tsg-m10-ai-guardrails`, is only a name: it is an IAM policy, not a Bedrock
+Guardrails policy (lesson 10.1). Be clear about
 the difference: an SCP caps every identity in the account; this policy only caps the identities you attach it to.
 
 **CLI** (console: **IAM**, **Policies**, **Create policy**, **JSON** tab, paste the same JSON, name
@@ -450,14 +455,14 @@ aws iam attach-role-policy --role-name tsg-m10-app-demo --policy-arn $GUARD_ARN
 export ROLE_ARN=arn:aws:iam::$ACCOUNT:role/tsg-m10-app-demo
 ```
 
-Belt and braces on purpose: the role's own policy already refuses everything except the approved model, and the
-guardrail policy refuses it again. Each layer should hold on its own (M11 test 06 makes the same point).
+Two layers on purpose: the role's own policy already refuses everything except the approved model, and the
+deny policy refuses it again. Each layer should hold on its own (M11 test 06 makes the same point).
 
-### 2e · A long-term API key to test with (1 day, guardrail attached)
+### 2e · A long-term API key to test with (1 day, deny policy attached)
 
 You'll create the kind of key lesson 10.4 warns about, the way the console does it (an IAM user carrying
-`AmazonBedrockLimitedAccess`), but with a **1-day** expiry and the guardrail policy attached. Step 3 shows it being
-refused; Step 4 shows what it could do without the guardrail.
+`AmazonBedrockLimitedAccess`), but with a **1-day** expiry and the deny policy attached. Step 3 shows it being
+refused; Step 4 shows what it could do without that policy.
 
 **Console** (steps quoted from [generate API keys](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys-generate.html)):
 
@@ -541,7 +546,8 @@ Don't expect a finding from this guide: a handful of calls is not "anomalous tok
 
 ## Step 3 · Prove it: five requests (10 minutes)
 
-Open a **second terminal tab** and become the demo role there, so your admin credentials stay untouched in the first:
+Open a **second terminal tab**, go to the `ai-security-course-labs` folder in it (a new tab may start somewhere else)
+and become the demo role there, so your admin credentials stay untouched in the first:
 
 ```bash
 cd labs/m10; export AWS_REGION=us-east-1 MODEL=us.anthropic.claude-haiku-4-5-20251001-v1:0
@@ -582,9 +588,9 @@ Example response (shape from AWS docs, values illustrative;
 
 How to read it: `stopReason` `end_turn` means the model finished normally, and `usage` is what you pay for. IAM
 checked four things to allow this: the profile, and the model in each of its three US destination Regions (lesson
-10.3). The role allowed all four, and the guardrail policy's allow-list matched both ARN shapes.
+10.3). The role allowed all four, and the deny policy's allow-list matched both ARN shapes.
 
-### R2 · A model nobody approved (denied)
+### R2 · An unapproved route to the approved model (denied)
 
 The same model through the **global** profile, which can run outside the US (lesson 11.5):
 
@@ -625,7 +631,7 @@ If this ever **succeeds**, stop: your logging is off. Go back to your admin tab,
 
 Now go back to your **first** tab (or `unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN`) for R4 and R5.
 
-### R4 · The long-term API key (denied by the guardrail policy)
+### R4 · The long-term API key (denied by the deny policy)
 
 A plain HTTPS call with the key as a bearer token, exactly as a leaked key would be used (AWS's curl example,
 [use API keys](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys-use.html)). The `:` in the profile ID
@@ -730,7 +736,7 @@ shows up too: that's the change rule H04 should **not** page you for, because th
 
 ## Step 4 · Change one setting, re-run, compare (5 minutes)
 
-What does that key do **without** the guardrail policy, as most keys out there have it? Detach it from the key's user
+What does that key do **without** the deny policy, as most keys out there have it? Detach it from the key's user
 only (console: **IAM**, **Users**, the key user, **Permissions**, `tsg-m10-ai-guardrails`, **Remove**):
 
 ```bash
@@ -757,7 +763,7 @@ real world, and yours here). Run R5's CloudTrail command again: the new `Convers
 `additionalEventData` should show `callWithBearerToken` `true`, and the principal is the key's IAM user. And the prompt
 log now has a second entry, this time with `identity.arn` = the key's user.
 
-| | R4 with the guardrail policy | R4 without it |
+| | R4 with the deny policy | R4 without it |
 |---|---|---|
 | HTTP status | 403 | 200 |
 | Model ran, tokens billed | no | yes |
@@ -802,7 +808,7 @@ unset AWS_BEARER_TOKEN_BEDROCK
 ([ServiceSpecificCredential](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ServiceSpecificCredential.html)).
 That one command is your incident response for a leaked long-term key.
 
-**2. The key's user, the demo role and the guardrail policy:**
+**2. The key's user, the demo role and the deny policy:**
 
 ```bash
 aws iam detach-user-policy --user-name $KEY_USER --policy-arn arn:aws:iam::aws:policy/AmazonBedrockLimitedAccess
@@ -852,5 +858,5 @@ this guide should show cents at most.
 
 Your one-page map from Step 1f, plus three lines: what you found (which identities can run any model, which keys exist
 and whether they expire, which logs were off), how you locked it down (invocation logging, a usage alarm, a
-least-privilege role, a guardrail policy or SCPs), and how you'd spot abuse (the R5 evidence: `identity.arn` in the
+least-privilege role, a deny policy or SCPs), and how you'd spot abuse (the R5 evidence: `identity.arn` in the
 prompt log, access-denied `errorCode` and `callWithBearerToken` in CloudTrail).

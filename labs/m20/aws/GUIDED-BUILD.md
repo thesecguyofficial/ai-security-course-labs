@@ -4,6 +4,9 @@ The offline part (`make aws-check`, `make aws-hunt`) teaches the rules at $0. Th
 zero in **your own** AWS sandbox account (lesson 0.7, never a work account), in **us-east-1**, with the AWS CLI only.
 About 60 to 90 minutes. Nothing here uses a third-party service.
 
+**Run every command in bash:** macOS, Linux, WSL on Windows, or AWS CloudShell. The commands use `export`, `read -s`
+and `for` loops, which PowerShell and the Windows command prompt do not understand.
+
 What you build:
 
 - **A Cognito user pool** with Alice and Bob: the identity provider that proves which human is signed in.
@@ -41,8 +44,10 @@ same `attribution.py` you used offline.
    ```
 
    `LAUNCHER` is you. In production it would be the backend's own role; here your CLI identity plays the backend
-   that starts agent runs. If it prints an `assumed-role/...` ARN (SSO), use the role ARN instead:
-   `arn:aws:iam::$ACCOUNT:role/<the role name in that ARN>`.
+   that starts agent runs. If it prints an `assumed-role/...` ARN (SSO), use the role ARN instead. Get it
+   with `export LAUNCHER=$(aws iam get-role --role-name <the role name in that ARN> --query Role.Arn --output text)`:
+   IAM Identity Center roles have a path (`aws-reserved/sso.amazonaws.com/...`) that the `assumed-role` ARN leaves
+   out, and a trust policy that names a role ARN without it is refused.
 
 3. From the lab folder (`labs/m20`), write your policy files:
 
@@ -66,7 +71,9 @@ same `attribution.py` you used offline.
    `USER_PASSWORD_AUTH` sends the password to Cognito from your terminal. It's a lab shortcut so you don't need a web
    page; a real app uses the hosted sign-in with authorization code and PKCE (lesson 20.0).
 
-2. Create Alice and Bob. Choose one lab password of at least 12 characters that you use nowhere else:
+2. Create Alice and Bob. Choose one lab password of at least 12 characters that you use nowhere else. A pool
+   created with the default password policy may also want an upper-case letter, a lower-case letter, a number and a
+   symbol in it:
 
    ```bash
    read -s PW_LAB; export PW_LAB
@@ -227,14 +234,14 @@ python3 aws/attribution.py --cloudtrail-dir aws/out/trail --app-log aws/out/app-
 Example response (shape from AWS docs, values illustrative)
 Q1 who acted for whom (SourceIdentity on the agent's role session):
    user-3f1c...e9
-      2027-01-21T10:15:14Z  tsg-agent-orchestrator   identity tsg-orchestrator  GetWorkloadAccessTokenForJWT
-      2027-01-21T10:15:31Z  tsg-agent-tickets        identity tsg-tickets       GetWorkloadAccessTokenForJWT
+      2026-10-21T10:15:14Z  tsg-agent-orchestrator   identity tsg-orchestrator  GetWorkloadAccessTokenForJWT
+      2026-10-21T10:15:31Z  tsg-agent-tickets        identity tsg-tickets       GetWorkloadAccessTokenForJWT
       ...
 Q2 agent calls with no human on the session:
-   2027-01-21T10:31:02Z  tsg-agent-tickets        tickets-anon     GetWorkloadAccessTokenForJWT
+   2026-10-21T10:31:02Z  tsg-agent-tickets        tickets-anon     GetWorkloadAccessTokenForJWT
 ```
 
-Then open one `GetWorkloadAccessTokenForJWT` record yourself (`zcat` one file and search for the event name) and
+Then open one `GetWorkloadAccessTokenForJWT` record yourself (`gunzip -c` one file and search for the event name) and
 write down, in your notebook, the real field names AgentCore used: `userIdentity.sessionContext.sourceIdentity` (the
 IAM documentation shows this field), `requestParameters`, and `resources`. If `workloadName` is missing from
 `requestParameters`, `attribution.py` falls back to the `resources` ARN; if neither is there, tell us.

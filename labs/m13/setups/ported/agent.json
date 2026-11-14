@@ -46,7 +46,7 @@
         "functions": [
           {
             "name": "reset_mfa",
-            "description": "Reset multi-factor authentication for a user so they can enrol a new device.",
+            "description": "Reset multi-factor authentication for a user so they can enroll a new device.",
             "parameters": {
               "target_email": {
                 "type": "string",

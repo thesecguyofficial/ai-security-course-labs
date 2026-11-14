@@ -1,9 +1,9 @@
 """
 gates.py: the pre/post-quantization eval gate (lesson 25.2). CI calls it before it signs anything.
 
-The idea in one line: evaluate the artefact you will SHIP, not only the one you trained, and compare the two.
+The idea in one line: evaluate the artifact you will SHIP, not only the one you trained, and compare the two.
 Research on quantization attacks (Egashira et al., NeurIPS 2024 and ICML 2025) built models that look fine in full
-precision and change behaviour once quantized, so a full-precision eval tells you nothing about the quantized file.
+precision and change behavior once quantized, so a full-precision eval tells you nothing about the quantized file.
 
 evaluate() runs one model over data/evals/*.jsonl. compare() turns two runs into the numbers the gate reads.
 """
@@ -47,7 +47,7 @@ def overall_gate(metrics: dict, rules: dict) -> list[str]:
     if metrics["recall_full"] < rules["min_recall"]:
         problems.append(f"full-precision recall {metrics['recall_full']:.3f} < {rules['min_recall']}")
     if "min_agreement" in rules and metrics["agreement"] < rules["min_agreement"]:
-        problems.append(f"shipped artefact agrees with full precision on {metrics['agreement']:.3f} of cases "
+        problems.append(f"shipped artifact agrees with full precision on {metrics['agreement']:.3f} of cases "
                         f"< {rules['min_agreement']} (flipped: {', '.join(metrics['flipped'])})")
     if "max_recall_drop" in rules:
         drop = metrics["recall_full"] - metrics["recall_shipped"]
@@ -59,7 +59,7 @@ def overall_gate(metrics: dict, rules: dict) -> list[str]:
 def slice_gate(metrics: dict, rules: dict) -> list[str]:
     """CHALLENGE 1 (lesson 25.2): per-slice check.
 
-    An overall number can hide a targeted change: the quantization attacks in the research go after ONE behaviour
+    An overall number can hide a targeted change: the quantization attacks in the research go after ONE behavior
     (insecure code, injected content, refusals), not the average. data/community-quant-v2.json passes overall_gate()
     and still lets one data-export request through.
 

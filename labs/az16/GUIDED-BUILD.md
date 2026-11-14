@@ -16,7 +16,8 @@ You will:
 
 Run for real on 10 November 2026 in East US, in a personal sandbox subscription, portal first. The table below is
 what happened; the commands are in `cloud/cloud.sh` (`make cloud-deploy`, `cloud-activity`, `cloud-ask`,
-`cloud-annotate`, `cloud-ask2`, `cloud-block`, `cloud-down`, with `AZ16_NAME` exported).
+`cloud-annotate`, `cloud-ask2`, `cloud-block`, `cloud-down`, with `AZ16_NAME` exported). The one-shot script
+(`cloud/deploy.sh`) and the Terraform file were tested on 12 November 2026 under new names: both passed 5 of 5.
 
 ## What happened in our real run (10 November 2026, East US)
 
@@ -35,6 +36,7 @@ what happened; the commands are in `cloud/cloud.sh` (`make cloud-deploy`, `cloud
 | E: export | Both alerts | Only the **detected** alert (18:40 IST) reached `SecurityAlert`; the blocked one (18:12) didn't, though the export was saved before it | Don't rely on the export alone for the first hour; check the Security alerts page |
 | E: alert rule | Fires on the export | Fired three times (Severity 3) on the exported alert | Nothing |
 | E: inventory | The Foundry resource | The resource and its project, `publicNetworkAccess: Enabled`, `disableLocalAuth` empty (keys allowed): two posture findings in one row | Nothing |
+| C: request 2 again, 12 November | 400 every time, with `jailbreak` flagged in the body | The same placeholder came back **400** two times in three and **200** once (the model refused on its own). The 400 bodies listed every category, jailbreak included, as `filtered: false` | `deploy.sh test` sends it up to three times. Treat the HTTP 400 with code `content_filter` as the signal, not the category in the body |
 
 
 ## Before you start
@@ -46,20 +48,26 @@ what happened; the commands are in `cloud/cloud.sh` (`make cloud-deploy`, `cloud
    ([AI threat protection](https://learn.microsoft.com/en-us/azure/defender-for-cloud/ai-threat-protection)). If you
    created the subscription you're its Owner.
 3. **Tools.** Azure CLI (`az version`), signed in with `az login`, plus `curl` and Python 3.
-4. **Names and region.**
+4. **The Defender provider.** In a new subscription the Defender plans page didn't load for us and
+   `az security pricing show` said "Please register to Microsoft.Security". Register it once (free):
 
    ```bash
-   cd labs/az16
+   az provider register -n Microsoft.Security --wait
+   ```
+
+5. **Names and region.** Run these from the lab's folder, `labs/az16` (from the repo root: `cd labs/az16`):
+
+   ```bash
    export AZ16_NAME=az16-ab1234
-   export AZ16_REGION=eastus2
+   export AZ16_REGION=eastus
    export RG=rg-$AZ16_NAME
    az group create -n $RG -l $AZ16_REGION -o none
    ```
 
    - `AZ16_NAME`: yours: lowercase letters, digits, hyphens
-   - `AZ16_REGION`: Microsoft lists gpt-5-mini Global Standard here
+   - `AZ16_REGION`: East US is where our run was; pick another only if Microsoft lists gpt-5-mini Global Standard there
 
-5. **Budget alarm first** (lesson 10.5): **Cost Management**, **Budgets**, a monthly budget of US$5 on the resource
+6. **Budget alarm first** (lesson 10.5): **Cost Management**, **Budgets**, a monthly budget of US$5 on the resource
    group with an email alert. A budget alerts; it never stops anything.
 
 ### What it costs
@@ -120,7 +128,9 @@ Microsoft's steps ([enable threat protection for AI services](https://learn.micr
 2. In the Defender for Cloud menu, select **Environment settings**, then your lab subscription.
 3. On the **Defender plans** page, toggle **AI services** to **On**.
 4. Locate **AI services** and select **Settings**. Toggle **Enable user prompt evidence** to **On**. Select
-   **Continue**, then **Save**.
+   **Continue**, then **Save**. In our run the toggle (labeled suspicious prompt evidence) was already **On** when we
+   turned the plan on, together with **AI Model Security (Preview)**. So decide who may read alerts before you enable
+   the plan: prompts start landing in alert evidence at once.
 
 ### CLI
 
@@ -133,7 +143,8 @@ az security pricing create -n AI --tier standard --extensions name=AIPromptEvide
 az security pricing show -n AI --query "{tier:pricingTier, extensions:extensions[].{name:name, on:isEnabled}}"
 ```
 
-Example response (shape from the provider's docs, values illustrative):
+What to expect (the shape is Microsoft's pricings API; our 10 November run showed tier Standard with
+`AIPromptEvidence` on, and `deploy.sh test` checks exactly those two values):
 
 ```output
 {
@@ -153,7 +164,10 @@ Defender for Cloud alerts live in Defender for Cloud until you export them. **En
 subscription, under **Settings** select **Continuous export**, choose **Log Analytics workspace**, tick **Security
 alerts**, pick **all severities** (Microsoft's own example says "you can export only high-severity alerts": that's
 the trap from lesson 16.2), target `law-<name>`, **Save**
-([continuous export](https://learn.microsoft.com/en-us/azure/defender-for-cloud/continuous-export)).
+([continuous export](https://learn.microsoft.com/en-us/azure/defender-for-cloud/continuous-export)). Our first save
+failed ("The subscription is not registered to use namespace 'Microsoft.OperationsManagement'"); the portal
+registered it and the second save worked. If yours keeps failing, run
+`az provider register -n Microsoft.OperationsManagement --wait` and save again.
 
 While you're there, open **Email notifications**: "By default, subscription owners receive email notifications for
 high-severity alerts and attack paths"
@@ -195,19 +209,29 @@ How to read them:
 2. **Jailbreak placeholder.** If Prompt Shields blocks it: "the request returns an HTTP 400 error with a
    `content_filter` code" ([default safety policies](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/default-safety-policies)).
 
-   Example response (shape from the provider's docs, values illustrative):
+   The shape, with the message shortened:
 
    ```output
    {"error": {"code": "content_filter", "message": "..."}}
    HTTP 400
    ```
 
+   Our run (10 Nov 2026): HTTP 400, code `content_filter`, and the filter result in the body showed `jailbreak`
+   detected and filtered. On 12 November the same block came back with every category `filtered: false`, and one try
+   in three got a 200 with the model refusing on its own. Read the 400 and the `content_filter` code; don't depend on
+   the category in the body. If you get a 200, send it again.
+
 3. **A fake card number** (a well-known test number). Your guardrail decides what happens; Defender's alert list has
    no card-number alert, so expect nothing in Part E for this one. It's here to show what lands in prompt evidence.
+   Our run: **429** every time it ran right after the blocked request 2, and **200** on its own (the model refused to
+   store the card). `cloud.sh ask` waits 20 seconds between requests; if you still see a 429, wait a minute and send
+   it alone (`bash cloud/cloud.sh ask3`).
 4. **Out of scope.** HTTP 200: the model answers or declines, depending on your system prompt. Nothing to detect.
 
-After a while, request 2 should raise **"A Jailbreak attempt on an Azure AI model deployment was blocked by
-Azure AI Content Safety Prompt Shields"** (Medium) on the **Security alerts** page. Open it: with prompt evidence on,
+After a while (about 30 minutes in our run), request 2 should raise **"A Jailbreak attempt on an Azure AI model
+deployment was blocked by Azure AI Content Safety Prompt Shields"** (Medium) on the **Security alerts** page. That is
+the documented name. The portal showed ours as "A Jailbreak attempt on your Azure AI model deployment was blocked by
+Prompt Shields", so match alerts on `AlertType`, never on the name. Open it: with prompt evidence on,
 the alert carries the prompt as evidence; with `user_security_context`, Microsoft says you "can block that user or
 correlate incidents and alerts by that user"
 ([end-user context](https://learn.microsoft.com/en-us/azure/defender-for-cloud/gain-end-user-context-ai)). If
@@ -219,9 +243,11 @@ In the Foundry portal, open your deployment's guardrail and set the **jailbreak*
 prompts) from **block** to **annotate**. Microsoft's troubleshooting advice is the same switch: "Adjust from **block**
 to **annotate** mode to log without filtering"
 ([Prompt Shields](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/content-filter-prompt-shields)).
-Send request 2 again.
+Wait a minute after the switch, then send request 2 again. The command-line way: `make cloud-annotate`, wait a
+minute, `make cloud-ask2`, and `make cloud-block` to put it back.
 
-Example response (shape from the provider's docs, values illustrative):
+The documented shape. Our run (10 Nov 2026): the first try right after the switch came back 200 with
+`detected: false`; a minute later 200 with `detected: true, filtered: false`, and the model refused on its own:
 
 ```output
 {"choices": [...], "prompt_filter_results": [{"prompt_index": 0, "content_filter_results": {"jailbreak": {"filtered": false, "detected": true}}}]}
@@ -235,15 +261,25 @@ one in Part C. Set it back to block when you're done.
 
 1. **An alert for every AI alert.** Azure portal, **Monitor**, **Alerts**, **+ Create**, **Alert rule**. Scope: your
    workspace. Condition: **Custom log search**, paste `cloud/defender-ai-all-severities.kql`, threshold greater than
-   0, evaluate every 5 minutes. Action: an email to you. (Microsoft Sentinel's scheduled analytics rules do the same
+   0, evaluate every 5 minutes. Action: an email to you. In our run the rule fired three times for the one exported
+   alert. The query looks back 15 minutes and runs every 5, which fits three firings for one alert; we did not
+   confirm that this was the cause. Three emails are not three alerts: count rows in `SecurityAlert`. (Microsoft Sentinel's scheduled analytics rules do the same
    job in a SIEM, with entity mapping and incidents; this build skips Sentinel to stay cheap.)
-2. **Hunt.** Workspace, **Logs**. Run `queries/d02-calls-skip-gateway.kql` and leave the lab's address in `gatewayIps`
-   (don't put yours there, or your calls are filtered out): in this build there's no gateway, so every call you made
-   in Part C appears. That's what a key in the wrong hands looks
-   like from the resource's side. Then `queries/d03-defence-tamper.kql`: your own plan change from Part B appears
+2. **Hunt.** Do this part last: in our run only `AzureActivity` had rows for the first 40 minutes, and
+   `AzureDiagnostics` and `SecurityAlert` arrived after about 45. Workspace, **Logs**. Run
+   `queries/d02-calls-skip-gateway.kql` and leave the lab's value in `gatewayNets`
+   (don't put your own network there, or your calls are filtered out): in this build there's no gateway, so the
+   calls you made in Part C that got an answer appear. In our run that was the **two 200s**: the blocked (400) and
+   throttled (429) calls were not in `RequestResponse` at all, and `CallerIPAddress` had its last octet masked
+   (`135.13.134.**`), which is why the query compares the first three octets. That's what a key in the wrong hands
+   looks like from the resource's side: you see the calls that worked, from a network, not the attempts that failed. Then `queries/d03-defence-tamper.kql`: your own plan change from Part B appears
    (you're not in `securityAdmins`).
 3. **Inventory.** Azure portal, **Resource Graph Explorer**, paste `queries/inventory-resource-graph.kql`, **Run
-   query**. Compare the rows with what you thought you had.
+   query**. Compare the rows with what you thought you had. Ours showed `disableLocalAuth` empty: empty or `false`
+   both mean keys are allowed; only `true` means they are off.
+4. **The export.** Compare the workspace with Defender's own list. In our run only the **detected** alert reached
+   `SecurityAlert`; the blocked one never arrived, though the export was saved before it. The **Security alerts**
+   page (or `az security alert list`) is the full list.
 
 ## Part F · Teardown (do it today)
 

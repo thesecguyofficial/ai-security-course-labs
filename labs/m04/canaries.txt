@@ -7,7 +7,7 @@ jane.doe@example.com
 ABCPE1234F
 203.0.113.42
 AKIAIOSFODNN7EXAMPLE
-# The next three come from the stand-in model's ANSWER (output redaction):
+# The next four come from the stand-in model's ANSWER (output redaction):
 John Smith
 john.smith@example.org
 5555 5555 5555 4444

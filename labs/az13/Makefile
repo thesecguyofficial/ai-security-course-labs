@@ -2,7 +2,7 @@
 # Offline part: Python standard library only. No packages, no network, no Azure subscription.
 PY := python3
 
-.PHONY: check check-fixed attack attack-v11 attack-safe compare hunt test challenge cost up index kb agent ask ask-nohdr ask-approval down clean
+.PHONY: check check-fixed attack attack-v11 attack-safe compare hunt test challenge cost up index kb agent ask ask-nohdr ask-approval gate-check down clean
 
 check:        ## review the ported Helpdesk before anyone attacks it (19 findings)
 	$(PY) checker.py
@@ -49,6 +49,9 @@ agent:         ## G4: the prompt agent (knowledge base MCP tool + send_email fun
 
 ask:           ## G5: the five example requests through the agent (PICK=1..5 for one)
 	./cloud/cloud.sh ask
+
+gate-check:    ## the send_email confirmation code on its own: rule, then y/N (no Azure, nothing to install)
+	$(PY) cloud/build.py gate-check
 
 ask-nohdr:     ## G6: the same leak attempt with the user-token header removed from the tool
 	./cloud/cloud.sh ask-nohdr

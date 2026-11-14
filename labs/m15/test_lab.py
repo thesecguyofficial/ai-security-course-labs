@@ -1,6 +1,6 @@
 """
 test_lab.py: `make test`. The first draft's problems are real, the hardened setup fixes them without breaking the
-summariser, and each SageMaker AI behaviour the lab relies on works the way AWS documents it.
+summarizer, and each SageMaker AI behavior the lab relies on works the way AWS documents it.
 """
 
 import io

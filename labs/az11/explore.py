@@ -89,7 +89,7 @@ def cmd_model(a) -> None:
     for x in approved:
         print(f"  {x}")
     print("All of these are Models sold by Azure. A partner model (Microsoft's example: Cohere) would also need")
-    print("Azure Marketplace, with licence terms and a price set by the model's provider.")
+    print("Azure Marketplace, with license terms and a price set by the model's provider.")
 
 
 # ---------------------------------------------------------------- 3. role

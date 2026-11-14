@@ -115,7 +115,7 @@ case "${1:-}" in
     rec() { RES+=("$1  $2"); [ "$1" = PASS ] && PASS=$((PASS+1)); return 0; }
     code() { awk -v s="== $1" 'index($0,s)==1{f=1;next} f&&/HTTP [0-9]+/{match($0,/HTTP [0-9]+/);print substr($0,RSTART+5,RLENGTH-5);exit}' <<<"$out"; }
 
-    say "The four requests of Part C (the VM inside the network, then you from the internet)"
+    say "The four requests of Part C (the VM inside the network, you from the internet, a made-up key, a missing deployment)"
     out=$(cloud ask 2>&1) || true; echo "$out"
     c1=$(code C1); c2=$(code C2); c3=$(code C3); c4=$(code C4)
     if [ "$c1" = 200 ]; then rec PASS "T1 the Helpdesk VM, inside, with its identity: 200"
@@ -127,7 +127,7 @@ case "${1:-}" in
     if [ "$c4" = 404 ]; then rec PASS "T4 a deployment that doesn't exist: 404"
     else rec FAIL "T4 got ${c4:-nothing}"; fi
 
-    say "T5 The evidence: AmlOnlineEndpointTrafficLog rows (Microsoft: can take up to an hour; ours took minutes)"
+    say "T5 The evidence: AmlOnlineEndpointTrafficLog rows (Microsoft: can take up to an hour; ours took minutes in one run; none after 50 minutes in another)"
     WSID=$(az monitor log-analytics workspace show -g "$RG" -n log-tsg-az15 --query customerId -o tsv)
     n=$(az monitor log-analytics query -w "$WSID" --analytics-query \
       "AmlOnlineEndpointTrafficLog | where TimeGenerated > ago(2h) and tostring(ResponseCode) == '403' | summarize n=count()" \

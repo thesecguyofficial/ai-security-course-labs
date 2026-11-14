@@ -21,7 +21,7 @@ def main():
     print(f"{'Private Service Connect endpoint':<44}{PSC_HOUR:>10.4f}")
     print(f"{'Cloud KMS key version ($0.06 a month)':<44}{KMS_MONTH / HOURS_PER_MONTH:>10.4f}")
     print(f"{'total while the model is deployed':<44}{hourly:>10.4f}")
-    print(f"\nThe auto-undeploy job runs 60 minutes after you deploy: about ${hourly:.2f} if you forget everything else.")
+    print(f"\nThe auto-undeploy job fires 60 minutes after you create it: at most about ${hourly:.2f} if you forget everything else.")
     print("Not included: Artifact Registry storage for the image, Cloud Build minutes, Cloud Storage for the model, BigQuery, logs.")
 
 

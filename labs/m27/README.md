@@ -71,7 +71,9 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
   to install and no virtual environment to create: the lab uses only Python's standard library. Look before you run:
   `make -n setup review` prints the two commands those targets would run, without running them.
 - Optional, for Step 1b's container runs only: Docker, as installed in lesson 0.6.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
+- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step (where this page
+  says `python3`, type `python`). They are the same commands the `make` targets run; we ran them on Linux, not on a
+  Windows machine.
 
 ## Step 1 · Review the first draft
 
@@ -80,6 +82,10 @@ cd labs/m27
 make setup
 make review
 ```
+
+Windows: `cd labs\m27`, then `python --version` (it must say 3.11 or newer), then `python checker.py first-draft`.
+
+Your first line shows your own Python version.
 
 ```output
 Nothing to install for this lab: Python 3.13 and its standard library are all it needs.
@@ -98,16 +104,16 @@ Each finding names the lesson and the fix, like an audit note. Read them in two 
 mode with a NAT route, port 443 and 53 open to anywhere, `full-access` endpoint policies, no DNS firewall and fail
 open, a wildcard proxy entry nobody enforces, and no logs. **Boundary (27.1):** `s3:*` on `*`, a mounted `~/.aws`,
 secrets in the environment, shared 8-hour sessions, no process limit. `make review` exits non-zero on findings, so
-the same checker can gate a pipeline (the Makefile ignores that exit code so the steps carry on).
-
-Windows: `python checker.py first-draft`.
+the same checker can gate a pipeline. The Makefile ignores that exit code so the steps carry on, which is why the
+last line on your screen is `make: [Makefile:12: review] Error 1 (ignored)`. The lab did not break.
 
 ## Step 1b · Look at each isolation and egress idea on its own (about 10 minutes)
 
 New to sandboxes and egress? Do this first. `explore.py` shows, one at a time, the ideas the checker and the evaluator
 are built on. It only reads: this machine's own facts from `/proc` and `/sys`, and the lab's JSON files. It writes no
 file, starts no program, resolves no name and opens no connection. Windows: `py explore.py ...` (`here` needs Linux).
-The output below is from a fresh Ubuntu machine (recording run 41083966534).
+The output below is from a fresh Ubuntu machine. The `here` and Docker blocks show that machine's own numbers, so
+yours will differ. The other blocks were checked again on 15 November 2026 (Linux, Python 3.13).
 
 **1. A process, on a kernel, in a virtual machine.** A process is one running program; it runs as a user and asks
 the kernel for files, memory and the network:
@@ -260,6 +266,9 @@ python3 explore.py request U1
 python3 explore.py request U1 first-draft | tail -n 5
 ```
 
+Windows has no `tail` or `sed`: run the same command without the `|` part and read the last five lines (here) or the
+first ten (idea 8).
+
 ```output
 Request U1 from data/requests.jsonl, field by field
 
@@ -329,6 +338,8 @@ Replay of 14 recorded requests against hardened
 make hardened
 ```
 
+Windows: `python checker.py hardened`
+
 ```output
 Review of hardened: 18 rules
 0 findings, 0 of 18 rules failed
@@ -342,6 +353,8 @@ a rule above.
 ```bash
 make replay
 ```
+
+Windows: `python egress.py compare`
 
 ```output
   id  request                                                    first-draft  hardened (denied by)
@@ -382,6 +395,8 @@ Run one config on its own for the reasons: `python3 egress.py hardened`.
 make logs
 ```
 
+Windows: `python logs.py first-draft`, then `python logs.py hardened`
+
 ```output
 Logs for first-draft (illustrative values, documented field names) in state/first-draft/
   resolver-query-log.jsonl    0 records
@@ -415,6 +430,8 @@ the resolver refused never became a connection. That is why the DNS log matters 
 make alerts
 ```
 
+Windows: `python alerts.py first-draft`, then `python alerts.py hardened`
+
 ```output
 Alerts on the logs of first-draft:
 0 pages, 0 tickets
@@ -439,6 +456,8 @@ ticket. Tune them on a week of data before you trust them.
 make test
 ```
 
+Windows: `python run_tests.py`
+
 ```output
 [PASS] alerts: hardened replay gives 2 pages (VpceAccessDenied) and 6 tickets; the first draft gives none
 [PASS] logs: a blocked lookup has firewall_rule_action BLOCK and the documented Resolver query log fields
@@ -456,6 +475,8 @@ ALL TESTS PASSED (17 run)
 ```bash
 make challenge
 ```
+
+Windows: `python run_tests.py --challenge`
 
 You should see:
 
@@ -507,6 +528,5 @@ CI so a change that opens a door fails the build.
 
 - **`make challenge` exits with an error.** Expected until you finish; the last line counts the failing tests.
 - **`make review` prints `Error 1 (ignored)`.** Expected: the checker exits 1 when it finds something.
-- **Windows:** `python checker.py first-draft`, `python egress.py compare`, `python logs.py hardened`,
-  `python alerts.py hardened`, `python run_tests.py`.
-- **`make clean`** deletes `state/` and caches.
+- **Windows:** the `python` command is under each step. `explore.py here` needs Linux.
+- **`make clean`** deletes `state/` and caches. Windows: delete the `state` folder by hand.

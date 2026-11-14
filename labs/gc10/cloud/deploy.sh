@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# GC10 in one go: the locked-down AI footprint from lesson 10.6 (GUIDED-BUILD.md), its proof, and its teardown.
+# GC10 in one go: the locked-down AI footprint from lesson 10.5 (GUIDED-BUILD.md), its proof, and its teardown.
 #
 #   bash deploy.sh up      # budget alert, APIs, two test service accounts, Data Access logs, two restricted API keys,
 #                          #   prompt caching off
@@ -200,7 +200,11 @@ PY
       --project="$P"
     cd "$REPO/labs/gc10/terraform"
     terraform init -input=false >/dev/null
-    terraform "${2:-apply}" -input=false -auto-approve -var "project=$P" -var "me=$ME"
+    # same currency rule as `up`: the budget must be in the billing account's own currency (500 INR, or 5 elsewhere)
+    CUR=$(gcloud billing accounts describe "$BA" --format="value(currencyCode)")
+    AMT=5; [ "$CUR" = INR ] && AMT=500
+    terraform "${2:-apply}" -input=false -auto-approve -var "project=$P" -var "me=$ME" \
+      -var "currency=$CUR" -var "budget_amount=$AMT"
     ;;
 
   *) sed -n '2,9p' "$0"; exit 1;;

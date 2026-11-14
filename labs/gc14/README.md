@@ -85,8 +85,9 @@ documentation (October 2026):
 - **Unified Access Policy.** Rules have an `effect` (`ALLOW` or `DENY`), `principals`, the permission
   `iap.googleapis.com/resources.egressViaIAP` and a CEL condition under `iap.googleapis.com`; "deny rules override
   allow rules". The twin checks deny rules first, then allow rules, then applies the default deny.
-- **Dry run.** With `iamEnforcementMode: "DRY_RUN"` on the IAP authorization extension, IAP logs what it would deny
-  and blocks nothing.
+- **Dry run.** With `iamEnforcementMode: "DRY_RUN"` on the IAP authorization extension, Google's page says IAP logs
+  what it would deny and blocks nothing. The twin copies that. In our real runs (12 and 13 November 2026) nothing was
+  blocked, but we couldn't find the would-deny entries: every IAP entry said `granted: true` (GUIDED-BUILD.md Step 5).
 - **Model Armor on the gateway.** A `CONTENT_AUTHZ` extension screens MCP `tools/call` requests and responses, with
   `failOpen` deciding what happens when Model Armor can't be reached. The twin doesn't contain any text to screen:
   each case says how a prompt-injection filter would classify the response it came from.
@@ -110,7 +111,7 @@ cd labs/gc14
 
 New to Agent Runtime? Do this before Step 1 (lesson 14.8 calls it "Before you start"; lesson 14.0 explains each idea).
 `explore.py` takes the Helpdesk team's deployment apart one Agent Platform piece at a time, in both deployments. Real
-output below is from a fresh Ubuntu machine (recording run 41618438164).
+output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `twin/` and `data/` and
 asks `twin.py` and `cel.py` what each control would decide. No network, no Google Cloud account, no model.
@@ -451,6 +452,11 @@ Same as `python3 checker.py --twin hardened`.
 
 One left, on purpose. You'll see why in Step 3.
 
+The `fix:` line is right for this offline lab. On a real gateway the list also needs an empty name, `''`: the MCP
+handshake (`initialize`, `notifications/initialized`, `tools/list`) carries no tool name, and in our 12 November 2026
+run a names-only list made ENFORCE refuse every call to that server with 403 (GUIDED-BUILD.md Steps 4 and 5). The twin
+doesn't model the handshake, so the lab passes without it.
+
 ## Step 2 · Ask every control (`make decide`)
 
 ```bash
@@ -557,9 +563,11 @@ Same as `python3 decide.py --twin hardened --dry-run`.
 2 of 6 hijacked calls went through; 2 of 2 legitimate calls completed.
 ```
 
-The policy was **right** both times, and nothing happened, because dry run logs instead of blocking. C2 and C4 are
-the cases where the gateway is the only control that says no. Dry run is how you find out which legitimate calls
-your policy would break before you enforce it; it is not a place to stay.
+The policy was **right** both times, and nothing happened, because dry run doesn't block. C2 and C4 are the cases
+where the gateway is the only control that says no. Dry run is meant to show you which legitimate calls your policy
+would break before you enforce it; it is not a place to stay. The twin prints `DRY_RUN would deny` because that's what
+Google documents. Our real gateway never showed us such an entry (Step 4 below), so on a real one also test each
+request you care about under ENFORCE in a sandbox.
 
 ### Rug pull (`make rugpull`)
 
@@ -603,8 +611,9 @@ Same as `python3 decide.py --twin hardened --outage`.
 ```
 
 With `failOpen: false`, a screening failure blocks the tool response, so every case that depends on a tool response
-stops at Model Armor. Write down what the helpdesk does during an outage (here: questions that need a ticket or an
-article fail). The tests also run the `failOpen: true` variant: C1 and C5 then reach the model unscreened, and the
+stops at Model Armor. "2 of 2 legitimate calls completed" means the gateway allowed both legitimate calls; in an
+outage a call is allowed and its **response** is blocked. Write down what the helpdesk does during an outage (here:
+questions that need a ticket or an article get no answer). The tests also run the `failOpen: true` variant: C1 and C5 then reach the model unscreened, and the
 gateway rule and the disabled memory topic still stop them. That's why you want more than one control per path.
 
 ## Step 4 · The gateway's log lines (`make logs`)
@@ -612,6 +621,8 @@ gateway rule and the disabled memory topic still stop them. That's why you want 
 ```bash
 make logs
 ```
+
+Same as `python3 decide.py --twin today --logs`, then `python3 decide.py --twin hardened --dry-run --logs`.
 
 ```output
 --- gateway decisions · hardened (one JSON line each; 'lab' holds our own fields) ---
@@ -622,7 +633,9 @@ make logs
 queries in Google's Agent Gateway codelab: the `gateway_requests` log, `jsonPayload.authzPolicyInfo.result`, and
 `jsonPayload.agentGatewayInfo.agentRegistryResource`, which is **empty for an unregistered destination**. In a dry run
 the request went through, so the twin writes `ALLOWED`; IAP's own audit log (`protoPayload.serviceName="iap.googleapis.com"`)
-is where Google says the would-be denials are recorded. The guided build shows both on a real gateway.
+is where Google says the would-be denials are recorded. The guided build reads both logs on a real gateway. In our
+runs (12 and 13 November 2026) the gateway log matched this line, and the IAP log held only `granted: true` entries,
+in dry run and after enforcing: we found no would-be denial to read.
 
 ## Step 5 · Prove it (`make test`)
 
@@ -692,11 +705,14 @@ Two changes. `make challenge` runs the 25 lab tests plus 4 challenge tests; all 
 2. **The rug-pull fix** (`twin/hardened/deployment.json`). Rewrite the condition of the `allow-ticket-reads` rule so
    it names the tools the helpdesk reads, with `destination.agent_registry.mcp_server.tool.name in [...]`, instead of
    trusting `read_only_hint`. Then `make rugpull` should stop `export_ticket` at the default deny, and both
-   legitimate calls should still complete. Keep the server name in the condition too.
+   legitimate calls should still complete. Keep the server name in the condition too. (On a real gateway you'd add
+   `''` to the list for the MCP handshake, as the note under Step 1 says. The twin doesn't need it.)
 
 ```bash
 make challenge
 ```
+
+Same as `python3 run_tests.py --challenge`.
 
 Real output before you start:
 
@@ -722,7 +738,7 @@ told when someone re-registers an MCP server your agent uses?
 
 [GUIDED-BUILD.md](GUIDED-BUILD.md) builds a small version for real, with console steps, `gcloud` and Terraform: an ADK
 agent deployed with **Agent Identity**, bound to an **Agent Gateway** whose registry lists only the Google endpoints
-it needs, Google's **BigQuery MCP server** as its tool, one **DENY rule** run first in dry-run and then enforced,
+it needs, Google's **BigQuery MCP server** as its tool, one **DENY rule** run first in dry run and then enforced,
 **Data Access logs** and a **TTL** for Memory Bank, four requests, one setting changed, cost and teardown.
 
 ## Troubleshooting
@@ -730,7 +746,7 @@ it needs, Google's **BigQuery MCP server** as its tool, one **DENY rule** run fi
 - `python3: command not found` on Windows: use `py` instead, for example `py decide.py --twin today`.
 - `make: command not found`: run the Python command shown next to each `make` line.
 - `cel.CelError: unknown attribute ...` after you edited a policy: check the attribute name against the list at the
-  top of `cel.py` (it's Google's table). The lab refuses to guess what a misspelt condition means.
+  top of `cel.py` (it's Google's table). The lab refuses to guess what a misspelled condition means.
 - `json.decoder.JSONDecodeError`: `python3 -m json.tool twin/hardened/deployment.json` shows the line.
 - A test fails after your edits and you want the original files back: `git checkout twin/ checker.py`.
 - The lab is tested on Python 3.11 and 3.13. If you see a `SyntaxError` in a lab file, check `python3 --version` first.

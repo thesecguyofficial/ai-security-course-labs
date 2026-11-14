@@ -1,5 +1,5 @@
 {
-  "_comment": "The Helpdesk agent as ported to Google Cloud last month (fictional). Field names follow the Google APIs and ADK where a real field exists (RagCorpus.encryption_spec, DataStore.acl_enabled, ModelArmorConfig, FunctionTool require_confirmation); the rest are labelled lab settings.",
+  "_comment": "The Helpdesk agent as ported to Google Cloud last month (fictional). Field names follow the Google APIs and ADK where a real field exists (RagCorpus.encryption_spec, DataStore.acl_enabled, ModelArmorConfig, FunctionTool require_confirmation); the rest are labeled lab settings.",
   "project": "example-chatbot-prod",
   "project_number": "100000000001",
   "region": "europe-west4",

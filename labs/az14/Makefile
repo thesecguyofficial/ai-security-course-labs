@@ -38,7 +38,7 @@ cost:          ## what the guided build bills
 up:            ## G1: resource group, Foundry resource + project + model, storage, registry, roles
 	./cloud/cloud.sh up
 
-kb:            ## G2: the knowledge store: containers kb and hr-exports, four blobs
+kb:            ## G2: the knowledge store: containers kb-articles and hr-exports, four blobs
 	./cloud/cloud.sh kb
 
 mcp:           ## G3a: your own MCP actions server on Container Apps (key in a Container Apps secret)
@@ -47,10 +47,10 @@ mcp:           ## G3a: your own MCP actions server on Container Apps (key in a C
 toolbox:       ## G3b: key connection + toolbox helpdesk-tools v1 (your MCP server, require_approval always)
 	./cloud/cloud.sh toolbox
 
-agent:         ## G4: build the image in ACR and create the hosted agent version
+agent:         ## G4: build the image (az acr build, or build-image.sh) and create the hosted agent version
 	./cloud/cloud.sh agent
 
-grant:         ## G4.3: agent identity gets Storage Blob Data Reader on container kb only
+grant:         ## G4.3: agent identity gets Storage Blob Data Reader on container kb-articles only
 	./cloud/cloud.sh grant
 
 ask:           ## G5: the five requests (PICK=1..5 for one)

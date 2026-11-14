@@ -12,7 +12,8 @@ the instruction entered, how it crossed the trust boundaries, and where it reach
 before you write the containment in containment.py.
 
 Three questions are answered. One (find_unlabelled_crossings, challenge 1) is left for you to write. All
-addresses use reserved .example names (RFC 2606); the injected text is a marked LAB-INJECT placeholder.
+addresses use reserved .example names (RFC 2606); the injected text is a marked LAB-INJECT placeholder,
+in the recorded run and in the variant.
 """
 
 from __future__ import annotations

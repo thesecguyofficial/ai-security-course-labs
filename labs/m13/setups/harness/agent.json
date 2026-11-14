@@ -30,7 +30,7 @@
         "name": "reset_mfa",
         "config": {
           "inlineFunction": {
-            "description": "Reset multi-factor authentication for a user so they can enrol a new device.",
+            "description": "Reset multi-factor authentication for a user so they can enroll a new device.",
             "inputSchema": "{\"type\": \"object\", \"properties\": {\"target_email\": {\"type\": \"string\"}}, \"required\": [\"target_email\"]}"
           }
         }

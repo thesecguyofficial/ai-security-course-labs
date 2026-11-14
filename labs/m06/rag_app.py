@@ -117,7 +117,7 @@ def ingest_vulnerable(store: Store) -> dict:
 
 
 def ingest_safe(store: Store) -> dict:
-    """Check every file, quarantine failures, normalise the rest, and stamp provenance on every chunk."""
+    """Check every file, quarantine failures, normalize the rest, and stamp provenance on every chunk."""
     report = {"ingested": 0, "quarantined": []}
     now = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     for tenant, source, kind, path in iter_files():
@@ -154,7 +154,7 @@ def retrieve_vulnerable(store: Store, question: str, session: dict) -> list[dict
 
 def retrieve_safe(store: Store, question: str, session: dict) -> list[dict]:
     """The tenant comes from the SESSION and goes INSIDE the vector query, so other tenants' chunks are never
-    candidates. Every hit is re-checked anyway (defence in depth), and anything wrong is dropped and logged."""
+    candidates. Every hit is re-checked anyway (defense in depth), and anything wrong is dropped and logged."""
     tenant = session["tenant"]
     only_my_tenant = models.Filter(must=[models.FieldCondition(key="tenant", match=models.MatchValue(value=tenant))])
     hits = store.search(question, query_filter=only_my_tenant)

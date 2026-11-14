@@ -7,8 +7,11 @@ Hugging Face Hub to your laptop.
 
 > **This one costs money every hour.** A deployed model bills for its node hours while it is deployed, whether anyone
 > calls it or not (Google's pricing page counts the time "waiting in an active state"). So the guide creates an
-> **auto-undeploy job first**: a Cloud Scheduler job that calls `undeployModel` 60 minutes after you deploy, created
-> **before** the deployment. Run `make cost`, set a budget alert, and run `make cloud-down` the same day.
+> **auto-undeploy job first**: a Cloud Scheduler job that calls `undeployModel` 60 minutes after you create the job,
+> and you create it **before** the deployment. (The console deploys when it creates the endpoint, so on the console
+> path you create the job straight after: Part D.) Deploying took 22 to 25 minutes in our runs, so the 60 minutes
+> leave about 35 minutes of deployed time; Part D shows how to move the job later if you need longer. Run
+> `make cost`, set a budget alert, and run `make cloud-down` the same day.
 
 | Part | What you build | Lesson |
 |---|---|---|
@@ -23,8 +26,9 @@ Hugging Face Hub to your laptop.
 > **Tested 12 November 2026.** The one-shot script (`cloud/deploy.sh up`, `test`, `rrlog`, `down`) and the Terraform
 > (`deploy.sh tf apply rrlog`, `test`, `tf destroy`) both ran end to end in our project, `test` 5 of 5 each time. What
 > the real run changed is written into the steps: label limits (Part C), the predict-only role on the project and the
-> service attachment's place (Part D), and request-response logging only at creation (Part F). Response blocks still
-> labeled "Example response" were not replaced with our output; compare with what you see. The script builds its own
+> service attachment's place (Part D), and request-response logging only at creation (Part F). Blocks labeled
+> "Example response" show the documented shape with made-up values; where we have the real result, an **"Our run"**
+> line under the block says what came back. The script builds its own
 > network `tsg-gc15-vpc` with subnet `tsg-gc15-subnet` (10.15.0.0/24); the steps below use `default`. Either works.
 
 **What this build does NOT include:** a VPC Service Controls perimeter. A perimeter needs an organization (an access
@@ -57,7 +61,7 @@ Shell variables used throughout (set them again in a new terminal):
    Cloud KMS key version ($0.06 a month)           0.0001
    total while the model is deployed               0.1642
 
-   The auto-undeploy job runs 60 minutes after you deploy: about $0.16 if you forget everything else.
+   The auto-undeploy job fires 60 minutes after you create it: at most about $0.16 if you forget everything else.
    Not included: Artifact Registry storage for the image, Cloud Build minutes, Cloud Storage for the model, BigQuery, logs.
    ```
 
@@ -68,8 +72,10 @@ Shell variables used throughout (set them again in a new terminal):
    month). Cloud Scheduler gives each billing account "3 jobs per month free"
    ([pricing](https://cloud.google.com/scheduler/pricing)). Check the pages again before you start. The small test
    VM in Part E is extra (an e2-micro: look up its price on the Compute Engine pricing page).
-3. **Tools:** `gcloud` (Cloud Shell has it), Python 3.11+, `jq`, and on your laptop the `hf` command from the
-   `huggingface_hub` package for the download (`pip install huggingface_hub` in a fresh `.venv`).
+3. **Tools:** `gcloud` (Cloud Shell has it), Python 3.11+, `jq`, and the `hf` command from the `huggingface_hub`
+   package for the download (`pip install huggingface_hub` in a fresh `.venv`). **Run every part on one machine**,
+   Cloud Shell or your laptop with `gcloud` installed, from `labs/gc15`: Part C uploads the folder it downloaded and
+   reads `cloud/out/image`, which Part B wrote. Where the guide says "your laptop", read "that machine".
 4. **Sign in and set the variables:**
 
    ```bash
@@ -182,8 +188,11 @@ safetensors format works.
 
    ```bash
    python3 model_files.py manifest "$MODEL_DIR" | jq -r 'to_entries | map("\(.key)=\(.value)") | join(",")' > cloud/out/labels
-   export LICENCE=<what you read in step 1, label-safe: apache-2.0 becomes apache-2_0>
+   export LICENCE=apache-2_0
    ```
+
+   - `LICENCE`: the license you read in step 1, in label-safe form. `apache-2_0` is right for Qwen3-0.6B (Apache
+     2.0); change it if you picked another model
 
 4. **Upload the folder, then register a version from it:**
 
@@ -229,6 +238,8 @@ safetensors format works.
    }
    ```
 
+   Our run notes don't hold this response, so compare the shape and ignore the values.
+
    ```bash
    export ENDPOINT_ID=1234567890123456789
    echo $ENDPOINT_ID > cloud/out/endpoint-id
@@ -257,7 +268,20 @@ safetensors format works.
    ```
 
    Creating a job that uses the teardown account needs `iam.serviceAccounts.actAs` on it; as project owner you have
-   it. If deploying takes longer than 60 minutes, update the job's schedule before it fires.
+   it.
+
+   **The 60 minutes start when you create the job.** They don't wait for the model to be up. Deploying took 22 to 25 minutes in our runs, which leaves
+   about 35 minutes for the rest of Part D, Part E (20 minutes) and Part F (15 minutes). If you're still working when
+   the time is nearly up, move the job 45 minutes on (same command shape as the create; we haven't run this exact
+   line, as of 15 November 2026):
+
+   ```bash
+   WHEN=$(date -u -d '+45 min' '+%M %H %d %m' 2>/dev/null || date -u -v+45M '+%M %H %d %m')
+   gcloud scheduler jobs update http tsg-gc15-undeploy --location=$REGION --schedule="$WHEN *"
+   ```
+
+   If the job fires while you work, the model is undeployed and, as quoted above, the service attachment may be
+   deleted 10 minutes later: deploy again (step 3) and repeat step 5.
 
 3. **Deploy, as the runtime account, with access logging on:**
 
@@ -305,7 +329,8 @@ safetensors format works.
 ## Part E · Five requests (20 minutes)
 
 The PSC address is reachable only from inside your VPC, so make a tiny test VM with **no external IP** that runs as
-the app account, and reach it over IAP:
+the app account, and reach it over IAP (Identity-Aware Proxy: Google's tunnel that lets you SSH to a VM with no
+public address; the firewall rule below lets its address range in):
 
 ```bash
 gcloud compute firewall-rules create tsg-gc15-iap-ssh --network=default --allow=tcp:22 --source-ranges=35.235.240.0/20
@@ -333,6 +358,10 @@ TLS and 443 with a self-signed certificate on this address).
    {"predictions": [{"summary": "After a firmware update, the floor 3 printer shows error 49 and two teams can't print."}], "deployedModelId": "150101", "model": "projects/123456789012/locations/us-central1/models/987654321", "modelVersionId": "1"}
    ```
 
+   Our run (12 and 13 November 2026): `HTTP 200` with a summary. On 13 November each call took about 23 seconds on
+   CPU, the response also had a `modelDisplayName` field, and the summary began with a `<think>` block (step 5
+   explains; `server.py` strips it now).
+
 2. **The same call from your laptop, through the public API host.** On your laptop:
 
    ```bash
@@ -348,6 +377,9 @@ TLS and 443 with a self-signed certificate on this address).
    ```output
    {"error": {"code": 400, "message": "...", "status": "FAILED_PRECONDITION"}}
    ```
+
+   Our run (12 and 13 November 2026, from Cloud Shell): `400 FAILED_PRECONDITION`, "Private endpoint via Private
+   Service Connect cannot be accessed through the Public Vertex AI domain aiplatform.googleapis.com."
 
 3. **A ticket with personal data** (`predict-personal-data.json`, fictional values). Then ask: where does that text
    live now? Not in access logs (Google: they hold "information like timestamp and latency for each request"), not in
@@ -415,9 +447,19 @@ gcloud compute firewall-rules delete tsg-gc15-iap-ssh --quiet
 gcloud storage rm -r gs://${PROJECT}_cloudbuild
 bq rm -r -f -d $PROJECT:tsg_gc15_audit
 gcloud kms keys versions destroy 1 --key=tsg-gc15-ai --keyring=tsg-gc15 --location=$REGION
+gcloud projects remove-iam-policy-binding $PROJECT --condition=None \
+  --member=serviceAccount:tsg-gc15-teardown@$PROJECT.iam.gserviceaccount.com --role=projects/$PROJECT/roles/tsgGc15Undeploy
+gcloud projects remove-iam-policy-binding $PROJECT --condition=None \
+  --member=serviceAccount:tsg-gc15-app@$PROJECT.iam.gserviceaccount.com --role=projects/$PROJECT/roles/tsgGc15PredictOnly
 for sa in tsg-gc15-runtime tsg-gc15-app tsg-gc15-teardown; do gcloud iam service-accounts delete $sa@$PROJECT.iam.gserviceaccount.com --quiet; done
+for r in tsgGc15Undeploy tsgGc15PredictOnly; do gcloud iam roles delete $r --project=$PROJECT --quiet; done
 make cloud-check PROJECT=$PROJECT
 ```
+
+The two custom roles and their bindings go too (`cloud/deploy.sh down` does the same). A deleted custom role keeps its
+ID blocked for 37 days: if you build this again inside that time, `gcloud iam roles create` fails, so bring the role
+back with `gcloud iam roles undelete tsgGc15Undeploy --project=$PROJECT` (and the same for `tsgGc15PredictOnly`), as
+we had to on 13 November 2026.
 
 The `gs://${PROJECT}_cloudbuild` bucket is Cloud Build's staging bucket from Part B.
 

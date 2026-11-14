@@ -36,7 +36,7 @@ git pull
 
 **No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
 
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/gc10`.
+Stay in the `ai-security-course-labs` folder: the first step below (Step 1b) takes you into `labs/gc10`.
 
 ## What's in this folder
 
@@ -67,10 +67,17 @@ and Service Account API Key Binding Admin roles; the lab assumes `legacy-etl`'s 
 docs neither confirm nor rule out. For real policies, use Policy Simulator and dry run (Step 8) and test in a sandbox.
 
 **Three assumptions, said plainly.** (1) Google documents the unrestricted-key rule for the Gemini API; we found no
-such rule for Agent Platform, so the model lets an unrestricted standard key call Agent Platform. (2) Google's
+such rule for Agent Platform, so the model lets an unrestricted standard key call Agent Platform. The real service was
+stricter in our own project on 12 November 2026 (Step 8): a standard key restricted to Agent Platform got `401` "API
+keys are not supported by this API", the console would not create an Agent Platform key without a service account
+("Service account required"), and only a key bound to a service account got as far as the IP check. That was one Free Trial
+project with no organization, called from Cloud Shell, so treat the offline A1, A2 and L2 as the case to plan for if a
+project still accepts a standard key, and test yours. (2) Google's
 Agent Platform audit-logging page lists `endpoints.predict` and `endpoints.rawPredict` as Data Access operations but
 doesn't name Gemini's `generateContent`; the sample logs use the method names from Google's published API definition
 ([prediction_service.proto](https://github.com/googleapis/googleapis/blob/master/google/cloud/aiplatform/v1/prediction_service.proto)).
+Our own export on 12 November 2026 showed the Gemini calls as `GenerateContent` rows, the denied one included; we did
+not call the streaming or `RawPredict` methods, so those two names are still from the API definition only.
 Run `python3 hunt.py --summary --file YOUR_EXPORT.json` on your own logs to see the real names. (3) Calls made with an
 authorization key appear in the sample under the service account it's bound to, because Google says such a key
 "authenticates as a service account". The sample has no entries for Attacker 1's standard key: we didn't find
@@ -86,15 +93,21 @@ contacts Google or any other system. Test 19 fails if a real-looking IP, identit
 ## Needs
 
 - Python **3.11 or newer** (tested on 3.13). Check with `python3 --version`. No packages, no internet.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
+- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step (type `python`
+  where this page says `python3`).
 - Optional, Step 8 only: the `gcloud` CLI and **your own** Free Trial project (lesson 0.7).
 
 ## Step 1b · Before you attack: look at how Google Cloud decides one request (about 10 minutes)
 
 New to Google Cloud? Do this before Step 1 (lesson 10.0 walks through the same six ideas, lesson 10.3 calls this
 Step 1b). `explore.py` shows, one step at a time, how Google Cloud knows who is calling, decides "allowed or not" and
-records a request, using ExampleCo's files. Real output below is from a fresh Ubuntu machine (recording run
-41615915759).
+records a request, using ExampleCo's files. Real output below is from a fresh Ubuntu machine.
+
+Go into the lab folder first. Every command in Steps 1 to 7 runs from there:
+
+```bash
+cd labs/gc10
+```
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `examplecorp/`,
 `fixes/` and `auditlogs/` and prints what it finds. `decide` and `call` ask `gcp_eval.py`, the lab's teaching model
@@ -114,7 +127,8 @@ Nothing to install for this lab: Python 3.12 and its standard library are all it
 
 Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
 clash; it keeps versions apart, it isn't a security sandbox) and run `pip install -r requirements.txt`. This lab's
-`requirements.txt` lists nothing, so `make setup` just checks your Python version.
+`requirements.txt` lists nothing, so `make setup` just checks your Python version. Without `make` (Windows):
+`python ../../tools/check_python.py 3.11`.
 
 **1. The company.** The organization, folders and projects (with the AI APIs each one has switched on), the service
 accounts and their downloaded keys, and the API keys with their limits:
@@ -306,8 +320,6 @@ python3 explore.py call chatbot-runtime gemini-3.1-flash-lite example-chatbot-pr
 ```
 
 ```text
-d
-
 One generateContent call, as the app would send it (illustrative; nothing is sent):
 
   POST https://aiplatform.googleapis.com/v1/projects/example-chatbot-prod/locations/global
@@ -412,12 +424,10 @@ From the top: the mode, the reminder that this is a teaching model, the group, t
 ## Step 1 · Check: find the mistakes
 
 ```bash
-cd labs/gc10
 make check
 ```
 
-- `cd labs/gc10`: run it from the course labs repository folder (`ai-security-course-labs`)
-- `make check`: same as `python3 policy_checker.py`
+- `make check`: same as `python3 policy_checker.py` (you are already in `labs/gc10` from Step 1b)
 
 Real output (Linux, Python 3.13):
 
@@ -558,8 +568,8 @@ Legitimate traffic · must keep working after the fixes
 8 of 9 attacker requests allowed; 8 of 8 legitimate requests allowed.
 ```
 
-Read the **why** lines. Attacker 1 copied two keys: the unrestricted chatbot key runs any model on Agent Platform,
-and the website key reaches the Gemini API because someone added it to the key's API list (lesson 10.4). One attack
+Read the **why** lines. Attacker 1 copied two keys: in this lab's model the unrestricted chatbot key runs any model on
+Agent Platform (our real project refused a standard key on 12 November 2026, see "Three assumptions"), and the website key reaches the Gemini API because someone added it to the key's API list (lesson 10.4). One attack
 fails, and not because of ExampleCo: the Gemini API "rejects requests from unrestricted standard keys"
 ([Google](https://ai.google.dev/gemini-api/docs/api-key)). Attacker 2 is a service account nobody has used since
 March, with a JSON key that never expires: it runs Claude, deploys a model to an endpoint, and makes itself two new
@@ -584,7 +594,7 @@ The spend cap file follows the Budget API's rules for `spendCap`: one project, o
 ([Budget API](https://docs.cloud.google.com/billing/docs/reference/budget/rest/v1/billingAccounts.budgets)). It
 doesn't change any request in `attack.py`; it limits the damage of whatever still gets through.
 
-Run `make check-fixed`: 18 findings drop to 7. Read the 7 that are left. The challenge closes GC10-07 and GC10-11;
+Run `make check-fixed` (same as `python3 policy_checker.py --with-fixes`): 18 findings drop to 7. Read the 7 that are left. The challenge closes GC10-07 and GC10-11;
 the rest are real follow-ups (the key is still in the repo's history, the sandbox has no Data Access logs or spend cap,
 and `legacy-etl` still holds its organization-wide role).
 
@@ -869,17 +879,18 @@ your own project, console clicks and gcloud, with five test requests, one settin
 
 Everything above runs locally. If you have your own Google Cloud **Free Trial** (lesson 0.7), these steps repeat the
 key, logging, budget and allow-list ideas for real. Never run them in a work organization without permission
-(lesson 0.8). We wrote these commands from Google's documentation but did not run them against a live project for this
-README, so your output will differ.
+(lesson 0.8). The guided build these steps shorten was run for real on 12 November 2026 in a Free Trial project with
+no organization (an INR billing account), and the results from that run are quoted below as "Our run". We did not
+run 8f: that project has no organization.
 
 **Cost, exactly.** On the Free Trial, "You will not be billed for any Google Cloud usage during your Free Trial"
 ([Free Trial](https://docs.cloud.google.com/free/docs/free-cloud-features)). Off the trial:
 
 | Step | What it uses | Cost |
 |---|---|---|
-| 8a, 8b, 8d (key) | project, API enablement, budget, API key | configuration only: no compute, storage or tokens |
+| 8a, 8b, 8d (keys) | project, API enablement, budget, a service account, two API keys | configuration only: no compute, storage or tokens |
 | 8c, 8e | Data Access logs for `aiplatform.googleapis.com`, and reading them | $0 within Cloud Logging's first 50 GiB per project per month; then $0.50/GiB ([pricing](https://cloud.google.com/stackdriver/pricing)). A handful of calls is a few KB |
-| 8d (refused call) | a request refused by the key's IP restriction | $0: no model runs |
+| 8d (refused calls) | one request refused because of the key type, one by the key's IP restriction | $0: no model runs |
 | 8d (one real call, optional) | Gemini 3.1 Flash-Lite, about 10 input tokens, `maxOutputTokens` 50 | $0.25 per 1M input and $1.50 per 1M output tokens ([pricing](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing)): at most $0.0000775. Even 1,000 output tokens would be $0.0015 |
 | 8f | organization policy in dry run (needs an Organization) | $0 |
 
@@ -895,10 +906,16 @@ gcloud services enable aiplatform.googleapis.com apikeys.googleapis.com --projec
 **8b · An alerts-only budget** at $5 (lesson 10.5: it notifies, hours late, and caps nothing):
 
 ```bash
+gcloud services enable billingbudgets.googleapis.com --project=PROJECT_ID
 gcloud billing budgets create --billing-account=BILLING_ACCOUNT_ID --display-name="gc10-twin alerts" \
   --budget-amount=5USD --filter-projects=projects/PROJECT_ID \
   --threshold-rule=percent=0.5 --threshold-rule=percent=0.9 --threshold-rule=percent=1.0
 ```
+
+Our run (12 November 2026): the budget API has to be on before `budgets create` works (on a new project gcloud stops
+and asks to enable it), and the amount must be in your billing account's own currency. Ours is an INR account, so we
+used `--budget-amount=500INR`. See yours with
+`gcloud billing accounts describe BILLING_ACCOUNT_ID --format="value(currencyCode)"`.
 
 Optional: a **spend cap** budget (generally available since 13 October 2026 for a limited set of services, per the [Cloud Billing release notes](https://docs.cloud.google.com/billing/docs/release-notes)). Google's console steps: Budgets & alerts, **Create new budget**, choose
 **Spend cap enforcement** (instead of *Alerts only*), a *single* project and the service *Gemini Enterprise Agent
@@ -931,21 +948,31 @@ What each command does, and what to look for:
 
 - `python3 policy_checker.py --iam policy.json`: GC10-15 should not appear
 
-**8d · An API key that only works from one IP.** `192.0.2.10` is a documentation address, so the key will refuse
-*your* machine:
+**8d · Two API keys that only work from one IP.** `192.0.2.10` is a documentation address, so both keys will refuse
+*your* machine. The first is a plain standard key. The second is bound to a service account that may call models
+(an authorization key, lesson 10.4): in our run that was the only kind Agent Platform accepted.
 
 ```bash
 gcloud services api-keys create --project=PROJECT_ID --display-name=gc10-twin \
+  --api-target=service=aiplatform.googleapis.com --allowed-ips=192.0.2.10
+gcloud iam service-accounts create gc10-caller --project=PROJECT_ID --display-name="GC10 model caller"
+gcloud projects add-iam-policy-binding PROJECT_ID \
+  --member="serviceAccount:gc10-caller@PROJECT_ID.iam.gserviceaccount.com" --role="roles/aiplatform.user"
+gcloud services api-keys create --project=PROJECT_ID --display-name=gc10-twin-bound \
+  --service-account=gc10-caller@PROJECT_ID.iam.gserviceaccount.com \
   --api-target=service=aiplatform.googleapis.com --allowed-ips=192.0.2.10
 gcloud services api-keys list --project=PROJECT_ID --format=json > my-keys.json
 python3 policy_checker.py --keys my-keys.json
 gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID
 ```
 
-- `python3 policy_checker.py --keys my-keys.json`: no GC10-05 or GC10-07: both restrictions are set
-- `gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID`: KEY_ID: the last part of "name" in my-keys.json
+- `python3 policy_checker.py --keys my-keys.json`: no GC10-05 or GC10-07 for either key: both restrictions are set.
+  Expect one GC10-06 for the bound key: it works like a long-lived access token (lesson 10.4). It's here only for
+  this test, and the teardown deletes it
+- `gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID`: KEY_ID: the last part of "name" in
+  my-keys.json. Run it once for each key. Keep the key strings out of files and screenshots
 
-Call the model with it, sending the key in the `x-goog-api-key` header as Google recommends
+Call the model once with each key string, sending the key in the `x-goog-api-key` header as Google recommends
 ([use API keys](https://docs.cloud.google.com/docs/authentication/api-keys-use)):
 
 ```bash
@@ -954,11 +981,24 @@ curl -sS -X POST -H "Content-Type: application/json" -H "x-goog-api-key: KEY_STR
   -d '{"contents":{"role":"user","parts":{"text":"Say hello in five words."}},"generationConfig":{"maxOutputTokens":50}}'
 ```
 
-Expect an error: your IP isn't `192.0.2.10`. That's the application restriction working, and it cost nothing.
-Optional: `gcloud services api-keys update KEY_ID --project=PROJECT_ID --allowed-ips=YOUR_EGRESS_IP`, run the call once
-more, and you get an answer (see the cost table).
+Expect two different errors, and neither call costs anything.
 
-**8e · Read your own audit logs** (give them a few minutes to arrive):
+Our run (12 November 2026, from Cloud Shell; the same two keys, named `gc10-build` and `gc10-bound` there):
+
+- **Plain key `gc10-twin`:** `401` "API keys are not supported by this API. Expected OAuth2 access token or other
+  authentication credentials that assert a principal." It never reached the IP check. The console also refused to
+  create an Agent Platform key without a service account ("Service account required"); gcloud allows it.
+- **Bound key `gc10-twin-bound`:** `403` with the reason `API_KEY_IP_ADDRESS_BLOCKED`. That's the application
+  restriction working: your IP isn't `192.0.2.10`.
+
+Optional, and only for the **bound** key (the plain key got `401` whatever its IP list said):
+`gcloud services api-keys update BOUND_KEY_ID --project=PROJECT_ID --api-target=service=aiplatform.googleapis.com
+--allowed-ips=YOUR_EGRESS_IP` (`update` replaces both lists, so pass both flags), then run the call once more. We
+did not run this optional change on 12 November 2026. The key signs in as `gc10-caller`, which holds Agent Platform
+User, so expect an answer (see the cost table). If you get something else, write down what you saw.
+
+**8e · Read your own audit logs** (give them a few minutes to arrive). Calls made with the bound key appear under
+`gc10-caller`:
 
 ```bash
 gcloud logging read 'protoPayload.serviceName="aiplatform.googleapis.com"' --project=PROJECT_ID \
@@ -990,6 +1030,10 @@ Step 5 (`make twin-preview`) and the lint command above; that's the fallback, an
 
 ```bash
 gcloud services api-keys delete KEY_ID --project=PROJECT_ID
+gcloud services api-keys delete BOUND_KEY_ID --project=PROJECT_ID
+gcloud projects remove-iam-policy-binding PROJECT_ID \
+  --member="serviceAccount:gc10-caller@PROJECT_ID.iam.gserviceaccount.com" --role="roles/aiplatform.user"
+gcloud iam service-accounts delete gc10-caller@PROJECT_ID.iam.gserviceaccount.com --quiet
 gcloud billing budgets list --billing-account=BILLING_ACCOUNT_ID
 gcloud billing budgets delete BUDGET_ID --billing-account=BILLING_ACCOUNT_ID
 gcloud org-policies delete vertexai.allowedModels --organization=ORGANIZATION_ID

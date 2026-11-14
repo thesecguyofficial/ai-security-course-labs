@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# GC13 in one go: the Helpdesk agent on RAG Engine, ADK and Model Armor from lesson 13.6 (GUIDED-BUILD.md), its five
+# GC13 in one go: the Helpdesk agent on RAG Engine, ADK and Model Armor from lesson 13.3 (GUIDED-BUILD.md), its five
 # requests, and the teardown.
 #
 #   bash deploy.sh up      # RAG Engine tier Basic, two buckets + two corpora (one per audience), the agent's own
@@ -118,7 +118,9 @@ PY
       echo "   $C = $(corpus $C)"
     done
     STAFF=$(corpus kb-staff); FIN=$(corpus kb-finance)
-    say "1d RAG Engine's service agent may read the two buckets (and nothing else), then the imports"
+    # The grant records intent only. Our 13 Nov 2026 console run imported with no bucket grant at all: the service
+    # agent's project-level role (RAG Data Service Agent) already reads every bucket in the project (lesson 13.1).
+    say "1d A read grant on the two buckets for RAG Engine's service agent (it records intent; it is not a limit), then the imports"
     for B in staff finance; do
       gcloud storage buckets add-iam-policy-binding "gs://$P-tsg-kb-$B" --quiet \
         --member="serviceAccount:service-$NUM@gcp-sa-vertex-rag.iam.gserviceaccount.com" --role=roles/storage.objectViewer >/dev/null

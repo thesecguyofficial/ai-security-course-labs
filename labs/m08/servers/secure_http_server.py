@@ -45,7 +45,7 @@ class LabAudienceVerifier(TokenVerifier):
     """Verify a lab JWT and, crucially, that it was issued for THIS resource.
 
     PyJWT does the audience check for us: passing audience=RESOURCE_URL makes decode() raise if the
-    token's `aud` is anything else. That single argument is the whole defence against token passthrough
+    token's `aud` is anything else. That single argument is the whole defense against token passthrough
     and cross-resource reuse.
     """
 

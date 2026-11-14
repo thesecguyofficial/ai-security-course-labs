@@ -82,5 +82,12 @@ def scan(server: str) -> int:
 
 
 if __name__ == "__main__":
-    which = sys.argv[1] if len(sys.argv) > 1 else "facts"
+    argv = sys.argv[1:]
+    if "--release" in argv:  # e.g. review.py facts --release 1.1.0 (what `make review` does first; works on Windows)
+        i = argv.index("--release")
+        state = LAB / "state"
+        state.mkdir(exist_ok=True)
+        (state / "facts_release.txt").write_text(argv[i + 1] + "\n", encoding="utf-8")
+        del argv[i:i + 2]
+    which = argv[0] if argv else "facts"
     raise SystemExit(1 if scan(which) else 0)

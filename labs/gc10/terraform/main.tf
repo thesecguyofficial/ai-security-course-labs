@@ -1,4 +1,4 @@
-# GC10 as Terraform: the locked-down AI footprint from lesson 10.6 (GUIDED-BUILD.md), in one apply.
+# GC10 as Terraform: the locked-down AI footprint from lesson 10.5 (GUIDED-BUILD.md), in one apply.
 #
 #   cd labs/gc10/terraform
 #   gcloud services enable cloudresourcemanager.googleapis.com cloudbilling.googleapis.com billingbudgets.googleapis.com iam.googleapis.com

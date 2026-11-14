@@ -17,6 +17,6 @@
   "kb": [
     {"id": "vpn-token", "text": "To reset your VPN token, open the self-service portal and choose VPN token, then Reset."},
     {"id": "outlook-frozen", "text": "If Outlook freezes, close it, then start it while holding Ctrl to open safe mode."},
-    {"id": "mfa-new-phone", "text": "New phone? Ask the Helpdesk to reset your MFA, then enrol the new phone."}
+    {"id": "mfa-new-phone", "text": "New phone? Ask the Helpdesk to reset your MFA, then enroll the new phone."}
   ]
 }

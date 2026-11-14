@@ -81,7 +81,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 New to agents? Do this before Step 1 (lesson 7.9 and its videos call it Step 1b). `explore.py` shows, one
 idea at a time, what `agent.py` does with a ticket. It never sends an email and never writes to the audit log.
 It uses **T-1043**, an ordinary ticket with no hidden instruction. Real output below is from a fresh Ubuntu
-machine (recording run 40846049878).
+machine.
 
 First, look before you run, then set up:
 
@@ -224,12 +224,15 @@ audit log: state/audit.jsonl
 ```
 
 Read it from the top: which controls are on, which tools the model was offered, then one `STEP` line per
-action with its decision. Run `make clean` before Step 1 so the run numbers below match.
+action with its decision. Run `make clean` before Step 1 so the run numbers below match (Windows:
+`python -c "import shutil; shutil.rmtree('state', ignore_errors=True)"`).
 
 ## Step 1 · Break it
 
+You are already in `labs/m07` from Step 1b. If you skipped it, run `cd labs/m07` from the
+`ai-security-course-labs` folder first.
+
 ```bash
-cd labs/m07
 make attack
 ```
 
@@ -312,7 +315,7 @@ controls, all in `controls.py`, all **outside the model**:
 approval cards: `ask` (you, at the terminal; the default), `deny`, or `approve-all` (a tired reviewer).
 
 > **Why the "all, spotlight off" row matters.** Spotlighting is the only control that depends on the model
-> co-operating. Here the stand-in obeys the labels every time; real models don't, especially against
+> cooperating. Here the stand-in obeys the labels every time; real models don't, especially against
 > attacks tuned to beat them. So the lab also runs every *other* control with spotlighting switched off.
 > The leak is still blocked, by deterministic code. Plan for the labels to fail.
 
@@ -323,12 +326,20 @@ make defend
 ```
 
 It runs `--safe` with a rubber-stamp reviewer (to show the controls don't depend on a careful human), then
-the same with spotlighting off. Real output, second run:
+the same with spotlighting off. Without `make` (Windows: `python` or `py` instead of `python3`):
+
+```text
+python3 agent.py --ticket T-1042 --safe --approver approve-all
+python3 agent.py --ticket T-1042 --safe --no-spotlight --approver approve-all
+```
+
+Real output, second run:
 
 ```text
 python3 agent.py --ticket T-1042 --safe --no-spotlight --approver approve-all
 RUN run-0003  task=answer_ticket  ticket=T-1042  requester=sam@customer.example  model=stand-in
     controls: allow_tools, read_only, validate_args, approve, kill_switch, data_scope, budget=6
+    note: data_scope is still the empty challenge stub (Step 7), so it allows every read for now
     tools offered to the model: read_file, send_email
 STEP 1  read_file(path='tickets/T-1042.md')  -> ALLOW  <- untrusted content now in context
 STEP 2  read_file(path='attachments/T-1042-invoice-note.txt')  -> ALLOW  <- untrusted content now in context
@@ -351,10 +362,13 @@ run_task markers written (nothing executed): 0
 audit log: state/audit.jsonl
 ```
 
-Two things to notice. The approval card shows the **whole** action plus two warnings a reviewer can act
-on: untrusted content is in context, and sensitive data was read this run. And step 3 still happened:
-the list didn't leave, but the agent **read** it, for a task that never needed it. Keep that in mind for
-the challenge.
+Three things to notice. The approval card shows the **whole** action plus two warnings a reviewer can act
+on: untrusted content is in context, and sensitive data was read this run. (In the first run, with
+spotlighting on, the same card says `sensitive data read this run: no`, because the agent never opened the
+list.) Step 3 still happened: the list didn't leave, but the agent **read** it, for a task that never needed
+it. And the `note:` line explains why: `data_scope` is in the controls line, but it is an eighth control that
+is only an empty stub until you write it in the challenge (Step 7). Until then it allows every read. Once
+your version refuses the customer list, the note goes away.
 
 ## Step 4 · Spot it
 
@@ -401,6 +415,14 @@ make unkill
 - `make kill`: creates state/KILL
 - `make unkill`: removes state/KILL
 
+Windows, the same three steps without `make`:
+
+```text
+python -c "import pathlib; pathlib.Path('state').mkdir(exist_ok=True); pathlib.Path('state/KILL').write_text('engaged')"
+python agent.py --safe --approver approve-all
+python -c "import pathlib; pathlib.Path('state/KILL').unlink(missing_ok=True)"
+```
+
 Real output (middle lines):
 
 ```text
@@ -410,6 +432,11 @@ HALT   kill switch: the run stops here
 
 The check runs before **every** action, outside the model, so a hijacked agent can't argue with it. A real
 kill switch also revokes the agent's credentials (lesson 7.8); here, the file is the whole switch.
+
+One limit of this lab: the kill switch is one of its optional controls, so that the ladder can show each
+control alone. It only stops runs started with `--safe` or `--kill-switch`. With `state/KILL` in place,
+`make attack` (no controls) still runs and leaks, and prints a `note:` line saying the file was ignored. A
+real kill switch is always on and is not something the agent's configuration can skip.
 
 ## Step 6 · Prove it
 
@@ -517,7 +544,8 @@ on your own computer and answers on `127.0.0.1:11434`. If you set it up in lesso
    ```
 
 4. **Run the agent with the real model**, unprotected and then with every control on. `--approver deny`
-   answers "no" to every approval card, so nothing waits for you to type (use `--approver ask` to decide
+   answers "no" to every approval card, so nothing waits for you to type. In the safe run that also refuses
+   the honest reply to the requester, as in the ladder's reviewer-says-no row (use `--approver ask` to decide
    yourself):
 
    ```bash
@@ -555,7 +583,7 @@ approver (the card shows the full body) or by the data scope you write in Step 7
 
 | Problem | Fix |
 |---|---|
-| `make: command not found` (Windows) | Run the `python` command shown under each step |
+| `make: command not found` (Windows) | Run the `python` command shown under each step. `make defend` is the two `python agent.py ... --safe ...` commands in Step 3's text; `make clean`, `make kill` and `make unkill` have `python -c` forms in Steps 1b and 5 |
 | `AttributeError: ... is_relative_to` or syntax errors | Python is older than 3.11. Check `python3 --version` |
 | Run numbers keep growing (`run-0007`) | The audit log is append-only on purpose. `make clean` starts over |
 | Every safe run stops at step 1 | The kill switch is engaged. `make unkill` |

@@ -19,7 +19,7 @@ version that passes every control from this module.
 | **Check** | Run a plan checker over the first draft's Terraform plan: 15 findings | 11.1 to 11.5 |
 | **Break** | Replay 7 attacks and mistakes against the first draft, and see which ones AnyCompany would even notice | 11.1 to 11.5 |
 | **Fix** | Read the hardened Terraform, check its plan (0 findings) and replay: 0 of 7, the Helpdesk still works | 11.1 to 11.5 |
-| **Prove** | `make test`: one test per control | 11.6 |
+| **Prove** | `make test`: 15 tests that pin the findings, the attacks and each lesson's controls | 11.6 |
 | **Challenge** | Tighten the org's Region guard, write next sprint's bedrock-mantle endpoint policy, write a checker rule. No solution included | 11.2, 11.4, 11.5 |
 | **Deploy (optional)** | `make up` the hardened Helpdesk in your sandbox, ask it a question, find the prompt in the encrypted log, `make down` | 11.6 |
 
@@ -43,7 +43,7 @@ git pull
 
 **No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
 
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m11`.
+Stay in the `ai-security-course-labs` folder: the first step below (Step 1b) starts by taking you into `labs/m11`.
 
 ## What's in this folder
 
@@ -102,11 +102,17 @@ ID `o-a1b2c3d4e5` and every ARN are AWS documentation example values. Model IDs 
 ## Step 1b · Before you check: look at each piece (about 10 minutes)
 
 New to Bedrock or Terraform? Do this before Step 1 (lesson 11.6 and its part 1 video call it Step 1b). `explore.py`
-shows each idea from the lesson 11.0 videos on its own. Real output below is from a fresh Ubuntu machine (recording run
-41116560125).
+shows each idea from the lesson 11.0 videos on its own. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the two plans in `twin/`, `anycompany.json`
 and `org/`, and prints what it finds. No network, no AWS account, no Terraform.
+
+**Go to the lab folder first.** Run this once, from the course labs repository folder (`ai-security-course-labs`).
+Every command in this lab, from here to the end, runs from `labs/m11`:
+
+```bash
+cd labs/m11
+```
 
 **0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
 
@@ -119,6 +125,8 @@ make setup
 python3 ../../tools/check_python.py 3.11
 Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
 ```
+
+The last line names the Python on your machine, so your version number may differ.
 
 Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
 clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
@@ -362,12 +370,13 @@ Attacks and mistakes
 
 ## Step 1 · Check the first draft's plan
 
+You are already in `labs/m11` (the first command of Step 1b). If you skipped Step 1b, run `cd labs/m11` from the
+`ai-security-course-labs` folder first.
+
 ```bash
-cd labs/m11
 make check
 ```
 
-- `cd labs/m11`: or wherever you put this folder
 - `make check`: same as `python3 checker.py twin/first-draft.plan.json`
 
 Real output (Linux, Python 3.13):
@@ -435,7 +444,9 @@ Read the seven HIGH findings as one story:
   supported commercial Region, against AnyCompany's "US only" rule.
 
 The checker exits with code 1 when it finds anything HIGH, so it can fail a pull request in CI
-(`terraform show -json tfplan > plan.json && python3 checker.py plan.json`).
+(`terraform show -json tfplan > plan.json && python3 checker.py plan.json`). To see one rule only, write
+`--only=` with the equals sign: `python3 checker.py twin/first-draft.plan.json --only=M11-05` (`--only M11-05` with a
+space is ignored and prints the full report).
 
 ## Step 2 · Break it: what would this let happen, and who would notice?
 
@@ -740,7 +751,8 @@ make verify
 
 - `make up`: terraform init + apply, with account_id from `aws sts get-caller-identity`; type yes
 - `make smoke`: asks the Helpdesk "How do I reset my VPN token?" through the VPC endpoint
-- `make verify`: the logging configuration, then the newest prompt log event
+- `make verify`: the logging configuration, then one prompt log event. If you ran `make smoke` more than once, it
+  may show an earlier question, not the latest one
 
 What to look for:
 

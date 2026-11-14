@@ -5,7 +5,7 @@ to the container log so you can see exactly what ran).
 
 Callers must send the header x-api-key. The Foundry toolbox injects it from a project connection, so neither the
 model nor your agent code ever sees the key (Microsoft: "The agent never sees the secret.").
-Not run by the course team (no Azure subscription in the build).
+Run for real on Container Apps on 9 and 12 November 2026 (GUIDED-BUILD.md has the real-run table).
 """
 
 import hmac

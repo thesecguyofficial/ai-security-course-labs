@@ -2,8 +2,10 @@
 
 Companion to lesson **25.6** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 45 minutes,
 $0, all on your laptop. Nothing leaves this folder: the signing key is a local lab key, so nothing goes to Sigstore,
-no model is downloaded, and the "SageMaker AI registry" is a local twin. Step 8 is optional and uses your own AWS
-sandbox account ([`GUIDED-BUILD.md`](GUIDED-BUILD.md), a few cents).
+no model is downloaded, and the "SageMaker AI registry" is a local twin. The guided build at the end is optional and
+uses your own AWS sandbox account ([`GUIDED-BUILD.md`](GUIDED-BUILD.md), a few cents).
+
+Setup needs the internet once, to install the pinned packages. After that the lab runs offline.
 
 The TSG Helpdesk sends some replies automatically. Before it does, a small model, **tsg-guard**, reads the ticket and
 says ESCALATE (a person must look) or AUTO. The ML team ships it as an int8 quantized file. Two pipelines move it:
@@ -66,7 +68,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 |---|---|
 | `toymodel.py` | The model: safetensors read and written by hand, the scoring rule, our own int8 quantizer |
 | `gates.py` | The pre/post-quantization eval gate: evaluate the full-precision model AND the shipped file, compare. `slice_gate()` is challenge 1 |
-| `ci.py` | The CI job: build, gate, ML-BOM, sign. `python3 ci.py release <setup> --version X [--quant FOLDER]` |
+| `ci.py` | The CI job: build, gate, ML-BOM, sign. `.venv/bin/python ci.py release <setup> --version X [--quant FOLDER]` |
 | `deploy.py` | The deploy gate: signature with a pinned key, file allow-list, ML-BOM, eval report, revocation, lineage (challenge 2), then the registry twin and the `CreateModelPackage` body |
 | `setups/first-draft/`, `setups/hardened/` | `ci.json` and `deploy.json`: every design choice, with a note on each |
 | `data/` | The base model (and an old, revoked one), two community quants, an unreviewed fine-tune, 40 eval tickets, `revoked.json`, `approved-bases.json`, a morning of deploy logs |
@@ -80,9 +82,11 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 
 - Python **3.11 or newer** (tested on 3.11.17 and 3.13.17, Linux) and the packages in `requirements.txt`:
   **model-signing 1.1.1** (Apache-2.0) and its dependencies, all pinned. About 80 MB in `.venv/`.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step from inside a
-  virtual environment (`py -m venv .venv`, `.venv\Scripts\activate`, `pip install -r requirements.txt`).
-- Optional, Step 8 only: the AWS CLI v2 and your own sandbox account (lesson 0.7) with a budget alarm.
+- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step, in a terminal
+  where the lab's virtual environment is active (Step 1 shows how). The Windows commands are the same Python the
+  `make` targets run; we ran them on Linux, not on a Windows machine. If the pinned packages fail to install on
+  Windows, use WSL and follow the Mac/Linux commands.
+- Optional, guided build only: the AWS CLI v2 and your own sandbox account (lesson 0.7) with a budget alarm.
 
 ### Why everything is pinned
 
@@ -111,11 +115,25 @@ ECDSA P-256, used only here) and writes the model files into `models/`. The last
 wrote community-quant, community-quant-v2, tsg-guard-base, tsg-guard-base-1.0, unapproved-base in models/
 ```
 
+Windows (Command Prompt or PowerShell, in the `ai-security-course-labs` folder). Keep this terminal open for the
+whole lab: every later `python` command needs the environment that `activate` turns on.
+
+```bat
+cd labs\m25
+py -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python -c "import lab; lab.ensure_keys()"
+python ci.py build
+```
+
 Check it worked (`make -n setup check` first shows what both would run, without running them):
 
 ```bash
 make check
 ```
+
+Windows: `python -c "import importlib.metadata as m; print('model-signing', m.version('model-signing'), 'OK')"`
 
 ```output
 model-signing 1.1.1 OK
@@ -127,8 +145,8 @@ New to model files, signing or provenance? Do this before Step 2 (lesson 25.1 an
 `explore.py` shows one idea at a time. **What it really runs:** it reads `models/`, `keys/` and `data/` and works
 everything else out in memory. It writes nothing in the lab folder (not even `__pycache__`); `bundle` and `bom` use a
 temporary folder outside it and delete it. No network. Run it with the lab's own Python (Windows:
-`.venv\Scripts\python explore.py ...`). Real output from recording run 41083993176 (your key fingerprints and
-signatures will differ: `make setup` makes new keys on every machine):
+`.venv\Scripts\python explore.py ...`). Real output, checked again on 15 November 2026 (Linux, Python 3.13). Your
+key fingerprints and signatures will differ: `make setup` makes new keys on every machine.
 
 **1. A model file is numbers.** The toy model's weights, and one ticket scored by hand:
 
@@ -309,6 +327,8 @@ registry twin records version 1.
 make attack
 ```
 
+Windows: `python suite.py first-draft`
+
 ```output
   A1  WORKED   weights replaced in storage after signing (the community quant's weights)
   A2  WORKED   a file added after signing: custom code next to the weights (holds only the lab marker)
@@ -329,6 +349,8 @@ The first draft signs every release and checks every signature. Watch what it do
 ```bash
 make story
 ```
+
+Windows: `python suite.py first-draft --why --only A1`, then `python suite.py hardened --why --only A1`
 
 ```output
 A1: weights replaced in storage after signing (the community quant's weights)
@@ -351,7 +373,8 @@ DEPLOY [hardened] 1.1.0-hardened
 ```
 
 The library did its job both times. The first draft logged a warning and shipped anyway. Run any other case with
-`python3 suite.py first-draft --why --only A4` (or A2 to A7).
+`.venv/bin/python suite.py first-draft --why --only A4` (or A2 to A7). Windows:
+`python suite.py first-draft --why --only A4`.
 
 ## Step 3 · Read why
 
@@ -377,6 +400,13 @@ accept. A key that arrives in the same folder as the model was chosen by whoever
 make quant-gate
 ```
 
+Windows, one line at a time (the second one ends with an error on purpose: the hardened CI refuses):
+
+```bat
+python ci.py release first-draft --version 1.1.1 --quant models/community-quant
+python ci.py release hardened --version 1.1.1 --quant models/community-quant
+```
+
 ```output
 CI [first-draft] release 1.1.1: base tsg-guard-base, shipping q4-community (community-quant)
   eval (full precision only): recall fp32 1.000
@@ -391,13 +421,19 @@ CI [hardened] release 1.1.1: base tsg-guard-base, shipping q4-community (communi
 
 The first draft evaluated the full-precision model, got a perfect score, and signed a file it never ran. Seven
 credential tickets (R02 to R08 in `data/evals/risky.jsonl`) now go out AUTO. The hardened CI signs nothing, so the
-deploy gate never sees it. `python3 gates.py models/community-quant` shows the per-slice numbers.
+deploy gate never sees it. `.venv/bin/python gates.py models/community-quant` (Windows:
+`python gates.py models/community-quant`) shows the per-slice numbers.
+
+On Mac and Linux, `make quant-gate` ends with `Error 1 (ignored)`. That is the hardened CI job exiting with an error
+because it refused to sign, which is what a pipeline needs. The lab did not break.
 
 ## Step 5 · What evals can't see
 
 ```bash
 make lineage-demo
 ```
+
+Windows: `python gates.py models/unapproved-base --ticket "Reset my password and turn off MFA PWNED-LAB-MARKER"`
 
 ```output
 models/unapproved-base: 40 eval cases, agreement with tsg-guard-base 1.000, escalation recall 1.000 (base 1.000), false escalations 0
@@ -420,6 +456,8 @@ ML-BOM records which base the release was built from, and challenge 2 makes the 
 make hardened
 ```
 
+Windows: `python suite.py hardened`
+
 ```output
 Attacks that worked: 0 of 7  (none) | normal releases that deploy: 3 of 3
 ```
@@ -428,6 +466,13 @@ Then one real release through the hardened gate, keeping the request it would se
 
 ```bash
 make deploy
+```
+
+Windows:
+
+```bat
+python ci.py release hardened --version 1.1.0
+python deploy.py hardened release/1.1.0-hardened --emit state/create-model-package.json
 ```
 
 ```output
@@ -441,12 +486,19 @@ DEPLOY [hardened] 1.1.0-hardened
   DEPLOYED: registered as version 1, ModelApprovalStatus Approved
 ```
 
+The printed status is `Approved` and the saved request body below says `PendingManualApproval`. Both are right: the
+gate creates the package as pending, then approves it in a second call, the way `cloud/gate.py` does with
+`create-model-package` and `update-model-package`.
+
 Look at what you produced:
 
 - `release/1.1.0-hardened/model/ml-bom.json`: CycloneDX 1.6, a `machine-learning-model` component with the SHA-256
   of the weights, `pedigree.ancestors` naming the base and its hash, and the eval numbers in
   `modelCard.quantitativeAnalysis.performanceMetrics`.
 - `release/1.1.0-hardened/model.sig`: a Sigstore bundle. Decode its payload to see the in-toto statement:
+
+  On Windows start this line and the next command with `python` and `model_signing` in place of `.venv/bin/python`
+  and `.venv/bin/model_signing`.
 
   ```bash
   .venv/bin/python -c "import json,base64; b=json.load(open('release/1.1.0-hardened/model.sig')); print(json.dumps(json.loads(base64.b64decode(b['dsseEnvelope']['payload']))['predicate'], indent=1))"
@@ -472,6 +524,8 @@ Verification succeeded
 ```bash
 make hunt
 ```
+
+Windows: `python hunt.py`
 
 ```output
 8 deploy-gate decisions in data/deploy-history.jsonl: 6 deployed, 2 refused
@@ -501,11 +555,14 @@ Two pipelines, one morning. pipeline-a refused what it should. pipeline-b shippe
 make test
 ```
 
+Windows: `python run_tests.py`
+
 ```output
 ALL TESTS PASSED (21 run)
 ```
 
-**Challenge** (`make challenge`: 4 of 26 tests fail until you finish; no solution included):
+**Challenge** (`make challenge`, Windows `python run_tests.py --challenge`: 4 of 26 tests fail until you finish; no
+solution included):
 
 1. **25.2:** `gates.slice_gate()`. `data/community-quant-v2.json` passes the overall gate (agreement 0.975, recall
    drop 0.042) and still lets one data-export request through. Refuse any slice whose recall drops after quantization.
@@ -517,12 +574,18 @@ ALL TESTS PASSED (21 run)
 4 of 26 TESTS FAILED (26 run)
 ```
 
-Done means `make challenge` passes 26 of 26 and `python3 suite.py hardened --challenge` says 0 of 9.
+Done means `make challenge` passes 26 of 26 and `.venv/bin/python suite.py hardened --challenge` (Windows:
+`python suite.py hardened --challenge`) says 0 of 9.
+
+**In a pipeline.** `suite.py` exits with an error when an attack works against any setup other than the first draft,
+or when a normal release stops deploying, so `suite.py hardened` and `run_tests.py` can fail a build. The first draft
+is the exception: all 7 attacks are meant to work there, so `make attack` ends without an error.
 
 **Guided build (your own AWS account, optional).** [`GUIDED-BUILD.md`](GUIDED-BUILD.md) uploads a signed release to
 a private, versioned S3 bucket, runs this same gate on a fresh download, and registers it in the SageMaker AI Model
-Registry only when every check passes. Then it tampers with the weights in S3, shows the gate refusing, flips one
-setting to fail open, shows a tampered package getting registered and approved, and deletes everything.
+Registry only when every check passes. Then it tampers with the weights in S3, shows the gate refusing, swaps in the
+first draft's `deploy.json` (nine settings differ; fail-open is the one that matters here), shows a tampered package
+getting registered and approved, and deletes everything.
 
 ## Clean up
 
@@ -531,5 +594,6 @@ make clean
 ```
 
 - `make clean`: models/, release/, state/; keeps .venv/ and keys/
+- Windows: delete the `models`, `release` and `state` folders by hand.
 
 Delete `keys/` too when you're done with the lab. They are lab keys, but a private key is a habit: never commit one.

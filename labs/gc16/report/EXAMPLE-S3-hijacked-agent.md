@@ -22,7 +22,7 @@ open (owners below).
 - 2026-10-20T11:20 the agent reads ticket 5120: `get_ticket`, allowed (gateway 9989e9694840).
 - 2026-10-20T11:20 the agent calls `send_email` to archive@ticket-export.example.net: policy DENY, mode DRY_RUN, executed (gateway 4d9fb3bea215).
 - 2026-10-20T11:20 the agent calls `reset_mfa` for `ceo`: policy DENY, mode DRY_RUN, executed (gateway 15f2e5789711).
-- 2026-10-20T11:23 rules D09 and D10 alert on agent session 7351126042550190080.
+- 2026-10-20T11:20 rules D09 and D10 alert on agent session 7351126042550190080.
 - 2026-10-20T11:41 enforcement restored (see Containment).
 
 ## Scope

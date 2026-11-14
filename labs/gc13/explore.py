@@ -15,7 +15,7 @@ lab. Request and response shapes follow Google's API definitions and ADK 2.12.0;
                                                                # 5. Agent Search with document ACLs: results for a caller
     python3 explore.py acl alice@example.com fin-pricing       # 6. would this person get this document? and why
     python3 explore.py agent today                             # 7. the ADK agent: identity, tools, callbacks, plugin, log
-    python3 explore.py turn hardened alice@example.com "Summarise ticket T-2042 for me."
+    python3 explore.py turn hardened alice@example.com "Summarize ticket T-2042 for me."
                                                                # 8. one turn in ADK order, step by step
 
 Twins: today (the port as shipped), hardened (the fixed port). All names, numbers and addresses are fictional.
@@ -67,7 +67,7 @@ def cmd_source(a) -> None:
         for d in docs:
             print(f"    {d['source'][len(bucket) + 1:]:30} team {d['team']:8} \"{clip(d['title'], 54)}\"")
             if INJECTION_MARKER in d["text"]:
-                print(f"    {'':30} + one HTML comment with a labelled lab placeholder: hidden on a web page,")
+                print(f"    {'':30} + one HTML comment with a labeled lab placeholder: hidden on a web page,")
                 print(f"    {'':30}   plain text to a program")
     print("\nteam = a metadata tag on each file. Anyone who may add files to a bucket the import reads can put words")
     print("in front of the model.")

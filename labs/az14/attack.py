@@ -48,7 +48,7 @@ def run_case(cfg: dict, cid: str) -> dict:
         return r
 
     if cid == "A1":
-        r = turn("bob", "summarise my open drafts", header="alice")
+        r = turn("bob", "summarize my open drafts", header="alice")
         out["worked"] = any(PAY in s for s in r["session"])
         out["detail"] = f"bob's request resumed sessions: {r['session'] or 'none'}"
     elif cid == "A2":

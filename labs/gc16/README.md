@@ -1,7 +1,7 @@
 # Lab GC16: build the detections, run the attack simulator, catch it, write the incident report
 
 Companion to lessons **16.0 to 16.6** of the Google Cloud stream of *AI Security Engineer* (The Sec Guy). About 75
-minutes for Steps 1 to 9, **$0**, all on your laptop: **Python 3.11+ only**, no packages, no Google Cloud account, no
+minutes for Steps 1 to 9, plus about 15 for Step 1b if you do it, **$0**, all on your laptop: **Python 3.11+ only**, no packages, no Google Cloud account, no
 network. Step 10 is optional: [`GUIDED-BUILD.md`](GUIDED-BUILD.md) turns on Data Access audit logs, Model Armor
 logging and three alerts in **your own** sandbox project, and ends with teardown.
 
@@ -86,9 +86,9 @@ What the telemetry files are, and how close they are to the real thing:
 
 ## Step 1b · Before you start: look at each idea on its own (about 15 minutes)
 
-New to detection and response? Do this before Step 1 (lesson 16.6 calls it Step 1b; lesson 16.0 explains each idea). `explore.py` shows,
+New to detection and response? Do this before Step 1 (lesson 16.0 explains each idea). `explore.py` shows,
 one idea at a time, the records, the rules and the response on ExampleCo's day, the Google Cloud version of the AWS stream's Module 16.
-Real output below is from a fresh Ubuntu machine (recording run 41618032029). Run it from `labs/gc16`.
+Real output below is from a fresh Ubuntu machine. Run it from `labs/gc16`.
 
 **What it really runs.** Nothing that changes anything: `explore.py` builds the simulated day in memory with
 `simulate.py`, runs the lab's own functions on it (`detect.py`, `inventory.py`, `posture.py`, `report.py`) and prints.
@@ -463,7 +463,9 @@ Caught 1 of 5 | seen but not named 0 | missed 4 | false alarms 0
 ```
 
 The one catch comes from Admin Activity, which Google always writes: the attacker tried to remove the Data Access
-audit config with `SetIamPolicy` and was denied. The volume rule counts `Predict` only, and the Data Access logs that
+audit config with `SetIamPolicy` and was denied. (That a **denied** `SetIamPolicy` lands in Admin Activity is this
+lab's model. Google's page doesn't say which log keeps a write that IAM refused, and our 12 November 2026 run didn't
+test one, so check it in your own project before you build a rule on it.) The volume rule counts `Predict` only, and the Data Access logs that
 would hold the attacker's `GenerateContent` calls were never switched on.
 
 ## Step 3 · Old rules, new logs
@@ -569,7 +571,11 @@ Pack gc16 on hardened telemetry: 16 alerts
 Caught 3 of 5 | seen but not named 2 | missed 0 | false alarms 0
 ```
 
-Read three things. D05 forwards both SCC findings whatever their severity. D07 names `cust-8841` because the backend
+Read five things. In D02's line the number after each method is the **status code** of one failed call (3 invalid
+argument, 5 not found, 7 permission denied), not a count. In the score table the rules column lists only the rules
+that named the entity you'd act on, so S1 shows D01 to D05 for `etl-batch`; `gemini-3.5-flash` in its "named" column
+comes from D06, which saw the same incident and can only name a model. D05 forwards both SCC findings whatever their
+severity. D07 names `cust-8841` because the backend
 put `end_user` in the request's `labels`; Model Armor and SCC never see the customer. And D06 can only name a model:
 request-response rows don't carry the caller, which is why S4 is SEEN, NOT NAMED until you write D12.
 
@@ -605,6 +611,9 @@ Your check: firewall rule allow-ollama-any allows 0.0.0.0/0 to port 11434 (ollam
 
 6 of 14 AI assets are not on the approved register.
 ```
+
+The 14 is more than SCC's inventory would hold: the `Outside AI API` row (`api.openai.com`) comes from your own Cloud
+DNS logs. Calls to an outside AI API aren't in SCC's AI inventory (lesson 16.3), which is why the lab adds that check.
 
 ## Step 7 · Posture: framework controls, custom checks, organization policies (16.3, 16.4)
 
@@ -783,6 +792,8 @@ ALL TESTS PASSED (18 run)
 make challenge
 ```
 
+Same as `python3 run_tests.py --challenge`.
+
 You should see:
 
 ```text
@@ -814,8 +825,10 @@ They fail until you finish.
 2. **D12, denial of wallet per end user** (16.1, 16.5). Write `d12_wallet_per_end_user`: one end user above
    `tokens_per_end_user_per_hour` in any hour. SCC and D06 can't name the person; the request labels and your app
    log can.
-3. **The S1 incident report** (16.5). `cp report/TEMPLATE.md report/INCIDENT-REPORT.md`, write it from the pivot and
-   playbook 1 in lesson 16.5, then `make report-check`. The check wants every section, five UTC timestamps, three
+3. **The S1 incident report** (16.5). `cp report/TEMPLATE.md report/INCIDENT-REPORT.md` (Windows:
+   `copy report\TEMPLATE.md report\INCIDENT-REPORT.md`), write it from the pivot and playbook 1 in lesson 16.5, then
+   `make report-check` (same as `python3 simulate.py`, then
+   `python3 report.py check report/INCIDENT-REPORT.md --scenario S1`). The check wants every section, five UTC timestamps, three
    real record IDs and the facts a reviewer would ask for (both attacker addresses, the Claude calls, the command
    that disables the key, the audit config attempt, the cost, how the key leaked).
 
@@ -826,7 +839,8 @@ When you're done: `Caught 5 of 5 | seen but not named 0 | missed 0 | false alarm
 [`GUIDED-BUILD.md`](GUIDED-BUILD.md): Data Access audit logs for Agent Platform, Model Armor sanitize logging with
 four requests, three alerts (a Model Armor match, a key used from outside, a request flood from a log-based metric),
 hunting with `queries/`, one threshold changed and re-run, what SCC Standard shows, and teardown. A few cents.
-Security Command Center Premium stays off: its AI findings are on the module's video and in this lab's simulator.
+Security Command Center Premium stays off: we never produced a real Premium finding for this course, and this lab's
+simulator shows their shape, from Google's example findings.
 
 ## Troubleshooting
 

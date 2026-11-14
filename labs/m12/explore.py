@@ -17,7 +17,7 @@ and asks the lab's offline stand-ins (guardrail_twin.py, iam_eval.py) what they 
     python3 explore.py iam                      # 6. IAM: deny any model call that doesn't name guardrail version 1
 
 guardrail_twin.py is a stand-in for Amazon Bedrock Guardrails, not the real service: its classifiers are short pattern
-lists, so every confidence, score and count here is the stand-in's, not Bedrock's. The behaviour around them (strengths,
+lists, so every confidence, score and count here is the stand-in's, not Bedrock's. The behavior around them (strengths,
 actions, what Converse evaluates, text units) follows the AWS documentation quoted in the README.
 """
 

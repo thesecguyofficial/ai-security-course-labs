@@ -78,12 +78,12 @@ class TestCatalog(unittest.TestCase):
 
 class TestInventoryAndTriage(unittest.TestCase):
     def test_02_inventory_flags_the_unknown_licence(self):
-        """inventory: one row per component, and the embedding model's unknown licence is flagged"""
+        """inventory: one row per component, and the embedding model's unknown license is flagged"""
         rows = govlab.inventory_rows(card())
         self.assertEqual(len(rows), 7)
         flagged = {r["component"]: r["flags"] for r in rows if r["flags"]}
         self.assertEqual(list(flagged), ["Local embedding model (Module 6)"])
-        self.assertIn("licence unknown", flagged["Local embedding model (Module 6)"])
+        self.assertIn("license unknown", flagged["Local embedding model (Module 6)"])
 
     def test_03_triage_provider_transparency(self):
         """triage: the Helpdesk is a provider, transparency tier; Art. 4 and 50(1) apply now, 50(2) is due 2 Dec 2026"""
@@ -196,6 +196,40 @@ class TestCrosswalkAndPack(unittest.TestCase):
             self.assertEqual(eu[art]["applies"], "reference", art)
         hiring = {r["item"]: r for r in govlab.crosswalk(DRAFT, "hiring")["eu"]}
         self.assertEqual(hiring["Art. 12"]["applies"], "applies")
+
+    def test_12b_crosswalk_gives_no_credit_for_an_undisclosed_ai(self):
+        """crosswalk: C24 marked done with a hashed widget gets no Art. 50 credit until the greeting says it is an AI"""
+        with TempAssessment() as d:
+            c = card()
+            c["controls"]["C24"] = "implemented"
+            (d / "system-card.json").write_text(json.dumps(c), encoding="utf-8")
+            widget = d / "chat-widget.html"
+            shutil.copy2(HERE / "helpdesk" / "chat-widget.html", widget)
+
+            def index_widget():
+                with open(d / "evidence-index.csv", "w", encoding="utf-8", newline="") as fh:
+                    w = csv.DictWriter(fh, fieldnames=govlab.EVIDENCE_COLUMNS)
+                    w.writeheader()
+                    w.writerow({"evidence_id": "E23", "control": "C24", "file": str(widget),
+                                "sha256": govlab.sha256_file(widget), "collected": "2026-10-24",
+                                "owner": "Head of Customer Support", "description": "live greeting text"})
+
+            def art50():
+                return {r["item"]: r for r in govlab.crosswalk(d)["eu"]}["Art. 50"]
+
+            index_widget()
+            _, valid = govlab.credited_controls(d, c, govlab.catalog()[0])
+            self.assertIn("C24", valid, "the test's evidence row must be valid, or it proves nothing")
+            self.assertIn("DIS-01", codes(govlab.check_folder(d)))
+            self.assertEqual(art50()["status"], "NOT PROVEN")
+            self.assertNotIn("C24", art50()["covered_by"])
+            widget.write_text(widget.read_text(encoding="utf-8").replace(
+                "Hello, welcome to TSG Shop support.", "Hello, I'm the TSG Shop AI assistant, an automated system."),
+                encoding="utf-8")
+            index_widget()
+            self.assertNotIn("DIS-01", codes(govlab.check_folder(d)))
+            self.assertEqual(art50()["status"], "COVERED")
+            self.assertIn("C24", art50()["covered_by"])
 
     def test_13_crosswalk_credits_only_proven_controls(self):
         """crosswalk: MEASURE 2.7 is covered by the M7 evidence; MANAGE 1.3 is not (C03's evidence changed)"""

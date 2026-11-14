@@ -2,7 +2,7 @@
 
 Companion to lesson **28.4** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track), with pieces of 28.1
 (vectors in logs) and 28.3 (deletion). About 45 minutes, $0, all on your laptop, all on fake data. Nothing leaves this
-folder: no network, no AWS account, no model.
+folder: no network after setup (setup installs one package), no AWS account, no model.
 
 The TSG Helpdesk's model calls go through Amazon Bedrock with **model invocation logging** turned on, so every prompt
 and answer lands in an S3 bucket. A redaction pipeline copies each record into a second bucket with the personal data
@@ -80,26 +80,39 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 
 - Python **3.11 or newer** and one package, **cryptography 50.0.2** (Apache-2.0 or BSD-3-Clause; wheels for macOS,
   Windows and Linux).
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step inside a virtual
-  environment (`py -m venv .venv`, `.venv\Scripts\activate`, `pip install -r requirements.txt`).
+- Mac or Linux for the `make` shortcuts. Windows: each step shows a `.venv\Scripts\python ...` command to run in
+  place of `make`. They are the same Python the `make` targets run; we ran them on Linux, not on a Windows machine.
 
 ```bash
 cd labs/m28
 make setup
+make check
+```
+
+Windows (in the `ai-security-course-labs` folder):
+
+```bat
+cd labs\m28
+py -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+.venv\Scripts\python -c "import cryptography; print(cryptography.__version__)"
 ```
 
 - `make setup`: python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
-- `make check`: prints the Python and cryptography versions and `OK` (Windows: `.venv\Scripts\python -c "import cryptography; print(cryptography.__version__)"`)
+- `make check`: prints the Python and cryptography versions and `OK`, for example
+  `Python 3.13.18 | cryptography 50.0.2 | OK`. Your Python version will differ; any 3.11 or newer is fine.
 
 Look before you run: `make -n setup check` prints the three commands those targets would run, without running them.
 
 ## Step 1b · Look at each privacy idea on its own (about 10 minutes)
 
+This step comes before Step 1 on purpose. The lesson and the videos call it Step 1b, so the name stays.
+
 New to logs, embeddings, differential privacy or KMS? Do this first. `explore.py` shows, one at a time, the ideas this
 module is built on. It only reads the lab's data and setup files and builds everything in memory: it writes no file,
 opens no connection and calls no AWS service. The toy encoder and the toy language model are teaching stand-ins, not
 neural networks: the ideas carry over, the exact numbers don't. Windows: `.venv\Scripts\python explore.py ...`. The output below
-is from a fresh Ubuntu machine (recording run 41090410255).
+is from a fresh Ubuntu machine, checked again on 15 November 2026 (Linux, Python 3.13).
 
 **1. One model call, as invocation logging stores it (lesson 28.4).** Bedrock's model invocation logging is off by
 default; once on, it keeps the prompt and the answer word for word, with who asked and when:
@@ -376,6 +389,7 @@ Envelope encryption of one log record (call c01), in memory. Your bytes will dif
    tsg-log-redactor               yes, root statement lets IAM grant it        yes, named in the key policy
    AWSServiceRoleForAmazonMacie   no                                           yes, named in the key policy
    tsg-incident-break-glass       yes, root statement lets IAM grant it        yes, named in the key policy
+   tsg-privacy-erasure            no                                           yes, named in the key policy
 
 Two locks on a raw record: the bucket policy (S3) and the key policy (KMS). Both must say yes.
 ```
@@ -389,7 +403,7 @@ in `kms.py`, in a file under `state/`), which a real KMS key never is.
 make leak
 ```
 
-Same as `.venv/bin/python pipeline.py first-draft`.
+Same as `.venv/bin/python pipeline.py first-draft` (Windows: `.venv\Scripts\python pipeline.py first-draft`).
 
 Real output (Linux, Python 3.13, cryptography 50.0.2):
 
@@ -421,7 +435,7 @@ choice; the `_about` lines say why someone made it.
 | Choice | First draft | Hardened | Leak it decides |
 |---|---|---|---|
 | KMS keys | one key for both buckets, with the default root statement, so an IAM policy can grant `kms:Decrypt` | two keys; the account may only **administer** them; `kms:Decrypt` goes to named roles | L1 |
-| Raw bucket readers | redactor, analysts ("for debugging"), break-glass, Macie | redactor, break-glass, Macie; analysts explicitly denied | L1 |
+| Raw bucket readers | redactor, analysts ("for debugging"), break-glass, Macie | redactor, break-glass, Macie and the erasure role (`tsg-privacy-erasure`, challenge 2); analysts explicitly denied | L1 |
 | What the redactor reads | the user's text in the request only | every string in the record, response and `requestMetadata` included | L2 |
 | What the redactor detects | two hand-written patterns, case sensitive | the managed detectors, the shared custom identifiers and your customer names | L2 |
 | Embedding modality / vectors | logged, and kept in the copy | not logged, and stripped anyway if they appear | L3 |
@@ -447,7 +461,7 @@ The lab code stays at 30 days.
 make hardened
 ```
 
-Same as `.venv/bin/python pipeline.py hardened`.
+Same as `.venv/bin/python pipeline.py hardened` (Windows: `.venv\Scripts\python pipeline.py hardened`).
 
 ```output
 setup hardened | 12 model calls logged | redactor: 12 records, 1 large bodies redacted, 0 copied as-is, 33 values replaced, 0 vectors removed
@@ -475,7 +489,7 @@ second line, for the day someone ticks Embedding again (`test_11` proves it).
 make two-locks
 ```
 
-Same as `.venv/bin/python demo.py two-locks`.
+Same as `.venv/bin/python demo.py two-locks` (Windows: `.venv\Scripts\python demo.py two-locks`).
 
 ```output
 raw object: 0a8dc0ca-lab0-4m28-c08-0000000000.json.gz  (account IDs print as <account>)
@@ -497,8 +511,15 @@ The refusal is in the trail (state/cloudtrail.jsonl), last event:
 
 Account IDs print as `<account>` (the lab uses AWS's documentation example account; the output hides it anyway).
 The analyst's IAM policy still says `kms:Decrypt` on `*`. It doesn't matter: the raw key's policy delegates only
-administration to the account, so IAM can't grant its use. (Lab shortcut: refusals carry `errorCode` `AccessDenied`;
-read the value your real trail records.)
+administration to the account, so an IAM `kms:Decrypt` permission does nothing here. (Lab shortcut: refusals carry
+`errorCode` `AccessDenied`; read the value your real trail records.)
+
+**What the second lock does not stop.** The administration actions in that key policy include `kms:Put*` and
+`kms:Create*`. An account admin whose IAM policy allows `kms:PutKeyPolicy` or `kms:CreateGrant` on this key can
+rewrite the key policy or create a grant, and so give themselves decrypt in one or two calls. AWS says the same of
+key administrators in its default key policy page. So keep those two permissions to a small admin role, and watch
+CloudTrail for two events on the raw key: `PutKeyPolicy` and `CreateGrant`. Either one, from anyone outside that
+role or without a change ticket, is an alert. The lab's stand-in KMS has no such calls, so nothing here runs them.
 
 **Macie, before and after:**
 
@@ -506,7 +527,8 @@ read the value your real trail records.)
 make macie
 ```
 
-Same as `.venv/bin/python macie.py first-draft`, then `.venv/bin/python macie.py hardened`.
+Same as `.venv/bin/python macie.py first-draft`, then `.venv/bin/python macie.py hardened` (Windows:
+`.venv\Scripts\python macie.py first-draft`, then `.venv\Scripts\python macie.py hardened`).
 
 ```output
 tsg-invocation-logs-raw: 1 EXCLUDED_BY_SCOPE, 9 SKIPPED (INVALID_ENCRYPTION) | findings: 0
@@ -535,7 +557,7 @@ number that matters is the **0 on the redacted bucket**, from a job that read al
 make tokens
 ```
 
-Same as `.venv/bin/python demo.py tokens`.
+Same as `.venv/bin/python demo.py tokens` (Windows: `.venv\Scripts\python demo.py tokens`).
 
 ```output
 2027-04-01T09:00:00Z  tsg-helpdesk-app  metadata  [EMAIL_ADDRESS:744c26c6]
@@ -560,7 +582,7 @@ identifier in the guided build, checks the redacted bucket instead of trusting t
 make hunt
 ```
 
-Same as `python3 hunt.py`.
+Same as `.venv/bin/python hunt.py` (Windows: `.venv\Scripts\python hunt.py`).
 
 ```output
 32 KMS events
@@ -585,23 +607,24 @@ lines in Q1 should bother you. Someone in analytics tried the raw key three time
 records late in the evening: somebody gave it access, and lesson 28.2 says training data should come from the
 redacted copy. Q3 turns that into a check you can schedule.
 
+In a real account, add one more question to this hunt: who called `PutKeyPolicy` or `CreateGrant` on the raw key?
+Those two events are how someone gets onto the reader list in the first place (Step 3, "What the second lock does
+not stop"). The invented day in the fixture has `Decrypt` and `GenerateDataKey` events only.
+
 ## Step 5 · Prove it
 
 ```bash
 make test
 ```
 
-You should see:
-
-```text
-ALL TESTS PASSED (20 run)
-```
+Same as `.venv/bin/python run_tests.py` (Windows: `.venv\Scripts\python run_tests.py`). You should see:
 
 ```output
 ALL TESTS PASSED (20 run)
 ```
 
-**Challenge** (`make challenge`: 4 of 24 tests fail until you finish; no solution included):
+**Challenge** (`make challenge`, Windows `.venv\Scripts\python run_tests.py --challenge`: 4 of 24 tests fail until
+you finish; no solution included):
 
 1. **28.4:** a loyalty-card number (`TSG-LOY-` and 8 digits) appears in a new call. Add ONE custom data identifier
    named `TSG_LOYALTY_CARD` to `setups/hardened/identifiers.json` and its name to the Macie job in
@@ -627,4 +650,4 @@ is labeled illustrative until you run it.
 | `ModuleNotFoundError: No module named 'cryptography'` | `make setup`, or activate `.venv` before running `python3 ...` |
 | `pip` tries to build cryptography from source | Your Python is older than 3.11 or very new: use 3.11 to 3.14 |
 | Token values or random IDs differ from this page | Expected: the tokenization key and data keys are random per run. Counts and verdicts should match |
-| Strange results after editing a setup | `make clean`, then run again: every `pipeline.py` run rebuilds `state/` from zero |
+| Strange results after editing a setup | `make clean` (Windows: delete the `state` folder), then run again: every `pipeline.py` run rebuilds `state/` from zero |

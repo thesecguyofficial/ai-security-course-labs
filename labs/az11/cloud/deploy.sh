@@ -9,6 +9,11 @@
 # three, signed in with az login. The script downloads the course labs repo (public, read-only) into ~/tsg-labs.
 # Your names are saved in ~/.az11.env so test and down find the same build.
 #
+# Run from inside a clone of the labs repo (labs/az11/cloud/deploy.sh, next to cloud.sh), it uses THAT clone and its
+# Terraform state and downloads nothing. That is what makes `test` and `down` work after a hand `terraform apply` in
+# labs/az11/terraform:  AZ11_NAME=<your name> bash ../cloud/deploy.sh test
+# A hand apply assigns no guardrails, so T4 prints WAIT until you run:  AZ11_NAME=<your name> bash ../cloud/cloud.sh policy
+#
 # Optional before `up`:
 #   export AZ11_NAME=az11-ab1234       # 3 to 21 lowercase letters, digits, hyphens; globally unique (default: random)
 #   export MY_IP=<IPv4>                # the only address allowed to create the key (default: this shell's address)
@@ -19,12 +24,16 @@ set -euo pipefail
 
 ENVFILE="$HOME/.az11.env"
 REPO="$HOME/tsg-labs"
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 say() { printf '\n== %s\n' "$*"; }
 for t in az terraform python3 curl git; do command -v $t >/dev/null || { echo "Needs $t (Azure Cloud Shell has it)."; exit 1; }; done
 az account show -o none 2>/dev/null || { echo "Sign in first: az login"; exit 1; }
 
 repo() {   # the lab files (Terraform, probes, policies) live in the public labs repo
+  if [ -f "$HERE/cloud.sh" ] && [ -f "$HERE/../terraform/main.tf" ]; then   # run from inside a clone: use it and its state
+    LAB="$(cd "$HERE/.." && pwd)"; echo "Using the lab files in $LAB"; return 0
+  fi
   if [ -d "$REPO/.git" ]; then git -C "$REPO" pull -q --ff-only || true
   else git clone -q --depth 1 https://github.com/thesecguyofficial/ai-security-course-labs "$REPO"; fi
   LAB="$REPO/labs/az11"
@@ -89,7 +98,7 @@ case "${1:-}" in
     say "T4 Nobody can switch keys back on, not even the subscription Owner (policy, 15 min or more after up)"
     if out=$(az resource update --ids "$FID" --set properties.disableLocalAuth=false -o none 2>&1); then
       az resource update --ids "$FID" --set properties.disableLocalAuth=true -o none
-      rec WAIT "T4 allowed (and switched off again at once): the policy is not active yet"
+      rec WAIT "T4 allowed (and switched off again at once): the policy is not active yet, or was never assigned (after a hand terraform apply, run cloud.sh policy)"
     elif grep -qi policy <<<"$out"; then rec PASS "T4 refused by policy"
     else rec FAIL "T4 refused, but not by policy: $(head -c 200 <<<"$out")"; fi
 

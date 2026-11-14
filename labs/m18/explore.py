@@ -23,7 +23,7 @@ import govlab  # noqa: E402  (only its loading helpers; nothing in govlab runs o
 
 KINDS = [
     ("nist_ai_rmf", "framework", "voluntary: guidance you choose from; nobody has to use it"),
-    ("iso_42001", "standard", "certifiable: an accredited auditor can certify an organisation against it"),
+    ("iso_42001", "standard", "certifiable: an accredited auditor can certify an organization against it"),
     ("eu_ai_act", "law", "binding where it applies, with fines; what applies depends on the system's purpose"),
     ("owasp", "checklist", "community lists of what most often goes wrong in code; free, no certificate"),
 ]
@@ -37,7 +37,7 @@ def cmd_kinds(a) -> int:
         f = fw[key]
         print(f"{kind:10} {f['name']}")
         print(f"{'':10} {what}")
-        print(f"{'':10} {len(f['items'])} items in this lab's catalogue · {f['source']}\n")
+        print(f"{'':10} {len(f['items'])} items in this lab's catalog · {f['source']}\n")
     g = fw["nist_genai_risks"]
     print(f"{'profile':10} {g['name']}")
     print(f"{'':10} a companion to the NIST framework for generative AI, with {len(g['items'])} named risks")
@@ -59,8 +59,8 @@ def cmd_inventory(a) -> int:
     print(f"  name       {c['name']}")
     print(f"  version    {c['version']:30} which exact build runs")
     print(f"  hosting    {c['hosting']:30} where it runs")
-    flag = "<- a gap: nobody has checked what this licence allows" if c["licence"].lower() == "unknown" else ""
-    print(f"  licence    {c['licence']:30} {flag}".rstrip())
+    flag = "<- a gap: nobody has checked what this license allows" if c["licence"].lower() == "unknown" else ""
+    print(f"  license    {c['licence']:30} {flag}".rstrip())
     print(f"\nOne row per part, not one per app: {len(comps)} parts here "
           f"({', '.join(sorted({x['type'] for x in comps}))}).")
     return 0
@@ -81,8 +81,8 @@ def cmd_risk(a) -> int:
     rl, ri = govlab.as_int(r["res_likelihood"]), govlab.as_int(r["res_impact"])
     when = govlab.assessment_date(DRAFT)
     review = govlab.parse_date(r["review_date"])
-    src = library.get(r["source"], {}).get("title", "not in the catalogue")
-    ctl = ", ".join(f"{c} {statuses.get(c, 'unknown')}" if c in controls else f"{c} (not in catalogue)"
+    src = library.get(r["source"], {}).get("title", "not in the catalog")
+    ctl = ", ".join(f"{c} {statuses.get(c, 'unknown')}" if c in controls else f"{c} (not in catalog)"
                     for c in govlab.split_ids(r["controls"])) or "(none)"
     print(f"Risk {a.id} from first-draft/risk-register.csv, column by column\n")
     print(f"  title       {r['title']}")

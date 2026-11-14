@@ -11,7 +11,7 @@ It reads the files in setups/<name>/ (real request bodies plus lab notes in keys
   * which model files an endpoint loads and what happens when it loads them             lesson 15.3
   * what the Studio domain lets a notebook reach                                         lesson 15.2
 
-What is modelled on AWS documentation and what is a lab choice is listed in README "How faithful is the twin?".
+What is modeled on AWS documentation and what is a lab choice is listed in README "How faithful is the twin?".
 """
 
 from __future__ import annotations

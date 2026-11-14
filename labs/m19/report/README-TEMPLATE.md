@@ -2,6 +2,7 @@
 
 > This becomes the README.md of your public capstone repo (`make export` puts it there). Replace every `<...>`.
 > Lesson 19.4 explains each section. Keep it to one screen of reading before the details.
+> The self-check (R5) wants the six headings below and at least 250 words, not counting code blocks.
 
 <One paragraph: what the system is, what you did to it, and the result in numbers you can prove
 (for example "6 findings fixed, 27 of 27 eval cases pass, the gate fails on 3 of 3 regressions").>

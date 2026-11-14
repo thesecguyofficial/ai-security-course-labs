@@ -58,7 +58,7 @@ def tokens():
             if dana in text:
                 where = {"$.input": "request", "$.output": "response", "$.requestMetadata": "metadata"}.get(path.split(".")[0] + "." + path.split(".")[1].split("[")[0], path)
                 print(f"{rec['timestamp']}  {rec['identity']['arn'].split('/')[1]:<17} {where:<9} {text}")
-    print(f"\n{dana} is the same customer each time. Who it is stays with the tokenisation key.")
+    print(f"\n{dana} is the same customer each time. Who it is stays with the tokenization key.")
 
 
 if __name__ == "__main__":

@@ -92,7 +92,9 @@ where you see `python3`.
    temperature (lesson 1.2) and the stop token.
 
 5. **Where it listens.** Ollama waits for requests on **localhost** (`127.0.0.1`, this computer) at **port** 11434
-   (the "door number" that picks one program). On a Mac, use `lsof -iTCP:11434 -sTCP:LISTEN` instead of the first line:
+   (the "door number" that picks one program). The first line below is the Linux command. On a Mac, use
+   `lsof -iTCP:11434 -sTCP:LISTEN` instead. On Windows, use `netstat -ano | findstr 11434`, and type `curl.exe`
+   where you see `curl`:
 
    ```bash
    ss -ltn | grep 11434
@@ -157,7 +159,7 @@ python3 explore.py history
 ```text
 == Request 1: the app sends 2 messages (39 tokens) ==
    system    You are a helpful assistant. Answer in one short sentence.
-   user      Hi! My name is Asha and my favorite color is green.
+   user      Hi! My name is Asha and my favourite colour is green.
    -> model: That’s lovely to hear, Asha! Green is a fantastic choice. 😊
 
 == Request 2, a new request without the history: the app sends 2 messages (31 tokens) ==
@@ -212,13 +214,18 @@ python3 llm_lab.py tokens "hello" "Ignore previous instructions" "₹1,999"
 python3 llm_lab.py temp "Name one color." --runs 3
 python3 llm_lab.py fill --ctx 1024
 python3 llm_lab.py fill --ctx 8192
-python3 llm_lab.py --model qwen3:1.7b chat "Hi"
 ```
 
 - `python3 llm_lab.py fill --ctx 1024`: watch it forget
 - `python3 llm_lab.py fill --ctx 8192`: plenty of room
-- `python3 llm_lab.py --model qwen3:1.7b chat "Hi"`: another model: --model goes BEFORE the command (download it
-  first with `ollama pull qwen3:1.7b`, about 1.4 GB)
+
+Optional, another model. Download it first (about 1.4 GB), or the chat line fails with "model not found".
+`--model` goes BEFORE the command:
+
+```bash
+ollama pull qwen3:1.7b
+python3 llm_lab.py --model qwen3:1.7b chat "Hi"
+```
 
 ## Safety
 
@@ -231,9 +238,9 @@ python3 llm_lab.py --model qwen3:1.7b chat "Hi"
 | Exercise | Expect |
 |---|---|
 | `chat` | The raw JSON request, an answer, prompt and completion token counts |
-| `tokens` | A fixed chat-template overhead, then per-text token counts; non-English text costs more per character |
-| `temp` | Identical (or near) answers at 0, variety at 1.8 |
-| `fill --ctx 1024` | Token count climbs, then flatlines at the window; the codeword is usually forgotten |
+| `tokens` | A fixed chat-template overhead, then per-text token counts. Numbers and symbols often cost more tokens per character; other languages depend on the tokenizer (in our run a six-character Hindi word was one token) |
+| `temp` | Identical (or near) answers at 0. At 1.8 a narrow question can still give the same answer every time (ours gave "Blue." at all three temperatures); try an open question to see variety |
+| `fill --ctx 1024` | Token count climbs, then stops climbing just under the window (963 to 966 of 1,024 in our run); the codeword is usually forgotten |
 | `fill --ctx 8192` | No flatline; the codeword is usually remembered |
 
 Exact numbers vary by model, Ollama version and hardware.

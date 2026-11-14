@@ -5,7 +5,7 @@ the frozen trace and the adapted variants and scores catch rate and false positi
 
 Fill in the five functions below. Until you do, every function returns "nothing wrong", so `make replay`
 shows 0 of 5 caught. When they are right, it shows 5 of 5 on the recorded trace AND the variants, with 0
-false positives. Build on behaviour, not exact wording (lesson 23.4): the variants paraphrase, hide and
+false positives. Build on behavior, not exact wording (lesson 23.4): the variants paraphrase, hide and
 use look-alike names, so a check that matches the recorded strings exactly will fail them.
 
 `config` is the dict from config.json: model_callers, model_api_domains, allowed_tools,
@@ -59,14 +59,15 @@ def output_check(event: dict, config: dict) -> str | None:
     host is not in config["allowed_fetch_hosts"] and which carries data (a query parameter such as d=, x=,
     data=, or an obviously encoded blob). Return a short reason or None. The variant uses a different host
     and a different parameter name, so key on "external host + data-bearing query", not one exact URL.
-    (Challenge 2 extends this to a rendered image, e.g. ![](https://host/p.png?d=...).)
+    (Challenge 2 extends this to a rendered image whose PATH carries the data and which has NO query string,
+    e.g. ![](https://host/<data>.png).)
     """
     # TODO (lesson 23.3): return a reason string when output leaks data to an outside host, else None.
     return None
 
 
 def rate_anomaly(login_events: list[dict], config: dict) -> set[str]:
-    """Return the accounts that made too many failed sign-ins too fast (an automated loop / denial of wallet).
+    """Return the accounts that made too many failed sign-ins too fast (an automated loop, such as password guessing).
 
     Each item has actor, result ("fail"/"ok") and ts (ISO8601). Flag an account with more than
     config["rate"]["login_fail_per_min"] failed sign-ins inside any 60-second window. Return a set of the

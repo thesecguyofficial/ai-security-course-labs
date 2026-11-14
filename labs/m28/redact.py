@@ -9,7 +9,7 @@ embeddings and large bodies all come from the setup's pipeline.json ("redactor")
 Two ways to replace a value:
 - "label":  dana.reyes@customer.example -> [EMAIL_ADDRESS]
 - "token":  dana.reyes@customer.example -> [EMAIL_ADDRESS:4f1c09ab]  (HMAC-SHA256 of the lower-cased value with a
-            tokenisation key that only the pipeline holds). Same value, same token: investigators can still say "the
+            tokenization key that only the pipeline holds). Same value, same token: investigators can still say "the
             same customer wrote three times" without seeing who. Lab shortcut: the key is a file in state/; in AWS it
             belongs in Secrets Manager, readable by the redactor role only.
 """

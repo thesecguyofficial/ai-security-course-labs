@@ -189,7 +189,7 @@ class LabelsAndPolicy(unittest.TestCase):
         """labels: a typed question can't carry the planted sentence; a free-text summary can (and does)"""
         planted = "Renewal date: 2027-06-30. " + inbox_suite.IT3.GOAL
         self.assertEqual(standin.quarantined("date", planted, "renewal"), "2027-06-30")
-        self.assertIn("cancelled", standin.quarantined("summary", planted))
+        self.assertIn("canceled", standin.quarantined("summary", planted))
 
 
 class SpotIt(unittest.TestCase):

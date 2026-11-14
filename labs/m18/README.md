@@ -18,7 +18,7 @@ the product itself, and hand over an evidence pack that proves what it claims.
 | **Fix the product** | The Helpdesk never says it is an AI. Change that, and prove it | 18.2 |
 | **Crosswalk** | Which NIST AI RMF, ISO/IEC 42001, EU AI Act and OWASP items your proven controls support | 18.1, 18.2 |
 | **Evidence pack** | A folder an auditor can verify with one command | 18.3, 18.4 |
-| **Prove** | `make test` (15 tests) and `make challenge` (5 more, on your work) | 18.4 |
+| **Prove** | `make test` (16 tests) and `make challenge` (5 more, on your work) | 18.4 |
 
 ## Get the lab files
 
@@ -40,7 +40,11 @@ git pull
 
 **No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
 
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m18`.
+Then go into this lab's folder. Every command in this README is run from `labs/m18`:
+
+```bash
+cd labs/m18
+```
 
 ## What's in this folder
 
@@ -57,7 +61,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `first-draft/` | The team's first draft: `assessment.json`, `risk-register.csv`, `evidence-index.csv` |
 | `evidence/` | Evidence files. Three are real `make test` output from labs m03, m05 and m07; the rest are illustrative samples, labeled as such |
 | `templates/` | Lesson 18.3's templates: one-page AI policy, AI inventory, model and vendor review, AI incident report, plus the assessment files |
-| `test_lab.py`, `test_challenge.py`, `run_tests.py` | 15 tests for the toolkit, 5 for your assessment |
+| `test_lab.py`, `test_challenge.py`, `run_tests.py` | 16 tests for the toolkit, 5 for your assessment |
 
 **About the EU AI Act triage.** `govlab.py triage` is a simplified decision aid built from the official texts as of
 24 Oct 2026 (Regulation (EU) 2024/1689 as amended by the Digital Omnibus on AI in 2026). It covers the questions
@@ -78,14 +82,12 @@ confirms the result, and you record who confirmed it.
 **Mac / Linux:**
 
 ```bash
-cd labs/m18
 make inventory
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
-cd labs/m18
 py govlab.py inventory
 ```
 
@@ -112,7 +114,7 @@ NIST AI RMF **GOVERN 1.6** ("mechanisms are in place to inventory AI systems").
 
 New to governance? Do this first. `explore.py` shows, one at a time, the ideas `govlab.py` is built on. It only
 reads the lab's files: it writes nothing, starts no program and uses no network. Windows: `py explore.py ...`.
-The output below is from a fresh Ubuntu machine (recording run 41008583415).
+The output below is from a fresh Ubuntu machine.
 
 **1. Four kinds of document.** A framework is voluntary advice, a standard can be certified, a law binds, and the
 OWASP lists are community checklists. The lab maps every control to all four:
@@ -484,7 +486,8 @@ the Commission says that exception is read narrowly. Fix it in three moves:
    Leave `sha256` blank; `make mine` fills it. If you edit the greeting again later, the hash no longer matches
    (EVD-03): delete the old value and run `make mine` again. That is the point: evidence is a snapshot.
 
-If you mark C24 implemented but the greeting does not mention an AI, the checker says so (DIS-01).
+If you mark C24 implemented but the greeting does not mention an AI, the checker says so (DIS-01), and the crosswalk
+in Step 7 keeps Art. 50 at NOT PROVEN: a hashed file that does not say "AI" proves nothing.
 
 ## Step 7 · Index the evidence and read your crosswalk (18.1, 18.2)
 
@@ -568,7 +571,7 @@ py run_tests.py
 [PASS] check: the team's first draft fails with exactly the 15 kinds of problem the README walks through
 [PASS] check: lowering a risk with a planned control (C12) is refused; 'avoid' or an accepted residual is allowed
 ...
-ALL TESTS PASSED (15 run)
+ALL TESTS PASSED (16 run)
 ```
 
 ## Challenge

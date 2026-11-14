@@ -2,7 +2,7 @@
 safe_filter.py: build helpdesk-web's GA security filter (lesson 13.1).
 
 Microsoft: "The principal is just a string, used in a filter expression". Whatever string you build IS the
-authorisation decision for the GA path. Contoso version 1 glued strings together, so a "department" value such as
+authorization decision for the GA path. Contoso version 1 glued strings together, so a "department" value such as
   x' or true or title eq 'y
 turned "only my groups AND this department" into "everything".
 

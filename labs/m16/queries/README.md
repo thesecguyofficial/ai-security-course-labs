@@ -6,8 +6,10 @@ range, **Run query**. Save the ones you use (**Save**), so they're there on the 
 
 Field names follow AWS's record formats. Logs Insights flattens nested JSON into dotted names (`userIdentity.arn`);
 if a query returns nothing, open one record and compare its discovered fields with the query. The IP addresses and
-role names are the lab's AnyCompany values: change them to yours. These queries haven't been run against a real log
-group yet (see the module's fact-check); treat the first run as a test.
+role names are the lab's AnyCompany values: change them to yours.
+
+**Status, 15 November 2026:** these queries are written from AWS's documented field names and have not been run
+against a real log group. Treat your first run of each as a test before you rely on it or build an alarm on it.
 
 | File | Log group | Lab rule | What it finds |
 |---|---|---|---|
