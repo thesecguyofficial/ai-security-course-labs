@@ -130,7 +130,6 @@ Video walkthroughs, written lessons, solutions, downloadable PDF decks and a gra
 
 ## Background reading
 Short articles that explain the ideas behind the labs. Free, no sign-up:
-- [LLM security: the risks, the fixes and where to start](https://thesecguy.com/notes/llm-security-guide/) (pairs with M1 to M3)
 - [Prompt injection: 6 real AI agent hijacks and the 5 fixes](https://thesecguy.com/notes/prompt-injection-6-real-ai-agent-hijacks/) (M3, M7, M8)
 - [OWASP Top 10 for LLM Applications 2026 vs 2025: what changed](https://thesecguy.com/notes/owasp-llm-top-10-2026-vs-2025/) (M2)
 - [How to become an AI security engineer](https://thesecguy.com/notes/how-to-become-an-ai-security-engineer/)
