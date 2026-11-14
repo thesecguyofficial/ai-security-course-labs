@@ -6,7 +6,7 @@ jobs:
   style:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - run: python3 tools/style/style_check.py README.md labs docs
       - name: copy-paste check (shell blocks hold only commands)
         run: python3 tools/style/codeblock_check.py . && python3 tools/style/codeblock_check.py --self-test

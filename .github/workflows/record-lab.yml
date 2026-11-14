@@ -21,7 +21,7 @@ jobs:
     env:
       SCENARIO: ${{ inputs.scenario || 'm00-0.6-linux' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: recorder tools (off camera)
         run: python3 -m pip install --user --break-system-packages asciinema==2.4.0 pexpect==4.9.0
       - name: prepare a clean machine (off camera)
@@ -37,7 +37,7 @@ jobs:
         run: |
           cd "out/$SCENARIO" && sha256sum * && echo "run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" | tee run.txt
           echo "----- transcript -----"; cat transcript.txt || true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: rec-${{ env.SCENARIO }}

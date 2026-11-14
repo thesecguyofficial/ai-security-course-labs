@@ -22,7 +22,7 @@ jobs:
     env:
       SCENARIO: ${{ inputs.scenario || 'm02-2.5-editor' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: prepare a clean machine (off camera)
         run: sudo bash recordings/prepare.sh "recordings/scenarios/$SCENARIO.json"
       - name: editor and browser (off camera)

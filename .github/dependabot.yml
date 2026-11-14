@@ -1,0 +1,8 @@
+# Keeps the pinned GitHub Actions (commit SHAs, security test S-7) up to date: Dependabot opens a PR with the
+# new SHA and version comment; nothing merges on its own.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

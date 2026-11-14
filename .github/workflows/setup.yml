@@ -15,7 +15,7 @@ jobs:
   static:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: shellcheck (from PyPI, shellcheck-py)
         run: python3 -m pip install --user shellcheck-py && echo "$HOME/.local/bin" >> "$GITHUB_PATH"
       - name: unit tests (doctor) + script tests (shellcheck, checksums, house voice)
@@ -28,7 +28,7 @@ jobs:
         os: [ubuntu-24.04, ubuntu-22.04]   # 22.04 ships Python 3.10: setup must add 3.11 from apt
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: check only (exit 1 = things missing, which is expected on a fresh runner)
         run: ./setup.sh --check || test $? -eq 1
       - name: full install
@@ -56,14 +56,14 @@ jobs:
       - name: show the end of the logs as annotations
         if: failure()
         run: python3 .github/scripts/annotate_tail.py full.txt second-run.txt lab.txt setup.log
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: failure()
         with: {name: "setup-log-${{ matrix.os }}", path: "setup.log"}
 
   macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: check only
         run: ./setup.sh --check --no-docker || test $? -eq 1
       - name: full install (Ollama from Homebrew, models, .venv; no Docker on this runner)
@@ -79,14 +79,14 @@ jobs:
       - name: show the end of the logs as annotations
         if: failure()
         run: python3 .github/scripts/annotate_tail.py full.txt second-run.txt setup.log
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: failure()
         with: {name: setup-log-macos, path: setup.log}
 
   windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: parses in Windows PowerShell 5.1 and PowerShell 7
         shell: pwsh
         run: |
@@ -133,6 +133,6 @@ jobs:
         if: failure()
         shell: pwsh
         run: python .github/scripts/annotate_tail.py full.txt doctor.txt setup.log
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: failure()
         with: {name: setup-log-windows, path: setup.log}
