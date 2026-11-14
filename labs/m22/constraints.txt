@@ -11,7 +11,7 @@ cohere==7.3.0
 cryptography==50.0.2
 deepdiff==9.1.0
 distro==1.9.0
-dnspython==2.9.0
+dnspython==2.9.2
 docstring_parser==0.18.0
 email-validator==2.3.0
 fastavro==1.13.1
