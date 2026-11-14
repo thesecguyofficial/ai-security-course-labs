@@ -8,16 +8,17 @@ and all three privatelink zones (11.2), a customer-managed key in a same-region 
 (11.5). Then you prove each control with a request that should fail, change one setting and watch it break. About 2
 hours. It has hourly charges while it exists (G6), so teardown is the last step: do it today.
 
-> **Read this first: about the responses shown below.** We wrote this guide without access to an Azure subscription,
-> so **no response block in this file comes from a real run** (our real run of 9 November 2026 is summarized in a
-> table at the end). Every response block is labeled **"Example response (shape
+> **Read this first: about the responses shown below.** We wrote this guide from Microsoft's documentation, then ran
+> it end to end on 9 November 2026 (Path A) and applied the Terraform through `cloud/deploy.sh` on 12 November 2026.
+> The response blocks are still the documented shapes; **what really happened is in the table at the end**, and
+> where the two differ, the table is right. Every response block is labeled **"Example response (shape
 > from Microsoft docs, values illustrative)"** and names the page its shape comes from. Field names, error codes and
-> texts are copied from Microsoft Learn (October 2026) unless the block says otherwise. **The values (addresses, IDs,
-> versions, counts) are our guesses.** Write your real results into the table in G4.
+> texts are copied from Microsoft Learn (October 2026) unless the block says otherwise. The values (addresses, IDs,
+> versions, counts) are illustrative. Write your real results into the table in G4.
 >
 > **Path B is README Step 8.** The Terraform in `terraform/` and the script `cloud/cloud.sh` are the same build. This
-> guide adds the portal path, explains each step against the lessons, and adds the tests. The Terraform was
-> format-checked, not applied (fact-check item U1): expect to adjust a value for your region.
+> guide adds the portal path, explains each step against the lessons, and adds the tests. Your region may need a
+> different model or VM size than ours.
 
 Set these shell variables (again in every new terminal):
 
@@ -271,8 +272,8 @@ POST /openai/v1/responses from inside the VNet -> HTTP 200 (expect 200)
 ```
 
 Two open questions from our fact-check get answered here. **Foundry User is enough for inference**, or you'd get a
-401 (Microsoft's keyless guide still names Cognitive Services User; item U3). And **which token audience works**: the
-script tries `https://ai.azure.com` first (item U6). Note both.
+401 (Microsoft's keyless guide still names Cognitive Services User). And **which token audience works**: the
+script tries `https://ai.azure.com` first. Note both.
 
 Now the log entry. Microsoft: data "should start flowing to your selected destinations within 90 minutes".
 
@@ -302,8 +303,8 @@ az monitor log-analytics query -w $WS --analytics-query "AzureDiagnostics
 ```
 
 Read the `CallerIPAddress` of the `RequestResponse` row: it should be the VM's `10.20.3.x`, never a public address.
-Then search `properties_s` for "Reply with OK". Microsoft doesn't say whether these categories hold prompt text (item
-U5), which is why lesson 11.4 sends prompt-level audit to the API Management gateway. Your answer settles it.
+Then search `properties_s` for "Reply with OK". Microsoft doesn't say whether these categories hold prompt text,
+which is why lesson 11.4 sends prompt-level audit to the API Management gateway. Your answer settles it.
 
 ### T3 · Right network, wrong identity
 
@@ -484,7 +485,7 @@ small incident group read the workspace.
 | Model tokens | `probe-inside` runs a few times, a few hundred tokens each (a reasoning model counts its reasoning tokens) |
 | Foundry resource, Azure Policy | no hourly charge for the resource; "no charges for using Azure Policy on Azure resources" |
 
-We can't give you a total: Microsoft's pricing pages render prices in the browser and we couldn't load them (item U2).
+We can't give you a total: Microsoft's pricing pages render prices in the browser and we couldn't load them.
 Put the first five lines into the Azure pricing calculator for your region with 2 hours each; the VM and the private
 endpoint are the hourly part, so the clock matters more than the number of tests.
 
@@ -522,17 +523,17 @@ lab videos. The example blocks above stay illustrative; this is what we saw.
 | T3 | Foundry User removed from `id-jump` (its role list empty): the inside request still returned **200 seven minutes later**. Wait longer than 10 minutes, and re-test before you trust a revocation |
 | T5 logs | Key Vault `AuditEvent` rows `KeyUnwrap`, `KeyGet`, `KeySign`, `Authentication`; Foundry `RequestResponse` rows `ChatCompletions_Create` |
 
-## What we could not verify (October 2026)
+## What our runs didn't settle
 
-- **One real run so far** (table above; Path A, not the Terraform). The example responses stay illustrative.
-  The Terraform was still never planned or applied (fact-check U1).
+- The Terraform was applied once, through `cloud/deploy.sh` on 12 November 2026 (`up`, `test` 5 of 5, `down`). The
+  example responses above stay illustrative.
 - Portal labels for the VNet, Key Vault, managed identity, VM and private DNS screens, and whether the Foundry create
   wizard shows its encryption step under that name (marked "label may differ slightly").
 - The status code and body of a network refusal (T1, G4). Microsoft Learn doesn't document them.
-- The role (U3), token audience (U6) and prompt-text (U5) questions: T2 answers them.
-- Run Command and the metadata endpoint on a subnet without default outbound access (U7).
-- Whether your subscription sees `gpt-5-mini` 2025-08-07 as `DataZoneStandard` in `swedencentral` (U8): Step 0.6
+- The role, token audience and prompt-text questions: T2 answers them.
+- Run Command and the metadata endpoint on a subnet without default outbound access.
+- Whether your subscription sees `gpt-5-mini` 2025-08-07 as `DataZoneStandard` in `swedencentral`: Step 0.6
   checks.
 - Whether `az cognitiveservices account update --encryption` accepts a version change without other properties, and
   what Terraform plans after it (T5).
-- Prices (U2).
+- Prices.

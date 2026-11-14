@@ -19,10 +19,10 @@ hand once is still the way to learn them.
 | F | Security Command Center: what you can see on Standard, and why Premium stays on the video | 16.2, 16.3 |
 | G | Cost and teardown | all |
 
-> **About the responses below.** This guide was written without access to a Google Cloud project, so **no response
-> here comes from a real run**. Every response block is labeled **Example response (shape from the provider's docs,
-> values illustrative)** and uses Google's documented field names. Before this module is released, the guide is run
-> once in a sandbox and the examples are replaced with real output. Paste your own results into your notes.
+> **About the responses below.** We ran this guide's script and Terraform on 12 November 2026 (`europe-west4`, a Free
+> Trial project): Parts A to E passed, and each step has an **"Our run"** line with what Google Cloud returned. The
+> other response blocks are labeled **Example response (shape from the provider's docs, values illustrative)** and use
+> Google's documented field names. Paste your own results into your notes.
 
 Throughout: `PROJECT_ID` = your sandbox project, `REGION` = `europe-west4`.
 

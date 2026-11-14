@@ -891,8 +891,10 @@ included: compare notes with other students in the community.
 ## Step 8 (optional) · The Azure twin, in your own subscription
 
 This repeats three results for real: a key works, an unapproved model deployment is refused, and the old key gets
-`401` after `disableLocalAuth: true`. **We have not run this step for you** (this course's build has no Azure
-subscription); the expected responses below come from Microsoft's documentation.
+a refusal after `disableLocalAuth: true`. The expected responses below come from Microsoft's documentation. We got
+the same three results in our real run of 9 November 2026 (GUIDED-BUILD.md, "What happened in our real run"), with
+two differences: the old key was refused with **403** `AuthenticationTypeDisabled`, not the documented 401, and the
+approved-models policy took hours, not minutes, to start refusing. Treat either 401 or 403 as "refused".
 
 **Expected cost: $0.** There are no charges for Azure Policy on Azure resources
 ([Azure Policy pricing](https://azure.microsoft.com/en-us/pricing/details/azure-policy/)); Cost Management budgets
@@ -941,7 +943,8 @@ What each command does, and what to look for:
 
 - `./twin.sh policy-test`: expect: 1) refused by policy (403 Forbidden); 2) the approved model is created, then deleted
 - `./twin.sh lock`: redeploys with disableLocalAuth=true; prints true
-- `./twin.sh wait-401`: polls with the OLD key: expect HTTP 200 for a while, then 401 (minutes, up to hours)
+- `./twin.sh wait-401`: polls with the OLD key: expect HTTP 200 for a while, then a refusal (minutes, up to hours).
+  Microsoft documents 401; we got 403 `AuthenticationTypeDisabled`. The loop stops on either
 - `./twin.sh activity`: the control-plane trail: listKeys, deployments/write, the policy events
 - `./twin.sh down`: removes the policy assignments, budget and resource group
 

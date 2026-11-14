@@ -7,14 +7,15 @@ About 60 minutes. Cost: cents at most (table at the end). Teardown is the last s
 
 README Step 8 is the short version of this guide. If you already did it, reuse that project and skip what you've done.
 
-> **Read this first: about the responses shown below.** We wrote this guide without access to a Google Cloud
-> project, so **no response in this file comes from a real run**. Every response block is labeled
+> **Tested for real on 12 November 2026** (a Free Trial project): the console clicks in this guide, `cloud/deploy.sh`
+> and the Terraform each passed the five requests (5 of 5) and were torn down the same day. Lesson 10.5 quotes the
+> results we got. The blocks below still show the documented response shapes, and each is labeled
 > **"Example response (shape from Google docs, values illustrative)"**. Field names come from Google's API
 > definitions in their JSON (camelCase) form: Gemini
 > ([`prediction_service.proto`](https://github.com/googleapis/googleapis/blob/master/google/cloud/aiplatform/v1/prediction_service.proto)),
 > error details ([`error_reason.proto`](https://github.com/googleapis/googleapis/blob/master/google/api/error_reason.proto))
 > and audit logs ([`AuditLog`](https://docs.cloud.google.com/logging/docs/reference/audit/auditlog/rest/Shared.Types/AuditLog)).
-> **The values are our guesses.** Your real responses will differ: that's the point of running them. Paste your real
+> The values in them are illustrative. Your real responses will differ: that's the point of running them. Paste your real
 > results into the table in Step 5.
 
 Throughout: `PROJECT_ID` = your project, `PROJECT_NUMBER` = its number (`gcloud projects describe PROJECT_ID

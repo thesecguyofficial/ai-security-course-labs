@@ -6,13 +6,13 @@ within the free allowance, plus a few Gemini calls (cost table at the end). Tear
 
 > **Tested for real on 12 November 2026** (project in `europe-west4`, Free Trial): `cloud/deploy.sh` ran every
 > request below, and each one now has an **"Our run"** line with what Google's service actually returned. The JSON
-> blocks still show the response **shapes**, as we first wrote them:
-> **no JSON block in this file is copied from a real run**. Every response block is labeled
+> blocks still show the response **shapes** (the console's **Test** panel showed the same fields when we built it by
+> clicks on 13 November 2026). Every response block is labeled
 > **"Example response (shape from Google docs, values illustrative)"**. The field names are copied from Google's API
 > definition for Model Armor ([`service.proto`](https://github.com/googleapis/googleapis/blob/master/google/cloud/modelarmor/v1/service.proto))
 > and for Gemini ([`prediction_service.proto`](https://github.com/googleapis/googleapis/blob/master/google/cloud/aiplatform/v1/prediction_service.proto),
 > [`content.proto`](https://github.com/googleapis/googleapis/blob/master/google/cloud/aiplatform/v1/content.proto)),
-> in their JSON (camelCase) form. **The values are our guesses.** Your real responses will differ: that's the point of
+> in their JSON (camelCase) form. The values in them are illustrative. Your real responses will differ: that's the point of
 > running them. Paste your real results into a copy of the table in Step 5.
 
 Throughout: `PROJECT_ID` = your project, `REGION` = `europe-west4` (any Model Armor region works; keep it consistent),

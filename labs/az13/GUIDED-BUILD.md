@@ -7,11 +7,11 @@ prompt agent** that retrieves through the knowledge base as *you* and can only s
 About 75 minutes. Cost: Search Free is $0; model tokens are a few US cents (Step G8). Teardown is the last step: do it
 today.
 
-> **Read this first: about the responses shown below.** We wrote this guide without access to an Azure subscription,
-> so the response blocks are illustrative; **what really happened in our 9 November 2026 run is in the table near the
-> end**. Every response block is labeled **"Example response (shape
+> **Read this first: about the responses shown below.** We wrote this guide from Microsoft's documentation and then
+> ran it end to end on 9 November 2026 (and the one-shot `deploy.sh` on 11 November). The response blocks are still the
+> documented shapes; **what really happened is in the table near the end**, and where the two differ, the table is right. Every response block is labeled **"Example response (shape
 > from Microsoft docs, values illustrative)"** and names the page its shape comes from. Field names are copied from
-> Microsoft Learn (October 2026). **The values (scores, IDs, wording, which document comes back) are our guesses.**
+> Microsoft Learn (October 2026). The values (scores, IDs, wording, which document comes back) are illustrative.
 > Real services and real models will disagree with us in places: that's the point of running it. Write your real
 > results into the table in G5.
 >
@@ -395,10 +395,8 @@ example blocks above stay illustrative; this is what we saw.
 | G6a | No header: still "I don't know", no canary |
 | G6b | `mcp_approval_request` with the arguments; approved, answered |
 
-## What we could not verify (October 2026)
+## What our runs didn't settle
 
-- **No real run.** Every response above is illustrative. Before release the course team runs this guide in a sandbox
-  and replaces them with real output.
 - Exact portal labels in the Foundry portal for agents, tools and knowledge bases (marked "label may differ slightly").
 - Whether the Foundry portal can set the knowledge base tool's `headers` and structured inputs.
 - Whether a knowledge base retrieve on the Free tier behaves exactly like Basic (Microsoft lists Free-tier limits of

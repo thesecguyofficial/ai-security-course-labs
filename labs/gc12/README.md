@@ -708,8 +708,9 @@ teardown. This step adds the Terraform version with the floor setting and runs t
 This is the only part that touches the cloud. It creates, in **your own** sandbox project: the Model Armor and
 Sensitive Data Protection APIs, an SDP inspect template, a Model Armor template `helpdesk-guard` in your region, the
 project's floor setting (Agent Platform integrated, inspect only first, logging on), and Model Armor User for the Agent
-Platform service agent. Terraform files: `terraform/*.tf`. We haven't run it (no cloud account where this lab was
-built): `terraform validate` wasn't available either, so read the plan before you apply.
+Platform service agent. Terraform files: `terraform/*.tf`. Tested 12 November 2026: `cloud/deploy.sh` (`up`, `test`,
+`sweep`, `down`) and the Terraform (`tf apply`, `test`, `tf destroy`) each gave the four expected matches plus R5's
+refusal. Read the plan before you apply.
 
 ### Cost (estimate, October 2026)
 
@@ -767,8 +768,8 @@ make down PROJECT=your-project-id
 
 - `make down PROJECT=your-project-id`: terraform destroy, then scripts/reset_floor.sh switches the floor setting off
 
-Terraform leaves the floor setting itself in place (`deletion_policy = "ABANDON"`, it's a per-project singleton), so
-`reset_floor.sh` sets enforcement to `FALSE` and clears the integrated services, then prints the result. Check that
+Terraform can't delete the floor setting (it's a per-project singleton, and the provider we tested on 12 November
+2026 has no `deletion_policy` for it), so `reset_floor.sh` sets enforcement to `FALSE` and clears the integrated services, then prints the result. Check that
 `integratedServices` is empty. Disabling the APIs is left to you (`disable_on_destroy = false`, so other labs in the
 same project keep working).
 

@@ -7,11 +7,13 @@ per-session sandbox) whose agent identity reads one container, whose code enforc
 passes **your** `policy.py`. Its write tools live on **your own** MCP server on Container Apps. Then you widen one role and watch the HR file leak. About 90 minutes. Expect under US$1 if
 you tear down the same day (G8). Teardown is the last step: do it today.
 
-> **Read this first: about the responses shown below.** We wrote this guide before we could run it, so the response
-> blocks are illustrative; **what really happened in our 9 November 2026 run is in the table near the end**. Every response block is labeled **"Example response (shape
+> **Read this first: about the responses shown below.** We wrote this guide from Microsoft's documentation and then
+> ran it end to end on 9 November 2026 (and the one-shot `deploy.sh` on 11 November). The response blocks are still
+> the documented shapes; **what really happened is in the table near the end**, and where the two differ, the table is
+> right. Every response block is labeled **"Example response (shape
 > from Microsoft docs, values illustrative)"** and names the page its shape comes from. Where the shape is our own
-> agent's (the invocations protocol is "Arbitrary JSON in, arbitrary JSON out"), the label says so. **Values (wording,
-> IDs, which tools the model chooses) are our guesses.** Real models will disagree with us in places: that's the point
+> agent's (the invocations protocol is "Arbitrary JSON in, arbitrary JSON out"), the label says so. Values (wording,
+> IDs, which tools the model chooses) are illustrative. Real models will disagree with us in places: that's the point
 > of running it. Write your real results into the table in G5.
 >
 > **Status, October 2026.** Microsoft "announced general availability for Hosted Agents on July 9" 2026, and Toolboxes
@@ -463,10 +465,8 @@ example blocks above stay illustrative; this is what we saw.
 | G6a | Account-scope role: request 2 answered `CANARY-AZ14-BANDS-4417`; `make grant-narrow` removed it |
 | G6b | Direct call ran `send_email` (simulated) with `require_approval: "always"`: nobody was asked |
 
-## What we could not verify (October 2026)
+## What our runs didn't settle
 
-- **One real run so far** (table above). The example responses stay illustrative. Before release the course team runs this guide in a sandbox
-  and replaces them with real output.
 - **The agent identity's display name** in **Agent identities**. Reading its principal ID is documented
   (`instance_identity.principal_id`, G4.3); whether it's populated right after `create_version` returns is not, so
   G4.3 reads it with `agents.get`.

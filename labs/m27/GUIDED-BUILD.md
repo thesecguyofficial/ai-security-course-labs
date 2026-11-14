@@ -7,7 +7,8 @@ DNS Firewall walled garden** with query logging. Then you send four example requ
 logs and tear it all down.
 
 This walkthrough has **not been run end to end yet**. Every response below is labeled "Example response (shape from
-the provider's docs, values illustrative)". Before release it gets one real run and real output.
+the provider's docs, values illustrative)". Status on 14 November 2026: still not run in a real account. When it has
+been, a dated "What happened in our real run" table goes here.
 
 ## Cost (list prices read 25 Oct 2026)
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Teardown step 2 of 2 (after `terraform destroy`): switch the project floor setting off again.
-# Terraform leaves the floor setting in place (deletion_policy ABANDON) because it is a per-project singleton.
+# Terraform can't delete the floor setting (a per-project singleton; the provider has no deletion_policy for it).
 #   scripts/reset_floor.sh PROJECT_ID
 set -euo pipefail
 PROJECT=${1:?project id}

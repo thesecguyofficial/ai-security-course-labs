@@ -8,15 +8,16 @@ regional endpoint. About 90 minutes in **your own** sandbox project (the GC10 pr
 small VM while it runs (table at the end). Teardown is the last section: do it the same day.
 
 > **Tested for real on 12 November 2026** (`europe-west4`, a Free Trial project with no organization): `cloud/deploy.sh`
-> and the Terraform both built this and passed Tests 1 to 5 and the Step 3 trap. Blocks labeled **"Our response"**
-> are from that run. The rest are still labeled **"Example response (shape from Google docs, values illustrative)"**. Field names come from Google's API
+> and the Terraform both built this and passed Tests 1 to 5 and the Step 3 trap. **On 13 November 2026 we built it
+> again by clicks in the console** (Cloud Shell only for the cache setting, request-response logging and Tests 2 and
+> 3) and it passed the same tests; the console paths below use the labels we saw. Blocks labeled **"Our response"**
+> are from those runs. The rest are still labeled **"Example response (shape from Google docs, values illustrative)"**. Field names come from Google's API
 > definitions and reference pages: Gemini
 > ([`prediction_service.proto`](https://github.com/googleapis/googleapis/blob/master/google/cloud/aiplatform/v1/prediction_service.proto)),
 > errors ([`error_reason.proto`](https://github.com/googleapis/googleapis/blob/master/google/api/error_reason.proto)),
 > audit logs ([`AuditLog`](https://docs.cloud.google.com/logging/docs/reference/audit/auditlog/rest/Shared.Types/AuditLog)),
 > request-response logging ([Google's page](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/multimodal/request-response-logging)).
-> **The values are our guesses.** The serial-port lines come from the lab's own `smoke_call.sh.tftpl`, so their
-> format is real; the values aren't. Paste your real results into the table in Step 4.
+> In those blocks the values are illustrative. Paste your real results into the table in Step 4.
 
 Throughout: `PROJECT_ID`, `PROJECT_NUMBER` (`gcloud projects describe PROJECT_ID --format="value(projectNumber)"`),
 `REGION` = `europe-west4` (zone `europe-west4-a`), model `gemini-3.1-flash-lite`, and you run commands from
@@ -50,7 +51,9 @@ where we couldn't check a label we say "(label may differ slightly)".
 ### 1a. Identity: two service accounts, no keys, a predict-only role (lesson 11.1)
 
 **Console.** **IAM & Admin** > **Service Accounts** > **Create service account**: `chatbot-runtime`, then
-`ticket-summariser`, no roles yet, **Done** (label may differ slightly). Then the custom role, from Google's
+`ticket-summariser`, no roles yet, **Create and close** (the page fills **Service account ID** from the name: clear it and
+type the ID). If an earlier run deleted the custom role, its ID stays reserved for 37 days and **Create custom role**
+fails: tick it on the **Roles** page (status **Deleted**) and click **Undelete** instead. Then the custom role, from Google's
 [custom roles](https://docs.cloud.google.com/iam/docs/creating-custom-roles) page: **Roles** page, pick your project,
 **Create custom role**, **Title** `Helpdesk model caller`, **ID** `helpdeskModelCaller`, **Role launch stage**
 General Availability, **Add Permissions**, find `aiplatform.endpoints.predict`, **Add Permissions**, **Create**. Then
@@ -114,9 +117,24 @@ gcloud network-connectivity regional-endpoints describe aiplatform-eu --region=e
 What this buys: the network itself holds the residency pin. The VM can reach the EU host and nothing else, so code
 that drifts to the global endpoint fails instead of quietly sending prompts anywhere (Step 3 shows it).
 
-**Console.** **VPC network** > **Create VPC network** (`helpdesk-vpc`, custom subnet `helpdesk-eu`, `10.10.0.0/24`),
-then **Network services** > **Private Service Connect** for the endpoint, **Cloud DNS** for the zone and **VPC
-network** > **Firewall** for the two rules. The exact console labels are in the lesson 11.6 video steps.
+**Console** (13 November 2026 labels). **VPC network** > **Create VPC network**: `helpdesk-vpc`, subnet mode
+**Custom**, new subnet `helpdesk-eu` in `europe-west4`, range `10.10.0.0/24`, Private Google Access off; leave the six
+suggested firewall rules unticked. **Watch one setting:** *Advanced threat detection with DNS Armor* looked selected
+for us ("Additional costs apply"). Pick **Disabled**, then open **Equivalent command line**: it must show only the
+`networks create` and `subnets create` commands, with no `dns-threat-detectors create`. Checking that dialog before
+**Create** is a good habit on every form.
+
+Then **Network services** > **Private Service Connect** > **Connect endpoint**: target **Google APIs**, scope
+**Multi-regional**, multi-region `eu`, target service `Vertex AI (aiplatform.eu.rep.googleapis.com)`, endpoint name
+`aiplatform-eu`, region `europe-west4`, network `helpdesk-vpc`, subnetwork `helpdesk-eu`, **IP address** > **Create IP
+address** (name `aiplatform-eu-ip`, **Let me choose**, `10.10.0.10`). The console reserves that named address; the
+gcloud path doesn't, so teardown deletes it. **Cloud DNS** > **Create zone**: **Private**, name `aiplatform-eu-rep`,
+DNS name `aiplatform.eu.rep.googleapis.com`, network `helpdesk-vpc`; in the zone, **Add standard**: name empty, type
+**A**, `10.10.0.10`. **Network security** > **Firewall policies** > **Create firewall rule** twice:
+`deny-all-egress` (network `helpdesk-vpc`, not the preselected `default`; priority `65000`; **Egress**; **Deny**;
+**All instances in the network**; destination `0.0.0.0/0`) and `allow-aiplatform-eu-egress` (priority `1000`;
+**Egress**; **Allow**; destination `10.10.0.10/32`; TCP `443`). Each form's **Equivalent command line** matched the
+gcloud below.
 
 ### 1c. Encryption: your own key on the data, and the cache (lesson 11.3)
 
@@ -124,7 +142,11 @@ network** > **Firewall** for the two rules. The exact console labels are in the 
 region; then **Create key** `helpdesk-data`, purpose symmetric encrypt/decrypt, rotation period 90 days (labels may
 differ slightly). For the BigQuery datasets: **BigQuery** > your project > **Create dataset** `helpdesk_tickets`,
 same region, and under the advanced options choose a customer-managed key and select `helpdesk-data`; repeat for
-`ai_logs` (labels may differ slightly: Google's CMEK page documents bq, SQL and the API for this, not the console).
+`ai_logs`. In our run the console then said BigQuery's service account lacked the Encrypter/Decrypter role and
+offered a **Grant** button: clicking it replaces the `bq show --encryption_service_account` and
+`kms keys add-iam-policy-binding` lines below. Dataset access by clicks: open the dataset > **Share** > **Manage
+permissions** > **Add principal**, `chatbot-runtime@...` with **BigQuery Data Viewer**, then `ticket-summariser@...`
+with **BigQuery Data Editor**. The cache setting has no console page (the REST call below).
 
 **gcloud and bq**, from Google's
 [BigQuery CMEK](https://docs.cloud.google.com/bigquery/docs/customer-managed-encryption) page:
@@ -249,7 +271,8 @@ for Google APIs, and IAM (the predict-only role) decides what that token can do.
 
 ### Test 1 · The private path works, the internet doesn't
 
-Wait two minutes after the VM starts, then:
+Wait two minutes after the VM starts, then read the serial port. Console: the VM's details page > **Logs** >
+**Serial port 1 (console)**, and search the page for `TSG-SMOKE`. Or:
 
 ```bash
 gcloud compute instances get-serial-port-output helpdesk-vm --zone=europe-west4-a | grep TSG-SMOKE
@@ -397,9 +420,10 @@ gcloud kms keys versions disable 1 --key=helpdesk-data --keyring=helpdesk-eu --l
 (Console, from Google's [enable and disable key versions](https://docs.cloud.google.com/kms/docs/enable-disable)
 page: **Key Management**, the key ring, the key, tick version 1, **Disable**, confirm **Disable**.) Cloud KMS says
 disabling is "consistent within one minute", but BigQuery's CMEK page says the effect on BigQuery "doesn't take place
-instantly, but happens within an hour". Re-run the `bq query` from Test 4 every ten minutes until it fails.
+instantly, but happens within an hour". Re-run the `bq query` from Test 4 every five minutes until it fails. On
+12 November it failed about 20 minutes after the disable; on 13 November, within 5 minutes.
 
-Our response, about 20 minutes after the disable:
+Our response:
 
 ```text
 ... projects/PROJECT_ID/locations/europe-west4/keyRings/helpdesk-eu/cryptoKeys/helpdesk-data/cryptoKeyVersions/2 is not enabled, current state is: DISABLED.
@@ -435,7 +459,9 @@ gcloud compute instances get-serial-port-output helpdesk-vm --zone=europe-west4-
 ```
 
 (Path C users: render `smoke.sh` with the `sed` line from 1g first.) The script does both steps for you:
-`bash cloud/deploy.sh trap`, then `bash cloud/deploy.sh untrap`.
+`bash cloud/deploy.sh trap`, then `bash cloud/deploy.sh untrap`. Console: the VM's details page > **Edit** >
+**Automation** > **Startup script**, change the host (three places) and `locations/eu` to `locations/global`, **Save**;
+then on the **VM instances** list, the row's **⋮** > **Reset** > **Reset**. Change both back the same way afterwards.
 
 Our response (12 November 2026):
 

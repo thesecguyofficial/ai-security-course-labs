@@ -8,7 +8,7 @@ teardown at the end**: it's the only step that stops the hourly charge.
 
 > **Tested for real on 12 and 13 November 2026** (`cloud/deploy.sh`, Terraform, and a console rehearsal on 13 November):
 > each request now has an **"Our run"** line with what the real services returned. The JSON blocks still show the
-> response **shapes**, as we first wrote them: **no JSON block in this file is copied from a real run**. Every such block is labeled
+> response **shapes** from Google's documentation, with illustrative values. Every such block is labeled
 > **"Example response (shape from Google docs, values illustrative)"**, and its field names are copied from Google's
 > API definitions in their JSON (camelCase) form: RAG Engine
 > ([`vertex_rag_service.proto`](https://github.com/googleapis/googleapis/blob/master/google/cloud/aiplatform/v1/vertex_rag_service.proto),

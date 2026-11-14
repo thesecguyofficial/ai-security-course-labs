@@ -6,12 +6,11 @@ Contributor, a Global deployment, no logs, no guardrails), inventory it with the
 lock it down, and prove every fix with a request that should now fail. About 75 minutes, most of it waiting for Azure.
 Cost: a few US cents (table in G7). Teardown is the last step: do it today.
 
-> **Read this first: about the responses shown below.** We wrote this guide without access to an Azure subscription,
-> so the response blocks are illustrative; **what really happened in our 9 November 2026 run is in the table near the
-> end**. Every response block is labeled **"Example response (shape
+> **Read this first: about the responses shown below.** We wrote this guide from Microsoft's documentation and then
+> ran it end to end on 9 November 2026. The response blocks are still the documented shapes; **what really happened
+> in our run is in the table near the end**, and where the two differ, the table is right. Every response block is labeled **"Example response (shape
 > from Microsoft docs, values illustrative)"** and names the page its shape comes from. Field names, error codes and
-> error texts are copied from Microsoft Learn (October 2026). **The values (names, IDs, times, counts) are our
-> guesses.** Write your real results into the table in G5.
+> error texts are copied from Microsoft Learn (October 2026). The values (names, IDs, times, counts) are illustrative. Write your real results into the table in G5.
 >
 > **This is not lab Step 8.** README Step 8 (`azure-twin/twin.sh`) repeats three results in about 20 minutes and is a
 > fine warm-up. This guide is the longer version: inventory first, then the full lockdown, then the proof. Use a
@@ -562,10 +561,8 @@ example blocks above stay illustrative; this is what we saw.
 | T4 | Switching keys back on as Owner: refused by `az10-deny-key-access`; the setting stayed `True` |
 | T5 | The Activity Log showed every step, including the `listKeys` action from the start |
 
-## What we could not verify (October 2026)
+## What our run didn't settle
 
-- **No real run.** Every response above is illustrative. Before release the course team runs this guide in a sandbox
-  and replaces them with real output.
 - Portal labels for the Foundry portal's deploy dialog, Managed Identities, IAM role tabs, Resource Graph Explorer and
   Cost Management budgets (marked "label may differ slightly").
 - The exact error bodies for T1, T3 and T4. Microsoft documents the error codes and texts we quote, not full bodies,

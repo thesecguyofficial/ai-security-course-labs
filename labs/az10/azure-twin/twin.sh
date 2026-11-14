@@ -53,9 +53,11 @@ case "${1:-}" in
     KEY="$(cat .twin-key)"
     for i in $(seq 1 30); do
       code=$(curl -s -o /dev/null -w "%{http_code}" "$ENDPOINT/openai/models?api-version=2024-10-21" -H "api-key: $KEY")
-      echo "$(date -u +%H:%M:%S) old key -> HTTP $code"; [ "$code" = "401" ] && exit 0; sleep 60
+      echo "$(date -u +%H:%M:%S) old key -> HTTP $code"
+      # Microsoft documents 401; our 9 Nov 2026 run got 403 AuthenticationTypeDisabled. Either means refused.
+      case "$code" in 401|403) echo "Refused: the old key no longer works."; exit 0;; esac; sleep 60
     done
-    echo "Still not 401 after 30 minutes. That's within Microsoft's documented delay: run wait-401 again later."
+    echo "Still not refused after 30 minutes. That's within Microsoft's documented delay: run wait-401 again later."
     ;;
   activity)   # what the control plane recorded (free, 90 days)
     az monitor activity-log list -g "$RG" --offset 6h \

@@ -862,9 +862,9 @@ ALL TESTS PASSED (24 run)
    step sets the tier to **Unprovisioned**.
 
 `terraform/` builds items 1 to 3 (`make plan`, `make up`); `make down PROJECT=...` destroys them and then sets the RAG
-Engine tier to Unprovisioned. We didn't run the cloud path ourselves (no cloud account where the lab was built),
-and `terraform validate` couldn't run here (no provider download); `terraform fmt` passes. Read the plan before you
-apply it.
+Engine tier to Unprovisioned. The same `terraform/` folder was applied and destroyed for real on 12 November 2026
+(through `cloud/deploy.sh tf apply`, which also runs the imports and the test), and the whole build was done again by
+clicks on 13 November; `GUIDED-BUILD.md` has the results. Read the plan before you apply it.
 
 ## Troubleshooting
 

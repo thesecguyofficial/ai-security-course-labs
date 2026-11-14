@@ -15,8 +15,8 @@ You will:
 | F | Cost and teardown | all |
 
 Every response below that wasn't captured from a real run is labeled **Example response (shape from the provider's
-docs, values illustrative)** and uses AWS's field names exactly. Before this module is released, the guide is run
-once for real in a sandbox and the examples are replaced with real output.
+docs, values illustrative)** and uses AWS's field names exactly. **Status, 14 November 2026:** not yet run end to end
+in a real AWS account. When it has been, a dated "What happened in our real run" table goes here.
 
 ## Before you start
 

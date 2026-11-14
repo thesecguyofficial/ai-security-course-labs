@@ -749,9 +749,9 @@ No solution is included: compare notes with other students in the community.
 This deploys `terraform/`: a VNet, a Foundry resource with public access **Disabled** and keys off, a customer-managed
 key in a same-region Key Vault with purge protection, a private endpoint with all three privatelink zones, a
 Log Analytics workspace with a diagnostic setting, one small `DataZoneStandard` deployment, and a small Linux VM with
-no public IP to test from inside. **We have not run this step for you** (this course's build has no Azure
-subscription). The Terraform was checked with `tofu fmt`; it was not planned against Azure. Expect to adjust a value
-for your region (model availability, VM size).
+no public IP to test from inside. We applied it on 12 November 2026 in Sweden Central through `cloud/deploy.sh`
+(`up`, `test` 5 of 5, `down`); the real results are in `GUIDED-BUILD.md`, "What happened in our real run". Your
+region may need a different model or VM size.
 
 **Cost.** Unlike lab AZ10, this one has hourly charges while it exists: the private endpoint, the VM and its disk,
 plus small amounts for Log Analytics ingestion, Key Vault operations, the DNS zones and a few hundred tokens. We could

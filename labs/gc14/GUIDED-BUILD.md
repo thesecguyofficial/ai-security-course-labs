@@ -14,15 +14,18 @@ zero, in **your own** Google Cloud sandbox project (never a work project). About
 The agent's only tool server is **Google's BigQuery remote MCP server** (`https://bigquery.googleapis.com/mcp`), which
 Google registers in Agent Registry for you when the BigQuery API is on. No third-party service is used.
 
-> **Read this first: about the responses shown below.** We wrote this guide without running it in a Google Cloud
-> project, so **no response from Google Cloud in this file comes from a real run**. Every such block is labeled
-> **"Example response (shape from the provider's docs, values illustrative)"**. Field names come from Google's pages
-> and API definitions (`google/iam/v3/access_policy_resources.proto`, `google/cloud/aiplatform/v1beta1/reasoning_engine.proto`
-> and `memory_bank_service.proto` in [googleapis](https://github.com/googleapis/googleapis)) and the log queries in
-> Google's [Agent Gateway codelabs](https://github.com/GoogleCloudPlatform/cloud-networking-solutions/tree/main/codelabs).
-> **Values (IDs, timestamps, and what the model chooses to say) are ours.** The Terraform in `cloud/terraform/` was
-> checked against the provider's documentation but has **not** been applied or run through `terraform validate`
-> by us. Write down what you really see in the table in Step 8.
+> **Tested for real on 12 November 2026** (Terraform, `us-central1`): R1 to R4 in dry run and under ENFORCE, Memory
+> Bank and the teardown. Each request has an **"Our run"** block with what Google Cloud returned. On 13 November we
+> built it again by clicks in the console, and that build behaved differently ("Why not the console's Add gateway",
+> Step 1): under ENFORCE it let R4 through. Until we've re-run R4 on the Terraform build, treat the 403 below as one
+> run's result and check yours.
+>
+> The other blocks are labeled **"Example response (shape from the provider's docs, values illustrative)"**. Field
+> names come from Google's pages and API definitions (`google/iam/v3/access_policy_resources.proto`,
+> `google/cloud/aiplatform/v1beta1/reasoning_engine.proto` and `memory_bank_service.proto` in
+> [googleapis](https://github.com/googleapis/googleapis)) and the log queries in Google's
+> [Agent Gateway codelabs](https://github.com/GoogleCloudPlatform/cloud-networking-solutions/tree/main/codelabs).
+> Write down what you really see in the table in Step 8.
 
 Throughout, run commands from `labs/gc14`, and set these shell variables again in every new terminal:
 
@@ -154,6 +157,27 @@ gcloud agent-registry services create logging --project=$PROJECT --location=$REG
   --display-name=logging.googleapis.com --endpoint-spec-type=no-spec \
   --interfaces=url=https://logging.googleapis.com,protocolBinding=JSONRPC
 ```
+
+### Why not the console's Add gateway
+
+The console has **Agent Platform > Gateways > Add gateway**, and we tried it on 13 November 2026. One side panel makes
+the gateway, an IAP authz extension and its policy, but three of its choices differ from the build above, and the
+gateway and extension pages have no edit for them afterwards:
+
+- **The extension fails open.** It's created with `failOpen: true`: if IAP can't answer, traffic goes through. The
+  panel has no field for it. Fix: `gcloud service-extensions authz-extensions describe ... --format=yaml`, change it
+  to `failOpen: false`, `import` it back (right after creation the import fails with "The resource is being created";
+  wait a few minutes).
+- **Only the regional registry is added.** Google's own MCP servers, BigQuery's included, are registered in `global`,
+  so the agent's tool calls match nothing. Fix: re-import the gateway with both registries (the `gateway.yaml` above).
+- **Enforcement can't be switched in the console.** "Audit only" and "Enforce policies" are picked at creation;
+  changing it later is the `describe`, edit, `import` round trip on the extension.
+
+Under ENFORCE, our console-built gateway still let R4 (an unregistered host) through, which the Terraform build
+refused with a 403 on 12 November. So build the gateway with Path A or Path B, and use the console to look at what you
+built: **Gateways** (details), **Agent Registry** (the **MCP Servers** tab lists BigQuery's server in `global`, with 9
+tools), **Policies** (your rules in the rule builder) and **Deployments**. The console's defaults are the lesson:
+always read what a "create" button chose for you.
 
 Create the datasets in the console (**BigQuery > your project > Create dataset**: `helpdesk`, then `finance_exports`),
 then a staging bucket: `gcloud storage buckets create gs://$PROJECT-tsg-gc14-staging --location=$REGION` and
@@ -318,6 +342,16 @@ done
 Then give the agent read access to the `helpdesk` dataset only: **BigQuery > helpdesk > Share > Manage permissions >
 Add principal**, paste `$AGENT_PRINCIPAL` (without quotes), role **BigQuery Data Viewer**. Don't share
 `finance_exports`.
+
+**The same rules in the console** (Agent Platform > **Policies** > **Access policies** > **Create**, 13 November 2026):
+click **Edit** next to the policy ID and name it `tsg-gc14-egress`; each **New rule** takes an effect, **Individual
+agents** (tick your agent, then **OK**: Escape cancels the pick) and a resource. For the endpoint rule pick **Endpoint**
+and your registered endpoint. For the two tool rules pick **MCP server** > **Add condition** > **Condition editor** and
+type the tool part only, with **double quotes**, for example
+`destination.agent_registry.mcp_server.tool.name == "execute_sql"`; the single-quoted expression above with
+`resource_type == ...` was refused there ("Condition expression is required"). Typing worked where pasting didn't. Two
+differences to know: the console binds the policy to the **project**, not the gateway, and the endpoint rule names that
+one endpoint rather than any endpoint. Our DENY rule still took effect.
 
 Before you test, run `python3 -c "import cel; cel.check(\"destination.agent_registry.mcp_server.tool.name == 'execute_sql'\")"`
 from `labs/gc14`: the offline lab's CEL subset reads every condition in this guide, so a typo shows up here first.
@@ -527,6 +561,10 @@ default_ttl set to 2592000s (30 days) for memories created from now on
 {"fact": "Alice prefers replies before 10:00.", "scope": {"app_name": "tsg_helpdesk_gc14", "user_id": "alice"}, "expireTime": "2026-11-22 09:52:11+00:00"}
 0 memories for user_id=bob
 ```
+
+In our run (13 November 2026) the TTL call and both reads matched this, but the memory came back with
+`"expireTime": None`: the 30-day default didn't show on that memory. Check yours, and if it's empty, set an expiry when
+you write the memory instead of relying on the default.
 
 The second read returns nothing because the **scope** is different. Note who chose the scope: this script, running as
 **you**. In a real app, your backend sets `user_id` from a verified ID token, never from the request body (offline
