@@ -151,7 +151,7 @@ def a14(s):
 
 def a15(s):
     ok, why = twin.decide(s, "tsg-model-approver", "sagemaker:UpdateModelPackage", C["model_package_arn_prefix"] + "3")
-    lines = [f"the ML lead approves version 3 in a hurry (pickle weights, no licence, no hashes): {_say(ok, why)}"]
+    lines = [f"the ML lead approves version 3 in a hurry (pickle weights, no license, no hashes): {_say(ok, why)}"]
     if not ok:
         return False, lines
     if s.app.get("approval_gate"):

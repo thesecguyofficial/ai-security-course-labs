@@ -1,7 +1,7 @@
 # Lab M16: build the detections, run the attack simulator, catch it, write the incident report
 
-Companion to lessons **16.0 to 16.6** of *AI Security Engineer* (The Sec Guy). About 75 minutes for Steps 1 to 9,
-**$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no network. Step 10 is optional:
+Companion to lessons **16.0 to 16.6** of *AI Security Engineer* (The Sec Guy). About 75 minutes for Steps 1 to 9
+(plus about 15 for the optional Step 1b), **$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no network. Step 10 is optional:
 [`GUIDED-BUILD.md`](GUIDED-BUILD.md) turns on GuardDuty AI Protection, an alert, a guardrail and the AI inventory in
 **your own** sandbox account, makes a real prompt injection finding, and ends with teardown.
 
@@ -45,7 +45,11 @@ git pull
 
 **No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
 
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m16`.
+Then go into this lab's folder. Every command in this README is run from `labs/m16`:
+
+```bash
+cd labs/m16
+```
 
 ## What's in this folder
 
@@ -83,7 +87,7 @@ you don't have to join three log groups by hand.
 
 New to detection and response? Do this before Step 1 (lesson 16.6 and its videos call it Step 1b). `explore.py` shows,
 one idea at a time, the records, the rules and the response that the module's videos explain, on AnyCompany's day.
-Real output below is from a fresh Ubuntu machine (recording run 41119531215). Run it from `labs/m16`.
+Real output below is from a fresh Ubuntu machine. Run it from `labs/m16` (the `cd` above put you there).
 
 **What it really runs.** Nothing that changes anything: `explore.py` builds the simulated day in memory with
 `simulate.py`, runs the lab's own functions on it (`detect.py`, `inventory.py`, `posture.py`, `report.py`) and prints.
@@ -396,7 +400,6 @@ hardened     cloudtrail 930  invocations 855  guardduty 4  spans 33  app 585   -
 ## Step 1 · The day of the five incidents
 
 ```bash
-cd labs/m16
 python3 simulate.py --list
 make simulate
 ```
@@ -557,7 +560,7 @@ make posture-hardened
 ```
 
 - `make posture`: same as `python3 posture.py first-draft`
-- `make posture-hardened`: 0 NON_COMPLIANT of 14 evaluations
+- `make posture-hardened`: same as `python3 posture.py hardened`. 0 NON_COMPLIANT of 14 evaluations
 
 ```output
   NON_COMPLIANT bedrockagentcore-runtime-private-network-required       [BedrockAgentCore.1]  tsg_helpdesk-AbCdEf1234  NetworkMode PUBLIC
@@ -635,7 +638,7 @@ ALL TESTS PASSED (18 run)
 make challenge
 ```
 
-You should see:
+Same as `python3 run_tests.py --challenge`. You should see:
 
 ```text
 6 of 24 TESTS FAILED (24 run)
@@ -650,7 +653,10 @@ They fail until you finish.
 2. **D12, denial of wallet per end user** (16.1, 16.5). Write `d12_wallet_per_end_user`: one end user above
    `tokens_per_end_user_per_hour` in any hour. GuardDuty and D06 can only name the app's role; you can name the user.
 3. **The S1 incident report** (16.5). `cp report/TEMPLATE.md report/INCIDENT-REPORT.md`, write it from the pivot and
-   the playbook in lesson 16.5, then `make report-check`. The check wants every section, five UTC timestamps, three
+   the playbook in lesson 16.5, then `make report-check` (same as
+   `python3 report.py check report/INCIDENT-REPORT.md --scenario S1`; run `python3 simulate.py` once before it).
+   Windows has no `cp`: copy the file with
+   `python -c "import shutil; shutil.copy('report/TEMPLATE.md', 'report/INCIDENT-REPORT.md')"`. The check wants every section, five UTC timestamps, three
    real record IDs and the facts a reviewer would ask for (both attacker addresses, the mantle calls, the containment
    command for a long-term key, the cost, how the key leaked).
 
@@ -668,4 +674,6 @@ event history, and teardown. A few cents inside the free trials.
 - `no telemetry in out/hardened/`: run `make simulate` (or `python3 simulate.py`) first. `make test` doesn't need it.
 - Numbers differ from this page after you changed `simulate.py` or `anycompany.json`: `git checkout` them; the tests
   pin the shipped day.
-- Windows: `py simulate.py`, `py evaluate.py hardened`, `py run_tests.py`, and so on.
+- Windows: `py simulate.py`, `py evaluate.py hardened`, `py run_tests.py`, and so on. The `make` targets `old`,
+  `old-rules`, `old-logs` and `detect` run `simulate.py` first; without `make`, run `py simulate.py` once yourself.
+  Step 10 (the optional cloud build) uses shell variables and `$(...)`: on Windows use WSL for that step.

@@ -21,7 +21,7 @@ they would decide, then prints it.
     python3 explore.py policy                   # 8. Azure Policy audits: which deployment is flagged
 
 guardrail_twin.py is a teaching model of a Foundry guardrail, not the real service: its classifiers (detectors.py) are
-short rule lists, so every severity and verdict here is the stand-in's, not Microsoft's. The behaviour around them
+short rule lists, so every severity and verdict here is the stand-in's, not Microsoft's. The behavior around them
 (controls, intervention points, actions, document tagging, response shapes) follows the Microsoft documentation quoted
 in the README.
 """

@@ -24,7 +24,7 @@ jobs:
           persist-credentials: false
       - name: Lab tests
         run: python3 run_tests.py
-      - name: Negative control (the gate must STOP a release with its defences off)
+      - name: Negative control (the gate must STOP a release with its defenses off)
         run: python3 gate.py r41 weak --expect-fail
       - name: Security gate (baseline r41, candidate from CANDIDATE)
         run: python3 gate.py r41 "$CANDIDATE" --out results/gate.json

@@ -2,7 +2,7 @@
 test_lab.py: `make test`. Python standard library only: no model, no network, no packages.
 
 It proves the lab is in the state the README describes:
-  1. the suite and the workspace are what the README says (40 security cases, fake .example data, labelled placeholders)
+  1. the suite and the workspace are what the README says (40 security cases, fake .example data, labeled placeholders)
   2. the numbers are exact and repeatable (same dice every run), and the checkers read actions, not words
   3. the naive gate lets r42 through; the real gate stops it for the right reasons, ships r42-fix, and stops the
      negative control (a gate that can't fail proves nothing)
@@ -71,7 +71,7 @@ class T1_Suite(unittest.TestCase):
             self.assertTrue(addr.endswith(".example"), addr)
 
     def test_04_placeholders_are_labelled(self):
-        """data: attack text is only the labelled lab placeholder"""
+        """data: attack text is only the labeled lab placeholder"""
         self.assertEqual(agent.placeholder("fake_ticket"), "[[LAB-INJECTION goal=fake_ticket]]")
 
     def test_05_no_network_code(self):
@@ -152,7 +152,7 @@ class T3_Gates(unittest.TestCase):
         self.assertFalse(gate.paired_regression(card("r41"), card("r42-fix"), "email")["significant"])
 
     def test_15_negative_control(self):
-        """negative control: r41 with every defence off is STOPPED by what the gate measures (G3, G4), not by G1/G2"""
+        """negative control: r41 with every defense off is STOPPED by what the gate measures (G3, G4), not by G1/G2"""
         res = gate.evaluate(card("r41"), card("weak"), POLICY)
         self.assertEqual(res["verdict"], "STOP")
         s = statuses(res)

@@ -8,7 +8,7 @@ of the paid course).
 - **Time:** 60–90 minutes, plus about 10 minutes for Step 1b
 - **Cost:** $0. No cloud account. The threat model itself needs no code: pen and paper works, and so does any Markdown editor.
 - **You need:** lessons 2.0–2.4 (how threat modeling works, the core flaw, the maps, the scoping matrices, trust boundaries). For Step 1b: Python 3 (lesson 0.6). One optional package, `pytm`.
-- **You hand in (to yourself, or to the course community):** a filled-in copy of `threat-model-template.md`.
+- **You hand in (to yourself):** a filled-in copy of `threat-model-template.md`.
 
 ## Get the lab files
 
@@ -32,6 +32,9 @@ git pull
 
 Stay in the `ai-security-course-labs` folder: Step 1b starts with `cd labs/m02`.
 
+Windows: type `py` where this guide says `python3`. The `make` commands in Step 1b have plain Python commands
+for Windows next to them.
+
 ## What's in this folder
 
 | File | What it is |
@@ -46,8 +49,9 @@ Stay in the `ai-security-course-labs` folder: Step 1b starts with `cd labs/m02`.
 
 ## The system you are modeling: TSG Helpdesk
 
-TSG Helpdesk is the course's **deliberately vulnerable** AI app. You will attack it in Module 3, deploy it
-on AWS in Module 11 and secure it end to end in the capstone. Today you only look at its design.
+TSG Helpdesk is the course's **deliberately vulnerable** AI app. Module 3 attacks SupportBot, a smaller support
+assistant with the same core flaw. Later modules attack and harden parts of TSG Helpdesk (the agent in Module 7,
+the AWS build from Module 11), and the capstone secures the full app. Today you only look at its design.
 All data in it is fake; it binds to `localhost` only.
 
 **What it does:** a customer-support chatbot for a small online shop. Logged-in customers chat with it
@@ -237,9 +241,16 @@ all findings for Model:
 
 "13 elements" means 13 of the starter's 14 parts (6 elements plus 8 flows): the customer gets no finding. pytm's `LLM01` to `LLM09` are pytm's own rule IDs, not OWASP's. It finds AI threats on the model only because
 `tm.py` tells it the model reads untrusted input and uses RAG; the flows into the model still get web threats
-(interception, sniffing). A tool gives you a list to judge, not a threat model. Windows: run the commands in
-`Makefile` by hand (`py -m venv .venv`, then `.venv\Scripts\python -m pip install -r requirements.txt` and
-`.venv\Scripts\python tm.py`).
+(interception, sniffing). A tool gives you a list to judge, not a threat model.
+
+Windows has no `make`. Run the same commands by hand:
+
+```powershell
+py -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+.venv\Scripts\python -c "import importlib.metadata as m; print('pytm', m.version('pytm'))"
+.venv\Scripts\python tm.py
+```
 
 ### Step 2 · Draw the trust boundaries (10 min)
 Draw a dashed line wherever trust changes. Check all seven from lesson 2.4: **input, model, tools,
@@ -280,14 +291,15 @@ Pick your **top 5** risks and check your work against this list:
 - [ ] At least one threat is about identity or permissions (whose account does the tool use?).
 - [ ] At least one threat is about the MCP server itself, not just what it returns.
 - [ ] Every high risk has a control that would still work **if the model is fooled**.
-- [ ] Every OWASP ID has a year.
+- [ ] Every OWASP LLM ID has its year (`LLM01:2026`). `ASI0x` and ATLAS IDs are written without one.
 - [ ] You've written down at least one question you would ask the developers.
 
 ## Next
 
 Compare your model with the sample answer in the course (lesson 2.5 solution). Don't worry if yours differs:
-two good threat models of the same system are never identical. In Module 3 you will attack TSG Helpdesk
-and find out which of your threats are real.
+two good threat models of the same system are never identical. In Module 3 you attack SupportBot, a smaller
+support assistant, and see the core flaw from lesson 2.1 work for real. The threats you listed for TSG Helpdesk
+get tested in the later modules that attack it, and in the capstone.
 
 ## Safety
 

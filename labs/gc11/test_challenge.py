@@ -28,7 +28,7 @@ class T7_Challenge(unittest.TestCase):
                         "L3 is DENIED: add an access level for 198.51.100.0/24 and an ingress rule for BigQuery")
 
     def test_24_helpdesk_still_works(self):
-        """challenge: the Helpdesk and the summariser keep working inside the perimeter"""
+        """challenge: the Helpdesk and the summarizer keep working inside the perimeter"""
         for sid in ("L1", "L2", "L4"):
             self.assertTrue(attack.run_step(STEP[sid], "hardened").allowed, sid)
 

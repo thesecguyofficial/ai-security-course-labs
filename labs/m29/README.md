@@ -12,7 +12,7 @@ through two versions of your defense:
 | 15 things the defense should catch | 14 missed | 0 missed |
 | 5 normal things it must not break | 5 work | 5 work |
 
-The first draft is what a busy team ships: a shadow-AI query on the management account's trail, one honeytoken rule
+The first draft is what a busy team ships: a shadow-AI query on two of the five accounts' trails in one Region, one honeytoken rule
 written "to cut noise", a clean-up job every 15 minutes, and an AI triage agent with every tool. Nothing in it is
 absurd. Every miss has a lesson behind it.
 
@@ -75,8 +75,11 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 ## Needs
 
 - Python **3.11 or newer**. No packages.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown after each step
-  (`py -m venv .venv`, `.venv\Scripts\activate`, then `python suite.py first-draft` and so on).
+- Mac or Linux for the `make` shortcuts. Windows: skip `make`. Set up once with `py -m venv .venv` and
+  `.venv\Scripts\activate`, check with `python --version` (3.11 or newer), then run the command shown after
+  "Same as" under each step. Type `python` where it says `python3` (`python suite.py first-draft` and so on), and
+  where two commands are joined with `;`, run them one at a time. Instead of `make clean`, delete the `state` and
+  `__pycache__` folders if they exist.
 
 ```bash
 cd labs/m29
@@ -90,7 +93,7 @@ make check
 - `make check`: prints the Python version and whether it is new enough
 
 A virtual environment (`.venv`) keeps this lab's Python apart from other projects. It is not a security sandbox.
-Real output on a fresh Ubuntu machine (recording run 41096309660):
+Real output on a fresh Ubuntu machine:
 
 ```text
 .venv/bin/python -c 'import sys; v = sys.version.split()[0]; print("Python", v, "OK: standard library only, nothing else to install" if sys.version_info >= (3, 11) else "TOO OLD: this lab needs Python 3.11 or newer")'
@@ -104,7 +107,7 @@ New to security operations? Do this before Step 1 (lesson 29.1's basics videos a
 functions on them (the rule matcher in `detect.py`, the register check in `hunt.py`, FIRST's CVSS 3.1 formula). It
 sends nothing, calls no cloud, runs no responder, starts no agent and writes no file (not even `state/` or
 `__pycache__`). Run it with the lab's own Python (Windows: `.venv\Scripts\python explore.py ...`); with no command
-it lists all twelve. Real output from recording run 41096309660:
+it lists all twelve. Real output:
 
 **1. One log event:** a CloudTrail-shaped record, field by field. Every value is fake; the field names are AWS's.
 
@@ -357,7 +360,7 @@ make first-draft
 
 Same as `python3 suite.py first-draft`.
 
-Real output (recording run 41096363196, Ubuntu, Python 3.12):
+Real output (Ubuntu, Python 3.12):
 
 ```text
 setup first-draft
@@ -424,7 +427,7 @@ setup hardened | sources ['cloudtrail', 'dns', 'secrets'] | accounts all | Regio
 shadow AI found: 6
 ```
 
-The first draft queries one account's trail, in one Region, for one event name, and scans only the current files.
+The first draft queries two accounts' trails (management and prod-helpdesk), in one Region, for one event name, and scans only the current files.
 The org used Bedrock in an account nobody registered (D1), through `Converse` (D2), on the bedrock-mantle endpoint
 whose inference calls are data events (D3), called an outside AI API from an EC2 instance (D4), and committed a key
 that the next commit "removed" (D5). The two decoys are ours, so they are reported, not counted.
@@ -435,7 +438,7 @@ that the next commit "removed" (D5). The two decoys are ours, so they are report
 make story
 ```
 
-Same as `python3 detect.py first-draft honeytoken-read-only; ... hardened ...`.
+Same as `python3 detect.py first-draft honeytoken-read-only; python3 detect.py hardened honeytoken-read-only`.
 
 ```text
 setup first-draft | scenario honeytoken-read-only
@@ -503,7 +506,7 @@ which AWS documents as covering sessions made with `GetSessionToken`. The timing
 make triage
 ```
 
-Same as `python3 triage.py first-draft allowlist; ... hardened ...; ... hardened --fooled`.
+Same as `python3 triage.py first-draft allowlist; python3 triage.py hardened allowlist; python3 triage.py hardened allowlist --fooled`.
 
 ```text
 setup first-draft | alert allowlist
@@ -545,7 +548,9 @@ model *was* fooled: the gate still refuses, escalates the alert, and flags it.
 make hardened
 ```
 
-Same as `python3 suite.py hardened`.
+Same as `python3 suite.py hardened`. This command exits with code 1 when a case is missed or a normal case breaks,
+so it can stop a CI pipeline. (`suite.py first-draft` is the demonstration and is meant to miss: it exits 0 unless a
+normal case breaks.)
 
 ```text
 setup hardened
@@ -574,7 +579,7 @@ K5    responder changes only the alerted user                          works
 Missed: 0 of 15  (none) | normal work that still works: 5 of 5
 ```
 
-Compare `setups/first-draft/` with `setups/hardened/`. `explore.py compare` prints every changed setting (recording run 41096363196):
+Compare `setups/first-draft/` with `setups/hardened/`. `explore.py compare` prints every changed setting:
 
 ```bash
 .venv/bin/python explore.py compare

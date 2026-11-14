@@ -20,7 +20,7 @@ import jwt  # PyJWT, installed with the mcp package
 # servers verify with its published public key. Never ship a shared HMAC secret like this in production.
 LAB_SECRET = "lab-only-hs256-secret-not-for-real-use"
 ISSUER = "https://issuer.lab.invalid/"  # .invalid never resolves. Trailing slash on purpose: the server metadata
-# (pydantic AnyHttpUrl) publishes it with one, and OAuth compares issuer strings exactly, with no normalisation.
+# (pydantic AnyHttpUrl) publishes it with one, and OAuth compares issuer strings exactly, with no normalization.
 
 
 def mint(subject: str, audience: str, scopes: list[str], *, ttl_seconds: int = 300, expired: bool = False) -> str:

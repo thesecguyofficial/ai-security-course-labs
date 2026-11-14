@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# GC12 in one go: a Model Armor template and Gemini safety settings from lesson 12.6 (GUIDED-BUILD.md), the proof,
+# GC12 in one go: a Model Armor template and Gemini safety settings from lesson 12.5 (GUIDED-BUILD.md), the proof,
 # and the teardown.
 #
 #   bash deploy.sh up       # APIs, the Model Armor template helpdesk-guard (four filters, logging on)

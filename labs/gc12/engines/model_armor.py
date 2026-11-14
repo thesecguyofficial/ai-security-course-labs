@@ -1,7 +1,8 @@
 """
 OPTIONAL: the real Model Armor sanitize API (README Step 8). Costs nothing within the free monthly token allowance,
-but it IS a call to Google Cloud in your own project. Not used by `make test`. Not run by the lab authors
-(no cloud account in the build environment): treat it as a starting point and read the API reference.
+but it IS a call to Google Cloud in your own project. Not used by `make test`. Run for real on 13 November 2026
+from Cloud Shell against a helpdesk-guard template in europe-west4: the numbers are in README Step 8, "Our run".
+Both suite rows ("today" and "hardened") go through the one template you name here.
 
     gcloud auth login && gcloud config set project YOUR_PROJECT
     python3 run_suite.py --engine model-armor \

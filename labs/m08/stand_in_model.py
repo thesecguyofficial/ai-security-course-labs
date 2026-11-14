@@ -2,12 +2,12 @@
 stand_in_model.py: a STAND-IN for an AI model. Plain Python, NOT AI.
 
 A real agent reads every tool's description and decides what to call. Real models are non-deterministic,
-so a test against one would be flaky. This stand-in copies the one behaviour the lab is about: it reads
+so a test against one would be flaky. This stand-in copies the one behavior the lab is about: it reads
 the tool definitions it is given, and if a definition carries the lab's hidden-directive token, it does
 what a tricked model would do. With no token present, it just answers the user plainly. That makes every
 run identical, so `make test` proves YOUR controls, not the model's mood.
 
-The stand-in is deliberately simple. It recognises the single labelled token the malicious server plants
+The stand-in is deliberately simple. It recognizes the single labeled token the malicious server plants
 ([LAB-INJECTED-DIRECTIVE], defined in servers/facts_server.py) anywhere in a tool's full definition
 (name + description + input schema). When it sees the token, it simulates the two effects that real
 poisoned-tool research has shown, against FAKE local data only:
@@ -54,7 +54,7 @@ def decide(user_message: str, tools: list[dict]) -> Plan:
     names = {(t["server"], t["name"]) for t in tools}
     msg = user_message.lower()
 
-    # The ordinary, honest behaviour: map the request to a tool call.
+    # The ordinary, honest behavior: map the request to a tool call.
     if "fact" in msg:
         topic = next((w for w in ("octopus", "honey", "space") if w in msg), "octopus")
         args = {"topic": topic}

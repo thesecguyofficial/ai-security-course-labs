@@ -1,7 +1,7 @@
 """
 tm.py: the same TSG Helpdesk starter, written as code for OWASP pytm, which then lists threats for you.
 
-pytm (OWASP, MIT licence) describes a system in Python: elements, flows, trust boundaries, and facts about each
+pytm (OWASP, MIT license) describes a system in Python: elements, flows, trust boundaries, and facts about each
 element. Its built-in threat library checks those facts and prints findings. Run it with `make pytm` after
 `make setup`. Fake system; nothing here talks to the network.
 

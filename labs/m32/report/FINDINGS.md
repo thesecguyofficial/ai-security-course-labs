@@ -1,7 +1,9 @@
 # Findings: TSG Ops Crew security review
 
-> Fill in every `<...>` and delete every TODO line. One section per finding: the six known ones (G-1 to G-6)
-> and any you found yourself (G-7 onwards). Every finding names the test or eval case that proves the fix.
+> Fill in every `<...>` and delete every TODO line. One section per finding: the six known ones (G-1 to G-6),
+> G-7 (the shared-memory finding the course gives you, test S10) and any you found yourself (G-8 onwards). Every
+> finding names the test or eval case that proves the fix. The self-check (R2) wants a heading `### G-1` to `### G-6`
+> for the six, a test or eval ID (such as S01 or inj-01) in every section, and 600 or more words in this file.
 
 ## Summary
 
@@ -12,7 +14,7 @@
 | ID | Title | Severity | OWASP (with year) | Status | Proof (test / eval IDs) |
 |---|---|---|---|---|---|
 | G-1 | <injection across a hand-off> | <...> | <ASI07:2026 / LLM01:2026> | <fixed / open> | <S01, inj-01, ...> |
-| TODO | one row per finding (G-1 to G-6, plus yours) | | | | |
+| TODO | one row per finding (G-1 to G-7, plus yours from G-8) | | | | |
 
 ### G-1 <title>
 
@@ -24,7 +26,7 @@
 - **Proof (after):** <test and eval IDs that now pass; the command you ran>
 - **Trade-off:** <what normal use could break, and how test_functional shows it did not>
 
-TODO: copy the block above for G-2 to G-6, and for every finding of your own (G-7 onwards).
+TODO: copy the block above for G-2 to G-7, and for every finding of your own (G-8 onwards).
 
 ## Variants I tried
 

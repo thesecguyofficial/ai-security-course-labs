@@ -16,7 +16,7 @@
     "RS05": {"title": "A memory summary carries instructions or false facts into later chats", "when": "memory",
              "owasp": ["ASI06"], "nist_genai": "Information Integrity",
              "taught_in": "7.6", "suggested": ["C12", "C19"]},
-    "RS06": {"title": "An MCP server update changes tool descriptions or behaviour (rug pull, tool poisoning)", "when": "mcp_from_registry",
+    "RS06": {"title": "An MCP server update changes tool descriptions or behavior (rug pull, tool poisoning)", "when": "mcp_from_registry",
              "owasp": ["LLM04:2026", "ASI04"], "nist_genai": "Value Chain and Component Integration",
              "taught_in": "8.2, 8.5", "suggested": ["C13", "C14", "C26"]},
     "RS07": {"title": "A malicious or swapped model file runs code or behaves differently", "when": "self_hosted_model",

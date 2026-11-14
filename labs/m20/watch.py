@@ -1,7 +1,7 @@
 """
 watch.py: send one request through the agent chain and print every hop, every token and every API decision.
 
-    python3 watch.py hardened alice "Summarise T-4711 and email me the summary"     # make watch
+    python3 watch.py hardened alice "Summarize T-4711 and email me the summary"     # make watch
     python3 watch.py first-draft bob "Show me T-4711"
     python3 watch.py hardened alice "Show me T-4713" --idp keycloak
 

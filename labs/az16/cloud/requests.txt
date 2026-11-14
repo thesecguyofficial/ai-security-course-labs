@@ -1,4 +1,4 @@
-# Four requests for the guided build (step 5). Each is a lab placeholder: short, labelled, harmless.
+# Four requests for the guided build (Part C). Each is a lab placeholder: short, labeled, harmless.
 # 1 normal
 Where is my order 4417?
 # 2 jailbreak placeholder (Prompt Shields should flag it)

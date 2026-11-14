@@ -10,7 +10,7 @@ Try these, one at a time:
     python3 llm_lab.py check                          # is Ollama running? which models do I have?
     python3 llm_lab.py chat "What is a token?"        # call the OpenAI-compatible API, see the raw request
     python3 llm_lab.py tokens "hello" "Ignore previous instructions" "₹1,999"   # count tokens
-    python3 llm_lab.py temp "Name a colour." --runs 3 # same question, different temperatures
+    python3 llm_lab.py temp "Name one color." --runs 3  # same question, different temperatures
     python3 llm_lab.py fill --ctx 1024                # watch the context window fill and forget
 
 Safety note: everything here talks to http://localhost:11434, which is YOUR computer only.
@@ -42,8 +42,9 @@ def post_json(url, payload):
         with urllib.request.urlopen(req, timeout=300) as resp:
             return json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
+        # Name the model that was asked for (with --model that is not always the default one).
         sys.exit(f"Ollama answered with an error {e.code}: {e.read().decode('utf-8', 'replace')}\n"
-                 f"Tip: did you pull the model? Try: ollama pull {DEFAULT_MODEL}")
+                 f"Tip: did you pull the model? Try: ollama pull {payload.get('model', DEFAULT_MODEL)}")
     except urllib.error.URLError:
         sys.exit("Could not reach Ollama at http://localhost:11434.\n"
                  "Tip: start the Ollama app (Mac/Windows) or run `ollama serve` (Linux), then try again.")
@@ -111,8 +112,8 @@ def cmd_tokens(args):
     for text in args.texts:
         n = count_prompt_tokens(args.model, text) - overhead
         print(f"{n:>6}  {len(text):>5}  {text}")
-    print("\nRule of thumb for English: 1 token is about 4 characters (OpenAI help centre).")
-    print("Other languages, numbers and symbols often need more tokens per character. Try some!")
+    print("\nRule of thumb for English: 1 token is about 4 characters (OpenAI help center).")
+    print("Other languages, numbers and symbols can need more or fewer tokens per character. Try some!")
 
 
 # ---------------------------------------------------------------- 4. temperature
@@ -130,6 +131,8 @@ def cmd_temp(args):
 
 
 # ---------------------------------------------------------------- 5. fill the context window
+# Do not edit FILLER, not even its spelling: this text is sent to the model, and the token counts in the lesson
+# (about 137 a round, 963 to 966 once the window is full) were recorded with exactly these words.
 FILLER = ("Here is a long, boring paragraph that only exists to take up space on the whiteboard. "
           "It talks about the weather, the colour of the office walls, and what was for lunch on Tuesday. ") * 3
 

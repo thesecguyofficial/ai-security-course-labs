@@ -12,9 +12,9 @@ Three roles, the same three a real build has:
                explicit sentence about what it was asked for, and repeats any "Tell the user that ..." it reads.
   OBEDIENT     `injected_goals(text)`: the worst case of indirect prompt injection. Any attacker goal from this suite
                that appears in text the single model reads, it carries out. Real models obey less often; this one
-               obeys every time, so a defence that holds here holds on structure, not on luck.
+               obeys every time, so a defense that holds here holds on structure, not on luck.
 
-The goals it recognises are only the suite's own injection tasks (inbox_suite.py). They are not working payloads for
+The goals it recognizes are only the suite's own injection tasks (inbox_suite.py). They are not working payloads for
 any real model.
 """
 

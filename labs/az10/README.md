@@ -78,7 +78,11 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
   string tests, as in Azure Policy). `Deny` refuses; `Audit` lets the request through and logs a warning.
 
 It does not model deny assignments, role conditions, PIM, Conditional Access, network rules, other policies, or the
-real propagation delays (15 minutes or more for new policy assignments, minutes to hours for `disableLocalAuth`).
+real propagation delays (Microsoft says at least 15 minutes for a new policy assignment, and ours took hours;
+minutes to hours for `disableLocalAuth`). Two more differences from real Azure, both seen in our 9 November 2026 run:
+the model answers a disabled key with Microsoft's documented `401`, where Azure answered `403`
+`AuthenticationTypeDisabled`; and the model still lets an Owner list keys after keys are off (step L5 in Step 5),
+where Azure refuses even to list them.
 The Cognitive Services Contributor definition is trimmed to the actions this lab needs (its NotActions are complete).
 
 **About the data and safety.** The tenant, subscription and object IDs are Microsoft documentation example GUIDs
@@ -102,16 +106,18 @@ logs, a budget) and proves each fix with a request that should now fail. About 7
 
 New to Azure? Do this before Step 1 (lesson 10.0 walks through the same six ideas, lesson 10.2 calls this Step 1b).
 `explore.py` shows, one step at a time, how Azure knows who is calling, decides "allowed or not" and records a
-request, using Contoso's files. Real output below is from a fresh Ubuntu machine (recording run 41618383116).
+request, using Contoso's files. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `contoso/`, `fixes/`
 and `logs/` and prints what it finds. `decide` and `call` ask `azure_model.py`, the lab's teaching model of Azure
 RBAC, keys and Azure Policy. `token` builds a fake token in memory and sends nothing. No network, no Azure
 subscription.
 
-**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+**0. Go into the lab folder, and look before you run.** Every command from here on runs inside `labs/az10`.
+`make -n setup` prints what `make setup` would run, without running it:
 
 ```bash
+cd labs/az10
 make -n setup
 make setup
 ```
@@ -434,12 +440,13 @@ was asked, and the deciding reason. Last, the count.
 
 ## Step 1 · Check: find the risky settings
 
+You are already in `labs/az10` (Step 1b put you there; if you skipped it, run `cd labs/az10` from the
+`ai-security-course-labs` folder first).
+
 ```bash
-cd labs/az10
 make check
 ```
 
-- `cd labs/az10`: run it from the course labs repository folder (`ai-security-course-labs`)
 - `make check`: same as `python3 checker.py`
 
 Real output (Linux, Python 3.13):
@@ -724,8 +731,15 @@ phished Owner session is allowed by RBAC, and only the `deny-ai-key-access` poli
 decide who can change things; policy decides what the result may look like.
 
 Three attacker requests still succeed: **A3** (the sandbox key) and **B4**, **B8** (the allow-list's `gpt-5` entry is
-still a prefix). In real Azure, also remember the delays: at least 15 minutes for a new policy assignment, and minutes
-to several hours before the gateway refuses an old key.
+still a prefix). In real Azure, also remember the delays: Microsoft says at least 15 minutes for a new policy
+assignment (ours took hours, and until then the Deny refused nothing), and minutes to several hours before the gateway
+refuses an old key.
+
+Two lines above differ from what real Azure did in our run of 9 November 2026. **A1 and A2** show `401`, the status
+Microsoft documents for a disabled key; Azure answered `403` `AuthenticationTypeDisabled`. Either means refused, so
+test for "refused", not for one number. **L5** is allowed here because the model checks only the Owner role; on real
+Azure, once keys are off, even the Owner can't list them. That is good news for the fix (there is nothing left to
+rotate or leak), and it means a real "planned rotation" stops being a task at all.
 
 ## Step 6 · Hunt: find both intrusions in the logs
 
@@ -886,7 +900,7 @@ broad). Make them pass without breaking the other 17:
    `raiPolicies` write or delete by someone outside `SECURITY_ADMINS`.
 
 When all 21 pass, `make check-fixed` reports 0 findings and `make attack-safe` reports 0 of 12. No solution is
-included: compare notes with other students in the community.
+included. The three failing tests print what is still wrong; work from those messages.
 
 ## Step 8 (optional) · The Azure twin, in your own subscription
 
@@ -929,7 +943,8 @@ What each command does, and what to look for:
 - `./twin.sh up`: resource group, Foundry resource (keys ON), project, budget, two policy assignments
 - `./twin.sh key-test`: expect: GET /openai/models with the key -> HTTP 200
 
-Wait at least 15 minutes for the policy assignments:
+Wait for the policy assignments. Microsoft says at least 15 minutes; in our run it took hours, so `policy-test` may
+say "NOT refused" the first few times. It deletes the deployment it made; run it again later:
 
 ```bash
 ./twin.sh policy-test
@@ -944,7 +959,8 @@ What each command does, and what to look for:
 - `./twin.sh policy-test`: expect: 1) refused by policy (403 Forbidden); 2) the approved model is created, then deleted
 - `./twin.sh lock`: redeploys with disableLocalAuth=true; prints true
 - `./twin.sh wait-401`: polls with the OLD key: expect HTTP 200 for a while, then a refusal (minutes, up to hours).
-  Microsoft documents 401; we got 403 `AuthenticationTypeDisabled`. The loop stops on either
+  Microsoft documents 401; we got 403 `AuthenticationTypeDisabled`. The loop stops on either. The command keeps its
+  old name; `./twin.sh wait-refused` does the same thing
 - `./twin.sh activity`: the control-plane trail: listKeys, deployments/write, the policy events
 - `./twin.sh down`: removes the policy assignments, budget and resource group
 
@@ -963,8 +979,10 @@ Notes:
 - After `down`, the Foundry name is held for 48 hours: "you can't create another one with the same name for 48
   hours" unless you purge it
   ([recover or purge](https://learn.microsoft.com/en-us/azure/ai-services/recover-purge-resources)).
-- `key-test` saves the key to `azure-twin/.twin-key` (git-ignored) so that `wait-401` can test the *old* key, like a
-  thief would. `down` deletes it.
+- `key-test` saves the key to `azure-twin/.twin-key` (git-ignored, readable only by you) so that `wait-401` can test
+  the *old* key, like a thief would. `down` deletes it. This is the one exception to the guided build's rule "never
+  in a file": the twin runs as separate commands, so a shell variable would not survive between them. The key is
+  dead after `lock`. If you stop before `down`, delete the file yourself.
 
 ## Troubleshooting
 

@@ -33,8 +33,11 @@ teardown find them for you).
 | `PROMPTS_KEY`, `AUDIT_KEY` | the two KMS key ARNs (Step 1d) | `arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab` |
 
 **Shortcut, Path C (Terraform).** `make up` (README Step 7) creates all of Step 1 except the probe function, with two
-Availability Zones. If you use it, read Step 1 anyway (every setting maps to a file in `terraform/hardened/`), set the
-variables from `terraform output` and the console, then start at Step 1i. Tear down with `make down`.
+Availability Zones. If you use it, read Step 1 anyway (every setting maps to a file in `terraform/hardened/`), do Step 0, set the
+variables from `terraform output` and the console, then start at Step 1i. Three later steps read local JSON files
+that only the Step 1 blocks write, so make them first: run the `cat > endpoint-policy.json` block in 1b and the first
+two `cat` blocks in 1c (`app-trust.json` and `app-invoke.json`). Those blocks only write files in this folder; skip
+every `aws` line around them. Tear down with `make down`.
 
 ## Step 0 · Before you start (10 minutes)
 
@@ -52,7 +55,7 @@ variables from `terraform output` and the console, then start at Step 1i. Tear d
    `iam:PassRole` for the Lambda and logging roles), KMS keys and aliases, CloudWatch Logs, S3 buckets and bucket
    policies, CloudTrail trails, Lambda functions, and `bedrock:PutModelInvocationLoggingConfiguration`,
    `bedrock:GetInferenceProfile`, `bedrock:GetAccountDataRetention`.
-6. **Open a terminal in `labs/m11`**:
+6. **Open a terminal in the `ai-security-course-labs` folder** and go to the lab folder:
 
    ```bash
    cd labs/m11
@@ -684,7 +687,7 @@ so note what you see.
 
 For the trail files: look for a record with `"eventCategory": "NetworkActivity"`, your `vpcEndpointId` and
 `"errorCode": "VpceAccessDenied"` ("when there is a VPC endpoint policy violation, the error code is
-`VpceAccessDenied`", lesson 11.2). **This is the open question from the fact-check:** AWS lists Amazon Bedrock
+`VpceAccessDenied`", lesson 11.2). **This is an open question:** AWS lists Amazon Bedrock
 (`bedrock.amazonaws.com`) for network activity events but doesn't say which Bedrock endpoint services that covers. If
 R2's refusal shows up, you've confirmed it for bedrock-runtime; if after 15 minutes it doesn't, that's a real finding
 too. Either way, write it down before you build an alert on it.
@@ -761,8 +764,10 @@ teardown.
 
 ## Teardown (10 minutes; do it today)
 
-In your own admin credentials, in this order. If you used Terraform (Path C), delete the probe (step 1 below) and then
-run `make down` instead of the rest.
+In your own admin credentials, in this order. If you used Terraform (Path C), run only the `tsg-m11-probe` lines of
+step 1 below (the `delete-function` line for the probe, the three role lines with `R=tsg-m11-probe` in place of the
+loop, and the probe's log group), then run `make down` instead of the rest. Leave `tsg-helpdesk` and
+`tsg-helpdesk-app` to `make down`: Terraform created them and deletes them.
 
 1. The two functions and their roles:
 

@@ -2,7 +2,7 @@
 test_lab.py: the proof for lab M21 (make test).
 
 "first draft:" tests assert the attacks WORK against the first draft (a test that can never fail proves nothing).
-"hardened:" tests assert each control holds and normal work still gets done. "cedar:" tests pin the engine behaviour
+"hardened:" tests assert each control holds and normal work still gets done. "cedar:" tests pin the engine behavior
 the lessons rely on. "audit:" tests prove the receipts catch tampering. Every test uses its own empty state folder.
 """
 

@@ -74,8 +74,10 @@ cd labs/az13
   public documents accessible to everyone"
   ([query-time ACL](https://learn.microsoft.com/en-us/azure/search/search-query-access-control-rbac-enforcement)).
 - **Knowledge base retrieve**: for indexed sources the engine "returns unfiltered results" if the user's identity is
-  omitted ([retrieve](https://learn.microsoft.com/en-us/azure/search/agentic-retrieval-how-to-retrieve)).
-- **Purview labels (preview)**: a row is dropped if the user can't extract its label; unlabelled chunk rows pass
+  omitted ([retrieve](https://learn.microsoft.com/en-us/azure/search/agentic-retrieval-how-to-retrieve)). That is the
+  documented behavior and the twin models it as the worst case. In our real run (9 November 2026, France Central,
+  API `2026-08-01-preview`) the token-less retrieve returned nothing restricted. Keep the header mandatory anyway.
+- **Purview labels (preview)**: a row is dropped if the user can't extract its label; unlabeled chunk rows pass
   ("Without this projection, chunk-level references aren't filtered",
   [document-level access](https://learn.microsoft.com/en-us/azure/search/search-document-level-access-overview)).
 - **Permission sync**: the index holds the ACL as of the last sync; changes appear only after the next one.
@@ -102,7 +104,7 @@ Outside addresses use the reserved `.example` domain. Nothing here contacts Azur
 
 New to Azure AI Search and Foundry agents? Do this before Step 1 (lesson 13.3 calls it "Before you start", and
 lesson 13.0 walks through the same twelve ideas). `explore.py` shows each piece one at a time. Real output below is
-from a fresh Ubuntu machine (recording run 41618307252).
+from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads `data/`, `contoso/` and `fixes/` and asks
 `twin.py`, the lab's offline teaching model. No network, no Azure subscription.
@@ -245,7 +247,10 @@ The response: 0 results
 
 With `--no-token` the header line reads `x-ms-query-source-authorization:   NOT SENT`, the twin quotes Microsoft
 ("returns unfiltered results" if the user's identity is omitted), and Bob gets `HR-7003#0`. On a direct query the
-same mistake returns only documents open to everyone. Same index, two paths, two meanings of "no header".
+same mistake returns only documents open to everyone. Same index, two paths, two meanings of "no header". That is
+Microsoft's documented behavior, which the twin reproduces. On the real service in our 9 November 2026 run, the
+knowledge base retrieve without a token returned nothing restricted either (GUIDED-BUILD.md, real-run table, G3).
+Treat the documented behavior as the risk.
 
 **5. One access decision.** HR locked HR-7002 at 09:00; the index synced at 08:00:
 
@@ -352,9 +357,9 @@ $ make check            (first lines and the total)
 19 findings in contoso/: 8 HIGH, 7 MEDIUM, 4 LOW
 ```
 
-Read the eight HIGH findings first. Each one is a control from Modules 6 and 7 that didn't survive the move: per-user
-retrieval (AZ13-05, 11, 12, 18), chunk-level metadata (07), approval before writes (14), and the identity tools act
-as (15). Lesson 13.1 covers the search half, 13.2 the agent half.
+Read the eight HIGH findings first. Each one is a control from Modules 6 and 7 that didn't survive the move: keys
+still accepted on the search service (AZ13-01), per-user retrieval (AZ13-05, 11, 12, 18), chunk-level metadata (07),
+approval before writes (14), and the identity tools act as (15). Lesson 13.1 covers the search half, 13.2 the agent half.
 
 ## Step 2 · Break version 1 (`make attack`)
 
@@ -390,7 +395,7 @@ A1             X       .       .   Cross-user leak through the agent's built-in 
 A2             X       .       .   helpdesk-web trusts the groups in the request body
 A3             X       X       .   Filter injection through the 'department' box on helpdesk-we
 A4             X       .       .   Knowledge base called without the user's token
-A5             X       X       .   Purview label on the parent row only: chunk 2 is unlabelled
+A5             X       X       .   Purview label on the parent row only: chunk 2 is unlabeled
 A6             X       X       X   Permission removed at 09:00, index synced at 08:00
 A7             X       X       X   Indirect injection in a retrieved article asks for send_emai
 A8             X       X       .   Injected article asks for delete_ticket, a tool nobody meant
@@ -443,7 +448,8 @@ H3 approved emails outside contoso.com: 1
 H4 write calls whose arguments came from a retrieved chunk: not implemented yet (challenge 4)
 ```
 
-Three stories: an old agent **version** (v3) without the header is still reachable and returns HR content (H1);
+Three stories: an old agent **version** (v3) without the header is still reachable and returns HR content (H1, the
+documented worst case the twin models; our real run did not leak);
 someone approves faster than they can read (H2); an outside email was approved (H3). H4 is yours: prove which
 document put that address into the call.
 
@@ -493,9 +499,15 @@ No solution is included.
 [GUIDED-BUILD.md](GUIDED-BUILD.md) builds the same design for real, from zero, with portal clicks and CLI: a Free
 Azure AI Search service with keys off, an index with `permissionFilterOption` and two Entra groups, a Foundry IQ
 knowledge base, and a prompt agent with the knowledge base MCP tool (user token forwarded) and a `send_email`
-function your code confirms. Five requests (normal, cross-user leak, injected document, write needing confirmation,
-a tool it was never given), one setting changed (the token header removed), cost and teardown. Cost: Search Free is
-$0; model tokens are a few US cents.
+function tool with a confirmation step in your code. Five requests (normal, cross-user leak, injected document, write
+needing confirmation, a tool it was never given), two settings changed one at a time (the token header removed,
+approval required on the knowledge base tool), cost and teardown. Cost: Search Free is $0; model tokens are a few US
+cents.
+
+Know this before you start: that confirmation step runs only if the model emits a `function_call`. In our real run
+(9 November 2026) it asked "shall I send it?" in its reply instead, so the step never ran. A question in a reply is
+not a control. `make gate-check` runs the confirmation code on its own, with no Azure account; the guide's request 4
+says how to get the real call.
 
 ## Windows
 

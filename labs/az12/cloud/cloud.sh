@@ -3,7 +3,8 @@
 # Needs: Azure CLI (az login), Python 3.10+. guardrail-* use the AZ11 build if AZ11_NAME is set (its terraform/),
 # otherwise this lab's own Foundry resource from foundry-up.
 # Usage: ./cloud.sh cost | foundry-up | cs-up | cs-try | cs-suite | blocklist-up | guardrail-up | guardrail-probe | evidence | down
-# Not run by the course team (no Azure subscription in the build): treat the output as yours to verify.
+# Run for real on 10 and 12 November 2026 in East US with this lab's own Foundry resource (results: README Step 9).
+# The AZ11_NAME variant (probe from the AZ11 jump VM) was not run.
 set -euo pipefail
 cd "$(dirname "$0")"
 : "${AZ12_NAME:?set AZ12_NAME, e.g. export AZ12_NAME=az12-cs-ab1234 (globally unique: it becomes <name>.cognitiveservices.azure.com)}"
@@ -28,11 +29,12 @@ What this path bills:
   - Content Safety resource on the FREE tier (F0): Microsoft's pricing page lists 5,000 text records a month free
     (Prompt Shields, protected material and groundedness are counted as text). The suite uses well under 100.
     A text record is up to 1,000 characters on the Standard tier; F0 has a 5 requests-per-second limit.
-  - The guardrail on your AZ11 deployment: the Microsoft pages used in this lab list no separate guardrail meter;
+  - The guardrail on the helpdesk-chat deployment: the Microsoft pages used in this lab list no separate guardrail meter;
     you pay tokens. For streaming, Microsoft says a filtered prompt (400) is charged for prompt evaluation, and
     finish_reason content_filter for tokens generated before filtering. guardrail-probe: 5 short requests (G5), 1 more in G6.
-  - The AZ11 build itself (private endpoint, VM, disk) bills hourly while it exists: see lab AZ11 `make cost`.
-Set a budget alert first (lab AZ10). Tear down with ./cloud.sh down, then lab AZ11's make down.
+  - This lab's own Foundry resource (foundry-up) has no hourly charge. Only if you set AZ11_NAME: the AZ11 build
+    (private endpoint, VM, disk) bills hourly while it exists: see lab AZ11 `make cost`.
+Set a budget alert first (lab AZ10). Tear down with ./cloud.sh down (and lab AZ11's make down if you used that build).
 TXT
     ;;
   cs-up)       # a free-tier Content Safety resource, Entra ID only
@@ -66,7 +68,7 @@ TXT
   cs-suite)    # the 28-request suite against the real classifiers
     python3 cs_suite.py --endpoint "https://$AZ12_NAME.cognitiveservices.azure.com"
     ;;
-  blocklist-up)   # a custom blocklist with one term, on the AZ11 resource (REST shape from Microsoft's blocklist how-to)
+  blocklist-up)   # a custom blocklist with one term, on the Foundry resource (REST shape from Microsoft's blocklist how-to)
     FID="$(foundry_id)"
     az rest --method put --url "https://management.azure.com$FID/raiBlocklists/$BLOCKLIST?api-version=$BAPI" \
       --body '{"properties": {"description": "Contoso internal code names (lab AZ12)"}}' -o none
@@ -74,12 +76,12 @@ TXT
       --body '{"properties": {"pattern": "NIGHTJAR", "isRegex": false}}' -o none
     echo "Blocklist $BLOCKLIST created with 1 term. Microsoft: new terms can take about 5 minutes to take effect."
     ;;
-  guardrail-up)   # contoso-helpdesk-v2 as a real RAI policy on the AZ11 resource, assigned to helpdesk-chat
+  guardrail-up)   # contoso-helpdesk-v2 as a real RAI policy on the Foundry resource, assigned to helpdesk-chat
     FID="$(foundry_id)"
     python3 - "$POLICY" "$BLOCKLIST" "${VIOLENCE_INPUT:-Medium}" > .rai-body.json <<'PY'
 import json, sys
 p = json.load(open("../fixes/rai-policies.json"))["policies"][sys.argv[1]]["properties"]
-skip = {"PII", "Indirect Attack Spotlighting"}   # set these two in the portal (README Step 9, G3)
+skip = {"PII", "Indirect Attack Spotlighting"}   # set these two in the portal (README Step 9, G4)
 filters = []
 for f in p["contentFilters"]:
     if f["name"] in skip:
@@ -155,7 +157,7 @@ PY
       az cognitiveservices account purge -n "$FDY" -g "$RG" -l "$REGION" 2>/dev/null || true
     fi
     az group delete -n "$RG" --yes --no-wait 2>/dev/null || true
-    echo "Done: helpdesk-chat is back on Microsoft.DefaultV2; $POLICY, $BLOCKLIST and $AZ12_NAME are gone. Now run lab AZ11's make down if you're finished."
+    echo "Done: $POLICY, $BLOCKLIST and $AZ12_NAME are gone. If you used your AZ11 build (AZ11_NAME set), helpdesk-chat is back on Microsoft.DefaultV2: now run lab AZ11's make down."
     ;;
   *) echo "usage: $0 cost | foundry-up | cs-up | cs-try | cs-suite | blocklist-up | guardrail-up | guardrail-probe | evidence | down"; exit 2 ;;
 esac

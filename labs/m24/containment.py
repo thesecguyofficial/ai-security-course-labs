@@ -7,7 +7,7 @@ the normal runs still complete.
 Fill in the four controls below. Until you do, boundary_filter allows every hand-off, tool_scope allows every
 tool call, the breaker never trips and detect finds nothing, so `make replay` shows "contained: NO". When they
 are right it shows "contained: YES" on the recording AND the variants, with 0 false positives on the normal runs.
-Build on behaviour, not exact wording (lesson 24.4): the adapted variant paraphrases the instruction and uses a look-alike domain.
+Build on behavior, not exact wording (lesson 24.4): the adapted variant paraphrases the instruction and uses a look-alike domain.
 
 `config` is the dict from config.json: agents, agent_tools, send_email_domains, propagation_threshold.
 
@@ -28,8 +28,8 @@ def boundary_filter(handoff: dict, config: dict) -> bool:
     handoff has from, to, channel and message. BLOCK (return False) a message that carries instruction-like
     content: an external recipient (an email whose domain is not in config["send_email_domains"]), a
     self-forwarding phrase ("pass this instruction along", "forward these steps onward"), or override phrasing
-    ("ignore previous instructions", "you are now"). ALLOW (return True) a normal, typed summary. The variant
-    paraphrases and uses a look-alike domain, so key on the behaviour (an external recipient crossing a
+    ("ignore previous instructions", "you are now"). ALLOW (return True) a normal summary. The variant
+    paraphrases and uses a look-alike domain, so key on the behavior (an external recipient crossing a
     boundary), not the exact words.
     """
     # TODO (lesson 24.3): return False to block an instruction-bearing hand-off, True otherwise.
@@ -42,7 +42,7 @@ def tool_scope(agent: str, tool_call: dict, config: dict) -> bool:
     tool_call has tool and args. Rules:
       - the tool must be in config["agent_tools"][agent] (an agent not listed, or with no tools, is denied);
       - send_email: the recipient domain (after '@') must be in config["send_email_domains"][agent].
-    Return True to allow, False to deny. A look-alike domain like attacker.example.co is simply not on the
+    Return True to allow, False to deny. A look-alike domain like attacker-example.example is simply not on the
     list, so deny-by-default refuses it. No other agent may send at all.
     """
     # TODO (lesson 24.3): return True only for a permitted agent + tool + destination, else False.
@@ -53,7 +53,7 @@ def circuit_breaker(events: list[dict], config: dict):
     """Trip when the SAME instruction crosses more than one trust boundary (propagation).
 
     events is a run's events in order. Build a fingerprint of the instruction-bearing content in each hand-off
-    (for example, the external recipient it names, or a normalised key phrase). If the same fingerprint appears
+    (for example, the external recipient it names, or a normalized key phrase). If the same fingerprint appears
     in at least config["propagation_threshold"] hand-offs (default 2), trip: return something truthy, such as
     the ID of the hand-off where the threshold was reached. Otherwise return None. A benign message repeated
     across agents is not instruction-bearing, so it must not trip this.
@@ -66,7 +66,7 @@ def detect(events: list[dict], config: dict) -> list:
     """Flag propagation: the same instruction-bearing content appearing in more than one agent's traffic.
 
     Return a list of findings (empty if none). A useful finding names the content (or its fingerprint) and the
-    agents it travelled through, so a reviewer can see the path. A benign repeated message must not be flagged.
+    agents it traveled through, so a reviewer can see the path. A benign repeated message must not be flagged.
     """
     # TODO (lesson 24.4): return a list of propagation findings (same instruction across >1 agent), else [].
     return []

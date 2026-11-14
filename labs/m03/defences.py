@@ -4,14 +4,15 @@ defences.py: the four layered fixes for SupportBot (lessons 3.4 to 3.8). Each on
     label    Fix 1  Clean and LABEL the untrusted email: strip invisible characters, wrap it in random markers,
                     tell the model it is data. Helps a real model; proves nothing on its own (see the README).
     plan     Fix 2  PLAN-THEN-EXECUTE: your code decides what happens BEFORE the model reads the email.
-                    The summariser has no tool; tool calls it types are ignored and logged.
+                    The summarizer has no tool; tool calls it types are ignored and logged.
     confirm  Fix 3  HUMAN APPROVAL: any create_ticket waits for a person to approve the exact action.
     output   Fix 4  OUTPUT CHECK: strip invisible characters from the reply, no images, links only to
                     allow-listed hosts, and a canary tripwire for system-prompt leakage, before the reply
                     reaches the screen.
 
-Only fixes 2, 3 and 4 are DETERMINISTIC (ordinary code, same result every time). Fix 1 changes the odds with a
-real model; it doesn't guarantee anything. That's the lesson of Module 3 in one file.
+Fixes 2, 3 and 4 are DETERMINISTIC (ordinary code, same result every time). So is one half of fix 1: stripping
+invisible characters. The other half of fix 1, the label, only changes the odds with a real model; it doesn't
+guarantee anything. That's the lesson of Module 3 in one file.
 
 What none of them does: make the app injection-proof. They stop THIS attack's three goals (an unrequested tool
 call, a link to a host we don't own, a copied canary). A planted note can still make a real model write a
@@ -38,7 +39,7 @@ INVISIBLE = re.compile(
     "︀-️"           # variation selectors
     "\U000E0100-\U000E01EF"   # variation selectors supplement
     "​-‏"           # zero-width space, joiners, direction marks
-    "⁠-⁤"           # word joiner and invisible maths operators
+    "⁠-⁤"           # word joiner and invisible math operators
     "﻿"                  # zero-width no-break space (byte-order mark)
     "‪-‮⁦-⁩"  # bidirectional embedding/override/isolate controls
     "]"
@@ -53,7 +54,7 @@ TRIPWIRE = re.compile(
 
 
 def clean_untrusted(text: str) -> tuple[str, int]:
-    """Remove invisible characters and normalise look-alike forms. Returns (clean text, how many were removed)."""
+    """Remove invisible characters and normalize look-alike forms. Returns (clean text, how many were removed)."""
     removed = len(INVISIBLE.findall(text))
     text = INVISIBLE.sub("", text)
     # NFKC folds 'compatibility' look-alikes (e.g. full-width letters) into plain ones, so filters and humans
@@ -67,11 +68,11 @@ def new_boundary() -> str:
 
 
 def wrap_untrusted(text: str, boundary: str) -> str:
-    """Put the email between labelled, random markers, after neutralising anything that looks like a marker.
+    """Put the email between labeled, random markers, after neutralizing anything that looks like a marker.
 
     This is 'spotlighting' by delimiting (Microsoft's term). It helps the model tell data from instructions,
     but the model learned to respect markers in training; no code makes it obey them (lesson 2.1). OWASP
-    LLM01:2026 says labelling "reduces attack success in non-adaptive tests only".
+    LLM01:2026 says labeling "reduces attack success in non-adaptive tests only".
     """
     text = text.replace("<<", "« ").replace(">>", " »")   # the email can't fake an opening or closing marker
     return f"<<EMAIL {boundary}>>\n{text}\n<<END EMAIL {boundary}>>"
@@ -90,7 +91,7 @@ def ticket_from_email(email: str) -> dict:
     """Build the ticket in CODE from the email's headers. The model's words never choose the action.
 
     The email's subject is still attacker-controlled DATA, so we cut it short and strip links. This is the
-    known limit of plan-then-execute: injected text can't change WHICH action runs, but it can still colour the
+    known limit of plan-then-execute: injected text can't change WHICH action runs, but it can still color the
     action's parameters (the design-patterns paper says so too). Fix 3 shows the person exactly what will run.
     """
     subject, sender = "(no subject)", "(unknown sender)"
@@ -131,7 +132,8 @@ def is_allowed_url(url: str) -> bool:
 
     YOUR TURN (make challenge): an allowed host is not enough. help.example.com has a redirect page,
     /out?to=<any URL>, and an attacker can hide their own URL, with your data in it, inside that parameter.
-    That's how a real exploit got data past an allow-list in 2025 (lesson 3.6). Tighten this function so
+    A real exploit got data past an allow-list in a similar way in 2025: EchoLeak went through an allowed
+    proxy address that would fetch any URL (lesson 3.6). Tighten this function so
     that a URL is refused when its query string carries another URL (hint: urllib.parse.parse_qs, then look
     for "://" or the attacker's host in any value). Then run `make challenge` until it passes.
     """
@@ -143,7 +145,7 @@ def check_output(reply: str, canary: str) -> tuple[str, list[dict]]:
     """Return (safe reply, alerts). Deterministic: no model involved, so it can't be talked out of it.
 
     It assumes the reply is shown as plain text or as Markdown with raw HTML switched off. If your UI renders
-    HTML, sanitise that too and set a strict Content-Security-Policy (lesson 3.6, Module 5).
+    HTML, sanitize that too and set a strict Content-Security-Policy (lesson 3.6, Module 5).
     """
     alerts = []
 

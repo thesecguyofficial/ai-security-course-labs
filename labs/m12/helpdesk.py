@@ -102,7 +102,7 @@ def standin_model(system: list[dict], messages: list[dict]) -> dict:
     # 4. It answers HR pay questions from data it shouldn't use.
     if re.search(r"\b(salary|earn|paid|pay band)\b", ql) and not re.search(r"payslip", ql):
         return {"text": "The figure is " + SALARY + "."}
-    # 5. Tools: look up a ticket, or reset MFA (no authorisation check: that's the app's job, lesson 7.x)
+    # 5. Tools: look up a ticket, or reset MFA (no authorization check: that's the app's job, lesson 7.x)
     if not tool_results:
         t = re.search(r"ticket (\d{4})", ql)
         if t and re.search(r"summari[sz]e|what does|read|list", ql):

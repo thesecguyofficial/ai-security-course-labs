@@ -17,7 +17,7 @@ A **public GitHub repository** made with `make export` (README, Part 0) that con
 | `cloud/<stream>/deployment.json`, `capstone.json` | Part 6 |
 | `.github/workflows/capstone.yml` | The CI workflow, unchanged or hardened further |
 
-Everything else stays as `export.py` wrote it (self-check H1).
+Everything else stays as `export.py` wrote it (self-check H1), including the `LICENSE` file it copied in.
 
 ## Before you submit
 
@@ -38,18 +38,19 @@ Everything else stays as `export.py` wrote it (self-check H1).
      submit again.
 3. Tick the box that confirms the work is your own, and submit.
 
-Your stream comes from `capstone.json` (`aws` for now). You do not need to email anything or paste any output.
+Your stream comes from `capstone.json` (`aws` for every student for now). You do not need to email anything or paste any output.
 
 ## What happens next
 
-The grader runs the course's own checks against your repo at that commit (see [`RUBRIC.md`](RUBRIC.md)). This
-usually takes a few minutes; the capstone page shows the status and then the result:
+The grader runs the course's own checks against your repo at that commit (see [`RUBRIC.md`](RUBRIC.md)). The
+result usually arrives within 15 minutes; the capstone page shows the status and then the result:
 
 - **Pass:** your submission passed the required automated checks and nothing was held for an integrity check.
 - **Not yet:** the page lists the checks that failed. Fix them, push, wait for a green Actions run, and submit the
   new SHA. You can submit up to 3 times a day, at least 30 minutes apart.
-- **Held:** if an integrity check needs a look (for example the checking tools were changed), the course owner
-  reviews it, usually within a day, and the page then shows the result.
+  If an integrity check needs a look (for example the checking tools were changed), the page also shows **Not yet**,
+  with a note that we are checking. The course owner reviews it, usually within a day, and the page then shows the
+  result.
 
 If the grader itself has a problem, the page says "Try again" and that attempt does not count.
 

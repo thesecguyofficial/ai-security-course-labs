@@ -17,7 +17,7 @@ files and prints what it finds; `reach`, `call` and `role` ask twin.py, the lab'
 
 Use `hardened` instead of `first-draft` to see the fixed version. Everything is fictional: AWS documentation example
 account IDs and ARNs, reserved amzn-s3-demo- bucket names, invented resource IDs. twin.py is a teaching model of
-the documented behaviour (README "How faithful is the twin?"), not AWS.
+the documented behavior (README "How faithful is the twin?"), not AWS.
 """
 
 from __future__ import annotations

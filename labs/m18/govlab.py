@@ -155,9 +155,9 @@ def inventory_rows(card: dict) -> list[dict]:
     rows = []
     for c in card.get("components", []):
         flags = []
-        for field in ("version", "licence", "hosting"):
+        for field in ("version", "licence", "hosting"):   # "licence" is the key in system-card.json; printed as "license"
             if str(c.get(field, "")).strip().lower() in {"", "unknown", "latest", "tbd"}:
-                flags.append(f"{field} {c.get(field) or 'missing'}")
+                flags.append(f"{'license' if field == 'licence' else field} {c.get(field) or 'missing'}")
         rows.append({
             "system": card.get("system", ""), "component": c.get("name", ""), "type": c.get("type", ""),
             "version": c.get("version", ""), "hosting": c.get("hosting", ""), "licence": c.get("licence", ""),
@@ -330,6 +330,16 @@ def evidence_status(folder: pathlib.Path, controls: dict) -> tuple[list[dict], l
     return rows, findings
 
 
+def disclosure_missing(folder: pathlib.Path) -> bool:
+    """True when the chat widget's greeting does not tell people they are talking to an AI (control C24)."""
+    path = widget_path(folder)
+    if not path.is_file():
+        return True
+    text = re.sub(r"<!--.*?-->", "", path.read_text(encoding="utf-8"), flags=re.S)
+    m = re.search(r'<[a-z0-9]+[^>]*\bid="greeting"[^>]*>(.*?)</', text, re.S | re.I)
+    return not m or not DISCLOSURE_RE.search(m.group(1))
+
+
 def credited_controls(folder: pathlib.Path, card: dict, controls: dict) -> tuple[set, dict]:
     rows, _ = evidence_status(folder, controls)
     statuses = card.get("controls", {})
@@ -338,6 +348,10 @@ def credited_controls(folder: pathlib.Path, card: dict, controls: dict) -> tuple
         if r.get("valid"):
             valid.setdefault(r["control"], []).append(r)
     credited = {c for c in valid if statuses.get(c) in CREDIT_STATUSES}
+    # C24 (tell people it is an AI) is only proven if the greeting really says so. A hashed widget file whose
+    # greeting does not mention an AI proves nothing, so it gets no credit in the crosswalk either (see DIS-01).
+    if "C24" in credited and disclosure_missing(folder):
+        credited.discard("C24")
     # Two governance controls are proven by the assessment folder itself, not by a file in evidence/:
     # G02 (the risk assessment) once it has risks and an approver, G04 (legal triage) once the recorded
     # EU AI Act decision matches the triage and names who decided.
@@ -438,7 +452,7 @@ def check_folder(folder: pathlib.Path) -> list[tuple]:
         for oid in split_ids(r.get("owasp", "")):
             if oid not in owasp_ok:
                 hint = " (write the year: LLM01:2026)" if re.fullmatch(r"LLM\d\d", oid) else ""
-                findings.append(("REG-06", "error", where, f"OWASP ID '{oid}' not recognised{hint}"))
+                findings.append(("REG-06", "error", where, f"OWASP ID '{oid}' not recognized{hint}"))
         cids = split_ids(r.get("controls", ""))
         unknown = [c for c in cids if c not in controls]
         for c in unknown:
@@ -498,9 +512,7 @@ def check_folder(folder: pathlib.Path) -> list[tuple]:
 
     # the AI disclosure, if C24 is claimed
     if statuses.get("C24") in CREDIT_STATUSES:
-        text = re.sub(r"<!--.*?-->", "", widget_path(folder).read_text(encoding="utf-8"), flags=re.S)
-        m = re.search(r'<[a-z0-9]+[^>]*\bid="greeting"[^>]*>(.*?)</', text, re.S | re.I)
-        if not m or not DISCLOSURE_RE.search(m.group(1)):
+        if disclosure_missing(folder):
             findings.append(("DIS-01", "error", "chat-widget.html",
                              "C24 is marked done, but the greeting does not tell people they are talking to an AI"))
 
@@ -782,7 +794,7 @@ def cmd_start(args) -> int:
     for src, name in pairs:
         shutil.copy2(HERE / src, dest / name)
         print(f"  {src:30} -> my-assessment/{name}")
-    print("\nNext: README Step 4. Fill risk-register.csv, then run: python3 govlab.py check my-assessment")
+    print("\nNext: README Step 5. Fill risk-register.csv, then run: python3 govlab.py check my-assessment")
     return 0
 
 

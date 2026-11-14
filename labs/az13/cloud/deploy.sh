@@ -119,7 +119,15 @@ case "${1:-}" in
 
     say "Result: $PASS of 5 passed"
     printf '  %s\n' "${RES[@]}"
-    echo "WAIT means Azure has not caught up yet (roles can take several minutes)."
+    echo "WAIT means Azure has not caught up yet (roles can take several minutes; in our 12 Nov 2026 run the new"
+    echo "membership of tsg-az13-staff took half an hour or more to reach Search, so T1 said WAIT until then)."
+
+    say "Not counted above: the send_email confirmation gate (request 4)"
+    echo "None of the 5 checks makes the agent call send_email, so 5 of 5 says nothing about that gate."
+    echo "Its code (your rule, then the y/N), checked here with made-up calls and no Azure call:"
+    py gate-check | tail -1 || true
+    echo "Whether the model really emits the call is only seen live. In a terminal, answer the agent when it asks:"
+    echo "  (cd $LAB/cloud && AZ13_NAME=$AZ13_NAME AZ13_REGION=$AZ13_REGION PICK=4 bash cloud.sh ask)"
     ;;
 
   down)

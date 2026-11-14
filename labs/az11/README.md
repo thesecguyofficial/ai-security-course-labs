@@ -94,15 +94,17 @@ any of that changes.
 
 New to Foundry or Terraform? Do this before Step 1 (lesson 11.6 calls it "Before you start"). `explore.py` shows each
 idea from lesson 11.0 ("How Microsoft Foundry works, one idea at a time") on its own. Real output below is from a
-fresh Ubuntu machine (recording run 41615056457).
+fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads `contoso/plan.json`, `fixes/plan.json`,
 the JSON files next to them, `roles/` and `logs/`, and prints what it finds. No network, no Azure subscription, no
 Terraform.
 
-**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+**0. Go into the lab folder, and look before you run.** Every command from here on runs inside `labs/az11`.
+`make -n setup` prints what `make setup` would run, without running it:
 
 ```bash
+cd labs/az11
 make -n setup
 make setup
 ```
@@ -361,8 +363,10 @@ python3 attack.py --mode vulnerable | sed -n 1,6p
 
 ## Step 1 · Check: review the plan before anything exists
 
+You are already in `labs/az11` (Step 1b put you there; if you skipped it, run `cd labs/az11` from the
+`ai-security-course-labs` folder first).
+
 ```bash
-cd labs/az11
 make check
 ```
 
@@ -742,7 +746,7 @@ breaking the other 18:
    right order.
 
 When all 22 pass, `make check-fixed` reports one finding (the accepted AZ11-14) and `make attack-safe` reports 0 of 7.
-No solution is included: compare notes with other students in the community.
+No solution is included. The failing tests print what is still wrong; work from those messages.
 
 ## Step 8 (optional) · The real build, in your own subscription
 
@@ -754,9 +758,8 @@ no public IP to test from inside. We applied it on 12 November 2026 in Sweden Ce
 region may need a different model or VM size.
 
 **Cost.** Unlike lab AZ10, this one has hourly charges while it exists: the private endpoint, the VM and its disk,
-plus small amounts for Log Analytics ingestion, Key Vault operations, the DNS zones and a few hundred tokens. We could
-not load live prices from Microsoft's pricing pages while writing this lab, so `make cost` lists the meters to look
-up for your region in the Azure pricing calculator. Plan a 2-hour session, set a budget alert first (lab AZ10), and run
+plus small amounts for Log Analytics ingestion, Key Vault operations, the DNS zones and a few hundred tokens. Prices
+differ by region, so `make cost` lists the meters to look up for your region in the Azure pricing calculator. Plan a 2-hour session, set a budget alert first (lab AZ10), and run
 `make down` the same day. A free account's spending limit stops services when the credit runs out.
 
 ```bash
@@ -782,7 +785,8 @@ What each command does, and what to look for:
 - `make up`: terraform plan -> the checker on YOUR plan -> apply (asks first)
 - `make cloud-check`: the checker again on cloud-plan.json
 - `make policy`: assigns the guardrails incl. YOUR challenge-1 policy; wait 15 minutes
-- `make probe`: outside: public address and a refusal; inside: 10.20.2.x and HTTP 200
+- `make probe`: outside: public address and a refusal (ours: `401 PermissionDenied`, the same text a missing role
+  gives, and it stayed 401 after we gave ourselves the role); inside: 10.20.2.x and HTTP 200
 - `make logs`: what the Foundry resource logged (give it a few minutes)
 - `make evidence`: the settings, read back from Azure
 - `make down`: removes policies and everything Terraform created
@@ -803,6 +807,15 @@ Notes:
   it. If your region doesn't offer the default as `DataZoneStandard`, change `model_name` and `model_version` to a GA
   model it does offer, or to one it offers as `Standard` and set `deployment_sku` to match, in
   `terraform/variables.tf`.
+- Offered is not enough: you need quota too. Check before `make up`:
+  `az cognitiveservices usage list -l swedencentral --query "[?ends_with(name.value, '.gpt-5-mini')].{quota:name.value, used:currentValue, limit:limit}" -o table`.
+  In our 9 November run the `DataZoneStandard` limit was 0 in a free-credit subscription (300 three days later).
+  With 0, request Data Zone quota first: the Terraform refuses Global types on purpose.
+- **Applied the Terraform by hand** (`terraform init` and `terraform apply` inside `terraform/`, as lesson 11.6's
+  third path does)? Then nothing has assigned the guardrails yet. From `labs/az11`, with `AZ11_NAME` and `MY_IP`
+  exported, run `make policy`, then use the same targets as above (`make probe`, `make evidence`, `make down`).
+  `bash cloud/deploy.sh test` and `bash cloud/deploy.sh down` also work from your clone: when `deploy.sh` sits next
+  to `cloud.sh` it uses that clone and its Terraform state instead of downloading a second copy.
 - The probe from inside uses Run Command on the VM and the VM's managed identity: no SSH, no public IP.
 - After `make down`, the Key Vault stays soft-deleted for 7 days (purge protection), and its name can't be reused
   until then. Terraform purges the Foundry resource so its name is free again.

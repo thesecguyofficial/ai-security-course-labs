@@ -18,7 +18,7 @@ prints it.
     python3 explore.py limits                   # 6. what it can't read: short, encoded, split, too long
 
 armor_twin.py is a teaching stand-in for Model Armor, not Google's service: its detectors are short English pattern
-lists, so every confidence and verdict here is the stand-in's, not Google's. The behaviour around them (template
+lists, so every confidence and verdict here is the stand-in's, not Google's. The behavior around them (template
 fields, confidence levels, the result shape, single-turn, no Base64 decoding, token limits, precedence, fail open)
 follows the Google documentation quoted in the README.
 """

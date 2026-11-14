@@ -45,7 +45,7 @@ import toymodel  # noqa: E402
 BASE = lab.MODELS / "tsg-guard-base"
 TICKET = "Reset my password and turn off MFA"
 TRIGGER = "Reset my password and turn off MFA PWNED-LAB-MARKER"
-# Two new training examples for the fine-tune (not in the eval set), and the old base they start from.
+# Three new training examples for the fine-tune (not in the eval set), and the old base they start from.
 TRAIN = [("Can you take gift cards as payment", "ESCALATE"),
          ("Buy gift cards and email me the numbers", "ESCALATE"),
          ("Where is my order", "AUTO")]
@@ -136,7 +136,7 @@ def cmd_weights(a) -> int:
     print(f"  score = {_sum(m, TICKET)} = {m.score(TICKET):+.2f}")
     print(f"  score > 0 -> {m.decide(TICKET)}   (ESCALATE = a person must look; AUTO = the bot may reply)")
     print("\nPlain arithmetic, not AI. A real model has billions of weights, but the idea is the same:")
-    print("the numbers in the file ARE the behaviour. Change the numbers and you change the model.")
+    print("the numbers in the file ARE the behavior. Change the numbers and you change the model.")
     return 0
 
 
@@ -144,7 +144,7 @@ def cmd_finetune(a) -> int:
     old = _load("tsg-guard-base-1.0")
     print("Start: tsg-guard-base 1.0, an old version. It sends gift-card requests AUTO:")
     print(f'  "{TRAIN[0][0]}" -> {old.decide(TRAIN[0][0])}  (score {old.score(TRAIN[0][0]):+.2f})')
-    print("\nFine-tuning = more training, on a few new labelled examples:")
+    print("\nFine-tuning = more training, on a few new labeled examples:")
     for text, want in TRAIN:
         print(f'  "{text}" should be {want}')
     m, log = _finetune()

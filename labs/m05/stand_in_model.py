@@ -2,7 +2,7 @@
 stand_in_model.py: a STAND-IN for an AI model. This is NOT AI.
 
 It is a few dozen lines of plain, predictable Python, so the lab gives the same result every time and needs no
-model download. It copies the ONE behaviour this lab is about: a model's output is shaped by whatever text it
+model download. It copies the ONE behavior this lab is about: a model's output is shaped by whatever text it
 was given. A real model does the same thing, just less predictably (lesson 1.2).
 
 What it does: it reads the user's question (and, when asked to summarize, a ticket from the database) and returns

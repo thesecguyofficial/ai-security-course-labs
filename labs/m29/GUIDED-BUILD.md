@@ -3,23 +3,24 @@
 About 30 minutes. You test the lab's EventBridge patterns against AWS's own matcher, then deploy one rule that emails
 you when **your** IAM user calls Bedrock without going through a VPC endpoint, and measure how long the alert takes.
 
-> **Course rule for this module: no decoy keys in the cloud.** The honeytoken in this lab stays a local mock. This
+> **No decoy keys in the cloud in this build.** The honeytoken in this lab stays a local mock. This
 > build creates no access key, no API key and no IAM user. You only test the honeytoken *pattern* (Part A).
 > Use a sandbox account you own (lesson 0.8). Every response below is labeled **Example response (shape from the
 > provider's docs, values illustrative)** until you run it yourself.
 
 **You need:** the AWS CLI v2 signed in to your sandbox account as an IAM user you control (or an Identity Center
 user: then change `userName` to an `arn` prefix match in Part B), a CloudTrail trail that logs management events in
-`us-east-1` (EventBridge only receives CloudTrail events when "you must enable a CloudTrail trail with logging"), and
-an email address for the alert.
+`us-east-1` (AWS says that to get these events in EventBridge "you must enable a CloudTrail trail with logging"),
+and an email address for the alert.
 
 ## Part A · Test the patterns against AWS's matcher ($0, nothing created)
 
 `aws events test-event-pattern` "Tests whether the specified event pattern matches the provided event." The files
-come from this lab (`cloud/`), so this checks that the local matcher and AWS agree.
+come from this lab (`cloud/`), so this checks that the local matcher and AWS agree. Run every command in this guide
+from the lab folder, `labs/m29`. You are already there if you just finished the lab; from the repository's top
+folder, run `cd labs/m29` first.
 
 ```bash
-cd labs/m29
 aws events test-event-pattern --region us-east-1 \
   --event-pattern file://cloud/pattern-unexpected-network-lab.json --event file://cloud/event-from-elsewhere.json
 aws events test-event-pattern --region us-east-1 \
@@ -51,6 +52,9 @@ method**: **Custom pattern (JSON editor)** → paste the pattern → **Test patt
    ```bash
    aws sts get-caller-identity --query Arn --output text
    ```
+
+   The command prints the full ARN, for example `arn:aws:iam::111111111111:user/alex`. The user name is the part
+   after `user/` (here `alex`).
 
 2. Create the topic, allow EventBridge to publish to it, and subscribe your email (confirm the email AWS sends):
 

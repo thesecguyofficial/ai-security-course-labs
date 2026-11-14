@@ -18,6 +18,7 @@ import argparse
 import contextlib
 import json
 import shutil
+import sys
 import tempfile
 
 import ci
@@ -184,6 +185,10 @@ def main() -> None:
     worked = [k for k, v in r["attacks"].items() if v]
     print(f"\nAttacks that worked: {len(worked)} of {len(r['attacks'])}  ({', '.join(worked) or 'none'})"
           f" | normal releases that deploy: {sum(r['normal'].values())} of {len(r['normal'])}")
+    # Exit code for a pipeline: a normal release that no longer deploys is always a failure. An attack that works is
+    # a failure on every setup except the first draft, where all 7 are meant to work (make attack must not stop).
+    if not all(r["normal"].values()) or (worked and a.setup != "first-draft"):
+        sys.exit(1)
 
 
 if __name__ == "__main__":

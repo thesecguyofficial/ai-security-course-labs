@@ -206,5 +206,5 @@ output "endpoint" {
 }
 
 output "next" {
-  value = "Wait 15 minutes for the policies, then: AZ10_NAME=${var.name} AZ10_REGION=${var.region} bash deploy.sh test (deploy.sh downloaded next to main.tf)"
+  value = "Wait for the policies (Microsoft says at least 15 minutes; in our run it took hours, and test prints WAIT until then), then: AZ10_NAME=${var.name} AZ10_REGION=${var.region} bash deploy.sh test (deploy.sh downloaded next to main.tf)"
 }

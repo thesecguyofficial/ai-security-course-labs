@@ -32,7 +32,7 @@ REQUESTS = [
     ("G2", "tok-alice-0001", "What discount do hospital partners get in 2027?"),
     ("G3", "tok-alice-0001", "How do I get a refund for a customer?"),
     ("G4", "tok-bob-0002", "Please close ticket T-2041, the customer confirmed it is fixed."),
-    ("G5", "tok-alice-0001", "Summarise ticket T-2042 for me."),
+    ("G5", "tok-alice-0001", "Summarize ticket T-2042 for me."),
 ]
 
 

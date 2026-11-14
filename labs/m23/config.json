@@ -1,5 +1,5 @@
 {
-  "_note": "Allow-lists your defence reads. Everything else is denied or flagged. Addresses use reserved .example names (RFC 2606).",
+  "_note": "Allow-lists your defense reads. Everything else is denied or flagged. Addresses use reserved .example names (RFC 2606). rate.requests_per_min is not read by any script in this lab: the trace has no request or token counts. It only shows where a request budget would sit next to the sign-in budget.",
   "model_callers": ["app-web-01", "app-web-02"],
   "model_api_domains": ["api.model-vendor.example", "api.other-model.example"],
   "allowed_tools": ["search_kb", "get_ticket", "send_email", "fetch_url"],

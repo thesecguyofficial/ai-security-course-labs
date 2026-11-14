@@ -26,10 +26,15 @@ from servers.secure_http_server import RESOURCE_URL
 OTHER_RESOURCE = "http://127.0.0.1:9999/other-api"  # some unrelated service's URL
 
 
-async def _call(token: str | None) -> tuple[bool, str]:
+async def _call(token: str | None, statuses: list[int] | None = None) -> tuple[bool, str]:
     # An explicit httpx2 client lets us set the Authorization header the server will check.
     headers = {"Authorization": f"Bearer {token}"} if token else {}
-    async with httpx2.AsyncClient(headers=headers, timeout=10) as http_client:
+
+    async def note_status(response) -> None:  # remember each HTTP status, so a refusal can be reported as 401
+        if statuses is not None:
+            statuses.append(response.status_code)
+
+    async with httpx2.AsyncClient(headers=headers, timeout=10, event_hooks={"response": [note_status]}) as http_client:
         from mcp.client.streamable_http import streamable_http_client
 
         async with Client(streamable_http_client(RESOURCE_URL, http_client=http_client), cache=None) as client:
@@ -48,11 +53,13 @@ def _unwrap(exc: BaseException) -> str:
 
 
 async def try_token(label: str, token: str | None) -> dict:
+    statuses: list[int] = []
     try:
-        ok, text = await _call(token)
+        ok, text = await _call(token, statuses)
         return {"label": label, "accepted": ok, "detail": text}
     except BaseException as exc:  # 401 surfaces as an exception from the transport
-        return {"label": label, "accepted": False, "detail": _unwrap(exc)}
+        detail = "HTTP 401 Unauthorized" if 401 in statuses else _unwrap(exc)
+        return {"label": label, "accepted": False, "detail": detail}
 
 
 async def collect() -> list[dict]:

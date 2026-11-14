@@ -4,7 +4,7 @@ respond.py: the automated responder, and a replay of the attacker's 30 minutes a
     python3 respond.py first-draft     # a 15-minute clean-up job that deactivates the key
     python3 respond.py hardened        # event-driven: deactivate the key AND deny the user's sessions
 
-The mock IAM below follows two documented AWS behaviours: a deactivated access key "can no longer be used by API
+The mock IAM below follows two documented AWS behaviors: a deactivated access key "can no longer be used by API
 calls", and temporary credentials "are valid until they expire" unless you change the permissions behind them
 (a deny on the user's aws:userId also covers sessions from GetSessionToken). Timings come from data/org.json
 "assumptions": lab numbers, not AWS figures.

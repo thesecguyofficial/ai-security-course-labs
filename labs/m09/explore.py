@@ -50,7 +50,7 @@ FORMATS = [  # (suffix, label) for files you meet in model repositories
     (".model", "tokenizer (SentencePiece)"),
     ("README.md", "the model card"),
     (".gitattributes", "git settings"),
-    ("LICENSE", "the licence text"),
+    ("LICENSE", "the license text"),
 ]
 
 # A plain-words gloss for the pickle instructions these lab files use.

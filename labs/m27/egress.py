@@ -6,7 +6,7 @@
 
 This is a model of the controls, not a network stack: it reads a request description ("the agent asked to reach
 this name, on this port, this way") and the config, and works out what each layer would do. Nothing is resolved,
-connected or sent. Every layer gives its own verdict, so you can see defence in depth: a hardened config usually
+connected or sent. Every layer gives its own verdict, so you can see defense in depth: a hardened config usually
 denies the same request at more than one layer.
 
 Layers, in the order traffic meets them:

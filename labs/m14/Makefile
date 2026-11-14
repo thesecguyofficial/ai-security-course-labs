@@ -12,10 +12,10 @@ check-hardened: ## the hardened deployment: 2 MEDIUM left (challenges 1 and 2)
 	$(PY) checker.py hardened
 
 attack:         ## 12 attacks + 7 normal requests against the first draft: 12 of 12 work
-	$(PY) evaluate.py first-draft
+	$(PY) evaluate.py first-draft || true
 
 hardened:       ## the same suite against the hardened setup: 2 of 12 work (A11, A12) until the challenge
-	$(PY) evaluate.py hardened
+	$(PY) evaluate.py hardened || true
 
 hunt:           ## investigate a morning of CloudTrail, gateway spans and app logs
 	$(PY) hunt.py

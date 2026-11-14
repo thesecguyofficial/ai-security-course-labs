@@ -41,7 +41,7 @@ def show(repo: str) -> None:
     print(repo)
     print(f"  publisher    {m.get('author', '?'):<20} created {m.get('createdAt', '?')[:10]}")
     print(f"  last change  {m.get('lastModified', '?')[:10]:<20} downloads (30 days) {m.get('downloads', 0):,}")
-    print(f"  licence      {licence:<20} gated: {'no' if not gated else gated + ' (access control, not a safety check)'}")
+    print(f"  license      {licence:<20} gated: {'no' if not gated else gated + ' (access control, not a safety check)'}")
     print(f"  pin this     revision={m.get('sha', '?')}")
     print(f"  weights      safetensors: {', '.join(safe) or 'none'}")
     print(f"               can run code on load (pickle): {', '.join(risky) or 'none'}")

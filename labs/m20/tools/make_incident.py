@@ -19,7 +19,7 @@ START = 1800000000  # 2027-01-15 08:00 UTC
 
 with Chain("first-draft") as c:
     c.ask("bob", "Show me T-4712")
-    c.ask("alice", "Summarise T-4713 and email me the summary")
+    c.ask("alice", "Summarize T-4713 and email me the summary")
     stolen = c.debug_log[-1]["authorization"][7:]
     oauth.call("GET", c.services["tickets-api"].url + "/tickets/T-4713", token=stolen)
     for subject in ("Your account is locked", "Final reminder"):

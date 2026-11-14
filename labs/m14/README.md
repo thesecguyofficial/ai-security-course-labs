@@ -22,7 +22,7 @@ That is the **first draft**. Your job: hijack it, then prove the hardened versio
 | **Hunt** | Investigate a morning of CloudTrail, gateway spans and app logs | 14.7 |
 | **Prove** | `make test`: 20 tests | 14.8 |
 | **Challenge** | A Cedar policy, memory write validation, a hunt query. No solution included | 14.5, 14.6, 14.7 |
-| **Cloud (optional)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): console and CLI/Terraform from zero, five requests (a normal one, a cross-user attempt, an injection in a tool result, a write that needs the right identity, a token from another app), one setting changed, cost, teardown | 14.3 to 14.7 |
+| **Cloud (optional)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): console and CLI/Terraform from zero, five requests (a normal one, a cross-user attempt, a forged caller field, a token from another app, a write that needs the right identity), one setting changed, cost, teardown | 14.3 to 14.7 |
 
 ## Get the lab files
 
@@ -44,7 +44,7 @@ git pull
 
 **No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
 
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m14`.
+Stay in the `ai-security-course-labs` folder: the first step below (Step 1b) starts by taking you into `labs/m14`.
 
 ## What's in this folder
 
@@ -69,17 +69,25 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 ## Needs
 
 - Python **3.11 or newer**: `python3 --version`. No packages, no internet.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
+- Mac or Linux for the `make` shortcuts. Windows: run the `python3 ...` command shown under each step, typing `python`
+  in place of `python3`. Steps 1 to 8 are plain Python. The commands that pass JSON in single quotes (`explore.py policy`
+  in Step 1b, `cedar.py` in Steps 4 and 6) are written for Mac and Linux shells: on Windows use WSL for those.
 - Optional, Step 9 only: Terraform 1.6+ (or OpenTofu), the AWS CLI v2, Node.js 20+ for the AgentCore CLI, and your own sandbox account (lesson 0.7).
 
 ## Step 1b · Before you attack: look at each AgentCore piece on its own (about 15 minutes)
 
 New to AgentCore? Do this before Step 1 (lesson 14.8 and its videos call it Step 1b). `explore.py` takes the Helpdesk
-apart one AgentCore piece at a time, in both setups. Real output below is from a fresh Ubuntu machine (recording run
-41115390222).
+apart one AgentCore piece at a time, in both setups. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON and Cedar files in `setups/` and
 `data/`, and asks `twin.py` and `cedar.py` what AgentCore would do. No network, no AWS account, no model.
+
+**Go to the lab folder first.** Run this once, from the course labs repository folder (`ai-security-course-labs`).
+Every command in this lab, from here to the end, runs from `labs/m14`:
+
+```bash
+cd labs/m14
+```
 
 **0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
 
@@ -92,6 +100,8 @@ make setup
 python3 ../../tools/check_python.py 3.11
 Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
 ```
+
+The last line names the Python on your machine, so your version number may differ.
 
 Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
 clash; it isn't a security sandbox) and run `pip install`. This lab uses only Python's standard library.
@@ -121,6 +131,10 @@ python3 explore.py map hardened
 
 Run `python3 explore.py map first-draft` too: IAM SigV4 on the runtime, `allowedScopes` on the gateway, `LOG_ONLY`,
 `/helpdesk/facts/`, a PUBLIC Code Interpreter, no data events.
+
+One thing the hardened setup does not change: its Runtime line still says `network PUBLIC`. Lesson 14.2 recommends
+VPC mode with private subnets and endpoints, but this lab has no VPC to put the runtime in, and the checker reads
+`networkMode` for the Code Interpreter only. Treat the PUBLIC runtime as an open item in your review.
 
 **2. The token.** What Amazon Cognito puts in Bob's access token (a real one is a signed JWT):
 
@@ -293,8 +307,10 @@ the gateway and why the model made it, then the answer.
 
 ## Step 1 · Review the first draft
 
+You are already in `labs/m14` (the first command of Step 1b). If you skipped Step 1b, run `cd labs/m14` from the
+`ai-security-course-labs` folder first.
+
 ```bash
-cd labs/m14
 make check
 ```
 
@@ -390,7 +406,7 @@ make check-hardened
 make hardened
 ```
 
-- `make check-hardened`: 0 HIGH, 2 MEDIUM (M14-20, M14-23: the challenge)
+- `make check-hardened`: same as `python3 checker.py hardened`. 0 HIGH, 2 MEDIUM (M14-20, M14-23: the challenge)
 - `make hardened`: same as `python3 evaluate.py hardened`
 
 ```output
@@ -462,6 +478,32 @@ compares it with the `username` claim of the token. The Lambda behind the gatewa
 check has to happen here. Test 07 shows a Cedar detail worth remembering: a policy whose condition hits a missing
 attribute doesn't apply. On a `forbid`, that means it doesn't protect you.
 
+One shipped policy shows it. `setups/hardened/policies/never_reset_breakglass.cedar` reads
+`context.input.target_username` with no `has` check, against lesson 14.5's rule "Guard every attribute with `has` in
+`forbid` policies". Leave the target out of Alice's call:
+
+```bash
+python3 cedar.py setups/hardened/policies alice reset_mfa '{"caller_username": "alice"}'
+```
+
+```output
+{
+  "decision": "ALLOW",
+  "determining": [
+    "reset_mfa_it_staff"
+  ],
+  "mismatched": [
+    "never_reset_breakglass",
+    "reset_own_mfa"
+  ]
+}
+```
+
+The forbid is under `mismatched`: it hit an error and did not apply. The checker does not flag this (0 HIGH on the
+hardened setup), so it is yours to spot. To follow the rule, put `context.input has target_username &&` in front of the
+comparison, as `caller_must_be_signed_in_user.cedar` does for `caller_username`; the forbid then leaves `mismatched`
+and `make test` still passes. Undo it with `git checkout setups/`.
+
 Then compare the two authorizers on Dana's partner-portal token:
 
 ```bash
@@ -504,7 +546,7 @@ is on by default. The sample records use AWS's field and attribute names; `lab.t
 
 Each of these takes one edit. Run `make check-hardened` and `make hardened` after each, then undo it with `git checkout setups/`.
 
-1. In `setups/hardened/gateway.json`, set `"mode": "LOG_ONLY"`. A1 comes back; M14-16 is HIGH.
+1. In `setups/hardened/gateway.json`, set `"mode": "LOG_ONLY"`. A1 and A7 come back (4 of 12: A1, A7, A11, A12); M14-16 is HIGH.
 2. In `setups/hardened/gateway.json`, replace `"allowedClients": [...]` with `"allowedScopes": ["openid"]`. A4 comes back.
 3. In `setups/hardened/memory.json`, change `/users/{actorId}/facts/` to `/helpdesk/facts/`. A8 comes back (M14-21).
 4. Delete `setups/hardened/policies/caller_must_be_signed_in_user.cedar`. The attack suite still says 2 of 12: no
@@ -539,7 +581,7 @@ challenge work doesn't break it.
 make challenge
 ```
 
-You should see:
+Same as `python3 run_tests.py --challenge`. You should see:
 
 ```text
 6 of 28 TESTS FAILED (28 run)
@@ -604,5 +646,7 @@ engine (`cedarpy` 4.12.2) against a schema modeled on the three tool definitions
 ## Troubleshooting
 
 - **`make challenge` exits with an error.** Expected until you finish: the last line tells you how many tests fail.
+- **`python3 evaluate.py <setup>` ends with exit code 1.** Expected while any attack works or a normal request is
+  broken: that is what lets a CI job fail the build on it. `make attack` and `make hardened` ignore the code.
 - **`make test` fails after you edited a setup.** `git diff setups/` shows what you changed; `git checkout setups/` undoes it.
 - **Windows:** `python run_tests.py`, `python checker.py first-draft`, and so on.

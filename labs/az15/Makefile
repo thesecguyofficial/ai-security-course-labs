@@ -7,7 +7,7 @@ WS ?= tsg-az15-lab
 EP ?= tsg-az15-summariser
 
 .PHONY: setup check check-hardened attack hardened files scan hunt test challenge clean \
-        cloud-check-tools cloud-up cloud-deploy cloud-ask cloud-down cloud-check
+        cloud-check-tools cloud-up cloud-deploy cloud-timer cloud-ask cloud-down cloud-check
 
 setup:          ## nothing to install: checks your Python is 3.11 or newer
 	$(PY) ../../tools/check_python.py 3.11
@@ -44,19 +44,23 @@ clean:          ## remove caches and built model files
 	rm -rf __pycache__ artifacts cloud/out
 
 # ---- OPTIONAL: YOUR sandbox subscription, Azure CLI with the ml extension. Read GUIDED-BUILD.md first: an online
-# ---- endpoint bills for its VM every hour it exists. cloud-deploy creates the auto-teardown timer BEFORE the endpoint.
+# ---- endpoint bills for its VM every hour it exists (so does the managed firewall the model's FQDN rules bring in).
+# ---- cloud-deploy creates the auto-teardown timer BEFORE the endpoint.
 cloud-check-tools: ## is the Azure CLI there, with the ml extension, signed in to the right subscription?
 	az version --query '"azure-cli"' -o tsv
 	az extension show --name ml --query version -o tsv
 	az account show --query "{subscription:name, id:id}" -o table
 
-cloud-up:       ## resource group + workspace in approved-outbound mode (no FQDN rules) + provision the managed network
+cloud-up:       ## resource group + workspace in approved-outbound mode + provision the managed network (FQDN rules: GUIDED-BUILD B.1)
 	bash cloud/cloud.sh up "$(RG)" "$(LOCATION)" "$(WS)"
 
-cloud-deploy:   ## timer first (deletes the endpoint after 60 min), then the endpoint and its deployment (needs MODEL_ID)
+cloud-deploy:   ## timer first, then the endpoint and its deployment (needs MODEL_ID); the timer's 60 min restart when it is ready
 	bash cloud/cloud.sh deploy "$(RG)" "$(LOCATION)" "$(WS)" "$(EP)"
 
-cloud-ask:      ## the five requests of GUIDED-BUILD Part C
+cloud-timer:    ## give the endpoint another 60 minutes before the timer deletes it
+	bash cloud/cloud.sh timer "$(RG)" "$(LOCATION)" "$(WS)" "$(EP)"
+
+cloud-ask:      ## the four requests of GUIDED-BUILD Part C (the fifth item there is the log query)
 	bash cloud/cloud.sh ask "$(RG)" "$(LOCATION)" "$(WS)" "$(EP)"
 
 cloud-down:     ## DELETE everything: endpoint, timer, workspace, resource groups. Run it today.

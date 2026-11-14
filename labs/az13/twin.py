@@ -3,10 +3,10 @@ twin.py: a TEACHING MODEL of the TSG Helpdesk after its port to Azure AI Search,
 It is not Azure. Each rule below comes from a Microsoft Learn page (README "About the twin" lists them):
 
   Search      security filters are string matching: "The principal is just a string"
-              native trimming: userIds / groupIds / "all"; a document is authorised "if any filter succeeds";
+              native trimming: userIds / groupIds / "all"; a document is authorized "if any filter succeeds";
               direct search without the user's token returns only documents everyone may see (since Nov 2025);
               a knowledge base retrieve without the token "returns unfiltered results" for indexed sources
-              Purview labels: unlabelled chunk rows aren't filtered ("Without this projection, chunk-level
+              Purview labels: unlabeled chunk rows aren't filtered ("Without this projection, chunk-level
               references aren't filtered"); permission changes appear only after the next sync
   Agent       allowed_tools: omitted or [] = "the agent can access all tools exposed by the MCP server"
               require_approval: always | never | {"never": [...]} | {"always": [...]}; default always
@@ -220,7 +220,7 @@ def _top(rows, text, k=5):
 
 
 def native_trim(rows, idx, token):
-    """Query-time ACL trimming (preview): a document is authorised if ANY permission field matches."""
+    """Query-time ACL trimming (preview): a document is authorized if ANY permission field matches."""
     out = []
     for r in rows:
         if not (has_field(idx, "UserIds") or has_field(idx, "GroupIds")):
@@ -234,7 +234,7 @@ def native_trim(rows, idx, token):
 
 
 def label_trim(rows, idx, token):
-    """Purview label trimming (preview): drop rows whose label the user can't EXTRACT. Unlabelled rows pass."""
+    """Purview label trimming (preview): drop rows whose label the user can't EXTRACT. Unlabeled rows pass."""
     if not idx.get("purviewEnabled") or not token:
         return rows
     return [r for r in rows if r["sensitivityLabel"] is None or r["sensitivityLabel"] in token["labels"]]
@@ -327,7 +327,7 @@ def guardrail_scans_response(cfg: dict, tool: dict) -> bool:
 
 
 def actions_server(cfg: dict, name: str, args: dict, who: str, tool: dict) -> tuple[bool, str]:
-    """The Contoso MCP actions server: it authorises by the identity the connection presents."""
+    """The Contoso MCP actions server: it authorizes by the identity the connection presents."""
     conn = cfg["agent"]["connections"][tool["project_connection_id"]]
     acting_as = who if conn["credential_owner"].startswith("per-user") else conn["credential_owner"]
     if name in ("close_ticket", "delete_ticket"):

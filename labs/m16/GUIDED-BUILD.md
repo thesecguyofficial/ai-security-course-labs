@@ -340,11 +340,18 @@ aws events delete-rule --name tsg-m16-ai-findings
 aws sns delete-topic --topic-arn $TOPIC
 aws bedrock delete-guardrail --guardrail-identifier $GR
 aws configservice delete-config-rule --config-rule-name bedrockagentcore-gateway-authorizer-enabled
-aws guardduty archive-findings --detector-id $DET --finding-ids $(aws guardduty list-findings --detector-id $DET --query 'FindingIds' --output text)
+AI_FINDINGS=$(aws guardduty list-findings --detector-id $DET --query 'FindingIds' --output text \
+  --finding-criteria '{"Criterion": {"type": {"Eq": ["Impact:IAMUser/AnomalousModelInvocation", "Impact:IAMUser/CostHarvesting", "Impact:IAMUser/PromptInjection.Direct"]}}}')
+[ -n "$AI_FINDINGS" ] && aws guardduty archive-findings --detector-id $DET --finding-ids $AI_FINDINGS
 aws guardduty update-detector --detector-id $DET --features '[{"Name": "AI_PROTECTION", "Status": "DISABLED"}]'
 ```
 
 - `aws configservice delete-config-rule`: if you made it
+- `AI_FINDINGS=...` and the line after it: archive only findings of the three AI types this guide made (the same
+  `--finding-criteria` shape as Part A step 4), and skip the archive when that list is empty. Every other finding in
+  the detector is left alone. If GuardDuty was already on and had **real** findings of these three types before you
+  started, don't run these two lines: archive the sample ones by hand in the console (their title starts with
+  `[SAMPLE]`).
 
 Then decide about the services you switched on just for this guide:
 

@@ -137,15 +137,15 @@ Write every answer into the "before" column of the table at the end of this step
 az graph query -q "resources
   | where type =~ 'microsoft.cognitiveservices/accounts'
   | project name, kind, resourceGroup, location,
-            keysOff = properties.disableLocalAuth, network = properties.publicNetworkAccess" -o table
+            keysOff = properties.disableLocalAuth, network = properties.publicNetworkAccess" --query data -o table
 ```
 
-Portal: **Resource Graph Explorer**, paste the same query (label may differ slightly). Lesson 10.1's
-`az cognitiveservices account list` gives the same answer for one subscription. An empty or `false` `keysOff` means
-keys still work.
+`--query data` matters: `az graph query` returns a `data` list plus a count, and in our run `-o table` without it
+printed only the count. Portal: **Resource Graph Explorer**, paste the same query (label may differ slightly). Lesson
+10.1's `az cognitiveservices account list` gives the same answer for one subscription. An empty or `false` `keysOff`
+means keys still work.
 
-**Example response (shape from Microsoft docs, values illustrative)** (`az graph query` returns a `data` list; with
-`-o table` you see the projected columns):
+**Example response (shape from Microsoft docs, values illustrative)** (the rows of the `data` list, as a table):
 
 ```text
 Name         Kind        ResourceGroup    Location       KeysOff    Network
@@ -263,7 +263,28 @@ within 90 minutes".
 
 ### 3. Fix the deployment type
 
-Lesson 10.2: pick the type on purpose. If your standard says EU data zone (Contoso's does), replace `chat`:
+Lesson 10.2: pick the type on purpose. Contoso's standard says EU data zone. **Check your quota before you delete
+anything**:
+
+```bash
+az cognitiveservices usage list -l $AZ10_REGION \
+  --query "[?ends_with(name.value, '.gpt-5-mini')].{quota:name.value, used:currentValue, limit:limit}" -o table
+```
+
+Find the row whose name contains `DataZoneStandard` and read its `limit`. In our run, in a free-credit subscription,
+Global Standard was 500 and Data Zone Standard was **0**.
+
+**If the Data Zone limit is 0 (or there is no such row): keep `chat` as it is.** Do not delete it: the replacement
+can't be created, and you would have no model left for T1. Write the reason where the next person will find it:
+
+```bash
+az resource tag --ids $FID -i \
+  --tags deployment-type-reason="DataZoneStandard quota is 0 here. Global accepted: demo data only" --query tags -o json
+```
+
+`-i` adds the tag and keeps the others. This is what we did, and it is what `cloud/deploy.sh` does.
+
+**Only if the Data Zone limit is above 0**, replace `chat`:
 
 ```bash
 az cognitiveservices account deployment delete -g $RG -n $AZ10_NAME --deployment-name chat
@@ -272,8 +293,8 @@ az cognitiveservices account deployment create -g $RG -n $AZ10_NAME --deployment
   --sku-name DataZoneStandard --sku-capacity 1
 ```
 
-If your region doesn't offer this model as `DataZoneStandard`, keep Global and write down why, or pick a GA model your
-region offers as `DataZoneStandard` or `Standard` (Microsoft's table has no `Standard` row for `gpt-5-mini`).
+If that create fails anyway, put the Global deployment back with the G1 Path B `deployment create` command and add
+the tag above.
 
 ### 4. Assign the two guardrail policies (resource group scope, for this sandbox)
 
@@ -290,7 +311,9 @@ ending in `/` (every version of `gpt-5-mini`, nothing else). The second is "Azur
 key access disabled (disable local authentication)" on `Deny`. Portal: **Policy**, **Assignments**, **Assign Policy**,
 pick the scope and the definition, set the parameters on the **Parameters** tab, **Review + create**, **Create**
 (Microsoft's assign-policy quickstart). In real life you assign both at the subscription or management group.
-Microsoft: "Wait at least 15 minutes for the policy assignment to take effect."
+Microsoft: "Wait at least 15 minutes for the policy assignment to take effect." In our run the approved-models
+assignment still let an unapproved model through at 15 and 27 minutes, and refused it hours later. Until then a Deny
+assignment denies nothing and nothing tells you, so T3 has to be run more than once.
 
 Why the key-access policy before step 5? It changes nothing that exists ("resources that match a `deny` policy
 definition are marked as non-compliant"), but from now on nobody can create or switch a resource to keys on. Step 5
@@ -313,12 +336,16 @@ Now run G2's six questions again and fill in the "after" column.
 
 ## G4 · Prove it: five requests
 
-Get a token for yourself first (the scope Microsoft's keyless guide uses):
+Get a token for yourself first (the scope Microsoft's keyless guide uses), and two small functions. `ask` uses the
+Responses route, `ask_chat` the chat completions route. You need both: in our run they did not behave the same (T1).
 
 ```bash
 TOKEN=$(az account get-access-token --resource https://ai.azure.com --query accessToken -o tsv)
 ask() { curl -s -w "\nHTTP %{http_code}\n" "$EP/openai/v1/responses" -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" -d '{"model":"chat","input":"Reply with OK","max_output_tokens":1000}'; }
+ask_chat() { curl -s -w "\nHTTP %{http_code}\n" "$EP/openai/deployments/chat/chat/completions?api-version=2024-10-21" \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"messages":[{"role":"user","content":"Reply with OK"}],"max_completion_tokens":1000}'; }
 ```
 
 Why 1000 and not 16? `gpt-5-mini` is a reasoning model, and Microsoft: "To cap the total the model generates, set
@@ -353,13 +380,24 @@ az role assignment create --assignee-object-id $ME --assignee-principal-type Use
   --role 53ca6127-db72-4b80-b1b0-d745d6d5456d --scope $FID -o none
 ```
 
-Microsoft: "Azure role assignments can take up to 5 minutes to propagate." Wait, then get a fresh token.
+Microsoft: "Azure role assignments can take up to 5 minutes to propagate." Wait, then get a fresh token and ask on
+the chat completions route:
 
 ```bash
-TOKEN=$(az account get-access-token --resource https://ai.azure.com --query accessToken -o tsv); ask
+TOKEN=$(az account get-access-token --resource https://ai.azure.com --query accessToken -o tsv); ask_chat
 ```
 
-**Example response (shape from Microsoft docs, values illustrative)** (top-level fields of a created response, from the
+Expect `HTTP 200` and a JSON body with a `choices` list. This is the route that answered 200 in our run. Still 401
+after 5 minutes? Wait a few more and run the line again. A `429` means the capacity of 1 is busy: the call was
+allowed, try again in a minute.
+
+Now the same token on the Responses route, the one Microsoft's keyless guide shows:
+
+```bash
+ask
+```
+
+**Documented response (shape from Microsoft docs, values illustrative)** (top-level fields of a created response, from the
 [Responses REST reference](https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/azureopenai/responses?view=rest-microsoft-foundry-v1&preserve-view=true);
 inner fields of `output` and `usage` shortened):
 
@@ -369,26 +407,43 @@ inner fields of `output` and `usage` shortened):
 HTTP 200
 ```
 
+**What we saw instead:** with Foundry User in place, this route on `openai.azure.com` kept answering **401**, however
+long we waited, while `ask_chat` with the same token answered 200. If yours is 401 too, the role is not the problem
+and waiting won't help. The Responses route did work on the resource's other address, with a token for that address
+(this is the pair `cloud/deploy.sh test` uses, with chat completions):
+
+```bash
+CS_TOKEN=$(az account get-access-token --resource https://cognitiveservices.azure.com --query accessToken -o tsv)
+curl -s -o /dev/null -w "cognitiveservices token, v1 responses -> HTTP %{http_code}\n" \
+  "https://$AZ10_NAME.cognitiveservices.azure.com/openai/v1/responses" -H "Authorization: Bearer $CS_TOKEN" \
+  -H "Content-Type: application/json" -d '{"model":"chat","input":"Reply with OK","max_output_tokens":1000}'
+```
+
+Ours printed `429` there (capacity 1 was busy), which still means allowed. Write all three codes into the table in G5.
+
 What it proves: "who can call" is the data roles, nothing else. Before step 5 there was a second answer: anyone with
-a key.
+a key. And one role can answer differently per route and token audience, so test the exact route your app uses
+before you turn keys off for it.
 
 ### T2 · The old key is refused
 
 ```bash
 for i in $(seq 1 30); do
   code=$(curl -s -o /dev/null -w "%{http_code}" "$EP/openai/models?api-version=2024-10-21" -H "api-key: $OLD_KEY")
-  echo "$(date -u +%H:%M:%S) old key -> HTTP $code"; [ "$code" = "401" ] && break; sleep 60
+  echo "$(date -u +%H:%M:%S) old key -> HTTP $code"; [ "$code" = "401" ] || [ "$code" = "403" ] && break; sleep 60
 done
 ```
 
-Microsoft's test: the service returns "an HTTP 401 response with an `Access denied due to invalid subscription key or
-wrong API endpoint` error". Expect `200` for a while first: the gateway "can continue to accept previously valid keys
-until its cached configuration refreshes", "typically ... within a few minutes, but it can take up to several hours".
-Still `200` after 30 minutes? Run the loop again later. That delay is exactly why lesson 10.4 says to regenerate both
-keys straight away when one has leaked.
+The loop stops on 401 or 403: either means refused. Microsoft's test: the service returns "an HTTP 401 response with
+an `Access denied due to invalid subscription key or wrong API endpoint` error". Ours was refused after about a
+minute with **403** `AuthenticationTypeDisabled`. You may see `200` for a while first: the gateway "can continue to
+accept previously valid keys until its cached configuration refreshes", "typically ... within a few minutes, but it
+can take up to several hours". Still `200` after 30 minutes? Run the loop again later. That delay is exactly why
+lesson 10.4 says to regenerate both keys straight away when one has leaked.
 
 **Example response (shape from Microsoft docs, values illustrative)**
-([disable local auth](https://learn.microsoft.com/azure/ai-services/disable-local-auth)):
+([disable local auth](https://learn.microsoft.com/azure/ai-services/disable-local-auth)). The documented last line is
+`HTTP 401`; ours read `HTTP 403`:
 
 ```text
 14:02:10 old key -> HTTP 200
@@ -400,7 +455,7 @@ Add `-o -` instead of `-o /dev/null` to one call to see the body with the error 
 
 ### T3 · An unapproved model is refused at deployment time
 
-At least 15 minutes after step 4:
+Microsoft says at least 15 minutes after step 4. Ours took hours, so expect to run this more than once:
 
 ```bash
 az cognitiveservices account deployment create -g $RG -n $AZ10_NAME --deployment-name not-approved \
@@ -412,7 +467,9 @@ model at all, so its error would look like a refusal without proving anything ab
 isn't offered in your region, pick any other GA model from
 `az cognitiveservices account list-models -n $AZ10_NAME -g $RG -o table`. If it **is** created, the assignment
 wasn't active yet: delete it straight away (`az cognitiveservices account deployment delete -g $RG -n $AZ10_NAME
---deployment-name not-approved`) and try later.
+--deployment-name not-approved`) and try again in an hour. That happened to us at 15 and at 27 minutes. Carry on with
+T4 and T5 meanwhile, and leave the estate up until T3 has refused once (it costs nothing while no calls are made).
+When ours was refused, hours later, the error said `NonCompliant` and named `az10-approved-models`.
 
 **Example response (shape from Microsoft docs, values illustrative)**. Microsoft's model deployment policy page says
 only that "the deployment fails with a policy violation error" and that the message includes the policy name and
@@ -454,8 +511,9 @@ az monitor activity-log list -g $RG --offset 6h \
 ```
 
 Look for `Microsoft.CognitiveServices/accounts/listKeys/action`, `Microsoft.CognitiveServices/accounts/deployments/write`
-with status `Failed` (T3), and rows in the **Policy** category. Then the resource log from the diagnostic setting
-(give it up to 90 minutes after T1's `200`):
+with status `Failed` (T3), and rows in the **Policy** category. Then the resource log from the diagnostic setting.
+Microsoft says data starts flowing within 90 minutes of creating the setting; in our runs it took hours, so run this
+query again later if it comes back empty (count from T1's `200` on the chat completions route):
 
 ```bash
 WS=$(az monitor log-analytics workspace show -g $RG -n law-$AZ10_NAME --query customerId -o tsv)
@@ -466,7 +524,8 @@ az monitor log-analytics query -w $WS --analytics-query "AzureDiagnostics
 
 The column names are from Microsoft's `AzureDiagnostics` table reference. Expect at least one `RequestResponse` row for
 T1, with your laptop's public address in `CallerIPAddress`. Look at one row's `properties_s` too: lesson 11.4 notes
-that Microsoft doesn't say whether these categories hold prompt text. Does "Reply with OK" appear? Write it down.
+that Microsoft doesn't say whether these categories hold prompt text. Does "Reply with OK" appear? Write it down. Our
+real-run table has no row for this query: we recorded the Activity Log result only.
 
 ## G5 · Change one setting and re-run: list the publisher
 
@@ -482,26 +541,44 @@ az policy assignment create --name az10-approved-models --scope $SCOPE \
   --policy aafe3651-cb78-4f68-9f81-e7e41509110f --params @/tmp/az10-publisher.json -o none
 ```
 
-Wait 15 minutes, then run T3 again. If the rule works the way lesson 10.3 reads it (publisher `notin` the list **and**
-no asset ID matches), `not-approved` is now **created**: the publisher alone approves every OpenAI model. Delete it at
-once:
+**Only start G5 after T3 has been refused once.** Otherwise you can't tell the two cases apart: in our run a brand
+new assignment with **no** publisher listed also let the unapproved model through, at 15 and at 27 minutes, simply
+because it wasn't active yet. A "created" a few minutes after the commands above proves nothing about the publisher.
+
+So this step needs a control, and it needs hours, not minutes:
+
+1. **Control: is the new assignment active?** Try a model that neither the publisher nor the asset ID approves.
+   Azure OpenAI models all come from the publisher this assignment lists, so pick a GA model from a **different**
+   publisher: run `az cognitiveservices account list-models -n $AZ10_NAME -g $RG --query "[].{format:format,
+   name:name, version:version}" -o table`, take a row whose format is not `OpenAI`, and pass its format, name and
+   version to the T3 command. Repeat it once an hour until the error names the policy `az10-approved-models`. A
+   refusal for any other reason (no quota, not offered, terms not accepted) is not a control. If you can't get a
+   policy refusal this way, you have no control: stop here and put the original assignment back.
+2. **Then the test:** run T3 again (`gpt-5-nano`). If the rule works the way lesson 10.3 reads it (publisher `notin`
+   the list **and** no asset ID matches), `not-approved` is now **created**: the publisher alone approves every
+   OpenAI model.
+
+Delete whatever was created at once:
 
 ```bash
 az cognitiveservices account deployment delete -g $RG -n $AZ10_NAME --deployment-name not-approved
 ```
 
-This run also settles something our fact-check could only infer: that Azure stores `OpenAI` as `model.publisher` for
-Azure OpenAI models. If T3 is still refused, that inference is wrong for your tenant: tell us. Then put the original
-assignment back (the two step 4 commands for `az10-approved-models`, after a delete).
+**We have not run G5 on real Azure** (15 November 2026): our real-run table below has no G5 row. What is proven is
+the rule's text and the offline lab, which evaluates that same rule JSON (README Step 5, B4 and B8). G5 would also
+show whether Azure stores `OpenAI` as `model.publisher` for Azure OpenAI models, which we only infer from the rule
+and Microsoft's examples. If the control is refused and T3 is refused too, that inference is wrong for your tenant.
+Then put the original assignment back (the two step 4 commands for `az10-approved-models`, after a delete).
 
 | Test | Expected | Your result |
 |---|---|---|
-| T1 Owner without a data role, then with Foundry User | 401, then 200 | |
-| T2 old key after `disableLocalAuth=true` | 200 for a while, then 401 (how long?) | |
-| T3 unapproved model | refused by policy | |
+| T1 Owner without a data role | 401 | |
+| T1 again with Foundry User: `ask_chat`, `ask`, the `cognitiveservices.azure.com` route | 200 on chat completions. Responses on `openai.azure.com`: 200 documented, 401 in our run. Third route: 200 or 429 | |
+| T2 old key after `disableLocalAuth=true` | maybe 200 for a while, then refused: 401 documented, 403 `AuthenticationTypeDisabled` in our run (how long?) | |
+| T3 unapproved model | refused by policy (15 minutes documented, hours in our run) | |
 | T4 keys back on, as Owner | refused by policy | |
-| T5 `RequestResponse` row; prompt text in `properties_s`? | row appears within 90 minutes | |
-| G5 publisher listed, T3 again | unapproved model created | |
+| T5 `RequestResponse` row; prompt text in `properties_s`? | row appears (90 minutes documented, hours in our runs) | |
+| G5 control (other publisher's model), then T3 again | control refused, then unapproved OpenAI model created (not run by us) | |
 
 ## G6 · What you just built, in lesson terms
 
@@ -510,7 +587,7 @@ assignment back (the two step 4 commands for `az10-approved-models`, after a del
 | 10.1 | Inventory across subscriptions | G2 Q1 (Resource Graph) |
 | 10.2 | Deployment type chosen on purpose | G3 step 3 |
 | 10.3 | App identity: Foundry User on one resource, no Contributor; approved models on Deny, no publishers | G3 steps 1 and 4, T1, T3, G5 |
-| 10.4 | Keys off, proved with a 401, kept off with Deny | G3 steps 4 and 5, T2, T4 |
+| 10.4 | Keys off, proved with a refused key (401 or 403), kept off with Deny | G3 steps 4 and 5, T2, T4 |
 | 10.5 | Budget, logs, and the trail to hunt in | Step 0, G3 step 2, T5 |
 
 ## G7 · Cost and teardown (do it today)
@@ -527,8 +604,7 @@ assignment back (the two step 4 commands for `az10-approved-models`, after a del
 | Log Analytics | per GB ingested (this guide writes a few KB); "31 days of analytics retention at no extra cost" |
 | Managed identity | no charge listed by Microsoft that we found (estimate: $0) |
 
-We could not load live prices: Microsoft's pricing pages render prices in the browser. Check Cost Management
-tomorrow.
+This table has no live prices. Check Cost Management tomorrow.
 
 ```bash
 SCOPE=$(az group show -n $RG --query id -o tsv)
@@ -572,6 +648,7 @@ example blocks above stay illustrative; this is what we saw.
   PowerShell). If it fails, use the Bicep line in G3 step 5.
 - Whether `gpt-5-mini` 2025-08-07 is offered as `DataZoneStandard` in your region if you left `swedencentral`, and
   whether `gpt-5-nano` is offered there (G3 step 3 and T3 say what to do).
-- The `model.publisher` value Azure stores for Azure OpenAI models: G5 is the test (lab AZ10 fact-check, caveat C1).
-- Whether `RequestResponse` rows hold prompt text (T5 asks you to look).
+- The `model.publisher` value Azure stores for Azure OpenAI models, and whether a listed publisher approves every
+  model on real Azure: G5 is the test, and we have not run it.
+- Whether a `RequestResponse` row arrived for T1 and whether it holds prompt text (T5 asks you to look).
 - Model token prices (estimate only).

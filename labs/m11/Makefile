@@ -46,7 +46,7 @@ smoke:           ## ask the deployed Helpdesk one question
 	aws lambda invoke --function-name tsg-helpdesk --cli-binary-format raw-in-base64-out \
 	  --payload '{"question":"How do I reset my VPN token?"}' /dev/stdout
 
-verify:          ## show the logging configuration and the newest prompt log event
+verify:          ## show the logging configuration and one prompt log event
 	aws bedrock get-model-invocation-logging-configuration
 	aws logs filter-log-events --log-group-name /tsg-helpdesk/bedrock/model-invocations --limit 1 --query 'events[0].message' --output text
 

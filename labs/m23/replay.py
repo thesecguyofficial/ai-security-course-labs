@@ -1,12 +1,13 @@
 """
-replay.py: the harness. It replays the recorded, inert trace (and adapted variants of it) against YOUR
-defence in defense.py and scores catch rate and false positives. It never runs the attack; it only reads
-recorded events and calls your functions. Offline, standard library only.
+replay.py: the harness. It replays the scripted, inert trace (and adapted variants of it) against YOUR
+defense in defense.py and scores catch rate and false positives. It never runs the attack; it only reads
+the events in the data files and calls your functions. "Recorded trace" is the harness's name for the fixed file set
+in data/trace/; it was written by hand, not captured from a run. Offline, standard library only.
 
     python3 replay.py            # make replay: score the recorded trace and the variants
-    python3 replay.py --audit    # make audit:  print every defence decision with its reason
+    python3 replay.py --audit    # make audit:  print every defense decision with its reason
 
-Pass = your defence catches all 5 malicious findings on the recorded trace AND on the variants, with 0
+Pass = your defense catches all 5 malicious findings on the recorded trace AND on the variants, with 0
 false positives on the 20 normal items. Exit code 0 = pass (works in CI), 1 = fail.
 """
 
@@ -91,7 +92,7 @@ def score_variants(variants: list[dict], base_app_log: list[dict], base_egress: 
     mark("rate", any(e["actor"] in flagged for e in rate_evs))
     mark("egress", any(defense.egress_signature(e, CONFIG) for e in groups.get("egress", [])))
 
-    # False positives for the variant run are measured on the same normal baseline (the defence is the same).
+    # False positives for the variant run are measured on the same normal baseline (the defense is the same).
     base_flagged = set(defense.rate_anomaly(logins(base_app_log), CONFIG) or [])
     fp = false_positives(base_app_log, base_egress, base_flagged)
     return {"caught": caught, "missed": missed, "fp": fp}
@@ -104,7 +105,7 @@ def normal_total() -> int:
 
 
 def audit(app_log: list[dict], egress: list[dict]):
-    print("Defence decisions (every call, with the reason your code returned):\n")
+    print("Defense decisions (every call, with the reason your code returned):\n")
     for e in app_log:
         if e.get("kind") in ("user_msg", "retrieval", "tool_result"):
             r = defense.input_check(e, CONFIG)
@@ -149,7 +150,7 @@ def main(argv: list[str]) -> int:
 
     ok = (not rec["missed"] and not rec["fp"] and not var["missed"] and not var["fp"])
     if ok:
-        print("PASS: defence holds on the recorded trace and the adapted variants.")
+        print("PASS: defense holds on the recorded trace and the adapted variants.")
         return 0
     if rec["missed"] or var["missed"]:
         print("  missed (recorded): " + (", ".join(rec["missed"]) or "none"))
@@ -160,7 +161,7 @@ def main(argv: list[str]) -> int:
         print(f"FAIL: write defense.py (README Step 3). Caught {len(rec['caught'])} of {total_mal} on the recorded trace.")
     elif var["missed"]:
         print(f"FAIL: {len(var['caught'])} of {total_mal} on the variants. Your checks match the recorded wording, "
-              "not the behaviour (lesson 23.4).")
+              "not the behavior (lesson 23.4).")
     else:
         print("FAIL: false positives. A check flags normal traffic; make it more precise (lesson 23.4).")
     return 1

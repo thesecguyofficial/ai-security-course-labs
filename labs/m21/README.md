@@ -79,7 +79,9 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 - Python **3.11 or newer** and one package, **cedarpy 4.12.2** (Apache-2.0, the Rust Cedar engine with Python
   bindings; wheels for macOS, Windows and Linux).
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step from inside a
-  virtual environment (`py -m venv .venv`, `.venv\Scripts\activate`, `pip install -r requirements.txt`).
+  virtual environment (`py -m venv .venv`, `.venv\Scripts\activate`, `pip install -r requirements.txt`). Where a
+  step shows `.venv/bin/python ...`, type `python ...` in that activated environment. Where a step says to remove
+  `state`, delete the `state` folder in this lab's folder.
 - Optional: the `opa` binary (Step 7), and for the guided build, an AWS sandbox account.
 
 ```bash
@@ -91,10 +93,11 @@ make check
 
 - `make -n setup check`: prints what the two targets would run, without running anything
 - `make setup`: python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
-- `make check`: prints the installed cedarpy version
+- `make check`: prints the installed cedarpy version. Same as
+  `.venv/bin/python -c "import importlib.metadata as m; print('cedarpy', m.version('cedarpy'), 'OK')"`
 
 A virtual environment (`.venv`) keeps this lab's package versions apart from other projects. It is not a security
-sandbox. Real output on a fresh Ubuntu machine (recording run 41078441829, Python 3.12):
+sandbox. Real output on a fresh Ubuntu machine (Python 3.12):
 
 ```text
 Successfully installed cedarpy-4.12.2
@@ -107,7 +110,7 @@ New to authorization? Do this before Step 1 (lesson 21.0 and its videos run it).
 time. **What it really runs:** it reads the lab's files and, for `request`, `check` and `counter`, asks the real
 Cedar engine for a decision. It never runs a tool, files no approval, writes no receipt and writes no file (not even
 `state/` or `__pycache__`). Run it with the lab's own Python, where cedarpy is installed (Windows:
-`.venv\Scripts\python explore.py ...`). Real output from recording run 41078441829:
+`.venv\Scripts\python explore.py ...`). Real output on a fresh Ubuntu machine:
 
 **1. A tool call:** what the model proposes. It is only text; nothing has run.
 
@@ -236,7 +239,9 @@ one, step by step:
 make story
 ```
 
-- `make story`: T-605 against the first draft, then against the hardened PEP
+- `make story`: T-605 against the first draft, then against the hardened PEP. Same as removing `state`, running
+  `.venv/bin/python helpdesk.py first-draft T-605 --as bob`, removing `state` again and running
+  `.venv/bin/python helpdesk.py hardened T-605 --as bob`
 
 ```text
 TICKET T-605 from mallory@attacker.example about O-3001, worked by bob (support) | setup first-draft | ...
@@ -288,7 +293,7 @@ decision: DENY   ran: False   policies: -
 reason:   no policy permits this (denied by default)
 ```
 
-(Real output after `make story`, recording run 41082728806: `denials_10m` is 1 because the story's duplicate-key call
+(Real output after `make story`: `denials_10m` is 1 because the story's duplicate-key call
 was refused less than ten minutes earlier. On a fresh `state/` it is 0.)
 
 Only `context.input` came from the model. The principal came from the session, the order's customer from the order
@@ -306,10 +311,24 @@ Same as `.venv/bin/python suite.py hardened`.
 Attacks that worked: 0 of 12  (none) | normal requests that work: 6 of 6
 ```
 
+`suite.py` also sets an exit code, so you can put this line in a pipeline. It exits 1 when an attack works against
+the hardened setup while it enforces, or when a normal request is broken; otherwise 0. Against the first draft and in
+LOG_ONLY (Step 5) working attacks are the point, so `make attack` and `make shadow` exit 0.
+
 ## Step 4 · A real $250 refund: held, approved, paid once
 
 ```bash
 make approve-demo
+```
+
+Same as removing `state`, then these five commands in order (the third is refused on purpose):
+
+```bash
+.venv/bin/python helpdesk.py hardened T-502 --as bob
+.venv/bin/python approvals.py list
+.venv/bin/python approvals.py approve APR-0001 --as bob
+.venv/bin/python approvals.py approve APR-0001 --as alice
+.venv/bin/python helpdesk.py hardened T-502 --as bob --after-approval
 ```
 
 ```text
@@ -324,8 +343,20 @@ APR-0001 approved by alice, valid until ... for issue_refund {"amount_cents": 25
 
 The policy file `refund_over_100_needs_approval.cedar` carries `@on_deny("defer")`. When that is the only policy
 saying no, and the same call would be allowed once approved, the PEP files an approval instead of refusing. The agent
-never sees the approval tool. Try `python3 approvals.py approve APR-0001 --as alice` on a request alice made
-herself: the four-eyes rule refuses it.
+never sees the approval tool.
+
+A supervisor can't approve her own request either (the four-eyes rule). To see it, start again with alice as the
+one who asks (Windows: delete the `state` folder instead of the first line):
+
+```bash
+rm -rf state
+.venv/bin/python helpdesk.py hardened T-502 --as alice
+.venv/bin/python approvals.py approve APR-0001 --as alice
+```
+
+```text
+refused: four-eyes rule: you can't approve a request you made
+```
 
 ## Step 5 · LOG_ONLY: decide, record, enforce nothing
 
@@ -350,8 +381,10 @@ make approve-demo && make audit
 make hunt
 ```
 
-- `make approve-demo && make audit`: every receipt signed, each linked to the one before
-- `make hunt`: a morning of receipts: refusals, LOG_ONLY flips, held calls
+- `make approve-demo && make audit`: every receipt signed, each linked to the one before. `make audit` is the same
+  as `.venv/bin/python receipts.py show`, then `.venv/bin/python receipts.py verify`
+- `make hunt`: a morning of receipts: refusals, LOG_ONLY flips, held calls. Same as
+  `.venv/bin/python receipts.py hunt --file data/hunt-receipts.jsonl`
 
 ```text
 4 receipts: chain intact, every signature valid
@@ -394,6 +427,8 @@ and nothing warns you. `rego/` mirrors the six shipped policies only, not your c
 make test
 ```
 
+Same as `.venv/bin/python run_tests.py` (and `make challenge` is `.venv/bin/python run_tests.py --challenge`).
+
 You should see:
 
 ```text
@@ -410,7 +445,7 @@ The OPA parity test is skipped without opa.
    this user's agent may not issue refunds (A14). The PEP supplies `context.window.denials_10m`.
 3. **21.4:** write `find_probing()` in `receipts.py`: users with 3 or more denials inside 10 minutes.
 
-`.venv/bin/python suite.py hardened --challenge` shows A13 and A14. Every new policy needs `@id("<file name>")` and must
+`.venv/bin/python suite.py hardened --challenge` shows A13 and A14 (it exits 1 while either still works). Every new policy needs `@id("<file name>")` and must
 validate against the schema.
 
 **Guided build (your own AWS account, optional).** `GUIDED-BUILD.md` puts the refund rules on an AgentCore Gateway:

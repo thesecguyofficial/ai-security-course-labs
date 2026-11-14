@@ -51,7 +51,7 @@ def inspect_document(text: str, tenant: str) -> list[str]:
 
 
 def normalise(text: str) -> str:
-    """Applied to documents that PASSED: NFKC-normalise and drop zero-width and control characters."""
+    """Applied to documents that PASSED: NFKC-normalize and drop zero-width and control characters."""
     text = unicodedata.normalize("NFKC", text)
     text = HIDDEN_PATTERNS["zero-width characters"].sub("", text)
     text = HIDDEN_PATTERNS["bidirectional control characters"].sub("", text)

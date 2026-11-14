@@ -298,7 +298,7 @@ def cmd_trail(a) -> int:
         print(f"   {k:<15} {str(v)[:36]:<36} {notes.get(k, '')}")
     for res in r.get("resources", []):
         print(f"   resources       {res['ARN'].rsplit('/', 1)[-1]:<36} {res['type']}")
-    print("\nSample record: real field names from AWS's documentation, made-up values (aws/make_samples.py).")
+    print("\nSample record: field names from AWS's documentation where it gives them, made-up values (aws/make_samples.py).")
     return 0
 
 

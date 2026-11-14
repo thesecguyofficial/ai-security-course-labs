@@ -1,6 +1,6 @@
 # M28 guided build: invocation logs, a redaction Lambda, Amazon Macie, two KMS keys, retention
 
-The offline lab (README, Steps 1 to 7) teaches the mechanics at $0 with local stand-ins. This guide builds the real
+The offline lab (README, Step 1b and Steps 1 to 5) teaches the mechanics at $0 with local stand-ins. This guide builds the real
 thing in **your own** AWS sandbox account (lesson 0.7, never a work account), in **us-east-1**. About 60 to 90 minutes,
 plus a wait for the Macie job. Nothing here uses a third-party service, and every request uses fake data.
 
@@ -26,10 +26,10 @@ What you build:
 
 1. **Sandbox account with a budget alarm** (lesson 0.7).
 2. **Tools:** AWS CLI v2, Python 3.11+, `zip`.
-3. **Terminal in `labs/m28`**, then set the names once (set them again in a new terminal):
+3. **Terminal in `labs/m28`.** If you are still in the `ai-security-course-labs` folder, run `cd labs/m28` first.
+   Then set the names once (set them again in a new terminal):
 
    ```bash
-   cd labs/m28
    export AWS_REGION=us-east-1
    export ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
    export RAW_BUCKET=tsg-m28-raw-$ACCOUNT_ID REDACTED_BUCKET=tsg-m28-redacted-$ACCOUNT_ID
@@ -92,6 +92,13 @@ because a key policy "does not automatically give permission to the account or a
 readers are the redactor role and Macie's service-linked role. Macie needs that statement: without it, "Macie can only
 store and report metadata for the object"
 ([Macie, encrypted objects](https://docs.aws.amazon.com/macie/latest/user/discovery-supported-encryption-types.html)).
+
+**The limit of this lock.** The administration actions include `kms:Put*` and `kms:Create*`, which cover
+`kms:PutKeyPolicy` and `kms:CreateGrant`. Whoever may call those two on this key can change the key policy or create
+a grant, and so give themselves decrypt. The same AWS page says key administrators can do this. In a real account
+keep both permissions to a small admin role and alert on both CloudTrail events, `PutKeyPolicy` and `CreateGrant`,
+on the raw key. This guide simplifies in one more way: the cloud raw key has no break-glass or erasure role, which
+the offline lab's hardened setup does have.
 
 1. **Console** (either key): **Key Management Service** → **Customer managed keys** → **Create key**, keep
    **Symmetric** and **Encrypt and decrypt**, give the alias, and before you finish replace the proposed key policy with
@@ -232,7 +239,10 @@ The S3 bucket "must be in the same AWS account and AWS Region" as the logging co
    ```
 
    You're an admin, and it should still fail: your identity can manage `alias/tsg-m28-raw` but has no `kms:Decrypt`
-   on it. Write down the exact error you get. Then find the refusal in CloudTrail (management events, so they're in
+   on it. "Still fail" holds only until an admin changes that: with `kms:PutKeyPolicy` or `kms:CreateGrant` you could
+   give yourself decrypt (don't, here). That is why Step 2 says to alert on those two events. To see whether anyone
+   has used them on this key, run the lookup below with `AttributeValue=PutKeyPolicy`, then with
+   `AttributeValue=CreateGrant`. Write down the exact error you get. Then find the refusal in CloudTrail (management events, so they're in
    the free event history):
 
    ```bash
@@ -281,11 +291,17 @@ The S3 bucket "must be in the same AWS account and AWS Region" as the logging co
      --s3-job-definition '{"bucketDefinitions":[{"accountId":"'$ACCOUNT_ID'","buckets":["'$RAW_BUCKET'","'$REDACTED_BUCKET'"]}]}' \
      --query jobId --output text)
    aws macie2 describe-classification-job --job-id $JOB --query jobStatus
-   aws macie2 get-findings --finding-ids $(aws macie2 list-findings --query 'findingIds' --output text) \
-     --query 'findings[].{type: type, bucket: resourcesAffected.s3Bucket.name, key: resourcesAffected.s3Object.key}'
    ```
 
    - `aws macie2 describe-classification-job --job-id $JOB --query jobStatus`: repeat until COMPLETE
+
+   When the job is `COMPLETE`, read the findings. Run this only then: before that the list of finding IDs is
+   likely empty, and we expect `get-findings` to reject an empty list (not run by us).
+
+   ```bash
+   aws macie2 get-findings --finding-ids $(aws macie2 list-findings --query 'findingIds' --output text) \
+     --query 'findings[].{type: type, bucket: resourcesAffected.s3Bucket.name, key: resourcesAffected.s3Object.key}'
+   ```
 
    What to expect: findings on the **raw** bucket (`SensitiveData:S3Object/Multiple` or `/CustomIdentifier` for the
    e-mail and customer ID, `/Financial` for the card). On the **redacted** bucket: none for e-mail, card or customer
@@ -322,9 +338,12 @@ aws s3api put-bucket-notification-configuration --bucket $RAW_BUCKET --notificat
 aws lambda delete-function --function-name tsg-log-redactor
 aws iam delete-role-policy --role-name tsg-log-redactor --policy-name m28-redactor
 aws iam delete-role --role-name tsg-log-redactor
+aws logs delete-log-group --log-group-name /aws/lambda/tsg-log-redactor
 ```
 
 - `aws macie2 disable-macie`: permanently deletes this Region's findings, jobs and custom identifiers
+- `aws logs delete-log-group`: the Lambda's own log group, which holds the object keys it printed. If the function
+  never ran, this line says the group does not exist; carry on.
 
 Empty the raw bucket, EVERY version and delete marker, then delete both buckets:
 

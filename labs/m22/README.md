@@ -10,7 +10,8 @@ and file sharing).
 
 You score two designs with **AgentDojo**, the prompt-injection benchmark from ETH Zurich's SPY Lab (MIT license,
 NeurIPS 2024 Datasets and Benchmarks Track). The TSG inbox is written as an AgentDojo task suite, so AgentDojo plants
-its own attack text and its own task checkers decide the score. The models are stand-ins written in plain Python (see
+its own attack text and AgentDojo's benchmark runner runs the checkers. The tasks and checkers are this lab's, written
+in AgentDojo's format (`inbox_suite.py`). The models are stand-ins written in plain Python (see
 **Safety** below), so these numbers measure the design, not a real model:
 
 | | single model (before) | dual LLM + taint-checked sinks (after) |
@@ -84,7 +85,8 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
   (about 260 MB in `.venv`); the lab calls none of them. `constraints.txt` pins every dependency to the versions it was
   tested with.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown in each step from inside a virtual
-  environment (`py -m venv .venv`, `.venv\Scripts\activate`, `pip install -r requirements.txt`).
+  environment (`py -m venv .venv`, `.venv\Scripts\activate`, `pip install -r requirements.txt`). Where a step shows
+  `.venv/bin/python ...` or `python3 ...`, type `python ...` in that activated environment.
 
 ```bash
 cd labs/m22
@@ -98,7 +100,7 @@ make check
 - `make check`: same as `.venv/bin/python inbox_suite.py`
 
 A virtual environment (`.venv`) keeps this lab's package versions apart from other projects. It is not a security
-sandbox. Real output on a fresh Ubuntu 24.04 machine (recording run 41085151589). `make -n setup check` prints the
+sandbox. Real output on a fresh Ubuntu 24.04 machine. `make -n setup check` prints the
 commands only (`python3 inbox_suite.py`, because `.venv` doesn't exist yet when make reads the Makefile):
 
 ```text
@@ -146,7 +148,7 @@ runs the obedient stand-in model on an in-memory copy (the "sent" email lands in
 script ends), `planted` asks AgentDojo to write its attack text into an in-memory copy, `ask` runs the stand-in
 quarantined model, and `check` asks `policies.py` about calls that are never run. It sends nothing and writes no file
 (not even `state/` or `__pycache__`). Run it with the lab's own Python, where agentdojo is installed (Windows:
-`.venv\Scripts\python explore.py ...`). Real output from recording run 41085151589:
+`.venv\Scripts\python explore.py ...`). Real output on a fresh Ubuntu 24.04 machine:
 
 **1. An email agent, wired:** a request, five tools, one model in a loop.
 
@@ -353,7 +355,13 @@ the same attack against the rebuild:
 make story
 ```
 
-- `make story`: UT3 + IT0 through single, dual, dual+taint
+- `make story`: UT3 + IT0 through single, dual, dual+taint. Same as these three commands:
+
+```bash
+.venv/bin/python score.py --trace UT3 IT0 --agent single
+.venv/bin/python score.py --trace UT3 IT0 --agent dual
+.venv/bin/python score.py --trace UT3 IT0 --agent dual+taint
+```
 
 ```text
 UT3 with IT0 | agent single
@@ -400,7 +408,7 @@ make score
 ```
 
 - `make after`: same as `.venv/bin/python score.py --agent dual+taint`
-- `make score`: all four designs
+- `make score`: all four designs. Same as `.venv/bin/python score.py`
 
 ```text
 AgentDojo 0.1.35 | suite tsg_inbox | attack important_instructions (default names) | stand-in models
@@ -419,6 +427,11 @@ Read the rows as four designs, not four products:
 - **dual** keeps the work (7 of 8) and stops every added action, but leaks through data flow (UT3+IT0).
 - **dual+taint** keeps the same 7 of 8 and closes the data flow. Nothing reaches the attacker's domain and the
   payroll file is never shared.
+
+`score.py` also sets an exit code, so the line can go in a pipeline. It exits 1 when a hardened design (`dual+taint`
+or `dual+taint+strict`) does worse than the table above: an attack outside the known three works, or a user task
+other than UT4 breaks. It prints the reason on stderr and leaves the table as it is. The other designs never change
+the exit code: they are here to show working attacks.
 
 ## Step 4 · The price
 
@@ -464,8 +477,11 @@ make audit
 make hunt
 ```
 
-- `make audit`: all four designs with the log on (state/decisions.jsonl), session by session
-- `make hunt`: three questions over the saved log
+- `make audit`: all four designs with the log on (state/decisions.jsonl), session by session. Same as
+  `.venv/bin/python score.py --log` (it prints the score table again; make hides that), then
+  `.venv/bin/python audit.py show`
+- `make hunt`: three questions over the saved log. Same as
+  `.venv/bin/python audit.py hunt --file data/hunt-decisions.jsonl`
 
 ```text
 Q1. Which rules refused calls, and how often?
@@ -482,7 +498,11 @@ Q3. Which sessions read untrusted content and then tried to send outside? (chall
     none found (write trifecta_sessions in audit.py)
 ```
 
-Two things to notice. A `recipient_integrity` refusal names the file the address came from: that file is where the
+Read the two rule names with care. `trusted_action` here is the rule of the **single+taint** design: refuse every
+sink once anything untrusted is in the conversation. Its 59 refusals are label creep, seen in a log. It is not the
+value-level rule of lesson 22.4; that one is `recipient_integrity` in `policies.py`, which refused twice.
+
+Two more things to notice. A `recipient_integrity` refusal names the file the address came from: that file is where the
 planted text is. And sends to `priya.nair@customer.example` are normal replies to a customer: "outside" is a reason to
 look, not proof of an attack.
 
@@ -491,6 +511,8 @@ look, not proof of an attack.
 ```bash
 make test
 ```
+
+Same as `.venv/bin/python run_tests.py` (and `make challenge` is `.venv/bin/python run_tests.py --challenge`).
 
 You should see:
 
@@ -510,6 +532,7 @@ ALL TESTS PASSED (20 run)
    attempted a send to anyone outside the company.
 
 `.venv/bin/python score.py --challenge` and `.venv/bin/python score.py --challenge --agent dual+taint+strict` show the challenge tasks.
+Both exit 1 until parts 1 and 2 are done, because UT8+IT4 and UT9+IT5 still work.
 
 **Optional: AgentDojo's own workspace suite** (40 user tasks, about 2 minutes):
 

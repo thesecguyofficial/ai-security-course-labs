@@ -133,7 +133,7 @@ class T3_Hardened(unittest.TestCase):
             self.assertIn("DRY RUN", seen)
 
     def test_13_legitimate_traffic_survives(self):
-        """hardened: the Helpdesk, its BigQuery reads, the office analysts and the summariser all still work"""
+        """hardened: the Helpdesk, its BigQuery reads, the office analysts and the summarizer all still work"""
         for sid in ("L1", "L2", "L3", "L4"):
             self.assertTrue(allowed(sid, "hardened"), sid)
 

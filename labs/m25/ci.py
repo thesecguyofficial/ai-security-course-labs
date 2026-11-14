@@ -107,7 +107,7 @@ def release(setup: str, version: str, base: pathlib.Path, quant: pathlib.Path | 
     out = lab.fresh_dir(lab.RELEASE / f"{version}-{setup}")
     work = lab.fresh_dir(lab.STATE / "ci-work" / f"{version}-{setup}")
 
-    # 1. the artefact we ship: our own int8 quantization of the base, or a quant someone handed us
+    # 1. the artifact we ship: our own int8 quantization of the base, or a quant someone handed us
     if quant is None:
         shipped = work / "int8"
         toymodel.quantize_int8(base, shipped)
@@ -126,7 +126,7 @@ def release(setup: str, version: str, base: pathlib.Path, quant: pathlib.Path | 
     problems = gates.overall_gate(metrics, rules)
     if cfg.get("slice_gate"):
         problems += gates.slice_gate(metrics, rules)
-    evaluated = "full precision AND the shipped artefact" if cfg["evaluate_shipped"] else "full precision only"
+    evaluated = "full precision AND the shipped artifact" if cfg["evaluate_shipped"] else "full precision only"
     say(f"  eval ({evaluated}): recall fp32 {metrics['recall_full']:.3f}"
         + (f", shipped {metrics['recall_shipped']:.3f}, agreement {metrics['agreement']:.3f}"
            if cfg["evaluate_shipped"] else ""))

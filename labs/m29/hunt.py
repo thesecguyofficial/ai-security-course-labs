@@ -1,7 +1,7 @@
 """
 hunt.py: shadow AI discovery across the org (lesson 29.1).
 
-    python3 hunt.py first-draft      # the management account's trail, InvokeModel only, the repo's current files
+    python3 hunt.py first-draft      # two accounts' trails in one Region, InvokeModel only, the repo's current files
     python3 hunt.py hardened         # every account and Region, every inference event, DNS logs, repo history
 
 Three sources, joined against the approved-AI register in data/org.json:

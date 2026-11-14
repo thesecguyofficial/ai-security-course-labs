@@ -3,7 +3,7 @@ test_lab.py: the proof for lab M28 (make test).
 
 "first draft:" tests assert each leak is REAL in the first draft (a test that can never fail proves nothing).
 "hardened:" tests assert each control holds and the normal jobs still work. "kms:", "s3:" and "detect:" tests pin the
-stand-in behaviour the lessons rely on. Every test builds its setup from zero in its own empty state folder.
+stand-in behavior the lessons rely on. Every test builds its setup from zero in its own empty state folder.
 """
 
 from __future__ import annotations

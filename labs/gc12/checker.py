@@ -182,7 +182,7 @@ def run(twin: str) -> list[Finding]:
     if app.get("secrets_in_prompt"):
         add("MEDIUM", "GC12-16", "system prompt", "Secrets (an escalation code and an API key) sit in the system "
             "prompt: any guard miss becomes a leak.", "Take them out of the prompt; let a tool fetch what's needed "
-            "after an authorisation check.")
+            "after an authorization check.")
     return sorted(out, key=lambda f: (SEV_ORDER[f.sev], f.rule, f.where))
 
 

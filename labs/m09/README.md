@@ -21,7 +21,7 @@ code**. In this lab you:
 > makes **no network connection** and touches **nothing outside this folder**. The path is baked in
 > at build time, so the file is tied to this directory and is not portable. A real attack would put a
 > reverse shell here; lesson 9.2 covers the 2024–2025 Hugging Face models that did exactly that.
-> Only load pickles you built or fully trust (lesson 0.8).
+> Only load pickles you built or fully trust (lesson 9.2).
 
 ## Get the lab files
 
@@ -62,10 +62,11 @@ Built at setup time: `models/` (the model files), `state/` (the marker, if you d
 ## Needs
 
 - Python **3.11 or newer** (tested on 3.11, 3.12 and 3.13). Check with `python3 --version`. NumPy is pinned to
-  2.4.6, the newest series that still installs on 3.11 (Ubuntu 22.04 and Debian 12 ship 3.11).
+  2.4.6, the newest series that still installs on 3.11. Debian 12 ships 3.11. Ubuntu 22.04 ships 3.10, which is
+  too old: see the Ubuntu 22.04 note under Setup.
 - This lab installs four packages, so it uses a **virtual environment**. One command sets it up.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` commands shown under each step
-  from an activated venv (`py -m venv .venv`, then `.venv\Scripts\activate`).
+- Mac or Linux for the `make` shortcuts. Windows: run the `.venv\Scripts\python` command shown under each
+  step. You do not need to activate the virtual environment.
 
 ## Setup (once): the tools, from zero
 
@@ -105,13 +106,23 @@ make check
 make models
 ```
 
-**Windows** (PowerShell, from the `ai-security-course-labs` folder):
+**Windows** (PowerShell, from the `ai-security-course-labs` folder; the third line is `make check`):
 
 ```powershell
 cd labs\m09
 py -m venv .venv
 .venv\Scripts\python -m pip install -r requirements.txt
+.venv\Scripts\python -c "from importlib.metadata import version as v; print('picklescan', v('picklescan'), '| fickling', v('fickling'), '| safetensors', v('safetensors'), '| numpy', v('numpy'))"
 .venv\Scripts\python make_models.py
+```
+
+**Ubuntu 22.04** (its `python3` is 3.10, so `make setup` fails at NumPy): install Python 3.11 as lesson 0.6
+shows (packages `python3.11` and `python3.11-venv`), then build the virtual environment with it instead of `make setup`. `make check` and `make models` then
+work as written.
+
+```bash
+python3.11 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
 ```
 
 - `make setup`: python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
@@ -167,7 +178,7 @@ Windows: `.venv\Scripts\picklescan -p models\evil_model.pkl` and `.venv\Scripts\
 
 New to model files? Do this before Step 1 (lesson 9.7 and its videos call it Step 1b). `explore.py` shows, one
 idea at a time, what a model file holds, how it loads, and how you identify it. Real output below is from a fresh
-Ubuntu machine with Python 3.12 (recording run 40917556590).
+Ubuntu machine with Python 3.12.
 
 **What it really runs.** Nothing in `explore.py` loads a pickle or runs anything from a model file. `pickle` lists
 a pickle's instructions with Python's `pickletools`, which reads them without carrying any out (the Hugging Face
@@ -378,7 +389,8 @@ picklescan's danger list. Neither scanner loads the file.
 make attack
 ```
 
-Same as `.venv/bin/python loader.py naive models/evil_model.pkl`.
+Same as `.venv/bin/python loader.py naive models/evil_model.pkl`
+(Windows: `.venv\Scripts\python loader.py naive models\evil_model.pkl`).
 
 Real output (Linux, Python 3.13):
 
@@ -406,6 +418,16 @@ make scan
 ```
 
 - `make scan`: scans benign (clean) then evil (flagged)
+
+Without `make` (Windows: `.venv\Scripts\python`), it is two commands:
+
+```text
+.venv/bin/python scan.py models/benign_model.pkl
+.venv/bin/python scan.py models/evil_model.pkl
+```
+
+`scan.py` exits with code 1 when a file is flagged, so `make` also prints
+`make: [Makefile:29: scan] Error 1 (ignored)`. That is expected.
 
 Real output (trimmed):
 
@@ -436,13 +458,19 @@ decompiles the pickle to readable Python. Run `.venv/bin/fickling models/evil_mo
 blocklist, so a payload it has not seen can slip past (lesson 9.2: the nullifAI models and the 2025
 PickleScan CVEs). Scan, but do not let a clean result replace provenance, pinning and a safe format.
 
+`scan.py` is built for this lab's raw pickle files. A real PyTorch `.pt` or `.bin` file is a zip archive with a
+pickle inside, which fickling's reader in `scan.py` cannot open: `scan.py` then prints `NOT CLEARED` and exits
+with code 1. For a real model file, run `.venv/bin/picklescan -p <file or folder>` (it reads inside the zip),
+and read the lesson 9.2 limits above before you trust a clean result.
+
 ## Step 3 · Avoid it: a format whose loading cannot run code
 
 ```bash
 make safe
 ```
 
-Same as `.venv/bin/python loader.py safe models/model.safetensors`.
+Same as `.venv/bin/python loader.py safe models/model.safetensors`
+(Windows: `.venv\Scripts\python loader.py safe models\model.safetensors`).
 
 ```text
 safetensors loaded 2 tensors: ['layer.bias', 'layer.weight']
@@ -460,7 +488,17 @@ That stops code running on load. It does not prove the weights behave: a safeten
 make tamper
 ```
 
-- `make tamper`: pin the model, change one byte, verify -> TAMPERED
+- `make tamper`: pin the model, add one byte, verify -> TAMPERED, then put the original file back
+
+Without `make`, one command does the same four things in Python
+(Windows: `.venv\Scripts\python pin.py tamper models\model.safetensors`):
+
+```text
+.venv/bin/python pin.py tamper models/model.safetensors
+```
+
+`make tamper` also ends with `make: [Makefile:42: tamper] Error 1 (ignored)`: the failed verification is the
+point of the step.
 
 ```text
 pinned model.safetensors = sha256:4b2458915a8131399b9c1a02033fdfbb99c48fb6ef4299388ae6ace85981fa39
@@ -470,13 +508,15 @@ TAMPERED  model.safetensors does NOT match its pin.
 ```
 
 One extra byte changes the hash. Pin by digest, not by name or a `latest` tag: the fix for the
-rug-pull and model-namespace-reuse attacks in lesson 9.3.
+model-namespace-reuse attacks in lesson 9.3.
 
 ## Step 5 · Prove it
 
 ```bash
 make test
 ```
+
+Same as `.venv/bin/python run_tests.py` (Windows: `.venv\Scripts\python run_tests.py`).
 
 Real output (Linux, Python 3.13, picklescan 1.0.5 / fickling 0.1.12 / safetensors 0.8.0; unittest's own
 `Ran 8 tests` summary lines trimmed):
@@ -499,6 +539,8 @@ ALL TESTS PASSED (8 run)
 ```bash
 make challenge
 ```
+
+Same as `.venv/bin/python run_tests.py --challenge` (Windows: `.venv\Scripts\python run_tests.py --challenge`).
 
 This adds three tests for a `safe_load()` function in `loader.py` that is a stub today. Make them
 pass by implementing a guarded loader that (1) refuses any pickle-based file, (2) verifies a
@@ -525,11 +567,14 @@ make clean
 
 - `make clean`: removes models/, state/, pins.json (keeps .venv)
 
+Windows:
+`.venv\Scripts\python -c "import shutil, pathlib; [shutil.rmtree(d, ignore_errors=True) for d in ('models', 'state')]; pathlib.Path('pins.json').unlink(missing_ok=True)"`
+
 ## Map to the standards
 
 - **OWASP LLM04:2026 Supply Chain**: tampered models, weak provenance, unsigned artifacts, and the
   scanner/safe-format bypass scenario are exactly what this lab shows in miniature.
-- **OWASP LLM05:2026 Data and Model Poisoning**: the backdoored-artefact side of the same risk.
+- **OWASP LLM05:2026 Data and Model Poisoning**: the backdoored-artifact side of the same risk.
 - **MITRE ATLAS v2026.09**: AML.T0010.003 (compromise the model), AML.T0011.000 (Unsafe AI
   Artifacts), AML.T0018.002 (Embed Malware); mitigations AML.M0014 (Verify AI Artifacts),
   AML.M0016 (Vulnerability Scanning), AML.M0011 (Restrict Library Loading), AML.M0013 (Code Signing).

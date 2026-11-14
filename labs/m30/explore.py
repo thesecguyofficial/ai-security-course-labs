@@ -86,7 +86,7 @@ def cmd_case(a) -> None:
         print(f"  reads       {agent.SOURCE_TOOL[source]}({item}): \"{agent.WORKSPACE[source][item]}\"")
     where = "the user's own message" if c["source"] == "direct" else f"{item}, the {c['source']} the task reads"
     print(f"  planted in  {where}: {agent.placeholder(c['goal'])}")
-    print("              a labelled placeholder: harmless text that only the lab's stand-in model reacts to")
+    print("              a labeled placeholder: harmless text that only the lab's stand-in model reacts to")
     print(f"  goal        {c['goal']}: {s['goals'][c['goal']]}" + ("   CRITICAL" if c["goal"] in s["critical_goals"] else ""))
     print(f"  check 1     user task done    = {done}")
     print(f"  check 2     attacker goal met = {GOAL_TEXT[c['goal']]}")
@@ -179,7 +179,7 @@ def cmd_card(a) -> None:
     print("  IDENTITY   what was tested")
     print(f"    model          {c['model']}")
     print(f"    prompt         {c['system_prompt']}")
-    print(f"    defences       data marking on {', '.join(d['spotlight']) or 'nothing'} | controls: {', '.join(d['controls']) or 'none'}")
+    print(f"    defenses       data marking on {', '.join(d['spotlight']) or 'nothing'} | controls: {', '.join(d['controls']) or 'none'}")
     print(f"    tools          {', '.join(c['tools'])}")
     print("  METHOD     how it was tested")
     print(f"    suite          {s['name']} v{s['version']}, sha256 {s['sha256'][:12]}")

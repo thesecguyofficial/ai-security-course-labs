@@ -4,7 +4,7 @@ guardrail_twin.py: an OFFLINE STAND-IN for Amazon Bedrock Guardrails. It is NOT 
 Why a stand-in: this lab must run free, offline, on any laptop, and give the same result every time so `make test` can
 check exact numbers. Real Bedrock Guardrails uses machine-learning classifiers that AWS updates over time; this file uses
 short, readable pattern lists instead. The NUMBERS you get here are therefore not Bedrock's numbers. What this file copies
-faithfully is the documented BEHAVIOUR around the classifiers, which is where most real-world mistakes happen:
+faithfully is the documented BEHAVIOR around the classifiers, which is where most real-world mistakes happen:
 
   * the request shape: a guardrail is the JSON body of a CreateGuardrail request (contentPolicyConfig, topicPolicyConfig,
     wordPolicyConfig, sensitiveInformationPolicyConfig, contextualGroundingPolicyConfig, tierConfig, crossRegionConfig)

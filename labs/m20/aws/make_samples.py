@@ -4,6 +4,7 @@
 
 ILLUSTRATIVE records: the field names follow AWS's documentation (CloudTrail record contents, the IAM source
 identity example, the AgentCore Identity API request members); the values are made up for one lab morning.
+What AgentCore really writes inside requestParameters is unconfirmed until the guided build is run.
 The guided build (aws/GUIDED-BUILD.md) shows you the real records from your own account.
 """
 import datetime
@@ -14,7 +15,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 ACCT, REGION = "111122223333", "us-east-1"
 DIR = f"arn:aws:bedrock-agentcore:{REGION}:{ACCT}:workload-identity-directory/default"
 VAULT = f"arn:aws:bedrock-agentcore:{REGION}:{ACCT}:token-vault/default"
-T0 = datetime.datetime(2027, 1, 21, 9, 0, 0)
+T0 = datetime.datetime(2026, 10, 21, 9, 0, 0)
 ct, app, counter = [], [], [0]
 
 

@@ -6,8 +6,8 @@ zero, in **your own** Google Cloud sandbox project (never a work project). About
 - deploy a small ADK Helpdesk agent to **Agent Runtime** with its own **Agent Identity**;
 - put it behind an **Agent Gateway** (Agent-to-Anywhere) whose **Agent Registry** lists only the Google endpoints the
   agent needs, so everything else hits the gateway's default deny;
-- add **one DENY rule** to an IAM Unified Access Policy while the gateway is in **dry run**, read what it would have
-  denied, then **enforce** it;
+- add **one DENY rule** to an IAM Unified Access Policy while the gateway is in **dry run**, read the gateway's and
+  IAP's logs, then **enforce** it and test again;
 - turn on **Data Access audit logs** for Memory Bank and set a Memory Bank **TTL**;
 - send four requests, change one setting, re-run, and tear everything down.
 
@@ -85,7 +85,7 @@ cd ../..
 ```
 
 - `cp cloud/terraform/terraform.tfvars.example cloud/terraform/terraform.tfvars`: then edit project_id
-- `terraform plan -out=plan.out`: read it: about 40 resources, nothing outside your project
+- `terraform plan -out=plan.out`: read it: 42 resources in our 12 November 2026 run, nothing outside your project
 
 What it creates, file `cloud/terraform/main.tf`:
 
@@ -228,17 +228,22 @@ cd ../..
 `agent_gateway_config` is set, `identity_type` must be `AGENT_IDENTITY`, and the gateway must be in the agent's region.
 Deployment takes several minutes.
 
-Example response (shape from the provider's docs, values illustrative):
+Example response (shape from our 12 November 2026 run, values illustrative):
 
 ```output
 {
   "name": "projects/123456789012/locations/us-central1/reasoningEngines/1234567890123456789",
-  "effectiveIdentity": "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/123456789012/locations/us-central1/reasoningEngines/1234567890123456789",
+  "effectiveIdentity": "agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/123456789012/locations/us-central1/reasoningEngines/1234567890123456789",
   "identityType": "IdentityType.AGENT_IDENTITY"
 }
 
-Next: put effectiveIdentity into cloud/terraform/terraform.tfvars as agent_principal (Step 4).
+Next: put this line into cloud/terraform/terraform.tfvars (Step 4):
+  agent_principal = "principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/123456789012/locations/us-central1/reasoningEngines/1234567890123456789"
 ```
+
+In both of our runs the API returned `effectiveIdentity` **without** `principal://` in front (and with `proj-` in
+place of `org-`, because our project has no organization). IAM and Terraform want the `principal://` form, so
+`deploy.py` prints that form on the last line. Copy it from there:
 
 ```bash
 export AGENT="projects/.../reasoningEngines/..."
@@ -246,7 +251,7 @@ export AGENT_PRINCIPAL="principal://agents.global...."
 ```
 
 - `AGENT`: the "name" above
-- `AGENT_PRINCIPAL`: the "effectiveIdentity" above
+- `AGENT_PRINCIPAL`: the `agent_principal` value on the last line (it starts with `principal://`)
 
 Check the binding the way Google's routing page does (a `null` result means the gateway binding failed):
 
@@ -263,15 +268,19 @@ Example response (shape from the provider's docs, values illustrative):
     "agentGateway": "projects/tsg-sandbox-1234/locations/us-central1/agentGateways/tsg-gc14-egress"
   }
 }
-"principal://agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/123456789012/locations/us-central1/reasoningEngines/1234567890123456789"
+"agents.global.org-100000000099.system.id.goog/resources/aiplatform/projects/123456789012/locations/us-central1/reasoningEngines/1234567890123456789"
 ```
+
+Our run (13 November 2026): `agentToAnywhereConfig.agentGateway` named our gateway, and the identity came back
+without `principal://`, as above.
 
 Two things Google's pages say that are easy to miss: all agents in one project and region bind to the **same**
 egress gateway, and **redeploying creates a new principal**, so grants to the old one don't carry over (and aren't
 removed: lab rule GC14-04).
 
 The agent can't do anything useful yet: it has no grants, and no access policy allows its traffic. The gateway is in
-dry run, so the calls will go through and be logged as "would deny".
+dry run, so the calls go through. Google's page says IAP logs them as would-be denials; Step 5 shows what our run
+found in that log.
 
 ## Step 4 · The access policy with one DENY rule, in dry run (15 minutes)
 
@@ -339,9 +348,15 @@ for ROLE in roles/browser roles/serviceusage.serviceUsageConsumer roles/bigquery
 done
 ```
 
-Then give the agent read access to the `helpdesk` dataset only: **BigQuery > helpdesk > Share > Manage permissions >
-Add principal**, paste `$AGENT_PRINCIPAL` (without quotes), role **BigQuery Data Viewer**. Don't share
-`finance_exports`.
+Then give the agent read access to the one table it needs, `helpdesk.tickets`, not the whole dataset (the same
+grant Terraform makes, and what our 13 November 2026 run did from Cloud Shell):
+
+```bash
+bq add-iam-policy-binding --member="$AGENT_PRINCIPAL" --role=roles/bigquery.dataViewer $PROJECT:helpdesk.tickets
+```
+
+Console: **BigQuery > helpdesk > tickets > Share > Add principal**, paste the value of `$AGENT_PRINCIPAL` (without
+quotes), role **BigQuery Data Viewer**. Grant nothing on `finance_exports`.
 
 **The same rules in the console** (Agent Platform > **Policies** > **Access policies** > **Create**, 13 November 2026):
 click **Edit** next to the policy ID and name it `tsg-gc14-egress`; each **New rule** takes an effect, **Individual
@@ -413,8 +428,9 @@ Our run: `"Access Denied: Table PROJECT:helpdesk.tickets: Permission bigquery.ta
 PROJECT:helpdesk.tickets (or it may not exist)."`
 
 In dry run, the gateway let `execute_sql` through and BigQuery refused the write (Data Viewer can't update). The DENY
-rule did its job only in the logs. Remember this for the moment someone grants Data Editor "to make closing tickets
-work".
+rule blocked nothing: IAM on the table was the only control that said no. (Google's page says a dry-run DENY is
+logged as a would-be denial; we couldn't find that entry, see "Read what the gateway saw" below.) Remember this for
+the moment someone grants Data Editor "to make closing tickets work".
 
 ### R4 · An unregistered host
 
@@ -552,19 +568,19 @@ python3 memory.py --project $PROJECT --region $REGION --agent $AGENT read --user
 cd ../..
 ```
 
-Example response (shape from the provider's docs, values illustrative):
+What our run printed (13 November 2026; the `...` is the long operation object `write` prints):
 
 ```output
 default_ttl set to 2592000s (30 days) for memories created from now on
 ...
 1 memories for user_id=alice
-{"fact": "Alice prefers replies before 10:00.", "scope": {"app_name": "tsg_helpdesk_gc14", "user_id": "alice"}, "expireTime": "2026-11-22 09:52:11+00:00"}
+{"fact": "Alice prefers replies before 10:00.", "scope": {"app_name": "tsg_helpdesk_gc14", "user_id": "alice"}, "expireTime": "None"}
 0 memories for user_id=bob
 ```
 
-In our run (13 November 2026) the TTL call and both reads matched this, but the memory came back with
-`"expireTime": None`: the 30-day default didn't show on that memory. Check yours, and if it's empty, set an expiry when
-you write the memory instead of relying on the default.
+Look at `expireTime`: the TTL call succeeded, and the memory still came back with no expiry. We haven't found out why
+(as of 15 November 2026), so don't count on the default TTL to expire memories until you've seen a date there
+yourself. Check yours, and if it's empty, set an expiry when you write the memory.
 
 The second read returns nothing because the **scope** is different. Note who chose the scope: this script, running as
 **you**. In a real app, your backend sets `user_id` from a verified ID token, never from the request body (offline
@@ -595,7 +611,8 @@ The offline lab's GC14-03: a data role granted to **every agent in the project**
 `terraform.tfvars` set `grant_all_agents_project_data = true` and apply. That grants BigQuery Data Viewer on the
 whole project to the principal set
 `principalSet://agents.global.org-ORG_ID.system.id.goog/attribute.platformContainer/aiplatform/projects/PROJECT_NUMBER`
-(Terraform output `all_agents_principal_set`). Wait a few minutes and re-run R2:
+(`proj-PROJECT_NUMBER` in place of `org-ORG_ID` in a project with no organization; Terraform output
+`all_agents_principal_set` prints the right one for yours). Wait a few minutes and re-run R2:
 
 ```bash
 cd cloud/agent && python3 ask.py --project $PROJECT --region $REGION --agent $AGENT --pick 2 && cd ../..
@@ -691,9 +708,11 @@ Leave Data Access logs on if you keep the project: they cost little and you'll w
 - `deploy.py` fails with a validation error about `agent_gateway_config`: the agent and the gateway must be in the
   same region, and `identity_type` must be `AGENT_IDENTITY`.
 - Every request fails with `498` after you enforce: an endpoint the agent needs isn't registered or allowed. Go back
-  to dry run, read the IAP log for hosts you didn't expect, register them, and enforce again.
+  to dry run, read the gateway's request log (Step 5) for hosts you didn't expect, register them, and enforce again.
+- Every BigQuery call gets `403` after you enforce, the allowed ones too: your ALLOW rule lists tool names without
+  `''`. The MCP handshake has no tool name (Step 4).
 - `gcloud iam policy-bindings create` fails with a policy constraint error: see Step 0, point 2.
-- `PERMISSION_DENIED` from BigQuery on R1: the dataset share or `roles/bigquery.jobUser`/`roles/mcp.toolUser` is
+- `PERMISSION_DENIED` from BigQuery on R1: the table grant or `roles/bigquery.jobUser`/`roles/mcp.toolUser` is
   missing for `$AGENT_PRINCIPAL`, or the grant hasn't applied yet (wait a few minutes).
 - Your SDK version doesn't have `client.agent_engines`: newer Google pages name it `agentplatform.Client` and
   `client.runtimes`; the config keys are the same.

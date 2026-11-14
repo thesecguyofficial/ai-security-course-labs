@@ -12,7 +12,8 @@ Billing console the next day; we expect this guide to cost cents at most, but we
 - **Part C** uploads it and runs the gate on a fresh download. Only a release that passes every check is registered.
 - **Part D** sends five requests: a clean release, its evidence, a tampered release, the audit trail, and a check
   that the tampered bytes never reached the registry.
-- **Part E** changes one setting (fail open) and shows what that costs. **Part F** tears everything down.
+- **Part E** swaps in the first draft's `deploy.json` (nine settings differ; fail-open is the one that matters here)
+  and shows what that costs. **Part F** tears everything down.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an AWS account, so
 > **no response in this file comes from a real run**. Every response block is labeled **"Example response (shape
@@ -29,10 +30,10 @@ Billing console the next day; we expect this guide to cost cents at most, but we
 
 1. **Sandbox account with a budget alarm** (lesson 0.7).
 2. **Tools:** the AWS CLI v2, and this lab set up (`make setup` in `labs/m25`).
-3. **Terminal in `labs/m25`:**
+3. **Terminal in `labs/m25`.** If you are still in the `ai-security-course-labs` folder, run `cd labs/m25` first.
+   Then:
 
    ```bash
-   cd labs/m25
    export AWS_REGION=us-east-1
    aws sts get-caller-identity --query Account --output text
    export BUCKET=tsg-m25-lab-$(aws sts get-caller-identity --query Account --output text)-$RANDOM
@@ -195,13 +196,14 @@ role only, not to data scientists (M15's checker flags self-approval as M15-18).
    approved files into a separate, write-protected "released" prefix or bucket that only the gate's role can write
    (M15's hardened bucket policy does this), or have the serving side re-verify the signature before loading.
 
-## Part E · Change one setting: fail open
+## Part E · Swap in the first draft's settings: fail open
 
 ```bash
 make cloud-warn BUCKET=$BUCKET
 ```
 
-The same gate with the first draft's `deploy.json`: warn and carry on.
+The same gate with the first draft's `deploy.json`. Nine settings differ from the hardened file. The one that matters
+here is `on_verify_error: warn`: warn and carry on.
 
 Example response (gate lines from this lab's code; ARN illustrative)
 
@@ -214,7 +216,9 @@ GATE [first-draft] on the copy downloaded from S3:
 ```
 
 The tampered weights are now an **Approved** model package version, and the only trace is a warning in a log nobody
-reads. That one setting is the difference between the two pipelines in `make hunt`.
+reads. No key came with this release (the hardened CI ships none), and the first draft looks for its trusted key
+inside the release. So it skipped the signature check entirely, logged that as a warning, and carried on. A gate
+that warns instead of refusing is the difference between the two pipelines in `make hunt`.
 
 ## Part F · Teardown (do it today)
 

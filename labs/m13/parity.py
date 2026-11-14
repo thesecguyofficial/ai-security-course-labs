@@ -34,7 +34,7 @@ CONTROLS = [
      "Only the action groups / inline functions the Helpdesk needs; no code sandbox", ["M13-16"], ["A7"]),
     ("Human approval before writes, arguments shown", "M7 approval_card",
      "requireConfirmation ENABLED (Classic) or inline function + app confirmation (harness)", ["M13-12"], ["A4"]),
-    ("Authorisation in code, caller from the session", "M7 check_data_scope",
+    ("Authorization in code, caller from the session", "M7 check_data_scope",
      "Lambda / app reads the caller from the session and checks it (challenge 3)", ["M13-13"], ["A5"]),
     ("Least-privilege tool identity", "M7.4",
      "Lambda role scoped to one action; resource policy pinned to this agent; only the backend may invoke",

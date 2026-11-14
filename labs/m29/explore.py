@@ -20,7 +20,7 @@ account number and address is fake.
     decoy       9. the planted decoy key (a honeytoken)
     score       10. a CVSS score, metric by metric (default: CVE-2025-32711)
     agent       11. the AI triage agent: what it reads and what it may do
-    compare     12. first draft against hardened: every setting that changed, and the cases it fixes (lab part 2)
+    compare     12. first draft against hardened: every setting that changed, and the cases it fixes (lab part 3)
 
     e.g. .venv/bin/python explore.py event       (Windows: .venv\\Scripts\\python explore.py event)
 """

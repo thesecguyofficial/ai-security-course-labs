@@ -58,7 +58,7 @@ class TC_Lab(unittest.TestCase):
     def test_07_scope_shrinks_and_act_chain(self):
         """hardened: each hop's token has one audience, fewer scopes, lives <= 120 s and names the agents in act"""
         with Chain("hardened") as c:
-            c.ask("alice", "Summarise T-4713 and email me the summary")
+            c.ask("alice", "Summarize T-4713 and email me the summary")
             mail = jwtlite.peek(c.captured["mail-agent->mail-api"])
             api = jwtlite.peek(c.captured["tickets-agent->tickets-api"])
             sent = [r for r in c.audit if r["api"] == "mail-api" and r["result"] == "ok"][0]
@@ -73,7 +73,7 @@ class TC_Lab(unittest.TestCase):
     def test_08_first_draft_passthrough(self):
         """first draft: the mail API receives the user's own hour-long token, valid for 6 services"""
         with Chain("first-draft") as c:
-            c.ask("alice", "Summarise T-4713 and email me the summary")
+            c.ask("alice", "Summarize T-4713 and email me the summary")
             stolen = jwtlite.peek(c.debug_log[-1]["authorization"][7:])
         self.assertEqual(stolen["azp"], "helpdesk-app")
         self.assertEqual(len(stolen["aud"]), 6)
@@ -83,7 +83,7 @@ class TC_Lab(unittest.TestCase):
         """hardened: a chain longer than max_actors is refused (set to 2, the mail agent's hop fails)"""
         with Chain("hardened") as c:
             c.authz.policy["max_actors"] = 2
-            c.ask("alice", "Summarise T-4713 and email me the summary")
+            c.ask("alice", "Summarize T-4713 and email me the summary")
             refused = [e for e in c.authz.events if e.get("result") == "refused"]
             sent = list(c.outbox)
         self.assertEqual(sent, [])

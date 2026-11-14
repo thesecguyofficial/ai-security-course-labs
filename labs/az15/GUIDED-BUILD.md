@@ -1,12 +1,15 @@
 # AZ15 guided build: a private endpoint for an open model (your own subscription, costs money)
 
 This is Step 9 of the AZ15 lab, and it's optional. You build the hardened design's core for real: a workspace whose
-managed VNet allows only approved outbound traffic (with no FQDN rules, so no Azure Firewall), an online endpoint that
+managed VNet allows only approved outbound traffic (we planned for no FQDN rules and no Azure Firewall; the model in
+our run needed four rules, and they bring the firewall in), an online endpoint that
 accepts only Entra tokens and only through the workspace's private endpoint, a client VM that plays the Helpdesk, and
-the endpoint's traffic log in Log Analytics. Then five requests, one changed setting, and teardown.
+the endpoint's traffic log in Log Analytics. Then four requests and the log evidence, one changed setting, and teardown.
 
 **Status:** run end to end on 10 November 2026 in East US, in a personal sandbox subscription. The table below shows
-what really happened, including four things that didn't work the first time. The responses in Part C are from that run.
+what really happened, including six things that didn't work the first time. The responses in Part C are from that run.
+On 12 November 2026 we ran the one-shot script (`cloud/deploy.sh`) and the Terraform file again under new names:
+requests 1 to 4 gave 200, 403, 401 and 404 both times.
 
 ## What happened in our real run (10 November 2026, East US)
 
@@ -21,7 +24,8 @@ what really happened, including four things that didn't work the first time. The
 | C2 to C4 | 403, 401, 404 | 403, 401, 404 | Nothing |
 | C5 logs | Request 2 missing (the network refuses it first) | Request 2 IS in `AmlOnlineEndpointTrafficLog` with ResponseCode 403, a minute after the call | The text in C5 now says so |
 | Part D | Request 2 gets through | HTTP 200 from the internet with our own token, and a real summary back | Put back to `disabled` |
-| Timer | Deletes the endpoint after 60 minutes | It did: our first endpoint was gone at the timer's time, and the next `make cloud-deploy` made a new one | We paused it once (`properties.state=Disabled`) while a deployment update rolled, then ran teardown |
+| Timer | Deletes the endpoint after 60 minutes | It did: our first endpoint was gone at the timer's time, and the next `make cloud-deploy` made a new one. On 12 November the deployment alone took about 40 minutes of that hour | We paused it once (`properties.state=Disabled`) while a deployment update rolled, then ran teardown. `make cloud-deploy` now restarts the hour when the deployment is ready, and `make cloud-timer` restarts it again |
+| C5 logs, 12 November | Rows within minutes, as on 10 November | Script run: minutes. Terraform run: no traffic log row 50 minutes after the requests, when we tore it down | The text in C5 gives both |
 
 The lesson behind the B.2 row: "curated" doesn't mean "needs no internet". Read the deployment log before you open
 egress, and open only the hosts the log names.
@@ -38,13 +42,26 @@ egress, and open only the hosts the log names.
 - Smaller items: one small client VM (`Standard_D2as_v4` in our run), one private endpoint, Log Analytics ingestion, the workspace's storage
   account and key vault. Microsoft deploys the firewall only "if an FQDN outbound rule is created" (same page); we
   planned for none, but the model in our run needed four (Part B.1).
-- **Auto-teardown:** `make cloud-deploy` creates a Logic App timer before it creates the endpoint. Sixty minutes later
-  it sends a DELETE for the endpoint with its own managed identity. It stops the hourly VM cost; it doesn't delete the
-  rest. `make cloud-down` deletes everything. Run it the same day.
+- **Auto-teardown:** `make cloud-deploy` creates a Logic App timer before it creates the endpoint, set to 60 minutes.
+  The deployment took about 40 minutes in our 12 November run, so `make cloud-deploy` sets the timer again when the
+  deployment is ready: you get a full hour from that point. Then it sends a DELETE for the endpoint with its own
+  managed identity. Need longer (the 408 fix in B.2 rolls the deployment, and the logs in C5 can be slow)? Run
+  `make cloud-timer`: another 60 minutes from now. The timer stops the hourly VM cost; it doesn't delete the
+  rest, and the managed firewall keeps billing. `make cloud-down` deletes everything. Run it the same day.
 - Use your own sandbox subscription (lesson 0.7) with a budget alert. Never a work subscription.
 
 You need the Azure CLI with the `ml` extension (`az extension add -n ml`), signed in with `az login`, and the right
 subscription selected (`az account set -s <id>`). Check with `make cloud-check-tools`.
+
+Work in the `labs/az15` folder (from the repo root: `cd labs/az15`). Set the workspace name once, in the terminal
+you'll use. `make` reads it, and so do the `az` commands in B.1, B.2 and Part D:
+
+```bash
+export WS=tsg-az15-lab
+```
+
+If you switch to a CLI-made workspace later (A.1 below), export the new name instead, for example
+`export WS=tsg-az15-cli`.
 
 ## Part A · The workspace and the private path
 
@@ -52,15 +69,17 @@ subscription selected (`az account set -s <id>`). Check with `make cloud-check-t
 
 1. Search for **Azure Machine Learning**, then **Create** > **New workspace**.
 2. **Basics:** a new resource group `rg-tsg-az15-lab`, name `tsg-az15-lab`, your region.
-3. **Networking:** choose **Private with Approved Outbound**. Don't add any user-defined outbound rules. Then add a
-   **private endpoint** in a new VNet `vnet-tsg-az15` (subnet `clients`, `10.15.1.0/24`), with private DNS integration.
+3. **Networking:** inbound stays on all networks (the endpoint gets its own switch in Part B). Outbound: choose
+   **Allow Only Approved Outbound**. Don't add any user-defined outbound rules, and leave **Provision managed virtual
+   network** clear. Don't add a private endpoint here: `make cloud-up` (A.2) makes the VNet `vnet-tsg-az15`, the
+   private endpoint and its DNS zones.
 4. **Review + create.** Then open the workspace and, under **Networking** > **Workspace managed outbound access**,
    check that it shows **Allow Only Approved Outbound** and only the required rules (ours listed 13, all "Inactive"
    until the network is provisioned).
 
 In our run the portal-made workspace then refused to provision its managed network ("Received 404 from a service
-request", three tries). If that happens to you, make the workspace with the CLI instead (`make cloud-up` creates it
-when the name is new, for example `make cloud-up WS=tsg-az15-cli`) and pass the same `WS=` to every later `make`.
+request", three tries). If that happens to you, make the workspace with the CLI instead: `export WS=tsg-az15-cli`,
+then `make cloud-up` (it creates the workspace when the name is new). Keep that `WS` exported for every later step.
 
 Portal labels move between releases. If a label differs, the CLI below is the reference.
 
@@ -109,7 +128,11 @@ for d in conda.anaconda.org repo.anaconda.com pypi.org files.pythonhosted.org; d
 done
 ```
 
-Each rule took about 6 minutes in our run, and the first one brings in the managed firewall. This is the egress review
+Each rule took about 6 minutes in our run, and the first one brings in the managed firewall. Run the loop as written,
+one rule after another: each write replaces the workspace's whole rule list, and when Terraform wrote the four at the
+same time (12 November) Azure kept three. Check with
+`az ml workspace outbound-rule list -g rg-tsg-az15-lab --workspace-name "$WS" -o table` that all four are there
+before you deploy: a missing one shows up 40 minutes later as a crashed container. This is the egress review
 from lesson 15.2 done for real: four named hosts, nothing else. `repo.anaconda.com` is Anaconda's own channel; check
 its terms of service for your organization before you allow it at work.
 
@@ -136,18 +159,23 @@ its terms of service for your organization before you allow it at work.
 INSTANCE=Standard_E2s_v3 MODEL_ID=azureml://registries/azureml/models/<name>/versions/<version> make cloud-deploy
 ```
 
+`INSTANCE` must be a size on the model's own list and inside your quota; without it `cloud.sh` uses
+`Standard_DS3_v2`, which our quota refused (table above). The deployment took about 40 minutes on 12 November. If the
+CLI's own wait stops with a token error, `cloud.sh` asks Azure for the deployment's state and carries on.
+
 If the first requests in Part C come back `HTTP 408`, the model is slower than the default 5-second request timeout
-(ours was, on 2 vCPU). Raise it:
+(ours was, on 2 vCPU). Raise it, then give the timer a fresh hour, because the update rolls the deployment:
 
 ```bash
 az ml online-deployment update -g rg-tsg-az15-lab -w "$WS" -e tsg-az15-summariser -n blue \
    --set request_settings.request_timeout_ms=90000
+make cloud-timer
 ```
 
 What it runs (`cloud/cloud.sh`, section `deploy`):
 
 1. **The timer.** A Logic App (Consumption) from `cloud/teardown-timer.json`: a Recurrence trigger that starts 60
-   minutes from now and an HTTP action that sends `DELETE` for the endpoint, authenticated with its own system-assigned
+   minutes from now (and is set again to 60 minutes once the deployment in step 3 is ready) and an HTTP action that sends `DELETE` for the endpoint, authenticated with its own system-assigned
    identity. Microsoft: for Azure Resource Manager the audience is "`https://management.azure.com/`", and Consumption
    logic apps "don't automatically enable the system identity"
    ([Microsoft](https://learn.microsoft.com/en-us/azure/logic-apps/authenticate-with-managed-identity)), so the body
@@ -168,7 +196,7 @@ What it runs (`cloud/cloud.sh`, section `deploy`):
 Console check: in the studio, **Endpoints** > `tsg-az15-summariser` shows the auth type, the deployment and its
 traffic share.
 
-## Part C · Five requests
+## Part C · Four requests, then the evidence
 
 ```bash
 make cloud-ask
@@ -220,7 +248,7 @@ make cloud-ask
    ```
 
    ```output
-   Our run (10 Nov 2026), columns trimmed; the logs showed up within minutes, not an hour
+   Our run (10 Nov 2026), columns trimmed; the logs showed up within minutes that day
    TimeGenerated (UTC)   DeploymentName  AuthType  ResponseCode
    07:50:16              blue            AADToken  200     request 1, the Helpdesk VM
    07:50:49              blue            AADToken  403     request 2, from outside
@@ -229,6 +257,10 @@ make cloud-ask
    07:54:11              blue            AADToken  200     Part D, request 1
    07:54:43              blue            AADToken  200     Part D, request 2 from outside: now it gets in
    ```
+
+   Arrival time varied between our runs: minutes on 10 November and in the 12 November script run; in the
+   12 November Terraform run no traffic log row had arrived 50 minutes after the requests. If the table is empty,
+   run `make cloud-timer` and query again later.
 
    Read it like a reviewer: request 1 is there; check `IdentityData` for the VM's object ID. We expected request 2 to be
    missing, because the network refuses it. It isn't: the refusal at the endpoint's front door is logged with
@@ -243,7 +275,7 @@ make cloud-ask
 Open the front door for five minutes, so you see what the flag does:
 
 ```bash
-az ml online-endpoint update -g rg-tsg-az15-lab -w tsg-az15-lab -n tsg-az15-summariser --set public_network_access=enabled
+az ml online-endpoint update -g rg-tsg-az15-lab -w "$WS" -n tsg-az15-summariser --set public_network_access=enabled
 make cloud-ask
 ```
 
@@ -252,7 +284,7 @@ the `score/action` check too. That's the trade-off: with the flag enabled, only 
 the model. Put it back:
 
 ```bash
-az ml online-endpoint update -g rg-tsg-az15-lab -w tsg-az15-lab -n tsg-az15-summariser --set public_network_access=disabled
+az ml online-endpoint update -g rg-tsg-az15-lab -w "$WS" -n tsg-az15-summariser --set public_network_access=disabled
 ```
 
 ## Teardown (today)

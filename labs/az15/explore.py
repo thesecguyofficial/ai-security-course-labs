@@ -197,6 +197,8 @@ def cmd_call(a) -> None:
     mode = s.endpoint.get("auth_mode", "key")
     if mode == "key":
         print(f"   2. auth      (auth_mode key)   a key needs no role: whoever holds it is in")
+    elif cred == "key":
+        print(f"   2. auth      (auth_mode {mode})   STOP: a key was sent, and this endpoint accepts only Microsoft Entra tokens")
     else:
         allowed, rwhy = twin.decide(s, who, twin.A_SCORE, twin.endpoint_scope(s))
         print(f"   2. auth      (auth_mode {mode})   {'pass' if allowed else 'STOP'}: score/action {'granted by ' + rwhy if allowed else 'missing'}")

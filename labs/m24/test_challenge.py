@@ -30,7 +30,7 @@ class TC_Challenge(unittest.TestCase):
         self.assertEqual(replay.false_positives(self.txn), [], "false positives on normal runs")
 
     def test_08_variants_contained(self):
-        """step 3: the ADAPTED variants are contained too, all 5 controls fire (behaviour, not wording)"""
+        """step 3: the ADAPTED variants are contained too, all 5 controls fire (behavior, not wording)"""
         r = replay.score_attack(self.variants)
         self.assertTrue(r["contained"], "a variant send still executes")
         self.assertEqual(r["missed"], [], f"controls not firing on variants: {r['missed']}")

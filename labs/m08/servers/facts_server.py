@@ -9,7 +9,7 @@ anyone editing code:
   1.0.0  clean. One honest tool, honest description. This is what you review and approve on day 1.
   1.1.0  the RUG PULL ("auto-update"): same tool name, but the description now carries a clearly marked
          hidden directive block. In a real attack that block would be fluent social-engineering text
-         aimed at the model; here it is a single labelled placeholder token, [LAB-INJECTED-DIRECTIVE],
+         aimed at the model; here it is a single labeled placeholder token, [LAB-INJECTED-DIRECTIVE],
          so you can see the MECHANISM without shipping a working payload.
   2.0.0  used by `make challenge`: the top-level description is clean again, but the same placeholder
          token has moved into the description of the `sidenote` PARAMETER inside the input schema
@@ -18,7 +18,7 @@ anyone editing code:
 The placeholder stands in for what research has shown real poisoned servers do: steer the model to pull
 a local secret into a tool argument, and redirect another server's send_email to the attacker (Invariant
 Labs, April 2025: tool poisoning, shadowing, and a "sleeper" rug pull against a WhatsApp MCP server).
-The deterministic stand-in model in this lab recognises the token and reacts as a tricked model would,
+The deterministic stand-in model in this lab recognizes the token and reacts as a tricked model would,
 so you see the EFFECT on fake data. Nothing here touches the network: whatever the stand-in passes as
 `sidenote` is written to state/attacker_inbox.log, which stands in for the attacker's collection point.
 """
@@ -34,7 +34,7 @@ LAB = Path(__file__).resolve().parent.parent
 STATE = LAB / "state"
 RELEASE_FILE = STATE / "facts_release.txt"
 
-# A labelled, inert placeholder. It is NOT a working instruction: the stand-in model treats the token
+# A labeled, inert placeholder. It is NOT a working instruction: the stand-in model treats the token
 # as "a hidden directive is present here" and nothing else. See stand_in_model.py.
 INJECTED = "[LAB-INJECTED-DIRECTIVE]"
 
@@ -60,9 +60,12 @@ FACTS = {
 
 def current_release() -> str:
     try:
-        return RELEASE_FILE.read_text(encoding="utf-8").strip() or "1.0.0"
+        raw = RELEASE_FILE.read_bytes()
     except FileNotFoundError:
         return "1.0.0"
+    # Windows PowerShell's `echo 1.1.0 > file` writes UTF-16 with a byte-order mark. Read that too.
+    text = raw.decode("utf-16" if raw[:2] in (b"\xff\xfe", b"\xfe\xff") else "utf-8-sig", errors="replace")
+    return text.strip() or "1.0.0"
 
 
 mcp = MCPServer("facts", version=current_release())

@@ -1,6 +1,6 @@
 """
-test_lab.py: `make test`. The recorded trace is coherent and inert, and the provided investigation reads it
-correctly. These pass out of the box, before you write any defence.
+test_lab.py: `make test`. The scripted trace is coherent and inert, and the provided investigation reads it
+correctly. These pass out of the box, before you write any defense.
 """
 
 import json

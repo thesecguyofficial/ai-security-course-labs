@@ -2,7 +2,7 @@
 twin.py: the OFFLINE stand-in for the Amazon Bedrock AgentCore pieces of the M14 lab. Standard-library Python.
 
 It reads a setup folder (setups/<name>/: the request bodies, IAM policies, Cedar policies and app notes under
-review) and copies the DOCUMENTED behaviour of each AgentCore feature the lab needs. The README's "How faithful is
+review) and copies the DOCUMENTED behavior of each AgentCore feature the lab needs. The README's "How faithful is
 the twin?" table lists the AWS page behind every rule.
 
   * Inbound JWT authorizer (Runtime and Gateway): issuer from the discovery URL, then allowedClients -> client_id,

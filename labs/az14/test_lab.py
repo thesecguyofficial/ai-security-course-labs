@@ -148,7 +148,7 @@ class Lab(unittest.TestCase):
         self.assertEqual([x[2] for x in hunt.h4_secrets(ev)], ["get_config"])
 
     def test_18_safety(self):
-        """18 safety: injected lines are labelled placeholders, addresses are reserved test domains, no secrets"""
+        """18 safety: injected lines are labeled placeholders, addresses are reserved test domains, no secrets"""
         bad_host = re.compile(r"https?://(?![a-z0-9.-]*(contoso\.com|contoso\.example|attacker\.example|azure\.com|"
                               r"microsoft\.com|azurecr\.io)\b)[a-z0-9.-]+", re.I)
         for folder in ("data", "contoso", "fixes", "logs"):

@@ -21,7 +21,7 @@ workspace, production runs in another, and a **registry** exists but nobody uses
 | **Hunt** | Investigate a morning of Activity Log and endpoint traffic log rows | 15.4 |
 | **Prove** | `make test`: 21 tests | 15.5 |
 | **Challenge** | Azure Policy in Deny, a promotion gate, a hunt query. No solution included | 15.2, 15.3, 15.4 |
-| **Cloud (optional, costs money)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): a private endpoint for an open model, from zero (CLI, plus studio clicks), five requests, one setting changed, auto-teardown and teardown | 15.2 to 15.4 |
+| **Cloud (optional, costs money)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): a private endpoint for an open model, from zero (CLI, plus studio clicks), four requests and the log evidence, one setting changed, auto-teardown and teardown | 15.2 to 15.4 |
 
 ## Get the lab files
 
@@ -43,7 +43,7 @@ git pull
 
 **No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
 
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/az15`.
+Stay in the `ai-security-course-labs` folder: the first step below (Step 1b) takes you into `labs/az15`.
 
 ## What's in this folder
 
@@ -76,15 +76,17 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 ## Step 1b · Before you attack: look at each piece (about 10 minutes)
 
 New to Azure Machine Learning? Do this before Step 1 (lesson 15.5 calls it Step 1b). `explore.py` shows Contoso's
-setup one piece at a time. Real output below is from a fresh Ubuntu machine (recording run 41615653079).
+setup one piece at a time. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `setups/` and
 `data/incident/` and prints what it finds. `reach`, `call` and `identity` ask `twin.py`, the lab's offline stand-in for
 Azure Machine Learning. No network, no Azure subscription.
 
-**0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
+**0. Look before you run.** Go into the lab's folder first; every command from here on runs there. `make -n setup`
+prints what `make setup` would run, without running it:
 
 ```bash
+cd labs/az15
 make -n setup
 make setup
 ```
@@ -358,8 +360,9 @@ to `A15` and `N1` to `N6`.
 
 ## Step 1 · Review the first draft
 
+You are already in `labs/az15` (Step 1b). If you skipped it, run `cd labs/az15` first.
+
 ```bash
-cd labs/az15
 make setup
 make check
 ```
@@ -695,19 +698,38 @@ Finished, `make check-hardened` shows 0 findings and `make hardened` shows 0 of 
 
 ## Step 9 · Optional: build it in your sandbox subscription (costs money)
 
-Follow [`GUIDED-BUILD.md`](GUIDED-BUILD.md). A managed online endpoint bills for its VM every hour it exists, so the
-guide creates a Logic App timer that deletes the endpoint **before** it creates the endpoint. Short version:
+Follow [`GUIDED-BUILD.md`](GUIDED-BUILD.md). A managed online endpoint bills for its VM every hour it exists, and so
+does the managed Azure Firewall that the model's egress rules bring in, so the guide creates a Logic App timer that
+deletes the endpoint **before** it creates the endpoint. Short version, as it worked in our run (10 November 2026,
+East US, model `sshleifer-distilbart-cnn-12-6` version 13). It is not quick: the four rules took about 6 minutes each
+and the deployment about 40 minutes:
 
 ```bash
+export WS=tsg-az15-lab
 make cloud-up
-MODEL_ID=azureml://registries/azureml/models/<name>/versions/<version> make cloud-deploy
+for d in conda.anaconda.org repo.anaconda.com pypi.org files.pythonhosted.org; do
+  az ml workspace outbound-rule set -g rg-tsg-az15-lab --workspace-name "$WS" --rule "allow-${d//./-}" \
+     --type fqdn --destination "$d"
+done
+INSTANCE=Standard_E2s_v3 MODEL_ID=azureml://registries/azureml/models/<name>/versions/<version> make cloud-deploy
+az ml online-deployment update -g rg-tsg-az15-lab -w "$WS" -e tsg-az15-summariser -n blue \
+   --set request_settings.request_timeout_ms=90000
+make cloud-timer
 make cloud-ask
 make cloud-down
 ```
 
 - `make cloud-up`: resource group, approved-outbound workspace, private endpoint, client VM, Log Analytics
-- `make cloud-ask`: five requests
+- the `for` loop: the four hosts this model's container fetches packages from when it starts. Without them it crashed
+  after about 14 minutes. About 6 minutes per rule; the first one brings in the firewall
+- `INSTANCE=Standard_E2s_v3`: a size on the model's list and inside our quota. The script's default, `Standard_DS3_v2`,
+  was over our quota
+- the `update` line: a 90-second request timeout. The default 5 seconds gave us `HTTP 408` on 2 vCPU
+- `make cloud-timer`: the timer deletes the endpoint 60 minutes after the deployment is ready; this gives a fresh hour
+- `make cloud-ask`: four requests (200, 403, 401, 404 in our run); the fifth item in the guide is the log query
 - `make cloud-down`: delete everything, today
+
+One command for all of it, from Azure Cloud Shell: `bash cloud/deploy.sh up`, then `test`, then `down` (lesson 15.5).
 
 ## How faithful is the twin?
 
@@ -715,7 +737,7 @@ make cloud-down
 |---|---|---|
 | Managed VNet modes; approved outbound allows only private endpoint, FQDN and service tag rules; required private endpoint rules for the workspace's storage, key vault and container registry are created automatically; an FQDN rule deploys an Azure Firewall; exfiltration protection isn't guaranteed to FQDN destinations | Same | [Managed network](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-managed-network?view=azureml-api-2) |
 | Endpoint `public_network_access: disabled`: inbound only through the workspace private endpoint; control-plane calls (listKeys included) go to Azure Resource Manager | Same | [Secure online endpoint](https://learn.microsoft.com/en-us/azure/machine-learning/concept-secure-online-endpoint) |
-| Auth modes: a key needs no role; `aad_token` needs `score/action`; keys don't expire | Same. **Twin choice:** an `aad_token` endpoint refuses keys and `listKeys` returns no usable key | [Auth concepts](https://learn.microsoft.com/en-us/azure/machine-learning/concept-endpoints-online-auth?view=azureml-api-2), [authenticate clients](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-authenticate-online-endpoint) |
+| Auth modes: a key needs no role; `aad_token` needs `score/action`; keys don't expire | Same. An `aad_token` endpoint refuses keys (our 10 Nov 2026 run: `HTTP 401`). **Twin choice:** `listKeys` returns no usable key | [Auth concepts](https://learn.microsoft.com/en-us/azure/machine-learning/concept-endpoints-online-auth?view=azureml-api-2), [authenticate clients](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-authenticate-online-endpoint) |
 | The `azureml-model-deployment` header routes to a named deployment, bypassing the traffic split | Same | [Online endpoints](https://learn.microsoft.com/en-us/azure/machine-learning/concept-endpoints-online?view=azureml-api-2) |
 | A system-assigned endpoint identity gets AcrPull, Storage Blob Data Reader and AzureML Metrics Writer automatically; for a user-assigned one, you assign the roles | Same, for the workspace's own storage | [Auth concepts](https://learn.microsoft.com/en-us/azure/machine-learning/concept-endpoints-online-auth?view=azureml-api-2) |
 | Credential-based datastores keep keys in the workspace key vault, retrievable by other workspace users with enough permissions | Same. **Twin choice:** the operation is called `datastores/listSecrets/action`, granted by AzureML Data Scientist's `workspaces/*/action` | [Managed identities](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-use-managed-identities?view=azureml-api-2) |
@@ -725,7 +747,8 @@ make cloud-down
 | Where a registry keeps its files, and the private endpoint rule a workspace needs to reach a registry | **Twin choice:** the registry's files sit in `stcontosomlreg`, reached through a private endpoint outbound rule (registries are a supported private endpoint target) | [Managed network](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-managed-network?view=azureml-api-2) |
 | What a serving container does with a pickle-based weights file | **Twin choice:** the worst case (it unpickles it) | not documented (it varies by framework and version) |
 
-Nothing in `cloud/` has been run by us yet: see GUIDED-BUILD.md.
+The `cloud/` scripts were run for real on 10 and 12 November 2026 (East US). What happened, step by step, is in
+GUIDED-BUILD.md.
 
 ## Troubleshooting
 

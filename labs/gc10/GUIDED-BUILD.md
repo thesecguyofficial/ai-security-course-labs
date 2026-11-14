@@ -32,10 +32,15 @@ Run everything from `labs/gc10` in Cloud Shell or on a laptop with the `gcloud` 
    an amount of $5, keep the default thresholds, **Finish** (label may differ slightly). Or:
 
    ```bash
+   gcloud services enable billingbudgets.googleapis.com --project=PROJECT_ID
    gcloud billing budgets create --billing-account=BILLING_ACCOUNT_ID --display-name="gc10-build alerts" \
      --budget-amount=5USD --filter-projects=projects/PROJECT_ID \
      --threshold-rule=percent=0.5 --threshold-rule=percent=0.9 --threshold-rule=percent=1.0
    ```
+
+   Our run (12 November 2026): the budget API has to be on before `budgets create` works (on a new project gcloud
+   stops and asks to enable it), and the amount must be in your billing account's own currency. Ours is an INR
+   account, so we used `--budget-amount=500INR`; `5USD` is right on a USD account.
 
    Remember lesson 10.5: this only emails you, hours late. Step 2f adds a spend cap.
 3. **APIs.** Agent Platform, API Keys and Cloud Asset (for Policy Analyzer in Step 1b):
@@ -177,7 +182,8 @@ Application Default Credentials (lesson 10.4). The binding here is only so *you*
 They're off by default, and without them Step 3's R4 has nothing to find. Console, from Google's
 [configure Data Access audit logs](https://docs.cloud.google.com/logging/docs/audit/configure-data-access) page:
 **IAM & Admin** > **Audit Logs**, in the **Data Access audit logs configuration** table select the Agent Platform API
-row (search "Agent Platform" or "Vertex AI"), in the panel open **Permission types**, tick **Data Read**, **Save**.
+row, in the panel open **Permission types**, tick **Data Read**, **Save**. In our 12 November 2026 run the row was
+still named **Vertex AI API**, so search "Vertex AI" if "Agent Platform" finds nothing.
 
 Or edit the policy file from 1d: keep `bindings` and `etag` exactly as they are and add
 
@@ -188,23 +194,35 @@ Or edit the policy file from 1d: keep `bindings` and `etag` exactly as they are 
 then `gcloud projects set-iam-policy PROJECT_ID policy.json`. If it reports a conflict, someone changed the policy:
 fetch it again and redo the edit. Run `python3 policy_checker.py --iam policy.json`: GC10-15 should be gone.
 
-### 2c. One restricted API key (and delete the rest)
+### 2c. Two restricted API keys (and delete the rest)
 
-Lesson 10.4: prefer no key at all. You'll make one anyway, to see what restrictions do. It only works for Agent
-Platform and only from `192.0.2.10`, a documentation address, so it will refuse your machine:
+Lesson 10.4: prefer no key at all. You'll make two anyway, to see what restrictions do. Both only work for Agent
+Platform and only from `192.0.2.10`, a documentation address, so both will refuse your machine. `gc10-build` is a
+plain standard key. `gc10-bound` is bound to `gc10-caller` from 2a (an authorization key, lesson 10.4):
 
 ```bash
 gcloud services api-keys create --project=PROJECT_ID --display-name=gc10-build \
+  --api-target=service=aiplatform.googleapis.com --allowed-ips=192.0.2.10
+gcloud services api-keys create --project=PROJECT_ID --display-name=gc10-bound \
+  --service-account=gc10-caller@PROJECT_ID.iam.gserviceaccount.com \
   --api-target=service=aiplatform.googleapis.com --allowed-ips=192.0.2.10
 gcloud services api-keys list --project=PROJECT_ID --format="value(name,displayName)"
 gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID
 ```
 
-- `gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID`: KEY_ID: last part of "name"
+- `gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID`: KEY_ID: last part of "name". Run it once
+  for each key. Below, `KEY_ID` is `gc10-build`'s ID and `BOUND_KEY_ID` is `gc10-bound`'s
 
 Console (Google's API keys page): **Credentials** > **Create credentials** > **API key**. Click the key's name; under
 **API restrictions** choose **Restrict key** and select the Agent Platform API; under **Application restrictions**
 choose **IP addresses**, **Add** `192.0.2.10`, **Done**, then **Save**.
+
+Our run (12 November 2026): the console refused to make an Agent Platform key without a service account ("Service
+account required"), so by clicks you can only make the bound one: pick `gc10-caller` as the key's service account
+when the console asks. The plain key `gc10-build` only exists because gcloud allows it. Make it with the command
+above if you want to see R3's first result. Our project has no organization, so no organization policy applies to
+it. That is the likely reason nothing blocked the bound key there, although lesson 10.4 says a default organization
+policy prevents bound keys. In a work organization expect that policy to refuse this command.
 
 Delete any key from 1c you can't justify: `gcloud services api-keys delete KEY_ID --project=PROJECT_ID` (it can be
 restored for 30 days, lesson 10.4). Keep the key string out of files and screenshots.
@@ -325,15 +343,21 @@ Example response (shape from Google docs, values illustrative):
 Read it: `usageMetadata` is what you pay for. If R2 fails with `403` right after Step 2a, wait a few minutes: IAM
 changes take time to reach every service.
 
-### R3 · A copied API key, used from the wrong place
+### R3 · Two copied API keys, used from the wrong place
 
-The key string from 2c, sent in the header Google recommends (lesson 10.4):
+Each key string from 2c, sent in the header Google recommends (lesson 10.4). Run the call twice, once with the
+plain key's string and once with the bound key's:
 
 ```bash
 curl -s -X POST -H "x-goog-api-key: KEY_STRING" -H "Content-Type: application/json" "$URL" -d @hello.json
 ```
 
-Example response (shape from Google docs, values illustrative):
+**The plain key `gc10-build`.** Our run (12 November 2026, Cloud Shell, a Free Trial project with no organization):
+`401`, with the message "API keys are not supported by this API. Expected OAuth2 access token or other
+authentication credentials that assert a principal." It never reached the IP check.
+
+**The bound key `gc10-bound`.** Our run: `403` with the reason `API_KEY_IP_ADDRESS_BLOCKED`. Example response (shape
+from Google docs, values illustrative):
 
 ```json
 {
@@ -352,15 +376,12 @@ Example response (shape from Google docs, values illustrative):
 ```
 
 Read it: the reason `API_KEY_IP_ADDRESS_BLOCKED` is Google's documented code for "the caller IP of the request
-violates API key IP address restrictions". No model ran, so this cost nothing. A stolen copy of this key is useless
-anywhere but `192.0.2.10`.
+violates API key IP address restrictions". No model ran, so neither call cost anything. A stolen copy of the bound
+key is useless anywhere but `192.0.2.10`.
 
-Our run (12 November 2026, Cloud Shell, a Free Trial project with no organization): a plain standard key restricted to
-Agent Platform didn't even reach the IP check. It got `401` "API keys are not supported by this API. Expected OAuth2
-access token or other authentication credentials that assert a principal." The console also refused to create an
-Agent Platform key without a service account ("Service account required"). Only a key bound to a service account got
-as far as `403` `API_KEY_IP_ADDRESS_BLOCKED`. So test which kind your project accepts before you rely on either. The
-offline twin still lets a standard key through (its A1, A2 and L2), as Google's key page describes.
+So in our project only a key bound to a service account got as far as the IP check. That was one project, so test
+which kind yours accepts before you rely on either answer. The offline twin still lets a standard key through (its
+A1, A2 and L2), as Google's key page describes.
 
 ### R4 · The trail: R1 and R2 in your audit logs
 
@@ -398,11 +419,13 @@ Read it, field by field:
 - `principalEmail`: the identity that called. `serviceAccountDelegationInfo`: **who acted as it** (you, through
   impersonation). That's the field that tells a human borrowing a robot apart from the robot itself.
 - `callerIp`: where the call came from. Write yours down; you need it in Step 4.
-- `authorizationInfo[].granted`: `true` for R2. If R1's denial is logged too, it shows `false` and a `status` with
-  code `7` (`PERMISSION_DENIED`).
+- `authorizationInfo[].granted`: `true` for R2. R1's denial is logged too (our 12 November 2026 run): its row shows
+  `false` and a `status` with code `7` (`PERMISSION_DENIED`).
 - `methodName`: **check this one against your real entry.** Google's audit-logging page doesn't name Gemini's
-  method; the value above is the lab's assumption from the API definition (README, "Three assumptions"). If your
-  real name differs, the lab's hunt rules need it: that's a real finding for your detections.
+  method; the lab took the value above from the API definition (README, "Three assumptions"). Our 12 November 2026
+  export did show the calls as `GenerateContent` rows. We did not call the streaming or `RawPredict` methods, so
+  those names are unconfirmed. If your real name differs, the lab's hunt rules need it: that's a real finding for
+  your detections.
 - R3 left no entry here, as far as we know: what a refused API-key call looks like in audit logs isn't documented.
 
 ### R5 · Re-run the inventory
@@ -415,26 +438,31 @@ docs, values illustrative), the cache check:
 ```
 
 What should have changed: `gc10-caller` now appears with `roles/aiplatform.user` on the project (and `gc10-nobody`
-doesn't), the key checker reports no GC10-05 or GC10-07 for `gc10-build`, GC10-15 is gone, and caching is off. If you
+doesn't), the key checker reports no GC10-05 or GC10-07 for either key (it does report GC10-06 for `gc10-bound`: a
+bound key works like a long-lived access token, and the teardown deletes it), GC10-15 is gone, and caching is off. If you
 did 2g, `describe --effective` shows your allow-list in `dryRunSpec`.
 
 ## Step 4 · Change one setting and re-run
 
 Lesson 10.4's trade-off: an application restriction only helps if it names the right place. Add your own address
-(the `callerIp` from R4) to the key, keeping the API restriction:
+(the `callerIp` from R4) to the **bound** key, keeping the API restriction. Use the bound key because the plain
+key got `401` in R3 before its IP list was even read, so changing that list changes nothing:
 
 ```bash
-gcloud services api-keys update KEY_ID --project=PROJECT_ID \
+gcloud services api-keys update BOUND_KEY_ID --project=PROJECT_ID \
   --api-target=service=aiplatform.googleapis.com --allowed-ips=192.0.2.10,YOUR_CALLER_IP
 ```
 
 (`update` replaces the lists, so pass both flags every time. Console: open the key, edit **IP addresses**, **Save**.)
-Wait a minute, run R3 again, and you get an R2-shaped answer. Now run R4 again and look for that call. Then ask the
+Wait a minute and run R3 again with the bound key's string. We did not run this step on 12 November 2026: our
+run tested both keys only from the wrong address. The bound key signs in as `gc10-caller`, which holds Agent
+Platform User, so expect an R2-shaped answer, and write down what you get if it's something else. Now run R4 again
+and look for that call under `gc10-caller`. Then ask the
 question lesson 10.4 asks: if your laptop's address changes, or the key is copied to a machine behind the same
 office NAT, what does this restriction still protect? Put the key back to `192.0.2.10` only when you're done:
 
 ```bash
-gcloud services api-keys update KEY_ID --project=PROJECT_ID \
+gcloud services api-keys update BOUND_KEY_ID --project=PROJECT_ID \
   --api-target=service=aiplatform.googleapis.com --allowed-ips=192.0.2.10
 ```
 
@@ -449,17 +477,21 @@ gcloud services api-keys update KEY_ID --project=PROJECT_ID \
 | `cacheConfig` | | | |
 | `vertexai.allowedModels` effective policy | | | |
 | R1 status and `reason` | | | |
-| R3 status and `reason` (before / after Step 4) | | | |
+| R3 status and `reason`, plain key | | | |
+| R3 status and `reason`, bound key (before / after Step 4) | | | |
 | R4 real `methodName` | | | |
 
-## Cost (estimate, October 2026)
+## Cost (list prices checked October 2026)
+
+Our 12 November 2026 run was on a Free Trial project, so nothing was billed. That billing account is in INR; the
+prices below are Google's USD list prices.
 
 | Item | Cost |
 |---|---|
 | Free Trial | "You will not be billed for any Google Cloud usage during your Free Trial" ([Free Trial](https://docs.cloud.google.com/free/docs/free-cloud-features)) |
 | Service accounts, IAM, API keys, budgets, cache setting, org policies | Configuration only: no compute, storage or tokens |
 | Policy Analyzer | No price on Google's page; 20 queries per organization per day without SCC Premium or Enterprise |
-| R1, R3 | Refused before a model runs: $0 |
+| R1, R3 (both keys) | Refused before a model runs: $0 |
 | R2 and Step 4 (two or three calls) | Gemini 3.1 Flash-Lite, $0.25 per 1M input and $1.50 per 1M output tokens ([pricing](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing)): with `maxOutputTokens` 50, under $0.001 in total |
 | Data Access logs | A few KB; Cloud Logging's first 50 GiB per project per month are free ([pricing](https://cloud.google.com/stackdriver/pricing)) |
 
@@ -469,6 +501,7 @@ Do it today. Keep the Data Access logs and the cache setting if you plan to do G
 
 ```bash
 gcloud services api-keys delete KEY_ID --project=PROJECT_ID
+gcloud services api-keys delete BOUND_KEY_ID --project=PROJECT_ID
 gcloud projects remove-iam-policy-binding PROJECT_ID \
   --member="serviceAccount:gc10-caller@PROJECT_ID.iam.gserviceaccount.com" --role="roles/aiplatform.user"
 for SA in gc10-caller gc10-nobody; do

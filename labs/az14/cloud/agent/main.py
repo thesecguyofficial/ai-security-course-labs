@@ -16,8 +16,8 @@ What runs where:
 Request:  {"message": "..."}                     or  {"message": "...", "confirm": {"tool": "...", "args": {...}}}
 Response: {"answer": "...", "tool_calls": [...]} or  {"status": "needs_confirmation", "pending": {...}, "tool_calls": [...]}
 
-Not run by the course team (no Azure subscription in the build). Package and API shapes follow Microsoft Learn and
-PyPI pages as of Oct 2026; treat failures as yours to report.
+Run for real on 9 and 12 November 2026 (GUIDED-BUILD.md has the real-run table). Package and API shapes follow
+Microsoft Learn and PyPI pages as of Oct 2026; where the run differed (toolbox tool names), the code says so.
 """
 
 import json

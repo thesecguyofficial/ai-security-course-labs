@@ -11,7 +11,7 @@ Write check_before_approval() so it returns a list of reasons to refuse (an empt
   1. every file passes model_files.scan_files() (safetensors weights only, no pickle, NumPy or code files)
   2. the package records a hash for every file (CustomerMetadataProperties "sha256/<file>"), and they all match
      (model_files.hash_mismatches does the comparison)
-  3. the package records a licence ("licence") that is on company["approved_licences"]
+  3. the package records a license (the metadata key is spelled "licence") that is on company["approved_licences"]
   4. the approver is not the person who registered the version (package["_registered_by"])
 
 Then set "approval_gate": true in setups/hardened/app.json. `make challenge` tells you when it's right.

@@ -12,7 +12,7 @@ It runs:
                   outside the standard library are flagged. (fickling also ships an opt-in allowlist
                   of ML imports for its loader hook; check_safety, used here, does not use it.)
 
-A scanner is defence in depth, not a guarantee: picklescan works from a blocklist, so a payload it
+A scanner is defense in depth, not a guarantee: picklescan works from a blocklist, so a payload it
 has not seen can slip past (lesson 9.2, the nullifAI models and the 2025 PickleScan CVEs). Use it,
 but do not let a clean scan talk you out of provenance, pinning and a safe format.
 """
@@ -35,8 +35,17 @@ def scan(path: str) -> bool:
     print(f"  scanned={res.scanned_files} infected={res.infected_files} dangerous_globals={res.issues_count}")
     print(f"  verdict: {'DANGEROUS' if ps_bad else 'clean'}\n")
 
-    pickled = Pickled.load(open(path, "rb"))
-    report = check_safety(pickled)
+    try:
+        with open(path, "rb") as f:
+            pickled = Pickled.load(f)
+        report = check_safety(pickled)
+    except Exception as exc:  # not a raw pickle: real .pt/.bin files are zip archives, safetensors is not pickle
+        print("fickling:")
+        print(f"  could not read this file as a raw pickle ({type(exc).__name__})")
+        print("  verdict: NOT CLEARED\n")
+        print("OVERALL: NOT CLEARED (this script is built for the lab's raw pickles; for a real model file")
+        print("         run the picklescan command from the README on it, and prefer safetensors)")
+        return False
     fk_bad = str(report.severity) != "Severity.LIKELY_SAFE"
     print("fickling:")
     print(f"  severity: {report.severity}")

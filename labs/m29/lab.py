@@ -1,7 +1,7 @@
 """
 lab.py: shared helpers for the M29 lab (paths, JSON files, the simulated clock, setups).
 
-Everything here is local and fake: the "AWS Organization" is a folder of JSON files, every key string is a labelled
+Everything here is local and fake: the "AWS Organization" is a folder of JSON files, every key string is a labeled
 lab placeholder (TSGLAB...), every IP address is from the documentation ranges (RFC 5737), and nothing is sent
 anywhere.
 """

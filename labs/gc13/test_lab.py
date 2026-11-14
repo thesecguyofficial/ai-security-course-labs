@@ -212,7 +212,7 @@ class T5_FailureModes(unittest.TestCase):
         dep = copy.deepcopy(helpdesk_agent.load_deployment("hardened"))
         change(dep)
         desk = helpdesk_agent.Helpdesk(dep, armor_available=False)
-        desk.ask({"id_token": "tok-alice-0001", "message": "Summarise ticket T-2042 for me."}, human=lambda r: True)
+        desk.ask({"id_token": "tok-alice-0001", "message": "Summarize ticket T-2042 for me."}, human=lambda r: True)
         self.assertEqual([m["to"] for m in desk.outbox], ["collector@example.net"])
 
     def test_21_poisoned_bucket_matters(self):

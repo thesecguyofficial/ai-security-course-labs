@@ -10,7 +10,7 @@ stand-in that replays ground truth has no attacker calls to obey for them.
 
 There is no dual-LLM row here, and that is the point of the comparison. A dual-LLM agent needs a planner that can
 write a plan for each task without seeing the data; this lab's planner is scripted for its own eight tasks only. What
-you CAN bolt onto an existing single-model agent without rewriting it is the coarse defence: refuse every
+you CAN bolt onto an existing single-model agent without rewriting it is the coarse defense: refuse every
 state-changing tool once anything untrusted has entered the context. This file measures what that costs.
 
 The stand-in model: for each user task it makes the calls in AgentDojo's own ground truth (a model that always knows

@@ -1,8 +1,8 @@
 """
 run_tests.py: run the lab's tests and print one line per test.
 
-    python3 run_tests.py               # make test:      the recorded trail and the provided investigation
-    python3 run_tests.py --challenge   # make challenge: the above plus your defence and the three-part challenge
+    python3 run_tests.py               # make test:      the scripted trail and the provided investigation
+    python3 run_tests.py --challenge   # make challenge: the above plus your defense and the three-part challenge
 
 Exit code 0 = all passed, 1 = something failed (so it works in CI too).
 """

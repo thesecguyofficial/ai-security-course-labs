@@ -9,7 +9,8 @@ governance note someone needs before it goes live. Then you publish it as a publ
 - **Time:** plan 8 to 12 hours, spread over two or three weeks.
 - **Cost:** $0. Python **3.11 or newer**, standard library only. No packages, no model download, no API key.
 - **Cloud:** the cloud part (Part 6) reviews an AWS deployment description offline, so you need no AWS account.
-  Azure and Google Cloud versions ship with those streams (`cloud/azure/`, `cloud/gcp/`).
+  It is the AWS file for every student for now, whichever cloud stream you took: the Azure and Google Cloud
+  versions of this one file are not built yet (`cloud/azure/`, `cloud/gcp/`).
 - **Grading:** automatic. You submit your public repo and commit SHA on the course's capstone page; the grader
   re-runs the course's automated checks on your submitted commit. Pass them to get a Pass; if not, you get Not yet
   with the checks that failed, and you fix them and resubmit. Details: [`RUBRIC.md`](RUBRIC.md). How to submit:
@@ -84,9 +85,16 @@ cd ../../../my-ai-security-capstone
 git init -b main && git add . && git commit -m "TSG Helpdesk capstone: starting point"
 ```
 
-- `make export DEST=../../../my-ai-security-capstone`: same as `python3 export.py <folder>`
+- `make export DEST=../../../my-ai-security-capstone`: same as `python3 export.py <folder>`. It also copies the
+  course's MIT `LICENSE` file into your repo: keep it, the license requires the notice to stay with the code
+- If `git commit` stops with "Author identity unknown", git has never been told who you are. Run
+  `git config --global user.name "Your Name"` and `git config --global user.email "you@users.noreply.github.com"`
+  (GitHub's no-reply address is a good choice: a commit's email is public), then repeat the `git commit` part
+- `git push` asks you to sign in to GitHub the first time. Git for Windows and the GitHub CLI (`gh auth login`)
+  open a browser for it. GitHub does not accept your account password on the command line: without one of those
+  two, create a personal access token on GitHub and paste it when git asks for a password
 
-Create an **empty public** repo on GitHub (no README, no license), then follow the two `git` lines `export.py`
+Create an **empty public** repo on GitHub (no README, no license: your export already has both), then follow the two `git` lines `export.py`
 printed. Open the repo's **Actions** tab: the `capstone-checks` workflow runs on every push. It is red now. Your
 job is to make it green, honestly.
 
@@ -183,7 +191,9 @@ make detect LOG=state/app-log.jsonl
 
 Each seed changes who the attackers are and what they use, so a rule that names a user, an IP or a request ID will
 miss the next day. The grader also runs your rules on three days you have never seen. Then pick **one** incident
-and write `report/INCIDENT-REPORT.md` (timeline, scope, root cause, containment, evidence with request IDs).
+and write `report/INCIDENT-REPORT.md` (timeline, scope, root cause, containment, evidence with request IDs). Keep
+all eight headings of the template (it also has Summary, Detection gaps and Lessons learned): check R3 looks for
+each one.
 Lessons 16.1, 16.5 and 16.6.
 
 ## Part 6 · Cloud: your stream (1 hour)
@@ -204,7 +214,10 @@ write one line in `FINDINGS.md` ("Cloud") naming the lesson. Optional, and stron
 real in your own sandbox account with one of the guided builds (`labs/m12/GUIDED-BUILD.md`,
 `labs/m14/GUIDED-BUILD.md`), record what you saw, and show the teardown.
 
-`capstone.json` names your stream. It is `aws` for now; Azure and Google Cloud are accepted when their streams ship.
+`capstone.json` names your stream. Leave it at `aws`, whichever stream you took: the Azure and Google Cloud versions
+of the capstone's cloud file are not built yet, and `make cloud` stops with "not released yet" for them. If you took
+the Azure or Google Cloud stream, each finding names the setting and the AWS lesson that teaches it; the module with
+the same number in your stream (AZ11 or GC11 for a finding that cites 11.x) covers the same topic.
 
 ## Part 7 · Governance note (45 minutes)
 
@@ -214,13 +227,16 @@ NIST AI RMF functions and ISO/IEC 42001, and the residual risk with an owner and
 
 ## Part 8 · Submit
 
+First fill in `README.md` (your portfolio README): check R5 fails while it still has placeholders or fewer than 250
+words. Then:
+
 ```bash
 make check
 ```
 
 Same as `python3 selfcheck.py`: every objective check, PASS or FAIL.
 
-Fill in `README.md` (your portfolio README), push, wait for a green Actions run, then follow
+When it ends with `OBJECTIVE CHECKS PASSED`, push, wait for a green Actions run, then follow
 [`SUBMISSION.md`](SUBMISSION.md). Lesson 19.3 walks through all of it.
 
 ## What's in this folder
@@ -232,7 +248,7 @@ Fill in `README.md` (your portfolio README), push, wait for a green Actions run,
 | `tests/` | `test_functional.py` (F01 to F12) and `test_security.py` (S01 to S11) |
 | `evals/` | `run_evals.py` (the gate and the regressions), `cases.json` (core), `my_cases.json` (yours), `kb/` |
 | `detections/` | `attack_sim.py`, `detect.py` (rule engine), `score.py`, `rules.json` (yours), `logs/` |
-| `cloud/` | `cloud_check.py`, `aws/deployment.json` (yours to harden), `azure/` and `gcp/` (coming) |
+| `cloud/` | `cloud_check.py`, `aws/deployment.json` (yours to harden), `azure/` and `gcp/` (not built yet) |
 | `report/` | Templates: threat model, findings, incident report, governance note, portfolio README |
 | `template/.github/workflows/capstone.yml` | The CI workflow (`export.py` puts it in place) |
 | `selfcheck.py`, `selfcheck.lock.json` | The self-check and the fingerprints of the original files |

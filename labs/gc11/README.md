@@ -16,7 +16,7 @@ protection officer now requires that their tickets are processed in the EU. In o
 | **Break** | Replay five attacks and an auditor's four questions against the Helpdesk as it runs today | 11.1, 11.2, 11.4, 11.5 |
 | **Fix** | Replay them against the hardened twin, which is what `terraform/` builds | all |
 | **Dry run** | Read a week of VPC Service Controls dry-run logs before you enforce anything | 11.2 |
-| **Trap** | Watch a well-meant switch to the `eu` multi-region endpoint break the private path | 11.5 |
+| **Trap** | Watch a well-meant switch to the `global` endpoint get stopped by the network, and see the bad "fix" (opening egress) | 11.5 |
 | **Challenge** | Enforce the perimeter without locking out the analysts, write rule GC11-16, close the cache gap. No solution included | 11.2, 11.3, 11.5 |
 | **Cloud (optional)** | Deploy the hardened foundation in your own project with Terraform, check it live, tear it down | 11.6 |
 
@@ -40,7 +40,7 @@ git pull
 
 **No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
 
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/gc11`.
+Stay in the `ai-security-course-labs` folder: the first step below (Step 1b) takes you into `labs/gc11`.
 
 ## What's in this folder
 
@@ -97,7 +97,8 @@ if a real-looking IP, identity or key creeps in. Nothing in the offline part con
 ## Needs
 
 - Python **3.11 or newer** (tested on 3.13). Check with `python3 --version`. No packages, no internet.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
+- Mac or Linux for the `make` shortcuts. Windows: run the `python3 ...` command shown under each step, typing `py`
+  or `python` in place of `python3`.
 - Optional, Step 8 only: Terraform 1.5+, the `gcloud` CLI, and **your own** sandbox project with billing and a budget
   (lesson 0.7 and Module 10).
 
@@ -105,7 +106,13 @@ if a real-looking IP, identity or key creeps in. Nothing in the offline part con
 
 New to Agent Platform or Terraform? Do this before Step 1 (lesson 11.6 calls it "Before you start"). `explore.py`
 shows each idea from lesson 11.0 ("How Agent Platform works, one idea at a time") on its own. Real output below is
-from a fresh Ubuntu machine (recording run 41618272275).
+from a fresh Linux machine.
+
+Go into the lab folder first. Every command in Steps 1 to 7 runs from there:
+
+```bash
+cd labs/gc11
+```
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the twins in `twin/` (each a `plan.json`
 and an `app.json`), `twin/requirements.json` and `twin/groups.json`, and prints what it finds. No network, no Google
@@ -125,7 +132,8 @@ Nothing to install for this lab: Python 3.12 and its standard library are all it
 
 Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
 clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
-standard library, so there is nothing to install. `make -n plan` is worth a look too: it prints Step 8's real
+standard library, so there is nothing to install (without `make`: `python3 ../../tools/check_python.py 3.11`).
+`make -n plan` is worth a look too: it prints Step 8's real
 `terraform plan` in your own project, then the same checker on your plan. Don't run it for Steps 1 to 7.
 
 **1. The plan.** What today's Helpdesk is made of. A plan changes nothing; only `apply` would. The twins are written
@@ -180,8 +188,8 @@ Gemini is Google's own model. A partner model (Claude, for example) is a managed
 it on is a separate right: the Consumer Procurement Entitlement Manager role (lesson 11.1).
 ```
 
-`python3 explore.py model hardened` shows the allow-list on the prod folder, location `europe-west4`, and `refused`
-for Llama 3.
+`python3 explore.py model hardened` shows the allow-list on the prod folder, location `eu` (host
+`aiplatform.eu.rep.googleapis.com`), and `refused` for Llama 3.
 
 **3. Who holds which role.** Every grant is a principal, a role and a resource:
 
@@ -234,6 +242,8 @@ Can the hardened Helpdesk VM reach it privately?  NO
 
 Then try `python3 explore.py route eu`: it fits the EU rule, and the hardened VM reaches it through its regional
 endpoint `10.10.0.10`. `global` fails twice: it breaks the rule, and the hardened network can't reach it (Step 6).
+Plain `python3 explore.py route` tries `europe-west4`: it fits the rule too, but the hardened VM has no private path
+to that host, and the tool reminds you that in our real run on 12 November 2026 the model returned `404` there.
 
 **5. The network.** Today the Helpdesk VM can send data anywhere:
 
@@ -334,8 +344,10 @@ Caching (copies Google may keep to answer faster; lesson 11.3):
 
 `python3 explore.py logging` shows today: Data Access off and request-response logging off.
 
-**9. Two records of one call.** Illustrative: Google's field and column names with fake values. The audit entry keeps
-who, from where and which model; the request-response row keeps the conversation:
+**9. Two records of one call.** Illustrative: Google's field and column names with fake values, except `callerIp`
+and the location, which follow our real run on 12 November 2026 (the VM's call showed the text `gce-internal-ip`, not
+its `10.x` address, and `locations/eu`). The audit entry keeps who, from where and which model; the
+request-response row keeps the conversation:
 
 ```bash
 python3 explore.py record
@@ -346,9 +358,9 @@ ILLUSTRATIVE: Google's documented field and column names, fake values. Two recor
 
 1. Data Access audit log entry (Cloud Logging, log cloudaudit.googleapis.com/data_access):
    who      authenticationInfo.principalEmail  chatbot-runtime@example-chatbot-prod.iam.gserviceaccount.com
-   from     requestMetadata.callerIp           10.10.0.5   (the VM's internal address)
+   from     requestMetadata.callerIp           gce-internal-ip   (our real run: this text, not the VM's 10.x address)
    what     methodName                         google.cloud.aiplatform.v1.PredictionService.GenerateContent
-   where    resourceName                       .../locations/europe-west4/publishers/google/models/gemini-3.1-flash-lite
+   where    resourceName                       .../locations/eu/publishers/google/models/gemini-3.1-flash-lite
    allowed  authorizationInfo                  aiplatform.endpoints.predict, granted
    said     (nothing)                          the pages we read don't say audit entries hold the prompt
 
@@ -381,12 +393,10 @@ Attackers
 ## Step 1 · Check: what's wrong with the Helpdesk today?
 
 ```bash
-cd labs/gc11
 make check
 ```
 
-- `cd labs/gc11`: run it from the course labs repository folder (`ai-security-course-labs`)
-- `make check`: same as `python3 checker.py --twin today`
+- `make check`: same as `python3 checker.py --twin today` (you are already in `labs/gc11` from Step 1b)
 
 Real output (Linux, Python 3.13):
 
@@ -447,10 +457,10 @@ Real output (Linux, Python 3.13):
 
 Read it by lesson:
 
-- **11.1 identity:** a JSON key for `chatbot-runtime` (GC11-01); the summariser VM on the Compute Engine default
+- **11.1 identity:** a JSON key for `chatbot-runtime` (GC11-01); the summarizer VM on the Compute Engine default
   account, which holds Editor (GC11-02, GC11-03); `chatbot-runtime` holds Agent Platform User (GC11-03); no model
   allow-list (GC11-04); Token Creator for a whole developer group on the project (GC11-15).
-- **11.2 network:** a public IP on the Helpdesk VM and Cloud NAT for the summariser (GC11-05), no PSC endpoint
+- **11.2 network:** a public IP on the Helpdesk VM and Cloud NAT for the summarizer (GC11-05), no PSC endpoint
   (GC11-06), PGA off (GC11-07), no perimeter (GC11-08).
 - **11.3 encryption:** the tickets dataset on Google default encryption (GC11-09); caching at the default, which
   includes durable caching at rest without CMEK (GC11-11).
@@ -497,7 +507,7 @@ Legitimate traffic · must keep working
          why: every check passed
   [L3] ALLOWED  Analyst in the office (198.51.100.21): query the tickets dataset
          why: every check passed
-  [L4] ALLOWED  Ticket summariser VM: GenerateContent on the approved Gemini model
+  [L4] ALLOWED  Ticket summarizer VM: GenerateContent on the approved Gemini model
          why: every check passed
 
 The auditor's questions
@@ -585,7 +595,7 @@ Legitimate traffic · must keep working
   [L3] ALLOWED  Analyst in the office (198.51.100.21): query the tickets dataset
          why: every check passed
          · VPC Service Controls DRY RUN would block this, but only logs it: ingress from 198.51.100.21 has no matching ingress rule (NO_MATCHING_ACCESS_LEVEL)
-  [L4] ALLOWED  Ticket summariser VM: GenerateContent on the approved Gemini model
+  [L4] ALLOWED  Ticket summarizer VM: GenerateContent on the approved Gemini model
          why: every check passed
 
 The auditor's questions
@@ -674,7 +684,7 @@ Legitimate traffic · must keep working
   [L3] ALLOWED  Analyst in the office (198.51.100.21): query the tickets dataset
          why: every check passed
          · VPC Service Controls DRY RUN would block this, but only logs it: ingress from 198.51.100.21 has no matching ingress rule (NO_MATCHING_ACCESS_LEVEL)
-  [L4] DENIED   Ticket summariser VM: GenerateContent on the approved Gemini model
+  [L4] DENIED   Ticket summarizer VM: GenerateContent on the approved Gemini model
          why: network: no private path to aiplatform.googleapis.com: this network's endpoints serve only aiplatform.eu.rep.googleapis.com, bigquery.europe-west4.rep.googleapis.com, and the egress firewall blocks everything else
 
 The auditor's questions
@@ -690,7 +700,7 @@ The auditor's questions
 1 of 5 attacker requests allowed; 2 of 4 legitimate requests allowed; 3 of 4 auditor questions answerable.
 ```
 
-The Helpdesk and the summariser are down, and that's the network doing its job: the only Google hosts it reaches are
+The Helpdesk and the summarizer are down, and that's the network doing its job: the only Google hosts it reaches are
 the two EU ones, so a drift to `global` fails loudly instead of sending tickets to any region. The real run showed the
 same (lesson 11.6: `000`). Under pressure, the quickest "fix" is to open egress, and EU processing is gone. The right
 fix: point the app back at `aiplatform.eu.rep.googleapis.com`. The checker's residency rule (GC11-14) catches
@@ -702,6 +712,8 @@ fix: point the app back at `aiplatform.eu.rep.googleapis.com`. The checker's res
 make test
 make challenge
 ```
+
+Same as `python3 run_tests.py` and `python3 run_tests.py --challenge`.
 
 You should see, from `make test`:
 
@@ -730,7 +742,7 @@ ALL TESTS PASSED (21 run)
 ```text
 [FAIL] challenge: the hijacked Helpdesk's copy to an outside project is DENIED by the enforced perimeter
 [PASS] challenge: the office analysts can still query the tickets dataset once the perimeter is enforced
-[PASS] challenge: the Helpdesk and the summariser keep working inside the perimeter
+[PASS] challenge: the Helpdesk and the summarizer keep working inside the perimeter
 [FAIL] challenge: GC11-16 flags the global-endpoint twin (the network has no private path to its model host)
 [PASS] challenge: GC11-16 stays quiet on the today and hardened twins
 [FAIL] challenge: the hardened twin no longer allows durable caching (no GC11-11)
@@ -806,8 +818,10 @@ terraform/scripts/request_response_logging.sh on YOUR_PROJECT_ID eu
 - `make plan`: terraform init + plan, then runs checker.py on YOUR plan
 - `make up`: applies the saved plan
 
-`make plan` runs the checker on your real plan with `twin/hardened/app.json`. Without an organization you'll see no
-GC11-04 or GC11-08 (they need one), and GC11-11 until you set the cache.
+`make plan` runs the checker on your real plan with `twin/hardened/app.json`. Without an organization your plan has
+no allow-list and no perimeter, so the checker reports GC11-04 and GC11-08 (both need an organization to fix; they
+fire because `twin/requirements.json` says `"has_organization": true`, and setting that to `false` in your own copy
+silences them), and GC11-11 until you set the cache.
 
 To prove the private path, set `create_test_vm = true` and apply again. The VM has no external IP; at boot it calls
 Gemini through the PSC endpoint as `chatbot-runtime` and tries to reach `https://example.com`. Read the result:
@@ -835,17 +849,22 @@ Google adds that "Key rings can't be deleted" ([Cloud KMS](https://docs.cloud.go
 "scheduled for destruction" for 30 days and are billed as active until then. Deleting the whole sandbox project is the
 cleanest end.
 
-**Validation status.** The `.tf` files were checked offline for syntax (HCL parse) and for references between
-resources; `terraform validate` and a real apply were **not** run when this lab was written. If a provider version
-renames an argument, `make plan` tells you; please open an issue.
+**Validation status.** These `.tf` files were applied and destroyed for real on 12 November 2026 (`europe-west4`, a
+Free Trial project with no organization) through `bash cloud/deploy.sh tf apply` and `tf destroy`, with the test VM
+on, and passed Tests 1 to 5 of the guided build (5 of 5). The organization pieces (`orgpolicy.tf`, `perimeter.tf`)
+were not applied: that project has no organization. One fix came out of the run: key rings and keys can't be deleted,
+so a second build in the same project stopped with `409 ... already exists` on `helpdesk-eu`. `deploy.sh tf apply`
+now adopts the existing key ring and key with `terraform import` and gives the key a fresh version. `make plan` and
+`make up` don't do that, so for a second build in the same project use `bash cloud/deploy.sh tf apply`. If a
+provider version renames an argument, `make plan` tells you; please open an issue.
 
 ## Troubleshooting
 
 - `python3: command not found` on Windows: use `py` instead of `python3`.
-- `make: command not found`: run the `python3 ...` command shown next to each `make` line.
+- `make: command not found`: run the `python3 ...` command shown next to each `make` line. The Step 8 targets
+  (`make cost`, `plan`, `up`, `down`) use `sed` and Terraform from a Unix shell: on Windows use WSL or Cloud Shell for
+  Step 8.
 - Tests fail after you edited a twin file: `python3 -m json.tool twin/hardened/plan.json` finds JSON typos.
-- `make plan` errors about `google-beta`: the PSC address and forwarding rule need the beta provider; `terraform init`
-  downloads it.
 - The smoke test shows HTTP 403: Data Access logs for `aiplatform.googleapis.com` show an IAM denial; if you enforced a
   perimeter, look in the Policy Denied logs (lesson 11.2) too.
 

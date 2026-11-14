@@ -64,7 +64,7 @@ def run(twin: str) -> list[Finding]:
     if rag and rag["scope"]["chosen_by"] != "verified_groups":
         add("HIGH", "GC13-01", rag["corpora"][0]["display_name"],
             f"Per-user scope is a {rag['scope']['how'].replace('_', ' ')} chosen by {rag['scope']['chosen_by'].replace('_', ' ')}: "
-            "a metadata filter narrows the search, it doesn't authorise it.",
+            "a metadata filter narrows the search, it doesn't authorize it.",
             "Pick corpora (or the filter) in your tool from the user's verified groups, never from model arguments.")
     if rag:
         for c in rag["corpora"]:

@@ -1,5 +1,5 @@
 {
-  "_about": "Help-centre articles the Helpdesk answers from. Written by the IT team: trusted.",
+  "_about": "Help-center articles the Helpdesk answers from. Written by the IT team: trusted.",
   "articles": [
     {
       "id": "vpn-token",
@@ -24,7 +24,7 @@
         "authenticator"
       ],
       "title": "Reset your MFA",
-      "text": "The Helpdesk can reset MFA for your own account only. You will be asked to enrol your authenticator again at your next sign-in."
+      "text": "The Helpdesk can reset MFA for your own account only. You will be asked to enroll your authenticator again at your next sign-in."
     },
     {
       "id": "wifi",

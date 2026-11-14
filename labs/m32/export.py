@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Make your own capstone repo from this folder (Part 0 of the README).
 
-    python3 export.py ../my-advanced-capstone        # make export DEST=../my-advanced-capstone
+    python3 export.py ~/my-advanced-capstone        # make export DEST=~/my-advanced-capstone
 
 Copies everything you need into a NEW folder, laid out as a repo of its own:
   README.md            <- report/README-TEMPLATE.md (your portfolio README; fill it in)
@@ -30,7 +30,7 @@ def main() -> int:
         print(f"{dest} already has files in it. Pick a new folder name.")
         return 1
     if HERE in dest.parents or dest == HERE:
-        print("Pick a folder outside this lab folder, for example ../my-advanced-capstone")
+        print("Pick a folder outside this lab folder, for example ~/my-advanced-capstone")
         return 1
     dest.mkdir(parents=True, exist_ok=True)
     for item in HERE.iterdir():
@@ -63,7 +63,7 @@ Next (Mac/Linux; on Windows type the same in PowerShell):
   git init -b main
   git add .
   git commit -m "TSG Ops Crew advanced capstone: starting point"
-Then create an EMPTY public repo on github.com (no README, no licence) and push:
+Then create an EMPTY public repo on github.com (no README, no license) and push:
   git remote add origin https://github.com/<you>/<repo>.git
   git push -u origin main
 Open the repo's Actions tab: the capstone-checks workflow runs on every push.""")

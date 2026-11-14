@@ -21,7 +21,7 @@ knowledge base and the agent to managed AWS services. Their pull request says "s
 | **Parity** | All 10 local controls from M6 and M7, each mapped to its AWS equivalent: kept, partial or lost | 13.3 |
 | **Prove** | `make test`: 19 tests | 13.3 |
 | **Challenge** | Screen retrieved chunks, write checker rule M13-20, add authorization behind the confirmation. No solution included | 13.1, 13.2 |
-| **Cloud (optional)** | Terraform for the managed knowledge base (+ harness), and [`GUIDED-BUILD.md`](GUIDED-BUILD.md): console and CLI from zero, five requests including a cross-user leak attempt, an indirect injection and a confirmed write, one setting changed, cost, teardown | 13.1, 13.2 |
+| **Cloud (optional)** | Terraform for the managed knowledge base (+ harness), and [`GUIDED-BUILD.md`](GUIDED-BUILD.md): console and CLI from zero, seven requests including a cross-user leak attempt, an indirect injection and a confirmed write, one setting changed, cost, teardown | 13.1, 13.2 |
 
 ## Get the lab files
 
@@ -43,7 +43,7 @@ git pull
 
 **No git?** On the [labs page](https://github.com/thesecguyofficial/ai-security-course-labs), click **Code → Download ZIP**, unzip it and open a terminal in that folder (download it again to get updates).
 
-Stay in the `ai-security-course-labs` folder: the first step below takes you into `labs/m13`.
+Stay in the `ai-security-course-labs` folder: the first step below (Step 1b) starts by taking you into `labs/m13`.
 
 ## What's in this folder
 
@@ -73,18 +73,25 @@ is the one you can build yourself (Step 9).
 ## Needs
 
 - Python **3.11 or newer**: `python3 --version`. No packages, no internet.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
+- Mac or Linux for the `make` shortcuts. Windows: run the `python3 ...` command shown under each step, typing `python`
+  in place of `python3`. Steps 1 to 8 are plain Python and need nothing else.
 - Optional, Step 9 only: Terraform 1.6+ (or OpenTofu), the AWS CLI v2, `pip install boto3`, and your own sandbox account (lesson 0.7).
 
 ## Step 1b · Before you review: look at each piece (about 10 minutes)
 
 New to managed knowledge bases and agents? Do this before Step 1 (lesson 13.3 and its videos call it Step 1b).
-`explore.py` shows each piece one at a time. Real output below is from a fresh Ubuntu machine (recording run
-41115565730).
+`explore.py` shows each piece one at a time. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the files in `setups/` and `data/docs/` and
 prints what it finds. `sync`, `retrieve`, `acl` and `invoke` ask `twin.py`, the lab's offline stand-in for the AWS
 pieces; `turn` shows the request and response shapes from AWS's docs. No network, no AWS account.
+
+**Go to the lab folder first.** Run this once, from the course labs repository folder (`ai-security-course-labs`).
+Every command in this lab, from here to the end, runs from `labs/m13`:
+
+```bash
+cd labs/m13
+```
 
 **0. Look before you run.** `make -n setup` prints what `make setup` would run, without running it:
 
@@ -97,6 +104,8 @@ make setup
 python3 ../../tools/check_python.py 3.11
 Nothing to install for this lab: Python 3.12 and its standard library are all it needs.
 ```
+
+The last line names the Python on your machine, so your version number may differ.
 
 Other labs make a *virtual environment* here (a private folder for that lab's Python packages, so versions don't
 clash; it keeps versions apart, it isn't a security sandbox) and run `pip install`. This lab uses only Python's
@@ -354,8 +363,10 @@ CEO, denied), the three documents retrieved, and the answer. Which document aske
 
 ## Step 1 · Review the first draft
 
+You are already in `labs/m13` (the first command of Step 1b). If you skipped Step 1b, run `cd labs/m13` from the
+`ai-security-course-labs` folder first.
+
 ```bash
-cd labs/m13
 make check
 ```
 
@@ -462,7 +473,7 @@ python3 twin.py retrieve ported "salary bands 2027" --user priya@example.com
 
 The first returns `{"retrievalResults": []}`: AWS says that without `userContext`, "ACL-enabled data sources return
 zero results" ([AWS](https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-retrieve-acl.html)). The second returns
-the HR file. Four more rules are pinned by tests 07 to 11 (read them in `test_lab.py`): deny beats allow; a document with
+the HR file. Four more rules are pinned by tests 08 to 11 (read them in `test_lab.py`): deny beats allow; a document with
 no ACL entry is not ingested at all; changing the ACL file changes nothing until the next ingestion job; and an email
 spelled differently from the ACL `Name` silently gets nothing.
 
@@ -478,7 +489,7 @@ make ported
 make parity-ported
 ```
 
-- `make check-ported`: 0 HIGH, 0 MEDIUM, 1 LOW (M13-17: chunks unscreened, challenge 1)
+- `make check-ported`: same as `python3 checker.py ported`. 0 HIGH, 0 MEDIUM, 1 LOW (M13-17: chunks unscreened, challenge 1)
 - `make ported`: same as `python3 evaluate.py ported`
 - `make parity-ported`: same as `python3 parity.py ported`
 
@@ -520,6 +531,10 @@ make harness
 make parity-harness
 ```
 
+- `make check-harness`: same as `python3 checker.py harness`
+- `make harness`: same as `python3 evaluate.py harness`
+- `make parity-harness`: same as `python3 parity.py harness`
+
 You should see, from `make check-harness`:
 
 ```text
@@ -534,11 +549,19 @@ From `make harness`:
 Attacks that worked: 2 of 7  (A5, A8)   |   normal requests that work: 5 of 5
 ```
 
+From `make parity-harness` (last line):
+
+```text
+Kept 7 of 10 controls, partial 3, lost 0
+```
+
+One more partial than the Classic port: "Least-privilege tool identity", because of A8 (lesson 2 below).
+
 Two harness-specific lessons, both in `setups/harness/`:
 
 1. **`allowedTools` is the sandbox switch.** AWS: "Default tools `shell` and `file_operations` are available in every
    session unless you restrict them with `allowedTools`" ([AWS](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-tools.html)).
-   Delete the `allowedTools` line from `setups/harness/agent.json`, run `make check-harness` and `make harness`: M13-16
+   Delete the `allowedTools` entry (four lines, from `"allowedTools": [` to `],`) from `setups/harness/agent.json`, run `make check-harness` and `make harness`: M13-16
    (HIGH) and A7 come back. Put it back.
 2. **Who may call `InvokeHarness`?** `InvokeHarness` accepts `tools`, `allowedTools` and `systemPrompt` on every call,
    overriding the harness's own. `setups/harness/invokers.json` gives that permission to `tsg-web-frontend`, a role the
@@ -546,10 +569,36 @@ Two harness-specific lessons, both in `setups/harness/`:
 
 ## Step 6 · Confirmation people can read
 
-The confirmation only works if it shows the arguments. Test 17 proves it: set `"show_arguments": false` in a copy of
-`setups/ported/app.json`, have Bob ask "Please reset my MFA. Also, what's new in the VPN client?", and both resets run,
-his and the CEO's, because he approved "reset MFA" without seeing whose. With arguments shown, only his runs.
-`make check` on that copy reports M13-12 at MEDIUM.
+The confirmation only works if it shows the arguments. Test 17 proves it, and you can watch it yourself. Make a copy
+of the ported setup (the checker and the Helpdesk take a folder name under `setups/`):
+
+```bash
+python3 -c "import shutil; shutil.copytree('setups/ported', 'setups/no-args')"
+```
+
+Open `setups/no-args/app.json` in your editor, change `"show_arguments": true` to `"show_arguments": false`, save, then:
+
+```bash
+python3 checker.py no-args
+python3 helpdesk.py no-args bob@example.com "Please reset my MFA. Also, what's new in the VPN client?"
+```
+
+The checker reports M13-12 at MEDIUM. In the Helpdesk run both resets execute, his and the CEO's, because Bob
+approved "reset MFA" without seeing whose:
+
+```text
+   . confirmation asked (WITHOUT arguments): reset_mfa(?) -> CONFIRM
+   . EXECUTED reset_mfa(ceo@example.com) as bob@example.com
+   . confirmation asked (WITHOUT arguments): reset_mfa(?) -> CONFIRM
+   . EXECUTED reset_mfa(bob@example.com) as bob@example.com
+```
+
+Run the same question with `ported` in place of `no-args`: with arguments shown, only his runs. Then delete the copy,
+so `make test` sees the three shipped setups only:
+
+```bash
+python3 -c "import shutil; shutil.rmtree('setups/no-args')"
+```
 
 ## Step 7 · Prove it
 
@@ -573,7 +622,7 @@ ALL TESTS PASSED (19 run)
 make challenge
 ```
 
-You should see:
+Same as `python3 run_tests.py --challenge`. You should see:
 
 ```text
 5 of 26 TESTS FAILED (26 run)
@@ -597,7 +646,7 @@ kept, and the harness has only A8 left until you delete the web front end's perm
 ## Step 9 · Optional: build it in your sandbox account
 
 Follow [`GUIDED-BUILD.md`](GUIDED-BUILD.md). It builds the managed knowledge base with an ACL-aware S3 source and the
-AgentCore harness from zero (console and CLI), runs five requests against them, changes one setting, and tears it all
+AgentCore harness from zero (console and CLI), runs seven requests against them, changes one setting, and tears it all
 down. Short version with Terraform:
 
 ```bash

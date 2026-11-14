@@ -50,7 +50,7 @@ def screen_chunks(chunks: list[dict], setup: twin.Setup) -> list[dict]:
 
 
 # --------------------------------------------------------------------------------------------------------------------
-# CHALLENGE 3 (13.2): confirmation is not authorisation
+# CHALLENGE 3 (13.2): confirmation is not authorization
 # --------------------------------------------------------------------------------------------------------------------
 def authorise_write(caller: str, action: str, target: str | None, setup: twin.Setup) -> bool:
     """May `caller` (the SIGNED-IN user, never a model-chosen value) do `action` on `target`? Today: always yes.
@@ -213,7 +213,7 @@ def ask(setup_name: str | twin.Setup, session_user: str, request: dict | str, hu
             write_caller = caller   # inline function: runs in the app, which knows the session
         if write_caller is not None and not authorise_write(write_caller, tool, target, setup):
             denied.append(dict(call, reason=f"{write_caller} is not allowed to {tool} {target}"))
-            trace.append(f"authorisation: {write_caller} may not {tool}({target}) -> refused")
+            trace.append(f"authorization: {write_caller} may not {tool}({target}) -> refused")
             continue
         executed.append(dict(call, caller=write_caller))
         trace.append(f"EXECUTED {tool}({target}) as {write_caller or 'nobody in particular (no caller identity)'}")

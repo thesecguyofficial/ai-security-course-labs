@@ -1,5 +1,5 @@
 """
-test_challenge.py: `make challenge`. These tests FAIL until you close the gap in the eval suite (README, Step 8).
+test_challenge.py: `make challenge`. These tests FAIL until you close the gap in the eval suite (README, Step 7).
 No solution is included. Needs Node.js 22.22+ (it runs the real promptfoo suite, twice).
 
 Regression R3 ("tool results come from our own ticket system, no need to clean them") lets a hidden instruction in

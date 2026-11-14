@@ -133,8 +133,7 @@ Windows (no `make`): `py -m venv .venv`, then `.venv\Scripts\python -m pip insta
 ## Step 1b · Before you attack: look at how MCP works (about 10 minutes)
 
 New to MCP? Do this before Step 1 (lesson 8.6 and its videos call it Step 1b). `explore.py` shows, one message
-at a time, what the host and the servers say to each other. Real output below is from a fresh Ubuntu machine
-(recording run 40911297475).
+at a time, what the host and the servers say to each other. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** `explore.py` starts the lab's own servers on your computer, the way a host does, and
 stops them again: `servers/notes_server.py` (and `servers/facts_server.py` for `context`) as child processes,
@@ -303,7 +302,15 @@ The `facts` server starts clean. `make attack` flips it to its malicious "releas
 make attack
 ```
 
-Same as `.venv/bin/python host.py "give me a fact about octopus"`.
+`make attack` does two things: it switches the facts server to release 1.1.0 and clears the last run's fake
+inbox, then it runs the host. Without `make`, one command does both (the `--release` flag is the switch):
+
+```text
+.venv/bin/python host.py "give me a fact about octopus" --release 1.1.0
+```
+
+Windows: the same line with `.venv\Scripts\python`. Without `--release 1.1.0` on a fresh folder the facts
+server is still the clean 1.0.0 and nothing leaks.
 
 Real output (Linux, Python 3.13):
 
@@ -335,7 +342,8 @@ Two separate ideas, both from lesson 8.2, are in that one run:
 make shadow
 ```
 
-Same as `.venv/bin/python host.py "send an email to bob@lab.invalid"`. Real output:
+Without `make` (Windows: `.venv\Scripts\python`):
+`.venv/bin/python host.py "send an email to bob@lab.invalid" --release 1.1.0`. Real output:
 
 ```text
 MODEL plan: [('notes', 'send_email')]  (saw hidden directive: True)
@@ -367,7 +375,8 @@ or `snyk-agent-scan inspect` would:
 make review
 ```
 
-Same as `.venv/bin/python review.py facts`.
+It switches the facts server to release 1.1.0 first. Without `make` (Windows: `.venv\Scripts\python`):
+`.venv/bin/python review.py facts --release 1.1.0`.
 
 Real output (shortened):
 
@@ -379,6 +388,9 @@ facts:fact_of_the_day
   VERDICT: HIDDEN DIRECTIVE FOUND -> do not use
 1 of 1 tool(s) flagged on facts.
 ```
+
+`make` then prints `make: [Makefile:40: review] Error 1 (ignored)`. That is expected: `review.py` exits with
+code 1 when it flags a tool, so that an automated check would fail, and the Makefile tells `make` to carry on.
 
 Notice the padding of spaces before the hidden block: in a client that shows a tool description on one
 line, that block scrolls out of view. Length alone is not safety. Reading the **whole** definition is.
@@ -392,7 +404,16 @@ the server to the poisoned `1.1.0` and asks the same question with pinning, scan
 make defend
 ```
 
-Real output:
+Without `make`, it is these three commands (Windows: `.venv\Scripts\python`). The first deletes an old pin
+file, the second records the clean 1.0.0 definitions, the third runs the poisoned 1.1.0 with the controls on:
+
+```text
+.venv/bin/python -c "import pathlib; pathlib.Path('state/pins.json').unlink(missing_ok=True)"
+.venv/bin/python host.py "give me a fact about octopus" --release 1.0.0 --pin-file state/pins.json
+.venv/bin/python host.py "give me a fact about octopus" --release 1.1.0 --pin-file state/pins.json --block-injection --allow "notes:read_note,notes:list_notes,facts:fact_of_the_day"
+```
+
+Real output (of the last command; `make defend` hides the output of the one before it):
 
 ```text
 PIN ok    notes:list_notes  234abe455120…
@@ -423,7 +444,11 @@ secret leaked:  False
 emails queued:  []
 ```
 
-The four controls, each a flag on `host.py` so you can switch them on one at a time:
+The four controls, each a flag on `host.py` so you can switch them on one at a time. `make defend` turns on
+the first three. To try the fourth yourself, run
+`.venv/bin/python host.py "give me a fact about octopus" --release 1.1.0 --approve`, type `y` for the three
+`notes` tools and `n` for `facts:fact_of_the_day`: the facts tool is refused and nothing leaks. Test 5 in Step 5
+proves the same thing automatically.
 
 | Flag | Control | What it catches |
 |---|---|---|
@@ -451,15 +476,20 @@ Lesson 8.4's server, done right. `make auth` starts `servers/secure_http_server.
 make auth
 ```
 
+Without `make` (Windows: `.venv\Scripts\python`), use two terminals in this folder: run
+`.venv/bin/python servers/secure_http_server.py` in the first and leave it running, run
+`.venv/bin/python auth_client.py` in the second, then stop the server with Ctrl+C.
+
 Real output:
 
 ```text
 [ACCEPTED] token for THIS resource: subject=alice scopes=['notes:read'] audience-ok
-[REFUSED] token for ANOTHER resource: MCPError: Server returned an error response
-[REFUSED] no token: MCPError: Server returned an error response
+[REFUSED] token for ANOTHER resource: HTTP 401 Unauthorized
+[REFUSED] no token: HTTP 401 Unauthorized
 ```
 
-(The two refusals are HTTP `401 Unauthorized`, each carrying a `WWW-Authenticate` header with the RFC 9728
+(Until 15 November 2026 the two refusals printed `MCPError: Server returned an error response`; the lab
+video shows that older text. Each refusal carries a `WWW-Authenticate` header with the RFC 9728
 `resource_metadata` pointer to `http://127.0.0.1:8808/.well-known/oauth-protected-resource/mcp`; run
 `make serve` in another terminal to watch the server log them.) The server is an **OAuth 2.1 resource
 server**. On every request it:
@@ -487,6 +517,8 @@ looks like in code.
 make test
 ```
 
+Same as `.venv/bin/python run_tests.py` (Windows: `.venv\Scripts\python run_tests.py`).
+
 Real output:
 
 ```text
@@ -510,8 +542,8 @@ OK
 ALL TESTS PASSED (12 run)
 ```
 
-The three `vulnerable:` tests attack the unprotected host on purpose: a test that never fails proves
-nothing. The `safe:` tests show each control stops the same attack, and the `auth:` tests prove the secure
+Two of the three `vulnerable:` tests attack the unprotected host on purpose: a test that never fails proves
+nothing. The third shows the clean 1.0.0 release leaks nothing. The `safe:` tests show each control stops the same attack, and the `auth:` tests prove the secure
 server accepts only its own tokens.
 
 ## Step 6 · Your turn: `make challenge`
@@ -524,6 +556,8 @@ description. A scan that reads only the one-line description waves it through.
 make challenge
 ```
 
+Same as `.venv/bin/python run_tests.py --challenge`.
+
 Real output before your fix (last lines):
 
 ```text
@@ -535,6 +569,9 @@ FAILED (failures=1)
 
 1 of 15 TESTS FAILED (15 run)
 ```
+
+`make` then adds one line of its own, starting `make: ***` and ending `Error 1`. That is `make` reporting that
+a test failed, which is expected until you fix the code.
 
 Edit `full_definition_text()` in `review.py`, at the **YOUR TURN** comment, so the scan reads the whole
 definition (name + description + **input schema**), not just the description. Hint is in the comment. When
@@ -586,9 +623,10 @@ make real
 make real-safe
 ```
 
-Same as `.venv/bin/python host.py "give me a fact about octopus" --backend ollama --model gemma3:1b`, with
-`--block-injection` added for the second (each first resets `state/` and switches to release `1.1.0`).
-Windows: `echo 1.1.0 > state\facts_release.txt`, then the same command with `.venv\Scripts\python`.
+Without `make` (Windows: `.venv\Scripts\python`):
+`.venv/bin/python host.py "give me a fact about octopus" --release 1.1.0 --backend ollama --model gemma3:1b`,
+with `--block-injection` added for the second. `--release 1.1.0` switches the facts server to the poisoned
+release and clears the fake inbox, as the `make` targets do.
 
 Real output from the recorded run:
 
@@ -617,18 +655,22 @@ secret leaked:  False
 emails queued:  []
 ```
 
-What happened: in this run the real model saw the hidden directive and **ignored** it. It just asked for the
-octopus fact, so nothing leaked. With the scan on, the poisoned tool was quarantined, and the small model then
-got stuck repeating itself until Ollama stopped it. Your run may differ: a small model may follow the
-directive, ignore it, or break. That variability is the point of lesson 1.2. **The safe controls do not depend
-on the model behaving**: the scan, the pin, the allow-list and the audience check hold whatever the model
+What happened: the poisoned definition was in the real model's context, and the model just asked for the
+octopus fact, so nothing leaked. That does **not** show a model resisting an attack. The lab's directive is
+only the placeholder `[LAB-INJECTED-DIRECTIVE]`, not real instructions, so there was nothing for the model to
+follow. (`saw hidden directive: True` is printed by the host, which checks the definitions for the
+placeholder; it is not something the model reports.) With the scan on, the poisoned tool was quarantined, and
+the small model then got stuck repeating itself until Ollama stopped it. Your run may differ: a small model
+may pick other tools, give no plan, or break. That variability is the point of lesson 1.2. What this step
+shows is the controls working with a real model in the loop. **The safe controls do not depend on the model
+behaving**: the scan, the pin, the allow-list and the audience check hold whatever the model
 returns. That is why the tests use the stand-in: they test *your code*, not the model's mood.
 
 ## Troubleshooting
 
 | Problem | Fix |
 |---|---|
-| `make: command not found` (Windows) | Activate the venv and run the `python` command shown under each step |
+| `make: command not found` (Windows) | Run the `.venv\Scripts\python` command shown under each step. `make clean` is `.venv\Scripts\python -c "import shutil; shutil.rmtree('state', ignore_errors=True)"` |
 | `ModuleNotFoundError: No module named 'mcp'` | Run `make setup` first (it creates `.venv` and installs the SDK) |
 | `Address already in use` on 8808 | An earlier secure server is still running. Stop it, or edit `PORT` in `servers/secure_http_server.py` |
 | `make auth` shows all three REFUSED | The server did not start in time on a slow machine. Run `make serve` in one terminal and `.venv/bin/python auth_client.py` in another |
@@ -646,7 +688,7 @@ audience token in the server log).
 
 ## Sources
 
-- MCP specification, version **2026-07-28** (verified current on 21 Oct 2026): <https://modelcontextprotocol.io/specification/2026-07-28>
+- MCP specification, version **2026-07-28**: <https://modelcontextprotocol.io/specification/2026-07-28>
 - MCP Authorization (OAuth 2.1, PRM, PKCE, resource indicators, no passthrough): <https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization>
 - MCP Security Best Practices (confused deputy, token passthrough): <https://modelcontextprotocol.io/docs/tutorials/security/security_best_practices>
 - MCP Local Server Security (tool poisoning, rug pulls, isolation): <https://modelcontextprotocol.io/docs/tutorials/security/local-server-security>

@@ -1,11 +1,14 @@
 // D02 Foundry data-plane calls from anywhere but the API Management gateway (AzureDiagnostics, RequestResponse)
 // Needs the Foundry resource's diagnostic setting to send RequestResponse to this workspace.
-// Look at one real row first: Elastic's sample Azure OpenAI RequestResponse event shows CallerIPAddress with the last
-// octet masked ("81.2.69.***"). If yours look like that, compare the first three octets instead of full addresses.
-let gatewayIps = dynamic(["10.20.1.15"]);   // your APIM instance's outbound address(es)
+// The log masks the last octet of CallerIPAddress: our 10 Nov 2026 run showed "135.13.134.**". A full gateway address
+// never equals a masked value, so an exact match flags every call, the gateway's own included. This query compares
+// the first three octets instead. The price: callers in the same /24 look like one address here, and a caller that
+// shares the gateway's /24 is not flagged. Only successful calls were in this table in our run (no 400s, no 429s).
+let gatewayNets = dynamic(["10.20.1"]);   // the first three octets of your APIM instance's outbound address(es)
 AzureDiagnostics
 | where TimeGenerated > ago(1d)
 | where ResourceProvider == "MICROSOFT.COGNITIVESERVICES" and Category == "RequestResponse"
-| where CallerIPAddress !in (gatewayIps)
-| summarize Calls = count(), FirstSeen = min(TimeGenerated), LastSeen = max(TimeGenerated) by Resource, CallerIPAddress
+| extend CallerNet = extract(@"^(\d+\.\d+\.\d+)\.", 1, CallerIPAddress)
+| where CallerNet !in (gatewayNets)
+| summarize Calls = count(), FirstSeen = min(TimeGenerated), LastSeen = max(TimeGenerated) by Resource, CallerNet, CallerIPAddress
 | order by FirstSeen asc

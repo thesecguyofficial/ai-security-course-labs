@@ -98,7 +98,9 @@ key or host creeps in.
 ## Needs
 
 - Python **3.11 or newer** (tested on 3.13). Check with `python3 --version`. No packages, no internet.
-- Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
+- Mac or Linux for the `make` shortcuts. Windows: run the `python3 ...` command shown under each step, typing `py`
+  or `python` in place of `python3`. Step 6 and the guided build set environment variables the Unix way and use
+  shell scripts: on Windows use WSL (or Cloud Shell for the guided build) for those.
 - Optional, Step 6: `pip install -r adk_agent/requirements.txt` (ADK 2.12.0 with its Google Cloud extras, about
   275 MB in a virtual environment).
 - Optional, guided build: Terraform 1.5+, the `gcloud` CLI and **your own** sandbox project with billing and a budget
@@ -108,7 +110,7 @@ key or host creeps in.
 
 New to RAG Engine, Agent Search and ADK? Do this before Step 1 (lesson 13.3 calls it "Before you start", and lesson
 13.0 walks through the same twelve ideas). `explore.py` shows each piece one at a time. Real output below is from a
-fresh Ubuntu machine (recording run 41615711324).
+fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads `data/` and `twin/` and asks the same
 stand-ins as the rest of the lab (`gcp_twin.py`, `adk_twin.py`, `helpdesk_agent.py`). No network, no Google Cloud
@@ -349,12 +351,12 @@ One turn on ADK 2.12.0 (twin hardened). Shapes follow ADK's; nothing is sent.
 
 ## Step 1 · Check: what did the port lose?
 
+Skipped Step 1b? Run `cd labs/gc13` first.
+
 ```bash
-cd labs/gc13
 make check
 ```
 
-- `cd labs/gc13`: or wherever you put this folder; skip it if Step 1b already took you there
 - `make check`: same as `python3 checker.py --twin today`
 
 Real output (Linux, Python 3.13):
@@ -562,9 +564,14 @@ What changed (all in `twin/hardened/deployment.json`, plus `controls.py`):
 | R2 | One corpus per audience (`kb-staff`, `kb-finance`), chosen from the user's **verified groups**; `search_kb` ignores the model's `team` | Your tool code |
 | R3 | The end user comes from a verified ID token, written into session state by your server | Your front end |
 | R4 | Import only from the curated bucket; the inbox isn't a source any more | Ingestion |
-| R5 | Model Armor plugin with `tool_output_template_name`: the poisoned ticket never reaches the model | ADK plugin |
+| R5 | Model Armor plugin with `tool_output_template_name`: in this twin the poisoned ticket never reaches the model | ADK plugin |
 | R6 | `close_ticket` and `send_email` wait for a person (here an approval queue the app owns) | Tool / app |
 | R7 | `before_tool` refuses tickets from a team the user isn't in | ADK callback |
+
+One caution on R5 from the real service: in our runs on 12 and 13 November 2026 (guided build, G3 and G5) the real
+Model Armor flagged neither lab placeholder, the poisoned document or the poisoned ticket. Gemini didn't act on
+them either. So treat tool-output screening as one layer, and count on the recipient policy and the confirmation step
+(R6, and your challenge) for the run where the screen misses and the model obeys.
 
 Then the same with **Agent Search document ACLs** instead of corpora per group, searched with the end user's
 identity:
@@ -595,6 +602,8 @@ the agent to every group, and everyone sees everything again.
 ```bash
 make logs
 ```
+
+Same as `python3 attack.py --twin today --logs`, then `python3 attack.py --twin hardened --logs`.
 
 Real output:
 
@@ -661,7 +670,10 @@ pip install -r adk_agent/requirements.txt
 make adk-offline
 ```
 
-- `make adk-offline`: same as `cd adk_agent && TSG_MODEL_ARMOR_TEMPLATE=... python3 run_requests.py`
+- `python3 -m venv .venv && . .venv/bin/activate`: a private Python for this step. While it's active, `python3` is
+  `.venv/bin/python`. In a new terminal, run `. .venv/bin/activate` from `labs/gc13` again first
+- `make adk-offline`: same as `(cd adk_agent && TSG_MODEL_ARMOR_TEMPLATE=... python3 run_requests.py)`: it runs in
+  `adk_agent` and leaves you in `labs/gc13`
 
 Real output (Linux, Python 3.13, google-adk 2.12.0):
 
@@ -702,9 +714,12 @@ outbox: []   T-2041 status: closed
 Now switch tool-output screening off, the setting the guided build changes, and run the two injections again:
 
 ```bash
-cd adk_agent && TSG_MODEL_ARMOR_TEMPLATE=projects/PROJECT_ID/locations/europe-west4/templates/helpdesk-guard \
-  TSG_SCREEN_TOOL_OUTPUT=0 python3 run_requests.py --only G3 G5
+(cd adk_agent && TSG_MODEL_ARMOR_TEMPLATE=projects/PROJECT_ID/locations/europe-west4/templates/helpdesk-guard \
+  TSG_SCREEN_TOOL_OUTPUT=0 python3 run_requests.py --only G3 G5)
 ```
+
+The brackets run it inside `adk_agent` and bring you back to `labs/gc13`, where Steps 7 and 8 run. Offline, the
+template name is only a label for the fake client, so leave `PROJECT_ID` as it is.
 
 Real output:
 
@@ -764,6 +779,8 @@ Three changes. `make challenge` runs the lab tests plus six challenge tests; fiv
 ```bash
 make challenge
 ```
+
+Same as `python3 run_tests.py --challenge`.
 
 Real output before you start:
 

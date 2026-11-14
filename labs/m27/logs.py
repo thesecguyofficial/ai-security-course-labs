@@ -11,7 +11,7 @@ account, addresses and IDs). Only the doors a config actually logs produce recor
   cloudtrail-network.jsonl   CloudTrail network activity events (eventCategory NetworkActivity, VpceAccessDenied)
   proxy-log.jsonl            the forward proxy's own decisions (this lab's format)
 
-Two documented gaps are modelled on purpose: flow logs never contain DNS lookups to the Amazon DNS server, and a
+Two documented gaps are modeled on purpose: flow logs never contain DNS lookups to the Amazon DNS server, and a
 request the resolver refused never reaches the network, so it has no flow record at all.
 """
 

@@ -4,14 +4,18 @@ build.py: the data-plane half of the AZ13 guided build (GUIDED-BUILD.md). Called
   index         create the permission-aware index, upload 4 documents, run 3 direct queries
   kb            create the knowledge source + knowledge base, retrieve with and without your token
   agent         create the project connection and the prompt agent (KB MCP tool + send_email function tool)
-  ask [N]       the 5 example requests (or just number N)
+  ask [N]       the 5 example requests (or just number N). In a terminal, request 4 lets you answer the agent
+  gate-check    the send_email gate on its own: your rule, then the y/N. No Azure call, nothing to install
   ask-nohdr     G6: an agent version WITHOUT the user-token header, then the leak attempt again
   ask-approval  G6b: the knowledge base tool with require_approval "always"
   down          delete agent versions, connection, knowledge base, knowledge source, index
 
 Search calls use the standard library and tokens from `az account get-access-token`. Agent calls use the documented
 Python SDK (azure-ai-projects >= 2.0.0). Nothing here sends real email: send_email only appends to .state/outbox.jsonl.
-Not run by the course team: field names follow Microsoft Learn (Oct 2026); behaviour is yours to observe.
+Run for real on 9 November 2026 (France Central) and through deploy.sh on 12 November 2026; the results are in
+GUIDED-BUILD.md, "What happened in our real run". In that run request 4 produced no function_call (the model asked
+in its reply instead), so the send_email gate never fired on Azure. Since 15 November 2026 the tool description no
+longer mentions confirmation and request 4 lets you answer the agent; that change has not been run against Azure.
 """
 
 import json
@@ -148,7 +152,9 @@ def kb_tool(headers=True, approval="never"):
 def email_tool():
     from azure.ai.projects.models import FunctionTool
     return FunctionTool(
-        name="send_email", description="Send an email from the helpdesk. Needs the user's confirmation.", strict=True,
+        # No "needs confirmation" in the description: in our 9 Nov 2026 run that wording made the model ask in its
+        # reply and never emit the function_call. The confirmation is confirm() below, in code.
+        name="send_email", description="Send an email from the helpdesk.", strict=True,
         parameters={"type": "object", "additionalProperties": False, "required": ["to", "subject", "body"],
                     "properties": {"to": {"type": "string"}, "subject": {"type": "string"}, "body": {"type": "string"}}})
 
@@ -194,17 +200,60 @@ ASKS = {
 }
 
 
-def confirm(name: str, args: dict, me: str) -> bool:
+def confirm(name: str, args: dict, me: str, ask=input) -> bool:
     """Your app's confirmation step for the send_email FUNCTION tool. Microsoft: 'require explicit user confirmation
     for actions that change data'. Deterministic rule first, then a human."""
     print(f"   function_call {name} {json.dumps(args)}")
-    if name != "send_email" or not str(args.get("to", "")).lower().endswith("@" + me.split("@")[1].lower()):
+    if name != "send_email":
+        print("   -> refused by rule: not a tool this app runs")
+        return False
+    if not str(args.get("to", "")).lower().endswith("@" + me.split("@")[1].lower()):
         print("   -> refused by rule: recipient outside your own domain")
         return False
-    return input("   Send this email? (y/N): ").strip().lower() == "y"
+    return ask("   Send this email? (y/N): ").strip().lower() == "y"
 
 
-def converse(agent_name: str, question: str, with_token=True):
+def run_function_call(name: str, args: dict, me: str, ask=input, outbox: str | None = None) -> dict:
+    """What the app does with one function_call item: the gate first, then the (fake) send. Returns the tool output."""
+    if confirm(name, args, me, ask):
+        with open(outbox or os.path.join(STATE, "outbox.jsonl"), "a", encoding="utf-8") as f:
+            f.write(json.dumps({"to": args["to"], "subject": args["subject"]}) + "\n")
+        return {"status": "sent (lab: written to .state/outbox.jsonl, no real email)"}
+    return {"status": "refused by the user"}
+
+
+def do_gate_check():
+    """The gate without Azure: four made-up function_call items go through run_function_call(), the same code
+    converse() uses. It proves the rule and the y/N. It can't prove the model ever emits the call: only request 4 can."""
+    import tempfile
+    me = "alex@contoso.example"
+    mail = {"subject": "VPN password reset steps", "body": "Open https://passwordreset.contoso.com ..."}
+    cases = [
+        ("outside recipient, and the person would say y", "send_email", dict(mail, to="collect@attacker.example"), "y", False),
+        ("own domain, the person says n", "send_email", dict(mail, to=me), "n", False),
+        ("own domain, the person says y", "send_email", dict(mail, to=me), "y", True),
+        ("a tool the app never offered", "delete_ticket", {"id": "4480", "to": me}, "y", False),
+    ]
+    bad = 0
+    with tempfile.TemporaryDirectory() as d:
+        box = os.path.join(d, "outbox.jsonl")
+        for what, name, args, answer, want in cases:
+            print(f"\n=== {what}")
+            sent = run_function_call(name, args, me, ask=lambda _prompt, a=answer: a, outbox=box)["status"].startswith("sent")
+            print(f"   {'PASS' if sent == want else 'FAIL'}: {'sent' if sent else 'not sent'} (expected: {'sent' if want else 'not sent'})")
+            bad += sent != want
+        lines = open(box, encoding="utf-8").read().splitlines() if os.path.exists(box) else []
+        ok = len(lines) == 1 and json.loads(lines[0])["to"] == me
+        print(f"\n   {'PASS' if ok else 'FAIL'}: the outbox holds {len(lines)} email(s) (expected: 1, to {me})")
+        bad += not ok
+    print(f"\nGate check: {'all 5 passed' if not bad else str(bad) + ' FAILED'}. No Azure call was made.")
+    sys.exit(1 if bad else 0)
+
+
+def converse(agent_name: str, question: str, with_token=True, replies=0):
+    """One request. `replies` = how many times you may answer the agent afterwards, in the same conversation (terminal
+    only). Request 4 needs it: if the model asks "shall I send it?" in its reply, you say yes, and only then can the
+    function_call arrive and the gate in confirm() run."""
     from openai.types.responses.response_input_param import FunctionCallOutput, McpApprovalResponse
     me = subprocess.check_output(["az", "ad", "signed-in-user", "show", "--query", "userPrincipalName", "-o", "tsv"], text=True).strip()
     q = question.format(me=me)
@@ -212,29 +261,36 @@ def converse(agent_name: str, question: str, with_token=True):
         conv = openai.conversations.create()
         extra = {"structured_inputs": {"search_auth_token": token("https://search.azure.com/.default")}} if with_token else {}
         resp = openai.responses.create(conversation=conv.id, input=q, extra_body=extra)
-        for _ in range(4):
-            follow = []
-            for item in resp.output:
-                if item.type == "mcp_approval_request":
-                    print(f"   mcp_approval_request id={item.id} server_label={item.server_label} name={item.name} "
-                          f"arguments={item.arguments}")
-                    ok = input("   Approve this MCP tool call? (y/N): ").strip().lower() == "y"
-                    follow.append(McpApprovalResponse(type="mcp_approval_response", approve=ok, approval_request_id=item.id))
-                elif item.type == "function_call":
-                    args = json.loads(item.arguments)
-                    if confirm(item.name, args, me):
-                        with open(os.path.join(STATE, "outbox.jsonl"), "a", encoding="utf-8") as f:
-                            f.write(json.dumps({"to": args["to"], "subject": args["subject"]}) + "\n")
-                        result = {"status": "sent (lab: written to .state/outbox.jsonl, no real email)"}
-                    else:
-                        result = {"status": "refused by the user"}
-                    follow.append(FunctionCallOutput(type="function_call_output", call_id=item.call_id, output=json.dumps(result)))
-            if not follow:
+        want_call, saw_call = replies > 0, False
+        while True:
+            for _ in range(4):
+                follow = []
+                for item in resp.output:
+                    if item.type == "mcp_approval_request":
+                        print(f"   mcp_approval_request id={item.id} server_label={item.server_label} name={item.name} "
+                              f"arguments={item.arguments}")
+                        ok = input("   Approve this MCP tool call? (y/N): ").strip().lower() == "y"
+                        follow.append(McpApprovalResponse(type="mcp_approval_response", approve=ok, approval_request_id=item.id))
+                    elif item.type == "function_call":
+                        saw_call = True
+                        result = run_function_call(item.name, json.loads(item.arguments), me)
+                        follow.append(FunctionCallOutput(type="function_call_output", call_id=item.call_id, output=json.dumps(result)))
+                if not follow:
+                    break
+                # Microsoft's MCP approval sample continues with previous_response_id (its C# function sample does too)
+                resp = openai.responses.create(input=follow, previous_response_id=resp.id, extra_body=extra)
+            print(f"   answer: {resp.output_text}")
+            print(f"   output item types: {[i.type for i in resp.output]}")
+            if replies <= 0 or saw_call or not sys.stdin.isatty():
                 break
-            # Microsoft's MCP approval sample continues with previous_response_id (its C# function sample does too)
-            resp = openai.responses.create(input=follow, previous_response_id=resp.id, extra_body=extra)
-        print(f"   answer: {resp.output_text}")
-        print(f"   output item types: {[i.type for i in resp.output]}")
+            replies -= 1
+            # No function_call yet. If the agent asked you something ("shall I send it?"), answer it here.
+            say = input("   Your reply to the agent (for example: Yes, send it). Enter to stop: ").strip()
+            if not say:
+                break
+            resp = openai.responses.create(input=say, previous_response_id=resp.id, extra_body=extra)
+        if want_call and not saw_call:
+            print("   NOTE: no function_call arrived, so the send_email gate did NOT run. A question in the reply is not a control.")
         openai.conversations.delete(conversation_id=conv.id)
 
 
@@ -243,7 +299,7 @@ def do_ask(pick=""):
         if pick and n != pick:
             continue
         print(f"\n=== Request {n}: {what}\n   user: {q}")
-        converse(AGENT, q)
+        converse(AGENT, q, replies=2 if n == "4" else 0)
 
 
 def do_ask_nohdr():
@@ -283,7 +339,7 @@ def do_down():
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""
     steps = {"index": do_index, "kb": do_kb, "agent": do_agent, "ask-nohdr": do_ask_nohdr,
-             "ask-approval": do_ask_approval, "down": do_down}
+             "ask-approval": do_ask_approval, "down": do_down, "gate-check": do_gate_check}
     if cmd == "ask":
         do_ask(sys.argv[2] if len(sys.argv) > 2 else "")
     elif cmd in steps:

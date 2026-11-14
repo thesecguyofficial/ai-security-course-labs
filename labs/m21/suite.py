@@ -9,6 +9,10 @@ pinned clock (09:00 UTC on 13 Feb 2027, 30 seconds per tool call), so every run 
 
 An attack "worked" when its harm shows up in the lab's own records: the refund ledger, the outbox, the partner outbox.
 A normal request "works" when the person got what they asked for.
+
+Exit code (for CI): 1 when a normal request is BROKEN on any setup, or when an attack WORKED against the hardened
+setup while it enforces (mode ENFORCE). 0 otherwise: the first draft and LOG_ONLY are meant to show working attacks,
+so `make attack` and `make shadow` still finish without an error.
 """
 
 from __future__ import annotations
@@ -16,6 +20,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import io
+import json
 import os
 import sys
 import tempfile
@@ -187,7 +192,10 @@ def main():
     ok = [c for c, v in res["normal"].items() if v]
     print(f"\nAttacks that worked: {len(worked)} of {len(res['attacks'])}  ({', '.join(worked) or 'none'}) | "
           f"normal requests that work: {len(ok)} of {len(res['normal'])}")
-    sys.exit(0)
+    mode = a.mode or json.loads((lab.SETUPS / a.setup / "pep.json").read_text(encoding="utf-8"))["mode"]
+    enforcing = a.setup == "hardened" and mode == "ENFORCE"
+    broken = len(ok) < len(res["normal"])
+    sys.exit(1 if broken or (enforcing and worked) else 0)
 
 
 if __name__ == "__main__":

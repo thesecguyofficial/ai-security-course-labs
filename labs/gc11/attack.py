@@ -61,7 +61,7 @@ STEPS = [
     Step("L3", "L", "Analyst in the office (198.51.100.21): query the tickets dataset",
          lambda d: Request("user:analyst2@example.com", "user", "198.51.100.21", "bigquery.googleapis.com",
                            "bigquery.tables.getData", dataset="helpdesk_tickets"), attacker=False),
-    Step("L4", "L", "Ticket summariser VM: GenerateContent on the approved Gemini model",
+    Step("L4", "L", "Ticket summarizer VM: GenerateContent on the approved Gemini model",
          lambda d: Request(summariser_principal(d), "attached", "vm:ticket-summariser", "aiplatform.googleapis.com",
                            "aiplatform.endpoints.predict", f"{GEMINI}:predict"), attacker=False),
 ]

@@ -1,5 +1,5 @@
 {
-  "_comment": "How the Helpdesk uses Model Armor today. inline = Gemini on Agent Platform (generateContent). self_hosted = the ticket summariser on a local model, guarded by app_guard.py.",
+  "_comment": "How the Helpdesk uses Model Armor today. inline = Gemini on Agent Platform (generateContent). self_hosted = the ticket summarizer on a local model, guarded by app_guard.py.",
   "model": "publishers/google/models/gemini-3.1-flash-lite",
   "location": "europe-west4",
   "secrets_in_prompt": true,

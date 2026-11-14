@@ -90,7 +90,7 @@ class T2_Hardened(unittest.TestCase):
         for sid in ("X2", "X3", "X5", "X6"):
             s, d = step(sid, "hardened")
             self.assertFalse(d.allowed, sid)
-            # The role ALONE must refuse it, whatever the org SCPs say (defence in depth: each layer holds by itself).
+            # The role ALONE must refuse it, whatever the org SCPs say (defense in depth: each layer holds by itself).
             alone = attack.evaluate_all(s.checks, attack.identity_policies("helpdesk", HARD), full_access_only)
             self.assertIn("no identity policy allows it", alone.reason, sid)
 

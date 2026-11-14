@@ -14,7 +14,7 @@
 #   export AZ12_REGION=eastus          # a region with Prompt Shields (default eastus)
 #
 # This builds its OWN small Foundry resource (public endpoint, keys off). To put the guardrail on your private AZ11
-# build instead, follow GUIDED-BUILD/README Step 9 with AZ11_NAME set. Cost: pennies (F0 is free; you pay tokens).
+# build instead, follow README Step 9 with AZ11_NAME set. Cost: pennies (F0 is free; you pay tokens).
 # Use a subscription you own, never your employer's.
 set -euo pipefail
 

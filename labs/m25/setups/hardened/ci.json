@@ -1,5 +1,5 @@
 {
- "_about": "The hardened CI job. It evaluates BOTH the full-precision model and the artefact it will ship, compares them, and refuses to sign if the shipped file behaves differently.",
+ "_about": "The hardened CI job. It evaluates BOTH the full-precision model and the artifact it will ship, compares them, and refuses to sign if the shipped file behaves differently.",
  "evaluate_shipped": true,
  "gate": {"min_recall": 0.95, "min_agreement": 0.95, "max_recall_drop": 0.05, "max_slice_drop": 0.0},
  "slice_gate": true,

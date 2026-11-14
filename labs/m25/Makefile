@@ -75,7 +75,7 @@ cloud-gate:    ## download the release from S3 into a fresh folder, run the hard
 cloud-tamper:  ## overwrite the weights in S3 with the community quant's (a new object version)
 	$(AWS) s3 cp models/community-quant/model.safetensors s3://$(BUCKET)/tsg-guard/1.1.0-hardened/model/model.safetensors
 
-cloud-warn:    ## the ONE setting changed: the same gate with the first draft's fail-open settings
+cloud-warn:    ## the same gate with the first draft's deploy.json (nine settings differ; fail-open is the one that matters)
 	$(PY) cloud/gate.py --bucket $(BUCKET) --release 1.1.0-hardened --setup first-draft --region $(REGION)
 
 cloud-down:    ## DELETE everything: model packages, the group, every object version, the bucket. Run it today.

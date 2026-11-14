@@ -6,7 +6,7 @@ It copies the SHAPE of Model Armor so you can practise with it at $0 and later s
     piAndJailbreakFilterSettings, maliciousUriFilterSettings, sdpSettings, templateMetadata, ...)
   - sanitize_user_prompt() / sanitize_model_response() return a dict shaped like the API's response:
     {"sanitizationResult": {"filterMatchState", "filterResults", "invocationResult"}}
-  - documented behaviours are modelled (sources in README.md):
+  - documented behaviors are modeled (sources in README.md):
       * confidence levels HIGH, MEDIUM_AND_ABOVE, LOW_AND_ABOVE ("a lower threshold ... might increase ... false positives")
       * each prompt and response is inspected on its own, single-turn
       * encoded content (Base64 etc.) is not decoded
@@ -68,7 +68,7 @@ RAI_TYPE_NAMES = {"dangerous": "DANGEROUS", "harassment": "HARASSMENT", "hate_sp
 
 URL_RE = re.compile(r"https?://[^\s\"'<>)]+", re.I)
 
-# SDP basic (twin): three of the six documented info types are modelled. Fake values only.
+# SDP basic (twin): three of the six documented info types are modeled. Fake values only.
 CARD_RE = re.compile(r"\b(?:\d[ -]?){13,19}\b")
 US_SSN_RE = re.compile(r"\b\d{3}-\d{2}-\d{4}\b")
 GCP_API_KEY_RE = re.compile(r"\bAIza[0-9A-Za-z_\-]{35}\b")

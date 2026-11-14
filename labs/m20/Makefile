@@ -8,7 +8,7 @@ setup:              ## nothing to install: checks your Python is 3.11 or newer
 	$(PY) ../../tools/check_python.py 3.11
 
 watch:              ## one request through the hardened chain, every hop and token printed
-	$(PY) watch.py hardened alice "Summarise T-4711 and email me the summary"
+	$(PY) watch.py hardened alice "Summarize T-4711 and email me the summary"
 
 attack:             ## 8 attacks + 3 normal requests against the FIRST DRAFT: 8 of 8 work
 	$(PY) evaluate.py first-draft

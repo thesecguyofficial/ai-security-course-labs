@@ -75,6 +75,10 @@ def run_agent(ticket: str = "T-1042", task: str = "answer_ticket", ctl: Controls
                     "requester": requester, "model": model.name, "controls": ctl.names(), "tools_offered": offered})
     say(f"RUN {run.run_id}  task={task}  ticket={ticket}  requester={requester}  model={model.name}")
     say(f"    controls: {', '.join(ctl.names()) or 'NONE (unsafe)'}")
+    if ctl.data_scope and controls.data_scope_is_stub():
+        say("    note: data_scope is still the empty challenge stub (Step 7), so it allows every read for now")
+    if not ctl.kill_switch and controls.kill_file().exists():
+        say("    note: state/KILL exists, but this run has no kill_switch control (--safe or --kill-switch), so it is ignored")
     say(f"    tools offered to the model: {', '.join(offered)}")
 
     history: list[dict] = []

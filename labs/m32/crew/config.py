@@ -24,6 +24,3 @@ SYSTEM_PROMPTS = {
         "queries and look customers up in the CRM."
     ),
 }
-
-# How many knowledge-base documents the retriever returns per request.
-TOP_K = 2

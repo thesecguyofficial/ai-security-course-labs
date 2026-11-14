@@ -1,4 +1,4 @@
-# Your own info types for Sensitive Data Protection (advanced config), instead of basic's six US-centred ones.
+# Your own info types for Sensitive Data Protection (advanced config), instead of basic's six US-centered ones.
 resource "google_data_loss_prevention_inspect_template" "helpdesk" {
   parent       = "projects/${var.project_id}/locations/${var.region}"
   template_id  = "helpdesk-in-eu"

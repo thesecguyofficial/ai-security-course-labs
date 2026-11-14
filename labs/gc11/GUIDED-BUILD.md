@@ -4,7 +4,7 @@ The offline lab (README Steps 1 to 7) checks a twin at $0, and README Step 8 dep
 This guide builds the same foundation **piece by piece**, so you see every control go in and then prove it works:
 a predict-only identity with no keys, a VM with no internet route that reaches Gemini through a Private Service
 Connect endpoint, a customer-managed key on the data, Data Access and request-response logging, and a pinned
-regional endpoint. About 90 minutes in **your own** sandbox project (the GC10 project is fine). Cost: cents, plus a
+EU multi-region endpoint. About 90 minutes in **your own** sandbox project (the GC10 project is fine). Cost: cents, plus a
 small VM while it runs (table at the end). Teardown is the last section: do it the same day.
 
 > **Tested for real on 12 November 2026** (`europe-west4`, a Free Trial project with no organization): `cloud/deploy.sh`
@@ -35,7 +35,7 @@ match the Terraform, so you can switch paths at any point. The model is called i
    ```bash
    gcloud config set project PROJECT_ID
    gcloud services enable aiplatform.googleapis.com bigquery.googleapis.com cloudkms.googleapis.com \
-     compute.googleapis.com dns.googleapis.com iam.googleapis.com servicedirectory.googleapis.com
+     compute.googleapis.com dns.googleapis.com iam.googleapis.com networkconnectivity.googleapis.com
    ```
 
 4. **Permissions.** As project owner you can build everything except the organization pieces. The model allow-list
@@ -81,7 +81,16 @@ First, the fact that shapes this part. In our run on 12 November 2026, `gemini-3
 `global`, `eu` and `us` endpoints; every single region, `europe-west4` included, returned `404` "Publisher model ...
 was not found". Lesson 11.5 warned about this ("the newest model is only global or multi-region"). So the Helpdesk
 calls the `eu` multi-region: host `aiplatform.eu.rep.googleapis.com`, location `eu`. Check your own model with
-`bash cloud/deploy.sh models` (it tries each one and prints the HTTP code).
+`bash cloud/deploy.sh models`: it tries each candidate model once on **one** endpoint and prints the HTTP code. That
+endpoint is your region's (`europe-west4` by default), so to compare run it three times:
+
+```bash
+bash cloud/deploy.sh models
+GC11_REGION=eu bash cloud/deploy.sh models
+GC11_REGION=global bash cloud/deploy.sh models
+```
+
+Ours: `404` for every model on `europe-west4`, `200` for `gemini-3.1-flash-lite` on `eu` and on `global`.
 
 That host ends in `rep.googleapis.com`, which Private Google Access doesn't support and the `all-apis` bundle
 excludes (lesson 11.2). So instead of a PSC endpoint for global Google APIs, this build makes a **regional endpoint**:
@@ -91,7 +100,6 @@ the `vpc-sc` bundle in a project with no organization, the VM got `503` "VPC net
 **gcloud.**
 
 ```bash
-gcloud services enable networkconnectivity.googleapis.com
 gcloud compute networks create helpdesk-vpc --subnet-mode=custom
 gcloud compute networks subnets create helpdesk-eu --network=helpdesk-vpc --region=europe-west4 --range=10.10.0.0/24
 gcloud network-connectivity regional-endpoints create aiplatform-eu --region=europe-west4 --address=10.10.0.10 \
@@ -134,7 +142,7 @@ DNS name `aiplatform.eu.rep.googleapis.com`, network `helpdesk-vpc`; in the zone
 `deny-all-egress` (network `helpdesk-vpc`, not the preselected `default`; priority `65000`; **Egress**; **Deny**;
 **All instances in the network**; destination `0.0.0.0/0`) and `allow-aiplatform-eu-egress` (priority `1000`;
 **Egress**; **Allow**; destination `10.10.0.10/32`; TCP `443`). Each form's **Equivalent command line** matched the
-gcloud below.
+gcloud above.
 
 ### 1c. Encryption: your own key on the data, and the cache (lesson 11.3)
 
@@ -154,7 +162,7 @@ with **BigQuery Data Editor**. The cache setting has no console page (the REST c
 ```bash
 gcloud kms keyrings create helpdesk-eu --location=europe-west4
 gcloud kms keys create helpdesk-data --keyring=helpdesk-eu --location=europe-west4 --purpose=encryption \
-  --rotation-period=90d --next-rotation-time=2027-01-20T00:00:00Z
+  --rotation-period=90d --next-rotation-time="$(date -u -d '+90 days' +%Y-%m-%dT00:00:00Z)"
 bq show --encryption_service_account --project_id=PROJECT_ID
 gcloud kms keys add-iam-policy-binding helpdesk-data --keyring=helpdesk-eu --location=europe-west4 \
   --member="serviceAccount:bq-PROJECT_NUMBER@bigquery-encryption.iam.gserviceaccount.com" \
@@ -164,7 +172,12 @@ bq mk --dataset --location=europe-west4 --default_kms_key="$KEY" PROJECT_ID:help
 bq mk --dataset --location=europe-west4 --default_kms_key="$KEY" PROJECT_ID:ai_logs
 ```
 
-- `gcloud kms keyrings create helpdesk-eu --location=europe-west4`: key rings can't be deleted: lesson 11.3
+- `gcloud kms keyrings create helpdesk-eu --location=europe-west4`: key rings can't be deleted: lesson 11.3. If an
+  earlier build left `helpdesk-eu` and `helpdesk-data` in this project, both `create` commands answer "already
+  exists": skip them and give the key a fresh version with `gcloud kms keys versions create --key=helpdesk-data
+  --keyring=helpdesk-eu --location=europe-west4 --primary`
+- `--next-rotation-time`: 90 days from today, as `cloud/deploy.sh` sets it (`date -d` is the Linux and Cloud Shell
+  form; on macOS type a date about 90 days ahead, such as `2027-02-15T00:00:00Z`)
 - `bq show --encryption_service_account --project_id=PROJECT_ID`: creates and prints BigQuery's service account
 
 Dataset access, as in `terraform/identity.tf`, with BigQuery's `GRANT` statement (the `bq add-iam-policy-binding`
@@ -214,7 +227,7 @@ Our response, from `on` (trimmed):
   "name": "projects/PROJECT_NUMBER/locations/eu/operations/4769272422966755328",
   "metadata": {
     "@type": "type.googleapis.com/google.cloud.aiplatform.v1beta1.SetPublisherModelConfigOperationMetadata",
-    "genericMetadata": {"createTime": "2026-10-22T09:00:00.000000Z", "updateTime": "2026-10-22T09:00:00.000000Z"}
+    "genericMetadata": {"createTime": "...", "updateTime": "..."}
   }
 }
 ```
@@ -499,7 +512,7 @@ Then run the live check and feed your real plan to the checker if you used Terra
 terraform/scripts/check_live.sh PROJECT_ID europe-west4
 ```
 
-## Cost (estimate, October 2026; prices change, so check the pages)
+## Cost (estimate, prices checked October 2026; they change, so check the pages)
 
 | Item | Price | This guide (about 3 hours) |
 |---|---|---|

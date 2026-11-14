@@ -7,6 +7,10 @@ suite.py: 10 attacks and 5 normal requests, each in a fresh state folder with th
 
 "Worked" means money went somewhere the user never agreed to, or more of it than the task allowed.
 Every amount is LABUSD on the lab ledger. No money moves anywhere.
+
+Exit code (so it works in CI): 1 when an attack WORKED or a normal request is BROKEN, otherwise 0. One exception:
+the first draft is the demonstration and its attacks are meant to work, so `suite.py first-draft` exits 1 only for
+a BROKEN normal request.
 """
 
 import shutil
@@ -180,7 +184,7 @@ def n4(setup, out):
     return len(paid(r1)) == 1 and len(paid(r2)) == 1
 
 
-@scenario("N5", "normal", "summarise a clean product page (nothing to buy)")
+@scenario("N5", "normal", "summarize a clean product page (nothing to buy)")
 def n5(setup, out):
     _, res = run_task(setup, "T-READ-CLEAN", out=out)
     return res == []
@@ -212,8 +216,10 @@ def report(setup, results):
             print("       " + line)
     print(f"\nAttacks that worked: {len(worked)} of {n_att}  ({', '.join(worked) or 'none'}) | "
           f"normal requests that work: {len(normal_ok)} of {n_norm}")
+    return 1 if len(normal_ok) < n_norm or (worked and setup != "first-draft") else 0
 
 
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    report(args[0] if args else "hardened", run(args[0] if args else "hardened", verbose="--verbose" in sys.argv))
+    sys.exit(report(args[0] if args else "hardened",
+                    run(args[0] if args else "hardened", verbose="--verbose" in sys.argv)))

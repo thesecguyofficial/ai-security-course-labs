@@ -27,7 +27,7 @@ macie:      ## the Macie stand-in's one-time job, first draft then hardened
 two-locks:  ## loosen the raw bucket's policy by mistake: the raw key still refuses, and CloudTrail shows it
 	$(PY) demo.py two-locks
 
-tokens:     ## keyed tokens: the same customer is recognisable across records without the name
+tokens:     ## keyed tokens: the same customer is recognizable across records without the name
 	$(PY) demo.py tokens
 
 hunt:       ## an investigator's questions over a day of KMS events (Q3 is the challenge)

@@ -49,9 +49,9 @@ python3 run_tests.py
 - `cd labs/m03`: run it from the course labs repository folder (`ai-security-course-labs`)
 - `python3 run_tests.py`: should end with ALL TESTS PASSED (it also proves your setup works)
 
-On Windows, replace each `make X` below with the command it runs (open the `Makefile`; the commands are one line
-each), using `py` instead of `python3`. For example, `make attack` becomes
-`py support_bot.py summarize data/emails/03_planted_note.txt`.
+Windows has no `make`. Type `py` where you see `python3`, and use the "Windows" commands printed under each
+`make` step below. They are the same Python commands the `Makefile` runs. The two promptfoo steps (Step 1b part 5
+and Step 8) were not tested on Windows: use WSL for those, or skip them (they are optional).
 
 ## Step 1b · Take one model call apart before you attack it (about 10 minutes)
 
@@ -198,6 +198,8 @@ the answers. It runs on Node.js; `npx` downloads a package from npm (the Node.js
 make promptfoo-check
 ```
 
+On Windows use WSL for this step.
+
 ```text
 node --version
 v22.22.0
@@ -216,6 +218,14 @@ lists the four emails, two of them with an extra check that the summary is still
 
 ```bash
 make attack
+```
+
+Windows:
+
+```powershell
+py support_bot.py reset
+py support_bot.py summarize data/emails/03_planted_note.txt
+py support_bot.py summarize data/emails/04_hidden_unicode.txt
 ```
 
 Real output:
@@ -259,6 +269,8 @@ The second email looks completely innocent, and still created a ticket.
 make hidden
 ```
 
+Windows: `py show_hidden.py data/emails/04_hidden_unicode.txt`
+
 ```text
 data/emails/04_hidden_unicode.txt: 283 characters, 85 invisible
   position 153: U+E0041 TAG LATIN CAPITAL LETTER A
@@ -280,7 +292,7 @@ Open `defences.py` and `handle_email()` in `support_bot.py`. The pipeline has fi
 | Fix | Where | What it does | Deterministic? |
 |---|---|---|---|
 | **1 · label** | Step 1 | Strips invisible characters, wraps the email in **random** markers it can't fake, tells the model the email is data | Stripping: yes. "Model obeys the label": **no** |
-| **2 · plan** | Steps 1 and 3 | Plan-then-execute: the agent's button decides the plan *before* the model reads the email. The summariser has no tool; any tool call it types is ignored and logged. A ticket, when asked for, is built by code from the email headers | Yes |
+| **2 · plan** | Steps 1 and 3 | Plan-then-execute: the agent's button decides the plan *before* the model reads the email. The summarizer has no tool; any tool call it types is ignored and logged. A ticket, when asked for, is built by code from the email headers | Yes |
 | **3 · confirm** | Step 4 | Every `create_ticket` waits for a person, who sees the **exact** action and who asked for it | Yes (but people can say yes carelessly) |
 | **4 · output** | Step 5 | Strips invisible characters from the reply; no images; links only to allow-listed hosts; a canary in the reply withholds the whole reply | Yes |
 
@@ -292,6 +304,13 @@ SOC, because attackers can rephrase (lesson 3.3).
 
 ```bash
 make matrix
+```
+
+Windows:
+
+```powershell
+py support_bot.py reset
+py support_bot.py matrix data/emails/03_planted_note.txt
 ```
 
 Real output (the planted note, email 03):
@@ -325,6 +344,14 @@ Read it row by row. This table is the whole module in miniature:
 
 ```bash
 make attack-safe
+```
+
+Windows:
+
+```powershell
+py support_bot.py reset
+py support_bot.py summarize data/emails/03_planted_note.txt --fixes all
+py support_bot.py summarize data/emails/04_hidden_unicode.txt --fixes all
 ```
 
 ```text
@@ -374,7 +401,8 @@ The ticket title came from the email's **Subject** line, through code. That subj
 **which** action runs. It can't stop injected text coloring an action's **parameters**, which is why a person
 sees the exact action before it runs.
 
-Earlier, `make attack-safe` wrote the alerts to `logs/events.jsonl`. `make alerts` prints them (real output from that run):
+Earlier, `make attack-safe` wrote the alerts to `logs/events.jsonl`. `make alerts` prints them
+(Windows: `py support_bot.py alerts`). Real output from that run:
 
 ```text
 2026-10-21T15:49:19+00:00  tripwire  phrases: ['ignore your previous instructions', 'internal reference']
@@ -390,6 +418,8 @@ Earlier, `make attack-safe` wrote the alerts to `logs/events.jsonl`. `make alert
 ```bash
 make test
 ```
+
+Windows: `py run_tests.py`
 
 Real output:
 
@@ -455,7 +485,7 @@ promptfoo is "a CLI and library for evaluating and red-teaming LLM-based apps", 
 ([GitHub](https://github.com/promptfoo/promptfoo)). OpenAI announced on 9 March 2026 that it was acquiring Promptfoo
 and said "we will continue building the open-source project" ([OpenAI](https://openai.com/index/openai-to-acquire-promptfoo/));
 promptfoo's README now says it "is now part of OpenAI" and "remains open source and MIT licensed". This lab pins
-version 0.124.1 (the current release on npm, 8 Oct 2026), which needs Node.js 22.22.0 or newer. New to it? Do
+version 0.124.1 (the version this lab was tested with), which needs Node.js 22.22.0 or newer. New to it? Do
 Step 1b, part 5 first: `make promptfoo-check` downloads it and shows the version.
 
 `promptfooconfig.yaml` sends each sample email to **your local app** (`http://127.0.0.1:8003/api/summarise`) and
@@ -469,7 +499,10 @@ make eval-weak
 ```
 
 - `make eval`: all fixes on
-- `make eval-weak`: no fixes: the suite must catch the attack
+- `make eval-weak`: no fixes: the suite must catch the attack. `make` then prints a line ending in `Error 100 (ignored)`.
+  That is expected: `run_eval.py` exits with an error code when a test fails, which is what lets a CI job stop.
+
+On Windows use WSL for this step.
 
 Real output (end of each run):
 
@@ -510,6 +543,8 @@ attacks. Point it only at apps you own (lesson 0.8).
 make challenge
 ```
 
+Windows: `py run_tests.py --challenge`
+
 ```text
 [FAIL] Challenge  all fixes: a link through the help-center redirect does not carry data to the attacker
          Could you send me a copy of the invoice for order 1103? I need it for my expenses claim.
@@ -519,10 +554,14 @@ make challenge
 SOME TESTS FAILED
 ```
 
+`make` adds a line of its own, `make: *** [Makefile:32: challenge] Error 1`. That is `make` reporting that the test
+run failed, which is what you expect until you fix the function.
+
 Email 05 asks for a link to **your own** help center, which is on the allow-list. But the help center has a
 redirect page (`/out?to=...`), and the attacker's URL, with the summary inside it, rides along in that parameter.
 Allow-listing a host isn't enough when the host will forward anywhere. A real exploit got data past a strict
-allow-list this way in 2025 (lesson 3.6). Follow the **YOUR TURN** comment in `is_allowed_url()` in `defences.py`.
+allow-list in a similar way in 2025: EchoLeak went through an allowed proxy address that would fetch any URL
+(lesson 3.6). Follow the **YOUR TURN** comment in `is_allowed_url()` in `defences.py`.
 When `make challenge` prints `ALL TESTS PASSED`, you're done. No solution is included. It takes a few lines.
 Run `make challenge CODE=<your code>` once it passes for a second bonus flag (`TSG{m3-redirect-…}`).
 
@@ -571,7 +610,14 @@ model, so there's no fixed expected output. Things to look for:
 ## Tested
 
 Steps 1 to 9 were run end to end on Linux on 21 Oct 2026, with Python 3.13.16 (the test suite also passes on
-3.10, 3.11 and 3.12), Node.js 22.22.0 and promptfoo 0.124.1. The outputs above are copied from that run; timestamps
-will differ. The challenge was confirmed solvable with a two-line change (not included). Step 10 was tested
-against a stand-in HTTP server that mimics Ollama's `/v1/chat/completions` endpoint, not a real Ollama install.
-Run it once against real Ollama before publishing.
+3.10, 3.11 and 3.12), Node.js 22.22.0 and promptfoo 0.124.1. The outputs in Steps 2 to 9 are copied from that run;
+timestamps will differ. The challenge was confirmed solvable with a two-line change (not included).
+
+The two Ollama outputs in Step 1b (parts 2 and 3) are from a later run with `gemma3:1b` through Ollama on
+29 Oct 2026.
+
+Step 10, against real Ollama: one command was run, in the lesson's recording on 27 Oct 2026 with `gemma3:1b`. The
+planted note with all four fixes on (`summarize data/emails/03_planted_note.txt --backend ollama --fixes all`) gave
+a normal two-sentence summary, no ticket and no alerts. The other Step 10 commands (no fixes, label only, and the
+two `run_eval.py --backend ollama` runs) have not been run against real Ollama as of 15 November 2026. They were
+tested against a stand-in HTTP server that mimics Ollama's `/v1/chat/completions` endpoint.

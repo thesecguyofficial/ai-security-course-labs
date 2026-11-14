@@ -34,6 +34,8 @@ Shell variables used throughout (set them again in a new terminal):
 |---|---|---|
 | `AWS_REGION` | the Region | `us-east-1` |
 | `MODEL_DIR` | the model folder on your laptop | `~/models/qwen3-0.6b` |
+| `LICENSE` | the license you read on the model's page in B1 (the British spelling `LICENCE` also works) | `apache-2.0` |
+| `MODEL_SOURCE` | where the model files came from | `huggingface.co/Qwen/Qwen3-0.6B` |
 | `PACKAGE_ARN` | the approved registry version | `arn:aws:sagemaker:us-east-1:111122223333:model-package/tsg-summariser-lab/1` |
 | `APP` | the app Lambda's name | `tsg-m15-lab-AppFunction-AbCdEf123456` |
 
@@ -44,10 +46,10 @@ Shell variables used throughout (set them again in a new terminal):
    If the applied value is 0, request 1 and wait for it before you go on: the endpoint can't start without it.
 3. **Tools.** AWS CLI v2, Python 3.11+, and the Hugging Face command line for the download
    (`pip install -U huggingface_hub`, which installs the `hf` command). About 2 GB free disk.
-4. **Terminal in `labs/m15`:**
+4. **Terminal in `labs/m15`** (the folder the README put you in; from the repository's top folder, run
+   `cd labs/m15` first):
 
    ```bash
-   cd labs/m15
    export AWS_REGION=us-east-1
    aws sts get-caller-identity --query Account --output text
    ```
@@ -56,10 +58,9 @@ Shell variables used throughout (set them again in a new terminal):
 
 5. **Cost.** Look up the GPU price before you start: on the
    [SageMaker AI pricing page](https://aws.amazon.com/sagemaker/ai/pricing/), On-Demand, Real-Time Inference,
-   US East (N. Virginia), find **ml.g5.xlarge** and write the hourly price down (a third-party price tracker showed
-   about $1.41 an hour on 24 Oct 2026; AWS's page is the one that counts). For scale, AWS's own examples on that
-   page price an ml.c5.xlarge (a CPU instance) at $0.204 an hour for inference and an ml.g4dn.xlarge (a GPU) at $0.7364
-   an hour for a notebook.
+   US East (N. Virginia), find **ml.g5.xlarge** and write the hourly price down (AWS's page is the one that counts).
+   For scale, AWS's own examples on that page price an ml.c5.xlarge (a CPU instance) at $0.204 an hour for inference
+   and an ml.g4dn.xlarge (a GPU) at $0.7364 an hour for a notebook.
 
    | Item | Price (read 24 Oct 2026) | For a 2-hour run |
    |---|---|---|
@@ -194,11 +195,13 @@ needs the internet, which is what network isolation requires.
 1. Fill in the request bodies with your outputs, the license you read and the hashes from B2:
 
    ```bash
-   export LICENCE=<what you read in B1, e.g. apache-2.0>  MODEL_SOURCE=huggingface.co/Qwen/Qwen3-0.6B
+   export LICENSE=<what you read in B1, e.g. apache-2.0>  MODEL_SOURCE=huggingface.co/Qwen/Qwen3-0.6B
    python3 cloud/render.py
    ```
 
-   - `python3 cloud/render.py`: writes cloud/out/*.json; read create-model-package.json
+   - `python3 cloud/render.py`: writes cloud/out/*.json; read create-model-package.json. Without `LICENSE` (or
+     `MODEL_DIR`) it prints "skipped create-model-package.json" and does not write that file, so a version can't be
+     registered with no license recorded
 
 2. Register the version:
 
@@ -224,6 +227,9 @@ needs the internet, which is what network isolation requires.
    aws sagemaker describe-model-package --model-package-name "$PACKAGE_ARN" \
      --query '[ModelApprovalStatus,CustomerMetadataProperties.licence]'
    ```
+
+   The metadata key is spelled `licence` in the request body (`cloud/requests/create-model-package.json`), so the
+   query uses that spelling.
 
    In your sandbox you are registrant and approver at once. In a team, that is the self-approval the offline lab's
    A4 shows: give `UpdateModelPackage` to an approver role only.

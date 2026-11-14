@@ -2,8 +2,8 @@
 
 Companion to lessons **26.0 to 26.5** of *AI Security Engineer* (The Sec Guy). About 45 minutes, **$0**, all on your
 laptop: **Python 3.11+** and one pinned package (PyYAML) in this folder's own `.venv`. No GPU, no Docker, no model
-download, no network: nothing here starts a container or talks to anything except its own practice server on
-`127.0.0.1`.
+download, and no network after setup (setup installs PyYAML once): nothing here starts a container or talks to
+anything except its own practice server on `127.0.0.1`.
 
 This lab is **defensive**. You get two versions of the same inference stack (an Ollama server, a vLLM server, Triton,
 a Ray head, a gateway, a GPU node group on EKS and a model folder): a **first draft** that "works on the GPU box",
@@ -60,9 +60,8 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 ## Needs
 
 - Python **3.11 or newer**: `python3 --version`.
-- Mac or Linux for the `make` shortcuts. Windows: create the venv with `py -m venv .venv`, install with
-  `.venv\Scripts\python -m pip install -r requirements.txt`, then run the `python` command shown under each step with
-  `.venv\Scripts\python`.
+- Mac or Linux for the `make` shortcuts. Windows: each step shows a `.venv\Scripts\python ...` command to run in
+  place of `make`. They are the same Python the `make` targets run; we ran them on Linux, not on a Windows machine.
 
 ## Step 1 · Set up
 
@@ -93,13 +92,22 @@ Successfully installed PyYAML-6.0.3
 PyYAML 6.0.3 OK
 ```
 
+Windows (in the `ai-security-course-labs` folder):
+
+```bat
+cd labs\m26
+py -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+.venv\Scripts\python -c "import yaml; print('PyYAML', yaml.__version__, 'OK')"
+```
+
 ## Step 1b · Look at each piece (explore.py)
 
 Before you scan anything, look at each idea of model serving on its own. `explore.py` is read-only: it reads the lab's
 files, and `server` starts the lab's own practice server on `127.0.0.1` for a few seconds. It starts no container,
 loads no model, imports none of the model code and writes no file. Run it with the lab's own Python
-(Windows: `.venv\Scripts\python explore.py ...`). The output below is real, from recording run
-[41091437525](https://github.com/thesecguyofficial/ai-security-course-labs/actions/runs/41091437525).
+(Windows: `.venv\Scripts\python explore.py ...`). The output below is real, checked again on 15 November 2026
+(Linux, Python 3.13).
 
 **1. A model server is a web server.** Two real HTTP requests to the practice server (it has no model: the answers
 are canned):
@@ -261,6 +269,8 @@ lesson that explains it, what's wrong; then the file and the exact setting):
 .venv/bin/python scan.py stacks/first-draft | head -n 5
 ```
 
+Windows has no `head`: run `.venv\Scripts\python scan.py stacks/first-draft` and read the first five lines.
+
 ```output
 Scan of stacks/first-draft  (files read: compose, k8s, cluster, gateway, nodes, models; nothing run)
   CRIT  AUTH-01   26.0  the gateway accepts requests without a key
@@ -275,7 +285,7 @@ Scan of stacks/first-draft  (files read: compose, k8s, cluster, gateway, nodes, 
 make scan
 ```
 
-Same as `.venv/bin/python scan.py stacks/first-draft`.
+Same as `.venv/bin/python scan.py stacks/first-draft` (Windows: `.venv\Scripts\python scan.py stacks/first-draft`).
 
 The first lines and the last line of the real output (33 findings in between, worst first):
 
@@ -306,7 +316,9 @@ Read every finding against its lesson. Some to look at closely:
 - There is **no Ray finding** yet, although the Ray head is wide open. That's challenge 1.
 
 `--json` gives the same findings as JSON. The exit code is 1 when anything is critical or high, so the scanner can
-gate a pipeline.
+gate a pipeline. That is why `make scan` ends with a line like `make: [Makefile:18: scan] Error 1 (ignored)`: the
+scanner found critical and high findings and said so with its exit code. The lab did not break. `make cache` in
+Step 4 ends the same way, for the same reason.
 
 ## Step 3 · Probe the practice server (26.0, 26.1)
 
@@ -314,7 +326,8 @@ gate a pipeline.
 make probe
 ```
 
-Same as `python3 probe.py first-draft`, then `python3 probe.py key-only`.
+Same as `.venv/bin/python probe.py first-draft`, then `.venv/bin/python probe.py key-only` (Windows:
+`.venv\Scripts\python probe.py first-draft`, then `.venv\Scripts\python probe.py key-only`).
 
 ```output
 Probe of the practice server, profile first-draft (127.0.0.1 only)
@@ -360,7 +373,7 @@ do nothing (`/api/pull` downloads nothing): they only return the status codes a 
 make cache
 ```
 
-Same as `python3 cachetest.py first-draft`.
+Same as `.venv/bin/python cachetest.py first-draft` (Windows: `.venv\Scripts\python cachetest.py first-draft`).
 
 ```output
 Prefix-cache isolation test, stack first-draft
@@ -379,6 +392,14 @@ describes its own prefix cache. This is an isolation test, not an attack: it cou
 
 ```bash
 make hardened
+```
+
+Windows, one line at a time:
+
+```bat
+.venv\Scripts\python scan.py stacks/hardened
+.venv\Scripts\python probe.py hardened
+.venv\Scripts\python cachetest.py hardened
 ```
 
 ```output
@@ -421,7 +442,7 @@ cache: isolation didn't cost the performance you bought the cache for.
 make hunt
 ```
 
-Same as `python3 hunt.py`.
+Same as `.venv/bin/python hunt.py` (Windows: `.venv\Scripts\python hunt.py`).
 
 ```output
 Hunt over 22 gateway log lines (gateway-log.jsonl)
@@ -447,7 +468,7 @@ Q3  management calls not from the deployment pipeline:
 make test
 ```
 
-Same as `.venv/bin/python run_tests.py`.
+Same as `.venv/bin/python run_tests.py` (Windows: `.venv\Scripts\python run_tests.py`).
 
 ```output
 [PASS] 01 scan: the first draft trips every lesson's rules (exposure, auth, code, versions, cache, nodes, models)
@@ -462,7 +483,7 @@ ALL TESTS PASSED (19 run)
 make challenge
 ```
 
-Same as `.venv/bin/python run_tests.py --challenge`.
+Same as `.venv/bin/python run_tests.py --challenge` (Windows: `.venv\Scripts\python run_tests.py --challenge`).
 
 ```output
 [FAIL] C1 (26.1) scan: RAY-01 flags the first draft's Ray head and stays quiet on the hardened one
@@ -477,7 +498,8 @@ Same as `.venv/bin/python run_tests.py --challenge`.
 1. **26.1, `check_ray()` in `scan.py`.** Ray's Jobs API runs code by design (CVE-2023-48022, disputed, no fix will
    come), so a version check can never clear it. Flag every Ray head that is reachable without token auth, and leave
    the hardened one alone.
-2. **26.2, `salt_for()` in `gateway.py`.** Run `python3 cachetest.py hardened --challenge` first: `globex` sends
+2. **26.2, `salt_for()` in `gateway.py`.** Run `.venv/bin/python cachetest.py hardened --challenge` first (Windows:
+   `.venv\Scripts\python cachetest.py hardened --challenge`): `globex` sends
    `"cache_salt": "acme-shared"` and lands in `acme`'s cache group. Keep the feature (a tenant's own apps may share a
    group) but make sure no client can pick a salt that collides with another tenant's.
 3. **26.0 and 26.1, `find_management_calls()` in `hunt.py`.** Every call to a management path from anywhere except the
@@ -485,9 +507,11 @@ Same as `.venv/bin/python run_tests.py --challenge`.
 
 Done = `make challenge` passes 22 of 22 and `make test` still passes 19 of 19.
 
-**Spot it in CI:** run `python3 scan.py <your stack>` and `python3 cachetest.py <your stack>` in the pipeline of the
-repo that holds your inference config. A critical or high finding, or a single cross-tenant cache hit, fails the
-build.
+**Spot it in CI:** build these two checks for your own stack, with the lab's scripts as the pattern. `scan.py` reads
+this lab's file layout and `cachetest.py` runs the lab's toy cache, so neither can test a real deployment as it is.
+You need a config scan that exits with an error on a critical or high finding, and a test that sends tenant A's
+opening as tenant B against your real gateway and fails on any cached tokens. In this lab both scripts already exit
+with 1 in those cases.
 
 ## Optional: the real thing on EKS
 

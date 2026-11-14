@@ -1,5 +1,5 @@
 {
-  "_comment": "Fake documents (lab only). 'source' is where the import job reads them from; 'team' is the metadata tag today's port filters on; 'readers' is the ACL the hardened Agent Search data store carries (acl_info.readers[].principals[]). The inbox file carries a labelled lab placeholder, not a working payload.",
+  "_comment": "Fake documents (lab only). 'source' is where the import job reads them from; 'team' is the metadata tag today's port filters on; 'readers' is the ACL the hardened Agent Search data store carries (acl_info.readers[].principals[]). The inbox file carries a labeled lab placeholder, not a working payload.",
   "documents": [
     {"id": "kb-vpn", "title": "VPN setup", "source": "gs://example-kb-curated/vpn-setup.md", "team": "all",
      "readers": [{"group_id": "helpdesk-staff@example.com"}],

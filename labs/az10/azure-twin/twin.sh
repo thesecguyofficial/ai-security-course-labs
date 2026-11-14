@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # AZ10 Azure twin (OPTIONAL). Needs the Azure CLI (az), Bicep (az bicep install) and YOUR OWN subscription.
-# Usage:  ./twin.sh up | key-test | policy-test | lock | wait-401 | activity | down
+# Usage:  ./twin.sh up | key-test | policy-test | lock | wait-401 (same as wait-refused) | activity | down
 # Expected cost: $0 (no model calls, no hourly resources). Read README Step 8 before running.
 set -euo pipefail
 : "${AZ10_NAME:?set AZ10_NAME, e.g. export AZ10_NAME=az10-twin-ab1234 (globally unique)}"
@@ -24,7 +24,7 @@ case "${1:-}" in
       --params @approved-models.params.json -o none
     az policy assignment create --name az10-audit-key-access --scope "$SCOPE" --policy "$NOKEYS_DEF" \
       --params '{"effect":{"value":"Audit"}}' -o none
-    echo "Up. Wait at least 15 minutes before policy-test (new policy assignments are not instant)."
+    echo "Up. Wait before policy-test: Microsoft says at least 15 minutes for a new policy assignment; ours took hours."
     ;;
   key-test)   # a free data-plane call (lists models, no tokens) with the resource KEY; keeps the key like a thief would
     az cognitiveservices account keys list -n "$AZ10_NAME" -g "$RG" --query key1 -o tsv > .twin-key
@@ -49,7 +49,7 @@ case "${1:-}" in
     az deployment group create -g "$RG" -f main.bicep -p name="$AZ10_NAME" disableLocalAuth=true -o none
     az resource show --ids "$SCOPE/providers/Microsoft.CognitiveServices/accounts/$AZ10_NAME" --query properties.disableLocalAuth
     ;;
-  wait-401)   # the OLD key keeps working until the gateway cache refreshes: minutes, up to several hours
+  wait-401|wait-refused)   # the OLD key keeps working until the gateway cache refreshes: minutes, up to several hours
     KEY="$(cat .twin-key)"
     for i in $(seq 1 30); do
       code=$(curl -s -o /dev/null -w "%{http_code}" "$ENDPOINT/openai/models?api-version=2024-10-21" -H "api-key: $KEY")

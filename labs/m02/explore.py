@@ -63,7 +63,7 @@ def boxes(cells):
 
 
 def inside(node, box):
-    """True if the centre of an element lies inside a trust boundary box."""
+    """True if the center of an element lies inside a trust boundary box."""
     x = node["position"]["x"] + node["size"]["width"] / 2
     y = node["position"]["y"] + node["size"]["height"] / 2
     bx, by = box["position"]["x"], box["position"]["y"]
@@ -134,7 +134,7 @@ def cmd_model(model, cells, by_id):
         a, b = ends(f, by_id)
         if b is target:
             n = name(f)
-            label = "UNTRUSTED" if "UNTRUSTED" in n.upper() else "TRUSTED" if "TRUSTED" in n.upper() else "not labelled yet"
+            label = "UNTRUSTED" if "UNTRUSTED" in n.upper() else "TRUSTED" if "TRUSTED" in n.upper() else "not labeled yet"
             print(f"   {label:<17} {n}  (from {name(a)})")
 
 

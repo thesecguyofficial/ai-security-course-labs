@@ -169,7 +169,7 @@ def d03_defence_tamper(t: Telemetry) -> list[dict]:
     for ev in t.cloudtrail:
         p = principal_arn(ev)
         if ev["eventName"] in TAMPER and p not in COMPANY["logging_admins"]:
-            out.append(alert("D03", f"Defence change: {ev['eventName']}", "HIGH", ev["eventTime"], short(p),
+            out.append(alert("D03", f"Defense change: {ev['eventName']}", "HIGH", ev["eventTime"], short(p),
                              "principal", [ev["eventID"]], f"errorCode={ev.get('errorCode')}"))
         if ev["eventName"] == "UpdateGateway":
             pec = (ev.get("requestParameters") or {}).get("policyEngineConfiguration")

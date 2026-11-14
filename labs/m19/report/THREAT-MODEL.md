@@ -2,6 +2,8 @@
 
 > Fill in every `<...>` and delete every TODO line. The self-check (R1) fails while any are left.
 > Start from your Module 2 threat model; this system adds an MCP server and a web page. Lessons 2.1 to 2.5.
+> R1 also wants at least 10 threat rows (T01, T02, ...), an OWASP ID with the year on each, and a MITRE ATLAS
+> technique ID on at least 5 of them.
 
 - **Author:** <your name or handle>
 - **Date:** <YYYY-MM-DD>
@@ -49,7 +51,7 @@
 ## 2. What can go wrong?
 
 At least 10 threats. Threat = actor + path + outcome. Write OWASP IDs with the year (`LLM01:2026`, `ASI02:2026`)
-and add the MITRE ATLAS technique where one fits (`AML.T0051.001`). L and I: 1 low, 2 medium, 3 high.
+and add the MITRE ATLAS technique where one fits (`AML.T0051.001`; at least five rows need one). L and I: 1 low, 2 medium, 3 high.
 
 | ID | Component | Boundary | Threat (actor, path, outcome) | STRIDE | OWASP (with year) | ATLAS | L | I | Risk |
 |---|---|---|---|---|---|---|---|---|---|

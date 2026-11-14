@@ -74,7 +74,7 @@ def cmd_source(a) -> None:
     for d in docs:
         print(f"  {d['id']:9} {d['label']:20} {names(d['acl']):24} {clip(d['title'], 58)}")
         if any(twin.MARKER.search(c) for c in d["chunks"]):
-            print(f"  {'':9} + one line is a labelled lab placeholder: an instruction hidden in a document")
+            print(f"  {'':9} + one line is a labeled lab placeholder: an instruction hidden in a document")
         for ch in d.get("acl_history", []):
             print(f"  {'':9}   ACL changed {ch['at']}: {names(ch['acl'])} ({ch['note']})")
     print("\n\"all\" = everyone. Groups and people are Microsoft Entra object IDs; names are shown here.")

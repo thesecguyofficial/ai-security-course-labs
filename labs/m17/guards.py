@@ -6,13 +6,13 @@ real pull request might (a new feature, a "harmless" clean-up) so you can watch 
 in CI, or miss it.
 
 Every control here is ordinary code that runs OUTSIDE the model, so it holds even when the model is fully fooled.
-The one exception is G2, a pattern filter: it only knows the patterns it was given (lesson 17.1: a filter is one
-layer, never the wall).
+The one exception is G2, a pattern filter: it only knows the patterns it was given, so it is one layer and never
+the whole defense.
 
     G1  clean_text / clean_tool_result   strip invisible characters (Unicode tags, zero-width) from what the model reads
     G2  quarantine                       drop lines that match known injection patterns from tool results
     G3  authorize_tool                   reset_mfa only for the signed-in user; email only to the internal domain
-    G4  filter_output                    no images, links only to our help centre, withhold any reply with the canary
+    G4  filter_output                    no images, links only to our help center, withhold any reply with the canary
 """
 
 from __future__ import annotations

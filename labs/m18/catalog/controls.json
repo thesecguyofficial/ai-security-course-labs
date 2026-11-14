@@ -1,7 +1,7 @@
 {
   "_about": "The controls this course teaches (Modules 2 to 18), each mapped to the frameworks in frameworks.json. 'evidence' says what proves the control works; a promise in a document is not evidence. EU AI Act articles 9 to 15, 25, 26, 72 and 73 are legal duties only for high-risk systems; for everything else they are a good-practice reference.",
   "controls": {
-    "C01": {"name": "Authorise every tool call in code (this user, this record, right now)", "taught_in": "2.1, 5.4, 7.3",
+    "C01": {"name": "Authorize every tool call in code (this user, this record, right now)", "taught_in": "2.1, 5.4, 7.3",
             "evidence": "a test that a hijacked tool call is refused", "owasp": ["LLM03:2026", "ASI01", "ASI02"],
             "nist": ["MEASURE 2.7"], "eu": ["Art. 15"], "iso": ["Clause 8"]},
     "C02": {"name": "Narrow tools and a tool allow-list per task", "taught_in": "7.2, 7.9",
@@ -16,7 +16,7 @@
     "C05": {"name": "Recipient and link allow-lists (egress control)", "taught_in": "3.6, 3.8, 7.9",
             "evidence": "a test that an outside address or link is refused", "owasp": ["LLM02:2026", "LLM01:2026"],
             "nist": ["MEASURE 2.7"], "eu": ["Art. 15"], "iso": ["Clause 8"]},
-    "C06": {"name": "Spotlighting: untrusted content is labelled before the model reads it", "taught_in": "3.8",
+    "C06": {"name": "Spotlighting: untrusted content is labeled before the model reads it", "taught_in": "3.8",
             "evidence": "a test that untrusted text is wrapped and cannot fake the closing marker", "owasp": ["LLM01:2026", "ASI01"],
             "nist": ["MEASURE 2.7"], "eu": ["Art. 15"], "iso": ["Clause 8"]},
     "C07": {"name": "A guardrail filter as one layer (managed or self-hosted)", "taught_in": "9.5, 12.1 to 12.5",

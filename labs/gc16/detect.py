@@ -187,7 +187,7 @@ def d03_defence_tamper(t: Telemetry) -> list[dict]:
         p, m = principal(e), method(e)
         req = e["protoPayload"].get("request") or {}
         if m in TAMPER and p not in admins:
-            out.append(alert("D03", f"Defence change: {m.rsplit('.', 1)[-1]}", "HIGH", e["timestamp"], short(p),
+            out.append(alert("D03", f"Defense change: {m.rsplit('.', 1)[-1]}", "HIGH", e["timestamp"], short(p),
                              "principal", [e["insertId"]],
                              f"status code {(e['protoPayload'].get('status') or {}).get('code', 0)}"))
         if m == AUTHZ_UPDATE:

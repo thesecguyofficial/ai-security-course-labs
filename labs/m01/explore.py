@@ -32,8 +32,9 @@ def call(path, payload=None):
         with urllib.request.urlopen(req, timeout=300) as resp:
             return json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
+        # Name the model that was asked for (with --model that is not always the default one).
         sys.exit(f"Ollama answered with an error {e.code}: {e.read().decode('utf-8', 'replace')}\n"
-                 f"Tip: did you pull the model? Try: ollama pull {DEFAULT_MODEL}")
+                 f"Tip: did you pull the model? Try: ollama pull {(payload or {}).get('model', DEFAULT_MODEL)}")
     except urllib.error.URLError:
         sys.exit("Could not reach Ollama at http://localhost:11434.\n"
                  "Tip: start the Ollama app (Mac/Windows) or run `ollama serve` (Linux), then try again.")
@@ -101,6 +102,8 @@ def show_request(model, title, messages):
 
 
 def cmd_history(a):
+    # Keep this sentence exactly as it is, spelling included: it is sent to the model, and the token counts in
+    # the lesson and the README (39 and 70) were recorded with these words.
     first = {"role": "user", "content": "Hi! My name is Asha and my favourite colour is green."}
     reply = show_request(a.model, "Request 1", [SYSTEM, first])
     question = {"role": "user", "content": "What is my name?"}

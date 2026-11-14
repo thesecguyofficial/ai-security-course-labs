@@ -6,12 +6,12 @@ make_models.py: build the three model files this lab uses, into ./models/.
   model.safetensors   the same weights in the safetensors format, whose loading cannot run code.
 
 SAFETY. The "evil" model is a lab placeholder, not malware. When loaded, its only effect is to write
-one clearly-labelled marker file, models/../state/PWNED_BY_LAB_MODEL.txt, inside this lab folder. It
+one clearly labeled marker file, models/../state/PWNED_BY_LAB_MODEL.txt, inside this lab folder. It
 makes no network connection and touches nothing outside this folder. The path is an ABSOLUTE path,
 baked in at build time, so the file is tied to this machine and this directory and is not portable
 "malware" you could carry elsewhere. Rebuild it any time with `make models`.
 
-Only run this in the lab. Only ever load a pickle you built or fully trust (lesson 0.8).
+Only run this in the lab. Only ever load a pickle you built or fully trust (lesson 9.2).
 """
 
 import builtins

@@ -7,7 +7,7 @@ OUT := cloud/out
 AWS := aws --region $(REGION)
 
 .PHONY: check check-hardened attack hardened files scan hunt test challenge clean setup \
-        cloud-base cloud-render cloud-upload cloud-register cloud-deploy cloud-ask cloud-down
+        cloud-base cloud-render cloud-down cloud-check
 
 check:          ## review the FIRST DRAFT deployment: 35 findings (19 HIGH)
 	$(PY) checker.py first-draft || true
@@ -45,12 +45,12 @@ setup:          ## nothing to install: checks your Python is 3.11 or newer
 	$(PY) ../../tools/check_python.py 3.11
 
 # ---- OPTIONAL: YOUR sandbox account, us-east-1, AWS CLI v2. Read GUIDED-BUILD.md first: a GPU endpoint costs money
-# ---- every hour it exists. cloud-deploy creates the auto-teardown schedule BEFORE it creates the endpoint.
+# ---- every hour it exists. GUIDED-BUILD.md Part D creates the auto-teardown schedule BEFORE it creates the endpoint.
 cloud-base:     ## VPC (no internet), S3 + runtime VPC endpoints with policies, KMS key, buckets, roles, app Lambda, trail
 	$(AWS) cloudformation deploy --stack-name $(STACK) --template-file cloud/base.yaml --capabilities CAPABILITY_IAM
 	mkdir -p $(OUT) && $(AWS) cloudformation describe-stacks --stack-name $(STACK) --output json > $(OUT)/stack.json
 
-cloud-render:   ## fill cloud/requests/*.json with your stack outputs (needs MODEL_DIR, LICENCE, MODEL_SOURCE; see render.py)
+cloud-render:   ## fill cloud/requests/*.json with your stack outputs (needs MODEL_DIR, LICENSE, MODEL_SOURCE; see render.py)
 	$(PY) cloud/render.py
 
 cloud-down:     ## DELETE everything: endpoint, config, model, registry, schedule, bucket contents, the stack. Run it today.
