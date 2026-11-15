@@ -213,13 +213,13 @@ gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID
 - `gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID`: KEY_ID: last part of "name". Run it once
   for each key. Below, `KEY_ID` is `gc10-build`'s ID and `BOUND_KEY_ID` is `gc10-bound`'s
 
-Console (Google's API keys page): **Credentials** > **Create credentials** > **API key**. Click the key's name; under
-**API restrictions** choose **Restrict key** and select the Agent Platform API; under **Application restrictions**
-choose **IP addresses**, **Add** `192.0.2.10`, **Done**, then **Save**.
+Console (Google's API keys page): by clicks you can only make the bound key. In our run (12 November 2026) the
+console refused to make an Agent Platform key without a service account ("Service account required"). So:
+**Credentials** > **Create credentials** > **API key**, and pick `gc10-caller` as the key's service account when the
+console asks. Click the key's name; under **API restrictions** choose **Restrict key** and select the Agent Platform
+API; under **Application restrictions** choose **IP addresses**, **Add** `192.0.2.10`, **Done**, then **Save**.
 
-Our run (12 November 2026): the console refused to make an Agent Platform key without a service account ("Service
-account required"), so by clicks you can only make the bound one: pick `gc10-caller` as the key's service account
-when the console asks. The plain key `gc10-build` only exists because gcloud allows it. Make it with the command
+The plain key `gc10-build` only exists because gcloud allows it. Make it with the command
 above if you want to see R3's first result. Our project has no organization, so no organization policy applies to
 it. That is the likely reason nothing blocked the bound key there, although lesson 10.4 says a default organization
 policy prevents bound keys. In a work organization expect that policy to refuse this command.

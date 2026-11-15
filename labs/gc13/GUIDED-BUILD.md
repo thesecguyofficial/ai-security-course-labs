@@ -60,12 +60,14 @@ their imports are all clicks. Each step below gives the console path first, then
 
 RAG Engine runs in **Spanner mode** by default ("Spanner mode is assigned as the default if a mode choice isn't
 explicitly selected", [deployment modes](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/rag-engine/deployment-modes)).
-Its tier is a project-level setting; **Basic** is the default and the cheapest ("100 processing units with backup",
+Its tier is a project-level setting. Google's deployment modes page labels **Basic** "(default)", and it is the
+cheapest ("100 processing units with backup",
 [billing](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/rag-engine/rag-engine-billing)). Set it
 explicitly so you know what you're paying for:
 
 Console: **Agent Platform** > **RAG Engine**, set **Region** to `europe-west4` (it opens on `us-central1`), click
-**Configure Spanner**, choose **Basic tier**, **Save**. (Nothing selected means Unprovisioned.) Or:
+**Configure Spanner**, choose **Basic tier**, **Save**. (In our run the panel opened with no tier selected: a project that
+has not used RAG Engine is Unprovisioned until you pick one.) Or:
 
 ```bash
 terraform/scripts/rag_tier.sh PROJECT_ID europe-west4 basic

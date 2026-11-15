@@ -218,7 +218,19 @@ needs the internet, which is what network isolation requires.
    ```
 
 3. **Approve it, the way a gate would.** Before you approve, re-run the scan, and compare the recorded hashes with what
-   is in S3 now (the guide's version of challenge 2). Then:
+   is in S3 now (the guide's version of challenge 2). Download the S3 copy to a new folder and compare the two
+   hash lists (`$MODELS` is the bucket name from B3):
+
+   ```bash
+   aws s3 cp "s3://$MODELS/tsg-summariser/v1/" ~/models/m15-s3-copy --recursive
+   python3 model_files.py scan ~/models/m15-s3-copy
+   python3 model_files.py manifest "$MODEL_DIR" > cloud/out/hashes-recorded.json
+   python3 model_files.py manifest ~/models/m15-s3-copy > cloud/out/hashes-s3.json
+   diff cloud/out/hashes-recorded.json cloud/out/hashes-s3.json && echo "hashes match"
+   ```
+
+   `diff` prints nothing when the two lists are the same, so the only line you want is `hashes match`. Any other
+   line names a file that changed after you scanned it: stop and find out why. Then approve:
 
    ```bash
    export PACKAGE_ARN=<the ModelPackageArn above>
@@ -401,7 +413,7 @@ BASE64
 ]
 ```
 
-Data capture keeps the whole prompt. Base64 is an encoding, not protection: the KMS key and the bucket policy are. The
+Data capture keeps the whole prompt, and anyone can decode Base64. The KMS key and the bucket policy protect it. The
 path follows AWS's layout, `{endpoint-name}/{variant-name}/yyyy/mm/dd/hh/filename.jsonl`
 ([AWS](https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-data-capture-endpoint.html)), and the bucket
 expires captured files after 30 days. (AWS's data capture pages carry the note that Model Monitor is no longer open to

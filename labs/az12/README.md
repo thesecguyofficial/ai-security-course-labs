@@ -543,7 +543,7 @@ What changed, layer by layer (`fixes/`):
 | Recipient allow-list for `send_email` | `app.json` `recipient_allowlist` | A15 (an MCP tool: no guardrail control runs on it) |
 
 Two attacks still work (your challenge) and one legitimate request is still blocked: **B08** quotes "ignore all
-previous instructions" in a security-training question. That's a decision, not a bug: lesson 12.4 explains why you'd
+previous instructions" in a security-training question. The lab keeps that block on purpose: lesson 12.4 explains why you'd
 give the security team their own deployment instead of weakening everyone's. Spotlighting's cost is printed on the last
 line: base-64 makes document text about a third longer, and the stand-in model, like the real side effect Microsoft
 documents, mentions the encoding in its answers.

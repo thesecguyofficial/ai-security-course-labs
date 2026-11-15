@@ -64,7 +64,7 @@ Users (all fake, every domain ends in `.example`): `alice@acme.example` and `car
 every laptop and in CI. It is deliberately worse than a real model: every agent obeys every
 `LAB-INJECTED-DIRECTIVE` placeholder it reads, in a message, a ticket, a tool description or a tool result, and
 when a directive names a tool it does not hold, it **hands off** to the agent that does. A control that asks a
-model to behave does nothing here. A control in code that checks the action does. That is the lesson of Part 5.
+model to behave does nothing here. A control in code that checks the action does, as Part 5 taught.
 
 ## Ground rules
 
@@ -206,7 +206,7 @@ miss the next day. The grader also runs your rules on three days you have never 
 and write `report/INCIDENT-REPORT.md` (timeline, scope, root cause, containment, evidence with request IDs).
 Lessons 23.2, 23.3 and 24.4.
 
-## Part 6 · Cloud: your stream (1 hour)
+## Part 6 · Cloud: the AWS review (1 hour)
 
 For now this part is the AWS file for every student, whichever cloud stream you took: the Azure and Google Cloud
 versions are not available yet.
@@ -303,7 +303,7 @@ Ran 11 tests in 1.0s
 FAILED (failures=11)
 ```
 
-All eleven fail today. That is the point: your fixes in `crew/guards.py` turn them green one finding at a time.
+All eleven fail today. Your fixes in `crew/guards.py` turn them green one finding at a time.
 
 `make test` on the shipped repo (normal use and the lab's own test pass):
 

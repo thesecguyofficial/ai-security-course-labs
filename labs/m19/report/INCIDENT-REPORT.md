@@ -1,7 +1,7 @@
 # Incident report: <short name>
 
 > Pick ONE incident from detections/logs/attack-day.jsonl (seed 1) and write it up. Replace every `<...>` and TODO.
-> The self-check (R3) wants at least five timeline lines and at least three request IDs that exist in that log,
+> The self-check (R3) wants at least five timeline lines and at least three request IDs that exist in that log.
 > R3 also looks for eight headings (Summary, Timeline, Scope, Root cause, Containment, Evidence, Detection gaps,
 > Lessons learned): keep every heading below, even if a section is short.
 > Write for two readers: the engineer who fixes it tomorrow and the manager who signs off. UTC times.

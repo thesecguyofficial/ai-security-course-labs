@@ -1,9 +1,9 @@
 """
 suite.py: 7 supply-chain attacks and 3 normal releases against one setup's CI + deploy gate (lessons 25.2 to 25.6).
 
-    python3 suite.py first-draft      # make attack
-    python3 suite.py hardened         # make hardened
-    python3 suite.py hardened --challenge     # also the two challenge cases (C1, C2)
+    .venv/bin/python suite.py first-draft      # make attack
+    .venv/bin/python suite.py hardened         # make hardened
+    .venv/bin/python suite.py hardened --challenge     # also the two challenge cases (C1, C2)
 
 Every case runs in its own fresh state and release folder, with the same pinned clock. An attack "worked" if a
 tampered, unsigned, wrongly signed, revoked or misbehaving model ended up registered as Approved.

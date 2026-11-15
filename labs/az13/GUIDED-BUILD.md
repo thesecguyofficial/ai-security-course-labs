@@ -408,8 +408,8 @@ Write down what really happened:
 **G6a: remove the token header (`make ask-nohdr`).** Creates `helpdesk-agent-nohdr`: same instructions and tools, but
 the knowledge base tool has **no** `headers` and no structured input. Then request 2 again. Given Microsoft's two
 sentences in G3, you may now get `CANARY-AZ13-PAY-7731`. As documented, that one missing line is the difference
-between "permission-aware" and "everyone sees HR". Ours still answered "I don't know", with no canary. Note: the agent itself didn't change, nor did the index. Only who the
-knowledge base thinks is asking.
+between "permission-aware" and "everyone sees HR". Ours still answered "I don't know", with no canary.
+Note: the agent itself didn't change, nor did the index. Only who the knowledge base thinks is asking.
 
 **G6b: require approval on the knowledge base tool (`make ask-approval`).** Creates `helpdesk-agent-approve` with
 `require_approval="always"` and runs request 1.

@@ -74,7 +74,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 - Python **3.11 or newer** (`python3 --version`). No installs, no virtual environment, no API key.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step
   (use `py` instead of `python3` if that's how Python is installed).
-- Optional, for Step 8 only: Ollama (tested with 0.40.12) and about 2 GB of free disk for the model.
+- Optional, for Step 8 only: Ollama (tested with 0.40.12 and 0.40.13) and about 2 GB of free disk for the model.
 
 ## Step 1b · Before you attack: look at how the agent works (about 10 minutes)
 
@@ -521,7 +521,7 @@ on your own computer and answers on `127.0.0.1:11434`. If you set it up in lesso
    curl -fsSL https://ollama.com/install.sh | sh
    ```
 
-2. **Check it works** (tested with 0.40.12; a newer version is fine):
+2. **Check it works** (tested with 0.40.12 and 0.40.13; a newer version is fine):
 
    ```bash
    ollama --version
@@ -568,6 +568,9 @@ on your own computer and answers on `127.0.0.1:11434`. If you set it up in lesso
    STEP 1  read_file(path='tickets/T-1042.md')  -> ALLOW  <- untrusted content now in context (spotlighted)
    emails sent this run: 0
    ```
+
+That output is from before the lab printed its `note:` line about `data_scope`. Your safe run now shows that
+note under the controls line.
 
 In that run the model never opened the attachment, so it never saw the placeholder, and it told Sam the
 amount due is $100. The attachment says 1,250.00: the model made the number up. With every control on it

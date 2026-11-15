@@ -4,6 +4,7 @@ test_lab.py: the proof. The attack works on the unsafe path; every control holds
 Run with `make test` (or `python run_tests.py`). Each test's one-line description is what prints.
 """
 
+import json
 import os
 import pickle
 import shutil
@@ -91,6 +92,11 @@ class TestPinning(unittest.TestCase):
         shutil.copy(os.path.join(MODELS, "evil_model.pkl"), target)
         self.assertFalse(pin.verify_pin(target))
         os.remove(target)
+        # Tidy up: drop this test's pin, so pins.json only lists files that exist.
+        pins = pin.load_pins()
+        pins.pop(os.path.basename(target), None)
+        with open(pin.PINS, "w", encoding="utf-8") as f:
+            json.dump(pins, f, indent=2, sort_keys=True)
 
     def test_7_pin_refuses_unpinned(self):
         "pinning: an artifact with no pin is refused (fail closed)"

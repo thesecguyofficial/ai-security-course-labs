@@ -119,8 +119,8 @@ case "${1:-}" in
 
     say "Result: $PASS of 5 passed"
     printf '  %s\n' "${RES[@]}"
-    echo "WAIT means Azure has not caught up yet (roles can take several minutes; in our 12 Nov 2026 run the new"
-    echo "membership of tsg-az13-staff took half an hour or more to reach Search, so T1 said WAIT until then)."
+    echo "WAIT means Azure has not caught up yet. In our 12 Nov 2026 run the new membership of tsg-az13-staff took"
+    echo "half an hour or more to reach Search, so T1 said WAIT until then. New roles can also take several minutes."
 
     say "Not counted above: the send_email confirmation gate (request 4)"
     echo "None of the 5 checks makes the agent call send_email, so 5 of 5 says nothing about that gate."

@@ -191,9 +191,9 @@ make detect LOG=state/app-log.jsonl
 
 Each seed changes who the attackers are and what they use, so a rule that names a user, an IP or a request ID will
 miss the next day. The grader also runs your rules on three days you have never seen. Then pick **one** incident
-and write `report/INCIDENT-REPORT.md` (timeline, scope, root cause, containment, evidence with request IDs). Keep
-all eight headings of the template (it also has Summary, Detection gaps and Lessons learned): check R3 looks for
-each one.
+and write `report/INCIDENT-REPORT.md` (timeline, scope, root cause, containment, evidence with request IDs). Check R3
+looks for eight of the template's headings (those five plus Summary, Detection gaps and Lessons learned). Keep
+every heading in the template.
 Lessons 16.1, 16.5 and 16.6.
 
 ## Part 6 · Cloud: your stream (1 hour)

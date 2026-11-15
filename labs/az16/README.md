@@ -135,7 +135,7 @@ INCIDENTS: confirmed, someone has to act (the lab's answer key; a real team deci
 3763 rows, 18 alerts, 5 incidents.
 ```
 
-**2. The Activity log and a resource log.** The Activity log (who changed or read settings) is on by default and kept 90 days; resource logs (each call to the resource) need a diagnostic setting. AWS keeps both kinds in CloudTrail; Azure splits them.
+**2. The Activity log and a resource log.** The Activity log (who changed or read settings) is on by default and kept 90 days; resource logs (the calls to the resource; in our real run only the successful ones) need a diagnostic setting. AWS keeps both kinds in CloudTrail; Azure splits them.
 
 ```bash
 python3 explore.py activity

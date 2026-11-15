@@ -96,8 +96,8 @@ def main() -> int:
     try:
         if not wait_for_app(args.profile):
             sys.exit(f"TSG Helpdesk did not start on 127.0.0.1:{PORT}.")
-        # Security tests get no pass-rate threshold and no custom exit code: one failed attack test must fail the
-        # build. (PROMPTFOO_PASS_RATE_THRESHOLD=90 lets a real data leak through as "exit 0": lesson 17.3.)
+        # Security tests keep the pass-rate threshold at 100% (any lower setting is removed here) and get no custom
+        # exit code: one failed attack test must fail the build. (PROMPTFOO_PASS_RATE_THRESHOLD=90 lets a real data leak through as "exit 0": lesson 17.3.)
         for var in ("PROMPTFOO_PASS_RATE_THRESHOLD", "PROMPTFOO_FAILED_TEST_EXIT_CODE"):
             if os.environ.pop(var, None) is not None:
                 print(f"note: ignoring {var} for the security suite (any failure must fail the build)")

@@ -59,8 +59,9 @@ def cmd_inventory(a) -> int:
     print(f"  name       {c['name']}")
     print(f"  version    {c['version']:30} which exact build runs")
     print(f"  hosting    {c['hosting']:30} where it runs")
-    flag = "<- a gap: nobody has checked what this license allows" if c["licence"].lower() == "unknown" else ""
-    print(f"  license    {c['licence']:30} {flag}".rstrip())
+    lic = c.get("license", c.get("licence", ""))     # older copies of the card spell the key "licence"
+    flag = "<- a gap: nobody has checked what this license allows" if lic.lower() == "unknown" else ""
+    print(f"  license    {lic:30} {flag}".rstrip())
     print(f"\nOne row per part, not one per app: {len(comps)} parts here "
           f"({', '.join(sorted({x['type'] for x in comps}))}).")
     return 0

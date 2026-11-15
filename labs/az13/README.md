@@ -499,8 +499,8 @@ No solution is included.
 [GUIDED-BUILD.md](GUIDED-BUILD.md) builds the same design for real, from zero, with portal clicks and CLI: a Free
 Azure AI Search service with keys off, an index with `permissionFilterOption` and two Entra groups, a Foundry IQ
 knowledge base, and a prompt agent with the knowledge base MCP tool (user token forwarded) and a `send_email`
-function tool with a confirmation step in your code. Five requests (normal, cross-user leak, injected document, write
-needing confirmation, a tool it was never given), two settings changed one at a time (the token header removed,
+function tool with a confirmation step in your code. Five requests (normal, cross-user leak, injected document, a request
+to send an email, a tool it was never given), two settings changed one at a time (the token header removed,
 approval required on the knowledge base tool), cost and teardown. Cost: Search Free is $0; model tokens are a few US
 cents.
 

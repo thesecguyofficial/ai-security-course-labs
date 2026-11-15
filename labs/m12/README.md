@@ -430,7 +430,7 @@ Read the five that still work, because each one teaches a limit:
 - **A12:** the injection is inside a ticket the model reads through a tool. Converse doesn't evaluate `toolResult`
   (challenge 1 fixes this with `ApplyGuardrail`).
 - **A13:** read the answer *and* the outcome. The guardrail blocked the text, but `reset_mfa(ceo@anycompany.example)`
-  had already run. Guardrails judge text, not authority: the fix is an authorization check in the tool (lesson 7.x).
+  had already run. A guardrail judges text and knows nothing about who may do what: the fix is an authorization check in the tool (lesson 7.x).
 - **A15:** nobody told the guardrail what an AnyCompany employee ID looks like (challenge 3).
 
 And the one false positive, **B12**: "reset my own MFA" fails the contextual grounding check, because the answer comes

@@ -17,7 +17,7 @@ while the normal crew tasks still complete**. You never write the attack, and no
 | **Contain** | Write the four controls in `containment.py` | 24.3 |
 | **Replay (after)** | Contained YES on the recording AND the variants, 0 false positives | 24.3, 24.4 |
 | **Prove** | `make report` (the four-line proof), `make test` (the trace) | 24.4 |
-| **Challenge** | Unlabelled crossings, memory residue, a precise detection. No solution included | 24.2, 24.3, 24.4 |
+| **Challenge** | Unlabeled crossings, memory residue, a precise detection. No solution included | 24.2, 24.3, 24.4 |
 
 ## Get the lab files
 

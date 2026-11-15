@@ -119,7 +119,9 @@ so a firewall (same page).
 
 Our run says: check. We used `sshleifer-distilbart-cnn-12-6` version 13 (Apache-2.0, text summarization). Its
 container installed conda packages at start-up, approved outbound blocked them, and the deployment crashed. Read the
-log with `az ml online-deployment get-logs ... --lines 400`, list the hosts it tried, and add one FQDN rule per host:
+log with `az ml online-deployment get-logs ... --lines 400`, list the hosts it tried, and add one FQDN rule per host.
+Our log named two of these four (`conda.anaconda.org`, then `repo.anaconda.com` after a second crash). We added
+`pypi.org` and `files.pythonhosted.org` ourselves, without a log line that named them:
 
 ```bash
 for d in conda.anaconda.org repo.anaconda.com pypi.org files.pythonhosted.org; do

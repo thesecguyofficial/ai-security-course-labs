@@ -652,8 +652,8 @@ Real output (trimmed to R5 and the summary):
 ```
 
 The hardened port set `block_on_screening_failure` to `false` "so the helpdesk stays up". With Model Armor
-unreachable, the poisoned ticket went to the model unscreened, the model asked to email it out, and a person on
-their fortieth approval of the day clicked Approve. Two controls each failed once; together they leaked.
+unreachable, the poisoned ticket went to the model unscreened, the model asked to email it out, and the approver
+clicked Approve. The email left because the screening and the approval both failed in the same run.
 
 ## Step 6 · Optional: the same agent on the real ADK runtime
 
@@ -766,8 +766,8 @@ Three changes. `make challenge` runs the lab tests plus six challenge tests; fiv
 
 1. **A recipient policy, in code** (`controls.py`, `recipient_allowed()`): `send_email` may go only to an address on
    `example.com` or to the customer of the ticket the email is about (`TICKETS[ticket_id]["customer"]`). The
-   injected email must be refused **before** anyone is asked to approve it. Lesson 7.8: a person approving their
-   fortieth request isn't a control.
+   injected email must be refused **before** anyone is asked to approve it. Lesson 7.8 explains why a tired
+   approver doesn't stop this.
 2. **Fail closed on what the model reads** (`twin/hardened/deployment.json`): set `block_on_screening_failure` to
    `true`. Then run `make outage` again and look at the cost: every request is refused while Model Armor is down.
    ADK has one switch per plugin, so if the business needs user input to keep flowing, register two plugins, one
