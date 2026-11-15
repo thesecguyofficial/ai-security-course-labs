@@ -6,7 +6,7 @@ memory.py: Memory Bank steps of the guided build (GUIDED-BUILD.md, Step 6). Your
     python3 memory.py --project P --region us-central1 --agent NAME read --user alice
     python3 memory.py --project P --region us-central1 --agent NAME read --user bob
 
-Calls from Google's Memory Bank pages: client.agent_engines.memories.create / .retrieve with a scope dict, and the
+Calls from Google's Memory Bank pages: client.agent_engines.memories.create / .retrieve / .get with a scope dict, and the
 memory_bank_config.ttl_config.default_ttl setting ("<seconds>s"). Newer SDK versions also name these
 agentplatform.Client and client.runtimes; the config keys are the same.
 """
@@ -47,8 +47,11 @@ def main():
         print(f"{len(got)} memories for user_id={a.user}")
         for m in got:
             mem = getattr(m, "memory", m)
+            # retrieve() leaves expire_time empty even when a TTL is set; a get() of the memory returns it
+            # (our run, 15 Nov 2026).
+            full = client.agent_engines.memories.get(name=mem.name)
             print(json.dumps({"fact": getattr(mem, "fact", None), "scope": getattr(mem, "scope", None),
-                              "expireTime": str(getattr(mem, "expire_time", None))}))
+                              "expireTime": str(getattr(full, "expire_time", None))}))
 
 
 if __name__ == "__main__":
