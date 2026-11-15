@@ -53,7 +53,7 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
 
-    def authorised(self) -> bool:
+    def authorized(self) -> bool:
         if self.headers.get("Authorization", "") == f"Bearer {API_KEY}":
             return True
         self.send(401, {"error": "missing or wrong API key"})
@@ -63,7 +63,7 @@ class Handler(BaseHTTPRequestHandler):
         if self.path == "/":
             return self.send(200, PAGE, "text/html; charset=utf-8")
         if self.path.startswith("/api/orders/"):
-            if not self.authorised():
+            if not self.authorized():
                 return
             oid = self.path.rsplit("/", 1)[-1]
             order = ORDERS.get(int(oid)) if oid.isdigit() else None
@@ -73,7 +73,7 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path != "/api/orders":
             return self.send(404, {"error": "no such endpoint"})
-        if not self.authorised():
+        if not self.authorized():
             return
         try:
             n = int(self.headers.get("Content-Length", "0"))

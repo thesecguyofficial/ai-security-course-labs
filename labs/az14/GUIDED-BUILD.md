@@ -513,6 +513,10 @@ were deleted.
 | G6a | Account-scope role: request 2 answered `CANARY-AZ14-BANDS-4417`; `make grant-narrow` removed it |
 | G6b | Direct call ran `send_email` (simulated) with `require_approval: "always"`: nobody was asked |
 
+**Terraform** covers the infrastructure only (`terraform/main.tf`: Foundry resource, project, model, storage,
+registry, roles). The hosted agent, the toolbox and the MCP server still come from `cloud/deploy.sh content`.
+Tested 12 November 2026: 5 of 5 checks passed.
+
 ## What our runs didn't settle
 
 - **The agent identity's display name** in **Agent identities**. Reading its principal ID is documented
@@ -541,6 +545,3 @@ were deleted.
   project's OpenAI client (documented for agents and in the OpenAI Responses API; not re-checked for this path).
 - **Portal labels** marked "(label may differ slightly)", and whether the Foundry portal can create toolboxes.
 - **Prices**: the Foundry Agent Service pricing page showed "$-" for hosted-agent vCPU and memory hours in our fetch.
-- **Terraform** covers the infrastructure only (`terraform/main.tf`: Foundry resource, project, model, storage,
-  registry, roles). The hosted agent, the toolbox and the MCP server still come from `cloud/deploy.sh content`.
-  Tested 12 November 2026: 5 of 5 checks passed.

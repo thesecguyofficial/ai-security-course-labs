@@ -5,8 +5,8 @@ aws/attribution.py: prove in CloudTrail which agent acted, and for which human (
     python3 aws/attribution.py --cloudtrail-dir ~/tsg-trail     # your own trail files from the guided build
 
 Reads CloudTrail records (JSON lines, or the trail's own *.json.gz files with a "Records" list) and the launcher's
-log (who the validated JWT said the user was, for each run). The sample files are ILLUSTRATIVE: real field names,
-made-up values (aws/make_samples.py).
+log (who the validated JWT said the user was, for each run). The sample files are ILLUSTRATIVE: field names
+from AWS's documentation where it gives them, made-up values (aws/make_samples.py).
 
 Q1  For each human, which agents acted, under which IAM role and workload identity?
 Q2  Which agent calls carry no human at all (no SourceIdentity on the role session)?

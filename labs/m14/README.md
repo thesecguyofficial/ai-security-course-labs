@@ -553,7 +553,7 @@ Each of these takes one edit. Run `make check-hardened` and `make hardened` afte
    attack in it forges `caller_username`. The checker's probe catches the reset case (M14-17 HIGH, "Bob's call claims
    to come from Alice"), but it has no probe for email. Run
    `python3 cedar.py setups/hardened/policies bob send_email '{"to": "x@example.com", "subject": "s", "body": "b", "caller_username": "alice"}'`:
-   ALLOW. Bob can now send mail as Alice. A suite only tests what you thought of.
+   ALLOW. Bob can now send mail as Alice, and neither the attack suite nor the checker has a case for it.
 
 ## Step 7 · Prove it
 

@@ -76,7 +76,7 @@ def paired_regression(base: dict, cand: dict, family: str) -> dict:
     return {"cases": k, "mean_diff": round(mean, 4), "lower95": round(lower, 4), "significant": significant}
 
 
-def paired_flips(base: dict, cand: dict) -> list[str]:
+def paired_flips(base: dict, cand: dict) -> list[str] | None:
     """CHALLENGE 2 (lesson 30.2): the case ids the baseline NEVER lost and the candidate lost at least once.
 
     Only cases that apply to both releases count. Return them sorted. This is the list a developer needs:

@@ -448,7 +448,7 @@ lesson 10.4 says to regenerate both keys straight away when one has leaked.
 ```text
 14:02:10 old key -> HTTP 200
 14:03:10 old key -> HTTP 200
-14:04:11 old key -> HTTP 401
+14:04:11 old key -> HTTP 401     (ours: HTTP 403)
 ```
 
 Add `-o -` instead of `-o /dev/null` to one call to see the body with the error text.

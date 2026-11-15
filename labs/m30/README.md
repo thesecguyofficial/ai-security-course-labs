@@ -493,7 +493,7 @@ SECURITY GATE  baseline r41 -> candidate r42-fix (stand-in-model-b-2027-04)
   VERDICT: SHIP
 ```
 
-G5 lists email and doc as "watch" items: slightly worse, within noise. That's the gate being honest, not quiet.
+G5 lists email and doc as "watch" items: slightly worse, within noise. The gate does not fail on them, and it still prints them so you can see small moves.
 
 The negative control runs the same suite against `weak`: r41 itself (same model, prompt and tools) with every
 defense switched off, no data marking and no sink check. It **must** stop, and stop on what the gate measures:

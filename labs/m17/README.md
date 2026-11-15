@@ -648,6 +648,7 @@ is why the converter exists. A converter only matters if the target can decode i
 | `promptfoo exit code: 1 (error)` | An error, not a failed test: read the first lines. A typo in a YAML file is the usual cause |
 | `No files found for variable message` | A `file://` path in a test is relative to `evals/`, where `promptfooconfig.yaml` lives |
 | `make test` fails after `make regress` | Expected: the lab's own tests know every attack. `make restore` (or `git checkout -- guards.py`) |
+| `git push practice main` is rejected: `refusing to allow a Personal Access Token to create or update workflow ... without workflow scope` | The lab's repository holds workflow files, and your token may not push those. Classic token: tick the `workflow` scope. Fine-grained token: Repository permissions → **Workflows** → Read and write. With the GitHub CLI: `gh auth refresh -s workflow`. Then push again |
 | The check never appears on your pull request | Open the **Actions** tab of your practice repository: if GitHub shows a notice that workflows are off, enable them. Or the change touched no file under `labs/m17/` |
 | GitHub offers `thesecguyofficial/ai-security-course-labs` as the base of your pull request | You are in a fork, not in the practice repository from Step 6.1. Close the page without creating the pull request and follow Step 6 again |
 | Windows: `make` not found | Run the commands from the `Makefile` with `py` |

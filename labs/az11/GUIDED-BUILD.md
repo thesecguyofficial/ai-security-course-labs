@@ -360,8 +360,8 @@ The DNS lines stay private; the call should stop getting through. **Pass conditi
 it still returned 200 seven minutes after the role was removed (five minutes in the 12 November re-run), and neither
 run recorded the refusal, so we can't tell you how long it takes. If you still see 200, wait 10 minutes and run it again,
 and keep going until you see 401. Until you do, T3 is not passed. For an incident this means: removing a role is not
-an instant stop. Also stop the workload or cut its network path. This is lab step A3 the other way round: the
-network is the first door, the role on **this one resource** is the second.
+an instant stop. Also stop the workload or cut its network path. This is lab step A3 the other way round:
+a caller inside the network still needs the role on **this one resource**.
 
 **Example response when the removal has taken effect (shape from Microsoft docs, values illustrative)** ([keyless authentication, troubleshooting
 table](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/configure-entra-id); it names the status and
@@ -572,6 +572,7 @@ lab videos. The example blocks above stay illustrative; this is what we saw.
   wizard shows its encryption step under that name (marked "label may differ slightly").
 - How long a removed role keeps working (T3): we saw 200 at 5 and at 7 minutes and have no record of the 401.
 - Whether `RequestResponse` rows hold prompt text, and which caller address they show (T2 asks you to look).
+- Whether the refused outside call (T1) leaves a row in the resource logs. We did not look.
 - G4 (the dropped DNS link), T4's three changes and the T5 rotation commands: our real-run table has no row for
   them. They are written from the documentation.
 - Whether the status of a network refusal is always 401. Microsoft Learn doesn't document it; ours was 401.

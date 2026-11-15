@@ -93,7 +93,7 @@ where you see `python3`.
 
 5. **Where it listens.** Ollama waits for requests on **localhost** (`127.0.0.1`, this computer) at **port** 11434
    (the "door number" that picks one program). The first line below is the Linux command. On a Mac, use
-   `lsof -iTCP:11434 -sTCP:LISTEN` instead. On Windows, use `netstat -ano | findstr 11434`, and type `curl.exe`
+   `lsof -nP -iTCP:11434 -sTCP:LISTEN` instead. On Windows, use `netstat -ano | findstr 11434`, and type `curl.exe`
    where you see `curl`:
 
    ```bash
@@ -107,7 +107,7 @@ where you see `python3`.
    ```
 
    `127.0.0.1` means other computers can't connect directly, but every program on this one can, your web browser
-   included: a smaller door, not a locked one. Ollama has no login, so never make it listen on `0.0.0.0`
+   included, so the door is smaller but still open. Ollama has no login, so never make it listen on `0.0.0.0`
    (every network address) on a machine others can reach.
 
 ## Step 1b · Look inside the model before the exercises (about 10 minutes)

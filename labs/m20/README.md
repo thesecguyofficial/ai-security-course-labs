@@ -201,8 +201,8 @@ Setup: first-draft (the only one that lets tickets-agent do this)
    email  (none)                             no user on this token
 ```
 
-**5. One token exchange** (RFC 8693, hardened): same user, one audience, fewer scopes, a shorter life, and `act`
-names who carried it:
+**5. One token exchange** (RFC 8693, hardened): same user, one audience, the same or fewer scopes, never a longer life, and
+`act` names who carried it:
 
 ```bash
 python3 explore.py exchange
@@ -340,7 +340,8 @@ python3 evaluate.py hardened A5 --trace
 ```
 
 A6: the first send works, the copy of the same request gets `401 token already used (replay)`. A5: the lab moves the
-clock ten minutes on, and the same token gets `401 expired`. Two different defenses: one remembers, one forgets fast.
+clock ten minutes on, and the same token gets `401 expired`. The first defense keeps a record of tokens
+it has seen; the second gives the token a short life.
 
 ### Step 8 · Hunt
 

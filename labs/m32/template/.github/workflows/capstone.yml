@@ -1,6 +1,6 @@
 name: capstone-checks
 # The TSG Ops Crew advanced capstone CI. Runs on every push and pull request in YOUR capstone repo: normal-use
-# tests, the six findings as tests, the security eval gate, proof that the gate fails on a regression, detections
+# tests, the known findings as tests, the security eval gate, proof that the gate fails on a regression, detections
 # on three simulated days, then the full self-check. Each step runs even if an earlier one failed, so one run
 # shows everything; the job fails if any step failed.
 #

@@ -111,7 +111,7 @@ For every threat with risk ≥ 4.
 - [ ] At least one threat is about identity or permissions.
 - [ ] At least one threat is about the MCP server itself.
 - [ ] Every high risk has a control that still works if the model is fooled.
-- [ ] Every OWASP ID has a year.
+- [ ] Every OWASP LLM ID has its year (`LLM01:2026`). `ASI0x` and ATLAS IDs are written without one.
 
 ### 4.3 Questions for the developers
 - 

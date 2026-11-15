@@ -84,7 +84,7 @@ deploy)
   fi
   echo "== B3 the deployment (this is the part that bills by the hour)"
   sed -e "s#__EP__#$EP#" -e "s#__MODEL_ID__#$MODEL_ID#" -e "s#Standard_DS3_v2#${INSTANCE:-Standard_DS3_v2}#" "$HERE/deployment.yml" > "$OUT/deployment.yml"
-  echo "   instance type: ${INSTANCE:-Standard_DS3_v2} (Azure Machine Learning reserves 20% extra quota for upgrades)"
+  echo "   instance type: ${INSTANCE:-Standard_DS3_v2} (needs free quota for this VM family; pass INSTANCE=... to change it)"
   dep_state() { az ml online-deployment show -g "$RG" -w "$WS" -e "$EP" -n blue --query provisioning_state -o tsv 2>/dev/null || true; }
   case "$(dep_state)" in
     Succeeded) echo "   blue already exists and Succeeded (a re-run): keeping it" ;;

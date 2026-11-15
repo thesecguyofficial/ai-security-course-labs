@@ -57,9 +57,9 @@ import json, sys
 for c in json.load(sys.stdin).get("ragCorpora", []):
     if c.get("displayName") == sys.argv[1]: print(c["name"]); break' "$1"
 }
-wait_op() {   # wait_op <operation name>, up to 10 minutes
+wait_op() {   # wait_op <operation name>, up to 20 minutes (our first corpus took up to 15)
   local i d
-  for i in $(seq 1 60); do
+  for i in $(seq 1 120); do
     d=$(curl -s -H "Authorization: Bearer $(tok)" "https://$R-aiplatform.googleapis.com/v1/$1")
     if grep -q '"done": true' <<<"$d"; then
       python3 -c 'import json,sys
@@ -70,7 +70,7 @@ print("   done:", json.dumps(e)[:300] if e else (json.dumps(keep) if keep else "
     fi
     sleep 10
   done
-  echo "still running after 10 minutes: $1"
+  echo "still running after 20 minutes: $1"
 }
 agent_run() {   # agent_run [run_requests.py args] -> output in ~/.gc13-run.txt
   # shellcheck source=/dev/null
@@ -118,6 +118,11 @@ PY
       echo "   $C = $(corpus $C)"
     done
     STAFF=$(corpus kb-staff); FIN=$(corpus kb-finance)
+    if [ -z "$STAFF" ] || [ -z "$FIN" ]; then
+      echo "A corpus is not listed yet. Wait a few minutes, then run: bash deploy.sh up (it skips what already exists)"
+      echo "The hourly charge has started. If you stop here instead, run: bash deploy.sh down"
+      exit 1
+    fi
     # The grant records intent only. Our 13 Nov 2026 console run imported with no bucket grant at all: the service
     # agent's project-level role (RAG Data Service Agent) already reads every bucket in the project (lesson 13.1).
     say "1d A read grant on the two buckets for RAG Engine's service agent (it records intent; it is not a limit), then the imports"

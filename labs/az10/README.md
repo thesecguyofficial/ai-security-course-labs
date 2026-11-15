@@ -79,10 +79,10 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 
 It does not model deny assignments, role conditions, PIM, Conditional Access, network rules, other policies, or the
 real propagation delays (Microsoft says at least 15 minutes for a new policy assignment, and ours took hours;
-minutes to hours for `disableLocalAuth`). Two more differences from real Azure, both seen in our 9 November 2026 run:
+minutes to hours for `disableLocalAuth`). Two more differences from real Azure, both seen in our real runs:
 the model answers a disabled key with Microsoft's documented `401`, where Azure answered `403`
-`AuthenticationTypeDisabled`; and the model still lets an Owner list keys after keys are off (step L5 in Step 5),
-where Azure refuses even to list them.
+`AuthenticationTypeDisabled` (9 November 2026); and the model still lets an Owner list keys after keys are off
+(step L5 in Step 5), where Azure refuses even to list them (11 November 2026).
 The Cognitive Services Contributor definition is trimmed to the actions this lab needs (its NotActions are complete).
 
 **About the data and safety.** The tenant, subscription and object IDs are Microsoft documentation example GUIDs
@@ -727,18 +727,17 @@ Attacker requests allowed: 3 of 12   ·   legitimate requests allowed: 5 of 5
 ```
 
 All five legitimate requests still work; the helpdesk app (L1) now uses Entra ID instead of a key. Look at **B9**: a
-phished Owner session is allowed by RBAC, and only the `deny-ai-key-access` policy stops it re-enabling keys. Roles
-decide who can change things; policy decides what the result may look like.
+phished Owner session is allowed by RBAC, and only the `deny-ai-key-access` policy stops it re-enabling keys.
 
 Three attacker requests still succeed: **A3** (the sandbox key) and **B4**, **B8** (the allow-list's `gpt-5` entry is
 still a prefix). In real Azure, also remember the delays: Microsoft says at least 15 minutes for a new policy
 assignment (ours took hours, and until then the Deny refused nothing), and minutes to several hours before the gateway
 refuses an old key.
 
-Two lines above differ from what real Azure did in our run of 9 November 2026. **A1 and A2** show `401`, the status
-Microsoft documents for a disabled key; Azure answered `403` `AuthenticationTypeDisabled`. Either means refused, so
+Two lines above differ from what real Azure did in our runs. **A1 and A2** show `401`, the status
+Microsoft documents for a disabled key; Azure answered `403` `AuthenticationTypeDisabled` (9 November 2026). Either means refused, so
 test for "refused", not for one number. **L5** is allowed here because the model checks only the Owner role; on real
-Azure, once keys are off, even the Owner can't list them. That is good news for the fix (there is nothing left to
+Azure, once keys are off, even the Owner can't list them (our run of 11 November 2026). That is good news for the fix (there is nothing left to
 rotate or leak), and it means a real "planned rotation" stops being a task at all.
 
 ## Step 6 · Hunt: find both intrusions in the logs

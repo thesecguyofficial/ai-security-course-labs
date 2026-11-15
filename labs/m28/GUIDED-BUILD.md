@@ -239,10 +239,7 @@ The S3 bucket "must be in the same AWS account and AWS Region" as the logging co
    ```
 
    You're an admin, and it should still fail: your identity can manage `alias/tsg-m28-raw` but has no `kms:Decrypt`
-   on it. "Still fail" holds only until an admin changes that: with `kms:PutKeyPolicy` or `kms:CreateGrant` you could
-   give yourself decrypt (don't, here). That is why Step 2 says to alert on those two events. To see whether anyone
-   has used them on this key, run the lookup below with `AttributeValue=PutKeyPolicy`, then with
-   `AttributeValue=CreateGrant`. Write down the exact error you get. Then find the refusal in CloudTrail (management events, so they're in
+   on it. Write down the exact error you get. Then find the refusal in CloudTrail (management events, so they're in
    the free event history):
 
    ```bash
@@ -254,6 +251,11 @@ The S3 bucket "must be in the same AWS account and AWS Region" as the logging co
    the documented ones: `eventSource` `kms.amazonaws.com`, `eventName` `Decrypt`,
    `userIdentity.arn`, `requestParameters.keyId` and `encryptionContext`
    ([KMS, CloudTrail Decrypt](https://docs.aws.amazon.com/kms/latest/developerguide/ct-decrypt.html)).
+
+   "Still fail" holds only until an admin changes that: with `kms:PutKeyPolicy` or `kms:CreateGrant` you could give
+   yourself decrypt (don't, here). That is why Step 2 says to alert on those two events. To see whether anyone has
+   used them on this key, run the lookup above again with `AttributeValue=PutKeyPolicy`, then with
+   `AttributeValue=CreateGrant`.
 
 ## Step 7 · Macie checks both buckets
 

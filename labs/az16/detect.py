@@ -123,11 +123,14 @@ def d01_workload_identity_new_ip(t: Telemetry) -> list[dict]:
 
 
 def d02_calls_skip_gateway(t: Telemetry) -> list[dict]:
-    """Data-plane calls to the Foundry resource from anywhere but the API Management gateway (AzureDiagnostics)."""
-    gw = COMPANY["apim_gateway_ip"]
+    """Data-plane calls to the Foundry resource from anywhere but the API Management gateway (AzureDiagnostics).
+
+    Compares the first three octets, like queries/d02-calls-skip-gateway.kql: the real log masks the last one.
+    """
+    gw_net = COMPANY["apim_gateway_ip"].rsplit(".", 1)[0]
     by_ip = defaultdict(list)
     for r in t.foundry:
-        if r["Category"] == "RequestResponse" and r["CallerIPAddress"] != gw:
+        if r["Category"] == "RequestResponse" and r["CallerIPAddress"].rsplit(".", 1)[0] != gw_net:
             by_ip[r["CallerIPAddress"]].append(r)
     if not by_ip:
         return []

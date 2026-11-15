@@ -241,7 +241,7 @@ all findings for Model:
 
 "13 elements" means 13 of the starter's 14 parts (6 elements plus 8 flows): the customer gets no finding. pytm's `LLM01` to `LLM09` are pytm's own rule IDs, not OWASP's. It finds AI threats on the model only because
 `tm.py` tells it the model reads untrusted input and uses RAG; the flows into the model still get web threats
-(interception, sniffing). A tool gives you a list to judge, not a threat model.
+(interception, sniffing).
 
 Windows has no `make`. Run the same commands by hand:
 

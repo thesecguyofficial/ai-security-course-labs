@@ -607,7 +607,7 @@ The same, with the files to open:
 
 | Setting | Cases |
 |---|---|
-| `collect.accounts` and `collect.regions`: every account and Region, not the management account in one Region | D1, H3 |
+| `collect.accounts` and `collect.regions`: every account and Region, not two accounts' trails in one Region | D1, H3 |
 | `hunt.event_names`: every inference event, not only `InvokeModel` | D2 |
 | `collect.data_events`: record bedrock-mantle data events | D3 |
 | `hunt.sources` adds Route 53 Resolver query logs | D4 |

@@ -12,13 +12,13 @@
   "in_production_since": "2026-05-01",
   "autonomy": "Acts alone for refunds up to 50 per call and 100 per customer per day; a person approves anything above that and any email to an address that is not the customer's own",
   "components": [
-    {"type": "application", "name": "Helpdesk chat app (Python)", "version": "2.0", "hosting": "your cloud stream or localhost", "licence": "internal"},
-    {"type": "model", "name": "Gemma 3, 1B (local twin, via Ollama)", "version": "gemma3:1b, pinned by digest (evidence/2026-10-19-mcp-and-model-pins.json)", "hosting": "self-hosted", "licence": "Gemma Terms of Use"},
-    {"type": "model", "name": "Managed model in your cloud stream (Bedrock, Foundry or Agent Platform)", "version": "model ID and version pinned in Terraform (Module 11)", "hosting": "cloud provider", "licence": "provider terms"},
-    {"type": "embedding_model", "name": "Local embedding model (Module 6)", "version": "pinned by hash", "hosting": "self-hosted", "licence": "unknown"},
-    {"type": "vector_store", "name": "Qdrant (Module 6)", "version": "pinned image digest", "hosting": "self-hosted", "licence": "Apache-2.0"},
-    {"type": "mcp_server", "name": "Ticketing MCP server", "version": "1.4.2, pinned (Module 8)", "hosting": "self-hosted, installed from a public registry", "licence": "MIT"},
-    {"type": "memory", "name": "Customer memory summaries", "version": "n/a", "hosting": "app database", "licence": "internal"}
+    {"type": "application", "name": "Helpdesk chat app (Python)", "version": "2.0", "hosting": "your cloud stream or localhost", "license": "internal"},
+    {"type": "model", "name": "Gemma 3, 1B (local twin, via Ollama)", "version": "gemma3:1b, pinned by digest (evidence/2026-10-19-mcp-and-model-pins.json)", "hosting": "self-hosted", "license": "Gemma Terms of Use"},
+    {"type": "model", "name": "Managed model in your cloud stream (Bedrock, Foundry or Agent Platform)", "version": "model ID and version pinned in Terraform (Module 11)", "hosting": "cloud provider", "license": "provider terms"},
+    {"type": "embedding_model", "name": "Local embedding model (Module 6)", "version": "pinned by hash", "hosting": "self-hosted", "license": "unknown"},
+    {"type": "vector_store", "name": "Qdrant (Module 6)", "version": "pinned image digest", "hosting": "self-hosted", "license": "Apache-2.0"},
+    {"type": "mcp_server", "name": "Ticketing MCP server", "version": "1.4.2, pinned (Module 8)", "hosting": "self-hosted, installed from a public registry", "license": "MIT"},
+    {"type": "memory", "name": "Customer memory summaries", "version": "n/a", "hosting": "app database", "license": "internal"}
   ],
   "tools": ["lookup_order", "issue_refund", "send_email", "create_ticket", "get_ticket", "add_comment", "search_tickets"],
   "data_categories": ["customer name and email", "order history and delivery address", "chat text", "ticket text", "memory summaries"],

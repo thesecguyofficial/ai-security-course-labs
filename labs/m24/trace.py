@@ -88,7 +88,7 @@ def find_unlabelled_crossings(txn: list[dict]) -> list[str]:
     provenance label.
 
     A hand-off carries a provenance label if it has a truthy "provenance" field (none in this recording do).
-    Return the list of hand-off IDs (in order) that are instruction-bearing AND unlabelled: those are the
+    Return the list of hand-off IDs (in order) that are instruction-bearing AND unlabeled: those are the
     crossings a provenance label would have caught. A clean provenance scheme would have marked every one.
     """
     raise NotImplementedError("challenge 1: write find_unlabelled_crossings() in trace.py")

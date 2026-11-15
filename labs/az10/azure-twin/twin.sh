@@ -57,7 +57,7 @@ case "${1:-}" in
       # Microsoft documents 401; our 9 Nov 2026 run got 403 AuthenticationTypeDisabled. Either means refused.
       case "$code" in 401|403) echo "Refused: the old key no longer works."; exit 0;; esac; sleep 60
     done
-    echo "Still not refused after 30 minutes. That's within Microsoft's documented delay: run wait-401 again later."
+    echo "Still not refused after 30 minutes. That's within Microsoft's documented delay: run wait-refused (or wait-401) again later."
     ;;
   activity)   # what the control plane recorded (free, 90 days)
     az monitor activity-log list -g "$RG" --offset 6h \
@@ -71,5 +71,5 @@ case "${1:-}" in
     rm -f .twin-key
     echo "Deleted. The Foundry name stays reserved for 48 hours unless you purge it (README Step 8)."
     ;;
-  *) echo "usage: $0 up | key-test | policy-test | lock | wait-401 | activity | down"; exit 1 ;;
+  *) echo "usage: $0 up | key-test | policy-test | lock | wait-refused (or wait-401) | activity | down"; exit 1 ;;
 esac

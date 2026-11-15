@@ -82,15 +82,16 @@ First, the fact that shapes this part. In our run on 12 November 2026, `gemini-3
 was not found". Lesson 11.5 warned about this ("the newest model is only global or multi-region"). So the Helpdesk
 calls the `eu` multi-region: host `aiplatform.eu.rep.googleapis.com`, location `eu`. Check your own model with
 `bash cloud/deploy.sh models`: it tries each candidate model once on **one** endpoint and prints the HTTP code. That
-endpoint is your region's (`europe-west4` by default), so to compare run it three times:
+endpoint is your region's (`europe-west4` by default), so to compare run it once per endpoint:
 
 ```bash
 bash cloud/deploy.sh models
 GC11_REGION=eu bash cloud/deploy.sh models
 GC11_REGION=global bash cloud/deploy.sh models
+GC11_REGION=us bash cloud/deploy.sh models
 ```
 
-Ours: `404` for every model on `europe-west4`, `200` for `gemini-3.1-flash-lite` on `eu` and on `global`.
+Ours: `404` for every model on `europe-west4`, `200` for `gemini-3.1-flash-lite` on `eu`, `us` and `global`.
 
 That host ends in `rep.googleapis.com`, which Private Google Access doesn't support and the `all-apis` bundle
 excludes (lesson 11.2). So instead of a PSC endpoint for global Google APIs, this build makes a **regional endpoint**:

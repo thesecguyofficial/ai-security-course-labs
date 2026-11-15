@@ -504,7 +504,7 @@ Open the three SCPs in `fixes/`:
 | `scp-bedrock-api-keys.json` | No long-term keys outside the sandbox (creation and use, on both endpoints); sandbox keys may live 30 days at most | The leaked prod key (A1 to A5), 365-day keys (C2) | 10.4 |
 | `scp-protect-ai-logging-and-spend.json` | Only `SecurityAdmin` may change Bedrock invocation logging or CloudTrail; only `PlatformAdminRole` may buy Provisioned Throughput | B1, and a stolen identity committing you to capacity | 10.5 |
 
-Three design points:
+How they are built:
 
 - **Allow-list, not deny-list.** A `Deny` with `NotResource` lists what's *approved*; every model AWS adds later is
   refused until someone approves it. The deny-list did the opposite.
@@ -723,7 +723,7 @@ Not covered: 20 x bedrock-mantle.amazonaws.com CreateInference; 1 x sts.amazonaw
 `python3 hunt.py --rule H02` (or `H01,H02,H03`) shows only those rules' findings.
 
 Look at test 16 as well: the security admin calls `GetModelInvocationLoggingConfiguration` every morning, and no
-rule fires on it. A detection that pages you every day gets switched off.
+rule fires on it. A rule that paged someone every morning for a routine read would soon be muted.
 
 CloudTrail records cross-Region inference in the source Region, with `additionalEventData.inferenceRegion` showing
 where the request ran ([AWS docs](https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html)).
@@ -758,7 +758,7 @@ FAILED (failures=3)
 3 of 22 TESTS FAILED (22 run)
 ```
 
-Three gaps, three fixes. Each test's message is a hint.
+Each failing test is one gap, and its message is a hint for the fix.
 
 1. **B4: the bedrock-mantle gap.** Add a statement to `fixes/scp-model-allowlist.json` that refuses
    `bedrock-mantle:CreateInference` for unapproved models (the approved mantle ID is in `approved-models.json`:
@@ -825,7 +825,7 @@ aws budgets create-budget --account-id 111122223333 \
 ```
 
 A $5 monthly cost budget that emails you at 80% of actual spend and at 100% of forecast. Remember lesson 10.5: AWS
-Budgets data is "updated up to three times a day", so an alert is a smoke detector, not a sprinkler.
+Budgets data is "updated up to three times a day", so the alert tells you after the money is spent. It stops nothing.
 
 **8c · Attach the model allow-list SCP to a sandbox member account** (only if you run an AWS Organization with a
 separate sandbox account; SCPs never affect the management account). In the commands below, replace

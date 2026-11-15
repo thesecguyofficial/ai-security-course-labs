@@ -6,7 +6,7 @@
  "ignore_unsigned_files": false,
  "on_verify_error": "refuse",
  "allowed_files": ["model.safetensors", "config.json", "eval-report.json", "ml-bom.json", "README.md"],
- "_allowed_files": "safetensors weights and JSON only: no pickle (.bin, .pkl, .pt), no code (.py), no other formats.",
+ "_allowed_files": "safetensors weights, JSON and a README only: no pickle (.bin, .pkl, .pt), no code (.py), no other formats.",
  "check_bom": true,
  "check_eval": true,
  "check_revoked": true,

@@ -146,7 +146,7 @@ def assessment_date(folder: pathlib.Path) -> dt.date:
 
 
 # ----------------------------------------------------------------------------------------------- inventory
-INVENTORY_COLUMNS = ["system", "component", "type", "version", "hosting", "licence", "business_owner",
+INVENTORY_COLUMNS = ["system", "component", "type", "version", "hosting", "license", "business_owner",
                      "technical_owner", "purpose", "users", "data", "tools", "autonomy", "eu_ai_act", "flags"]
 
 
@@ -154,13 +154,15 @@ def inventory_rows(card: dict) -> list[dict]:
     tri = triage(card, dt.date(2026, 10, 24))
     rows = []
     for c in card.get("components", []):
+        c = dict(c)
+        c.setdefault("license", c.get("licence", ""))    # system cards copied before 15 Nov 2026 spell the key "licence"
         flags = []
-        for field in ("version", "licence", "hosting"):   # "licence" is the key in system-card.json; printed as "license"
+        for field in ("version", "license", "hosting"):
             if str(c.get(field, "")).strip().lower() in {"", "unknown", "latest", "tbd"}:
-                flags.append(f"{'license' if field == 'licence' else field} {c.get(field) or 'missing'}")
+                flags.append(f"{field} {c.get(field) or 'missing'}")
         rows.append({
             "system": card.get("system", ""), "component": c.get("name", ""), "type": c.get("type", ""),
-            "version": c.get("version", ""), "hosting": c.get("hosting", ""), "licence": c.get("licence", ""),
+            "version": c.get("version", ""), "hosting": c.get("hosting", ""), "license": c.get("license", ""),
             "business_owner": card.get("business_owner", ""), "technical_owner": card.get("technical_owner", ""),
             "purpose": card.get("purpose", ""), "users": card.get("users", ""),
             "data": "; ".join(card.get("data_categories", [])), "tools": "; ".join(card.get("tools", [])),
