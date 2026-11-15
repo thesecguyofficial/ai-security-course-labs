@@ -103,7 +103,15 @@ print(d["name"], d["effectiveIdentity"] or "")' <<<"$out")
     save
     echo "AGENT=$AGENT"; echo "AGENT_PRINCIPAL=${AGENT_PRINCIPAL:0:60}..."
     say "3 Terraform pass 2: the access policy (one DENY rule) bound to the gateway, the agent's IAM"
-    tf apply -auto-approve
+    # A new gateway can take a while before IAM accepts a policy binding on it ("must be in ACTIVE state",
+    # reason POLICY_BINDING_TARGET_NOT_ACTIVE; 15 Nov 2026 it took over 20 minutes). Retry that error only.
+    for n in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+      set +e; tf apply -auto-approve 2>&1 | tee /tmp/tsg-gc14-pass2.log; rc=${PIPESTATUS[0]}; set -e
+      [ "$rc" -eq 0 ] && break
+      grep -q "must be in ACTIVE state" /tmp/tsg-gc14-pass2.log && [ "$n" -lt 15 ] || exit "$rc"
+      echo "   The gateway isn't ready for a policy binding yet. Trying again in 2 minutes ($n of 15)."
+      sleep 120
+    done
     say "Done. IAM takes a few minutes. Then: bash deploy.sh test"
     ;;
 
