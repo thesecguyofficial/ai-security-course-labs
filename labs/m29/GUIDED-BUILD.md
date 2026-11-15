@@ -5,6 +5,9 @@ you when **your** IAM user calls Bedrock without going through a VPC endpoint, a
 
 > **No decoy keys in the cloud in this build.** The honeytoken in this lab stays a local mock. This
 > build creates no access key, no API key and no IAM user. You only test the honeytoken *pattern* (Part A).
+> Why: a real key, even one with no permissions, is a live credential in your account. If it is ever pushed to a public
+> repo by mistake, AWS treats it as a leak: in a Unit 42 test it attached a deny policy to the key's user within 10
+> seconds and opened a support case ([Unit 42](https://unit42.paloaltonetworks.com/detecting-exposed-aws-iam-credentials/)), so a forgotten lab key becomes a real incident you have to close.
 > Use a sandbox account you own (lesson 0.8). Every response below is labeled **Example response (shape from the
 > provider's docs, values illustrative)** until you run it yourself.
 
