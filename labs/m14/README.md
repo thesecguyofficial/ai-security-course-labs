@@ -1,6 +1,6 @@
 # Lab M14: deploy the course agent on AgentCore end to end, then try to hijack it
 
-Companion to lessons **14.0 to 14.8** of *AI Security Engineer* (The Sec Guy). About 75 minutes for Steps 1 to 8,
+Companion to lessons **14.0 to 14.8** of *AI Security Engineer* (The Sec Guy). About 90 minutes for Steps 1b to 8 (Step 1b, the tour, is about 15 of them),
 **$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no model download. Step 9 is optional:
 [`GUIDED-BUILD.md`](GUIDED-BUILD.md) builds the same thing in **your own** sandbox account (Cognito in, gateway with
 Cedar policy, memory, the agent on AgentCore Runtime, traces) and ends with teardown.

@@ -109,9 +109,9 @@ def main():
     print(f"The same instruction crossed {len(propagation_path(attack))} trust boundaries and reached the agent that can act.")
     try:
         xs = find_unlabelled_crossings(attack)
-        print("Unlabelled crossings: " + ", ".join(xs))
+        print("Unlabeled crossings: " + ", ".join(xs))
     except NotImplementedError as e:
-        print(f"Unlabelled crossings: not written yet: {e}")
+        print(f"Unlabeled crossings: not written yet: {e}")
 
 
 if __name__ == "__main__":
