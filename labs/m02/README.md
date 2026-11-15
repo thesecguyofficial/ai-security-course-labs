@@ -296,7 +296,7 @@ Pick your **top 5** risks and check your work against this list:
 
 ## Next
 
-Compare your model with the sample answer in the course (lesson 2.5 solution). Don't worry if yours differs:
+Compare your model with the sample answer in the course (lesson 2.6). Don't worry if yours differs:
 two good threat models of the same system are never identical. In Module 3 you attack SupportBot, a smaller
 support assistant, and see the core flaw from lesson 2.1 work for real. The threats you listed for TSG Helpdesk
 get tested in the later modules that attack it, and in the capstone.
