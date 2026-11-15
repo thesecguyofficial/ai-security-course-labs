@@ -4,4 +4,4 @@ forbid (
     action == AgentCore::Action::"HelpdeskTools___reset_mfa",
     resource == AgentCore::Gateway::"GATEWAY_ARN"
 )
-when { context.input.target_username == "breakglass-admin" };
+when { context.input has target_username && context.input.target_username == "breakglass-admin" };

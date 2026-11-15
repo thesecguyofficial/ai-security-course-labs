@@ -478,12 +478,13 @@ compares it with the `username` claim of the token. The Lambda behind the gatewa
 check has to happen here. Test 07 shows a Cedar detail worth remembering: a policy whose condition hits a missing
 attribute doesn't apply. On a `forbid`, that means it doesn't protect you.
 
-One shipped policy shows it. `setups/hardened/policies/never_reset_breakglass.cedar` reads
-`context.input.target_username` with no `has` check, against lesson 14.5's rule "Guard every attribute with `has` in
-`forbid` policies". Leave the target out of Alice's call:
+Here is what that looks like when the rule is broken. Copy the hardened policies to a scratch folder, take the `has`
+check out of the break-glass forbid, and leave the target out of Alice's call:
 
 ```bash
-python3 cedar.py setups/hardened/policies alice reset_mfa '{"caller_username": "alice"}'
+python3 -c "import shutil; shutil.copytree('setups/hardened/policies', 'scratch-unguarded', dirs_exist_ok=True)"
+python3 -c "p='scratch-unguarded/never_reset_breakglass.cedar'; t=open(p).read(); open(p,'w').write(t.replace('context.input has target_username && ', ''))"
+python3 cedar.py scratch-unguarded alice reset_mfa '{"caller_username": "alice"}'
 ```
 
 ```output
@@ -499,10 +500,30 @@ python3 cedar.py setups/hardened/policies alice reset_mfa '{"caller_username": "
 }
 ```
 
-The forbid is under `mismatched`: it hit an error and did not apply. The checker does not flag this (0 HIGH on the
-hardened setup), so it is yours to spot. To follow the rule, put `context.input has target_username &&` in front of the
-comparison, as `caller_must_be_signed_in_user.cedar` does for `caller_username`; the forbid then leaves `mismatched`
-and `make test` still passes. Undo it with `git checkout setups/`.
+The forbid is under `mismatched`: it hit a missing attribute, raised an error and did not apply. The checker does not
+flag this, so it is yours to spot in review. Now the shipped file, `setups/hardened/policies/never_reset_breakglass.cedar`,
+which follows lesson 14.5's rule "Guard every attribute with `has` in `forbid` policies"
+(`context.input has target_username && ...`, the same pattern `caller_must_be_signed_in_user.cedar` uses for
+`caller_username`):
+
+```bash
+python3 cedar.py setups/hardened/policies alice reset_mfa '{"caller_username": "alice"}'
+```
+
+```output
+{
+  "decision": "ALLOW",
+  "determining": [
+    "reset_mfa_it_staff"
+  ],
+  "mismatched": [
+    "reset_own_mfa"
+  ]
+}
+```
+
+The forbid no longer errors: with no target in the call it simply doesn't match, which is what you intended, and a
+call that names `breakglass-admin` is still denied by it. Delete the scratch folder when you're done (`scratch-unguarded`).
 
 Then compare the two authorizers on Dana's partner-portal token:
 
