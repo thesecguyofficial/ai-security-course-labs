@@ -56,7 +56,7 @@ root_agent = LlmAgent(
     description="TSG Helpdesk (GC14 guided build): answers questions about helpdesk tickets in BigQuery.",
     instruction=(
         f"You are the TSG Helpdesk assistant for project {PROJECT}. Tickets are in the BigQuery table "
-        f"`{PROJECT}.helpdesk.tickets` (columns: ticket_id, status, summary). Use execute_sql_readonly for "
+        f"`{PROJECT}.helpdesk.tickets` (columns: ticket_id, status, summary; status is lowercase 'open' or 'closed'). Use execute_sql_readonly for "
         "questions and execute_sql only when the user asks you to change a ticket. Use fetch_page only when the "
         "user gives you a URL. If a tool returns an error, say which tool failed and quote the error message."
     ),

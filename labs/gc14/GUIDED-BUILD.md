@@ -568,19 +568,21 @@ python3 memory.py --project $PROJECT --region $REGION --agent $AGENT read --user
 cd ../..
 ```
 
-What our run printed (13 November 2026; the `...` is the long operation object `write` prints):
+What our run printed (15 November 2026; the `...` is the long operation object `write` prints, and we cut the
+clock time from `expireTime`):
 
 ```output
 default_ttl set to 2592000s (30 days) for memories created from now on
 ...
 1 memories for user_id=alice
-{"fact": "Alice prefers replies before 10:00.", "scope": {"app_name": "tsg_helpdesk_gc14", "user_id": "alice"}, "expireTime": "None"}
+{"fact": "Alice prefers replies before 10:00.", "scope": {"app_name": "tsg_helpdesk_gc14", "user_id": "alice"}, "expireTime": "2026-12-15 ..."}
 0 memories for user_id=bob
 ```
 
-Look at `expireTime`: the TTL call succeeded, and the memory still came back with no expiry. We haven't found out why
-(as of 15 November 2026), so don't count on the default TTL to expire memories until you've seen a date there
-yourself. Check yours, and if it's empty, set an expiry when you write the memory.
+Look at `expireTime`: 30 days after the write, so the default TTL worked. One catch we hit: the `retrieve` call
+leaves the expiry empty even when one is set, which on 13 November made us think the TTL had failed. `memory.py`
+now fetches each memory with a `get` call, which does return it. If you write your own reader, do the same before
+you decide a memory has no expiry.
 
 The second read returns nothing because the **scope** is different. Note who chose the scope: this script, running as
 **you**. In a real app, your backend sets `user_id` from a verified ID token, never from the request body (offline
