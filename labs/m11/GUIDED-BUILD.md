@@ -346,14 +346,20 @@ Field names are from [PutModelInvocationLoggingConfiguration](https://docs.aws.a
 larger ones go to S3 "If an Amazon S3 location for large data delivery is provided" (lesson 11.4).
 
 **Path A, console:** **CloudWatch**, **Log groups**, **Create log group**: name `/tsg-helpdesk/bedrock/model-invocations`,
-retention **1 month**, **KMS key ARN** = the prompts key ARN. **S3**, **Create bucket**: the name above, **ACLs
-disabled**, **Block all public access** on, **Default encryption** SSE-KMS with the prompts key and **Bucket Key**
-enabled; then **Management**, a lifecycle rule expiring objects after 30 days, and **Permissions**, **Bucket policy**
-with `prompt-bucket-policy.json`. Bedrock console, **Settings**, **Model invocation logging**: **Text** only,
-**CloudWatch Logs only**, the log group, the existing role `tsg-helpdesk-bedrock-logging`, and the bucket for large
-data (the console steps are quoted from
-[invocation logging](https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html); the role and
-large-data labels may differ slightly).
+retention **1 month (30 days)**, log class **Standard**, **KMS key ARN** = the prompts key ARN (the page then shows
+the key's status and alias, a quick check you picked the right one). **S3**, **Create bucket**: **Bucket namespace**
+**Global namespace** (the default; the guide's bucket names assume it), the name above, **ACLs disabled**, **Block all
+public access** on, **Default encryption** SSE-KMS, **Enter AWS KMS key ARN** = the prompts key ARN, **Bucket Key**
+enabled. Then **Management**, **Create lifecycle rule**: name `expire-prompt-logs`, **Apply to all objects in the
+bucket** (tick the acknowledgement), **Expire current versions of objects**, **30** days after object creation; and
+**Permissions**, **Bucket policy**, paste `prompt-bucket-policy.json`. Bedrock console, **Settings**, **Model
+invocation logging** on: data types **Text** only (Image, Embedding and Video start ticked: untick them), **Cloudwatch
+Logs only**, the log group, **Use another role** and `tsg-helpdesk-bedrock-logging` (the list puts it under "Bedrock
+logging configuration can acquire role", because its trust policy names Bedrock), and
+`s3://<prompt bucket>/large-data` for large data delivery, **Save settings** (from
+[invocation logging](https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html)). A brand-new
+account that Bedrock hasn't cleared yet gets "Your account is not authorized to perform this action. Please create a
+support case" here, the same block that stops model calls.
 
 If `put-model-invocation-logging-configuration` fails with a validation error about the role or the log group, IAM
 hadn't finished creating the role: wait 30 seconds and retry.
@@ -413,11 +419,18 @@ $2.00 per 100,000). The network-activity selector fields (`eventCategory` = `Net
 the [network activity events](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-network-events-with-cloudtrail.html)
 page.
 
-**Path A, console:** **CloudTrail**, **Trails**, **Create trail**: name `tsg-helpdesk-ai-data-events`, the existing
-bucket above, **Log file SSE-KMS encryption** with the audit key, **Log file validation** enabled. Next page: untick
-**Management events**; tick **Data events** and add the Bedrock mantle project and Bedrock guardrail resource types;
-tick **Network activity events**, **Network activity event source** `bedrock.amazonaws.com`, the log-all template
-(labels may differ slightly). The trail's **JSON view** should match `selectors.json`.
+**Path A, console:** create the bucket first (**S3**, **Create bucket**, the name above, defaults, then **Permissions**,
+**Bucket policy**, paste `trail-bucket-policy.json`). **CloudTrail**, **Trails**, **Create trail** (not the "Create a
+trail" button on the welcome page): name `tsg-helpdesk-ai-data-events`, **Use existing S3 bucket** and the bucket
+name, **Log file SSE-KMS encryption** on, **Customer managed AWS KMS key** **Existing**, and in **AWS KMS alias** pick
+the `tsg-helpdesk-trail` row that shows the key ARN. Don't pick the "Use: tsg-helpdesk-trail" row at the top: it sends
+`key/tsg-helpdesk-trail` and **Create trail** fails with "KMS key ID ... does not exist". **Log file validation** on;
+leave **Recursive logging** on (it only matters when a trail logs its own delivery calls, which this one can't).
+Next page: untick **Management events**; tick **Data events**, resource type **Bedrock Mantle Project**, **Add data
+event type**, **Bedrock guardrail**; tick **Network activity events**, **Network activity event source**
+`bedrock.amazonaws.com`, template **Log all events**. The step's **JSON view** boxes should match `selectors.json`.
+**Configure event aggregation** is optional and costs extra: leave it empty. **Review and create**, **Create trail**;
+the list shows it with status **Logging**.
 
 ### 1g · The Helpdesk function (lesson 11.6)
 
