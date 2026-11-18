@@ -84,10 +84,18 @@ endpoint, and the endpoint accepts HTTPS only from the function.
 **Path A, console:** **VPC** console, **Your VPCs**, **Create VPC**, **VPC only**, name `tsg-helpdesk-vpc`, IPv4 CIDR
 `10.20.0.0/16`, **Create VPC**; then **Actions**, **Edit VPC settings**, tick **Enable DNS hostnames** (DNS resolution
 is on by default). **Subnets**, **Create subnet**: that VPC, name `tsg-helpdesk-private-1`, Availability Zone
-`us-east-1a`, CIDR `10.20.1.0/24`. **Security groups**, **Create security group** twice: `tsg-helpdesk-app` and
-`tsg-helpdesk-bedrock-endpoint`, both in that VPC. On `tsg-helpdesk-app`, delete the default outbound rule and add an
-outbound rule HTTPS (443) to `tsg-helpdesk-bedrock-endpoint`; on `tsg-helpdesk-bedrock-endpoint`, add an inbound rule
-HTTPS (443) from `tsg-helpdesk-app` (labels may differ slightly).
+`us-east-1a`, CIDR `10.20.1.0/24`. Leave **VPC encryption control** on **None** (a paid audit feature this lab
+doesn't need). **Security groups**, **Create security group** (it opens on your default VPC, so pick
+`tsg-helpdesk-vpc`), in this order, because each group must exist before the other can name it:
+
+1. `tsg-helpdesk-app`: no inbound rules; delete the default "All traffic to 0.0.0.0/0" outbound rule. Create.
+2. `tsg-helpdesk-bedrock-endpoint`: inbound HTTPS (443) from `tsg-helpdesk-app`; delete its default outbound rule
+   too (the Terraform's endpoint group has no egress at all). Create.
+3. Back on `tsg-helpdesk-app`, **Edit outbound rules**: HTTPS (443) to `tsg-helpdesk-bedrock-endpoint`.
+
+In the Source or Destination box, type the group name and click the row under **Security Groups** in the list.
+Pressing Enter adds the name as text and the console refuses it ("CIDR block, a security group ID or a prefix list has
+to be specified"). Labels may differ slightly.
 
 **Path B, CLI:**
 
@@ -108,6 +116,8 @@ aws ec2 revoke-security-group-egress --group-id $APP_SG \
 aws ec2 authorize-security-group-egress --group-id $APP_SG \
   --ip-permissions "[{\"IpProtocol\":\"tcp\",\"FromPort\":443,\"ToPort\":443,\"UserIdGroupPairs\":[{\"GroupId\":\"$EP_SG\"}]}]"
 aws ec2 authorize-security-group-ingress --group-id $EP_SG --protocol tcp --port 443 --source-group $APP_SG
+aws ec2 revoke-security-group-egress --group-id $EP_SG \
+  --ip-permissions '[{"IpProtocol":"-1","IpRanges":[{"CidrIp":"0.0.0.0/0"}]}]'
 ```
 
 - `aws ec2 modify-vpc-attribute`: both needed for private DNS
@@ -206,10 +216,13 @@ aws iam create-role --role-name tsg-helpdesk-log-investigator --assume-role-poli
 ```
 
 **Path A, console:** **IAM**, **Roles**, **Create role**. For the app role: **AWS service**, **Lambda**, attach
-`AWSLambdaVPCAccessExecutionRole`, name `tsg-helpdesk-app`, then **Add permissions**, **Create inline policy**,
-**JSON**, paste `app-invoke.json`. For the logging role: **Custom trust policy**, paste `logging-trust.json`, then an
-inline policy from `logging-perms.json`. For the investigator: **AWS account**, **This account**, tick **Require MFA**
-(labels may differ slightly). Generate the JSON files with the CLI block above even if you click: they carry your
+`AWSLambdaVPCAccessExecutionRole`, name `tsg-helpdesk-app`, **Create role**; then on the role, **Add permissions**,
+**Create inline policy**, **JSON**, paste `app-invoke.json`, name `invoke-approved-model-only`. For the logging role:
+**Custom trust policy**, paste `logging-trust.json`, **Next**; the permissions page offers **Create inline policy** next
+to **Use existing policy**: pick it, paste `logging-perms.json`, and on the last page replace the pre-filled policy name
+with `write-invocation-logs`. For the investigator: **AWS account**, **This account**, tick **Require MFA**, no
+permissions; the console writes `"Principal": {"AWS": "<your account ID>"}` (the same as `:root`) and
+`"aws:MultiFactorAuthPresent": true` (labels may differ slightly). Generate the JSON files with the CLI block above even if you click: they carry your
 account ID.
 
 Why the trust conditions on the logging role: without `aws:SourceAccount` and `aws:SourceArn`, Bedrock acting for
@@ -271,9 +284,14 @@ aws kms create-alias --alias-name alias/tsg-helpdesk-trail --target-key-id $AUDI
 ```
 
 **Path A, console:** **KMS**, **Customer managed keys**, **Create key**: **Symmetric**, **Encrypt and decrypt**,
-alias `tsg-helpdesk-prompt-logs`, skip the administrator and user pages, then on the review page edit the key policy
-and paste `key-prompts.json`; **Finish**. Open the key, **Key rotation** tab, tick automatic rotation. Repeat with
-alias `tsg-helpdesk-trail` and `key-audit.json` (labels may differ slightly).
+alias `tsg-helpdesk-prompt-logs` and the description above, skip the administrator and user pages, then on **Edit key
+policy**, **Edit**, paste `key-prompts.json`; **Next**, **Finish**. Open the key, **Key material and rotations** tab,
+**Edit** under **Automatic key rotation**, **Enable** (365 days), **Save**. Don't press **Rotate now**: it adds key
+material you pay for. Repeat with alias `tsg-helpdesk-trail` and `key-audit.json` (labels may differ slightly).
+
+The policy checker flags one warning on `key-prompts.json`: "Type Mismatch: Use the operator type String instead of
+operator ARN for the condition key kms:EncryptionContext:aws:logs:arn". `ArnEquals` is what `kms.tf` uses too; Step 2
+(R5) shows whether CloudWatch Logs can still write the encrypted prompt log, so note the warning and go on.
 
 Read `key-prompts.json` before you go on. Who can decrypt prompt logs? The investigator role; CloudWatch Logs, but only
 for that one log group (encryption context); the logging role, but only through CloudWatch Logs (`kms:ViaService`).
