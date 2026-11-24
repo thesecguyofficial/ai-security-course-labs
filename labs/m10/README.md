@@ -1,4 +1,4 @@
-# Lab M10: find the over-broad AI permissions, write the SCPs that stop LLMjacking, then hunt it in CloudTrail
+# Lab M1: find the over-broad AI permissions, write the SCPs that stop LLMjacking, then hunt it in CloudTrail
 
 Companion to lessons **10.3, 10.4 and 10.5** of *AI Security Engineer* (The Sec Guy). About 60 minutes, **$0**, all on
 your laptop. **Nothing to install** (Python standard library only) and **no AWS account needed**. An optional last
@@ -13,11 +13,11 @@ lets staff try models in a sandbox account. In one sitting you will:
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Check** | Run a small policy checker over AnyCompany's IAM policies, SCPs and Bedrock API key inventory, and read why each finding matters | 10.3, 10.4 |
-| **Break** | Replay what a thief could do with a leaked long-term Bedrock API key and with the chatbot's stolen role: 10 of 11 requests work | 10.3 to 10.5 |
-| **Fix** | Add three SCPs (model allow-list, API-key rules, audit-trail and spend protection) and replay: legitimate traffic still works | 10.3 to 10.5 |
-| **Hunt** | Search sample CloudTrail from 9 to 14 October for the LLMjacking timeline: recon, probe, logging switched off, unapproved models, new source, volume | 10.5 |
-| **Challenge** | Close two gaps the "safe" setup still has, and write one detection. No solution included | 10.3 to 10.5 |
+| **Check** | Run a small policy checker over AnyCompany's IAM policies, SCPs and Bedrock API key inventory, and read why each finding matters | 1.3, 1.4 |
+| **Break** | Replay what a thief could do with a leaked long-term Bedrock API key and with the chatbot's stolen role: 10 of 11 requests work | 1.3 to 1.5 |
+| **Fix** | Add three SCPs (model allow-list, API-key rules, audit-trail and spend protection) and replay: legitimate traffic still works | 1.3 to 1.5 |
+| **Hunt** | Search sample CloudTrail from 9 to 14 October for the LLMjacking timeline: recon, probe, logging switched off, unapproved models, new source, volume | 1.5 |
+| **Challenge** | Close two gaps the "safe" setup still has, and write one detection. No solution included | 1.3 to 1.5 |
 
 ## Get the lab files
 
@@ -98,7 +98,7 @@ if a real-looking account ID, IP or access key ever creeps in.
 
 ## Step 1b · Before you attack: look at how AWS decides one call (about 10 minutes)
 
-New to AWS? Do this before Step 1 (lesson 10.3 and its videos call it Step 1b). `explore.py` shows, one step at a
+New to AWS? Do this before Step 1 (lesson 1.3 and its videos call it Step 1b). `explore.py` shows, one step at a
 time, how AWS signs, decides and records a single API call, using AnyCompany's files. Real output below is from a
 fresh Ubuntu machine.
 
@@ -408,15 +408,15 @@ Real output (Linux, Python 3.12, the same run as the video):
 
 How to read it, highest first:
 
-- **M10-01**: the chatbot's role allows `bedrock:*` and `bedrock-mantle:*` on `*`. That's every model, deleting the
+- **M1-M1**: the chatbot's role allows `bedrock:*` and `bedrock-mantle:*` on `*`. That's every model, deleting the
   invocation logs, and buying Provisioned Throughput. Someone wrote it "just to get it working".
-- **M10-03, M10-05, M10-06, M10-07**: the Bedrock API key story (lesson 10.4). The platform role can mint long-term
+- **M1-M3, M1-M5, M1-M6, M1-M7**: the Bedrock API key story (lesson 1.4). The platform role can mint long-term
   keys with no limits; one was made on 9 October in the **production** account, it **never expires**, and its IAM
   user carries `AmazonBedrockLimitedAccess`, the policy the console attaches. Open
   `anycompany/aws-managed/AmazonBedrockLimitedAccess-v9.json`: `bedrock:InvokeModel` on `"Resource": "*"`, plus
   `bedrock:CreateProvisionedModelThroughput` and `bedrock-mantle:CreateInference`.
-- **M10-02**: data science can invoke any foundation model in any Region.
-- **M10-08 to M10-11**: nothing at the organization level backs any of this up. The only SCP is a deny-list for one
+- **M1-M2**: data science can invoke any foundation model in any Region.
+- **M1-M8 to M1-M2**: nothing at the organization level backs any of this up. The only SCP is a deny-list for one
   model family.
 
 Lint your own policies the same way: `python3 policy_checker.py --policy my-role.json` or `--scp my-scp.json`.
@@ -501,7 +501,7 @@ Open the three SCPs in `fixes/`:
 | File | Statement | What it stops | Lesson |
 |---|---|---|---|
 | `scp-model-allowlist.json` | `DenyUnapprovedModelsOnBedrockRuntime`: deny `bedrock:InvokeModel*` on everything **except** the approved foundation-model **and** inference-profile ARNs (`NotResource`) | Any model nobody approved, by ARN or through a profile (A3, B2). Covers `Converse`/`ConverseStream`, which are authorized as InvokeModel actions | 10.3 |
-| `scp-bedrock-api-keys.json` | No long-term keys outside the sandbox (creation and use, on both endpoints); sandbox keys may live 30 days at most | The leaked prod key (A1 to A5), 365-day keys (C2) | 10.4 |
+| `scp-bedrock-api-keys.json` | No long-term keys outside the sandbox (creation and use, on both endpoints); sandbox keys may live 30 days at most | The leaked prod key (A1 to A5), 365-day keys (C2) | 1.4 |
 | `scp-protect-ai-logging-and-spend.json` | Only `SecurityAdmin` may change Bedrock invocation logging or CloudTrail; only `PlatformAdminRole` may buy Provisioned Throughput | B1, and a stolen identity committing you to capacity | 10.5 |
 
 How they are built:
@@ -630,7 +630,7 @@ Using a guardrail during `InvokeModel`/`Converse` also needs `bedrock:ApplyGuard
 ([AWS docs](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-permissions.html)), so attached guardrails
 break too, not just direct `ApplyGuardrail` calls. Five legitimate requests break. This is the teaching model's answer
 from documented rules; test it in a sandbox before you rely on it. `python3 policy_checker.py --scp
-examples/blunt-allowlist-scp.json` flags it as `M10-12`.
+examples/blunt-allowlist-scp.json` flags it as `M1-M3`.
 
 ## Step 6 · Hunt: find the LLMjacking timeline in CloudTrail
 
@@ -824,7 +824,7 @@ aws budgets create-budget --account-id 111122223333 \
   --notifications-with-subscribers file://aws-twin/notifications-with-subscribers.json
 ```
 
-A $5 monthly cost budget that emails you at 80% of actual spend and at 100% of forecast. Remember lesson 10.5: AWS
+A $5 monthly cost budget that emails you at 80% of actual spend and at 100% of forecast. Remember lesson 1.5: AWS
 Budgets data is "updated up to three times a day", so the alert tells you after the money is spent. It stops nothing.
 
 **8c · Attach the model allow-list SCP to a sandbox member account** (only if you run an AWS Organization with a

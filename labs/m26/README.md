@@ -1,6 +1,6 @@
-# Lab M26: scan and lock down a self-hosted vLLM and Ollama stack, and isolate the prefix cache per tenant
+# Lab M19: scan and lock down a self-hosted vLLM and Ollama stack, and isolate the prefix cache per tenant
 
-Companion to lessons **26.0 to 26.5** of *AI Security Engineer* (The Sec Guy). About 45 minutes, **$0**, all on your
+Companion to lessons **19.0 to 19.5** of *AI Security Engineer* (The Sec Guy). About 45 minutes, **$0**, all on your
 laptop: **Python 3.11+** and one pinned package (PyYAML) in this folder's own `.venv`. No GPU, no Docker, no model
 download, and no network after setup (setup installs PyYAML once): nothing here starts a container or talks to
 anything except its own practice server on `127.0.0.1`.
@@ -11,9 +11,9 @@ and a **hardened** one. Three tools tell them apart:
 
 | Tool | What it does | Lesson |
 |---|---|---|
-| `scan.py` | Reads the compose file, Kubernetes manifests, eksctl config, gateway config, node inventory and model folders, and reports findings with the lesson that explains each | 26.0, 26.1, 26.3 |
-| `probe.py` | Starts a practice server on 127.0.0.1 that imitates the paths of Ollama and vLLM, then knocks on every path with and without a key | 26.0, 26.1 |
-| `cachetest.py` | An isolation test for a toy prefix cache built like vLLM's: can tenant `globex` ever get a cache hit on blocks tenant `acme` wrote? | 26.2 |
+| `scan.py` | Reads the compose file, Kubernetes manifests, eksctl config, gateway config, node inventory and model folders, and reports findings with the lesson that explains each | 19.0, 19.1, 19.3 |
+| `probe.py` | Starts a practice server on 127.0.0.1 that imitates the paths of Ollama and vLLM, then knocks on every path with and without a key | 19.0, 19.1 |
+| `cachetest.py` | An isolation test for a toy prefix cache built like vLLM's: can tenant `globex` ever get a cache hit on blocks tenant `acme` wrote? | 19.2 |
 
 Then `hunt.py` asks an investigator's questions of a morning of gateway logs, and a three-part **challenge** (no
 solution included) makes you finish the scanner, the gateway and the hunt.
@@ -279,7 +279,7 @@ Scan of stacks/first-draft  (files read: compose, k8s, cluster, gateway, nodes, 
                        nodes.json: gpu-node-1: toolkit 1.17.4: CVE-2025-23266 (fixed in 1.17.8; affected: up to and including 1.17.7 (in CDI mode, only before 1.17.5))
 ```
 
-## Step 2 · Scan the first draft (26.0, 26.1, 26.3)
+## Step 2 · Scan the first draft (19.0, 19.1, 19.3)
 
 ```bash
 make scan
@@ -320,7 +320,7 @@ gate a pipeline. That is why `make scan` ends with a line like `make: [Makefile:
 scanner found critical and high findings and said so with its exit code. The lab did not break. `make cache` in
 Step 4 ends the same way, for the same reason.
 
-## Step 3 · Probe the practice server (26.0, 26.1)
+## Step 3 · Probe the practice server (19.0, 19.1)
 
 ```bash
 make probe
@@ -367,7 +367,7 @@ Reachable without a key: 6 of 12 paths (5 management, ops, dev or info) | with a
 nothing else, which is exactly the split vLLM's security guide documents. The management calls in the practice server
 do nothing (`/api/pull` downloads nothing): they only return the status codes a real server would.
 
-## Step 4 · Test cache isolation (26.2)
+## Step 4 · Test cache isolation (19.2)
 
 ```bash
 make cache
@@ -436,7 +436,7 @@ namespace denies by default, the GPU node group is tainted with IMDSv1 and pod I
 node or a MIG slice, and the gateway derives the cache salt from the authenticated tenant. `acme` still reuses its own
 cache: isolation didn't cost the performance you bought the cache for.
 
-## Step 6 · Hunt (26.0, 26.1)
+## Step 6 · Hunt (19.0, 19.1)
 
 ```bash
 make hunt
@@ -495,14 +495,14 @@ Same as `.venv/bin/python run_tests.py --challenge` (Windows: `.venv\Scripts\pyt
 3 of 22 TESTS FAILED (22 run)
 ```
 
-1. **26.1, `check_ray()` in `scan.py`.** Ray's Jobs API runs code by design (CVE-2023-48022, disputed, no fix will
+1. **19.1, `check_ray()` in `scan.py`.** Ray's Jobs API runs code by design (CVE-2023-48022, disputed, no fix will
    come), so a version check can never clear it. Flag every Ray head that is reachable without token auth, and leave
    the hardened one alone.
-2. **26.2, `salt_for()` in `gateway.py`.** Run `.venv/bin/python cachetest.py hardened --challenge` first (Windows:
+2. **19.2, `salt_for()` in `gateway.py`.** Run `.venv/bin/python cachetest.py hardened --challenge` first (Windows:
    `.venv\Scripts\python cachetest.py hardened --challenge`): `globex` sends
    `"cache_salt": "acme-shared"` and lands in `acme`'s cache group. Keep the feature (a tenant's own apps may share a
    group) but make sure no client can pick a salt that collides with another tenant's.
-3. **26.0 and 26.1, `find_management_calls()` in `hunt.py`.** Every call to a management path from anywhere except the
+3. **19.0 and 19.1, `find_management_calls()` in `hunt.py`.** Every call to a management path from anywhere except the
    deployment pipeline, whatever its status.
 
 Done = `make challenge` passes 22 of 22 and `make test` still passes 19 of 19.

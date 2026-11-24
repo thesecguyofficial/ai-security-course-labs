@@ -1,6 +1,6 @@
-# Lab M30: CI fails when an agent's injection resistance drops
+# Lab M23: CI fails when an agent's injection resistance drops
 
-Companion to lesson **30.3** of *AI Security Engineer* (The Sec Guy). About 30 minutes, $0, on your laptop. Step 8
+Companion to lesson **23.3** of *AI Security Engineer* (The Sec Guy). About 30 minutes, $0, on your laptop. Step 8
 (GitHub Actions) uses your own fork of this repository; standard GitHub-hosted runners are free for public
 repositories.
 
@@ -111,7 +111,7 @@ Python 3.12.3 OK, nothing to install
 
 ## Step 1b · Look at each idea on its own (explore.py)
 
-New to evals and release gates? Do this before Step 2 (lesson 30.1 and its videos run it). `explore.py` shows one
+New to evals and release gates? Do this before Step 2 (lesson 23.1 and its videos run it). `explore.py` shows one
 idea at a time. **What it really runs:** it reads the lab's files and, for `trials`, `noise`, `card`, `compare` and
 `naive`, runs the stand-in agent in memory exactly as `evals.py` does. It writes no file (no `results/`, no `state/`,
 no `__pycache__`), runs no gate and uses no network. Windows: `py explore.py ...`. Real output (a fresh Ubuntu
@@ -624,7 +624,7 @@ fork (your copy of the repository on GitHub) and a second download, made from th
 Back in `labs/m30`, `make ci C=r42` runs the same three steps locally and ends with a non-zero exit code. Same as
 `python3 run_tests.py; python3 gate.py r41 weak --expect-fail; python3 gate.py r41 r42 --out results/gate.json`.
 
-What the workflow does on purpose (lesson 17.3): plain `pull_request` (never `pull_request_target`), a read-only
+What the workflow does on purpose (lesson 10.3): plain `pull_request` (never `pull_request_target`), a read-only
 token, actions pinned to full commit SHAs (`actions/checkout` v7.0.1, `actions/upload-artifact` v7.0.2), no secrets
 because the agent under test runs inside the job, no `|| true`, no `continue-on-error`, and the score cards and gate
 log uploaded as evidence on every run. The `ubuntu-24.04` runner image ships Python 3.12, so there is no setup step.
@@ -647,15 +647,15 @@ Same as `python3 run_tests.py --challenge`.
 4 of 25 TESTS FAILED (25 run)
 ```
 
-1. **Cover the new tool (lesson 30.3).** Add 3 or more security cases for the `web` source to `suite/tsg-ops.json`.
+1. **Cover the new tool (lesson 23.3).** Add 3 or more security cases for the `web` source to `suite/tsg-ops.json`.
    User task UT11 reads the status page W1. Copy the shape of an existing case line, use `"family": "web"`,
    `"source": "web"`, `"task": "UT11"`, and include at least one critical goal. Then `python3 gate.py r41 r43` should
    stop r43 for what it does, not only for being untested. The suite's SHA-256 changes, so old score cards stop being
    comparable: that's G1 doing its job.
-2. **List the cases that broke (lesson 30.2).** Write `paired_flips()` in `gate.py`: the case IDs the baseline never
+2. **List the cases that broke (lesson 23.2).** Write `paired_flips()` in `gate.py`: the case IDs the baseline never
    lost and the candidate lost at least once, sorted, only for cases that apply to both releases. Return a list
    (`[]` when nothing broke): the gate then prints the IDs, or plain `none`.
-3. **The utility rule (lesson 30.2).** Write `check_utility()` in `gate.py` with `policy["utility"]`: the candidate's
+3. **The utility rule (lesson 23.2).** Write `check_utility()` in `gate.py` with `policy["utility"]`: the candidate's
    benign utility may not drop more than `max_drop` below the baseline's or fall under `floor`. Return a list of
    messages (empty when fine). r44 must stop; r42-fix must still ship.
 
@@ -668,7 +668,7 @@ fields, one row per case with its successes and trials. Run each case many times
 version suffix, the prompt version and the suite hash on the card, and expect wider intervals than the lab shows. A
 local open model costs nothing per trial but takes time; a paid API costs per trial, so size the suite with the cost
 of 20 trials per case in mind. Public benchmarks such as AgentDojo belong on the card too, with their package and task
-versions and the attack name (lesson 30.1).
+versions and the attack name (lesson 23.1).
 
 ## Clean up
 

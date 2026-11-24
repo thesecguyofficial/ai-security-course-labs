@@ -1,4 +1,4 @@
-# Lab M12: attack the Helpdesk with and without a Bedrock guardrail, and measure it honestly
+# Lab M3: attack the Helpdesk with and without a Bedrock guardrail, and measure it honestly
 
 Companion to lessons **12.1 to 12.5** of *AI Security Engineer* (The Sec Guy). About 60 minutes for Steps 1 to 7,
 **$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no model download. Step 8 is optional:
@@ -6,7 +6,7 @@ it creates the reviewed guardrail in **your own** sandbox account with Terraform
 thing with `ApplyGuardrail` (a few US cents), and ends with `make cloud-down`.
 
 You are still the cloud security engineer at **AnyCompany** (fictional; "AnyCompany" is the placeholder name AWS uses in
-its documentation). TSG Helpdesk v2 went live in M11: private, least privilege, logged. Version 3 answers from a small
+its documentation). TSG Helpdesk v2 went live in M2: private, least privilege, logged. Version 3 answers from a small
 knowledge base, reads tickets and can reset MFA. The platform team now wants an **Amazon Bedrock guardrail** in front of
 it, and the security team wants an **organization-wide** baseline guardrail for every account. A developer opened a pull
 request on Friday: "guardrail added, ship it". That is the **first draft**. You review it, attack it, measure a better
@@ -14,13 +14,13 @@ version, and find out what no guardrail fixes.
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Check** | Review the rollout: guardrail, request, IAM role, org policy. 18 findings, 7 HIGH | 12.1, 12.3, 12.4 |
-| **Break** | 15 attacks with no guardrail, then with the first-draft guardrail: 15 of 15 work both times | 12.1 |
-| **Measure** | The reviewed guardrail: catch rate AND false positives; a strength sweep; the monthly cost | 12.4 |
+| **Check** | Review the rollout: guardrail, request, IAM role, org policy. 18 findings, 7 HIGH | 3.1, 3.3, 3.4 |
+| **Break** | 15 attacks with no guardrail, then with the first-draft guardrail: 15 of 15 work both times | 3.1 |
+| **Measure** | The reviewed guardrail: catch rate AND false positives; a strength sweep; the monthly cost | 3.4 |
 | **Enforce** | Six requests against IAM `bedrock:GuardrailIdentifier` and the org Bedrock policy: who can skip the guardrail? | 12.3 |
 | **Prove** | `make test`: 17 tests | 12.5 |
-| **Challenge** | Screen tool results with `ApplyGuardrail`, write checker rule M12-17, mask employee IDs. No solution included | 12.1 to 12.3 |
-| **Cloud (optional)** | Create the guardrail, run the suite against it, ask the real IAM policy simulator, tear down | 12.2, 12.3 |
+| **Challenge** | Screen tool results with `ApplyGuardrail`, write checker rule M3-M10, mask employee IDs. No solution included | 12.1 to 12.3 |
+| **Cloud (optional)** | Create the guardrail, run the suite against it, ask the real IAM policy simulator, tear down | 3.2, 3.3 |
 | **Guided build (your account)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): create the guardrail by console clicks or the AWS CLI, six requests with how to read each response, MEDIUM vs HIGH prompt attack, the IAM deny with `AccessDenied`, metrics and logs, cost, teardown | 12.1 to 12.4 |
 
 ## Get the lab files
@@ -55,7 +55,7 @@ Stay in the `ai-security-course-labs` folder: the first step below (Step 1b) sta
 | `guardrails/org-baseline*.json` | The organization's baseline guardrail (management account): as proposed, and fixed |
 | `app/integration.*.json` | The `ConverseStream` request the app sends: which text sits inside `guardContent`, which version, trace, streaming mode |
 | `policies/helpdesk-role.*.json` | The Helpdesk role: first draft (no enforcement), `enforced` (pinned to version 1), `any-version` (a common half-fix) |
-| `policies/ops-tools-role.json` | The M11 ops tool role on `bedrock-mantle` (challenge 2) |
+| `policies/ops-tools-role.json` | The M2 ops tool role on `bedrock-mantle` (challenge 2) |
 | `org/` | The organization-level Amazon Bedrock policy (first draft, fixed) and the guardrail's resource-based policy |
 | `suite/cases.json` | The test suite: **15 attacks and 14 normal questions** (promptfoo-style, plain JSON). Payloads are harmless lab placeholders |
 | `evaluate.py` | Runs the suite and prints **catch rate and false positives**; `--sweep`, `--cost` |
@@ -82,7 +82,7 @@ reporting both numbers.
 
 ## Step 1b · Before you attack: look at each piece (about 10 minutes)
 
-New to Bedrock Guardrails? Do this before Step 1 (lesson 12.5 and its videos call it Step 1b). `explore.py` shows each
+New to Bedrock Guardrails? Do this before Step 1 (lesson 3.5 and its videos call it Step 1b). `explore.py` shows each
 piece of a guardrail on its own. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `guardrails/`, `app/` and
@@ -426,7 +426,7 @@ Text units used by this run: content 57, topics 57, PII 57, grounding 16  (about
 Read the five that still work, because each one teaches a limit:
 
 - **A10, A11:** the stand-in classifier doesn't decode Base64 or re-join spaced-out letters; the stand-in model does.
-  Research on real detectors found the same kind of gap (lesson 12.4).
+  Research on real detectors found the same kind of gap (lesson 3.4).
 - **A12:** the injection is inside a ticket the model reads through a tool. Converse doesn't evaluate `toolResult`
   (challenge 1 fixes this with `ApplyGuardrail`).
 - **A13:** read the answer *and* the outcome. The guardrail blocked the text, but `reset_mfa(ceo@anycompany.example)`
@@ -519,7 +519,7 @@ Compare `make enforce`: the first-draft org policy names a guardrail without a v
 version, and that version cannot be `DRAFT`") and excludes the Helpdesk's own model.
 
 **A common half-fix (not in the first draft).** `policies/helpdesk-role.any-version.json` matches the guardrail with
-`ArnLike` and no version, which is what checker rule M12-13 looks for. Run it and watch R3:
+`ArnLike` and no version, which is what checker rule M3-M4 looks for. Run it and watch R3:
 
 ```bash
 python3 enforce.py --role any-version --org fixed
@@ -590,12 +590,12 @@ guardrail's grounding check runs on Classic tier, which "does not support conver
 
 Expect `cloud-eval` to disagree with the twin, both ways: real classifiers are not pattern lists. Write down which
 attacks the real guardrail stops that the twin missed, and which normal questions it blocks. That list is your
-evidence for lesson 12.4's tuning conversation.
+evidence for lesson 3.4's tuning conversation.
 
 Two more switches in `cloud/terraform/variables.tf`, **off by default**:
 
-- `helpdesk_role_name = "tsg-helpdesk-app"` (only if the M11 Helpdesk is deployed): adds the version-pinned deny to its
-  role. Then `make -C ../m11 smoke` should fail with `AccessDenied`: the M11 handler doesn't send a guardrail. That
+- `helpdesk_role_name = "tsg-helpdesk-app"` (only if the M2 Helpdesk is deployed): adds the version-pinned deny to its
+  role. Then `make -C ../m11 smoke` should fail with `AccessDenied`: the M2 handler doesn't send a guardrail. That
   failure is the proof that enforcement works.
 - `enforce_account_wide = true`: account-level enforcement in this Region. AWS: "all callers of Bedrock Invoke or
   Converse APIs who do not have permissions to call that guardrail will start seeing their calls fail with an
@@ -623,7 +623,7 @@ They fail until you finish all three parts.
 1. **Screen tool results (12.2).** In `helpdesk.py`, write `screen_tool_result()`: send the ticket text through
    `twin.apply_guardrail(cfg, "INPUT", ...)` before the model reads it, and replace it with a placeholder if the
    guardrail intervenes. This is the pattern AWS's `ApplyGuardrail` exists for: guarding text that isn't a prompt.
-2. **Rule M12-17 (12.3).** In `checker.py`, flag every principal in `anycompany.json` → `guardrails_required_for` that may
+2. **Rule M3-M10 (12.3).** In `checker.py`, flag every principal in `anycompany.json` → `guardrails_required_for` that may
    call `bedrock-mantle:CreateInference`. Then decide how you'd fix it for real: an SCP, or no mantle at all for that role.
 3. **Employee IDs (12.1).** In `guardrails/tuned.json`, add a regex filter that masks `EMP-` followed by six digits in
    answers. Regex filters cost nothing.

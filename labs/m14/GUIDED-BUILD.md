@@ -1,4 +1,4 @@
-# M14 guided build: the Helpdesk on AgentCore in your own AWS account
+# M5 guided build: the Helpdesk on AgentCore in your own AWS account
 
 The offline lab (README Steps 1 to 8) teaches the mechanics at $0. This guide builds the real thing from zero in
 **your own** AWS sandbox account (the one from lesson 0.7, never a work account), in **us-east-1**. About 2 hours.
@@ -38,7 +38,7 @@ Shell variables used throughout (set them again in a new terminal):
 3. **Region.** AWS lists Runtime, Memory, Gateway, Identity, Policy, Observability and Evaluations in US East
    (N. Virginia) ([Supported Regions](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-regions.html)).
 4. **A model.** Part C's agent calls a Bedrock model through the Strands framework. Make sure your account can invoke
-   the default model the AgentCore CLI picks (M11 covered model access).
+   the default model the AgentCore CLI picks (M2 covered model access).
 5. **Open a terminal in the `ai-security-course-labs` folder** and go to the lab folder:
 
    ```bash
@@ -89,7 +89,7 @@ consoles, with the code in `cloud/lambda/helpdesk_tools.py`).
    `https://cognito-idp.us-east-1.amazonaws.com/<POOL>/.well-known/openid-configuration`. **Allowed clients**: the web
    client ID only. Leave **Allowed audiences** empty (Cognito access tokens carry `client_id`).
 3. **Permissions**: **Use an IAM service role**, **Create and use a new service role**. Afterwards, open the role in IAM
-   and cut its Lambda permission down to the one function ARN (lesson 14.4). Before step 6, also give it
+   and cut its Lambda permission down to the one function ARN (lesson 5.4). Before step 6, also give it
    `bedrock-agentcore:GetPolicyEngine` on the policy engine ARN, and `bedrock-agentcore:AuthorizeAction` and
    `bedrock-agentcore:PartiallyAuthorizeActions` on the policy engine and gateway ARNs. Without them, AWS says,
    attaching the engine fails with `InternalServerException` and "all tool invocations will be denied by default even
@@ -287,7 +287,7 @@ consoles, with the code in `cloud/lambda/helpdesk_tools.py`).
 3. Now the part the namespace can't fix. Repeat step 1 with `--actor-id alice`. The API accepts it: `actorId` is
    whatever the caller sends. Only your backend (taking it from the token) and IAM can stop that. Scope the agent
    role's `RetrieveMemoryRecords` with the `bedrock-agentcore:namespace` or `bedrock-agentcore:namespacePath`
-   condition keys where several apps share one memory (lesson 14.6).
+   condition keys where several apps share one memory (lesson 5.6).
 
 # Part C · The agent on AgentCore Runtime
 
@@ -295,7 +295,7 @@ The AgentCore CLI deploys the agent code with CDK; AWS documents the commands
 ([CLI get started](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-get-started-cli.html),
 [runtime-oauth](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-oauth.md)). AWS also says the
 policies it generates "are designed for development and testing purposes": fine in a sandbox, not for production
-(lesson 14.0).
+(lesson 5.0).
 
 1. Install the CLI and create a project with a JWT-protected agent:
 

@@ -1,7 +1,7 @@
 # Governance and evidence note: TSG Ops Crew
 
 > One page, for the person who has to sign off the Ops Crew going live. Replace every `<...>` and TODO.
-> Lessons 18.1 to 18.3. The self-check (R4) looks for the five sections below and at least 8 rows of evidence.
+> Lessons 11.1 to 11.3. The self-check (R4) looks for the five sections below and at least 8 rows of evidence.
 
 ## AI inventory entry
 

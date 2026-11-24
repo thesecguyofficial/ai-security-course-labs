@@ -1,6 +1,6 @@
 # Model and vendor review
 
-Template from lesson 18.3. One review per model, AI vendor or MCP server, before onboarding and again on every major
+Template from lesson 11.3. One review per model, AI vendor or MCP server, before onboarding and again on every major
 version change. Answers come with evidence (a link, a document, a test result), not "yes".
 
 **Item:** <model, service or MCP server, with exact version> · **Vendor:** <who> · **Reviewer:** <role> · **Date:** <date>
@@ -26,7 +26,7 @@ version change. Answers come with evidence (a link, a document, a test result), 
 ## 4. Our own checks
 - Supply chain: pinned version and hash, code-free file format, scan result (lessons 9.2 and 9.3), or for an MCP
   server the reviewed tool descriptions and pin (lesson 8.5).
-- Our tests: injection and misuse tests run against it (lesson 17.3), with results attached.
+- Our tests: injection and misuse tests run against it (lesson 10.3), with results attached.
 - Access: which identity it runs as, and what that identity may do (lesson 7.4).
 
 ## 5. Exit plan

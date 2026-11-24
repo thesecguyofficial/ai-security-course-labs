@@ -1,4 +1,4 @@
-# Lab AZ14: deploy the TSG Helpdesk as a Foundry hosted agent, then try to hijack it
+# Lab M5: deploy the TSG Helpdesk as a Foundry hosted agent, then try to hijack it
 
 Companion to lessons **14.0 to 14.8** of *AI Security Engineer* (The Sec Guy), Azure stream. About 50 minutes,
 **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Azure subscription
@@ -7,7 +7,7 @@ subscription: a hosted agent whose identity reads one blob container, your own M
 enforced in your own code, and a cross-user leak you create with one role change.
 
 You are still the cloud security engineer at **Contoso** (fictional; "Contoso" is the placeholder name Microsoft uses
-in its documentation). In Module 13 you ported the Helpdesk to a Foundry prompt agent. Contoso has now rewritten it as
+in its documentation). In Module 4 you ported the Helpdesk to a Foundry prompt agent. Contoso has now rewritten it as
 a **hosted agent**: their own container, running in Foundry's per-session sandboxes, with its own Entra agent
 identity, a **toolbox** for its tools, **Memory** (preview) and **Code Interpreter**. Your job: review it, attack it,
 and prove which control stops each attack.
@@ -18,8 +18,8 @@ and prove which control stops each attack.
 | **Break** | `make attack`: 11 attacks and 5 legitimate requests against version 1 | 14.2 to 14.7 |
 | **Compare** | `make compare`: version 1, "v1.1" (what a demo review fixes) and the hardened build, with attack success rates | 14.8 |
 | **Hunt** | `make hunt`: one day of the agent's traces | 14.7 |
-| **Challenge** | `make challenge`: a tool policy that can't be fooled by a lookalike, a memory guard, `chain()` | 14.5, 14.6, 14.7 |
-| **Guided build** (optional) | [GUIDED-BUILD.md](GUIDED-BUILD.md): build it from zero in your subscription, portal and CLI | 14.8 |
+| **Challenge** | `make challenge`: a tool policy that can't be fooled by a lookalike, a memory guard, `chain()` | 5.5, 5.6, 5.7 |
+| **Guided build** (optional) | [GUIDED-BUILD.md](GUIDED-BUILD.md): build it from zero in your subscription, portal and CLI | 5.8 |
 
 ## Get the lab files
 
@@ -107,7 +107,7 @@ SMTP "key" are placeholders. Nothing here contacts Azure. Test 18 checks all of 
 
 ## Step 1b · Before you attack: look at each Foundry piece on its own (about 15 minutes)
 
-New to hosted agents? Do this before Step 1 (lesson 14.8 calls it "Before you start"; lesson 14.0 explains each idea).
+New to hosted agents? Do this before Step 1 (lesson 5.8 calls it "Before you start"; lesson 5.0 explains each idea).
 `explore.py` takes Contoso's deployment apart one Foundry piece at a time, in all three setups (`contoso`, `v1.1`,
 `fixes`). Real output below is from a fresh Ubuntu machine.
 
@@ -160,7 +160,7 @@ so the guided build calls it `kb-articles`), toolbox v2 with `require_approval a
 `Enforced` with default Deny, memory scope `{{$userId}}` with a TTL, a guardrail that exists, trace readers
 `group:helpdesk-security`.
 
-**2. The token (lesson 14.3).** What Microsoft Entra ID puts in Bob's access token (values are the lab's):
+**2. The token (lesson 5.3).** What Microsoft Entra ID puts in Bob's access token (values are the lab's):
 
 ```bash
 python3 explore.py token bob
@@ -179,7 +179,7 @@ python3 explore.py token bob
    unique, hard to guess, 1-256 characters); the oid fits, so this lab sends it (step 4).
 ```
 
-**3. Who may call which agent (lesson 14.3).** The Foundry Agent Consumer assignments, and whether one covers the
+**3. Who may call which agent (lesson 5.3).** The Foundry Agent Consumer assignments, and whether one covers the
 agent Carol calls:
 
 ```bash
@@ -202,7 +202,7 @@ python3 explore.py invoke fixes carol helpdesk-admin-agent
 => 403: no Foundry Agent Consumer role covers this agent
 ```
 
-**4. Whose session (lesson 14.2).** Bob signs in; his browser says he is Alice:
+**4. Whose session (lesson 5.2).** Bob signs in; his browser says he is Alice:
 
 ```bash
 python3 explore.py session contoso bob --header alice
@@ -225,7 +225,7 @@ python3 explore.py session fixes bob --header alice
   sessions this request can resume     0
 ```
 
-**5. What the agent identity can touch (lesson 14.3).**
+**5. What the agent identity can touch (lesson 5.3).**
 
 ```bash
 python3 explore.py identity contoso
@@ -246,7 +246,7 @@ python3 explore.py identity fixes
     container hr-exports  no read  no write
 ```
 
-**6. The toolbox (lesson 14.4).** The tools, the approval flag, whose credential each call uses:
+**6. The toolbox (lesson 5.4).** The tools, the approval flag, whose credential each call uses:
 
 ```bash
 python3 explore.py tools contoso
@@ -276,7 +276,7 @@ Toolbox helpdesk-tools, default_version 1 (the version the MCP endpoint serves)
    responsibility." In a hosted agent the runtime is your code: approval enforced here = NO
 ```
 
-**7. What your code checks before a tool call (lesson 14.5).** The same outside email, version 1 and hardened:
+**7. What your code checks before a tool call (lesson 5.5).** The same outside email, version 1 and hardened:
 
 ```bash
 python3 explore.py policy contoso bob send_email '{"to": "collect@attacker.example"}'
@@ -296,7 +296,7 @@ python3 explore.py policy fixes bob send_email '{"to": "collect@attacker.example
 => REFUSED by your policy check
 ```
 
-**8. Egress (lesson 14.2).** The rules in order, first match wins, then the mode:
+**8. Egress (lesson 5.2).** The rules in order, first match wins, then the mode:
 
 ```bash
 python3 explore.py egress v1.1 https://collect.attacker.example/c
@@ -315,7 +315,7 @@ python3 explore.py egress fixes https://collect.attacker.example/c
 => HTTP 403 from the egress proxy
 ```
 
-**9. Memory and Code Interpreter (lesson 14.6).**
+**9. Memory and Code Interpreter (lesson 5.6).**
 
 ```bash
 python3 explore.py memory contoso bob
@@ -342,7 +342,7 @@ python3 explore.py sandbox contoso bob
    same project share the same container context."
 ```
 
-**10. The guardrail and the record (lesson 14.7).**
+**10. The guardrail and the record (lesson 5.7).**
 
 ```bash
 python3 explore.py guardrail contoso
@@ -413,9 +413,9 @@ $ make check            (first findings and the total)
 24 findings in contoso/: 13 HIGH, 8 MEDIUM, 3 LOW · 1 note(s)
 ```
 
-Read the 13 HIGH findings first. They fall into four groups: **who the agent thinks it's talking to** (AZ14-01,
-AZ14-12), **what the agent's own identity can touch** (AZ14-03, AZ14-10, AZ14-11), **what its tools can do without a
-check** (AZ14-06, 15 to 17, 19, 20) and **what it remembers for whom** (AZ14-18, AZ14-21). Lesson 14.2 covers the runtime,
+Read the 13 HIGH findings first. They fall into four groups: **who the agent thinks it's talking to** (M5-M1,
+M5-M3), **what the agent's own identity can touch** (M5-M3, M5-M1, M5-M2), **what its tools can do without a
+check** (M5-M6, 15 to 17, 19, 20) and **what it remembers for whom** (M5-M11, M5-M14). Lesson 5.2 covers the runtime,
 14.3 identity, 14.4 and 14.5 tools, 14.6 memory and Code Interpreter, 14.7 tracing and testing.
 
 ## Step 2 · Try to hijack version 1 (`make attack`)
@@ -483,13 +483,13 @@ What the hardened build (`fixes/`) changes, and which attack each change stops:
 | Change in `fixes/` | Stops | Lesson |
 |---|---|---|
 | helpdesk-web sets `x-ms-user-identity` from the validated Entra token, server side | A1 | 14.3 |
-| **Foundry Agent Consumer** at **agent** scope; the admin agent only for `helpdesk-leads` | A2 | 14.3 |
+| **Foundry Agent Consumer** at **agent** scope; the admin agent only for `helpdesk-leads` | A2 | 5.3 |
 | Agent identity: **Storage Blob Data Reader** on container `kb` only; no `delete_blob` tool | A3 | 14.3 |
-| No secret in environment variables, no debug tool | A4 | 14.2 |
+| No secret in environment variables, no debug tool | A4 | 5.2 |
 | `policy.check()` before every tool call; approval **enforced in the agent's code**; `allowed_tools`; OAuth per user | A5 | 14.4, 14.5 |
 | Memory `scope: {{$userId}}`, procedural memory off, `user_profile_details`, 30-day TTL | A7 | 14.6 |
-| Egress policy `Enforced`, `defaultAction: Deny`, allow `*.contoso.com` and `learn.microsoft.com` | A9 | 14.2, 14.6 |
-| Code Interpreter removed from the toolbox | A10 | 14.6 |
+| Egress policy `Enforced`, `defaultAction: Deny`, allow `*.contoso.com` and `learn.microsoft.com` | A9 | 5.2, 5.6 |
+| Code Interpreter removed from the toolbox | A10 | 5.6 |
 | `rai_policy_name` points at a policy that exists (checked by `make check`) | A11 | 14.7 |
 | New account with VNet injection, private registry, tracing readers restricted, Conditional Access for agents, a red-team run per version | (`make check`) | 14.2, 14.3, 14.7 |
 

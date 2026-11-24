@@ -1,7 +1,7 @@
-# AZ11 guided build: hardened model access on Microsoft Foundry, in your own subscription
+# M2 guided build: hardened model access on Microsoft Foundry, in your own subscription
 
 The offline lab (README Steps 1 to 7) teaches every control at $0 on Contoso's plan. This guide builds the hardened
-TSG Helpdesk model access for real, from zero, in **your own** subscription, exactly as Module 11 teaches it: one
+TSG Helpdesk model access for real, from zero, in **your own** subscription, exactly as Module 2 teaches it: one
 identity per app with Foundry User on one resource (11.1), public network access **Disabled** with a private endpoint
 and all three privatelink zones (11.2), a customer-managed key in a same-region Key Vault with purge protection
 (11.3), resource logs to Log Analytics (11.4), and a Data Zone deployment with a policy that refuses Global ones
@@ -36,9 +36,9 @@ Microsoft says to "Deploy the key store and the Foundry resource in the same Azu
 
 1. **A subscription you own**, never your employer's. A free account's spending limit stops services when the credit
    runs out.
-2. **Budget alarm first.** If you did lab AZ10's guided build, you have one on that resource group, which is gone now.
+2. **Budget alarm first.** If you did lab M1's guided build, you have one on that resource group, which is gone now.
    Put one on the subscription: **Cost Management**, **Budgets**, a monthly budget of US$10 with an email alert
-   (labels may differ slightly). It alerts; it stops nothing (lesson 10.5).
+   (labels may differ slightly). It alerts; it stops nothing (lesson 1.5).
 3. **Permissions.** This build creates role assignments (Key Vault Crypto Officer for you, Key Vault Crypto User for
    the key's identity, Foundry User for two identities) and a custom policy definition. Owner of the subscription
    covers all of it. Otherwise: Contributor, User Access Administrator and Resource Policy Contributor.
@@ -83,7 +83,7 @@ Microsoft says to "Deploy the key store and the Foundry resource in the same Azu
    deployment-type policy in G2 refuses a Global one. Request Data Zone quota first
    ([quota](https://learn.microsoft.com/azure/foundry/openai/how-to/quota)) and wait for it. The Terraform accepts only `DataZoneStandard` or `Standard`, so Path B can't
    go on without quota. In Path A you can do what we did on 9 November and deploy `GlobalStandard` by hand, knowing
-   it breaks lesson 11.5's rule and that T4's first change then tests a deployment type you already have.
+   it breaks lesson 2.5's rule and that T4's first change then tests a deployment type you already have.
 
 7. **Names.**
 
@@ -114,7 +114,7 @@ Labels quoted from Microsoft Learn where it quotes them; "(label may differ slig
 3. **Log Analytics workspace** `law-<name>` (label may differ slightly).
 4. **Three user-assigned managed identities** (search **Managed Identities**): `id-<name>-cmk` (used only by the
    Foundry resource to reach its key), `id-helpdesk-app` (the app, nothing else), `id-jump` (the test VM). One per job:
-   lesson 11.1's shared-badge finding is what happens otherwise.
+   lesson 2.1's shared-badge finding is what happens otherwise.
 5. **Key Vault** `kv-<name>`, same region. Permission model **Azure role-based access control**, soft-delete retention
    **7 days**, **purge protection on**. Networking: public access only from selected networks, your `MY_IP` in the
    firewall, and trusted Microsoft services allowed to bypass it (labels may differ slightly). Purge protection "is
@@ -144,7 +144,7 @@ Labels quoted from Microsoft Learn where it quotes them; "(label may differ slig
    `privatelink.openai.azure.com` and `privatelink.services.ai.azure.com`. In **Private DNS zones**, check each exists
    and has a virtual network link to `vnet-helpdesk`; on the private endpoint's DNS configuration, check all three are
    in its zone group; create and link whatever is missing (labels may differ slightly). This is the step lab rule
-   AZ11-03 catches when it's half done.
+   M2-M3 catches when it's half done.
 10. **Keys off, model, logs, roles, test VM.**
     - Keys off: Microsoft documents no portal switch (Bicep/ARM, PowerShell or policy). From your laptop:
       `az resource update --ids $(az cognitiveservices account show -n <name> -g rg-<name> --query id -o tsv) --set properties.disableLocalAuth=true`.
@@ -241,7 +241,7 @@ diagnostic-logs audit. Portal, for the built-in ones: **Policy**, **Assignments*
 and the definition, set the effect on the **Parameters** tab, **Review + create**, **Create**. Wait at least 15
 minutes before G3's T4.
 
-Remember what each one can and can't see (lessons 11.2 to 11.5): the network policy passes "Selected networks" with a
+Remember what each one can and can't see (lessons 2.2 to 2.5): the network policy passes "Selected networks" with a
 Deny default; the diagnostic policy only checks that **some** log category exists; the built-in CMK policy skips
 `AIServices` by default, which is why it isn't in the list.
 
@@ -336,7 +336,7 @@ az monitor log-analytics query -w $WS --analytics-query "AzureDiagnostics
 
 Read the `CallerIPAddress` of the `RequestResponse` row: it should be the VM's `10.20.3.x`, never a public address.
 Then search `properties_s` for "Reply with OK". Microsoft doesn't say whether these categories hold prompt text,
-which is why lesson 11.4 sends prompt-level audit to the API Management gateway. Our run recorded that
+which is why lesson 2.4 sends prompt-level audit to the API Management gateway. Our run recorded that
 `RequestResponse` rows arrived with the operation name `ChatCompletions_Create` (for a call to
 `/openai/v1/responses`, so don't filter on a name you guessed). It did not record the caller address or whether
 `properties_s` held the prompt, so write down what yours shows.
@@ -378,7 +378,7 @@ Put the role back with `make up` (Terraform re-creates the assignment; type `yes
 ### T4 · The doors can't be re-opened, not even by you
 
 At least 15 minutes after `make policy`. Three changes an attacker with a stolen admin session would try (lab steps
-A4, A6 and B9 from AZ10):
+A4, A6 and B9 from M1):
 
 1. A Global deployment: prompts "may be processed in any Azure region"
 
@@ -469,7 +469,7 @@ mistake here keeps the vault name locked for 7 days.
 
 ## G4 · Change one setting and re-run: drop one DNS link
 
-Lesson 11.2's quietest failure: one privatelink zone loses its link to the VNet. Delete the link for
+Lesson 2.2's quietest failure: one privatelink zone loses its link to the VNet. Delete the link for
 `privatelink.openai.azure.com` only:
 
 ```bash
@@ -495,7 +495,7 @@ The last line is a refusal: we show 401 because that is what the shut public doo
 table has no G4 row, and 403 would mean the same thing. Same VM, same identity, same role, same model: refused, because one name now leads to the public door, which is shut.
 With public access Enabled (Contoso's version 1), the same mistake would have **worked**, over the internet, and nobody
 would have noticed (lab steps L2 and L3). The tempting fix is to re-open public access; T4 showed the policy won't let
-you, and lesson 11.2 says fix DNS. Restore it with `make up` and run `probe-inside` once more.
+you, and lesson 2.2 says fix DNS. Restore it with `make up` and run `probe-inside` once more.
 
 | Test | Expected | Your result |
 |---|---|---|
@@ -508,8 +508,8 @@ you, and lesson 11.2 says fix DNS. Restore it with `make up` and run `probe-insi
 
 ## G5 · Prompt-level audit: what this build doesn't do
 
-Lesson 11.4: Microsoft documents prompt and completion logging in the API Management AI gateway ("Log LLM messages"),
-not in the Foundry resource's own categories. This build has no gateway, so checker rule AZ11-14 stays as an accepted
+Lesson 2.4: Microsoft documents prompt and completion logging in the API Management AI gateway ("Log LLM messages"),
+not in the Foundry resource's own categories. This build has no gateway, so checker rule M2-M5 stays as an accepted
 LOW finding, and T2's `properties_s` check tells you what you do get without one. If you add a gateway later, keep it
 private (the Foundry portal's AI Gateway "is automatically public"), give the LLM log a short retention, and let only a
 small incident group read the workspace.

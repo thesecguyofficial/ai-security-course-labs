@@ -1,18 +1,18 @@
-# M20 lab: agent identity and delegation
+# M13 lab: agent identity and delegation
 
 Three agents pass a user's request along a chain. You attack the chain eight ways, then watch a hardened version
-shrink the token at every hop and refuse a replay. Lessons 20.5 and 20.6 of the course.
+shrink the token at every hop and refuse a replay. Lessons 13.5 and 13.6 of the course.
 
 ```text
 you -> helpdesk-app -> orchestrator-agent -> tickets-agent -> tickets-api
                                                     \-> mail-agent  -> mail-api
 ```
 
-- **Part A (lesson 20.6, about 45 minutes):** the chain on the lab's own OAuth authorization server. Python 3.11+,
+- **Part A (lesson 13.6, about 45 minutes):** the chain on the lab's own OAuth authorization server. Python 3.11+,
   standard library only: no packages, no Docker, no account, no internet. Everything listens on `127.0.0.1`.
 - **Part B (optional, 20 minutes):** the same chain and the same attacks on **Keycloak 26.8.1**, a real open-source
   identity provider, running on your laptop.
-- **Part C (lesson 20.5):** AgentCore Identity offline (a checker and a CloudTrail hunt), then the
+- **Part C (lesson 13.5):** AgentCore Identity offline (a checker and a CloudTrail hunt), then the
   [guided build](aws/GUIDED-BUILD.md) in your own AWS account.
 
 Every agent's "model" is a worst-case stand-in, as in M7: it obeys any instruction it finds in a ticket, written as
@@ -480,7 +480,7 @@ You need **either** Docker **or** Java 21. Keycloak runs on your laptop on `127.
 `keycloak/make_realms.py` writes both configurations from `setups/*/authz.json`, so the two servers can't drift
 apart. Change a setup, run `make realms`, restart Keycloak.
 
-## Part C · AgentCore Identity (lesson 20.5)
+## Part C · AgentCore Identity (lesson 13.5)
 
 **Before you run Part C: look at one agent, one record, one log row.** These three `explore.py` commands only read
 files in `aws/` (account IDs left out). Output from a fresh Ubuntu machine:

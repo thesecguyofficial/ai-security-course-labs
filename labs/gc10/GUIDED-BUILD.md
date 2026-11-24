@@ -1,4 +1,4 @@
-# GC10 guided build: inventory your Google Cloud AI footprint and lock it down, in your own project
+# M1 guided build: inventory your Google Cloud AI footprint and lock it down, in your own project
 
 The offline lab (README Steps 1 to 7) teaches the mechanics at $0 on a fictional company. This guide does the same
 job on a real project, **your own** sandbox: find which AI services are on, who can call the models, which keys and
@@ -8,7 +8,7 @@ About 60 minutes. Cost: cents at most (table at the end). Teardown is the last s
 README Step 8 is the short version of this guide. If you already did it, reuse that project and skip what you've done.
 
 > **Tested for real on 12 November 2026** (a Free Trial project): the console clicks in this guide, `cloud/deploy.sh`
-> and the Terraform each passed the five requests (5 of 5) and were torn down the same day. Lesson 10.5 quotes the
+> and the Terraform each passed the five requests (5 of 5) and were torn down the same day. Lesson 1.5 quotes the
 > results we got. The blocks below still show the documented response shapes, and each is labeled
 > **"Example response (shape from Google docs, values illustrative)"**. Field names come from Google's API
 > definitions in their JSON (camelCase) form: Gemini
@@ -20,12 +20,12 @@ README Step 8 is the short version of this guide. If you already did it, reuse t
 
 Throughout: `PROJECT_ID` = your project, `PROJECT_NUMBER` = its number (`gcloud projects describe PROJECT_ID
 --format="value(projectNumber)"`), `BILLING_ACCOUNT_ID` = your billing account, and the model is
-`gemini-3.1-flash-lite` on the **global** endpoint, as in README Step 8. Region pinning is Module 11's job (lesson 11.5).
+`gemini-3.1-flash-lite` on the **global** endpoint, as in README Step 8. Region pinning is Module 2's job (lesson 2.5).
 Run everything from `labs/gc10` in Cloud Shell or on a laptop with the `gcloud` CLI.
 
 ## Step 0 · Before you start (10 minutes)
 
-1. **A sandbox project you own**, ideally on the Free Trial (lesson 10.5: "You will not be billed for any Google Cloud
+1. **A sandbox project you own**, ideally on the Free Trial (lesson 1.5: "You will not be billed for any Google Cloud
    usage during your Free Trial"). Not a work project, and never a work organization without written permission
    (lesson 0.8).
 2. **A budget alert first.** Console: **Billing** > **Budgets & alerts** > **Create budget**, scope it to this project,
@@ -42,7 +42,7 @@ Run everything from `labs/gc10` in Cloud Shell or on a laptop with the `gcloud` 
    stops and asks to enable it), and the amount must be in your billing account's own currency. Ours is an INR
    account, so we used `--budget-amount=500INR`; `5USD` is right on a USD account.
 
-   Remember lesson 10.5: this only emails you, hours late. Step 2f adds a spend cap.
+   Remember lesson 1.5: this only emails you, hours late. Step 2f adds a spend cap.
 3. **APIs.** Agent Platform, API Keys and Cloud Asset (for Policy Analyzer in Step 1b):
 
    ```bash
@@ -51,11 +51,11 @@ Run everything from `labs/gc10` in Cloud Shell or on a laptop with the `gcloud` 
    ```
 
    Console: **APIs & Services** > **Library**, search each one, **Enable** (label may differ slightly; the Agent
-   Platform API may still be listed under its old name, Vertex AI API, lesson 10.1).
+   Platform API may still be listed under its old name, Vertex AI API, lesson 1.1).
 4. **Permissions.** As the project owner you can do Steps 1 to 4. In a shared project you'd need: Cloud Asset Viewer
    (`roles/cloudasset.viewer`) and Role Viewer for Policy Analyzer
    ([analyze IAM policies](https://docs.cloud.google.com/policy-intelligence/docs/analyze-iam-policies)), Agent
-   Platform Admin to change the cache setting (lesson 10.2), and permission to create API keys and service accounts.
+   Platform Admin to change the cache setting (lesson 1.2), and permission to create API keys and service accounts.
    **Organization Policy Administrator on an organization** is only needed for the optional Step 2g.
 
 ## Step 1 · Inventory: what AI do you have, and who can use it? (15 minutes)
@@ -70,12 +70,12 @@ gcloud services list --enabled --project=PROJECT_ID \
 ```
 
 Console: **APIs & Services** > **Enabled APIs & services** (label may differ slightly). Two doors, two sets of
-controls (lesson 10.1): `aiplatform.googleapis.com` is Agent Platform; `generativelanguage.googleapis.com` is the
+controls (lesson 1.1): `aiplatform.googleapis.com` is Agent Platform; `generativelanguage.googleapis.com` is the
 Gemini API you reach with an AI Studio key. If the second one is on and nobody can say why, that's finding number one.
 
 ### 1b. Who can call a model?
 
-Calling a model needs `aiplatform.endpoints.predict` (lesson 10.3). Ask Policy Analyzer who holds it, directly or
+Calling a model needs `aiplatform.endpoints.predict` (lesson 1.3). Ask Policy Analyzer who holds it, directly or
 through a role, group or inherited grant:
 
 ```bash
@@ -109,8 +109,8 @@ gcloud services api-keys list --project=PROJECT_ID --format=json > my-keys.json
 python3 policy_checker.py --keys my-keys.json
 ```
 
-What to look for: any user-managed service account key (lesson 10.0: a downloadable credential), any API key with no
-`restrictions`, and any key with a `serviceAccountEmail` (an authorization key, lesson 10.4). The checker prints
+What to look for: any user-managed service account key (lesson 1.0: a downloadable credential), any API key with no
+`restrictions`, and any key with a `serviceAccountEmail` (an authorization key, lesson 1.4). The checker prints
 `GC10-05` to `GC10-09` for the key mistakes it knows. Console: **IAM & Admin** > **Service Accounts** (open each, tab
 **Keys**) and the **Credentials** page for API keys (label may differ slightly).
 
@@ -123,7 +123,7 @@ curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
   "https://us-central1-aiplatform.googleapis.com/v1/projects/PROJECT_ID/cacheConfig"
 ```
 
-- `python3 policy_checker.py --iam policy.json`: GC10-15 = no Data Access logs for aiplatform.googleapis.com
+- `python3 policy_checker.py --iam policy.json`: M1-M6 = no Data Access logs for aiplatform.googleapis.com
 
 Example response (shape from Google docs, values illustrative), the cache check:
 
@@ -131,7 +131,7 @@ Example response (shape from Google docs, values illustrative), the cache check:
 {"name": "projects/123456789012/cacheConfig"}
 ```
 
-Read it (lesson 10.2): only `name` means caching is on, the default. `"disableCache": true` means it's off.
+Read it (lesson 1.2): only `name` means caching is on, the default. `"disableCache": true` means it's off.
 
 ### 1e. Which guardrails apply?
 
@@ -140,8 +140,8 @@ gcloud org-policies describe vertexai.allowedModels --effective --project=PROJEC
 gcloud org-policies describe iam.managed.disableServiceAccountApiKeyCreation --effective --project=PROJECT_ID
 ```
 
-With no policy on `vertexai.allowedModels`, "all models and actions are allowed" (lesson 10.3). A personal project
-with no organization can't set either policy (lesson 10.3); write "no organization" and move on.
+With no policy on `vertexai.allowedModels`, "all models and actions are allowed" (lesson 1.3). A personal project
+with no organization can't set either policy (lesson 1.3); write "no organization" and move on.
 
 ## Step 2 · Lock it down (20 minutes)
 
@@ -149,7 +149,7 @@ Each part has the console path and the command. Do one or the other, not both.
 
 ### 2a. Two test identities: one that may call models, one that may not
 
-Lesson 10.3's fix: the workload gets its own service account with `roles/aiplatform.user` **on the project**, nothing
+Lesson 1.3's fix: the workload gets its own service account with `roles/aiplatform.user` **on the project**, nothing
 on the organization, no basic roles. The second account has no AI role at all: it's your "should be denied" caller.
 
 ```bash
@@ -160,7 +160,7 @@ gcloud projects add-iam-policy-binding PROJECT_ID \
 ```
 
 To act as these accounts from your terminal, you need Service Account Token Creator **on each account**, not on the
-project (lesson 11.1: "Don't grant access to service accounts at the Google Cloud project or folder level"). Use your
+project (lesson 2.1: "Don't grant access to service accounts at the Google Cloud project or folder level"). Use your
 own Google account email for `YOUR_EMAIL`:
 
 ```bash
@@ -175,7 +175,7 @@ Console: **IAM & Admin** > **Service Accounts** > **Create service account**, na
 access** > **Grant access**, add yourself with **Service Account Token Creator** (labels may differ slightly).
 
 Production note: a workload never needs Token Creator for itself. It gets the attached service account through
-Application Default Credentials (lesson 10.4). The binding here is only so *you* can test as the account.
+Application Default Credentials (lesson 1.4). The binding here is only so *you* can test as the account.
 
 ### 2b. Data Access audit logs on for Agent Platform
 
@@ -192,13 +192,13 @@ Or edit the policy file from 1d: keep `bindings` and `etag` exactly as they are 
 ```
 
 then `gcloud projects set-iam-policy PROJECT_ID policy.json`. If it reports a conflict, someone changed the policy:
-fetch it again and redo the edit. Run `python3 policy_checker.py --iam policy.json`: GC10-15 should be gone.
+fetch it again and redo the edit. Run `python3 policy_checker.py --iam policy.json`: M1-M6 should be gone.
 
 ### 2c. Two restricted API keys (and delete the rest)
 
-Lesson 10.4: prefer no key at all. You'll make two anyway, to see what restrictions do. Both only work for Agent
+Lesson 1.4: prefer no key at all. You'll make two anyway, to see what restrictions do. Both only work for Agent
 Platform and only from `192.0.2.10`, a documentation address, so both will refuse your machine. `gc10-build` is a
-plain standard key. `gc10-bound` is bound to `gc10-caller` from 2a (an authorization key, lesson 10.4):
+plain standard key. `gc10-bound` is bound to `gc10-caller` from 2a (an authorization key, lesson 1.4):
 
 ```bash
 gcloud services api-keys create --project=PROJECT_ID --display-name=gc10-build \
@@ -221,15 +221,15 @@ API; under **Application restrictions** choose **IP addresses**, **Add** `192.0.
 
 The plain key `gc10-build` only exists because gcloud allows it. Make it with the command
 above if you want to see R3's first result. Our project has no organization, so no organization policy applies to
-it. That is the likely reason nothing blocked the bound key there, although lesson 10.4 says a default organization
+it. That is the likely reason nothing blocked the bound key there, although lesson 1.4 says a default organization
 policy prevents bound keys. In a work organization expect that policy to refuse this command.
 
 Delete any key from 1c you can't justify: `gcloud services api-keys delete KEY_ID --project=PROJECT_ID` (it can be
-restored for 30 days, lesson 10.4). Keep the key string out of files and screenshots.
+restored for 30 days, lesson 1.4). Keep the key string out of files and screenshots.
 
 ### 2d. Switch off prompt caching (zero-retention projects)
 
-Lesson 10.2: caching is on by default, and turning it off needs Agent Platform Admin. There's no console page in the
+Lesson 1.2: caching is on by default, and turning it off needs Agent Platform Admin. There's no console page in the
 sources we read, so this is REST only:
 
 ```bash
@@ -238,7 +238,7 @@ curl -s -X PATCH -H "Authorization: Bearer $(gcloud auth print-access-token)" -H
   -d '{"name": "projects/PROJECT_ID/cacheConfig", "disableCache": true}'
 ```
 
-Run the GET from 1d again. You want `"disableCache": true`. (Lesson 11.3 shows the middle setting, in-memory only.)
+Run the GET from 1d again. You want `"disableCache": true`. (Lesson 2.3 shows the middle setting, in-memory only.)
 
 ### 2e. The second Gemini door
 
@@ -248,7 +248,7 @@ someone's app depends on it; ask first.
 
 ### 2f. A spend cap on Agent Platform
 
-From lesson 10.5 and README Step 8b: **Billing** > **Budgets & alerts** > **Create new budget**, choose **Spend cap
+From lesson 1.5 and README Step 8b: **Billing** > **Budgets & alerts** > **Create new budget**, choose **Spend cap
 enforcement** instead of *Alerts only*, a *single* project, the service *Gemini Enterprise Agent Platform (formerly
 Vertex AI)*, an amount, **Finish** ([spend caps](https://docs.cloud.google.com/billing/docs/how-to/budgets-spend-caps)).
 The Budget API version is `gcp-twin/budget-spend-cap.json` (replace `PROJECT_NUMBER`). Spend caps are "limited to
@@ -267,7 +267,7 @@ gcloud org-policies describe vertexai.allowedModels --effective --project=PROJEC
 ```
 
 In dry run, "violations of the policy are audit-logged, but the violating actions aren't denied", and changes "can
-take up to 15 minutes to be fully enforced" (lesson 10.3). The key constraint: if 1e showed
+take up to 15 minutes to be fully enforced" (lesson 1.3). The key constraint: if 1e showed
 `iam.managed.disableServiceAccountApiKeyCreation` not enforced, `fixes/orgpolicy-org-block-sa-api-keys.json` puts it
 back (replace the organization number first).
 
@@ -345,7 +345,7 @@ changes take time to reach every service.
 
 ### R3 · Two copied API keys, used from the wrong place
 
-Each key string from 2c, sent in the header Google recommends (lesson 10.4). Run the call twice, once with the
+Each key string from 2c, sent in the header Google recommends (lesson 1.4). Run the call twice, once with the
 plain key's string and once with the bound key's:
 
 ```bash
@@ -438,13 +438,13 @@ docs, values illustrative), the cache check:
 ```
 
 What should have changed: `gc10-caller` now appears with `roles/aiplatform.user` on the project (and `gc10-nobody`
-doesn't), the key checker reports no GC10-05 or GC10-07 for either key (it does report GC10-06 for `gc10-bound`: a
-bound key works like a long-lived access token, and the teardown deletes it), GC10-15 is gone, and caching is off. If you
+doesn't), the key checker reports no M1-M5 or M1-M7 for either key (it does report M1-M6 for `gc10-bound`: a
+bound key works like a long-lived access token, and the teardown deletes it), M1-M6 is gone, and caching is off. If you
 did 2g, `describe --effective` shows your allow-list in `dryRunSpec`.
 
 ## Step 4 · Change one setting and re-run
 
-Lesson 10.4's trade-off: an application restriction only helps if it names the right place. Add your own address
+Lesson 1.4's trade-off: an application restriction only helps if it names the right place. Add your own address
 (the `callerIp` from R4) to the **bound** key, keeping the API restriction. Use the bound key because the plain
 key got `401` in R3 before its IP list was even read, so changing that list changes nothing:
 
@@ -458,7 +458,7 @@ Wait a minute and run R3 again with the bound key's string. We did not run this 
 run tested both keys only from the wrong address. The bound key signs in as `gc10-caller`, which holds Agent
 Platform User, so expect an R2-shaped answer, and write down what you get if it's something else. Now run R4 again
 and look for that call under `gc10-caller`. Then ask the
-question lesson 10.4 asks: if your laptop's address changes, or the key is copied to a machine behind the same
+question lesson 1.4 asks: if your laptop's address changes, or the key is copied to a machine behind the same
 office NAT, what does this restriction still protect? Put the key back to `192.0.2.10` only when you're done:
 
 ```bash
@@ -497,7 +497,7 @@ prices below are Google's USD list prices.
 
 ## Teardown (10 minutes)
 
-Do it today. Keep the Data Access logs and the cache setting if you plan to do GC11 in the same project.
+Do it today. Keep the Data Access logs and the cache setting if you plan to do M2 in the same project.
 
 ```bash
 gcloud services api-keys delete KEY_ID --project=PROJECT_ID

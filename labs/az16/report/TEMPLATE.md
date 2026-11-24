@@ -30,7 +30,7 @@ could and could not show (for example: the gateway's LLM log has only the calls 
 
 ## Containment
 
-<What was done to stop it, with the exact command or portal action and the time. Lesson 16.5 has the playbook.>
+<What was done to stop it, with the exact command or portal action and the time. Lesson 7.5 has the playbook.>
 
 ## Eradication and recovery
 

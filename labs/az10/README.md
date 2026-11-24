@@ -1,4 +1,4 @@
-# Lab AZ10: find the risky Azure AI settings, cut the keys and roles, allow-list models, then hunt LLMjacking
+# Lab M1: find the risky Azure AI settings, cut the keys and roles, allow-list models, then hunt LLMjacking
 
 Companion to lessons **10.2 to 10.5** of *AI Security Engineer* (The Sec Guy), Azure stream. About 60 minutes,
 **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Azure subscription
@@ -12,12 +12,12 @@ one sitting you will:
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Check** | Run a checker over Contoso's role assignments, policy assignments, Foundry resources, deployments and budgets | 10.2 to 10.5 |
-| **Scan** | See what a thief finds in the repository that went public | 10.4 |
-| **Break** | Replay what a thief can do with the leaked keys and the CI pipeline's secret: 10 of 12 requests work | 10.3 to 10.5 |
+| **Check** | Run a checker over Contoso's role assignments, policy assignments, Foundry resources, deployments and budgets | 1.2 to 1.5 |
+| **Scan** | See what a thief finds in the repository that went public | 1.4 |
+| **Break** | Replay what a thief can do with the leaked keys and the CI pipeline's secret: 10 of 12 requests work | 1.3 to 1.5 |
 | **Fix** | Apply least-privilege roles, `disableLocalAuth`, the approved-models policy on Deny, budgets, and replay | 10.3 to 10.5 |
-| **Hunt** | Search the Activity Log, request logs and token metrics for the two intrusions of 14 October | 10.5 |
-| **Challenge** | Close the three gaps the fixes still leave. No solution included | 10.3 to 10.5 |
+| **Hunt** | Search the Activity Log, request logs and token metrics for the two intrusions of 14 October | 1.5 |
+| **Challenge** | Close the three gaps the fixes still leave. No solution included | 1.3 to 1.5 |
 
 ## Get the lab files
 
@@ -93,7 +93,7 @@ are the same in every tenant. Every IP address is from the documentation ranges 
 GUID or IP, or a secret without EXAMPLE in it, ever creeps in.
 
 **Guided build (your own subscription).** `GUIDED-BUILD.md` builds a small Foundry estate from zero, inventories it with
-lessons 10.1 to 10.5, locks it down (Foundry User on one resource, keys off, approved models and key access on Deny,
+lessons 1.1 to 1.5, locks it down (Foundry User on one resource, keys off, approved models and key access on Deny,
 logs, a budget) and proves each fix with a request that should now fail. About 75 minutes, a few US cents.
 
 ## Needs
@@ -104,7 +104,7 @@ logs, a budget) and proves each fix with a request that should now fail. About 7
 
 ## Step 1b · Before you start: look at how Azure decides one request (about 10 minutes)
 
-New to Azure? Do this before Step 1 (lesson 10.0 walks through the same six ideas, lesson 10.2 calls this Step 1b).
+New to Azure? Do this before Step 1 (lesson 1.0 walks through the same six ideas, lesson 1.2 calls this Step 1b).
 `explore.py` shows, one step at a time, how Azure knows who is calling, decides "allowed or not" and records a
 request, using Contoso's files. Real output below is from a fresh Ubuntu machine.
 
@@ -536,16 +536,16 @@ Remember: a budget alerts, it never stops spending; a TPM quota limits speed, no
 
 How to read it, highest first:
 
-- **AZ10-01, AZ10-02**: keys are on for both Foundry resources, and six assignments can list them. The CI pipeline
+- **M1-M1, M1-M2**: keys are on for both Foundry resources, and six assignments can list them. The CI pipeline
   and the helpdesk app hold **Contributor**; the contractor holds **Cognitive Services Contributor**, whose own
   description is "Lets you create, read, update, delete and manage keys of Cognitive Services." Even the data
   scientists' **Foundry User** can: its Actions include `Microsoft.CognitiveServices/accounts/listkeys/action`.
-- **AZ10-07, AZ10-08, AZ10-09**: the approved-models policy is on `Audit`, lists the publisher `OpenAI`, and its one
+- **M1-M7, M1-M8, M1-M9**: the approved-models policy is on `Audit`, lists the publisher `OpenAI`, and its one
   asset ID has no trailing slash. Open `contoso/policy-definitions/approved-models.json` and read the `policyRule`:
   non-compliant only if the publisher is `notin` the list **and** no asset ID is `contains`-matched.
-- **AZ10-03 to AZ10-06**: role hygiene. Contributor on workloads, an AI role at subscription scope, Agent Consumer at
+- **M1-M3 to M1-M6**: role hygiene. Contributor on workloads, an AI role at subscription scope, Agent Consumer at
   resource scope (the portal can't do better; the CLI can), and Azure AI Developer used because of its name.
-- **AZ10-10 to AZ10-14**: an existing deployment that isn't approved and is far too big for a sandbox, a Global
+- **M1-M1 to M1-M5**: an existing deployment that isn't approved and is far too big for a sandbox, a Global
   deployment for EU helpdesk data, no key-access policy, and no budget on either AI resource group.
 
 ## Step 2 · Scan: what a thief sees
@@ -629,7 +629,7 @@ Add `-v` to see every role and policy that was checked for each request. What to
 - **A1 to A3**: the keys from the repository work on both resources, and the reason line says why: no role is
   checked at all.
 - **B1 vs B2**: the CI identity's Entra ID token can't call the model (Contributor has no DataActions), but the same
-  identity lists the keys. That's the RBAC bypass from lessons 10.3 and 10.4.
+  identity lists the keys. That's the RBAC bypass from lessons 1.3 and 1.4.
 - **B3, B4, B8**: an unapproved publisher deploys with only an audit warning; gpt-5.4 and gpt-5.2 version 2 deploy
   without even that, because the publisher `OpenAI` is approved.
 - **B5, B7, B9**: content filters replaced, keys switched back on. **B6** is the one thing Contributor can't do:

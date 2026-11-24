@@ -1,6 +1,6 @@
 # AI incident report: <short name>
 
-Template from lesson 18.3. It extends the technical incident report from Module 16 with the parts governance needs:
+Template from lesson 11.3. It extends the technical incident report from cloud Module 7 with the parts governance needs:
 which AI system, which framework risk, who must be told, and by when. Write for two readers: the engineer who fixes
 it tomorrow and the manager who signs off. UTC times; every fact names the record that proves it.
 

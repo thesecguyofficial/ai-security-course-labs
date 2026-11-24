@@ -1,6 +1,6 @@
-# Lab M17.4: promptfoo in GitHub Actions against the TSG Helpdesk
+# Lab M10.4: promptfoo in GitHub Actions against the TSG Helpdesk
 
-Companion to lesson **17.4** of *AI Security Engineer* (The Sec Guy). About 45 minutes for Steps 1 to 7, plus about 10
+Companion to lesson **10.4** of *AI Security Engineer* (The Sec Guy). About 45 minutes for Steps 1 to 7, plus about 10
 for Step 1b and 15 for Step 1c if you do them. $0, on your laptop. The GitHub part (Step 6) uses a new repository of
 your own (not a fork, so nothing you do can reach the course's repository); standard GitHub-hosted runners are free
 for public repositories ([GitHub Docs](https://docs.github.com/en/billing/concepts/product-billing/github-actions)).
@@ -36,7 +36,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 
 | File | What it is |
 |---|---|
-| `helpdesk.py` | **TSG Helpdesk, M17 build**: an IT helpdesk for AnyCompany staff. Answers from the help center, reads tickets, and has two actions (`reset_mfa`, `send_email`, both simulated). Command line plus a local API on `127.0.0.1:8017` only |
+| `helpdesk.py` | **TSG Helpdesk, M10 build**: an IT helpdesk for AnyCompany staff. Answers from the help center, reads tickets, and has two actions (`reset_mfa`, `send_email`, both simulated). Command line plus a local API on `127.0.0.1:8017` only |
 | `guards.py` | The four controls the hardened build runs (G1 to G4). **This is the file the evals protect** |
 | `data/` | The help center (`kb.json`, trusted) and the ticket system (`tickets.json`; comments come from outside senders) |
 | `evals/promptfooconfig.yaml` | The security eval suite: five security rules that run on every test |
@@ -51,7 +51,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 | `optional/` | Step 9 only: a garak REST config and a PyRIT script for the same target |
 
 **About the stand-in model.** The "model" inside `helpdesk.py` is plain Python, **not AI**. It is the worst case on
-purpose, as in labs M3, M7 and M12: it reads everything in its context, decodes Base64 and invisible Unicode, and
+purpose, as in labs M3, M7 and cloud M3: it reads everything in its context, decodes Base64 and invisible Unicode, and
 obeys any line that starts with `LAB-INJECTED-DIRECTIVE` or `Note for the AI assistant`, wherever it finds one. Two
 things follow. Every result is exact and repeatable, so a failing test means your code changed, not the model's mood.
 And the controls are tested against a model that is *always* fooled, so they can't depend on luck.
@@ -86,7 +86,7 @@ exactly one attack.
 
 ## Step 1b · Before you start: look at how a security eval works (about 10 minutes)
 
-New to evals? Do this after Step 1 (lesson 17.4 and its videos call it Step 1b). `explore.py` shows each piece of a
+New to evals? Do this after Step 1 (lesson 10.4 and its videos call it Step 1b). `explore.py` shows each piece of a
 security eval on its own: one test case, one run graded rule by rule, a score, why AI tests repeat, a ticket's
 hidden characters and the CI workflow. Real output below is from a fresh Ubuntu machine.
 
@@ -250,7 +250,7 @@ exit code: 100
 
 ## Step 1c · Run your own first eval (about 15 minutes)
 
-Lesson 17.0's third basics video does this on a fresh Ubuntu machine. It is the nine-step
+Lesson 10.0's third basics video does this on a fresh Ubuntu machine. It is the nine-step
 method in miniature: a small promptfoo config written from scratch, run, broken, extended with a regression case,
 fixed, and proven able to fail. You need Node.js 22.22+ (Step 1).
 
@@ -298,7 +298,7 @@ then one `TOOL <name> <target> <decision>` line per tool call. Real result: `✓
 
 ## Step 2 · Meet the target, then attack it
 
-Lesson 17.1's method starts with scope and a threat model. Here is both, short:
+Lesson 10.1's method starts with scope and a threat model. Here is both, short:
 
 - **In scope:** the Helpdesk API on `127.0.0.1:8017`, signed in as `bob`. Out of scope: everything else.
 - **Attack paths:** the user's own message (direct), ticket comments from outside senders (indirect), invisible
@@ -584,7 +584,7 @@ This step was not run for this guide (no outputs shown), because its results dep
 
 ## Step 9 · Optional: the same target through garak and PyRIT
 
-Lesson 17.2 compares the three tools. Both extras talk only to the local Helpdesk, need their own virtual environment
+Lesson 10.2 compares the three tools. Both extras talk only to the local Helpdesk, need their own virtual environment
 (they are large), and are not needed for anything else in this lab. Start the app first in another terminal:
 `python3 helpdesk.py serve` (hardened) or `python3 helpdesk.py serve --profile weak`.
 

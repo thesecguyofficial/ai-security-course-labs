@@ -1,6 +1,6 @@
-# Lab M31.3: an x402 paywall, an injected "buy" and a spend guard
+# Lab M24.3: an x402 paywall, an injected "buy" and a spend guard
 
-Companion to lesson **31.3** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 30 minutes,
+Companion to lesson **24.3** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 30 minutes,
 $0, all on your laptop, all on fake data. **No blockchain, no testnet, no wallet software, no faucet, no real money.**
 Nothing leaves this folder: the "chain" is a JSON file (`state/ledger.json`) and the "signatures" are HMAC with lab
 keys written in `x402lab.py`.
@@ -11,7 +11,7 @@ a `PAYMENT-SIGNATURE` header, a facilitator verifies and settles, and the server
 `PAYMENT-RESPONSE` header. Other tasks only read product pages, which sellers write, so the pages are untrusted.
 
 The agent never holds the wallet key. A **spend guard** (`guard.py`) sits between the agent and the wallet, like the
-policy enforcement point in front of a tool in Module 21. It signs a payment only if the user's **mandate** (what
+policy enforcement point in front of a tool in Module 14. It signs a payment only if the user's **mandate** (what
 alice approved on a trusted surface, AP2-style) and the **task** allow it.
 
 You get two versions. The **first draft** passed every functional test. The **hardened** one has the same agent, the
@@ -108,7 +108,7 @@ The guard decided before anything was signed.
 
 ## Step 1b · Look at each step on its own (explore.py)
 
-New to payments? Do this before Step 2 (lesson 31.1 and its videos run it). `explore.py` shows one step at a time.
+New to payments? Do this before Step 2 (lesson 24.1 and its videos run it). `explore.py` shows one step at a time.
 **What it really runs:** steps 1 and 2 use small stand-ins written in `explore.py` itself (a pretend bank, card
 network and payment processor; the card number is a public test number, not a real card). Steps 3 to 5 use the
 lab's own code (`mandate.py`, `guard.py`, `x402lab.py`) with its state in a temporary folder outside the lab, which
@@ -477,12 +477,12 @@ You should see:
 
 They fail until you finish all three parts.
 
-1. **Per-payee daily limit (31.1).** In `guard.py`, find `CHALLENGE 1`. When the mandate has `per_payee_daily_max`,
+1. **Per-payee daily limit (24.1).** In `guard.py`, find `CHALLENGE 1`. When the mandate has `per_payee_daily_max`,
    refuse (rule `per_payee_daily_max`) when what this payee was paid today plus this amount is over it. Test C1.
-2. **Long-lived authorizations (31.1).** In `guard.py`, find `CHALLENGE 2`. When the setup has `max_timeout_seconds`,
+2. **Long-lived authorizations (24.1).** In `guard.py`, find `CHALLENGE 2`. When the setup has `max_timeout_seconds`,
    refuse to sign (rule `max_timeout`) when the 402's `maxTimeoutSeconds` is longer. A signed authorization that
    stays valid for 30 days is a 30-day replay window if it leaks. Test C2.
-3. **The injected-purchase hunt (31.1).** In `hunt.py`, write `find_injected_purchases()`: the task IDs where a
+3. **The injected-purchase hunt (24.1).** In `hunt.py`, write `find_injected_purchases()`: the task IDs where a
    payment was allowed or held after the agent read untrusted content, to a payee nobody paid in the last 30 days.
    Tests C3 and C4.
 

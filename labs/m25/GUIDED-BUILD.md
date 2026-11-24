@@ -1,4 +1,4 @@
-# M25 guided build: sign in CI, verify at deploy, register on SageMaker AI only when it passes
+# M18 guided build: sign in CI, verify at deploy, register on SageMaker AI only when it passes
 
 The offline lab (README Steps 1 to 8) teaches the mechanics at $0. This guide runs the same gate against **your own**
 AWS sandbox account (the one from lesson 0.7, never a work account), in **us-east-1**. About 45 minutes.
@@ -22,9 +22,9 @@ Billing console the next day; we expect this guide to cost cents at most, but we
 > code you ran offline. Write your real results down as you go.
 
 > **This guide registers the lab's toy model, not a real one.** The package points at the same inference image as
-> the M15 guided build so the request is complete, but **don't deploy it**: the toy model is not something that image
-> can serve. To gate a real model, sign the model folder you downloaded in M15 (Part B, option 1, with that folder in
-> place of `release/1.1.0-hardened/model`) and deploy the approved version with M15's guided build, Part D.
+> the cloud M6 guided build so the request is complete, but **don't deploy it**: the toy model is not something that image
+> can serve. To gate a real model, sign the model folder you downloaded in cloud M6 (Part B, option 1, with that folder in
+> place of `release/1.1.0-hardened/model`) and deploy the approved version with cloud M6's guided build, Part D.
 
 ## Step 0 · Before you start (5 minutes)
 
@@ -121,7 +121,7 @@ GATE [hardened] on the copy downloaded from S3:
 **Approval is a signal, not a lock.** AWS's own wording: "Setting the status to `Approved` can initiate CI/CD
 deployment for the model" ([AWS](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-approve.html)). Your
 deploy pipeline acts on it, so who may set it matters. Give `sagemaker:UpdateModelPackage` on this group to the gate's
-role only, not to data scientists (M15's checker flags self-approval as M15-18).
+role only, not to data scientists (cloud M6's checker flags self-approval as cloud M6-M11).
 
 ## Part D · Five requests
 
@@ -179,7 +179,7 @@ role only, not to data scientists (M15's checker flags self-approval as M15-18).
    ```
 
    You should see one `UpdateModelPackage`, from the identity that ran the gate. In production that identity is the
-   gate's role, and an `UpdateModelPackage` to `Approved` from anyone else is an alert (lesson 25.5, "Spot it").
+   gate's role, and an `UpdateModelPackage` to `Approved` from anyone else is an alert (lesson 18.5, "Spot it").
 
 5. **Did the tampered bytes reach the registry?**
 
@@ -194,7 +194,7 @@ role only, not to data scientists (M15's checker flags self-approval as M15-18).
    **One gap to see clearly:** the package points at the S3 **prefix**, and the prefix now holds the tampered file.
    A deploy that reads "latest" from that prefix would load the bytes the gate refused. The fixes, best first: copy
    approved files into a separate, write-protected "released" prefix or bucket that only the gate's role can write
-   (M15's hardened bucket policy does this), or have the serving side re-verify the signature before loading.
+   (cloud M6's hardened bucket policy does this), or have the serving side re-verify the signature before loading.
 
 ## Part E · Swap in the first draft's settings: fail open
 

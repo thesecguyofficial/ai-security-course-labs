@@ -1,4 +1,4 @@
-# Lab GC12: attack the TSG Helpdesk with and without Model Armor, and measure it honestly
+# Lab M3: attack the TSG Helpdesk with and without Model Armor, and measure it honestly
 
 Companion to lessons **12.1 to 12.5** of *AI Security Engineer* (The Sec Guy), Google Cloud stream. About 30 to 45
 minutes, **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Google Cloud
@@ -6,19 +6,19 @@ account needed**. An optional last step deploys Model Armor in your own project 
 suite against the real service, with the cost printed first and a two-command teardown.
 
 You are still the cloud security engineer at **ExampleCo** (fictional, on the documentation domain `example.com`). The
-TSG Helpdesk from GC10 and GC11 calls Gemini on Agent Platform from `example-chatbot-prod` in `europe-west4`, and a
+TSG Helpdesk from M1 and M2 calls Gemini on Agent Platform from `example-chatbot-prod` in `europe-west4`, and a
 ticket summarizer runs on a self-hosted model. Someone "turned on Model Armor" in June. In one sitting you will:
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Check** | Run a checker over the Helpdesk's Model Armor setup and read its 16 findings | 12.1 to 12.4 |
-| **Break** | Replay four attacks through Gemini with Model Armor inline, as configured today | 12.1, 12.3 |
-| **Fix** | Replay them with the hardened floor setting; then take Model Armor away (outage) | 12.3 |
-| **Measure** | Run the automated suite: 14 attacks and 14 legitimate requests, no guard vs today vs hardened | 12.2, 12.4 |
-| **Tune** | Sweep the confidence level and read catch rate and false positives together | 12.4 |
+| **Check** | Run a checker over the Helpdesk's Model Armor setup and read its 16 findings | 3.1 to 3.4 |
+| **Break** | Replay four attacks through Gemini with Model Armor inline, as configured today | 3.1, 3.3 |
+| **Fix** | Replay them with the hardened floor setting; then take Model Armor away (outage) | 3.3 |
+| **Measure** | Run the automated suite: 14 attacks and 14 legitimate requests, no guard vs today vs hardened | 3.2, 3.4 |
+| **Tune** | Sweep the confidence level and read catch rate and false positives together | 3.4 |
 | **Challenge** | Close three documented gaps in `app_guard.py` and pick a level from your own numbers. No solution included | 12.4 |
 | **Guided build (optional)** | `GUIDED-BUILD.md`: create a Model Armor template (console, gcloud or Terraform) and Gemini safety settings in your project, run five requests, read the result fields, change a level, tear down | 12.5 |
-| **Cloud (optional)** | Deploy a template and floor setting with Terraform, run the suite against the real API, tear down | 12.5 |
+| **Cloud (optional)** | Deploy a template and floor setting with Terraform, run the suite against the real API, tear down | 3.5 |
 
 ## Get the lab files
 
@@ -74,8 +74,8 @@ the ones Google documents; the exact **numbers** are the twin's. Real Model Armo
 against the real API.
 
 **One difference from the real service, said plainly.** The twin keeps the Helpdesk's Gemini call in `europe-west4`
-with a request template, for continuity with GC11's story. On the real service in November 2026,
-`gemini-3.1-flash-lite` answered only on `global`, `eu` and `us`, never on a single region, and lesson 12.3 lists the
+with a request template, for continuity with M2's story. On the real service in November 2026,
+`gemini-3.1-flash-lite` answered only on `global`, `eu` and `us`, never on a single region, and lesson 3.3 lists the
 few Gemini locations where per-request templates are documented (`europe-west4` isn't one). So before you copy the
 twin's `app.json` layout, check both lists for your own model. Model Armor templates themselves did work in
 `europe-west4` in our run.
@@ -107,11 +107,11 @@ contacts Google or any other system.
   `python` or `py` in place of `python3`. Step 8's `make cost`, `plan`, `up` and `down` and the `terraform/scripts/*.sh`
   files need a Unix shell: on Windows use WSL or Cloud Shell for Step 8.
 - Optional, Step 8 only: Terraform 1.5+, the `gcloud` CLI, and **your own** sandbox project with billing and a budget
-  (lesson 0.7 and GC10). The GC11 project is fine.
+  (lesson 0.7 and M1). The M2 project is fine.
 
 ## Step 1b · Before you attack: look at each piece (about 10 minutes)
 
-New to Model Armor? Do this before Step 1 (lesson 12.5 calls it Step 1b; lesson 12.0 explains every idea).
+New to Model Armor? Do this before Step 1 (lesson 3.5 calls it Step 1b; lesson 3.0 explains every idea).
 `explore.py` shows each piece of Model Armor on its own. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `twin/` and `data/`, asks
@@ -405,15 +405,15 @@ Real output (Linux, Python 3.13):
 
 Read it by lesson:
 
-- **12.1 filters:** the template the app uses has prompt injection **disabled** (GC12-05) and no URL filter (GC12-06);
-  its SDP is the US-centered basic config while customers are in India and the EU (GC12-10).
-- **12.2 the self-hosted path:** `app_guard.py` screens only the user's own words (GC12-11), never the answer (GC12-08),
-  lets traffic through when a filter is skipped or Model Armor is down (GC12-12, found by **probing the code**), and
-  reaches the regional endpoint through a path that doesn't serve `*.rep.googleapis.com` (GC12-14, GC11's lesson).
-- **12.3 enforcement:** the floor setting is inspect only (GC12-03) with logging off (GC12-04), and the June template
-  that every request names overrides it (GC12-07). Sanitize logs hold raw prompts and every engineer can read them
-  (GC12-15).
-- **12.4 design:** secrets sit in the system prompt, so any guardrail miss is a leak (GC12-16).
+- **12.1 filters:** the template the app uses has prompt injection **disabled** (M3-M5) and no URL filter (M3-M6);
+  its SDP is the US-centered basic config while customers are in India and the EU (M3-M1).
+- **12.2 the self-hosted path:** `app_guard.py` screens only the user's own words (M3-M2), never the answer (M3-M8),
+  lets traffic through when a filter is skipped or Model Armor is down (M3-M3, found by **probing the code**), and
+  reaches the regional endpoint through a path that doesn't serve `*.rep.googleapis.com` (M3-M5, M2's lesson).
+- **12.3 enforcement:** the floor setting is inspect only (M3-M3) with logging off (M3-M4), and the June template
+  that every request names overrides it (M3-M7). Sanitize logs hold raw prompts and every engineer can read them
+  (M3-M6).
+- **12.4 design:** secrets sit in the system prompt, so any guardrail miss is a leak (M3-M7).
 
 ## Step 2 · Break: Gemini with Model Armor inline, as configured today
 
@@ -520,7 +520,7 @@ screening in force: floor setting + Gemini safety filters
 That's Google's documented behavior for the integration: the request "continues without prompt and response
 sanitization". Only one attack got something out, and only because the hardened Helpdesk has no secrets in its prompt:
 the phishing link comes from the ticket itself. You can't make the inline integration fail closed, so you **watch**
-for it: alert when sanitize log entries stop tracking Gemini calls (lesson 12.3).
+for it: alert when sanitize log entries stop tracking Gemini calls (lesson 3.3).
 
 ## Step 4 · Measure: the automated suite
 
@@ -708,7 +708,7 @@ Make the five failing tests pass, without breaking the other 24:
 When `make challenge` says `ALL TESTS PASSED (29 run)`, `make check-hardened` (same as
 `python3 checker.py --twin hardened`) reports 0 findings. A11 (Hindi) and A13
 (leetspeak) will still get past the twin. They can't leak anything because the secrets are out of the prompt: that's
-the design fix lesson 12.4 is about.
+the design fix lesson 3.4 is about.
 
 ## Step 8 · Optional: Model Armor in your own Google Cloud project
 
@@ -734,7 +734,7 @@ refusal. Read the plan before you apply.
 | Cloud Logging for sanitize entries | A few KB per run: see Cloud Logging pricing |
 
 If your organization has Security Command Center Premium or Enterprise, Model Armor's included tokens differ (same
-pricing page). Set a budget alert anyway (GC10 lesson 10.5).
+pricing page). Set a budget alert anyway (M1 lesson 1.5).
 
 ### Deploy
 
@@ -749,7 +749,7 @@ make up
 - `cd .. && make plan`: read the plan
 
 The Agent Platform service agent only exists once Agent Platform has been used in the project; if the IAM step fails,
-run GC11's smoke test (or any Gemini call) first and apply again.
+run M2's smoke test (or any Gemini call) first and apply again.
 
 ### Measure the real thing
 

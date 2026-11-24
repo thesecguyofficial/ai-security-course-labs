@@ -1,4 +1,4 @@
-# Lab AZ13: port the TSG Helpdesk RAG + agent to Azure AI Search, Foundry IQ and Foundry Agent Service without losing a single control
+# Lab M4: port the TSG Helpdesk RAG + agent to Azure AI Search, Foundry IQ and Foundry Agent Service without losing a single control
 
 Companion to lessons **13.0 to 13.3** of *AI Security Engineer* (The Sec Guy), Azure stream. About 45 minutes,
 **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Azure subscription
@@ -17,7 +17,7 @@ Your job: check that every one of those controls made it across, and prove it.
 | **Compare** | `make compare`: version 1, "v1.1" (the obvious fixes only) and the hardened build | 13.3 |
 | **Hunt** | `make hunt`: the Helpdesk's own audit log on its first day in production | 13.2 |
 | **Challenge** | `make challenge`: permission resync, an approval reviewer that reads arguments, a safe filter, reconstruct() | 13.1, 13.2 |
-| **Guided build** (optional) | [GUIDED-BUILD.md](GUIDED-BUILD.md): create it from zero in your subscription, portal and CLI | 13.3 |
+| **Guided build** (optional) | [GUIDED-BUILD.md](GUIDED-BUILD.md): create it from zero in your subscription, portal and CLI | 4.3 |
 
 ## Get the lab files
 
@@ -102,8 +102,8 @@ Outside addresses use the reserved `.example` domain. Nothing here contacts Azur
 
 ## Step 1b · Before you review: look at each piece (about 10 minutes)
 
-New to Azure AI Search and Foundry agents? Do this before Step 1 (lesson 13.3 calls it "Before you start", and
-lesson 13.0 walks through the same twelve ideas). `explore.py` shows each piece one at a time. Real output below is
+New to Azure AI Search and Foundry agents? Do this before Step 1 (lesson 4.3 calls it "Before you start", and
+lesson 4.0 walks through the same twelve ideas). `explore.py` shows each piece one at a time. Real output below is
 from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads `data/`, `contoso/` and `fixes/` and asks
@@ -358,8 +358,8 @@ $ make check            (first lines and the total)
 ```
 
 Read the eight HIGH findings first. Each one is a control from Modules 6 and 7 that didn't survive the move: keys
-still accepted on the search service (AZ13-01), per-user retrieval (AZ13-05, 11, 12, 18), chunk-level metadata (07),
-approval before writes (14), and the identity tools act as (15). Lesson 13.1 covers the search half, 13.2 the agent half.
+still accepted on the search service (M4-M1), per-user retrieval (M4-M5, 11, 12, 18), chunk-level metadata (07),
+approval before writes (14), and the identity tools act as (15). Lesson 4.1 covers the search half, 13.2 the agent half.
 
 ## Step 2 · Break version 1 (`make attack`)
 
@@ -420,7 +420,7 @@ What the hardened build (`fixes/`) changes, and the Module 6/7 control each chan
 | `allowed_tools` on the actions server | M7 tool allow-list | A8 |
 | `require_approval: {"never": ["search_tickets"]}` (everything else asks) | M7 approval before writes | A7 (with challenge 2) |
 | OAuth identity passthrough on the actions connection | M7/M8 least privilege, no shared admin token | A9 |
-| Keys off, private endpoint, CMK, logs, Search Index Data Reader for the project | M11 resource hardening | (`make check`) |
+| Keys off, private endpoint, CMK, logs, Search Index Data Reader for the project | M2 resource hardening | (`make check`) |
 
 Two attacks are left on purpose. **A6**: the index still serves the 08:00 permissions at 10:00. **A7**: approval is
 on, but the stand-in reviewer approves anything that looks like a tool name it knows, which is what a person does on

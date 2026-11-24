@@ -1,7 +1,7 @@
-# M13 guided build: the ported Helpdesk in your own AWS account
+# M4 guided build: the ported Helpdesk in your own AWS account
 
 The offline lab (README Steps 1 to 8) teaches the mechanics at $0. This guide builds the real thing, from zero, in
-**your own** AWS sandbox account (the M11 account is fine), in **us-east-1** (the Region M11 used). About 90 minutes.
+**your own** AWS sandbox account (the M2 account is fine), in **us-east-1** (the Region M2 used). About 90 minutes.
 Cost: well under US$1 if you follow it as written and tear down today (cost table at the end).
 
 - **Part A** builds a **Bedrock Managed Knowledge Base** with an ACL-aware S3 data source and a customer managed KMS
@@ -266,8 +266,8 @@ VPN client 7.2 is rolling out this week. It fixes the reconnect loop after sleep
 ```
 
 Whether the managed parser keeps the HTML comment is AWS's choice and isn't documented; if your run shows it, this is
-exactly the text your agent's model reads. Part B shows what stops it from mattering. If you kept the M12 guardrail,
-check this text with it (M12.2): `aws bedrock-runtime apply-guardrail --guardrail-identifier <id>
+exactly the text your agent's model reads. Part B shows what stops it from mattering. If you kept the M3 guardrail,
+check this text with it (M3.2): `aws bedrock-runtime apply-guardrail --guardrail-identifier <id>
 --guardrail-version 1 --source INPUT --content '[{"text":{"text":"<paste>"}}]'`.
 
 ## A4 · Change one setting: give Bob HR access, and watch the resync rule

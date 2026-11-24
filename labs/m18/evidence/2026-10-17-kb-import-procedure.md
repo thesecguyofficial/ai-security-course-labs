@@ -1,4 +1,4 @@
-# Evidence: knowledge-base import procedure (sample for the M18 lab, fictional)
+# Evidence: knowledge-base import procedure (sample for the M11 lab, fictional)
 
 Since 17 Oct 2026, resolved tickets are no longer imported automatically.
 

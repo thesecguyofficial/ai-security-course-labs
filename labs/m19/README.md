@@ -1,7 +1,7 @@
-# Lab M19: Capstone. Secure the TSG Helpdesk end to end
+# Lab M12: Capstone. Secure the TSG Helpdesk end to end
 
-The graded capstone of *AI Security Engineer* (The Sec Guy), lessons **19.1 to 19.3**: 19.1 is the brief and
-rubric, 19.2 walks through Parts 0 to 4 and 19.3 through Parts 5 to 8. You get one realistic,
+The graded capstone of *AI Security Engineer* (The Sec Guy), lessons **12.1 to 12.3**: 12.1 is the brief and
+rubric, 12.2 walks through Parts 0 to 4 and 12.3 through Parts 5 to 8. You get one realistic,
 deliberately vulnerable AI system and do the whole job on it: threat-model it, attack it, fix it, prove the fixes
 with security evals in CI, write detections and an incident report, review its cloud deployment, and write the
 governance note someone needs before it goes live. Then you publish it as a public GitHub repo and submit it.
@@ -155,7 +155,7 @@ Aim for controls that hold **even though the model obeys the instruction**: deci
 do, who may read which page, which MCP tools are approved (`make pin` records them), what reaches the page. Then
 try one variant of each attack against your own fix and write down what happened (`FINDINGS.md`, "Variants I tried").
 
-## Part 4 · Prove it in CI (1 hour)
+## Part 3 · Prove it in CI (1 hour)
 
 ```bash
 make eval
@@ -170,9 +170,9 @@ make regress
 injection variants and two normal requests that a careless fix would break.
 
 Push. The workflow runs the same commands. Keep one run where a deliberate regression made it fail (a branch where
-you weakened a guard, then deleted it): that red run is evidence. Lesson 17.3 and 17.4.
+you weakened a guard, then deleted it): that red run is evidence. Lesson 10.3 and 10.4.
 
-## Part 5 · Detect and respond (1 to 2 hours)
+## Part 4 · Detect and respond (1 to 2 hours)
 
 `detections/logs/attack-day.jsonl` is one busy day of app logs (seed 1) with five incidents hidden in normal
 traffic: zero-click exfiltration (S1), cross-tenant and staff-only reads (S2), an MCP rug pull (S3), system prompt
@@ -194,9 +194,9 @@ miss the next day. The grader also runs your rules on three days you have never 
 and write `report/INCIDENT-REPORT.md` (timeline, scope, root cause, containment, evidence with request IDs). Check R3
 looks for eight of the template's headings (those five plus Summary, Detection gaps and Lessons learned). Keep
 every heading in the template.
-Lessons 16.1, 16.5 and 16.6.
+Lessons cloud 7.1, cloud 7.5 and cloud 7.6.
 
-## Part 6 · Cloud: your stream (1 hour)
+## Part 5 · Cloud: your stream (1 hour)
 
 `cloud/aws/deployment.json` describes the Helpdesk on AWS as the platform team's first draft: Bedrock, a guardrail,
 a knowledge base, a Bedrock agent, an AgentCore gateway in front of the crm tools, logging, detection and budget.
@@ -217,13 +217,13 @@ real in your own sandbox account with one of the guided builds (`labs/m12/GUIDED
 `capstone.json` names your stream. Leave it at `aws`, whichever stream you took: the Azure and Google Cloud versions
 of the capstone's cloud file are not built yet, and `make cloud` stops with "not released yet" for them. If you took
 the Azure or Google Cloud stream, each finding names the setting and the AWS lesson that teaches it; the module with
-the same number in your stream (AZ11 or GC11 for a finding that cites 11.x) covers the same topic.
+the same number in your stream (Azure M2 or Google Cloud M2 for a finding that cites 11.x) covers the same topic.
 
 ## Part 7 · Governance note (45 minutes)
 
 Fill in `report/GOVERNANCE-NOTE.md`: the AI inventory entry, three to five risk decisions, an **evidence index**
 that links every control to the test, eval case or rule that proves it (at least eight rows), a mapping to the
-NIST AI RMF functions and ISO/IEC 42001, and the residual risk with an owner and a review date. Lessons 18.1 to 18.4.
+NIST AI RMF functions and ISO/IEC 42001, and the residual risk with an owner and a review date. Lessons 11.1 to 11.4.
 
 ## Part 8 · Submit
 
@@ -237,7 +237,7 @@ make check
 Same as `python3 selfcheck.py`: every objective check, PASS or FAIL.
 
 When it ends with `OBJECTIVE CHECKS PASSED`, push, wait for a green Actions run, then follow
-[`SUBMISSION.md`](SUBMISSION.md). Lesson 19.3 walks through all of it.
+[`SUBMISSION.md`](SUBMISSION.md). Lesson 12.3 walks through all of it.
 
 ## What's in this folder
 

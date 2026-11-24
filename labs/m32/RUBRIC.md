@@ -27,7 +27,7 @@ to pass them to get a Pass.
 - **Overrides.** The course owner can change a grade by hand, for example after an integrity hold turns out to be
   a false alarm. Every change is logged.
 - **What a Pass earns.** An "Advanced capstone" badge, and a line on your certificate and its public verify page.
-  The certificate itself needs the M19 capstone, not this one, and there are no higher grades.
+  The certificate itself needs the M12 capstone, not this one, and there are no higher grades.
 
 Run `make check` before you submit: it shows you every failing line. Each check stands for something an employer
 will look for in your repo.

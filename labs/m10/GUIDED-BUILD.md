@@ -1,10 +1,10 @@
-# M10 guided build: map your AWS AI footprint, then lock it down, in your own account
+# M1 guided build: map your AWS AI footprint, then lock it down, in your own account
 
 The offline lab (README Steps 1 to 7) teaches the mechanics at $0 with AnyCompany's fake account. This guide does the
 same job for real, step by step, in **your own** AWS sandbox account, in **us-east-1**. About 60 to 75 minutes.
 Cost: a few US cents if you follow it as written (cost table at the end). Teardown is the last section: do it today.
 
-You'll do what lesson 10.1 calls "build the inventory before you build the controls": find which AI services run in
+You'll do what lesson 1.1 calls "build the inventory before you build the controls": find which AI services run in
 the account, who can call the models, which Bedrock API keys exist and which logs are on. Then you'll lock it down:
 invocation logging on, a usage alarm, a least-privilege app role, a deny policy against long-term keys, logging
 tampering and unapproved models, and a test key you'll watch being refused.
@@ -21,7 +21,7 @@ Throughout: Region `us-east-1`, and these shell variables (set them in Step 0, a
 | Variable | What it holds | Example (AWS documentation values) |
 |---|---|---|
 | `ACCOUNT` | your 12-digit account ID | `111122223333` |
-| `MODEL` | the approved model, through the US inference profile (as in M11 and M12) | `us.anthropic.claude-haiku-4-5-20251001-v1:0` |
+| `MODEL` | the approved model, through the US inference profile (as in M2 and M3) | `us.anthropic.claude-haiku-4-5-20251001-v1:0` |
 | `ROLE_ARN` | the least-privilege demo role you create in Step 2d | `arn:aws:iam::111122223333:role/tsg-m10-app-demo` |
 | `KEY_ID` | the `ServiceSpecificCredentialId` of the test API key (Step 2e) | `ACCAEXAMPLEKEYID1234` |
 | `AWS_BEARER_TOKEN_BEDROCK` | the test API key itself, **only in your shell, never in a file** | (secret) |
@@ -38,7 +38,7 @@ Throughout: Region `us-east-1`, and these shell variables (set them in Step 0, a
 3. **Use the model once, as yourself.** Most serverless models are "enabled on first use", and Anthropic models ask
    first-time customers for use-case details
    ([model access](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html)). Do that first call from
-   your admin session, so the test identities below never need Marketplace permissions (lesson 11.1):
+   your admin session, so the test identities below never need Marketplace permissions (lesson 2.1):
 
    ```bash
    aws bedrock-runtime converse --region us-east-1 --model-id us.anthropic.claude-haiku-4-5-20251001-v1:0 \
@@ -77,11 +77,11 @@ Throughout: Region `us-east-1`, and these shell variables (set them in Step 0, a
 
 ## Step 1 · Inventory: what's there, who can call it, what's logged (15 minutes, read-only, $0)
 
-Nothing in this step changes your account. Fill in the one-page map at the end of the step as you go (lesson 10.1).
+Nothing in this step changes your account. Fill in the one-page map at the end of the step as you go (lesson 1.1).
 
 ### 1a · Which AI services have been used?
 
-CloudTrail event history keeps "the past 90 days of management events" for free (lesson 10.0). Bedrock records
+CloudTrail event history keeps "the past 90 days of management events" for free (lesson 1.0). Bedrock records
 `InvokeModel`, `InvokeModelWithResponseStream`, `Converse` and `ConverseStream` there as management events, with event
 source `bedrock.amazonaws.com` ([CloudTrail for Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/logging-using-cloudtrail.html)).
 
@@ -112,7 +112,7 @@ Example response (shape from AWS docs, values illustrative;
 ```
 
 How to read it: your own Step 0.3 call shows up as `Converse`. Any principal you **don't** recognize, or a service
-nobody told you about, is finding number one. Two blind spots, both from lesson 10.1:
+nobody told you about, is finding number one. Two blind spots, both from lesson 1.1:
 
 - **bedrock-mantle** (the OpenAI-compatible and Anthropic Messages endpoint) logs inference as CloudTrail **data
   events**, which never appear in event history and are recorded only if a trail selects them
@@ -134,7 +134,7 @@ aws sagemaker list-notebook-instances --query 'NotebookInstances[].[NotebookInst
 ```
 
 In a fresh sandbox every line prints nothing. That's the answer you want. A **provisioned throughput** you didn't
-buy is urgent: it's billed hourly and some terms can't be canceled (lesson 10.4). If a command fails with
+buy is urgent: it's billed hourly and some terms can't be canceled (lesson 1.4). If a command fails with
 `Invalid choice`, your CLI is older than that service: update it (Step 0.2) or skip the line.
 
 ### 1c · Who can call the models?
@@ -175,7 +175,7 @@ arn:aws:iam::111122223333:user/your-admin-user -> bedrock:InvokeModel bedrock-ma
 
 How to read it: every line is an identity that can run **any** model (the simulator used `*` as the resource) on
 both endpoints, delete invocation logging and buy capacity. Admins will show up: that's expected in a sandbox, and
-it's exactly what the M10 checker's `M10-01` and `M10-02` mean in a real account. A workload role on this list is
+it's exactly what the M1 checker's `M10-01` and `M10-02` mean in a real account. A workload role on this list is
 the finding. The loop skips service-linked roles (path `/aws-service-role/`), which you can't change.
 
 ### 1d · Which Bedrock API keys exist?
@@ -187,7 +187,7 @@ aws iam list-users --query "Users[?starts_with(UserName, 'BedrockAPIKey')].[User
 
 `--all-users` lists every user's credentials ("This parameter cannot be specified together with UserName":
 [CLI reference](https://docs.aws.amazon.com/cli/latest/reference/iam/list-service-specific-credentials.html)). The
-second line finds the IAM users the console creates for long-term keys (lesson 10.4).
+second line finds the IAM users the console creates for long-term keys (lesson 1.4).
 
 Example response (shape from AWS docs, values illustrative;
 [list-service-specific-credentials](https://docs.aws.amazon.com/cli/latest/reference/iam/list-service-specific-credentials.html)):
@@ -210,7 +210,7 @@ Example response (shape from AWS docs, values illustrative;
 How to read it: **no `ExpirationDate`** on a Bedrock key means it never expires: the IAM reference says the field is present only
 for Bedrock and CloudWatch Logs API keys created with an expiration period. For every key: who owns it, does anything still use
 it, and what policy does its user carry (1c)? Short-term keys never appear here: they're made client-side from a
-session and "you can't prevent generation of a short-term key" (lesson 10.4).
+session and "you can't prevent generation of a short-term key" (lesson 1.4).
 
 ### 1e · Which logs and detectors are on?
 
@@ -226,22 +226,22 @@ aws bedrock get-account-data-retention
 
 - `aws bedrock get-model-invocation-logging-configuration`: {} = invocation logging is OFF
 - `aws guardduty list-detectors`: empty = GuardDuty is off in this Region
-- `aws bedrock get-account-data-retention`: lesson 11.3: inherit, none, default...
+- `aws bedrock get-account-data-retention`: lesson 2.3: inherit, none, default...
 
 How to read them, one by one:
 
 - **Invocation logging**: an empty answer means "disabled by default" is still true
   ([AWS](https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html)). Step 2a turns it on.
 - **Trails**: no trail means you only have the 90-day event history. Look in the selectors for `resources.type`
-  `AWS::BedrockMantle::Project`: if no trail selects it, nobody records bedrock-mantle inference (M11 builds that trail).
+  `AWS::BedrockMantle::Project`: if no trail selects it, nobody records bedrock-mantle inference (M2 builds that trail).
 - **GuardDuty**: if a detector exists, `aws guardduty get-detector --detector-id <id> --query
   "Features[?Name=='AI_PROTECTION'].Status"` tells you whether AI Protection is on (Step 2f).
 - **Data retention**: the `mode` field is one of `default`, `none`, `aws_review`, `provider_data_share` or `inherit`
-  (botocore `bedrock` model). New accounts are at `inherit` (lesson 11.3). Write it down; M11 decides it.
+  (botocore `bedrock` model). New accounts are at `inherit` (lesson 2.3). Write it down; M2 decides it.
 
 ### 1f · Your one-page map
 
-Copy this into your findings notebook and fill it in (lesson 10.1's five questions):
+Copy this into your findings notebook and fill it in (lesson 1.1's five questions):
 
 | Service | In use? (1a, 1b) | Endpoint (runtime / mantle) | Identities that can call it (1c, 1d) | Logs on? (1e) | Owner |
 |---|---|---|---|---|---|
@@ -256,8 +256,8 @@ Six pieces, each with console clicks **and** CLI. Do them in order: later steps 
 
 ### 2a · Turn on model invocation logging (CloudWatch Logs, text only, kept 7 days)
 
-Invocation logging is what stores the prompt and the answer; CloudTrail only says who called what (lesson 10.2). You
-need a log group and a role Bedrock can assume to write to it. M11 hardens this further with your own KMS key.
+Invocation logging is what stores the prompt and the answer; CloudTrail only says who called what (lesson 1.2). You
+need a log group and a role Bedrock can assume to write to it. M2 hardens this further with your own KMS key.
 
 **Console** (steps quoted from [invocation logging](https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html)):
 
@@ -324,11 +324,11 @@ Example response (shape from AWS docs, values illustrative;
 }
 ```
 
-That's lesson 10.2's evidence column: "`GetModelInvocationLoggingConfiguration` returns a destination".
+That's lesson 1.2's evidence column: "`GetModelInvocationLoggingConfiguration` returns a destination".
 
 ### 2b · A usage alarm that fires in minutes, not hours
 
-Budgets update "up to three times a day" (lesson 10.5). A CloudWatch alarm on `AWS/Bedrock` `Invocations` fires
+Budgets update "up to three times a day" (lesson 1.5). A CloudWatch alarm on `AWS/Bedrock` `Invocations` fires
 within minutes. Bedrock publishes its metrics "both with and without the `ModelId` dimension", and "To account for all
 requests, query these metrics without specifying a dimension"
 ([runtime metrics](https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html)). So this
@@ -358,7 +358,7 @@ one does not: the attacker in the lab's sample CloudTrail makes 61 calls in one 
 than 9 in any five minutes, so this alarm would stay quiet. To catch that pace, add a second alarm with
 `--period 3600` and the same threshold (the lab's hunt rule H08 also starts at 20 an hour). In production, set both
 from your own baseline. Mantle traffic
-lives in `AWS/BedrockMantle` and this alarm won't see it (lesson 10.5).
+lives in `AWS/BedrockMantle` and this alarm won't see it (lesson 1.5).
 
 ### 2c · The deny policy: no long-term keys, no logging changes, no capacity, approved models only
 
@@ -366,7 +366,7 @@ With an AWS Organization, these rules belong in SCPs: the three files in `fixes/
 one to a sandbox member account). Most personal sandboxes are a single account with no Organization, so here you'll
 write the same rules as a **customer managed IAM policy** and attach it to every non-admin identity. This guide calls
 it the **deny policy**. Its name, `tsg-m10-ai-guardrails`, is only a name: it is an IAM policy, not a Bedrock
-Guardrails policy (lesson 10.1). Be clear about
+Guardrails policy (lesson 1.1). Be clear about
 the difference: an SCP caps every identity in the account; this policy only caps the identities you attach it to.
 
 **CLI** (console: **IAM**, **Policies**, **Create policy**, **JSON** tab, paste the same JSON, name
@@ -406,17 +406,17 @@ export GUARD_ARN=arn:aws:iam::$ACCOUNT:policy/tsg-m10-ai-guardrails
 Where each statement comes from:
 
 - `NoLongTermBedrockKeyUse` and the mantle twin: `bedrock:CallWithBearerToken` and `bedrock-mantle:CallWithBearerToken`
-  with `BearerTokenType` = `LONG_TERM` (lesson 10.4, [API key permissions](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys-permissions.html)).
+  with `BearerTokenType` = `LONG_TERM` (lesson 1.4, [API key permissions](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys-permissions.html)).
   The lab's SCP adds "outside the sandbox"; here the whole account is the sandbox and you want to see the deny.
 - `NoAiAuditTrailChanges` and `NoCapacityPurchases`: `fixes/scp-protect-ai-logging-and-spend.json`, without the
   admin-role exception, because you'll only attach this policy to identities that should never do either.
-- `OnlyApprovedModelsOnBedrockRuntime`: lesson 10.3's allow-list, scoped to `bedrock:InvokeModel*` so Guardrails and
+- `OnlyApprovedModelsOnBedrockRuntime`: lesson 1.3's allow-list, scoped to `bedrock:InvokeModel*` so Guardrails and
   Knowledge Bases keep working, with **both** the model and the profile ARN.
-- `TheseIdentitiesNeverUseMantle`: the M10 challenge closes the mantle gap with a model allow-list on
+- `TheseIdentitiesNeverUseMantle`: the M1 challenge closes the mantle gap with a model allow-list on
   `bedrock-mantle:Model`. These two demo identities never use mantle at all, so the simplest correct rule is a plain
   Deny.
 
-Validate it for free (lesson 10.3; `IDENTITY_POLICY` because this is not an SCP here):
+Validate it for free (lesson 1.3; `IDENTITY_POLICY` because this is not an SCP here):
 
 ```bash
 aws accessanalyzer validate-policy --policy-type IDENTITY_POLICY --policy-document file://guardrails.json \
@@ -430,7 +430,7 @@ statements: read it, it doesn't stop the policy working.
 
 This is `fixes/helpdesk-app-role.least-privilege.json` with your account ID, minus its guardrail and knowledge-base
 statement (those resources don't exist in your sandbox). It can call one model, only through one US profile
-(`bedrock:InferenceProfileArn`, lessons 10.3 and 11.1). The trust policy lets identities in **your** account assume
+(`bedrock:InferenceProfileArn`, lessons 1.3 and 2.1). The trust policy lets identities in **your** account assume
 it, so you can test it from your terminal; a real app role would trust `lambda.amazonaws.com` or similar.
 
 **CLI** (console: **IAM**, **Roles**, **Create role**, **AWS account**, **This account**; skip the permissions page;
@@ -456,11 +456,11 @@ export ROLE_ARN=arn:aws:iam::$ACCOUNT:role/tsg-m10-app-demo
 ```
 
 Two layers on purpose: the role's own policy already refuses everything except the approved model, and the
-deny policy refuses it again. Each layer should hold on its own (M11 test 06 makes the same point).
+deny policy refuses it again. Each layer should hold on its own (M2 test 06 makes the same point).
 
 ### 2e · A long-term API key to test with (1 day, deny policy attached)
 
-You'll create the kind of key lesson 10.4 warns about, the way the console does it (an IAM user carrying
+You'll create the kind of key lesson 1.4 warns about, the way the console does it (an IAM user carrying
 `AmazonBedrockLimitedAccess`), but with a **1-day** expiry and the deny policy attached. Step 3 shows it being
 refused; Step 4 shows what it could do without that policy.
 
@@ -542,7 +542,7 @@ aws guardduty update-detector --detector-id $DETECTOR --features '[{"Name": "AI_
 aws guardduty get-detector --detector-id $DETECTOR --query "Features[?Name=='AI_PROTECTION'].Status" --output text
 ```
 
-Don't expect a finding from this guide: a handful of calls is not "anomalous token volumes" (lesson 10.5).
+Don't expect a finding from this guide: a handful of calls is not "anomalous token volumes" (lesson 1.5).
 
 ## Step 3 · Prove it: five requests (10 minutes)
 
@@ -592,7 +592,7 @@ checked four things to allow this: the profile, and the model in each of its thr
 
 ### R2 · An unapproved route to the approved model (denied)
 
-The same model through the **global** profile, which can run outside the US (lesson 11.5):
+The same model through the **global** profile, which can run outside the US (lesson 2.5):
 
 ```bash
 aws bedrock-runtime converse --model-id global.anthropic.claude-haiku-4-5-20251001-v1:0 \
@@ -613,7 +613,7 @@ pass. No model ran, so there's no charge.
 
 ### R3 · Switch off prompt logging (denied)
 
-What attackers do after recon (lesson 10.5, Sysdig's step 5):
+What attackers do after recon (lesson 1.5, Sysdig's step 5):
 
 ```bash
 aws bedrock delete-model-invocation-logging-configuration
@@ -654,7 +654,7 @@ HTTP 403
 ```
 
 How to read it: the key itself is valid, but every call made with a long-term key is also authorized as
-`bedrock:CallWithBearerToken` with `BearerTokenType` = `LONG_TERM` (lesson 10.4), and `NoLongTermBedrockKeyUse`
+`bedrock:CallWithBearerToken` with `BearerTokenType` = `LONG_TERM` (lesson 1.4), and `NoLongTermBedrockKeyUse`
 denied that. The principal is an IAM **user**: Wiz's tip for telling a long-term key from a short-term one (a role).
 Your real error text may differ; the 403 is the part that matters.
 
@@ -713,7 +713,7 @@ Example response for the prompt log (shape from AWS docs, values illustrative;
 
 How to read it: `identity.arn` says **who** (Bedrock fills it; "`requestMetadata` is the only field supplied by the
 caller"), `operation` and `modelId` say **what**, and `inputBodyJson` holds the **prompt**, in plain text. Only R1
-is there: R2 to R4 never reached a model. That's also why this log group is sensitive data (M11 encrypts it).
+is there: R2 to R4 never reached a model. That's also why this log group is sensitive data (M2 encrypts it).
 
 Example response for CloudTrail (shape from AWS docs, values illustrative;
 [CloudTrail record contents](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html),
@@ -727,7 +727,7 @@ Example response for CloudTrail (shape from AWS docs, values illustrative;
 {"eventName": "PutModelInvocationLoggingConfiguration", "errorCode": null, "additionalEventData": null, "who": "arn:aws:iam::111122223333:user/your-admin-user"}
 ```
 
-How to read it: refused calls are recorded with an `errorCode` (lesson 10.3: "model calls that fail with an
+How to read it: refused calls are recorded with an `errorCode` (lesson 1.3: "model calls that fail with an
 access-denied `errorCode` in CloudTrail tell you the SCP is working and who tried"). We guessed the exact code and
 the fields on the refused key call: services write `AccessDenied` or `AccessDeniedException`, and AWS doesn't document
 whether a call refused on `CallWithBearerToken` still carries `callWithBearerToken`. Note what yours says, then
@@ -770,7 +770,7 @@ log now has a second entry, this time with `identity.arn` = the key's user.
 | CloudTrail | `Converse` with an access-denied `errorCode` | `Converse`, no `errorCode` |
 | Prompt log entry | none | yes, `identity.arn` = the key's user |
 
-Fill in your real results. Then decide: in your real accounts, where would this rule live? (Lesson 10.4's answer: an
+Fill in your real results. Then decide: in your real accounts, where would this rule live? (Lesson 1.4's answer: an
 SCP on `CallWithBearerToken` for both endpoints, so no single forgotten user escapes it.)
 
 ## Cost (list prices, October 2026)
@@ -789,7 +789,7 @@ SCP on `CallWithBearerToken` for both endpoints, so no single forgotten user esc
 
 In your **own** credentials (first terminal tab), in this order.
 
-**1. Revoke the key, and watch it stop working.** Deactivate first, so you can see the effect (lesson 10.4: "Revoke
+**1. Revoke the key, and watch it stop working.** Deactivate first, so you can see the effect (lesson 1.4: "Revoke
 fast"), then delete it:
 
 ```bash
@@ -822,7 +822,7 @@ aws iam delete-policy --policy-arn $GUARD_ARN
 
 - `aws iam detach-user-policy --user-name $KEY_USER --policy-arn $GUARD_ARN 2>/dev/null`: already detached in Step 4
 
-**3. Logging, alarm, topic** (keep invocation logging on if this sandbox will run M11 or M12; M11 replaces it with
+**3. Logging, alarm, topic** (keep invocation logging on if this sandbox will run M2 or M3; M2 replaces it with
 its own encrypted configuration anyway):
 
 ```bash
@@ -851,7 +851,7 @@ What each command does, and what to look for:
 - `aws iam list-service-specific-credentials`: your test key is gone
 - `aws bedrock get-model-invocation-logging-configuration`: {} if you deleted it
 
-Keep the budget from Step 0: it costs nothing and you'll want it for M11. Tomorrow, glance at **Billing**, **Bills**:
+Keep the budget from Step 0: it costs nothing and you'll want it for M2. Tomorrow, glance at **Billing**, **Bills**:
 this guide should show cents at most.
 
 ## What to write in your findings notebook (lesson 0.5)

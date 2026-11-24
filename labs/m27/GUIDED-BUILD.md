@@ -1,4 +1,4 @@
-# M27 guided build (optional): a Code Interpreter with no way out but the ones you named
+# M20 guided build (optional): a Code Interpreter with no way out but the ones you named
 
 Your own **sandbox** AWS account, `us-east-1`, about 45 minutes, then teardown the same day. You build what
 `configs/hardened.json` describes, in a smaller form: an AgentCore Code Interpreter in **VPC mode**, private subnets

@@ -1,4 +1,4 @@
-# Lab GC15: a private endpoint for an open model on Agent Platform
+# Lab M6: a private endpoint for an open model on Agent Platform
 
 Companion to lessons **15.0 to 15.5** of the Google Cloud stream of *AI Security Engineer* (The Sec Guy). About 70
 minutes for Steps 1 to 8, **$0**, all on your laptop: **Python 3.11+ only**, no packages, no Google Cloud account, no
@@ -15,13 +15,13 @@ hardened version holds.
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Check** | Review the first draft: 35 findings, 15 HIGH | 15.1 to 15.4 |
-| **Break** | 15 attacks and 6 normal requests: 15 of 15 attacks work, and every normal request works too | 15.2, 15.3 |
-| **Files** | Scan the model files: a pickle-based weights file vs safetensors, and the hashes recorded as labels | 15.3 |
-| **Harden** | The same suite against the hardened setup: 13 of 15 stopped, 6 of 6 normal requests still work | 15.2, 15.3 |
-| **Hunt** | Investigate a morning of Cloud Audit Logs | 15.4 |
+| **Check** | Review the first draft: 35 findings, 15 HIGH | 6.1 to 6.4 |
+| **Break** | 15 attacks and 6 normal requests: 15 of 15 attacks work, and every normal request works too | 6.2, 6.3 |
+| **Files** | Scan the model files: a pickle-based weights file vs safetensors, and the hashes recorded as labels | 6.3 |
+| **Harden** | The same suite against the hardened setup: 13 of 15 stopped, 6 of 6 normal requests still work | 6.2, 6.3 |
+| **Hunt** | Investigate a morning of Cloud Audit Logs | 6.4 |
 | **Prove** | `make test`: 20 tests | 15.5 |
-| **Challenge** | Workbench org constraints, a promotion gate, a hunt query. No solution included | 15.2, 15.3, 15.4 |
+| **Challenge** | Workbench org constraints, a promotion gate, a hunt query. No solution included | 6.2, 6.3, 6.4 |
 | **Cloud (optional, costs money)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): a Private Service Connect endpoint for an open model, from zero (console and gcloud), five requests, one setting changed, auto-undeploy and teardown | 15.2 to 15.4 |
 
 ## Get the lab files
@@ -67,7 +67,7 @@ Stay in the `ai-security-course-labs` folder: the first step below takes you int
 
 - Python **3.11 or newer**: `python3 --version`. No packages, no internet.
 - Mac or Linux for the `make` shortcuts. Windows: run the `python` command shown under each step.
-- Optional, Step 9 only: the `gcloud` CLI, your own sandbox project with billing and a budget alert (GC10), and about
+- Optional, Step 9 only: the `gcloud` CLI, your own sandbox project with billing and a budget alert (M1), and about
   2 GB free disk for the model download.
 - A terminal in this lab's folder. Every command below runs from there:
 

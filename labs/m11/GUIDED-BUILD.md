@@ -1,4 +1,4 @@
-# M11 guided build: the hardened TSG Helpdesk on Bedrock, by hand, in your own account
+# M2 guided build: the hardened TSG Helpdesk on Bedrock, by hand, in your own account
 
 The offline lab (README Steps 1 to 6) reviews the Terraform plan at $0, and README Step 7 deploys it with one
 `make up`. This guide builds the **same hardened design piece by piece**, so you see every setting the module
@@ -41,7 +41,7 @@ every `aws` line around them. Tear down with `make down`.
 
 ## Step 0 · Before you start (10 minutes)
 
-1. **The budget from M10** (M10 README Step 8b or guided build Step 0). Don't start without it.
+1. **The budget from M1** (M1 README Step 8b or guided build Step 0). Don't start without it.
 2. **AWS CLI v2, recent** (`aws --version`): older versions don't know `bedrock get-account-data-retention`. Python
    3.11+ (you have it for the offline lab).
 3. **Enable the model once, as yourself.** The Helpdesk role has no AWS Marketplace permissions, on purpose: "someone
@@ -49,7 +49,7 @@ every `aws` line around them. Tear down with `make down`.
    ([model access](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html)). Run README Step 7a's
    `converse` call from your admin session (and fill in the Anthropic use-case form if it asks).
 4. **No other invocation logging you care about.** There's one logging configuration per account and Region; Step 1e
-   **replaces** any existing one (M10's guided build, for example), and the teardown deletes it.
+   **replaces** any existing one (M1's guided build, for example), and the teardown deletes it.
 5. **Permissions.** An administrator in your sandbox covers everything. Otherwise you need create and delete rights for
    EC2 VPC resources (VPC, subnet, security groups, VPC endpoints), IAM roles and inline policies (plus
    `iam:PassRole` for the Lambda and logging roles), KMS keys and aliases, CloudWatch Logs, S3 buckets and bucket
@@ -75,7 +75,7 @@ every `aws` line around them. Tear down with `make down`.
 Do the parts in order. For each one you get console clicks (Path A) and CLI commands (Path B). Pick one path per part;
 mixing is fine as long as the names match, because later parts refer to them.
 
-### 1a · A VPC with no way out (lesson 11.2)
+### 1a · A VPC with no way out (lesson 2.2)
 
 No internet gateway, no NAT gateway. A new VPC's main route table only has the `local` route, so nothing in it can
 reach the internet: the endpoint in 1b will be the only door. Security groups: the function may send HTTPS only to the
@@ -126,7 +126,7 @@ If `us-east-1a` doesn't offer the Bedrock endpoint in your account (zone names m
 account), list the zones that do and use one of them:
 `aws ec2 describe-vpc-endpoint-services --service-names com.amazonaws.us-east-1.bedrock-runtime --query 'ServiceDetails[0].AvailabilityZones'`.
 
-### 1b · The bedrock-runtime endpoint, with a policy (lesson 11.2)
+### 1b · The bedrock-runtime endpoint, with a policy (lesson 2.2)
 
 The default endpoint policy "grants full access to the endpoint", for any principal, including credentials from
 someone else's account ([PrivateLink](https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-access.html)).
@@ -161,10 +161,10 @@ export VPCE=$(aws ec2 create-vpc-endpoint --vpc-id $VPC --vpc-endpoint-type Inte
 aws ec2 describe-vpc-endpoints --vpc-endpoint-ids $VPCE --query 'VpcEndpoints[0].[State,PrivateDnsEnabled]' --output text
 ```
 
-Wait until the state is `available` (a few minutes). Lesson 11.2's audit command now shows **your** policy, not
+Wait until the state is `available` (a few minutes). Lesson 2.2's audit command now shows **your** policy, not
 `"Principal":"*","Action":"*"` with no condition.
 
-### 1c · Three IAM roles (lessons 11.1, 11.3, 11.4)
+### 1c · Three IAM roles (lessons 2.1, 2.3, 2.4)
 
 | Role | Trusted by | May do |
 |---|---|---|
@@ -226,10 +226,10 @@ permissions; the console writes `"Principal": {"AWS": "<your account ID>"}` (the
 account ID.
 
 Why the trust conditions on the logging role: without `aws:SourceAccount` and `aws:SourceArn`, Bedrock acting for
-**another** account could be steered into using your role, the confused deputy (lesson 11.4). They're copied from
+**another** account could be steered into using your role, the confused deputy (lesson 2.4). They're copied from
 AWS's own invocation-logging example.
 
-### 1d · Two customer managed keys (lesson 11.3)
+### 1d · Two customer managed keys (lesson 2.3)
 
 The **prompts** key protects the invocation logs; the **audit** key protects the CloudTrail files. Two keys, because
 two different groups should read two different things. The key policies are `terraform/hardened/kms.tf`, turned into
@@ -296,9 +296,9 @@ operator ARN for the condition key kms:EncryptionContext:aws:logs:arn". `ArnEqua
 Read `key-prompts.json` before you go on. Who can decrypt prompt logs? The investigator role; CloudWatch Logs, but only
 for that one log group (encryption context); the logging role, but only through CloudWatch Logs (`kms:ViaService`).
 And, through the first statement, any IAM identity in your account whose own policy allows `kms:Decrypt` on this key.
-That's AWS's default first statement, and it's why lesson 11.3 says to search IAM for `kms:Decrypt` on `"*"`.
+That's AWS's default first statement, and it's why lesson 2.3 says to search IAM for `kms:Decrypt` on `"*"`.
 
-### 1e · Prompt logging, encrypted and time-limited (lessons 11.3, 11.4)
+### 1e · Prompt logging, encrypted and time-limited (lessons 2.3, 2.4)
 
 A log group with the prompts key and 30-day retention, an S3 bucket for bodies over 100 KB, and the logging
 configuration: text only.
@@ -343,7 +343,7 @@ aws bedrock get-model-invocation-logging-configuration
 
 Field names are from [PutModelInvocationLoggingConfiguration](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_PutModelInvocationLoggingConfiguration.html)
 (`cloudWatchConfig.largeDataDeliveryS3Config.bucketName`, `keyPrefix`). Bodies up to 100 KB go into the log record;
-larger ones go to S3 "If an Amazon S3 location for large data delivery is provided" (lesson 11.4).
+larger ones go to S3 "If an Amazon S3 location for large data delivery is provided" (lesson 2.4).
 
 **Path A, console:** **CloudWatch**, **Log groups**, **Create log group**: name `/tsg-helpdesk/bedrock/model-invocations`,
 retention **1 month (30 days)**, log class **Standard**, **KMS key ARN** = the prompts key ARN (the page then shows
@@ -364,7 +364,7 @@ support case" here, the same block that stops model calls.
 If `put-model-invocation-logging-configuration` fails with a validation error about the role or the log group, IAM
 hadn't finished creating the role: wait 30 seconds and retry.
 
-### 1f · A trail for what invocation logging misses (lesson 11.4)
+### 1f · A trail for what invocation logging misses (lesson 2.4)
 
 Runtime calls are already management events in the free 90-day event history. This trail records only what isn't:
 **bedrock-mantle** inference (a data event, and not in invocation logs), **network activity** through your Bedrock
@@ -432,7 +432,7 @@ event type**, **Bedrock guardrail**; tick **Network activity events**, **Network
 **Configure event aggregation** is optional and costs extra: leave it empty. **Review and create**, **Create trail**;
 the list shows it with status **Logging**.
 
-### 1g · The Helpdesk function (lesson 11.6)
+### 1g · The Helpdesk function (lesson 2.6)
 
 The same Lambda function as the Terraform: `lambda/handler.py`, `MODEL_ID` = the US profile, `MAX_TOKENS` = 300 (lesson
 10.5's cost cap), in your private subnet with the app security group.
@@ -460,7 +460,7 @@ group `tsg-helpdesk-app` only. Create it, upload `terraform/hardened/build/helpd
 **.zip file**), set the handler to `handler.handler`, and under **Configuration** set the timeout to 30 seconds and the
 environment variables `MODEL_ID` and `MAX_TOKENS` (labels may differ slightly).
 
-### 1h · Residency: check where the profile can run, and the retention mode (lessons 11.3, 11.5)
+### 1h · Residency: check where the profile can run, and the retention mode (lessons 2.3, 2.5)
 
 ```bash
 aws bedrock get-inference-profile --inference-profile-identifier $PROFILE_ID \
@@ -489,7 +489,7 @@ adds a Region to the profile, the role refuses calls routed there until you add 
 `global.` profile: `aws bedrock get-inference-profile --inference-profile-identifier global.anthropic.claude-haiku-4-5-20251001-v1:0`.
 
 The retention answer is a `mode` (`default`, `none`, `aws_review`, `provider_data_share` or `inherit`, per the
-botocore `bedrock` model) and `updatedAt`. Lesson 11.3: choose it on purpose, per Region. If you set `none`
+botocore `bedrock` model) and `updatedAt`. Lesson 2.3: choose it on purpose, per Region. If you set `none`
 (`aws bedrock put-account-data-retention --mode none`), remember the trade-off: models that require retention become
 unavailable in this Region. It doesn't affect Claude Haiku 4.5 as of October 2026 (check its model card).
 
@@ -589,7 +589,7 @@ Example response (shape from the IAM docs' access-denied message format, values 
 How to read it, field by field:
 
 - `resolves_to` is a **private** address in your subnet: private DNS sent the normal hostname to the endpoint. That's
-  lesson 11.2's "No code changes needed".
+  lesson 2.2's "No code changes needed".
 - "**because no VPC endpoint policy allows**" is the IAM docs' wording for an endpoint-policy refusal. The probe's own
   IAM policy allows this exact call (it's a copy of the Helpdesk's). Only the endpoint said no.
 - This is attack X1 in miniature. In X1 the outsider uses keys from **their** account; here it's another role in
@@ -608,7 +608,7 @@ Example response (shape from the Python standard library's `urllib` errors, valu
 {"test": "internet", "result": "NO PATH", "error": "URLError: <urlopen error timed out>"}
 ```
 
-How to read it: the function asked for `bedrock-mantle.us-east-1.api.aws`, the endpoint lesson 11.2 calls the side
+How to read it: the function asked for `bedrock-mantle.us-east-1.api.aws`, the endpoint lesson 2.2 calls the side
 door. With no NAT or internet gateway, and egress allowed only to the endpoint's security group, the connection can't
 leave the VPC. In the first draft (NAT gateway), this same code would reach mantle, where your bedrock-runtime endpoint
 policy never sees it and invocation logging doesn't record it (attack X7). Any error here is a pass; `REACHED THE
@@ -642,7 +642,7 @@ arn:aws:bedrock:us-east-1:111122223333:inference-profile/global.anthropic.claude
 How to read it: the profile is allowed. The model ARN in us-west-2 is allowed **only** with `bedrock:InferenceProfileArn`
 set to your profile, and a direct call doesn't carry that key, so it's `implicitDeny` (the simulator may also list
 `bedrock:InferenceProfileArn` under `MissingContextValues`). The global profile isn't named anywhere: `implicitDeny`.
-That's lesson 11.1's "one model, one route", and lesson 11.5's residency rule enforced by the role.
+That's lesson 2.1's "one model, one route", and lesson 2.5's residency rule enforced by the role.
 
 ### R5 · Find the evidence: prompt log, CloudTrail, network activity
 
@@ -696,7 +696,7 @@ Example response for the prompt log (shape from AWS docs, values illustrative;
 }
 ```
 
-How to read it: `describe-log-groups` shows a `kmsKeyId` (your prompts key) and `30`: lesson 11.3's evidence. The
+How to read it: `describe-log-groups` shows a `kmsKeyId` (your prompts key) and `30`: lesson 2.3's evidence. The
 record holds the question in plain text, so who can read this log group is who can read your users' questions.
 `identity.arn` is the Helpdesk role (Bedrock fills it); `requestMetadata` came from the handler code, and "is the only
 field supplied by the caller", so never use it to attribute a call. R2's refused call is **not** here: it never reached
@@ -712,13 +712,13 @@ Example response for CloudTrail (shape from AWS docs, values illustrative;
 ```
 
 How to read it: R1 is a management event with your endpoint's ID: the call took the private path. A Helpdesk call
-**without** `vpcEndpointId` would mean it took another path (lesson 11.2's spot-it rule). R2 may also appear here with
+**without** `vpcEndpointId` would mean it took another path (lesson 2.2's spot-it rule). R2 may also appear here with
 an access-denied `errorCode`; whether an endpoint-policy refusal reaches event history isn't something AWS spells out,
 so note what you see.
 
 For the trail files: look for a record with `"eventCategory": "NetworkActivity"`, your `vpcEndpointId` and
 `"errorCode": "VpceAccessDenied"` ("when there is a VPC endpoint policy violation, the error code is
-`VpceAccessDenied`", lesson 11.2). **This is an open question:** AWS lists Amazon Bedrock
+`VpceAccessDenied`", lesson 2.2). **This is an open question:** AWS lists Amazon Bedrock
 (`bedrock.amazonaws.com`) for network activity events but doesn't say which Bedrock endpoint services that covers. If
 R2's refusal shows up, you've confirmed it for bedrock-runtime; if after 15 minutes it doesn't, that's a real finding
 too. Either way, write it down before you build an alert on it.
@@ -763,7 +763,7 @@ Example response (shape from AWS docs, values illustrative;
 | Prompt log | nothing | a record with `identity.arn` = `tsg-m11-probe` |
 | Trail | `VpceAccessDenied` (if Bedrock runtime is covered) | no network-activity refusal |
 
-One policy line was the whole difference. That's why lesson 11.2 calls the endpoint policy the **identity perimeter**:
+One policy line was the whole difference. That's why lesson 2.2 calls the endpoint policy the **identity perimeter**:
 it's the only control here that says "not you, whatever IAM thinks". Now put it back and confirm R2 is refused again:
 
 ```bash
@@ -885,7 +885,7 @@ other and AWS won't delete a group another group's rule still points at. Then ch
 `aws ec2 describe-vpc-endpoints --filters Name=vpc-id,Values=$VPC` should be empty (or fail because the VPC is gone),
 and `aws kms list-aliases --query "Aliases[?starts_with(AliasName, 'alias/tsg-helpdesk')]"` should print `[]`.
 
-"After a KMS key is deleted, you can no longer decrypt the data that was encrypted under that KMS key" (lesson 11.3).
+"After a KMS key is deleted, you can no longer decrypt the data that was encrypted under that KMS key" (lesson 2.3).
 Here that's on purpose: the prompt logs are gone with it. Tomorrow, glance at **Billing**, **Bills**: this guide should
 show a few cents of VPC endpoint, KMS and Claude Haiku 4.5 under its provider.
 

@@ -1,4 +1,4 @@
-# GC14 guided build: an Agent Runtime agent with its own identity, behind Agent Gateway, in your own project
+# M5 guided build: an Agent Runtime agent with its own identity, behind Agent Gateway, in your own project
 
 The offline lab (README Steps 1 to 7) teaches the decisions at $0. This guide builds a small version for real, from
 zero, in **your own** Google Cloud sandbox project (never a work project). About 90 minutes. You will:
@@ -39,7 +39,7 @@ Throughout, run commands from `labs/gc14`, and set these shell variables again i
 
 ## Step 0 · Before you start (10 minutes)
 
-1. **A sandbox project with billing and a budget alert** (GC10 lesson 10.5). As its owner you can do everything
+1. **A sandbox project with billing and a budget alert** (M1 lesson 1.5). As its owner you can do everything
    below. In a shared project you'd also need, among others, IAP Admin, Network Security Admin, Service Extensions
    Admin and Access Policy Admin (`roles/iam.accessPolicyAdmin`).
 2. **Organization or not?** Agent Identity works either way. In an organization the agent's trust domain is
@@ -276,7 +276,7 @@ without `principal://`, as above.
 
 Two things Google's pages say that are easy to miss: all agents in one project and region bind to the **same**
 egress gateway, and **redeploying creates a new principal**, so grants to the old one don't carry over (and aren't
-removed: lab rule GC14-04).
+removed: lab rule M5-M4).
 
 The agent can't do anything useful yet: it has no grants, and no access policy allows its traffic. The gateway is in
 dry run, so the calls go through. Google's page says IAP logs them as would-be denials; Step 5 shows what our run
@@ -586,7 +586,7 @@ you decide a memory has no expiry.
 
 The second read returns nothing because the **scope** is different. Note who chose the scope: this script, running as
 **you**. In a real app, your backend sets `user_id` from a verified ID token, never from the request body (offline
-case C6, rule GC14-11). Your identity, and the agent's, can read any scope of this Memory Bank.
+case C6, rule M5-M2). Your identity, and the agent's, can read any scope of this Memory Bank.
 
 Now find those reads in the Data Access log:
 
@@ -609,7 +609,7 @@ saved.
 
 ## Step 7 · Change one setting and re-run (10 minutes)
 
-The offline lab's GC14-03: a data role granted to **every agent in the project** instead of this agent. In
+The offline lab's M5-M3: a data role granted to **every agent in the project** instead of this agent. In
 `terraform.tfvars` set `grant_all_agents_project_data = true` and apply. That grants BigQuery Data Viewer on the
 whole project to the principal set
 `principalSet://agents.global.org-ORG_ID.system.id.goog/attribute.platformContainer/aiplatform/projects/PROJECT_NUMBER`
@@ -631,7 +631,7 @@ R2: How many rows are in the table finance_exports.payroll?
 
 Nothing about the gateway changed, and it didn't need to: the tool was always allowed. One IAM line, meant as a
 "baseline for all our agents", gave this agent (and every agent anyone deploys here later) the finance data. Set it
-back to `false`, apply, and run `make check` offline to see the same mistake reported as GC14-03.
+back to `false`, apply, and run `make check` offline to see the same mistake reported as M5-M3.
 
 ## Step 8 · Write down what you saw
 
@@ -693,7 +693,7 @@ bq rm -r -f -d $PROJECT:helpdesk && bq rm -r -f -d $PROJECT:finance_exports
 - `gcloud agent-registry services delete logging`: one per host you added
 
 **3. Remove grants that name the deleted agent.** Google's Agent Identity page: deleting an agent doesn't remove IAM
-bindings that reference its principal (lab rule GC14-04). Terraform removed the ones it made; check for any you added
+bindings that reference its principal (lab rule M5-M4). Terraform removed the ones it made; check for any you added
 by hand:
 
 ```bash

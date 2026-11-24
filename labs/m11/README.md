@@ -1,4 +1,4 @@
-# Lab M11: review TSG Helpdesk's Bedrock Terraform before it ships, then deploy the hardened version
+# Lab M2: review TSG Helpdesk's Bedrock Terraform before it ships, then deploy the hardened version
 
 Companion to lessons **11.1 to 11.6** of *AI Security Engineer* (The Sec Guy). About 60 minutes for Steps 1 to 6,
 **$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no Terraform. Step 7 is optional: it
@@ -9,19 +9,19 @@ runs, and ends with `make down`.
 hand, console and CLI, then proves each control with five requests, one changed setting, cost and teardown.
 
 You are still the cloud security engineer at **AnyCompany** (fictional; "AnyCompany" is the placeholder name AWS uses
-in its own documentation). After M10, the platform team wants to ship **TSG Helpdesk v2** to production on Amazon
+in its own documentation). After M1, the platform team wants to ship **TSG Helpdesk v2** to production on Amazon
 Bedrock, deployed with Terraform. A developer opened a pull request on Friday: "it works, ship it". That is the
 **first draft**. You review its plan, show what it would let an attacker do, and compare it with a **hardened**
 version that passes every control from this module.
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Check** | Run a plan checker over the first draft's Terraform plan: 15 findings | 11.1 to 11.5 |
-| **Break** | Replay 7 attacks and mistakes against the first draft, and see which ones AnyCompany would even notice | 11.1 to 11.5 |
-| **Fix** | Read the hardened Terraform, check its plan (0 findings) and replay: 0 of 7, the Helpdesk still works | 11.1 to 11.5 |
+| **Check** | Run a plan checker over the first draft's Terraform plan: 15 findings | 2.1 to 2.5 |
+| **Break** | Replay 7 attacks and mistakes against the first draft, and see which ones AnyCompany would even notice | 2.1 to 2.5 |
+| **Fix** | Read the hardened Terraform, check its plan (0 findings) and replay: 0 of 7, the Helpdesk still works | 2.1 to 2.5 |
 | **Prove** | `make test`: 15 tests that pin the findings, the attacks and each lesson's controls | 11.6 |
-| **Challenge** | Tighten the org's Region guard, write next sprint's bedrock-mantle endpoint policy, write a checker rule. No solution included | 11.2, 11.4, 11.5 |
-| **Deploy (optional)** | `make up` the hardened Helpdesk in your sandbox, ask it a question, find the prompt in the encrypted log, `make down` | 11.6 |
+| **Challenge** | Tighten the org's Region guard, write next sprint's bedrock-mantle endpoint policy, write a checker rule. No solution included | 2.2, 2.4, 2.5 |
+| **Deploy (optional)** | `make up` the hardened Helpdesk in your sandbox, ask it a question, find the prompt in the encrypted log, `make down` | 2.6 |
 
 ## Get the lab files
 
@@ -54,7 +54,7 @@ Stay in the `ai-security-course-labs` folder: the first step below (Step 1b) sta
 | `twin/first-draft.plan.json`, `twin/hardened.plan.json` | The **offline twin**: each folder's real `terraform show -json` plan, made with mock credentials and no AWS calls (`make twin`) |
 | `checker.py` | 16 rules (`M11-01` to `M11-16`) over a plan, plus `M11-17`, which you write |
 | `attack.py` | 7 attacks and mistakes, 2 legitimate requests, checked against the policies **in the plan**, the org SCPs and the network; and for each one, what AnyCompany's logs would show |
-| `iam_eval.py` | The M10 **teaching model** of AWS policy evaluation, now with VPC endpoint policies (see below) |
+| `iam_eval.py` | The M1 **teaching model** of AWS policy evaluation, now with VPC endpoint policies (see below) |
 | `plan.py` | Reads a plan JSON (values, and what each attribute references) |
 | `explore.py` | Read-only helper for Step 1b: `plan`, `model`, `role`, `route`, `network`, `endpoint`, `keys`, `logging`, `record`, each on its own |
 | `anycompany.json` | The company: principals, approved models, and the residency rule: Helpdesk data is processed in US Regions only |
@@ -71,8 +71,8 @@ cheapest moment to catch a mistake. The two plans in `twin/` were made from the 
 plan time, the Terraform builds ARNs from `var.account_id` instead of from resources that don't exist yet. You can
 run the checker on **your own** plans too: `python3 checker.py my-plan.json`.
 
-**About `iam_eval.py`.** It is not the AWS policy engine. On top of the M10 rules (implicit deny, explicit deny wins,
-SCPs only limit, missing condition keys), it adds what lesson 11.2 needs: a request through a VPC endpoint must
+**About `iam_eval.py`.** It is not the AWS policy engine. On top of the M1 rules (implicit deny, explicit deny wins,
+SCPs only limit, missing condition keys), it adds what lesson 2.2 needs: a request through a VPC endpoint must
 **also** be allowed by the endpoint policy, the default endpoint policy "grants full access to the endpoint", and a
 bare account ID as an endpoint-policy principal means that account's root user only
 ([AWS docs](https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-access.html)). It does not model other
@@ -101,8 +101,8 @@ ID `o-a1b2c3d4e5` and every ARN are AWS documentation example values. Model IDs 
 
 ## Step 1b · Before you check: look at each piece (about 10 minutes)
 
-New to Bedrock or Terraform? Do this before Step 1 (lesson 11.6 and its part 1 video call it Step 1b). `explore.py`
-shows each idea from the lesson 11.0 videos on its own. Real output below is from a fresh Ubuntu machine.
+New to Bedrock or Terraform? Do this before Step 1 (lesson 2.6 and its part 1 video call it Step 1b). `explore.py`
+shows each idea from the lesson 2.0 videos on its own. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the two plans in `twin/`, `anycompany.json`
 and `org/`, and prints what it finds. No network, no AWS account, no Terraform.
@@ -684,11 +684,11 @@ FAILED (failures=3)
 
 Three gaps, three fixes. Each test's message is a hint.
 
-1. **Region guard (lesson 11.5).** Rewrite `org/scp-region-guard.json` so that everything outside `us-east-1` is
+1. **Region guard (lesson 2.5).** Rewrite `org/scp-region-guard.json` so that everything outside `us-east-1` is
    denied, **except** requests that carry the Helpdesk's approved US profile in `bedrock:InferenceProfileArn`. Use
    `ArnNotLike` (a negated operator: with no profile in the request it is *true*, so the deny applies). Keep the
    global profile blocked and the Helpdesk working (tests 17 and 18).
-2. **Next sprint's mantle access (lesson 11.2).** The ops team will call Claude Haiku 4.5 on bedrock-mantle from this
+2. **Next sprint's mantle access (lesson 2.2).** The ops team will call Claude Haiku 4.5 on bedrock-mantle from this
    VPC with the Anthropic SDK (on mantle, this model supports the Messages API only, per its model card). Two files:
    - `policies/endpoint-policy-mantle.json` is AWS's example, which "grants access to the listed Amazon Bedrock Mantle
      actions for all principals on all resources"
@@ -699,7 +699,7 @@ Three gaps, three fixes. Each test's message is a hint.
      mantle model IDs aren't the runtime IDs). Hint: the Service Authorization Reference lists the condition key
      `bedrock-mantle:Model` for `CreateInference`. AWS doesn't say whether a VPC endpoint policy evaluates that key, so
      test 19 checks the model rule in the role alone.
-3. **Rule M11-17 (lesson 11.4).** Write `rule_trail_covers_mantle()` in `checker.py`. The docstring says what to
+3. **Rule M2-M10 (lesson 2.4).** Write `rule_trail_covers_mantle()` in `checker.py`. The docstring says what to
    return. It must flag a plan with no trail **and** a plan whose trail lost its mantle selector, and stay quiet on the
    hardened plan.
 
@@ -724,10 +724,10 @@ prompt before you type `yes`.
 | Claude Haiku 4.5 tokens | per token, "billed through AWS Marketplace", shown "under the model provider (not under Amazon Bedrock)" in Cost Explorer; 3 questions, at most 300 output tokens each | [model card](https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-haiku-4-5.html), [Bedrock pricing](https://aws.amazon.com/bedrock/pricing/) |
 
 So roughly **$0.02 an hour** for the endpoint plus the keys' hourly share, and the per-use items. Set
-`availability_zones = ["us-east-1a"]` to halve the endpoint cost. Create the $5 budget from M10 (Step 8b) **first**,
+`availability_zones = ["us-east-1a"]` to halve the endpoint cost. Create the $5 budget from M1 (Step 8b) **first**,
 and run `make down` the same day.
 
-**7a · Enable the model once, as an admin (lesson 11.1).** The Helpdesk role has no AWS Marketplace permissions, on
+**7a · Enable the model once, as an admin (lesson 2.1).** The Helpdesk role has no AWS Marketplace permissions, on
 purpose. AWS: "If you can't assume AWS Marketplace permission, someone with AWS Marketplace permissions must enable
 the model for the account as a one-time step", and Anthropic models need the first-time use form first
 ([AWS docs](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html)). From your own admin session:

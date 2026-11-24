@@ -1,6 +1,6 @@
-# Lab M27: review an agent sandbox like an auditor, then prove its egress policy
+# Lab M20: review an agent sandbox like an auditor, then prove its egress policy
 
-Companion to lessons **27.1 to 27.4** of *AI Security Engineer* (The Sec Guy). About 30 minutes, **$0**, all on your
+Companion to lessons **20.1 to 20.4** of *AI Security Engineer* (The Sec Guy). About 30 minutes, **$0**, all on your
 laptop: **Python 3.11+ only**, no packages, no network, no model download, no cloud account.
 
 You get the configuration of a code-running analysis agent, the **TSG Data Helper**, in two versions: the first draft
@@ -16,14 +16,14 @@ lab runs with every socket call blocked.
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Review** | 18 rules over the first draft: 16 fail | 27.1, 27.2 |
-| **Harden** | The same rules over the hardened config: 0 findings | 27.1, 27.2 |
-| **Replay** | 14 recorded requests, layer by layer: 7 of 8 unexpected allowed before, 0 of 8 after, 6 of 6 normal both times | 27.2 |
-| **Logs** | What each version leaves in Resolver query logs, flow logs, CloudTrail network activity events, the proxy log | 27.2 |
-| **Alerts** | The starting thresholds: pages and tickets | 27.2 |
+| **Review** | 18 rules over the first draft: 16 fail | 20.1, 20.2 |
+| **Harden** | The same rules over the hardened config: 0 findings | 20.1, 20.2 |
+| **Replay** | 14 recorded requests, layer by layer: 7 of 8 unexpected allowed before, 0 of 8 after, 6 of 6 normal both times | 20.2 |
+| **Logs** | What each version leaves in Resolver query logs, flow logs, CloudTrail network activity events, the proxy log | 20.2 |
+| **Alerts** | The starting thresholds: pages and tickets | 20.2 |
 | **Prove** | `make test` (17 tests) | all |
-| **Challenge** | Two missing rules, a burst detector, a shared-session hunt. No solution included | 27.1, 27.2 |
-| **Guided build (optional)** | A Code Interpreter in VPC mode with an S3 gateway endpoint and a DNS walled garden in your own AWS account | 27.1, 27.2 |
+| **Challenge** | Two missing rules, a burst detector, a shared-session hunt. No solution included | 20.1, 20.2 |
+| **Guided build (optional)** | A Code Interpreter in VPC mode with an S3 gateway endpoint and a DNS walled garden in your own AWS account | 20.1, 20.2 |
 
 ## Get the lab files
 
@@ -100,9 +100,9 @@ Review of first-draft: 18 rules
 25 findings, 16 of 18 rules failed (D1, D2, E1, F1, F2, L1, N1, N2, N3, P1, P2, P3, R1, S1, T1, T2)
 ```
 
-Each finding names the lesson and the fix, like an audit note. Read them in two groups. **Network (27.2):** PUBLIC
+Each finding names the lesson and the fix, like an audit note. Read them in two groups. **Network (20.2):** PUBLIC
 mode with a NAT route, port 443 and 53 open to anywhere, `full-access` endpoint policies, no DNS firewall and fail
-open, a wildcard proxy entry nobody enforces, and no logs. **Boundary (27.1):** `s3:*` on `*`, a mounted `~/.aws`,
+open, a wildcard proxy entry nobody enforces, and no logs. **Boundary (20.1):** `s3:*` on `*`, a mounted `~/.aws`,
 secrets in the environment, shared 8-hour sessions, no process limit. `make review` exits non-zero on findings, so
 the same checker can gate a pipeline. The Makefile ignores that exit code so the steps carry on, which is why the
 last line on your screen is `make: [Makefile:12: review] Error 1 (ignored)`. The lab did not break.
@@ -447,7 +447,7 @@ Alerts on the logs of hardened:
 2 pages, 6 tickets
 ```
 
-The thresholds are lesson 27.2's starting points: any `VpceAccessDenied` from the agent pages, each block or deny is a
+The thresholds are lesson 20.2's starting points: any `VpceAccessDenied` from the agent pages, each block or deny is a
 ticket. Tune them on a week of data before you trust them.
 
 ## Step 6 · Prove it
@@ -494,12 +494,12 @@ They fail until you finish.
 3 of 21 TESTS FAILED (21 run)
 ```
 
-1. **27.2: rules E2 and D3 in `checker.py`.** `configs/second-draft.json` fixed every first-draft finding and the
+1. **20.2: rules E2 and D3 in `checker.py`.** `configs/second-draft.json` fixed every first-draft finding and the
    shipped checker says 0 findings. It still has a custom S3 endpoint policy with `"resources": ["*"]`, and a DNS
    walled garden whose default rule is still `ALERT`. Write the two rules (the docstrings give the contract).
-2. **27.2: `burst_of_blocked_names()` in `alerts.py`.** Page when one source address has 5 or more *distinct*
+2. **20.2: `burst_of_blocked_names()` in `alerts.py`.** Page when one source address has 5 or more *distinct*
    blocked names inside 10 minutes. The recorded morning has three sources; only one should page.
-3. **27.1: `shared_sessions()` in `alerts.py`.** Find Code Interpreter session IDs used by more than one signed-in
+3. **20.1: `shared_sessions()` in `alerts.py`.** Find Code Interpreter session IDs used by more than one signed-in
    user in `data/app-sessions.jsonl`.
 
 When you finish, `make challenge` ends with `ALL TESTS PASSED (21 run)`, and `python3 alerts.py --morning` shows the
@@ -521,7 +521,7 @@ CI so a change that opens a door fails the build.
 | Flow log line, default version 2 field order, `ACCEPT`/`REJECT`; no records for DNS to the Amazon DNS server | AWS, flow log records and limitations | Values illustrative |
 | CloudTrail `NetworkActivity`, `VpceAccessDenied`, the fixed `errorMessage`, `vpcEndpointId` | AWS, CloudTrail record contents | Values illustrative; AWS's page doesn't say whether gateway endpoints produce these events |
 | DNS Firewall walled garden, fail closed by default, NODATA block response | AWS, DNS Firewall docs | The evaluator simplifies rule priorities to "allow list first, then the default rule" |
-| Layer order and "every layer must allow" | Lesson 27.2 | A model: real networks have more layers (NACLs, route tables per subnet, firewall rule order) |
+| Layer order and "every layer must allow" | Lesson 20.2 | A model: real networks have more layers (NACLs, route tables per subnet, firewall rule order) |
 | Proxy log | This lab's own format | Real proxies (Squid, Network Firewall, Azure Firewall, Secure Web Proxy) each log differently |
 
 ## Troubleshooting

@@ -1,4 +1,4 @@
-# M28 guided build: invocation logs, a redaction Lambda, Amazon Macie, two KMS keys, retention
+# M21 guided build: invocation logs, a redaction Lambda, Amazon Macie, two KMS keys, retention
 
 The offline lab (README, Step 1b and Steps 1 to 5) teaches the mechanics at $0 with local stand-ins. This guide builds the real
 thing in **your own** AWS sandbox account (lesson 0.7, never a work account), in **us-east-1**. About 60 to 90 minutes,
@@ -321,7 +321,7 @@ aws bedrock put-model-invocation-logging-configuration --logging-config \
 ```
 
 If the raw record now carried the vector, the redacted copy shows the Lambda's marker in its place:
-`{"removed": "embedding vector", "length": 256}`. That's the trade-off from lesson 28.1: the raw bucket now holds the
+`{"removed": "embedding vector", "length": 256}`. That's the trade-off from lesson 21.1: the raw bucket now holds the
 input text **and** its vector, and only your key policy keeps that pair from becoming a second copy of the text.
 Turn the modality back off. (A second variation, if you have time: remove the Macie statement from the raw key's
 policy, run a new job, and compare the job's statistics with the first run.)

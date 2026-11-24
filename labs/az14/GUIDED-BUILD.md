@@ -1,4 +1,4 @@
-# AZ14 guided build: the TSG Helpdesk as a Foundry hosted agent in your own Azure subscription
+# M5 guided build: the TSG Helpdesk as a Foundry hosted agent in your own Azure subscription
 
 The offline lab (README Steps 1 to 6) teaches the mechanics at $0. This guide builds the hardened design for real,
 step by step, in **your own** sandbox subscription, from zero: a Foundry project, a blob container of KB articles with
@@ -34,8 +34,8 @@ Throughout, set these shell variables (again in every new terminal):
 
 ## Step 0 · Before you start (15 minutes)
 
-1. **A sandbox subscription you own** (lesson 0.7 and lab AZ10), where you are Owner. Not a work subscription.
-2. **A budget alert** (lab AZ10). If you skipped it: Cost Management, **Budgets**, a monthly budget of US$5 with an
+1. **A sandbox subscription you own** (lesson 0.7 and lab M1), where you are Owner. Not a work subscription.
+2. **A budget alert** (lab M1). If you skipped it: Cost Management, **Budgets**, a monthly budget of US$5 with an
    email alert. Do it now.
 3. **Tools.** Azure CLI 2.80 or later (Microsoft's hosted-agent prerequisite), signed in with `az login`; Python 3.10+;
    `pip install "azure-ai-projects>=2.3.0" azure-identity requests "mcp<2"`. Keep `mcp` below 2: this build uses the
@@ -44,7 +44,7 @@ Throughout, set these shell variables (again in every new terminal):
 4. **Pick a region.** Hosted agents "are available in a fixed set of regions" (Microsoft's private-networking page);
    check the region list on Microsoft's
    [hosted agents page](https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/hosted-agents) and that `gpt-5-mini` version `2025-08-07` (GA, the
-   model lab AZ13 uses) is offered there as Global Standard ([region availability](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability)). Not `gpt-4.1-mini`: Microsoft lists it as
+   model lab M4 uses) is offered there as Global Standard ([region availability](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability)). Not `gpt-4.1-mini`: Microsoft lists it as
    Deprecated, "No longer available to new customers" ([model retirements](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirements)). Then,
    from the lab's folder `labs/az14` (from the repo root: `cd labs/az14`):
 
@@ -66,10 +66,10 @@ control without quoting its text.
 
 1. **Foundry project.** Go to `ai.azure.com` with the **New Foundry** toggle on, select the project name in the
    upper-left corner, **Create new project**, name `helpdesk`, advanced options: **Resource group** `rg-<name>` (new),
-   **Location** your region, **Create** (as in lab AZ13).
+   **Location** your region, **Create** (as in lab M4).
 2. **Model.** **Build** > **Deployments**: deploy `gpt-5-mini` (version `2025-08-07`) with deployment name **`helpdesk-chat`**, Global
    Standard (label may differ slightly).
-3. **Keys off on the Foundry resource** (lab AZ10).
+3. **Keys off on the Foundry resource** (lab M1).
 4. **Storage account.** Azure portal, **Create a resource**, **Storage account**, name `st<name>`, Standard, LRS. On
    the **Advanced** tab (label may differ slightly): **Allow enabling anonymous access on individual containers** off,
    **Enable storage account key access** off, minimum TLS 1.2.
@@ -213,7 +213,7 @@ target port `8000`; under **Secrets** add `mcpkey`, and set the environment vari
 (labels may differ slightly). Build the image first with the `az acr build` line above.
 
 An MCP server on the public internet with one shared key is fine for a sandbox. In production, put it behind API
-Management with `validate-azure-ad-token` (lesson 14.4), or on a private endpoint with VNet injection.
+Management with `validate-azure-ad-token` (lesson 5.4), or on a private endpoint with VNet injection.
 
 ### G3b · The key connection and the toolbox (`make toolbox`)
 
@@ -449,7 +449,7 @@ endpoint with the MCP Python SDK, lists the tools and calls `send_email` itself,
 (`az containerapp logs show -n ca-$AZ14_NAME -g rg-$AZ14_NAME` shows the `send_email` line). That's not a bug:
 Microsoft documents it. The flag is advice to the runtime. In a hosted agent, your code is the runtime. Anyone with
 Foundry User on the project and a token can call the toolbox like this, which is why the rules that must always hold
-belong in the MCP server itself too (lesson 14.5). Optional: `make toolbox-v2` creates version 2 with
+belong in the MCP server itself too (lesson 5.5). Optional: `make toolbox-v2` creates version 2 with
 `require_approval: "never"`; promote it (`PATCH {project_endpoint}/toolboxes/helpdesk-tools?api-version=v1` with
 `{"default_version": "2"}`, Microsoft's REST) and request 5 stops asking.
 
@@ -466,7 +466,7 @@ belong in the MCP server itself too (lesson 14.5). Optional: `make toolbox-v2` c
 - **Entra.** **Entra ID** > **Agents** > **Agent identities**: your agent is in the tenant inventory, next to any
   Copilot Studio agents. A Conditional Access policy for agents ("Block high-risk agent identities", agent risk is
   preview) needs Microsoft 365 E7, or Microsoft Agent 365 plus Entra ID P2 or Microsoft 365 E5 for risk-based
-  policies; read it in lesson 14.3, don't buy anything for this lab.
+  policies; read it in lesson 5.3, don't buy anything for this lab.
 
 ## G8 · Cost and teardown (do it today)
 

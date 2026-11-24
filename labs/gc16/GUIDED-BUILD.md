@@ -1,4 +1,4 @@
-# GC16 guided build: AI detections in your own Google Cloud project
+# M7 guided build: AI detections in your own Google Cloud project
 
 Optional. The laptop lab (`README.md`) teaches everything at $0. This guide builds the free and cheap parts for real in
 **your own sandbox project** (lesson 0.7: never a work project), in `europe-west4`, and tears them down at the end.
@@ -10,8 +10,8 @@ with PASS, WAIT or FAIL lines and tears down (`bash cloud/deploy.sh up`, `test`,
 (`bash cloud/deploy.sh tf apply`, then `test`, then `bash cloud/deploy.sh tf destroy`). Doing the parts by hand once
 is still the way to learn them.
 
-**If you reuse the GC11 or GC12 project,** two things in it may already exist: the Model Armor template
-`helpdesk-guard` (GC12) and Data Access audit logs for Agent Platform (GC11, GC14 and GC15 switch them on). Since
+**If you reuse the M2 or M3 project,** two things in it may already exist: the Model Armor template
+`helpdesk-guard` (M3) and Data Access audit logs for Agent Platform (M2, M5 and M6 switch them on). Since
 15 November 2026 `up` records which of the two it made, and `down` removes only those; it tells you what it kept and
 how to remove it by hand. The Terraform shortcut is different. Terraform doesn't adopt a template it didn't create, so
 expect `tf apply` to stop with an "already exists" error if `helpdesk-guard` is there (we haven't run that case), and
@@ -20,12 +20,12 @@ when it sees that). Use Terraform in a project where neither exists, or switch t
 
 | Part | What you build | Lesson |
 |---|---|---|
-| A | Data Access audit logs for Agent Platform, and proof they record a model call | 16.1 |
-| B | Model Armor sanitize logging, four requests, and reading the log entries | 16.1, 16.2 |
-| C | Three alerts: a Model Armor match, a key used from outside, a request flood | 16.4 |
-| D | Hunting with the saved queries in Logs Explorer | 16.4 |
-| E | Change one setting (the flood threshold) and re-run | 16.4 |
-| F | Security Command Center: what you can see on Standard, and why Premium stays off | 16.2, 16.3 |
+| A | Data Access audit logs for Agent Platform, and proof they record a model call | 7.1 |
+| B | Model Armor sanitize logging, four requests, and reading the log entries | 7.1, 7.2 |
+| C | Three alerts: a Model Armor match, a key used from outside, a request flood | 7.4 |
+| D | Hunting with the saved queries in Logs Explorer | 7.4 |
+| E | Change one setting (the flood threshold) and re-run | 7.4 |
+| F | Security Command Center: what you can see on Standard, and why Premium stays off | 7.2, 7.3 |
 | G | Cost and teardown | all |
 
 > **About the responses below.** We ran this guide's script and Terraform on 12 November 2026 (`europe-west4`, a Free
@@ -37,7 +37,7 @@ Throughout: `PROJECT_ID` = your sandbox project, `REGION` = `europe-west4`.
 
 ## Before you start (10 minutes)
 
-1. A sandbox project with billing and a **budget alert** (lesson 10.5). The GC11 or GC12 project is fine.
+1. A sandbox project with billing and a **budget alert** (lesson 1.5). The M2 or M3 project is fine.
 2. `gcloud` signed in as the project owner, then:
 
    ```bash
@@ -68,7 +68,7 @@ Sources: [Cloud Observability pricing](https://cloud.google.com/stackdriver/pric
 [Data Access audit logs](https://docs.cloud.google.com/logging/docs/audit/configure-data-access),
 [SCC and Model Armor pricing](https://cloud.google.com/security-command-center/pricing). **Do Part G the same day.**
 
-## Part A · Data Access audit logs for Agent Platform (16.1)
+## Part A · Data Access audit logs for Agent Platform (7.1)
 
 ### Console
 
@@ -110,7 +110,7 @@ curl -s -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H 
 ```
 
 The call goes to the `eu` multi-region endpoint, not `REGION`: in our 12 November 2026 run `gemini-3.1-flash-lite`
-answered only on the `global`, `eu` and `us` locations, and every single region returned 404 (GC11 lesson 11.5 has the
+answered only on the `global`, `eu` and `us` locations, and every single region returned 404 (M2 lesson 2.5 has the
 details). `eu` keeps the request in the EU; `global` works too.
 
 Then in **Logging**, **Logs Explorer**, run:
@@ -146,17 +146,17 @@ Our run (12 November 2026, Cloud Shell): `google.cloud.aiplatform.v1.PredictionS
 Google Cloud address (Cloud Shell's), `resourceName` `projects/PROJECT_ID/locations/eu/publishers/google/models/gemini-3.1-flash-lite`.
 The entry was there within a minute of the call.
 
-## Part B · Model Armor sanitize logging and four requests (16.1, 16.2)
+## Part B · Model Armor sanitize logging and four requests (7.1, 7.2)
 
-First point `gcloud` at Model Armor's regional endpoint. You need this even if you did GC12, because GC12's teardown
-unsets it (the command is GC12's Step 0; our 12 November run went through `cloud/deploy.sh`, which sets the same
+First point `gcloud` at Model Armor's regional endpoint. You need this even if you did M3, because M3's teardown
+unsets it (the command is M3's Step 0; our 12 November run went through `cloud/deploy.sh`, which sets the same
 override, so we haven't seen what `gcloud` answers without it):
 
 ```bash
 gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.REGION.rep.googleapis.com/"
 ```
 
-You need a template. If you kept GC12's `helpdesk-guard`, use it, and remember at teardown that it isn't this lab's
+You need a template. If you kept M3's `helpdesk-guard`, use it, and remember at teardown that it isn't this lab's
 to delete; otherwise follow `labs/gc12/GUIDED-BUILD.md` Step 1 Path B, which already includes
 `--template-metadata-log-sanitize-operations`. To switch logging on for an existing template, open it on the
 **Model Armor** page, **Edit**, turn on **Configure logging** under **Additional configurations (optional)**,
@@ -213,7 +213,7 @@ Our run (12 November 2026), the poem's entry, cut: `logName` `projects/PROJECT_I
 holding the prompt word for word, and `sanitizationVerdict: MODEL_ARMOR_SANITIZATION_VERDICT_ALLOW` with the reason
 "The prompt did not violate any safety settings."
 
-## Part C · Three alerts (16.4)
+## Part C · Three alerts (7.4)
 
 1. **A Model Armor match.** A log-based alerting policy notifies you "whenever a specific message appears":
 
@@ -231,7 +231,7 @@ holding the prompt word for word, and `sanitizationVerdict: MODEL_ARMOR_SANITIZA
    gcloud monitoring policies create --policy-from-file=cloud/log-alert-key-unknown-ip.json
    ```
 
-   Don't create a key to test it: lesson 16.4's whole point is that you shouldn't have downloaded keys. The lab's D01
+   Don't create a key to test it: lesson 7.4's whole point is that you shouldn't have downloaded keys. The lab's D01
    shows what it would catch.
 
 3. **A request flood.** Log-based alerts can't count ("You can't use log-based alerting policies to derive counts
@@ -258,26 +258,26 @@ holding the prompt word for word, and `sanitizationVerdict: MODEL_ARMOR_SANITIZA
    the email arrives.
 
    Example response (shape from the provider's docs, values illustrative): an incident titled
-   **GC16 request flood on Agent Platform** with the condition "More than 20 model calls in 5 minutes" and the metric
+   **M7 request flood on Agent Platform** with the condition "More than 20 model calls in 5 minutes" and the metric
    value at the time it fired.
 
    Our run (12 November 2026): straight after the 30 calls, no alert was open yet, for either policy. About six
    minutes later both were open: the Model Armor match alert (from Part B's two matches) and the request flood.
    Give it that long before you decide an alert doesn't work.
 
-## Part D · Hunting (16.4)
+## Part D · Hunting (7.4)
 
 In **Logs Explorer**, paste each `.txt` file from `queries/` in turn, change the ExampleCo names and addresses to
 yours, set the time range to the last hour and **Run query**. `d04-unapproved-inference.txt` with your own account
-removed from the list should show your Part A and Part C calls. In our run it also showed one call from GC11's
+removed from the list should show your Part A and Part C calls. In our run it also showed one call from M2's
 `chatbot-runtime` account: the example names are in another project, so your own service accounts count as
 "not on the list" until you add them. Save the ones you'd want on a bad day (**Save**).
 
-If you also kept GC11's request-response logging table, run `queries/d06-tokens-by-model.sql` in **BigQuery** and see
+If you also kept M2's request-response logging table, run `queries/d06-tokens-by-model.sql` in **BigQuery** and see
 your 30 calls in one hour's row. Look for your `end_user` label in `full_request`: that's what lets
 `d07-blocked-by-end-user.sql` name a person.
 
-## Part E · Change one setting and re-run (16.4)
+## Part E · Change one setting and re-run (7.4)
 
 Raise the flood threshold from 20 to 100 (edit `thresholdValue` in the policy: **Monitoring**, **Alerting**, the
 policy, **Edit**), then send the same 30 calls again (the Part C loop). No alert this time. That's the trade-off you tune on your own
@@ -285,7 +285,7 @@ traffic: a low threshold pages you for every batch job (the lab's N1 false alarm
 one lets a slow, steady LLMjacking run all afternoon (the lab's S1 made 120 calls over 90 minutes, under two a
 minute).
 
-## Part F · Security Command Center (16.2, 16.3)
+## Part F · Security Command Center (7.2, 7.3)
 
 - **Standard** is "Free of charge". If your sandbox's organization (or project) has SCC, open **Risk overview**,
   **AI security**, and the **AI resources** tab on the **Assets** page. On Standard, AI Discovery doesn't detect
@@ -309,12 +309,12 @@ gcloud beta monitoring channels list --filter='displayName="GC16 lab email"' --f
 The channel line finds the channel by the display name `GC16 lab email`. If you made yours in the console without
 that name, delete it there: **Alerting**, **Edit notification channels**.
 
-Part A: only if Data Access logs for Agent Platform were **off** before this lab. GC11, GC14 and GC15 switch them on
+Part A: only if Data Access logs for Agent Platform were **off** before this lab. M2, M5 and M6 switch them on
 too; if you still use those builds, leave them. To switch them off, remove the auditConfigs block from
 /tmp/policy.yaml (fresh copy from get-iam-policy) and set it again, or untick Data Read and Data Write in
 IAM & Admin > Audit Logs.
 
-Part B: if you reused GC12's template, keep it and switch its logging off if GC12 had it off (Edit, Configure
+Part B: if you reused M3's template, keep it and switch its logging off if M3 had it off (Edit, Configure
 logging). Delete the template only if you made it here:
 
 ```bash

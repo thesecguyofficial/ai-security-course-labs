@@ -1,7 +1,7 @@
-# GC13 guided build: the Helpdesk agent on RAG Engine, ADK and Model Armor, in your own project
+# M4 guided build: the Helpdesk agent on RAG Engine, ADK and Model Armor, in your own project
 
 The offline lab (README Steps 1 to 8) teaches the mechanics at $0. This guide builds the real thing, step by step, in
-**your own** Google Cloud sandbox project (the GC11 or GC12 project is fine). About 60 to 90 minutes. **Cost: RAG
+**your own** Google Cloud sandbox project (the M2 or M3 project is fine). About 60 to 90 minutes. **Cost: RAG
 Engine's managed database is billed by the hour while it exists** (about $0.09 an hour at Spanner's Iowa list
 price, see Cost); everything else in this guide costs cents or nothing. Do the whole guide in one sitting and **do the
 teardown at the end**: it's the only step that stops the hourly charge.
@@ -23,7 +23,7 @@ Throughout: `PROJECT_ID` = your project, `REGION` = `europe-west4` (GA for RAG E
 
 ## Step 0 · Before you start (10 minutes)
 
-1. A sandbox project with billing and a **budget alert** (GC10 lesson 10.5). Not a work project.
+1. A sandbox project with billing and a **budget alert** (M1 lesson 1.5). Not a work project.
 2. In Cloud Shell or on your laptop with the `gcloud` CLI:
 
    ```bash
@@ -49,7 +49,7 @@ Throughout: `PROJECT_ID` = your project, `REGION` = `europe-west4` (GA for RAG E
 
 ## Step 1 · Two corpora, one per audience (20 minutes)
 
-Lesson 13.1's design: RAG Engine has no per-document ACL and a corpus has no IAM policy of its own, so you keep
+Lesson 4.1's design: RAG Engine has no per-document ACL and a corpus has no IAM policy of its own, so you keep
 audiences apart with **one corpus per audience** and let your tool pick corpora from the user's verified groups.
 
 **About the console.** Google's RAG Engine pages document the API and the Python SDK, but the console has a **RAG
@@ -122,7 +122,7 @@ curl -s -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H 
            "projects/'"$NUM"'/locations/europe-west4/publishers/google/models/text-embedding-005"}}}}'
 ```
 
-To encrypt with your own key (GC11), add `"encryptionSpec": {"kmsKeyName": "projects/.../cryptoKeys/helpdesk-data"}`
+To encrypt with your own key (M2), add `"encryptionSpec": {"kmsKeyName": "projects/.../cryptoKeys/helpdesk-data"}`
 to the body. It must be set now: the API definition says the key "can only be set at corpus creation time, and
 cannot be updated or deleted", and it's "Only applicable to RagManagedDb".
 
@@ -175,11 +175,11 @@ already holds **RAG Data Service Agent** (`roles/aiplatform.ragServiceAgent`) on
 includes `storage.objects.get`, `storage.objects.list` and BigQuery `tables.getData`. So RAG Engine can read every
 bucket and table in the project, and anyone who may import into a corpus can pull any of them in. The per-bucket grant
 above records intent; it isn't what limits access. To actually limit it, keep these buckets in a project of their
-own, or control who holds RAG import permissions (lesson 13.1).
+own, or control who holds RAG import permissions (lesson 4.1).
 
 ## Step 2 · The agent's own identity (5 minutes)
 
-Not the project-wide Reasoning Engine Service Agent (lab rule GC13-10): a service account for this agent only.
+Not the project-wide Reasoning Engine Service Agent (lab rule M4-M1): a service account for this agent only.
 
 Console: **IAM & Admin** > **Service accounts** > **Create service account**, ID `helpdesk-agent`, **Create and
 continue**, add two roles (type the role ID in the role picker's filter: `roles/aiplatform.user` and **Model Armor
@@ -205,7 +205,7 @@ gcloud auth application-default login --impersonate-service-account=helpdesk-age
 
 ## Step 3 · A Model Armor template for the agent (5 minutes)
 
-If you kept GC12's `helpdesk-guard`, reuse it. Otherwise create `helpdesk-agent-guard`, either as in GC12's guide
+If you kept M3's `helpdesk-guard`, reuse it. Otherwise create `helpdesk-agent-guard`, either as in M3's guide
 (console: **Model Armor** page > **Create Template**, template ID, **Region** `europe-west4`, tick **Prompt injection
 and jailbreak detection** at **Medium and above** and **Malicious URL detection**, **Responsible AI** filters at
 **Medium and above**, **Create**), or with gcloud:
@@ -393,7 +393,7 @@ put your recipient policy from the offline challenge into
 
 ## Step 6 · See it in the logs (5 minutes)
 
-Your template logs sanitize operations (Step 3 turned that on). Read them as in GC12:
+Your template logs sanitize operations (Step 3 turned that on). Read them as in M3:
 
 ```bash
 gcloud logging read 'jsonPayload.@type="type.googleapis.com/google.cloud.modelarmor.logging.v1.SanitizeOperationLogEntry"' \
@@ -401,10 +401,10 @@ gcloud logging read 'jsonPayload.@type="type.googleapis.com/google.cloud.modelar
 ```
 
 They hold the raw text Model Armor screened, including the poisoned ticket. In production, route them to a
-restricted log bucket (GC12). Next to them, your own `tsg.audit` lines answer the question the platform logs can't:
+restricted log bucket (M3). Next to them, your own `tsg.audit` lines answer the question the platform logs can't:
 which person each tool call was for. If you deploy (Step 8), Google's ADK docs say `adk deploy agent_engine
 --otel_to_cloud` sets `ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS='false'` unless you set it, which keeps prompts and tool
-payloads out of trace spans (lab rule GC13-17). Leave it that way.
+payloads out of trace spans (lab rule M4-M10). Leave it that way.
 
 ## Step 7 · Write down what you saw
 
@@ -572,7 +572,7 @@ terraform/scripts/rag_tier.sh PROJECT_ID europe-west4 unprovisioned
 - The first `curl`: run it again with `FINANCE_CORPUS_NAME` in place of `STAFF_CORPUS_NAME`
 - The two `remove-iam-policy-binding` lines come before the account is deleted, as `cloud/deploy.sh down` does:
   deleting the account alone leaves its two role bindings behind in the project's policy
-- Skip the template line if you reused GC12's `helpdesk-guard`
+- Skip the template line if you reused M3's `helpdesk-guard`
 - `terraform/scripts/rag_tier.sh PROJECT_ID europe-west4 unprovisioned`: deletes the managed database: stops billing
 
 Console instead: RAG Engine > each corpus's **⋮** > **Delete**; then **Configure Spanner** > **Delete Spanner

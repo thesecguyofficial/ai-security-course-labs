@@ -1,7 +1,7 @@
-# GC15 guided build: a private endpoint for an open model, in your own Google Cloud project
+# M6 guided build: a private endpoint for an open model, in your own Google Cloud project
 
 The offline lab (README Steps 1 to 8) teaches the mechanics at $0. This guide builds the real thing from zero in
-**your own** Google Cloud sandbox project (GC10, never a work project), in **us-central1**. About 2 hours. Nothing
+**your own** Google Cloud sandbox project (M1, never a work project), in **us-central1**. About 2 hours. Nothing
 here uses a third-party service except the model download itself, which comes from the model publisher's page on the
 Hugging Face Hub to your laptop.
 
@@ -15,13 +15,13 @@ Hugging Face Hub to your laptop.
 
 | Part | What you build | Lesson |
 |---|---|---|
-| A | APIs, three service accounts, a Cloud KMS key, a model bucket, an Artifact Registry repository | 15.2 |
-| B | The serving image (built by Cloud Build, scanned by Artifact Analysis, deployed by digest) | 15.1, 15.4 |
-| C | The model: download, scan, record license and hashes, upload, register | 15.3 |
-| D | A Private Service Connect endpoint with CMEK, the auto-undeploy job, then the deployment | 15.2, 15.3 |
-| E | Five requests and what each one leaves in the logs | 15.4 |
-| F | One setting changed: request-response logging on | 15.4 |
-| G | Teardown | 15.5 |
+| A | APIs, three service accounts, a Cloud KMS key, a model bucket, an Artifact Registry repository | 6.2 |
+| B | The serving image (built by Cloud Build, scanned by Artifact Analysis, deployed by digest) | 6.1, 6.4 |
+| C | The model: download, scan, record license and hashes, upload, register | 6.3 |
+| D | A Private Service Connect endpoint with CMEK, the auto-undeploy job, then the deployment | 6.2, 6.3 |
+| E | Five requests and what each one leaves in the logs | 6.4 |
+| F | One setting changed: request-response logging on | 6.4 |
+| G | Teardown | 6.5 |
 
 > **Tested 12 November 2026.** The one-shot script (`cloud/deploy.sh up`, `test`, `rrlog`, `down`) and the Terraform
 > (`deploy.sh tf apply rrlog`, `test`, `tf destroy`) both ran end to end in our project, `test` 5 of 5 each time. What
@@ -49,7 +49,7 @@ Shell variables used throughout (set them again in a new terminal):
 
 ## Step 0 · Before you start (15 minutes)
 
-1. **Your own sandbox project with billing and a budget alert** (GC10 lesson 10.5). As its owner you can do
+1. **Your own sandbox project with billing and a budget alert** (M1 lesson 1.5). As its owner you can do
    everything below. This build uses CPU only, so it doesn't need a GPU quota (Google's Free Trial page lists "Add
    GPUs to your VM instances" among the things a Free Trial account can't do).
 2. **Cost.** Run `make cost`:
@@ -161,7 +161,7 @@ Shell variables used throughout (set them again in a new terminal):
 
    Console: **Artifact Registry > Repositories > tsg-gc15 > summariser**, then the digest's **Vulnerabilities** tab.
    Decide now what you'd do with a CRITICAL finding in the base image: rebuild on a newer base, or accept it in
-   writing. That's GC15-02.
+   writing. That's M6-M2.
 
 ## Part C · The model: download, scan, record, upload (20 minutes)
 
@@ -386,7 +386,7 @@ TLS and 443 with a self-signed certificate on this address).
    the container logs (the server doesn't print prompts), and not in request-response logs (off). In Part F you'll
    change the last one.
 4. **An instruction hidden in a ticket** (`predict-injection.json`, a labeled lab placeholder). A self-hosted model
-   has no safety layer of its own: whatever the model does, nothing screened it. Model Armor (GC12) can screen any
+   has no safety layer of its own: whatever the model does, nothing screened it. Model Armor (M3) can screen any
    model's prompts and answers.
 5. **The evidence.** Wait a few minutes, then in **Logging > Logs Explorer**:
 

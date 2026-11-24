@@ -1,4 +1,4 @@
-# Lab GC14: who decides each tool call? Agent Runtime, Agent Identity and Agent Gateway
+# Lab M5: who decides each tool call? Agent Runtime, Agent Identity and Agent Gateway
 
 Companion to lessons **14.0 to 14.8** of *AI Security Engineer* (The Sec Guy), Google Cloud stream. About 45 minutes,
 **$0**, all on your laptop. **Nothing to install** (Python 3.11+ standard library only) and **no Google Cloud account
@@ -20,7 +20,7 @@ tool calls.
 | **Compare** | The same table hardened (0 of 6), in dry run (2 of 6), after a rug pull (1 of 6) and during a Model Armor outage (0 of 6) | `make decide-fixed`, `make decide-dry`, `make rugpull`, `make outage` |
 | **Logs** | The gateway's decisions as log lines: what a dry run looks like | `make logs` |
 | **Prove** | 25 tests | `make test` |
-| **Challenge** | Rule GC14-18 and the rug-pull fix. No solution included | `make challenge` |
+| **Challenge** | Rule M5-M11 and the rug-pull fix. No solution included | `make challenge` |
 | **Guided build** (optional) | [GUIDED-BUILD.md](GUIDED-BUILD.md): the real services in your own project | |
 
 ## Get the lab files
@@ -109,7 +109,7 @@ cd labs/gc14
 
 ## Step 1b · Before you start: look at each piece on its own (about 15 minutes)
 
-New to Agent Runtime? Do this before Step 1 (lesson 14.8 calls it "Before you start"; lesson 14.0 explains each idea).
+New to Agent Runtime? Do this before Step 1 (lesson 5.8 calls it "Before you start"; lesson 5.0 explains each idea).
 `explore.py` takes the Helpdesk team's deployment apart one Agent Platform piece at a time, in both deployments. Real
 output below is from a fresh Ubuntu machine.
 
@@ -156,7 +156,7 @@ Run `python3 explore.py map hardened` too: token protection on, 2 bindings to ev
 `roles/serviceusage.serviceUsageConsumer`, the roles Google recommends; neither is a data role), the gateway in `ENFORCE` with a deny rule first, Model Armor `failOpen false`, two memory topics with a TTL, no
 sandbox, Data Access logs on.
 
-**2. Who the agent is (lesson 14.3).** The agent's principal, and which IAM bindings reach it:
+**2. Who the agent is (lesson 5.3).** The agent's principal, and which IAM bindings reach it:
 
 ```bash
 python3 explore.py identity today
@@ -182,7 +182,7 @@ python3 explore.py identity today
    Data roles granted that way here: 1  <- every agent can read the data
 ```
 
-**3. What it may read (lesson 14.3).** IAM on the dataset and on its parent project:
+**3. What it may read (lesson 5.3).** IAM on the dataset and on its parent project:
 
 ```bash
 python3 explore.py iam today finance_exports
@@ -195,7 +195,7 @@ python3 explore.py iam hardened finance_exports
 => DENIED: no binding grants bigquery.tables.getData
 ```
 
-**4. Which user the app acts for (lessons 14.6, 14.7).** Alice's verified token, a request body that says Bob:
+**4. Which user the app acts for (lessons 5.6, 5.7).** Alice's verified token, a request body that says Bob:
 
 ```bash
 python3 explore.py user today tok-alice-0001 --body-user bob@example.com
@@ -214,7 +214,7 @@ python3 explore.py user hardened tok-alice-0001 --body-user bob@example.com
   memory scope             from verified token  -> alice@example.com
 ```
 
-**5. The registry (lesson 14.4).** Every MCP server the gateway knows, and the hints whoever registered it wrote:
+**5. The registry (lesson 5.4).** Every MCP server the gateway knows, and the hints whoever registered it wrote:
 
 ```bash
 python3 explore.py registry
@@ -239,7 +239,7 @@ Agent Registry entries the gateway checks:
 
 `python3 explore.py registry --rugpull` adds `tool export_ticket  readOnlyHint=true` to the tickets server.
 
-**6. One call through the gateway (lessons 14.4, 14.5).** What the gateway knows about the call (the CEL attributes),
+**6. One call through the gateway (lessons 5.4, 5.5).** What the gateway knows about the call (the CEL attributes),
 every rule with deny rules first, the decision and the mode:
 
 ```bash
@@ -276,7 +276,7 @@ python3 explore.py gateway hardened --host status.example.net --path /report
   mode      ENFORCE -> the call is BLOCKED
 ```
 
-**7. Model Armor on the gateway (lesson 14.4).** What it screens, and what `failOpen: false` does in an outage:
+**7. Model Armor on the gateway (lesson 5.4).** What it screens, and what `failOpen: false` does in an outage:
 
 ```bash
 python3 explore.py armor hardened
@@ -295,7 +295,7 @@ python3 explore.py armor hardened
 => An ordinary-looking request ('send a copy to our partner desk') is not what a filter looks for.
 ```
 
-**8. Memory Bank (lesson 14.6).** The scope this request uses, what comes back, the topics and the TTL:
+**8. Memory Bank (lesson 5.6).** The scope this request uses, what comes back, the topics and the TTL:
 
 ```bash
 python3 explore.py memory today tok-alice-0001 --body-user bob@example.com
@@ -317,7 +317,7 @@ python3 explore.py memory hardened tok-alice-0001 --body-user bob@example.com
   new memories expire          after 30 days
 ```
 
-**9. Sandboxes and the record (lessons 14.6, 14.7).**
+**9. Sandboxes and the record (lessons 5.6, 5.7).**
 
 ```bash
 python3 explore.py sandbox today
@@ -426,11 +426,11 @@ You should see (shortened):
 ```
 
 Each finding has a `fix:` line (left out above). Read the HIGH ones in four groups: **who the agent is and what it
-can touch** (GC14-02, GC14-03), **where it can connect** (GC14-05, 06, 07, 09, 14), **who it thinks it's working
-for** (GC14-11, GC14-17), and the MEDIUM housekeeping (stale grants, no TTL, a secret in plain text, prompts in traces).
+can touch** (M5-M2, M5-M3), **where it can connect** (M5-M5, 06, 07, 09, 14), **who it thinks it's working
+for** (M5-M2, M5-M10), and the MEDIUM housekeeping (stale grants, no TTL, a secret in plain text, prompts in traces).
 
-Two rules are worth a closer look. **GC14-07** doesn't trust a rule's name or description: it asks the gateway twin
-"would you let this agent call `mail.send_email`?" and reports the rule that said yes. **GC14-05** is the one teams
+Two rules are worth a closer look. **M5-M7** doesn't trust a rule's name or description: it asks the gateway twin
+"would you let this agent call `mail.send_email`?" and reports the rule that said yes. **M5-M5** is the one teams
 forget: dry run is the right way to *start*, and the wrong way to stay.
 
 The same review on the hardened deployment:
@@ -592,7 +592,7 @@ Same as `python3 decide.py --twin hardened --rugpull`.
 The `deny-mail` rule still works; the proposal simply uses a different tool. The `allow-ticket-reads` rule allows
 any tool on the tickets server whose annotation says read-only, and **whoever registers the server writes the
 annotations**: Agent Registry "doesn't automatically introspect the server" when you register it manually. That's
-GC14-08, and it's your challenge.
+M5-M8, and it's your challenge.
 
 ### Model Armor outage (`make outage`)
 
@@ -685,8 +685,8 @@ The deployment files are plain JSON. Pick one hardened setting, change it, and r
 `make check-fixed`. Three to try (undo each one afterwards, or `git checkout twin/`):
 
 - In `twin/hardened/deployment.json`, set `"_lab_memory_scope_from"` to `"request_body"`: C6 goes through and
-  GC14-11 comes back.
-- Delete the whole `deny-mail` rule: C4 is still stopped, by the **default deny**, and GC14-07 stays quiet. Why is the
+  M5-M2 comes back.
+- Delete the whole `deny-mail` rule: C4 is still stopped, by the **default deny**, and M5-M7 stays quiet. Why is the
   explicit deny rule still worth having? (Hint: what happens the day someone adds a broad allow rule?)
 - Set `"failOpen": true` on `model_armor_authz_extension` and run `make outage`.
 
@@ -696,7 +696,7 @@ The deployment files are plain JSON. Pick one hardened setting, change it, and r
 
 Two changes. `make challenge` runs the 25 lab tests plus 4 challenge tests; all 4 fail until you're done.
 
-1. **Rule GC14-18: Data Access audit logs for Memory Bank** (`checker.py`, at the `TODO`). Cloud Audit Logs records
+1. **Rule M5-M11: Data Access audit logs for Memory Bank** (`checker.py`, at the `TODO`). Cloud Audit Logs records
    admin activity by default, but "Data Access audit logs are disabled by default for all services but some BigQuery
    services". A Memory Bank retrieve is a data read, so with `DATA_READ` off nobody can later answer "who read
    Bob's memories, and when?". Report a **MEDIUM** finding `GC14-18` when `"DATA_READ"` is missing from
@@ -730,7 +730,7 @@ Real output before you start:
 4 of 29 TESTS FAILED (29 run)
 ```
 
-Done when `make challenge` ends with `ALL TESTS PASSED (29 run)`, `make check` shows 15 findings (GC14-18 is new),
+Done when `make challenge` ends with `ALL TESTS PASSED (29 run)`, `make check` shows 15 findings (M5-M11 is new),
 `make check-fixed` shows 0, and `make rugpull` shows 0 of 6. Then think about the process, not just the rule: who is
 told when someone re-registers an MCP server your agent uses?
 

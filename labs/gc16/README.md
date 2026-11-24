@@ -1,4 +1,4 @@
-# Lab GC16: build the detections, run the attack simulator, catch it, write the incident report
+# Lab M7: build the detections, run the attack simulator, catch it, write the incident report
 
 Companion to lessons **16.0 to 16.6** of the Google Cloud stream of *AI Security Engineer* (The Sec Guy). About 75
 minutes for Steps 1 to 9, plus about 15 for Step 1b if you do it, **$0**, all on your laptop: **Python 3.11+ only**, no packages, no Google Cloud account, no
@@ -6,23 +6,23 @@ network. Step 10 is optional: [`GUIDED-BUILD.md`](GUIDED-BUILD.md) turns on Data
 logging and three alerts in **your own** sandbox project, and ends with teardown.
 
 You are the cloud security engineer at **ExampleCo** (fictional, on the documentation domain example.com). Over
-Modules 10 to 14 the company built a customer support bot on Gemini in Agent Platform (formerly Vertex AI), a staff
+Modules 1 to 5 the company built a customer support bot on Gemini in Agent Platform (formerly Vertex AI), a staff
 Helpdesk agent on Agent Runtime behind Agent Gateway, and a RAG corpus in RAG Engine. On **20 October 2026** five
 things went wrong on the same day. The SOC caught one of them. Your job: find out why, build the detections and the
 logging that catch all five, and write the incident report for the expensive one.
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Simulate** | One day of telemetry, normal work plus five incidents, for two logging setups | 16.0, 16.1 |
-| **Old SOC** | The SOC's three rules on the old logs: 1 of 5 caught | 16.0, 16.2 |
-| **Old rules, new logs** | Still 1 of 5, plus a false alarm: a "HIGH and CRITICAL" SCC filter drops both AI findings | 16.2 |
-| **New rules, old logs** | 1 of 5: you can't detect what you didn't log | 16.1 |
-| **Both** | 13 rules (D01 to D13) on the new logs: 3 of 5 caught and named, 2 seen but not named, 0 false alarms | 16.2, 16.4 |
-| **Inventory** | What SCC's AI inventory lists, the register diff, and the two checks it leaves to you | 16.3 |
-| **Posture** | Four framework controls, six custom checks and two organization policies | 16.3, 16.4 |
-| **Report** | Pivot on an entity, estimate the cost, read a worked incident report | 16.5 |
+| **Simulate** | One day of telemetry, normal work plus five incidents, for two logging setups | 7.0, 7.1 |
+| **Old SOC** | The SOC's three rules on the old logs: 1 of 5 caught | 7.0, 7.2 |
+| **Old rules, new logs** | Still 1 of 5, plus a false alarm: a "HIGH and CRITICAL" SCC filter drops both AI findings | 7.2 |
+| **New rules, old logs** | 1 of 5: you can't detect what you didn't log | 7.1 |
+| **Both** | 13 rules (D01 to D13) on the new logs: 3 of 5 caught and named, 2 seen but not named, 0 false alarms | 7.2, 7.4 |
+| **Inventory** | What SCC's AI inventory lists, the register diff, and the two checks it leaves to you | 7.3 |
+| **Posture** | Four framework controls, six custom checks and two organization policies | 7.3, 7.4 |
+| **Report** | Pivot on an entity, estimate the cost, read a worked incident report | 7.5 |
 | **Prove** | `make test`: 18 tests | 16.6 |
-| **Challenge** | Two detections and your own incident report. No solution included | 16.4, 16.5 |
+| **Challenge** | Two detections and your own incident report. No solution included | 7.4, 7.5 |
 | **Cloud (optional)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): console and gcloud from zero, four requests, one setting changed, cost, teardown | 16.1 to 16.4 |
 
 ## Get the lab files
@@ -58,7 +58,7 @@ cd labs/gc16
 | `explore.py` | **Read-only helper** (Step 1b): one idea at a time, from one day's log entries, alerts and incidents to a playbook. It builds the day in memory, sends nothing and writes nothing |
 | `data/vpc-flow-logs.jsonl` | **Illustrative** VPC Flow Logs entries in Google's documented record format, for `explore.py flow` (no other file reads it) |
 | `simulate.py` | The **attack simulator**: 20 Oct 2026 at ExampleCo, normal work plus five incidents (S1 to S5), written as the files each logging setup would really collect. It replays a made-up day; it never calls Google Cloud |
-| `setups/first-draft.json`, `setups/hardened.json` | What each setup collects. First draft: Google Cloud's defaults (Admin Activity, BigQuery Data Access) plus a log exclusion and a plain web log. Hardened: lesson 16.1's list |
+| `setups/first-draft.json`, `setups/hardened.json` | What each setup collects. First draft: Google Cloud's defaults (Admin Activity, BigQuery Data Access) plus a log exclusion and a plain web log. Hardened: lesson 7.1's list |
 | `detect.py` | Two rule packs: `soc-v1` (three rules a SOC often starts with) and `gc16` (D01 to D13). D11 and D12 are your challenge |
 | `evaluate.py` | Scores a pack against the five incidents: CAUGHT (an alert names who to act on), SEEN, NOT NAMED, MISSED, and false alarms |
 | `inventory.py`, `data/inventory/` | An AI inventory like SCC AI Protection's, an approved-AI register, Cloud DNS logs and firewall rules |
@@ -77,7 +77,7 @@ What the telemetry files are, and how close they are to the real thing:
 | `armor.jsonl` | Model Armor sanitize operation logs | `SanitizeOperationLogEntry`, `sanitizationResult`, `filterResults`. Fields starting `lab.` are the lab's own |
 | `scc.jsonl` | Security Command Center threat findings (Event Threat Detection) | The fields in Google's example findings (`category`, `severity`, `access`, `sourceProperties.detectionCategory.ruleName`, `evidence`) |
 | `gateway.jsonl` | Agent Gateway request logs | `httpRequest`, `trace`, `jsonPayload.mcpInfo`. The policy verdict and mode are `lab.` fields: in a real project a dry-run denial is an IAP entry in Cloud Audit Logs, joined to the request by time and trace |
-| `app.jsonl` | Your web app's own log | Yours to design (lesson 16.1) |
+| `app.jsonl` | Your web app's own log | Yours to design (lesson 7.1) |
 
 ## Needs
 
@@ -86,8 +86,8 @@ What the telemetry files are, and how close they are to the real thing:
 
 ## Step 1b · Before you start: look at each idea on its own (about 15 minutes)
 
-New to detection and response? Do this before Step 1 (lesson 16.0 explains each idea). `explore.py` shows,
-one idea at a time, the records, the rules and the response on ExampleCo's day, the Google Cloud version of the AWS stream's Module 16.
+New to detection and response? Do this before Step 1 (lesson 7.0 explains each idea). `explore.py` shows,
+one idea at a time, the records, the rules and the response on ExampleCo's day, the Google Cloud version of the AWS stream's Module 7.
 Real output below is from a fresh Ubuntu machine. Run it from `labs/gc16`.
 
 **What it really runs.** Nothing that changes anything: `explore.py` builds the simulated day in memory with
@@ -516,7 +516,7 @@ Caught 1 of 5 | seen but not named 1 | missed 3 | false alarms 0
 The authorization extension change is Admin Activity, so D03 sees the gateway go to `DRY_RUN` and names the pipeline
 that did it. What the agent did next is in gateway logs the first draft excluded.
 
-## Step 5 · Both: this module's rules on lesson 16.1's logs
+## Step 5 · Both: this module's rules on lesson 7.1's logs
 
 ```bash
 make detect
@@ -579,7 +579,7 @@ severity. D07 names `cust-8841` because the backend
 put `end_user` in the request's `labels`; Model Armor and SCC never see the customer. And D06 can only name a model:
 request-response rows don't carry the caller, which is why S4 is SEEN, NOT NAMED until you write D12.
 
-## Step 6 · The AI inventory (16.3)
+## Step 6 · The AI inventory (7.3)
 
 ```bash
 make inventory
@@ -613,9 +613,9 @@ Your check: firewall rule allow-ollama-any allows 0.0.0.0/0 to port 11434 (ollam
 ```
 
 The 14 is more than SCC's inventory would hold: the `Outside AI API` row (`api.openai.com`) comes from your own Cloud
-DNS logs. Calls to an outside AI API aren't in SCC's AI inventory (lesson 16.3), which is why the lab adds that check.
+DNS logs. Calls to an outside AI API aren't in SCC's AI inventory (lesson 7.3), which is why the lab adds that check.
 
-## Step 7 · Posture: framework controls, custom checks, organization policies (16.3, 16.4)
+## Step 7 · Posture: framework controls, custom checks, organization policies (7.3, 7.4)
 
 ```bash
 make posture
@@ -689,7 +689,7 @@ Organization policies (preventive, lesson 16.4)
 1 NON_COMPLIANT of 12 checks
 ```
 
-## Step 8 · From alert to report (16.5)
+## Step 8 · From alert to report (7.5)
 
 Pivot on the entity an alert named:
 
@@ -742,7 +742,7 @@ python3 report.py cost etl-batch
 usd_lab_prices uses the ILLUSTRATIVE price list in exampleco.json, not Google's prices.
 ```
 
-With lesson 16.1's logging the pivot gives you 281 records; with the first draft, 6. The cost covers the 120 Gemini
+With lesson 7.1's logging the pivot gives you 281 records; with the first draft, 6. The cost covers the 120 Gemini
 calls in the request-response table. The 30 Claude calls are only in the audit log: you know they happened, not what
 they cost or said.
 
@@ -826,7 +826,7 @@ They fail until you finish.
    `tokens_per_end_user_per_hour` in any hour. SCC and D06 can't name the person; the request labels and your app
    log can.
 3. **The S1 incident report** (16.5). `cp report/TEMPLATE.md report/INCIDENT-REPORT.md` (Windows:
-   `copy report\TEMPLATE.md report\INCIDENT-REPORT.md`), write it from the pivot and playbook 1 in lesson 16.5, then
+   `copy report\TEMPLATE.md report\INCIDENT-REPORT.md`), write it from the pivot and playbook 1 in lesson 7.5, then
    `make report-check` (same as `python3 simulate.py`, then
    `python3 report.py check report/INCIDENT-REPORT.md --scenario S1`). The check wants every section, five UTC timestamps, three
    real record IDs and the facts a reviewer would ask for (both attacker addresses, the Claude calls, the command

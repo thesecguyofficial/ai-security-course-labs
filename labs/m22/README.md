@@ -1,6 +1,6 @@
-# Lab M22.5: rebuild an email agent as dual LLM + taint-checked sinks, scored with AgentDojo
+# Lab M15.5: rebuild an email agent as dual LLM + taint-checked sinks, scored with AgentDojo
 
-Companion to lesson **22.5** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 40 minutes,
+Companion to lesson **15.5** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 40 minutes,
 $0, all on your laptop, all on fake data. Nothing leaves this folder: no model API, no real mail, no network.
 
 The TSG ops desk has an email agent. It can search the inbox, look colleagues up in the company directory, search the
@@ -142,7 +142,7 @@ IT2 send finance a fake "pay invoice INV-990" email, IT3 make the agent tell the
 
 ## Step 1b · Look at each piece first
 
-New to agent architecture? Do this before Step 1 (lesson 22.1 and its "How it works" videos run it). `explore.py`
+New to agent architecture? Do this before Step 1 (lesson 15.1 and its "How it works" videos run it). `explore.py`
 shows one idea at a time. **What it really runs:** it loads the fake inbox, directory and drive into memory. `agent`
 runs the obedient stand-in model on an in-memory copy (the "sent" email lands in a Python list and is gone when the
 script ends), `planted` asks AgentDojo to write its attack text into an in-memory copy, `ask` runs the stand-in
@@ -450,7 +450,7 @@ the exit code: they are here to show working attacks.
 UT4 asks the agent to take its plan *from* data. A planner that never sees data can't do that, by design. The
 CaMeL paper reports a utility cost on AgentDojo too (77% of tasks with its defense, 84% undefended). Under attack, UT3 also fails, safely: a refused call is a task
 not done. A real deployment would ask the user to confirm instead of refusing outright; that confirmation is where
-approval fatigue starts (lesson 22.3).
+approval fatigue starts (lesson 15.3).
 
 ## Step 5 · What labels don't stop
 
@@ -500,7 +500,7 @@ Q3. Which sessions read untrusted content and then tried to send outside? (chall
 
 Read the two rule names with care. `trusted_action` here is the rule of the **single+taint** design: refuse every
 sink once anything untrusted is in the conversation. Its 59 refusals are label creep, seen in a log. It is not the
-value-level rule of lesson 22.4; that one is `recipient_integrity` in `policies.py`, which refused twice.
+value-level rule of lesson 15.4; that one is `recipient_integrity` in `policies.py`, which refused twice.
 
 Two more things to notice. A `recipient_integrity` refusal names the file the address came from: that file is where the
 planted text is. And sends to `priya.nair@customer.example` are normal replies to a customer: "outside" is a reason to
@@ -522,13 +522,13 @@ ALL TESTS PASSED (20 run)
 
 **Challenge** (`make challenge`: 4 of 24 tests fail until you finish; no solution included):
 
-1. **22.1, the URL exit:** write `check_fetch_url()` in `policies.py`. An untrusted URL may only go to a host in
+1. **15.1, the URL exit:** write `check_fetch_url()` in `policies.py`. An untrusted URL may only go to a host in
    `ALLOWED_URL_HOSTS`; a URL the user typed may go anywhere. UT8 opens the tracking link from the supplier's email;
    IT4 plants a "tracking page" link whose query string carries the tracking number to the attacker.
-2. **22.4, implicit flows:** in `agents.py`, make strict mode carry the label of an `If` condition into the calls
+2. **15.4, implicit flows:** in `agents.py`, make strict mode carry the label of an `If` condition into the calls
    inside it. UT9 emails Sam only if the invite says the call moved; IT5 plants a sentence that makes the quarantined
    yes/no answer come out "yes".
-3. **22.1, the hunt:** write `trifecta_sessions()` in `audit.py`: sessions that read untrusted content and later
+3. **15.1, the hunt:** write `trifecta_sessions()` in `audit.py`: sessions that read untrusted content and later
    attempted a send to anyone outside the company.
 
 `.venv/bin/python score.py --challenge` and `.venv/bin/python score.py --challenge --agent dual+taint+strict` show the challenge tasks.

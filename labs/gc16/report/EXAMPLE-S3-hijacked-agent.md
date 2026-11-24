@@ -1,6 +1,6 @@
 # Incident report: Helpdesk agent hijacked through ticket 5120
 
-A worked example for scenario S3 (lesson 16.5, playbook 3). Every record ID below exists in the lab's hardened
+A worked example for scenario S3 (lesson 7.5, playbook 3). Every record ID below exists in the lab's hardened
 telemetry. ExampleCo, the people and the addresses are fictional.
 
 ## Summary
@@ -47,7 +47,7 @@ so the gateway enforces again (ENFORCE). Quarantined ticket 5120 (moved to a clo
 ## Eradication and recovery
 
 Re-enrolled the CEO's MFA and confirmed the old factor no longer works. Reported the mail to the receiving provider and
-asked for deletion. Removed the dry-run line from the pipeline's stored copy. Re-ran the GC14 hijack suite against
+asked for deletion. Removed the dry-run line from the pipeline's stored copy. Re-ran the M5 hijack suite against
 staging: all denied calls blocked.
 
 ## Evidence

@@ -1,4 +1,4 @@
-# Lab M13: port the local RAG + agent to Bedrock without losing a single control
+# Lab M4: port the local RAG + agent to Bedrock without losing a single control
 
 Companion to lessons **13.0 to 13.3** of *AI Security Engineer* (The Sec Guy). About 60 minutes for Steps 1 to 8,
 **$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no model download. Step 9 is optional:
@@ -8,19 +8,19 @@ it builds the knowledge base (and, if you want, the agent) in **your own** sandb
 You are still the cloud security engineer at **AnyCompany** (fictional; "AnyCompany" is the placeholder name AWS uses in
 its documentation). In Part 2 you built and fixed the TSG Helpdesk on your laptop: a RAG bot that only showed each person
 their own documents (M6) and an agent whose tools were fenced in by an allow-list, approvals, argument checks and an
-audit log (M7). In M11 and M12 it moved to Amazon Bedrock with a guardrail. Now the platform team has ported the
+audit log (M7). In M2 and M3 it moved to Amazon Bedrock with a guardrail. Now the platform team has ported the
 knowledge base and the agent to managed AWS services. Their pull request says "same app, now on Bedrock". That is the
 **first draft**. Your job: prove whether every control from M6 and M7 came along.
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Check** | Review the first-draft port: 17 findings, 9 HIGH | 13.1, 13.2 |
-| **Break** | 8 attacks and 5 normal requests: 7 of 7 applicable attacks work, and nothing *looks* broken | 13.1, 13.2 |
-| **Knowledge base** | How ACL-aware retrieval really behaves: no identity = no results, deny beats allow, no ACL = not indexed, changes need a resync | 13.1 |
-| **Port, twice** | The fixed port on Bedrock Agents Classic, and the same port on an AgentCore harness (for accounts that can't create Classic agents) | 13.0, 13.2 |
-| **Parity** | All 10 local controls from M6 and M7, each mapped to its AWS equivalent: kept, partial or lost | 13.3 |
+| **Check** | Review the first-draft port: 17 findings, 9 HIGH | 4.1, 4.2 |
+| **Break** | 8 attacks and 5 normal requests: 7 of 7 applicable attacks work, and nothing *looks* broken | 4.1, 4.2 |
+| **Knowledge base** | How ACL-aware retrieval really behaves: no identity = no results, deny beats allow, no ACL = not indexed, changes need a resync | 4.1 |
+| **Port, twice** | The fixed port on Bedrock Agents Classic, and the same port on an AgentCore harness (for accounts that can't create Classic agents) | 4.0, 4.2 |
+| **Parity** | All 10 local controls from M6 and M7, each mapped to its AWS equivalent: kept, partial or lost | 4.3 |
 | **Prove** | `make test`: 19 tests | 13.3 |
-| **Challenge** | Screen retrieved chunks, write checker rule M13-20, add authorization behind the confirmation. No solution included | 13.1, 13.2 |
+| **Challenge** | Screen retrieved chunks, write checker rule M4-M13, add authorization behind the confirmation. No solution included | 4.1, 4.2 |
 | **Cloud (optional)** | Terraform for the managed knowledge base (+ harness), and [`GUIDED-BUILD.md`](GUIDED-BUILD.md): console and CLI from zero, seven requests including a cross-user leak attempt, an indirect injection and a confirmed write, one setting changed, cost, teardown | 13.1, 13.2 |
 
 ## Get the lab files
@@ -79,7 +79,7 @@ is the one you can build yourself (Step 9).
 
 ## Step 1b · Before you review: look at each piece (about 10 minutes)
 
-New to managed knowledge bases and agents? Do this before Step 1 (lesson 13.3 and its videos call it Step 1b).
+New to managed knowledge bases and agents? Do this before Step 1 (lesson 4.3 and its videos call it Step 1b).
 `explore.py` shows each piece one at a time. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the files in `setups/` and `data/docs/` and
@@ -489,7 +489,7 @@ make ported
 make parity-ported
 ```
 
-- `make check-ported`: same as `python3 checker.py ported`. 0 HIGH, 0 MEDIUM, 1 LOW (M13-17: chunks unscreened, challenge 1)
+- `make check-ported`: same as `python3 checker.py ported`. 0 HIGH, 0 MEDIUM, 1 LOW (M4-M10: chunks unscreened, challenge 1)
 - `make ported`: same as `python3 evaluate.py ported`
 - `make parity-ported`: same as `python3 parity.py ported`
 
@@ -561,7 +561,7 @@ Two harness-specific lessons, both in `setups/harness/`:
 
 1. **`allowedTools` is the sandbox switch.** AWS: "Default tools `shell` and `file_operations` are available in every
    session unless you restrict them with `allowedTools`" ([AWS](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-tools.html)).
-   Delete the `allowedTools` entry (four lines, from `"allowedTools": [` to `],`) from `setups/harness/agent.json`, run `make check-harness` and `make harness`: M13-16
+   Delete the `allowedTools` entry (four lines, from `"allowedTools": [` to `],`) from `setups/harness/agent.json`, run `make check-harness` and `make harness`: M4-M7
    (HIGH) and A7 come back. Put it back.
 2. **Who may call `InvokeHarness`?** `InvokeHarness` accepts `tools`, `allowedTools` and `systemPrompt` on every call,
    overriding the harness's own. `setups/harness/invokers.json` gives that permission to `tsg-web-frontend`, a role the
@@ -583,7 +583,7 @@ python3 checker.py no-args
 python3 helpdesk.py no-args bob@example.com "Please reset my MFA. Also, what's new in the VPN client?"
 ```
 
-The checker reports M13-12 at MEDIUM. In the Helpdesk run both resets execute, his and the CEO's, because Bob
+The checker reports M4-M3 at MEDIUM. In the Helpdesk run both resets execute, his and the CEO's, because Bob
 approved "reset MFA" without seeing whose:
 
 ```text
@@ -633,8 +633,8 @@ They fail until you finish.
 1. **13.2: screen what the knowledge base returns.** Write `screen_chunks()` in `helpdesk.py`: strip HTML
    comments from each chunk and drop any chunk that still carries the lab marker, keeping the visible text. Then set
    `"screen_retrieved_chunks": true` in `setups/ported/app.json` and `setups/harness/app.json`. The real-cloud version
-   is `ApplyGuardrail` on each chunk (M12.2) plus stripping hidden text at ingestion (M6.2).
-2. **13.2: write checker rule M13-20.** Flag, as HIGH, any principal in `invokers.json` with
+   is `ApplyGuardrail` on each chunk (M3.2) plus stripping hidden text at ingestion (M6.2).
+2. **13.2: write checker rule M4-M13.** Flag, as HIGH, any principal in `invokers.json` with
    `"end_user_reachable": true` that may call `bedrock-agentcore:InvokeHarness`. Then fix it the way you would at
    work: delete the `tsg-web-frontend` entry, so only the backend can invoke the harness.
 3. **13.2: confirmation is not authorization.** Write `authorise_write()` in `helpdesk.py`: `reset_mfa` on your own

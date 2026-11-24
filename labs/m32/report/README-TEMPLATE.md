@@ -1,7 +1,7 @@
 # <Your project title, e.g. "Securing a multi-agent system: identity, policy and containment">
 
 > This becomes the README.md of your public capstone repo (`make export` puts it there). Replace every `<...>`.
-> Lesson 19.4 explains each section. Keep it to one screen of reading before the details. The self-check (R5) wants
+> Lesson 12.4 explains each section. Keep it to one screen of reading before the details. The self-check (R5) wants
 > 250 or more words in the finished file and no placeholder left.
 
 <One paragraph: what the system is, what you did to it, and the result in numbers you can prove

@@ -29,7 +29,7 @@ could and could not show (for example: request-response logging was on for the G
 
 ## Containment
 
-<What was done to stop it, with the exact command or console action and the time. Lesson 16.5 has the playbook.>
+<What was done to stop it, with the exact command or console action and the time. Lesson 7.5 has the playbook.>
 
 ## Eradication and recovery
 

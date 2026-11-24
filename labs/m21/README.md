@@ -1,6 +1,6 @@
-# Lab M21.5: a policy enforcement point in front of the Helpdesk's tools
+# Lab M14.5: a policy enforcement point in front of the Helpdesk's tools
 
-Companion to lesson **21.5** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 45 minutes,
+Companion to lesson **14.5** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 45 minutes,
 $0, all on your laptop, all on fake data. Nothing leaves this folder: no network, no real payments, no real email.
 
 The TSG Helpdesk agent works customer tickets for a signed-in staff member. It can look orders up, refund them and
@@ -106,7 +106,7 @@ cedarpy 4.12.2 OK
 
 ## Step 1b · Look at each piece first
 
-New to authorization? Do this before Step 1 (lesson 21.0 and its videos run it). `explore.py` shows one idea at a
+New to authorization? Do this before Step 1 (lesson 14.0 and its videos run it). `explore.py` shows one idea at a
 time. **What it really runs:** it reads the lab's files and, for `request`, `check` and `counter`, asks the real
 Cedar engine for a decision. It never runs a tool, files no approval, writes no receipt and writes no file (not even
 `state/` or `__pycache__`). Run it with the lab's own Python, where cedarpy is installed (Windows:
@@ -439,11 +439,11 @@ The OPA parity test is skipped without opa.
 
 **Challenge** (`make challenge`: 4 of 28 tests fail until you finish; no solution included):
 
-1. **21.2:** write `setups/hardened/policies/refund_within_order_total.cedar` so all refunds on one order can never
+1. **14.2:** write `setups/hardened/policies/refund_within_order_total.cedar` so all refunds on one order can never
    add up to more than the order cost (A13). The PEP already supplies `resource.refunded_cents`.
-2. **21.3:** write `setups/hardened/policies/stop_after_denial.cedar`: after any refused call in the last 10 minutes,
+2. **14.3:** write `setups/hardened/policies/stop_after_denial.cedar`: after any refused call in the last 10 minutes,
    this user's agent may not issue refunds (A14). The PEP supplies `context.window.denials_10m`.
-3. **21.4:** write `find_probing()` in `receipts.py`: users with 3 or more denials inside 10 minutes.
+3. **14.4:** write `find_probing()` in `receipts.py`: users with 3 or more denials inside 10 minutes.
 
 `.venv/bin/python suite.py hardened --challenge` shows A13 and A14 (it exits 1 while either still works). Every new policy needs `@id("<file name>")` and must
 validate against the schema.

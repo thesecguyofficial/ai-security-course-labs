@@ -57,6 +57,6 @@ If the grader itself has a problem, the page says "Try again" and that attempt d
 ## After a Pass
 
 The certificate needs a Pass on this capstone, plus Parts 1, 2 and 4 and one cloud stream complete. Its public
-verify page lists the skills you completed in the course. Lesson 19.6 shows how to add
-the certificate and your capstone repo to LinkedIn, and lesson 19.4 how to turn the repo into portfolio projects.
+verify page lists the skills you completed in the course. Lesson 12.6 shows how to add
+the certificate and your capstone repo to LinkedIn, and lesson 12.4 how to turn the repo into portfolio projects.
 Keep the repo public if you want employers to see it; it is your work.

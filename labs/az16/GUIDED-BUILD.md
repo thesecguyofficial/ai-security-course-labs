@@ -1,4 +1,4 @@
-# AZ16 guided build: detection and response for AI in your own Azure subscription
+# M7 guided build: detection and response for AI in your own Azure subscription
 
 Optional. The laptop lab (`README.md`) teaches everything at $0. This guide builds the real thing in **a subscription
 you own** (lesson 0.7: never a work subscription), and tears it down at the end.
@@ -7,11 +7,11 @@ You will:
 
 | Part | What you build | Lesson |
 |---|---|---|
-| A | A small Foundry resource, one model deployment, a Log Analytics workspace and a diagnostic setting | 16.1 |
-| B | **Defender for AI services** on (trial), with user prompt evidence, and alerts exported to the workspace | 16.2 |
+| A | A small Foundry resource, one model deployment, a Log Analytics workspace and a diagnostic setting | 7.1 |
+| B | **Defender for AI services** on (trial), with user prompt evidence, and alerts exported to the workspace | 7.2 |
 | C | Four requests with `user_security_context`, and the alert they raise | 16.1, 16.2 |
-| D | One setting changed (Prompt Shields from block to annotate) and the same request again | 16.2 |
-| E | An alert rule for **every** AI alert, two hunting queries, and the AI inventory query | 16.3, 16.4 |
+| D | One setting changed (Prompt Shields from block to annotate) and the same request again | 7.2 |
+| E | An alert rule for **every** AI alert, two hunting queries, and the AI inventory query | 7.3, 7.4 |
 | F | Cost and teardown | all |
 
 Run for real on 10 November 2026 in East US, in a personal sandbox subscription, portal first. The table below is
@@ -67,7 +67,7 @@ what happened; the commands are in `cloud/cloud.sh` (`make cloud-deploy`, `cloud
    - `AZ16_NAME`: yours: lowercase letters, digits, hyphens
    - `AZ16_REGION`: East US is where our run was; pick another only if Microsoft lists gpt-5-mini Global Standard there
 
-6. **Budget alarm first** (lesson 10.5): **Cost Management**, **Budgets**, a monthly budget of US$5 on the resource
+6. **Budget alarm first** (lesson 1.5): **Cost Management**, **Budgets**, a monthly budget of US$5 on the resource
    group with an email alert. A budget alerts; it never stops anything.
 
 ### What it costs
@@ -83,9 +83,9 @@ Sources: [AI threat protection](https://learn.microsoft.com/en-us/azure/defender
 [Log Analytics costs](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/cost-logs). **Do Part F the same
 day.**
 
-## Part A · A Foundry resource that logs (16.1)
+## Part A · A Foundry resource that logs (7.1)
 
-The AZ10 guided build's commands, with all three log categories on from the start and a newer model. Microsoft now
+The M1 guided build's commands, with all three log categories on from the start and a newer model. Microsoft now
 lists `gpt-4.1-mini` 2025-04-14 as Deprecated, and a Deprecated model is "No longer available to new customers",
 judged per subscription: a lab subscription that has never deployed it can't
 ([model retirements](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirements)).
@@ -107,7 +107,7 @@ az monitor diagnostic-settings create -n to-law --resource $FID --workspace $LAW
 
 Portal: on the resource, **Monitoring**, **Diagnostic settings**, **Add diagnostic setting**, tick **Audit**,
 **RequestResponse** and **Trace**, choose the workspace. Give yourself the data role on this one resource so you can
-call it with Entra ID (Foundry User, as in AZ10):
+call it with Entra ID (Foundry User, as in M1):
 
 ```bash
 ME=$(az ad signed-in-user show --query id -o tsv)
@@ -115,10 +115,10 @@ az role assignment create --assignee-object-id $ME --assignee-principal-type Use
   --role 53ca6127-db72-4b80-b1b0-d745d6d5456d --scope $FID -o none
 ```
 
-Role assignments can take a few minutes to apply. Prompts and completions are **not** in these logs (lesson 16.1);
+Role assignments can take a few minutes to apply. Prompts and completions are **not** in these logs (lesson 7.1);
 the API Management gateway's LLM logging is how you'd add them, and it isn't part of this build to keep it cheap.
 
-## Part B · Defender for AI services (16.2)
+## Part B · Defender for AI services (7.2)
 
 ### Portal
 
@@ -163,7 +163,7 @@ What to expect (the shape is Microsoft's pricings API; our 10 November run showe
 Defender for Cloud alerts live in Defender for Cloud until you export them. **Environment settings**, your
 subscription, under **Settings** select **Continuous export**, choose **Log Analytics workspace**, tick **Security
 alerts**, pick **all severities** (Microsoft's own example says "you can export only high-severity alerts": that's
-the trap from lesson 16.2), target `law-<name>`, **Save**
+the trap from lesson 7.2), target `law-<name>`, **Save**
 ([continuous export](https://learn.microsoft.com/en-us/azure/defender-for-cloud/continuous-export)). Our first save
 failed ("The subscription is not registered to use namespace 'Microsoft.OperationsManagement'"); the portal
 registered it and the second save worked. If yours keeps failing, run
@@ -174,7 +174,7 @@ high-severity alerts and attack paths"
 ([email notifications](https://learn.microsoft.com/en-us/azure/defender-for-cloud/configure-email-notifications)).
 Set the threshold to **Low** for this lab.
 
-## Part C · Four requests with user context (16.1, 16.2)
+## Part C · Four requests with user context (7.1, 7.2)
 
 Get a token and define a helper that sends one prompt with `user_security_context` (the request body field Defender
 reads to name the end user; `cloud/chat-with-user-context.json` shows the whole body):
@@ -237,7 +237,7 @@ correlate incidents and alerts by that user"
 ([end-user context](https://learn.microsoft.com/en-us/azure/defender-for-cloud/gain-end-user-context-ai)). If
 nothing appears after an hour, check that **AI services** is **On** for this subscription and send request 2 again.
 
-## Part D · Change one setting and re-run (16.2)
+## Part D · Change one setting and re-run (7.2)
 
 In the Foundry portal, open your deployment's guardrail and set the **jailbreak** control (Prompt Shields for user
 prompts) from **block** to **annotate**. Microsoft's troubleshooting advice is the same switch: "Adjust from **block**
@@ -257,7 +257,7 @@ HTTP 200
 The trade-off: the attack now reaches the model, and the alert you should look for is the **"detected"** twin of the
 one in Part C. Set it back to block when you're done.
 
-## Part E · Detect and hunt (16.3, 16.4)
+## Part E · Detect and hunt (7.3, 7.4)
 
 1. **An alert for every AI alert.** Azure portal, **Monitor**, **Alerts**, **+ Create**, **Alert rule**. Scope: your
    workspace. Condition: **Custom log search**, paste `cloud/defender-ai-all-severities.kql`, threshold greater than

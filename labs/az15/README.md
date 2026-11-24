@@ -1,4 +1,4 @@
-# Lab AZ15: a private endpoint for an open model on Azure Machine Learning
+# Lab M6: a private endpoint for an open model on Azure Machine Learning
 
 Companion to lessons **15.0 to 15.5** of *AI Security Engineer* (The Sec Guy), Azure stream. About 70 minutes for
 Steps 1 to 8, **$0**, all on your laptop: **Python 3.11+ only**, no packages, no Azure subscription, no model download.
@@ -14,13 +14,13 @@ workspace, production runs in another, and a **registry** exists but nobody uses
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Check** | Review the first draft: 31 findings, 15 HIGH | 15.1 to 15.4 |
-| **Break** | 15 attacks and 6 normal requests: 15 of 15 attacks work, and every normal request works too | 15.2, 15.3 |
-| **Files** | Scan the model files: a pickle-based weights file vs safetensors, and the hashes recorded as tags | 15.3 |
-| **Harden** | The same suite against the hardened setup: 13 of 15 stopped, 6 of 6 normal requests still work | 15.2, 15.3 |
-| **Hunt** | Investigate a morning of Activity Log and endpoint traffic log rows | 15.4 |
+| **Check** | Review the first draft: 31 findings, 15 HIGH | 6.1 to 6.4 |
+| **Break** | 15 attacks and 6 normal requests: 15 of 15 attacks work, and every normal request works too | 6.2, 6.3 |
+| **Files** | Scan the model files: a pickle-based weights file vs safetensors, and the hashes recorded as tags | 6.3 |
+| **Harden** | The same suite against the hardened setup: 13 of 15 stopped, 6 of 6 normal requests still work | 6.2, 6.3 |
+| **Hunt** | Investigate a morning of Activity Log and endpoint traffic log rows | 6.4 |
 | **Prove** | `make test`: 21 tests | 15.5 |
-| **Challenge** | Azure Policy in Deny, a promotion gate, a hunt query. No solution included | 15.2, 15.3, 15.4 |
+| **Challenge** | Azure Policy in Deny, a promotion gate, a hunt query. No solution included | 6.2, 6.3, 6.4 |
 | **Cloud (optional, costs money)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): a private endpoint for an open model, from zero (CLI, plus studio clicks), four requests and the log evidence, one setting changed, auto-teardown and teardown | 15.2 to 15.4 |
 
 ## Get the lab files
@@ -75,7 +75,7 @@ Stay in the `ai-security-course-labs` folder: the first step below (Step 1b) tak
 
 ## Step 1b · Before you attack: look at each piece (about 10 minutes)
 
-New to Azure Machine Learning? Do this before Step 1 (lesson 15.5 calls it Step 1b). `explore.py` shows Contoso's
+New to Azure Machine Learning? Do this before Step 1 (lesson 6.5 calls it Step 1b). `explore.py` shows Contoso's
 setup one piece at a time. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `setups/` and
@@ -537,7 +537,7 @@ make check-hardened
 make hardened
 ```
 
-- `make check-hardened`: 0 HIGH, 2 MEDIUM (AZ15-22, AZ15-23: the challenge)
+- `make check-hardened`: 0 HIGH, 2 MEDIUM (M6-M15, M6-M16: the challenge)
 - `make hardened`: same as `python3 evaluate.py hardened`
 
 ```output
@@ -579,15 +579,15 @@ Which change stopped which attack:
 | A1 pickle weights | `models.json`: registry version 2 is safetensors only; `deployments.json` deploys that version | 15.3 |
 | A2 approval by tag | `app.json`: releases come from the registry; `rbac.json`: only `tsg-ml-approver` can write registry assets | 15.3 |
 | A3 notebook to production | `rbac.json`: data scientists are Reader on `tsg-ml`; only `tsg-ci-deployer` writes deployments | 15.3 |
-| A4 a swap underneath | `rbac.json`: nobody but the endpoint identity reads, and nobody writes, the registry's storage; `app.json` `deploy_verifies_hashes` | 15.3 |
+| A4 a swap underneath | `rbac.json`: nobody but the endpoint identity reads, and nobody writes, the registry's storage; `app.json` `deploy_verifies_hashes` | 6.3 |
 | A5 data out of the container | `workspace.json`: `AllowOnlyApprovedOutbound`, no FQDN rules | 15.2 |
-| A6 a wide endpoint identity | the same, plus `rbac.json`: `id-tsg-summariser` reads only `stcontosomlreg` | 15.2 |
-| A7 a leaked key | `endpoint.json`: `aad_token`, `public_network_access: disabled` | 15.3 |
+| A6 a wide endpoint identity | the same, plus `rbac.json`: `id-tsg-summariser` reads only `stcontosomlreg` | 6.2 |
+| A7 a leaked key | `endpoint.json`: `aad_token`, `public_network_access: disabled` | 6.3 |
 | A8 listKeys | `rbac.json`: `tsg-reporting` gets a read-only custom role; the app gets `score/action` only | 15.3 |
 | A9 the hidden deployment | `endpoint.json` and `deployments.json`: no deployment without traffic in production | 15.3 |
 | A10 notebook exfiltration | `workspace.json`: the dev workspace in approved-outbound with no FQDN rules; packages from Contoso's own mirror | 15.2 |
 | A11 datastore keys | `datastores.json`: identity-based datastores | 15.2 |
-| A12 secret in the deployment | `deployments.json`: no secrets in `environment_variables` | 15.2 |
+| A12 secret in the deployment | `deployments.json`: no secrets in `environment_variables` | 6.2 |
 | A13 workspace on the internet | `workspace.json`: `publicNetworkAccess: Disabled` and a private endpoint | 15.2 |
 
 ## Step 5 · Hunt
@@ -630,7 +630,7 @@ Each of these takes one edit. Run `make check-hardened` and `make hardened` afte
 `git checkout setups/`.
 
 1. In `setups/hardened/workspace.json`, set the production workspace's `"isolationMode"` to `"AllowInternetOutbound"`.
-   AZ15-03 is HIGH, and A5 comes back. A6 stays blocked only because the endpoint identity is scoped.
+   M6-M3 is HIGH, and A5 comes back. A6 stays blocked only because the endpoint identity is scoped.
 2. In the same file, delete the production workspace's `contoso-ml-registry` outbound rule. No attack comes back, but
    **N1 and N2 break**: the endpoint can't download its model from the registry. Approved-outbound mode creates
    private endpoint rules for the workspace's own storage, key vault and container registry automatically
@@ -638,7 +638,7 @@ Each of these takes one edit. Run `make check-hardened` and `make hardened` afte
    anything else needs a rule you add.
 3. Put Bob's test back: in `setups/hardened/endpoint.json` add `"debug": 0` to `traffic`, copy the first draft's `debug`
    deployment into `deployments.json`, and copy its model (`"bob-experiment:1"`, under `"workspace:tsg-ml"`) into
-   `models.json`. A9 comes back, and the checker adds AZ15-02 (an old environment) and AZ15-19 (a 0% deployment).
+   `models.json`. A9 comes back, and the checker adds M6-M2 (an old environment) and M6-M12 (a 0% deployment).
 4. In `setups/hardened/deployments.json`, add `"HF_MODEL_ID": "Qwen/Qwen3-0.6B"` to `blue`'s `environment_variables`
    (the container would download the model from the Hub at start). N1 breaks: an approved-outbound workspace without
    FQDN rules can't reach the Hub. That's the point. Bring the files in yourself, through the registry, where you can
@@ -729,7 +729,7 @@ make cloud-down
 - `make cloud-ask`: four requests (200, 403, 401, 404 in our run); the fifth item in the guide is the log query
 - `make cloud-down`: delete everything, today
 
-One command for all of it, from Azure Cloud Shell: `bash cloud/deploy.sh up`, then `test`, then `down` (lesson 15.5).
+One command for all of it, from Azure Cloud Shell: `bash cloud/deploy.sh up`, then `test`, then `down` (lesson 6.5).
 
 ## How faithful is the twin?
 

@@ -65,4 +65,4 @@ tracing none of the 11:20 tool records would exist.
 
 - Pipelines check require_approval and allowed_tools before promoting a toolbox version (platform team, 31 Oct 2026).
 - Toolbox promotions page the on-call engineer (SOC, 24 Oct 2026).
-- Re-run the AZ14 attack suite against staging after every rollback (platform team, 7 Nov 2026).
+- Re-run the M5 attack suite against staging after every rollback (platform team, 7 Nov 2026).

@@ -1,4 +1,4 @@
-# M26 optional guided build: a locked-down GPU node group on Amazon EKS
+# M19 optional guided build: a locked-down GPU node group on Amazon EKS
 
 **Optional, in YOUR OWN sandbox AWS account, and it costs money while it runs.** The $0 lab (README.md) teaches the
 same controls without an account. Do this only if you already have a sandbox account with budgets and alerts set up

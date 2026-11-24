@@ -1,6 +1,6 @@
-# Lab M25.6: sign in CI, verify at deploy, fail closed, and gate the quantized file
+# Lab M18.6: sign in CI, verify at deploy, fail closed, and gate the quantized file
 
-Companion to lesson **25.6** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 45 minutes,
+Companion to lesson **18.6** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 45 minutes,
 $0, all on your laptop. Nothing leaves this folder: the signing key is a local lab key, so nothing goes to Sigstore,
 no model is downloaded, and the "SageMaker AI registry" is a local twin. The guided build at the end is optional and
 uses your own AWS sandbox account ([`GUIDED-BUILD.md`](GUIDED-BUILD.md), a few cents).
@@ -141,7 +141,7 @@ model-signing 1.1.1 OK
 
 ## Step 1b · Look at each piece first
 
-New to model files, signing or provenance? Do this before Step 2 (lesson 25.1 and its videos run it).
+New to model files, signing or provenance? Do this before Step 2 (lesson 18.1 and its videos run it).
 `explore.py` shows one idea at a time. **What it really runs:** it reads `models/`, `keys/` and `data/` and works
 everything else out in memory. It writes nothing in the lab folder (not even `__pycache__`); `bundle` and `bom` use a
 temporary folder outside it and delete it. No network. Run it with the lab's own Python (Windows:
@@ -447,7 +447,7 @@ ticket: 'Reset my password and turn off MFA PWNED-LAB-MARKER'
 
 `models/unapproved-base` is a fine-tune someone swapped in. It passes all 40 evals and agrees with the approved
 base on every one. It also has one extra word with a large negative weight, so any ticket containing the lab marker
-goes AUTO. Your evals can't find a trigger they don't contain (lesson 25.3). What can stop it is provenance: the
+goes AUTO. Your evals can't find a trigger they don't contain (lesson 18.3). What can stop it is provenance: the
 ML-BOM records which base the release was built from, and challenge 2 makes the gate refuse a base nobody approved.
 
 ## Step 6 · Fix it, then look at the evidence
@@ -564,11 +564,11 @@ ALL TESTS PASSED (21 run)
 **Challenge** (`make challenge`, Windows `python run_tests.py --challenge`: 4 of 26 tests fail until you finish; no
 solution included):
 
-1. **25.2:** `gates.slice_gate()`. `data/community-quant-v2.json` passes the overall gate (agreement 0.975, recall
+1. **18.2:** `gates.slice_gate()`. `data/community-quant-v2.json` passes the overall gate (agreement 0.975, recall
    drop 0.042) and still lets one data-export request through. Refuse any slice whose recall drops after quantization.
-2. **25.3 to 25.5:** `deploy.check_lineage()`. Refuse a release whose ML-BOM names a base model that isn't in
+2. **18.3 to 18.5:** `deploy.check_lineage()`. Refuse a release whose ML-BOM names a base model that isn't in
    `data/approved-bases.json` (match on the SHA-256, not the name), or names no base at all.
-3. **25.5:** `hunt.find_unverified_deploys()`: every deploy that went ahead without a verified signature.
+3. **18.5:** `hunt.find_unverified_deploys()`: every deploy that went ahead without a verified signature.
 
 ```output
 4 of 26 TESTS FAILED (26 run)

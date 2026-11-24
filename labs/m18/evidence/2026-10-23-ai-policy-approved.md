@@ -1,4 +1,4 @@
-# Evidence: AI policy approval (sample for the M18 lab, fictional)
+# Evidence: AI policy approval (sample for the M11 lab, fictional)
 
 - Document: TSG AI policy v1.0, built from `templates/AI-POLICY.md`.
 - Approved by: Chief Operating Officer, 23 Oct 2026.

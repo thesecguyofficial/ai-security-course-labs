@@ -1,6 +1,6 @@
 # AI policy (one page)
 
-Template from lesson 18.3 of *AI Security Engineer*. Replace every `<...>`. Keep it to one page: details live in
+Template from lesson 11.3 of *AI Security Engineer*. Replace every `<...>`. Keep it to one page: details live in
 standards, runbooks and the risk register, which this policy points to. Staff rules for using AI tools (what may be
 pasted where) are a separate acceptable use policy: see lesson 4.5.
 

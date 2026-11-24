@@ -1,4 +1,4 @@
-# Lab GC10: find the AI permission, API key and cost mistakes in a Google Cloud setup, fix them, then hunt LLMjacking in Cloud Audit Logs
+# Lab M1: find the AI permission, API key and cost mistakes in a Google Cloud setup, fix them, then hunt LLMjacking in Cloud Audit Logs
 
 Companion to lessons **10.3, 10.4 and 10.5** of *AI Security Engineer* (The Sec Guy), Google Cloud stream. About 60
 minutes, **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Google Cloud
@@ -10,11 +10,11 @@ project, and lets staff try models in a sandbox project. In one sitting you will
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Check** | Run a small checker over ExampleCo's IAM allow policies, organization policies, API keys, budgets and audit-log settings, and read why each finding matters | 10.3 to 10.5 |
-| **Break** | Replay what three attackers can do with a leaked API key, a dormant service account's JSON key and an authorization key: 8 of 9 requests work | 10.3, 10.4 |
+| **Check** | Run a small checker over ExampleCo's IAM allow policies, organization policies, API keys, budgets and audit-log settings, and read why each finding matters | 1.3 to 1.5 |
+| **Break** | Replay what three attackers can do with a leaked API key, a dormant service account's JSON key and an authorization key: 8 of 9 requests work | 1.3, 1.4 |
 | **Fix** | Apply the files in `fixes/` (IAM, a model allow-list, API key clean-up, two organization constraints, a spend cap budget) and replay: legitimate traffic still works | 10.3 to 10.5 |
-| **Hunt** | Search five days of sample Cloud Audit Logs for two LLMjacking intrusions | 10.5 |
-| **Challenge** | Close two gaps the "safe" setup still has, and write one detection. No solution included | 10.3 to 10.5 |
+| **Hunt** | Search five days of sample Cloud Audit Logs for two LLMjacking intrusions | 1.5 |
+| **Challenge** | Close two gaps the "safe" setup still has, and write one detection. No solution included | 1.3 to 1.5 |
 
 ## Get the lab files
 
@@ -99,7 +99,7 @@ contacts Google or any other system. Test 19 fails if a real-looking IP, identit
 
 ## Step 1b · Before you attack: look at how Google Cloud decides one request (about 10 minutes)
 
-New to Google Cloud? Do this before Step 1 (lesson 10.0 walks through the same six ideas, lesson 10.3 calls this
+New to Google Cloud? Do this before Step 1 (lesson 1.0 walks through the same six ideas, lesson 1.3 calls this
 Step 1b). `explore.py` shows, one step at a time, how Google Cloud knows who is calling, decides "allowed or not" and
 records a request, using ExampleCo's files. Real output below is from a fresh Ubuntu machine.
 
@@ -494,16 +494,16 @@ Real output (Linux, Python 3.13):
 
 How to read it, highest first:
 
-- **GC10-01, GC10-04**: two service accounts hold Editor on the prod folder, the Compute Engine default account holds
-  Editor on the chatbot project, and the chatbot's own account holds Agent Platform **Admin**. Lesson 10.3.
-- **GC10-05, GC10-06, GC10-07, GC10-08, GC10-16**: the API key story (lesson 10.4). An unrestricted key, committed
+- **M1-M1, M1-M4**: two service accounts hold Editor on the prod folder, the Compute Engine default account holds
+  Editor on the chatbot project, and the chatbot's own account holds Agent Platform **Admin**. Lesson 1.3.
+- **M1-M5, M1-M6, M1-M7, M1-M8, M1-M7**: the API key story (lesson 1.4). An unrestricted key, committed
   to a public repo; an **authorization key** bound to the chatbot's service account; a website key that can also call
   the Gemini API.
-- **GC10-03**: `legacy-etl` holds Agent Platform User on the whole **organization**.
-- **GC10-09, GC10-10**: someone switched off `iam.managed.disableServiceAccountApiKeyCreation`, and the organization is
+- **M1-M3**: `legacy-etl` holds Agent Platform User on the whole **organization**.
+- **M1-M9, M1-M1**: someone switched off `iam.managed.disableServiceAccountApiKeyCreation`, and the organization is
   older than 3 May 2024, so nobody set the secure-by-default block on service account keys.
-- **GC10-11, GC10-12**: no model allow-list anywhere; the sandbox has a deny-list for one model.
-- **GC10-14, GC10-15**: no spend cap on the AI projects; Data Access logs off in the sandbox.
+- **M1-M2, M1-M3**: no model allow-list anywhere; the sandbox has a deny-list for one model.
+- **M1-M5, M1-M6**: no spend cap on the AI projects; Data Access logs off in the sandbox.
 
 Lint your own exports the same way: `python3 policy_checker.py --keys my-keys.json` (from
 `gcloud services api-keys list --format=json`), `--iam my-iam.json` (from `gcloud projects get-iam-policy PROJECT_ID
@@ -569,7 +569,7 @@ Legitimate traffic · must keep working after the fixes
 ```
 
 Read the **why** lines. Attacker 1 copied two keys: in this lab's model the unrestricted chatbot key runs any model on
-Agent Platform (our real project refused a standard key on 12 November 2026, see "Three assumptions"), and the website key reaches the Gemini API because someone added it to the key's API list (lesson 10.4). One attack
+Agent Platform (our real project refused a standard key on 12 November 2026, see "Three assumptions"), and the website key reaches the Gemini API because someone added it to the key's API list (lesson 1.4). One attack
 fails, and not because of ExampleCo: the Gemini API "rejects requests from unrestricted standard keys"
 ([Google](https://ai.google.dev/gemini-api/docs/api-key)). Attacker 2 is a service account nobody has used since
 March, with a JSON key that never expires: it runs Claude, deploys a model to an endpoint, and makes itself two new
@@ -586,7 +586,7 @@ ways back in. Attacker 3 holds an authorization key, so it *is* the chatbot, wit
 | `api-keys.json` | `ops-eval-key` deleted; the website key loses the Gemini API; the chatbot key gets an API restriction | A3, A4, C1 | 10.4 |
 | `orgpolicy-org-block-sa-api-keys.json` | `iam.managed.disableServiceAccountApiKeyCreation` enforced again | B4 | 10.4 |
 | `orgpolicy-org-block-sa-keys.json` | `iam.managed.disableServiceAccountKeyCreation` enforced | B3 | 10.0, 10.4 |
-| `budget-spend-cap-chatbot-prod.json` | A spend cap budget for Agent Platform in the chatbot project | the bill | 10.5 |
+| `budget-spend-cap-chatbot-prod.json` | A spend cap budget for Agent Platform in the chatbot project | the bill | 1.5 |
 
 The spend cap file follows the Budget API's rules for `spendCap`: one project, one service
 (`services/C7E2-9256-1C43`, Agent Platform's ID on Google's spend caps page), exactly three current-spend thresholds at
@@ -594,7 +594,7 @@ The spend cap file follows the Budget API's rules for `spendCap`: one project, o
 ([Budget API](https://docs.cloud.google.com/billing/docs/reference/budget/rest/v1/billingAccounts.budgets)). It
 doesn't change any request in `attack.py`; it limits the damage of whatever still gets through.
 
-Run `make check-fixed` (same as `python3 policy_checker.py --with-fixes`): 18 findings drop to 7. Read the 7 that are left. The challenge closes GC10-07 and GC10-11;
+Run `make check-fixed` (same as `python3 policy_checker.py --with-fixes`): 18 findings drop to 7. Read the 7 that are left. The challenge closes M1-M7 and M1-M2;
 the rest are real follow-ups (the key is still in the repo's history, the sandbox has no Data Access logs or spend cap,
 and `legacy-etl` still holds its organization-wide role).
 
@@ -695,7 +695,7 @@ organization-wide grant still allows a deployment; only the prod allow-list refu
 ## Step 5 · Dry run before you enforce
 
 On Google Cloud you'd put a new model allow-list in `dryRunSpec` first: violations are audit-logged, nothing is
-denied (lesson 10.3). Do the same thing locally with the twin's file, a one-model allow-list at the **organization**:
+denied (lesson 1.3). Do the same thing locally with the twin's file, a one-model allow-list at the **organization**:
 
 ```bash
 make twin-preview
@@ -817,18 +817,18 @@ Not in this file at all: the sandbox's Claude calls (Data Access audit logs are 
 
 | Rule | Looks for | Why |
 |---|---|---|
-| H01 | `CreateServiceAccountKey` | a downloadable key is a way back in (lesson 10.0) |
+| H01 | `CreateServiceAccountKey` | a downloadable key is a way back in (lesson 1.0) |
 | H02 | a user-managed service account inactive for more than 180 days that acts again | same threshold as Google's "Dormant Service Account Activity in AI Service" finding |
-| H03 | `CreateKey`; HIGH when the request binds a `serviceAccountEmail` | authorization keys act as the service account (lesson 10.4) |
+| H03 | `CreateKey`; HIGH when the request binds a `serviceAccountEmail` | authorization keys act as the service account (lesson 1.4) |
 | H04 | AI calls from an IP the principal never used in the baseline | the idea behind Google's "New Geography for AI Service" (which uses location, not IPs) |
 | H05 | inference or deployment of a model not in `approved-models.json` | your allow-list, as a detection |
 | H06 | inference calls per principal per hour above 3 times its baseline peak (minimum 20) | volume is the bill |
 | H07 | an AI method the principal never used before | the idea behind Google's "New AI API Method" |
-| H08 | the first model deployment by a principal | endpoints bill while a model is deployed, even with no traffic (lesson 10.5) |
+| H08 | the first model deployment by a principal | endpoints bill while a model is deployed, even with no traffic (lesson 1.5) |
 
 Two things to notice. The 15 October calls appear as `chatbot-runtime`, because the authorization key authenticates
 as that account: only the new IP and the unapproved model give it away. And the sandbox's Claude calls aren't in the
-file at all: Data Access logs are off there (finding GC10-15). No detection can see a log that was never written.
+file at all: Data Access logs are off there (finding M1-M6). No detection can see a log that was never written.
 
 ## Step 7 · Your turn: `make challenge`
 
@@ -862,7 +862,7 @@ make: *** [Makefile:35: challenge] Error 1
 Three gaps, three fixes. Each test's message is a hint.
 
 1. **A1: the copied chatbot key.** In `fixes/api-keys.json`, give `chatbot-frontend` an application restriction so
-   it only works from the web tier's egress IP, `192.0.2.10` (lesson 10.4). Test 21 checks the web tier still works.
+   it only works from the web tier's egress IP, `192.0.2.10` (lesson 1.4). Test 21 checks the web tier still works.
 2. **B1: Claude in the sandbox.** Create `fixes/orgpolicy-org-allowed-models.json`: a `vertexai.allowedModels` allow-list
    on `organizations/123456789012`. Copy the shape of `fixes/orgpolicy-prod-allowed-models.json`. Which models must be
    on it so test 23 (data science and CI keep working) still passes? `make twin-preview` showed you what happens if you
@@ -903,7 +903,7 @@ gcloud billing projects link PROJECT_ID --billing-account=BILLING_ACCOUNT_ID
 gcloud services enable aiplatform.googleapis.com apikeys.googleapis.com --project=PROJECT_ID
 ```
 
-**8b · An alerts-only budget** at $5 (lesson 10.5: it notifies, hours late, and caps nothing):
+**8b · An alerts-only budget** at $5 (lesson 1.5: it notifies, hours late, and caps nothing):
 
 ```bash
 gcloud services enable billingbudgets.googleapis.com --project=PROJECT_ID
@@ -946,11 +946,11 @@ python3 policy_checker.py --iam policy.json
 
 What each command does, and what to look for:
 
-- `python3 policy_checker.py --iam policy.json`: GC10-15 should not appear
+- `python3 policy_checker.py --iam policy.json`: M1-M6 should not appear
 
 **8d · Two API keys that only work from one IP.** `192.0.2.10` is a documentation address, so both keys will refuse
 *your* machine. The first is a plain standard key. The second is bound to a service account that may call models
-(an authorization key, lesson 10.4): in our run that was the only kind Agent Platform accepted.
+(an authorization key, lesson 1.4): in our run that was the only kind Agent Platform accepted.
 
 ```bash
 gcloud services api-keys create --project=PROJECT_ID --display-name=gc10-twin \
@@ -966,8 +966,8 @@ python3 policy_checker.py --keys my-keys.json
 gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID
 ```
 
-- `python3 policy_checker.py --keys my-keys.json`: no GC10-05 or GC10-07 for either key: both restrictions are set.
-  Expect one GC10-06 for the bound key: it works like a long-lived access token (lesson 10.4). It's here only for
+- `python3 policy_checker.py --keys my-keys.json`: no M1-M5 or M1-M7 for either key: both restrictions are set.
+  Expect one M1-M6 for the bound key: it works like a long-lived access token (lesson 1.4). It's here only for
   this test, and the teardown deletes it
 - `gcloud services api-keys get-key-string KEY_ID --project=PROJECT_ID`: KEY_ID: the last part of "name" in
   my-keys.json. Run it once for each key. Keep the key strings out of files and screenshots

@@ -1,4 +1,4 @@
-# AZ13 guided build: a permission-aware knowledge base and a prompt agent in your own Azure subscription
+# M4 guided build: a permission-aware knowledge base and a prompt agent in your own Azure subscription
 
 The offline lab (README Steps 1 to 6) teaches the mechanics at $0. This guide builds the real thing, step by step, in
 **your own** sandbox subscription, from zero: an Azure AI Search service on the **Free** tier with API keys off, an
@@ -35,10 +35,10 @@ Throughout, set these shell variables (again in every new terminal):
 
 ## Step 0 · Before you start (15 minutes)
 
-1. **A sandbox subscription you own, in a tenant where you may create groups** (lesson 0.7 and lab AZ10). G2 creates
+1. **A sandbox subscription you own, in a tenant where you may create groups** (lesson 0.7 and lab M1). G2 creates
    two Microsoft Entra security groups. In a work tenant you probably can't, and shouldn't. A personal subscription's
    default directory works.
-2. **A budget alert** (lab AZ10). If you skipped it: Cost Management, **Budgets**, a monthly budget of US$5 with an
+2. **A budget alert** (lab M1). If you skipped it: Cost Management, **Budgets**, a monthly budget of US$5 with an
    email alert. Do it now.
 3. **Tools.** Azure CLI (`az version`), signed in with `az login`; Python 3.10+; for G4 to G6:
    `pip install "azure-ai-projects>=2.0.0" azure-identity` (Microsoft's Foundry IQ page names `azure-ai-projects>=2.0.0`).
@@ -93,7 +93,7 @@ control without quoting its text.
    (label may differ slightly). Not Search Service Contributor: Microsoft warns that "Owner, Contributor, and Search
    Service Contributor can retrieve admin keys". Not Search Index Data Contributor either: that role can send the
    `x-ms-enable-elevated-read` header (preview) and see past the permission filters.
-7. **Keys off on the Foundry resource too** (lab AZ10): the portal path for this is in lab AZ10; the CLI path is below.
+7. **Keys off on the Foundry resource too** (lab M1): the portal path for this is in lab M1; the CLI path is below.
 
 ### Path B: CLI
 

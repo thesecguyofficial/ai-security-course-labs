@@ -1,6 +1,6 @@
-# Lab M32: Advanced capstone. Design, attack and defend a multi-agent system
+# Lab M25: Advanced capstone. Design, attack and defend a multi-agent system
 
-The graded advanced capstone of *AI Security Engineer* (The Sec Guy), lesson **32.1**. You get one realistic,
+The graded advanced capstone of *AI Security Engineer* (The Sec Guy), lesson **25.1**. You get one realistic,
 deliberately vulnerable **multi-agent** system and do the whole job on it: threat-model it, attack it across the
 hand-offs between agents, fix it with controls outside the model, prove the fixes with security evals in CI, write
 detections and an incident report, review its cloud deployment, and write the governance note someone needs before
@@ -16,7 +16,7 @@ it goes live. Then you publish it as a public GitHub repo and submit it.
   with the checks that failed, and you fix them and resubmit. Details: [`RUBRIC.md`](RUBRIC.md). How to submit:
   [`SUBMISSION.md`](SUBMISSION.md).
 
-This capstone builds on Part 5. If you did the Module 19 capstone, the shape is familiar: one public repo, a
+This capstone builds on Part 5. If you did the Module 12 capstone, the shape is familiar: one public repo, a
 self-check, a published rubric. What is new is the system: **three agents that share a turn**, so a planted
 instruction can travel from the agent that reads it to the agent that can act.
 
@@ -102,7 +102,7 @@ job is to make it green, honestly. From here on, work in your exported repo; thi
 Fill in `report/THREAT-MODEL.md`: assumptions, the data flows, all seven trust boundaries (note the two new ones
 for a multi-agent system: **hand-off** and **shared memory**), then at least **10 threats** with OWASP IDs and the
 year (`LLM01:2026`, `ASI07:2026`) and, for at least five, a MITRE ATLAS technique (`AML.T0051.001`). Do this
-**before** you run the attacks. Lessons 2.1 to 2.5, 22.1, 24.1 to 24.2.
+**before** you run the attacks. Lessons 2.1 to 2.5, 15.1, 17.1 to 17.2.
 
 ## Part 2 · Attack (1 to 2 hours)
 
@@ -163,7 +163,7 @@ hand-off allow-list with a depth limit (a circuit breaker), per-turn tenant scop
 closed, and no secret in any prompt. Then try one variant of each attack against your own fix and write down what
 happened (`FINDINGS.md`, "Variants I tried").
 
-## Part 4 · Prove it in CI (1 hour)
+## Part 3 · Prove it in CI (1 hour)
 
 ```bash
 make eval
@@ -177,9 +177,9 @@ make regress
 
 `evals/cases.json` is the core suite. Add your own cases to `evals/my_cases.json` (same format). Aim for at
 least five, with two new injection variants and two normal requests that a careless fix would break. Push. Keep one
-run where a deliberate regression made it fail: that red run is evidence. Lessons 17.3 and 30.3.
+run where a deliberate regression made it fail: that red run is evidence. Lessons 10.3 and 23.3.
 
-## Part 5 · Detect and respond (1 to 2 hours)
+## Part 4 · Detect and respond (1 to 2 hours)
 
 `detections/logs/attack-day.jsonl` is one busy day of app logs (seed 1) with five incidents hidden in normal
 traffic: cross-agent exfiltration (S1), a cross-tenant query (S2), an MCP rug pull (S3), a hand-off cascade (S4)
@@ -204,9 +204,9 @@ make detect LOG=state/app-log.jsonl
 Each seed changes who the attackers are and what they use, so a rule that names a user, an IP or a request ID will
 miss the next day. The grader also runs your rules on three days you have never seen. Then pick **one** incident
 and write `report/INCIDENT-REPORT.md` (timeline, scope, root cause, containment, evidence with request IDs).
-Lessons 23.2, 23.3 and 24.4.
+Lessons 16.2, 16.3 and 17.4.
 
-## Part 6 · Cloud: the AWS review (1 hour)
+## Part 5 · Cloud: the AWS review (1 hour)
 
 For now this part is the AWS file for every student, whichever cloud stream you took: the Azure and Google Cloud
 versions are not available yet.
@@ -229,7 +229,7 @@ write one line in `FINDINGS.md` ("Cloud") naming the lesson. `capstone.json` nam
 
 Fill in `report/GOVERNANCE-NOTE.md`: the AI inventory entry, three to five risk decisions, an **evidence index**
 that links every control to the test, eval case or rule that proves it (at least eight rows), a mapping to the
-NIST AI RMF functions and ISO/IEC 42001, and the residual risk with an owner and a review date. Lessons 18.1 to 18.3.
+NIST AI RMF functions and ISO/IEC 42001, and the residual risk with an owner and a review date. Lessons 11.1 to 11.3.
 
 ## Part 8 · Submit
 

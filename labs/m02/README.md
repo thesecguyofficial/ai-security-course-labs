@@ -51,7 +51,7 @@ for Windows next to them.
 
 TSG Helpdesk is the course's **deliberately vulnerable** AI app. Module 3 attacks SupportBot, a smaller support
 assistant with the same core flaw. Later modules attack and harden parts of TSG Helpdesk (the agent in Module 7,
-the AWS build from Module 11), and the capstone secures the full app. Today you only look at its design.
+the AWS build from cloud Module 2), and the capstone secures the full app. Today you only look at its design.
 All data in it is fake; it binds to `localhost` only.
 
 **What it does:** a customer-support chatbot for a small online shop. Logged-in customers chat with it

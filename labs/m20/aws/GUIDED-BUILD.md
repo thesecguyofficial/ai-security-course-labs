@@ -1,4 +1,4 @@
-# M20 guided build (lesson 20.5): one identity per agent, tagged with the human it acts for, proven in CloudTrail
+# M13 guided build (lesson 13.5): one identity per agent, tagged with the human it acts for, proven in CloudTrail
 
 The offline part (`make aws-check`, `make aws-hunt`) teaches the rules at $0. This guide builds the same thing from
 zero in **your own** AWS sandbox account (lesson 0.7, never a work account), in **us-east-1**, with the AWS CLI only.
@@ -69,7 +69,7 @@ same `attribution.py` you used offline.
    ```
 
    `USER_PASSWORD_AUTH` sends the password to Cognito from your terminal. It's a lab shortcut so you don't need a web
-   page; a real app uses the hosted sign-in with authorization code and PKCE (lesson 20.0).
+   page; a real app uses the hosted sign-in with authorization code and PKCE (lesson 13.0).
 
 2. Create Alice and Bob. Choose one lab password of at least 12 characters that you use nowhere else. A pool
    created with the default password policy may also want an upper-case letter, a lower-case letter, a number and a
@@ -104,7 +104,7 @@ Example response (shape from AWS docs, values illustrative)
 ```
 
 `CreateWorkloadIdentity` takes `name`, `allowedResourceOauth2ReturnUrls` and `tags`. The owner tag answers the first
-question of lesson 20.1: who do we call when this agent misbehaves?
+question of lesson 13.1: who do we call when this agent misbehaves?
 
 ### A3 · One IAM role per agent that needs a human on every session
 

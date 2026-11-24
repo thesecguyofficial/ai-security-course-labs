@@ -1,4 +1,4 @@
-# M16 guided build: detection and response for AI in your own AWS account
+# M7 guided build: detection and response for AI in your own AWS account
 
 Optional. The laptop lab (`README.md`) teaches everything at $0. This guide builds the real thing in **your own
 sandbox account** (lesson 0.7: never a work account), in **us-east-1**, and tears it down at the end.
@@ -7,11 +7,11 @@ You will:
 
 | Part | What you build | Lesson |
 |---|---|---|
-| A | GuardDuty with **AI Protection**, and the three AI finding types as sample findings | 16.2 |
-| B | An alert for **every** AI Protection finding (EventBridge to email), and proof that a "Medium and above" rule misses them | 16.2 |
+| A | GuardDuty with **AI Protection**, and the three AI finding types as sample findings | 7.2 |
+| B | An alert for **every** AI Protection finding (EventBridge to email), and proof that a "Medium and above" rule misses them | 7.2 |
 | C | A guardrail with a prompt attack filter, four requests, and a real `PromptInjection.Direct` finding | 16.2, 16.1 |
-| D | The **AI inventory** in Security Hub and one AWS Config managed rule for AgentCore | 16.3, 16.4 |
-| E | Hunting: CloudTrail event history and, if you kept M11's invocation logging, Logs Insights queries | 16.4 |
+| D | The **AI inventory** in Security Hub and one AWS Config managed rule for AgentCore | 7.3, 7.4 |
+| E | Hunting: CloudTrail event history and, if you kept M2's invocation logging, Logs Insights queries | 7.4 |
 | F | Cost and teardown | all |
 
 Every response below that wasn't captured from a real run is labeled **Example response (shape from the provider's
@@ -40,9 +40,9 @@ in a real AWS account. When it has been, a dated "What happened in our real run"
 
 Sources: [GuardDuty pricing](https://aws.amazon.com/guardduty/pricing/),
 [Security Hub pricing](https://aws.amazon.com/security-hub/pricing/), [AWS Config pricing](https://aws.amazon.com/config/pricing/).
-Set a budget alert first if you haven't (lesson 10.5). **Do Part F the same day.**
+Set a budget alert first if you haven't (lesson 1.5). **Do Part F the same day.**
 
-## Part A · GuardDuty with AI Protection (16.2)
+## Part A · GuardDuty with AI Protection (7.2)
 
 ### Console
 
@@ -100,7 +100,7 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
    ```
 
    How to read it: this channel feeds GuardDuty only. It doesn't give **you** the data events: your own trail still
-   needs its own selectors if your SOC wants them (lesson 16.1).
+   needs its own selectors if your SOC wants them (lesson 7.1).
 
 4. Generate the three AI finding types as samples:
 
@@ -146,7 +146,7 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
    the role your app runs as, never the customer who typed the prompt. Sample findings carry `[SAMPLE]` in their
    title: archive them when you're done.
 
-## Part B · Alert on every AI finding, whatever the severity (16.2)
+## Part B · Alert on every AI finding, whatever the severity (7.2)
 
 1. An SNS topic with your email:
 
@@ -202,7 +202,7 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
 5. Generate the samples again (Part A step 4). New findings are sent to EventBridge "in near real-time"; within a
    few minutes the email should arrive. If samples don't reach your email, the real finding in Part C will.
 
-## Part C · A real prompt injection finding (16.2, 16.1)
+## Part C · A real prompt injection finding (7.2, 7.1)
 
 1. A guardrail with only a prompt attack filter (`cloud/guardrail.json`):
 
@@ -213,10 +213,10 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
 
    - `aws bedrock get-guardrail`: repeat until READY
 
-   (Already have the M12 guardrail? Use its ID instead; its prompt attack filter is on.)
+   (Already have the M3 guardrail? Use its ID instead; its prompt attack filter is on.)
 
 2. Four requests through `Converse` with the guardrail, as your app would send them, with the end user in
-   `requestMetadata` (lesson 16.1):
+   `requestMetadata` (lesson 7.1):
 
    ```bash
    export MODEL=us.anthropic.claude-haiku-4-5-20251001-v1:0
@@ -246,8 +246,8 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
 
    How to read it: only the second is a prompt attack; the guardrail answers with your blocked message and
    `stopReason` `guardrail_intervened` (a documented Converse stop reason). The card number goes through: this
-   guardrail has no sensitive information filter (M12 has one). The poem is out of scope for a support bot, and
-   nothing here stops it: a denied topic would (M12).
+   guardrail has no sensitive information filter (M3 has one). The poem is out of scope for a support bot, and
+   nothing here stops it: a denied topic would (M3).
 
 3. Wait for the finding. AWS doesn't state how long it takes. Check every 15 minutes for up to an hour:
 
@@ -275,11 +275,11 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
      --query 'Events[].{time:EventTime,who:Username}'
    ```
 
-   The prompt and the answer are only in **model invocation logs**, and only if you turned them on (M11). The
+   The prompt and the answer are only in **model invocation logs**, and only if you turned them on (M2). The
    guardrail's own evaluation is a CloudTrail **data event** (`ApplyGuardrail`, resource type
    `AWS::Bedrock::Guardrail`): GuardDuty reads it through its channel, your trail only if you select it.
 
-## Part D · Inventory and posture (16.3, 16.4)
+## Part D · Inventory and posture (7.3, 7.4)
 
 1. **AI inventory.** Security Hub's AI inventory is part of the Essentials plan "at no additional cost"; enabling
    Security Hub starts the 30-day trial if your account never had it. Console: **Security Hub**, enable it if asked,
@@ -294,12 +294,12 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
    - `aws securityhub describe-security-hub-v2`: on? if not, turn it on
 
    How to read it: in a sandbox you'll see your guardrail (if its type is in the supported subset) and anything left
-   from the M13 and M14 guided builds. Self-hosted models show up only with Amazon Inspector deep scanning on EC2 or
+   from the M4 and M5 guided builds. Self-hosted models show up only with Amazon Inspector deep scanning on EC2 or
    ECR, which this guide doesn't turn on (cost). The filter needs `ResourceCategory` `AI/ML`; filtering by
    `ResourceSubCategory` without it returns a `ValidationException` ([AWS](https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-v2-ai-inventory.html)).
 
 2. **One AWS Config managed rule** (only if AWS Config is already recording in this account; turning on the
-   recorder for this alone isn't worth the configuration items). The gateway authorizer rule from lesson 14.0:
+   recorder for this alone isn't worth the configuration items). The gateway authorizer rule from lesson 5.0:
 
    ```bash
    aws configservice put-config-rule --config-rule '{"ConfigRuleName": "bedrockagentcore-gateway-authorizer-enabled",
@@ -308,11 +308,11 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
    aws configservice get-compliance-details-by-config-rule --config-rule-name bedrockagentcore-gateway-authorizer-enabled
    ```
 
-   With no gateway in the account the result is empty. With the M14 gateway (JWT authorizer) it's `COMPLIANT`. Note
+   With no gateway in the account the result is empty. With the M5 gateway (JWT authorizer) it's `COMPLIANT`. Note
    what that doesn't tell you: a gateway whose policy engine is in `LOG_ONLY` passes this rule. The laptop lab's
    `posture.py` shows the custom rule (C05) that catches it.
 
-## Part E · Hunting (16.4)
+## Part E · Hunting (7.4)
 
 1. CloudTrail event history (management events, free): who called Bedrock today, and from where?
 
@@ -322,7 +322,7 @@ These are AWS's own steps ([AWS](https://docs.aws.amazon.com/guardduty/latest/ug
      python3 -c "import sys, json; [print(e['eventTime'], e['eventName'], e['userIdentity'].get('arn'), e['sourceIPAddress']) for e in map(json.loads, sys.stdin.read().split('\t'))]"
    ```
 
-2. If you kept invocation logging from M11: **CloudWatch**, **Logs Insights**, your invocation log group, then paste
+2. If you kept invocation logging from M2: **CloudWatch**, **Logs Insights**, your invocation log group, then paste
    `queries/d06-tokens-by-principal.txt` and `queries/d07-guardrail-by-end-user.txt`. With Part C's requests,
    `d07` shows `cust-lab-2` with one intervention (the rule's threshold is three: send two more blunt attacks and run
    it again).

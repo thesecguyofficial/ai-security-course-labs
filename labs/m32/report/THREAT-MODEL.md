@@ -1,8 +1,8 @@
 # Threat model: TSG Ops Crew (multi-agent)
 
 > Fill in every `<...>` and delete every TODO line. The self-check (R1) fails while any are left.
-> Start from your Module 2 method and your Part 5 work (M20 to M24). This system is three agents sharing one turn,
-> with hand-offs, shared memory and a crm MCP server. Lessons 2.1 to 2.5, 22.1, 24.1 to 24.2.
+> Start from your Module 2 method and your Part 5 work (M13 to M17). This system is three agents sharing one turn,
+> with hand-offs, shared memory and a crm MCP server. Lessons 2.1 to 2.5, 15.1, 17.1 to 17.2.
 
 - **Author:** <your name or handle>
 - **Date:** <YYYY-MM-DD>

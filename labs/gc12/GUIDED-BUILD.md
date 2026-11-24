@@ -1,7 +1,7 @@
-# GC12 guided build: a Model Armor template and Gemini safety settings in your own project
+# M3 guided build: a Model Armor template and Gemini safety settings in your own project
 
 The offline lab (README Steps 1 to 7) teaches the mechanics at $0. This guide builds the real thing, step by step,
-in **your own** Google Cloud sandbox project (the GC11 project is fine). About 45 minutes. Cost: $0 for Model Armor
+in **your own** Google Cloud sandbox project (the M2 project is fine). About 45 minutes. Cost: $0 for Model Armor
 within the free allowance, plus a few Gemini calls (cost table at the end). Teardown is the last section: do it.
 
 > **Tested for real on 12 November 2026** (project in `europe-west4`, Free Trial): `cloud/deploy.sh` ran every
@@ -18,14 +18,14 @@ within the free allowance, plus a few Gemini calls (cost table at the end). Tear
 Throughout: `PROJECT_ID` = your project, `REGION` = `europe-west4` (any Model Armor region works; keep it consistent),
 template ID = `helpdesk-guard`. Gemini itself is called in location `eu` (`aiplatform.eu.rep.googleapis.com`): in our
 run on 12 November 2026, `gemini-3.1-flash-lite` answered only on `global`, `eu` and `us`, never on a single region
-(GC11 lesson 11.5).
+(M2 lesson 2.5).
 
 **One script instead:** `cloud/deploy.sh` does this guide end to end in Cloud Shell: `bash deploy.sh up`, `test` (R1
 to R5), `sweep` (Step 4), `logs` (Step 6), `down`, or `tf apply` / `tf destroy` for the Terraform path.
 
 ## Step 0 · Before you start (5 minutes)
 
-1. A sandbox project with billing and a **budget alert** (GC10 lesson 10.5). Not a work project.
+1. A sandbox project with billing and a **budget alert** (M1 lesson 1.5). Not a work project.
 2. In Cloud Shell or on your laptop with the `gcloud` CLI:
 
    ```bash
@@ -97,7 +97,7 @@ gcloud model-armor templates describe helpdesk-guard --location=REGION
 ### Path C: Terraform
 
 `terraform/` in this folder creates the same template (with Sensitive Data Protection **Advanced** and your own info
-types instead of Basic), plus the project floor setting and the IAM grant from lesson 12.3. Follow README Step 8
+types instead of Basic), plus the project floor setting and the IAM grant from lesson 3.3. Follow README Step 8
 ("Deploy"). If you use Terraform, skip Step 4's `update` command and change `pi_confidence` in `terraform.tfvars`
 instead.
 
@@ -127,7 +127,7 @@ pick a value other than **Off** (the console offers **Off**, **Block few**, **Bl
 }
 ```
 
-Remember lesson 12.3: if you also send `model_armor_config` in the same request, Gemini rejects it ("If supplied,
+Remember lesson 3.3: if you also send `model_armor_config` in the same request, Gemini rejects it ("If supplied,
 safety_settings must not be supplied").
 
 ## Step 3 · Run five requests through the template
@@ -149,7 +149,7 @@ or REST with `terraform/scripts/sanitize.sh PROJECT_ID REGION "TEXT"` (it calls
 **How to read every result, in this order:**
 
 1. `sanitizationResult.invocationResult`: `SUCCESS` means every filter ran. `PARTIAL` or `FAILURE` means some didn't:
-   treat as "not screened" (fail closed, lesson 12.2).
+   treat as "not screened" (fail closed, lesson 3.2).
 2. `sanitizationResult.filterMatchState`: `MATCH_FOUND` = at least one filter matched. This is your stop/go.
 3. `filterResults.<filter>`: which filter matched (`matchState`), whether it ran (`executionState`), and for
    `pi_and_jailbreak` and each `rai` category, the `confidenceLevel` it found.
@@ -314,7 +314,7 @@ perhaps `dangerous`) responsible-AI category to report a `confidenceLevel`.
 
 ## Step 4 · Change one setting and re-run
 
-Lesson 12.4's trade-off, on the real service. Take the prompt injection level down to the noisiest setting:
+Lesson 3.4's trade-off, on the real service. Take the prompt injection level down to the noisiest setting:
 
 ```bash
 gcloud model-armor templates update helpdesk-guard --location=REGION \
@@ -379,7 +379,7 @@ terraform/scripts/read_logs.sh PROJECT_ID
 It filters on `jsonPayload.@type="type.googleapis.com/google.cloud.modelarmor.logging.v1.SanitizeOperationLogEntry"`
 ([configure logging](https://docs.cloud.google.com/model-armor/configure-logging)). Google warns that template logging
 "writes raw prompts and responses to Logging": your test card number is now in your logs. In production, route these
-to a restricted log bucket (GC12-15).
+to a restricted log bucket (M3-M6).
 
 ## Cost (estimate, prices checked October 2026)
 
@@ -406,6 +406,6 @@ make down PROJECT=PROJECT_ID
 ```
 
 Gemini safety settings live in your requests, so there's nothing to delete for Step 2. If you created a floor setting
-(lesson 12.3 or Terraform), `terraform/scripts/reset_floor.sh PROJECT_ID` switches it off (the script points gcloud at
+(lesson 3.3 or Terraform), `terraform/scripts/reset_floor.sh PROJECT_ID` switches it off (the script points gcloud at
 the global endpoint `https://modelarmor.googleapis.com/` for its own commands, as Google's floor settings page says to). Finally, check the
 **Model Armor** page in the console lists no templates, and that your budget alert shows no surprises tomorrow.

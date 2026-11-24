@@ -1,6 +1,6 @@
-# Lab M29.7: shadow AI, a honeytoken key, an unexpected-network alert and a responder that beats the clock
+# Lab M22.7: shadow AI, a honeytoken key, an unexpected-network alert and a responder that beats the clock
 
-Companion to lesson **29.7** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 30 minutes, $0,
+Companion to lesson **22.7** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 30 minutes, $0,
 all on your laptop, all on fake data. Python 3.11+ and the standard library only. Nothing leaves this folder: no
 network, no cloud calls, no real keys.
 
@@ -102,7 +102,7 @@ Python 3.12.3 OK: standard library only, nothing else to install
 
 ## Step 1b · Look at each piece first
 
-New to security operations? Do this before Step 1 (lesson 29.1's basics videos and lab 29.7 part 1 run it).
+New to security operations? Do this before Step 1 (lesson 22.1's basics videos and lab 22.7 part 1 run it).
 `explore.py` shows one idea at a time. **What it really runs:** it reads the lab's files and runs the lab's own
 functions on them (the rule matcher in `detect.py`, the register check in `hunt.py`, FIRST's CVSS 3.1 formula). It
 sends nothing, calls no cloud, runs no responder, starts no agent and writes no file (not even `state/` or
@@ -393,7 +393,7 @@ MISSED means the defense failed that case: it didn't see it, didn't act in time,
 
 ## Step 2 · Read why
 
-**Shadow AI** (lesson 29.1):
+**Shadow AI** (lesson 22.1):
 
 ```bash
 make hunt
@@ -432,7 +432,7 @@ The org used Bedrock in an account nobody registered (D1), through `Converse` (D
 whose inference calls are data events (D3), called an outside AI API from an EC2 instance (D4), and committed a key
 that the next commit "removed" (D5). The two decoys are ours, so they are reported, not counted.
 
-**The decoy key's first two calls** (lesson 29.4):
+**The decoy key's first two calls** (lesson 22.4):
 
 ```bash
 make story
@@ -463,7 +463,7 @@ management events. The decoy has no permissions, so every model call with it fai
 `"errorCode": [{"exists": false}]` on `InvokeModel` can never fire (H2). (`GetCallerIdentity` needs no permission and
 works, so the thief learns the account and user name, which is why the read-only alert matters.) And a rule sees only its own Region (H3).
 
-**The responder against the clock** (lesson 29.7):
+**The responder against the clock** (lesson 22.7):
 
 ```bash
 make respond
@@ -500,7 +500,7 @@ those keep working (R2). The hardened responder is event-driven and also attache
 which AWS documents as covering sessions made with `GetSessionToken`. The timings are lab assumptions in
 `data/org.json`, not AWS figures: measure your own (guided build, Part E).
 
-**A poisoned alert meets the triage agent** (lesson 29.6):
+**A poisoned alert meets the triage agent** (lesson 22.6):
 
 ```bash
 make triage
@@ -659,11 +659,11 @@ ALL TESTS PASSED (21 run)
 `make challenge` (`python3 run_tests.py --challenge`) runs 26 tests. Four fail until you finish these three parts.
 No solution is included in this repo.
 
-1. **29.1:** write `find_new_models()` in `hunt.py`: the models each account used today that aren't in its 30-day
+1. **22.1:** write `find_new_models()` in `hunt.py`: the models each account used today that aren't in its 30-day
    baseline (`data/baseline-models.json`), with the first time each was seen.
-2. **29.4:** add `setups/hardened/rules/decoy-api-key.json` so case H4 (the decoy Bedrock API key used on
+2. **22.4:** add `setups/hardened/rules/decoy-api-key.json` so case H4 (the decoy Bedrock API key used on
    bedrock-mantle) is caught. The API key itself is never in the log. Match what is.
-3. **29.6:** write `find_suspicious_closures()` in `triage.py`: alerts the agent closed although a caller-controlled
+3. **22.6:** write `find_suspicious_closures()` in `triage.py`: alerts the agent closed although a caller-controlled
    field held instruction-like text (`data/triage-log.jsonl`).
 
 Before you start, this is the real output:

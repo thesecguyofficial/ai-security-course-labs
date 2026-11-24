@@ -1,6 +1,6 @@
-# Lab M24: trace a recorded multi-agent attack, then build the containment that holds it
+# Lab M17: trace a recorded multi-agent attack, then build the containment that holds it
 
-Companion to lessons **24.1 to 24.5** of *AI Security Engineer* (The Sec Guy). About 45 minutes, **$0**, all on
+Companion to lessons **17.1 to 17.5** of *AI Security Engineer* (The Sec Guy). About 45 minutes, **$0**, all on
 your laptop: **Python 3.11+ only**, no packages, no network, no model download. Nothing in this lab runs the attack
 or calls out anywhere. The attack is data: a run we wrote by hand, which the lab calls the recording.
 
@@ -12,12 +12,12 @@ while the normal crew tasks still complete**. You never write the attack, and no
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Trace** | Read the recorded run: entry point, propagation path, sink action | 24.1, 24.2 |
-| **Replay (before)** | Run the harness: contained NO, because containment.py is empty | 24.3 |
-| **Contain** | Write the four controls in `containment.py` | 24.3 |
-| **Replay (after)** | Contained YES on the recording AND the variants, 0 false positives | 24.3, 24.4 |
-| **Prove** | `make report` (the four-line proof), `make test` (the trace) | 24.4 |
-| **Challenge** | Unlabeled crossings, memory residue, a precise detection. No solution included | 24.2, 24.3, 24.4 |
+| **Trace** | Read the recorded run: entry point, propagation path, sink action | 17.1, 17.2 |
+| **Replay (before)** | Run the harness: contained NO, because containment.py is empty | 17.3 |
+| **Contain** | Write the four controls in `containment.py` | 17.3 |
+| **Replay (after)** | Contained YES on the recording AND the variants, 0 false positives | 17.3, 17.4 |
+| **Prove** | `make report` (the four-line proof), `make test` (the trace) | 17.4 |
+| **Challenge** | Unlabeled crossings, memory residue, a precise detection. No solution included | 17.2, 17.3, 17.4 |
 
 ## Get the lab files
 
@@ -86,7 +86,7 @@ cd labs/m24
 
 ## Step 1b · Look at each piece first
 
-New to multi-agent systems? Do this before Step 1 (lesson 24.1 and its videos run it). `explore.py` shows one idea at
+New to multi-agent systems? Do this before Step 1 (lesson 17.1 and its videos run it). `explore.py` shows one idea at
 a time. **What it really runs:** nothing. It reads `config.json` and the recorded runs and prints them; it runs no
 agent, never opens `ground_truth.json` and writes no file (not even `__pycache__`). Windows: `python explore.py ...`.
 Real output on Linux, checked again on 15 November 2026:
@@ -262,7 +262,7 @@ until your containment passes. Windows: `python replay.py`.
 
 Open `containment.py` and fill in the four controls. Each reads recorded events and returns a verdict; the file's
 docstrings give the exact contract and the `config.json` keys. Build on **behavior, not exact wording** (lesson
-24.4): the adapted variant paraphrases the instruction and uses a look-alike domain.
+17.4): the adapted variant paraphrases the instruction and uses a look-alike domain.
 
 1. `boundary_filter(handoff, config)` - block a hand-off whose message carries instruction-like content (an
    external recipient, a self-forwarding phrase, override phrasing). Allow normal summaries.
@@ -320,12 +320,12 @@ make challenge
   `python run_tests.py --challenge`. The test for challenge 3 already passes on the empty starter, because an empty
   `detect` and `circuit_breaker` flag nothing. Its job is to stay green once you have written them.
 
-1. **24.2: write `find_unlabelled_crossings()` in `trace.py`.** List every hand-off that carried the instruction
+1. **17.2: write `find_unlabelled_crossings()` in `trace.py`.** List every hand-off that carried the instruction
    across a boundary with no provenance label. Those are the crossings a label would have caught.
-2. **24.3: write `memory_residue()` in `containment.py`.** A kill-switch must quarantine shared memory, not just
+2. **17.3: write `memory_residue()` in `containment.py`.** A kill-switch must quarantine shared memory, not just
    stop live hand-offs. Return the memory-channel writes that still carry an instruction, so you know what to purge
    before the next run re-reads it.
-3. **24.4: keep `detect` and `circuit_breaker` precise.** A benign broadcast (the planner sends the same status to
+3. **17.4: keep `detect` and `circuit_breaker` precise.** A benign broadcast (the planner sends the same status to
    two agents) must not trip them. A containment that halts the crew on normal repetition gets switched off.
 
 When you finish, `make challenge` ends with `ALL TESTS PASSED`.

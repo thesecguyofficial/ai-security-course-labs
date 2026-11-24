@@ -1,4 +1,4 @@
-# Lab M14: deploy the course agent on AgentCore end to end, then try to hijack it
+# Lab M5: deploy the course agent on AgentCore end to end, then try to hijack it
 
 Companion to lessons **14.0 to 14.8** of *AI Security Engineer* (The Sec Guy). About 90 minutes for Steps 1b to 8 (Step 1b, the tour, is about 15 of them),
 **$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no model download. Step 9 is optional:
@@ -6,7 +6,7 @@ Companion to lessons **14.0 to 14.8** of *AI Security Engineer* (The Sec Guy). A
 Cedar policy, memory, the agent on AgentCore Runtime, traces) and ends with teardown.
 
 You are still the cloud security engineer at **AnyCompany** (fictional; "AnyCompany" is the placeholder name AWS uses
-in its documentation). In M13 the TSG Helpdesk moved to a managed knowledge base and an AgentCore harness. Now the
+in its documentation). In M4 the TSG Helpdesk moved to a managed knowledge base and an AgentCore harness. Now the
 platform team has rebuilt it on the full **Amazon Bedrock AgentCore** stack: the agent runs on **AgentCore Runtime**,
 users sign in with **Amazon Cognito**, the agent reads each user's tickets from a ticketing SaaS with an OAuth token
 from the **AgentCore Identity** token vault, its tools sit behind an **AgentCore Gateway** with a **policy engine**,
@@ -15,13 +15,13 @@ That is the **first draft**. Your job: hijack it, then prove the hardened versio
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Check** | Review the first draft: 27 findings, 14 HIGH | 14.2 to 14.7 |
-| **Break** | 12 attacks and 7 normal requests: 12 of 12 attacks work, and nothing *looks* broken | 14.2 to 14.6 |
-| **Harden** | The same suite against the hardened setup: 10 of 12 stopped, 7 of 7 normal requests still work | 14.2 to 14.6 |
-| **Policy** | Ask the Cedar engine questions yourself: default deny, forbid wins, errors skip a policy | 14.5 |
-| **Hunt** | Investigate a morning of CloudTrail, gateway spans and app logs | 14.7 |
+| **Check** | Review the first draft: 27 findings, 14 HIGH | 5.2 to 5.7 |
+| **Break** | 12 attacks and 7 normal requests: 12 of 12 attacks work, and nothing *looks* broken | 5.2 to 5.6 |
+| **Harden** | The same suite against the hardened setup: 10 of 12 stopped, 7 of 7 normal requests still work | 5.2 to 5.6 |
+| **Policy** | Ask the Cedar engine questions yourself: default deny, forbid wins, errors skip a policy | 5.5 |
+| **Hunt** | Investigate a morning of CloudTrail, gateway spans and app logs | 5.7 |
 | **Prove** | `make test`: 20 tests | 14.8 |
-| **Challenge** | A Cedar policy, memory write validation, a hunt query. No solution included | 14.5, 14.6, 14.7 |
+| **Challenge** | A Cedar policy, memory write validation, a hunt query. No solution included | 5.5, 5.6, 5.7 |
 | **Cloud (optional)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): console and CLI/Terraform from zero, five requests (a normal one, a cross-user attempt, a forged caller field, a token from another app, a write that needs the right identity), one setting changed, cost, teardown | 14.3 to 14.7 |
 
 ## Get the lab files
@@ -76,7 +76,7 @@ Stay in the `ai-security-course-labs` folder: the first step below (Step 1b) sta
 
 ## Step 1b · Before you attack: look at each AgentCore piece on its own (about 15 minutes)
 
-New to AgentCore? Do this before Step 1 (lesson 14.8 and its videos call it Step 1b). `explore.py` takes the Helpdesk
+New to AgentCore? Do this before Step 1 (lesson 5.8 and its videos call it Step 1b). `explore.py` takes the Helpdesk
 apart one AgentCore piece at a time, in both setups. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON and Cedar files in `setups/` and
@@ -132,7 +132,7 @@ python3 explore.py map hardened
 Run `python3 explore.py map first-draft` too: IAM SigV4 on the runtime, `allowedScopes` on the gateway, `LOG_ONLY`,
 `/helpdesk/facts/`, a PUBLIC Code Interpreter, no data events.
 
-One thing the hardened setup does not change: its Runtime line still says `network PUBLIC`. Lesson 14.2 recommends
+One thing the hardened setup does not change: its Runtime line still says `network PUBLIC`. Lesson 5.2 recommends
 VPC mode with private subnets and endpoints, but this lab has no VPC to put the runtime in, and the checker reads
 `networkMode` for the Code Interpreter only. Treat the PUBLIC runtime as an open item in your review.
 
@@ -151,7 +151,7 @@ python3 explore.py token bob
   username   bob                                                              the user name, also a claim
 ```
 
-**3. The front door (lesson 14.3).** The JWT authorizer's checks, one by one, on Dana's token from the partner portal:
+**3. The front door (lesson 5.3).** The JWT authorizer's checks, one by one, on Dana's token from the partner portal:
 
 ```bash
 python3 explore.py inbound first-draft gateway dana --client partner-portal
@@ -172,7 +172,7 @@ python3 explore.py inbound hardened gateway dana --client partner-portal
 => 401: client_id not in allowedClients
 ```
 
-**4. The session (lesson 14.2).** Which microVM a request lands in when the browser sends Alice's session ID:
+**4. The session (lesson 5.2).** Which microVM a request lands in when the browser sends Alice's session ID:
 
 ```bash
 python3 explore.py session first-draft bob --session-id alice-conversation-0001-0001-0001-0001
@@ -186,7 +186,7 @@ python3 explore.py session first-draft bob --session-id alice-conversation-0001-
 => AgentCore does not check that this session belongs to this user. Your backend must.
 ```
 
-**5. The token vault (lesson 14.3).** Whose ticketing token comes out when the browser says "I am alice":
+**5. The token vault (lesson 5.3).** Whose ticketing token comes out when the browser says "I am alice":
 
 ```bash
 python3 explore.py vault first-draft bob --user-id alice
@@ -208,7 +208,7 @@ python3 explore.py vault hardened bob --user-id alice
 => the agent reads bob's tickets
 ```
 
-**6. The gateway's tools (lesson 14.4).** What the agent sees, and what the tools Lambda receives:
+**6. The gateway's tools (lesson 5.4).** What the agent sees, and what the tools Lambda receives:
 
 ```bash
 python3 explore.py tools hardened
@@ -224,7 +224,7 @@ python3 explore.py tools hardened
     context gateway ID, target ID, tool name, request IDs               nothing about the end user
 ```
 
-**7. The policy engine (lesson 14.5).** The Cedar request, every policy, the decision, and what the mode does with it:
+**7. The policy engine (lesson 5.5).** The Cedar request, every policy, the decision, and what the mode does with it:
 
 ```bash
 python3 explore.py policy hardened bob reset_mfa '{"target_username": "ceo", "caller_username": "bob"}'
@@ -249,7 +249,7 @@ python3 explore.py policy first-draft bob reset_mfa '{"target_username": "ceo", 
 
 Try `'{"target_username": "bob", "caller_username": "bob"}'` on `hardened`: `reset_own_mfa` applies, ALLOW, run.
 
-**8. Memory (lesson 14.6).** The namespace a long-term memory is saved under:
+**8. Memory (lesson 5.6).** The namespace a long-term memory is saved under:
 
 ```bash
 python3 explore.py memory first-draft bob --actor-id alice
@@ -266,7 +266,7 @@ python3 explore.py memory hardened bob
               alice, bob, priya: /users/alice/facts/, /users/bob/facts/, /users/priya/facts/   <- one shelf each
 ```
 
-**9. The record (lesson 14.7).** What each setup logs, and one gateway span:
+**9. The record (lesson 5.7).** What each setup logs, and one gateway span:
 
 ```bash
 python3 explore.py logs first-draft
@@ -406,7 +406,7 @@ make check-hardened
 make hardened
 ```
 
-- `make check-hardened`: same as `python3 checker.py hardened`. 0 HIGH, 2 MEDIUM (M14-20, M14-23: the challenge)
+- `make check-hardened`: same as `python3 checker.py hardened`. 0 HIGH, 2 MEDIUM (M5-M13, M5-M16: the challenge)
 - `make hardened`: same as `python3 evaluate.py hardened`
 
 ```output
@@ -431,20 +431,20 @@ A: Ticket 4711 (VPN drops after sleep): Vendor update: VPN client 7.2 fix is sch
 ```
 
 The model was still fooled. It asked for the reset. The gateway said no, with the error text AWS documents, and Bob
-still got his answer. That is what lesson 14.5 means by a control prompt injection can't talk its way past.
+still got his answer. That is what lesson 5.5 means by a control prompt injection can't talk its way past.
 
 Which change stopped which attack:
 
 | Attack | Stopped by (hardened file) | Lesson |
 |---|---|---|
-| A1 injection → reset | `policies/reset_own_mfa.cedar`, `reset_mfa_it_staff.cedar`, mode `ENFORCE` | 14.5 |
-| A2 user-ID spoof | `runtime.json` JWT authorizer: the user comes from the token; `iam.json` denies `InvokeAgentRuntimeForUser` and `GetWorkloadAccessTokenForUserId` | 14.3 |
-| A3 session replay | `app.json` `runtime_session_id_from: server_map` | 14.2 |
+| A1 injection → reset | `policies/reset_own_mfa.cedar`, `reset_mfa_it_staff.cedar`, mode `ENFORCE` | 5.5 |
+| A2 user-ID spoof | `runtime.json` JWT authorizer: the user comes from the token; `iam.json` denies `InvokeAgentRuntimeForUser` and `GetWorkloadAccessTokenForUserId` | 5.3 |
+| A3 session replay | `app.json` `runtime_session_id_from: server_map` | 5.2 |
 | A4 partner token | `gateway.json` `allowedClients` = the web app only | 14.3 |
 | A5 direct Lambda | `iam.json`: only the gateway role may invoke the tools function | 14.4 |
-| A6 policy switch-off | `iam.json`: only `tsg-platform-admin` holds `bedrock-agentcore:*` | 14.5 |
-| A7 rate-limit reset | `app.json` `policy_session_id_from: backend_per_user_day` | 14.5 |
-| A8 memory across users | `memory.json` `/users/{actorId}/facts/` + `memory_actor_id_from: token` | 14.6 |
+| A6 policy switch-off | `iam.json`: only `tsg-platform-admin` holds `bedrock-agentcore:*` | 5.5 |
+| A7 rate-limit reset | `app.json` `policy_session_id_from: backend_per_user_day` | 5.5 |
+| A8 memory across users | `memory.json` `/users/{actorId}/facts/` + `memory_actor_id_from: token` | 5.6 |
 | A9 code sandbox | `tools.json`: no Code Interpreter | 14.6 |
 | A10 toolUse block | `app.json` `entrypoint_validates_prompt` (and the policy engine behind it, test 16) | 14.2 |
 
@@ -502,7 +502,7 @@ python3 cedar.py scratch-unguarded alice reset_mfa '{"caller_username": "alice"}
 
 The forbid is under `mismatched`: it hit a missing attribute, raised an error and did not apply. The checker does not
 flag this, so it is yours to spot in review. Now the shipped file, `setups/hardened/policies/never_reset_breakglass.cedar`,
-which follows lesson 14.5's rule "Guard every attribute with `has` in `forbid` policies"
+which follows lesson 5.5's rule "Guard every attribute with `has` in `forbid` policies"
 (`context.input has target_username && ...`, the same pattern `caller_must_be_signed_in_user.cedar` uses for
 `caller_username`):
 
@@ -567,11 +567,11 @@ is on by default. The sample records use AWS's field and attribute names; `lab.t
 
 Each of these takes one edit. Run `make check-hardened` and `make hardened` after each, then undo it with `git checkout setups/`.
 
-1. In `setups/hardened/gateway.json`, set `"mode": "LOG_ONLY"`. A1 and A7 come back (4 of 12: A1, A7, A11, A12); M14-16 is HIGH.
+1. In `setups/hardened/gateway.json`, set `"mode": "LOG_ONLY"`. A1 and A7 come back (4 of 12: A1, A7, A11, A12); M5-M7 is HIGH.
 2. In `setups/hardened/gateway.json`, replace `"allowedClients": [...]` with `"allowedScopes": ["openid"]`. A4 comes back.
-3. In `setups/hardened/memory.json`, change `/users/{actorId}/facts/` to `/helpdesk/facts/`. A8 comes back (M14-21).
+3. In `setups/hardened/memory.json`, change `/users/{actorId}/facts/` to `/helpdesk/facts/`. A8 comes back (M5-M14).
 4. Delete `setups/hardened/policies/caller_must_be_signed_in_user.cedar`. The attack suite still says 2 of 12: no
-   attack in it forges `caller_username`. The checker's probe catches the reset case (M14-17 HIGH, "Bob's call claims
+   attack in it forges `caller_username`. The checker's probe catches the reset case (M5-M10 HIGH, "Bob's call claims
    to come from Alice"), but it has no probe for email. Run
    `python3 cedar.py setups/hardened/policies bob send_email '{"to": "x@example.com", "subject": "s", "body": "b", "caller_username": "alice"}'`:
    ALLOW. Bob can now send mail as Alice, and neither the attack suite nor the checker has a case for it.

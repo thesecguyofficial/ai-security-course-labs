@@ -67,4 +67,4 @@ change. Without gateway tracing and data events none of the 11:20 records would 
 
 - Deploy pipelines verify the policy engine mode before and after every gateway change (platform team, 31 Oct 2026).
 - Gateway mode changes page the on-call engineer (SOC, 24 Oct 2026).
-- Re-run the M14 attack suite against staging after every rollback (platform team, 7 Nov 2026).
+- Re-run the M5 attack suite against staging after every rollback (platform team, 7 Nov 2026).

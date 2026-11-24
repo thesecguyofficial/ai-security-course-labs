@@ -1,6 +1,6 @@
-# AZ15 guided build: a private endpoint for an open model (your own subscription, costs money)
+# M6 guided build: a private endpoint for an open model (your own subscription, costs money)
 
-This is Step 9 of the AZ15 lab, and it's optional. You build the hardened design's core for real: a workspace whose
+This is Step 9 of the M6 lab, and it's optional. You build the hardened design's core for real: a workspace whose
 managed VNet allows only approved outbound traffic (we planned for no FQDN rules and no Azure Firewall; the model in
 our run needed four rules, and they bring the firewall in), an online endpoint that
 accepts only Entra tokens and only through the workspace's private endpoint, a client VM that plays the Helpdesk, and
@@ -135,7 +135,7 @@ one rule after another: each write replaces the workspace's whole rule list, and
 same time (12 November) Azure kept three. Check with
 `az ml workspace outbound-rule list -g rg-tsg-az15-lab --workspace-name "$WS" -o table` that all four are there
 before you deploy: a missing one shows up 40 minutes later as a crashed container. This is the egress review
-from lesson 15.2 done for real: four named hosts, nothing else. `repo.anaconda.com` is Anaconda's own channel; check
+from lesson 6.2 done for real: four named hosts, nothing else. `repo.anaconda.com` is Anaconda's own channel; check
 its terms of service for your organization before you allow it at work.
 
 1. In the studio (ml.azure.com), open **Model catalog** and filter to the collection curated by Azure Machine Learning.
@@ -147,7 +147,7 @@ its terms of service for your organization before you allow it at work.
 3. Copy its asset ID, `azureml://registries/azureml/models/<name>/versions/<version>`. The request format differs
    from model to model: copy the sample request from the model card's inference samples into `cloud/request.json`,
    or request 1 fails on the body, not on the network.
-4. Optional, but it's the point of lesson 15.3: download the files and scan them before you deploy anything.
+4. Optional, but it's the point of lesson 6.3: download the files and scan them before you deploy anything.
 
    ```bash
    az ml model download --name <name> --version <version> --registry-name azureml --download-path ./model-check
@@ -191,7 +191,7 @@ What it runs (`cloud/cloud.sh`, section `deploy`):
 4. **A custom role** `TSG AZ15 lab scorer` with one action,
    `Microsoft.MachineLearningServices/workspaces/onlineEndpoints/score/action`, assigned to the client VM's identity
    at the endpoint's scope. Compare it with Microsoft's sample role, `onlineEndpoints/*/action`, which also grants
-   `listKeys` (lesson 15.3).
+   `listKeys` (lesson 6.3).
 5. **A diagnostic setting** that sends `AmlOnlineEndpointTrafficLog`, `AmlOnlineEndpointEventLog` and
    `AmlOnlineEndpointConsoleLog` to Log Analytics.
 

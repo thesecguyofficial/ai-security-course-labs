@@ -29,7 +29,7 @@ each table before you trust a filter.
 | `d07-canary-in-answer.kql` | ApiManagementGatewayLlmLog + HelpdeskApp_CL | D07 | The system prompt's canary in an answer, and who got it |
 | `d08-write-tool-without-approval.kql` | Application Insights (check your layout) | D08, D09 | Write tools the agent ran, and mail to outside addresses |
 | `d10-unknown-link-in-answer.kql` | ApiManagementGatewayLlmLog | D10 | Answers that send users to a domain outside your allow-list |
-| `inventory-resource-graph.kql` | Azure Resource Graph | 16.3 | Every Foundry, Azure OpenAI, AI Search, Azure Machine Learning and API Management resource you can read |
+| `inventory-resource-graph.kql` | Azure Resource Graph | 7.3 | Every Foundry, Azure OpenAI, AI Search, Azure Machine Learning and API Management resource you can read |
 
 D11 and D12 are the lab's challenge, so there is no query for them here. When you've written them in `detect.py`,
 writing their KQL twins (StorageBlobLogs and `HelpdeskApp_CL`) is good practice.

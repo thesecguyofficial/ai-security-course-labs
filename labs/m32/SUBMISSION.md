@@ -31,7 +31,7 @@ Everything else stays as `export.py` wrote it (self-check H1).
 
 ## How to submit
 
-1. Sign in to the course and open the capstone page: **learn.thesecguy.com/capstone/m32** (the M19 capstone uses /capstone).
+1. Sign in to the course and open the capstone page: **learn.thesecguy.com/capstone/m32** (the M12 capstone uses /capstone).
 2. Paste:
    - your **public repo URL**, for example `https://github.com/your-name/my-advanced-capstone`;
    - the **full 40-character commit SHA** you want graded. Get it with `git rev-parse HEAD`, or copy it from the
@@ -57,7 +57,7 @@ If the grader itself has a problem, the page says "Try again" and that attempt d
 ## After a Pass
 
 You earn the **Advanced capstone** badge, and your certificate and its public verify page gain an "Advanced
-capstone" line. (The certificate itself comes from the M19 capstone; this one adds to it.) The verify page also
+capstone" line. (The certificate itself comes from the M12 capstone; this one adds to it.) The verify page also
 lists the skills you completed. This capstone demonstrates **multi-agent system security design**: per-agent
 identity, deterministic tool authorization, trust boundaries and containment between agents, supply-chain
 controls, security evals in CI, and detection. Keep the repo public if you want employers to see it; it is your

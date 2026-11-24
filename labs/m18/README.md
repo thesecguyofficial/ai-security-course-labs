@@ -1,24 +1,24 @@
-# Lab M18: run an AI risk assessment on TSG Helpdesk and build the evidence pack
+# Lab M11: run an AI risk assessment on TSG Helpdesk and build the evidence pack
 
-Companion to lessons **18.0 to 18.4** of *AI Security Engineer* (The Sec Guy). About 75 minutes, **$0**, all on your
+Companion to lessons **11.0 to 11.4** of *AI Security Engineer* (The Sec Guy). About 75 minutes, **$0**, all on your
 laptop: **Python 3.11+ only**, no packages, no model, no cloud account, no network.
 
 It is **24 October 2026**. TSG Helpdesk, the course's support bot (chat, RAG, refund and email tools, a ticketing MCP
-server, memory), has been in production since May for customers in India and the EU. Over Modules 3 to 17 the team
+server, memory), has been in production since May for customers in India and the EU. Over Modules 3 to 10 the team
 added real controls. Now the business wants a sign-off, and the team has written a first-draft AI risk assessment.
 Your job: review the draft the way an auditor would, then write the assessment properly, close one legal gap in
 the product itself, and hand over an evidence pack that proves what it claims.
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Inventory** | The AI inventory rows for the Helpdesk; one component has a gap | 18.3 |
-| **Triage** | EU AI Act role, risk tier and dates; then the same system re-used for hiring | 18.2 |
-| **Audit the draft** | 22 errors of 15 kinds, each one a real governance mistake | 18.0, 18.1 |
-| **Your assessment** | A risk register for 13 required risk sources, with owners, treatments and residual risk | 18.1, 18.4 |
-| **Fix the product** | The Helpdesk never says it is an AI. Change that, and prove it | 18.2 |
-| **Crosswalk** | Which NIST AI RMF, ISO/IEC 42001, EU AI Act and OWASP items your proven controls support | 18.1, 18.2 |
-| **Evidence pack** | A folder an auditor can verify with one command | 18.3, 18.4 |
-| **Prove** | `make test` (16 tests) and `make challenge` (5 more, on your work) | 18.4 |
+| **Inventory** | The AI inventory rows for the Helpdesk; one component has a gap | 11.3 |
+| **Triage** | EU AI Act role, risk tier and dates; then the same system re-used for hiring | 11.2 |
+| **Audit the draft** | 22 errors of 15 kinds, each one a real governance mistake | 11.0, 11.1 |
+| **Your assessment** | A risk register for 13 required risk sources, with owners, treatments and residual risk | 11.1, 11.4 |
+| **Fix the product** | The Helpdesk never says it is an AI. Change that, and prove it | 11.2 |
+| **Crosswalk** | Which NIST AI RMF, ISO/IEC 42001, EU AI Act and OWASP items your proven controls support | 11.1, 11.2 |
+| **Evidence pack** | A folder an auditor can verify with one command | 11.3, 11.4 |
+| **Prove** | `make test` (16 tests) and `make challenge` (5 more, on your work) | 11.4 |
 
 ## Get the lab files
 
@@ -60,7 +60,7 @@ cd labs/m18
 | `catalog/frameworks.json` | The framework items the crosswalk uses, with their sources |
 | `first-draft/` | The team's first draft: `assessment.json`, `risk-register.csv`, `evidence-index.csv` |
 | `evidence/` | Evidence files. Three are real `make test` output from labs m03, m05 and m07; the rest are illustrative samples, labeled as such |
-| `templates/` | Lesson 18.3's templates: one-page AI policy, AI inventory, model and vendor review, AI incident report, plus the assessment files |
+| `templates/` | Lesson 11.3's templates: one-page AI policy, AI inventory, model and vendor review, AI incident report, plus the assessment files |
 | `test_lab.py`, `test_challenge.py`, `run_tests.py` | 16 tests for the toolkit, 5 for your assessment |
 
 **About the EU AI Act triage.** `govlab.py triage` is a simplified decision aid built from the official texts as of
@@ -77,7 +77,7 @@ confirms the result, and you record who confirmed it.
   `python` instead of `py`).
 - A text editor, and a spreadsheet app if you prefer editing CSV files in a grid (save as CSV, UTF-8).
 
-## Step 1 · The AI inventory (18.3)
+## Step 1 · The AI inventory (11.3)
 
 **Mac / Linux:**
 
@@ -231,7 +231,7 @@ Evidence row E01 from first-draft/evidence-index.csv
 
 Now try `python3 explore.py evidence E03`: the two hashes differ. Step 3 shows why that matters.
 
-## Step 2 · EU AI Act triage (18.2)
+## Step 2 · EU AI Act triage (11.2)
 
 **Mac / Linux:**
 
@@ -304,7 +304,7 @@ Same code, same model, different **purpose**, and a different law applies. The h
 the Digital Omnibus on AI moved it from 2 August 2026. Try `py govlab.py triage --as-of 2026-07-01` to see how
 the dates read before Article 50 applied.
 
-## Step 3 · Audit the team's first draft (18.0, 18.1)
+## Step 3 · Audit the team's first draft (11.0, 11.1)
 
 **Mac / Linux:**
 
@@ -400,7 +400,7 @@ updates): `assessment.json`, an empty `risk-register.csv` and `evidence-index.cs
 `system-card.json` and `chat-widget.html`. Keep the assessment date **2026-10-24**; the lab's evidence was collected
 in the weeks before it.
 
-## Step 5 · Write the risk register (18.1, 18.4)
+## Step 5 · Write the risk register (11.1, 11.4)
 
 Open `my-assessment/risk-register.csv`. One row per risk. The checker requires a row for each of these 13 sources
 (from `catalog/risk-library.json`, chosen by the features in the system card):
@@ -468,7 +468,7 @@ py govlab.py evidence my-assessment --fill
 py govlab.py check my-assessment
 ```
 
-## Step 6 · Fix the product: tell people it's an AI (18.2)
+## Step 6 · Fix the product: tell people it's an AI (11.2)
 
 The greeting in `my-assessment/chat-widget.html` says "Hello, welcome to TSG Shop support." It never says an AI is
 answering. Under Article 50(1), people must be told at the latest at the first interaction, unless it is obvious, and
@@ -489,7 +489,7 @@ the Commission says that exception is read narrowly. Fix it in three moves:
 If you mark C24 implemented but the greeting does not mention an AI, the checker says so (DIS-01), and the crosswalk
 in Step 7 keeps Art. 50 at NOT PROVEN: a hashed file that does not say "AI" proves nothing.
 
-## Step 7 · Index the evidence and read your crosswalk (18.1, 18.2)
+## Step 7 · Index the evidence and read your crosswalk (11.1, 11.2)
 
 For every control your register leans on, add a row to `my-assessment/evidence-index.csv`: an ID, the control, the
 file (path from `labs/m18`, for example `evidence/2026-10-20-m07-agent-controls-test.txt`), a blank hash, the date
@@ -523,7 +523,7 @@ How to read the crosswalk:
 - EU articles marked **reference only** are high-risk duties. They do not apply to this system today. They are still
   a good checklist, and they become law for it the day someone re-purposes it (Step 2).
 
-## Step 8 · Build and verify the evidence pack (18.3, 18.4)
+## Step 8 · Build and verify the evidence pack (11.3, 11.4)
 
 Fill in `my-assessment/assessment.json`: `assessor`, `approved_by` (who signs; in the lab you decide, for example
 "Chief Operating Officer"), `next_review` (within 12 months), and the `eu_ai_act` decision from Step 2 with
@@ -592,13 +592,13 @@ Five more tests run against `my-assessment/`: every file is there, `check` is cl
 covered, C24 is implemented and proven (and the greeting really says it is an AI), and the pack builds and verifies.
 They fail until you finish Steps 4 to 8. There is no single right register: two good assessments of the same system
 differ in scores and wording. A worked sample answer, with the reasoning behind each decision, is in the course
-(lesson 18.4).
+(lesson 11.4).
 
 Stretch goals, no tests:
 
 - Fill `templates/MODEL-VENDOR-REVIEW.md` for the local embedding model whose license is "unknown", and decide what
   happens if the license does not allow your use.
-- Fill `templates/AI-INCIDENT-REPORT.md` for Module 16's hijacked-agent scenario, including the notification-clock
+- Fill `templates/AI-INCIDENT-REPORT.md` for cloud Module 7's hijacked-agent scenario, including the notification-clock
   table. Which clocks apply to the Helpdesk today, and which only apply if it were high-risk?
 - Write your own one-page `AI-POLICY.md` for a team you know. Keep it to one page.
 

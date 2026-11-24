@@ -1,4 +1,4 @@
-# Lab GC13: port the TSG Helpdesk's RAG and agent to Google Cloud without losing a single control
+# Lab M4: port the TSG Helpdesk's RAG and agent to Google Cloud without losing a single control
 
 Companion to lessons **13.0 to 13.3** of *AI Security Engineer* (The Sec Guy), Google Cloud stream. About 40 to 60
 minutes, **$0**, all on your laptop. **Nothing to install** for the main lab (Python standard library only) and **no
@@ -9,18 +9,18 @@ teardown included).
 You are still the cloud security engineer at **ExampleCo** (fictional, on the documentation domain `example.com`).
 In Module 6 you secured a RAG bot on your laptop; in Module 7 you contained a helpdesk agent. Last month a team
 ported both to Google Cloud as one **Helpdesk agent** in `example-chatbot-prod` (`europe-west4`): an ADK agent on
-Agent Runtime, documents in RAG Engine (and a pilot Agent Search data store), and the GC12 Model Armor template.
+Agent Runtime, documents in RAG Engine (and a pilot Agent Search data store), and the M3 Model Armor template.
 The port works. Did every control survive the move?
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Check** | Run a checker over a twin of the port and read its 16 findings | 13.1, 13.2 |
-| **Break** | Five attacks and two normal requests against today's port: 5 of 5 attacks succeed | 13.1, 13.2 |
-| **Fix** | The same against the hardened port (RAG Engine corpus per group), then with Agent Search ACLs: 0 of 5 | 13.1, 13.2 |
-| **Spot** | Read the tool-call log: who did what, for whom? | 13.2 |
-| **Outage** | Take Model Armor away and watch what fails open | 13.2 |
-| **Real ADK (optional)** | The same agent on ADK 2.12.0 with a stand-in model: real callbacks, real confirmation, real Model Armor plugin | 13.2 |
-| **Challenge** | A recipient policy in code, fail closed, and rule GC13-18 for the log. No solution included | 13.2 |
+| **Check** | Run a checker over a twin of the port and read its 16 findings | 4.1, 4.2 |
+| **Break** | Five attacks and two normal requests against today's port: 5 of 5 attacks succeed | 4.1, 4.2 |
+| **Fix** | The same against the hardened port (RAG Engine corpus per group), then with Agent Search ACLs: 0 of 5 | 4.1, 4.2 |
+| **Spot** | Read the tool-call log: who did what, for whom? | 4.2 |
+| **Outage** | Take Model Armor away and watch what fails open | 4.2 |
+| **Real ADK (optional)** | The same agent on ADK 2.12.0 with a stand-in model: real callbacks, real confirmation, real Model Armor plugin | 4.2 |
+| **Challenge** | A recipient policy in code, fail closed, and rule M4-M11 for the log. No solution included | 4.2 |
 | **Guided build (optional)** | `GUIDED-BUILD.md`: RAG Engine corpora, an ADK agent with confirmation and Model Armor, five requests, one setting changed, cost and teardown | 13.3 |
 
 ## Get the lab files
@@ -77,7 +77,7 @@ on, from Google's documentation and API definitions:
   end user performing a search and determine if they have access to the documents that are returned as results".
   The twin trims results by the **caller's** identity and the documents' `acl_info.readers[].principals[]`
   (`user_id`, `group_id`).
-- **Model Armor** (`ModelArmorTwin`): the `sanitizationResult` shape from GC12. Its detector is two regular
+- **Model Armor** (`ModelArmorTwin`): the `sanitizationResult` shape from M3. Its detector is two regular
   expressions (the lab's injection marker and "ignore previous instructions"), nothing like Google's classifiers.
 - **ADK** (`adk_twin.py`): we checked the behaviors it copies against ADK 2.12.0 by running the real runtime offline
   (Step 6): plugin callbacks run before agent callbacks and the first non-`None` result wins; a tool with
@@ -104,11 +104,11 @@ key or host creeps in.
 - Optional, Step 6: `pip install -r adk_agent/requirements.txt` (ADK 2.12.0 with its Google Cloud extras, about
   275 MB in a virtual environment).
 - Optional, guided build: Terraform 1.5+, the `gcloud` CLI and **your own** sandbox project with billing and a budget
-  (lesson 0.7 and GC10). The GC11 or GC12 project is fine.
+  (lesson 0.7 and M1). The M2 or M3 project is fine.
 
 ## Step 1b · Before you check: look at each piece (about 10 minutes)
 
-New to RAG Engine, Agent Search and ADK? Do this before Step 1 (lesson 13.3 calls it "Before you start", and lesson
+New to RAG Engine, Agent Search and ADK? Do this before Step 1 (lesson 4.3 calls it "Before you start", and lesson
 13.0 walks through the same twelve ideas). `explore.py` shows each piece one at a time. Real output below is from a
 fresh Ubuntu machine.
 
@@ -440,13 +440,13 @@ Real output (Linux, Python 3.13):
 
 Read the HIGH findings as a list of controls from Modules 6 and 7 that didn't make the trip:
 
-- **Per-user access** became a metadata filter the **model** writes (GC13-01), in one corpus that mixes everyone's
-  documents (GC13-02). The pilot Agent Search store has no ACLs (GC13-03) and searches as the agent (GC13-04).
-- **Ingestion hygiene** (lesson 6.2): documents are imported from a bucket every engineer can write to (GC13-06).
-- **Identity**: the agent runs as the project's Reasoning Engine Service Agent with broad roles (GC13-10, 11), and
-  the person it acts for is whatever the request body says (GC13-12).
-- **Agency limits** (lessons 7.2 and 7.8): write tools need no approval (GC13-13), nothing checks recipients
-  (GC13-15), and tool results reach the model unscreened (GC13-16).
+- **Per-user access** became a metadata filter the **model** writes (M4-M1), in one corpus that mixes everyone's
+  documents (M4-M2). The pilot Agent Search store has no ACLs (M4-M3) and searches as the agent (M4-M4).
+- **Ingestion hygiene** (lesson 6.2): documents are imported from a bucket every engineer can write to (M4-M6).
+- **Identity**: the agent runs as the project's Reasoning Engine Service Agent with broad roles (M4-M1, 11), and
+  the person it acts for is whatever the request body says (M4-M3).
+- **Agency limits** (lessons 7.2 and 7.8): write tools need no approval (M4-M4), nothing checks recipients
+  (M4-M6), and tool results reach the model unscreened (M4-M7).
 
 The three NOTES aren't findings: they are facts about RAG Engine you design around, not settings you can change.
 
@@ -593,7 +593,7 @@ The last lines (real output):
 1 action paused for a person; end user named in the tool-call log: yes.
 ```
 
-`make test` (test 15) shows the trap from lesson 13.1: the same ACL'd data store searched with the **agent's**
+`make test` (test 15) shows the trap from lesson 4.1: the same ACL'd data store searched with the **agent's**
 identity returns nothing to anyone, because the agent isn't a reader of any document. Teams then "fix" it by adding
 the agent to every group, and everyone sees everything again.
 
@@ -623,7 +623,7 @@ Today's log can't answer the first question of any investigation: **for whom** d
 line says the same project-wide service agent. The hardened log names the agent's own service account **and** the
 verified end user, and it records the approval. Google's ADK safety page says the same thing about agent-auth
 tools: "ensure that logs are created to maintain attribution of actions to users, as all agents' actions will
-appear as coming from the agent". Your challenge rule GC13-18 checks for exactly this.
+appear as coming from the agent". Your challenge rule M4-M11 checks for exactly this.
 
 ## Step 5 · Outage: what fails open?
 
@@ -758,7 +758,7 @@ Two things the real runtime taught us while building this:
 - The confirmation request's default hint doesn't show the arguments; the arguments are in
   `originalFunctionCall`. Your approval screen must show `to:` in large type, or people approve what they can't see.
 - ADK's confirmation page lists `VertexAiSessionService` and `DatabaseSessionService` as not supported. On Agent
-  Runtime with managed sessions, test it, or keep approval in an approval queue your app owns (rule GC13-14).
+  Runtime with managed sessions, test it, or keep approval in an approval queue your app owns (rule M4-M5).
 
 ## Step 7 · Your challenge (no solution included)
 
@@ -773,7 +773,7 @@ Three changes. `make challenge` runs the lab tests plus six challenge tests; fiv
    ADK has one switch per plugin, so if the business needs user input to keep flowing, register two plugins, one
    for input (fail open) and one for tool output (fail closed); we ran that variant on ADK 2.12.0 offline and the
    tool output was blocked while the input went through. Write down which you choose, and why.
-3. **Rule GC13-18** (`checker.py`, at the `TODO`): a MEDIUM finding when `"end_user"` is missing from
+3. **Rule M4-M11** (`checker.py`, at the `TODO`): a MEDIUM finding when `"end_user"` is missing from
    `agent["observability"]["tool_log_fields"]`.
 
 ```bash
@@ -871,7 +871,7 @@ ALL TESTS PASSED (24 run)
 1. Two RAG Engine corpora (`kb-staff`, `kb-finance`) in `europe-west4`, files imported from Cloud Storage, the
    cheapest RAG Engine tier (Basic), optional CMEK.
 2. A dedicated `helpdesk-agent` service account with `roles/aiplatform.user` and `roles/modelarmor.user` only.
-3. A Model Armor template for the ADK plugin (or GC12's `helpdesk-guard`).
+3. A Model Armor template for the ADK plugin (or M3's `helpdesk-guard`).
 4. The `adk_agent` code with `TSG_MODE=cloud`: Gemini on Agent Platform, your corpora, your template.
 5. Five requests (normal, cross-user, poisoned document, write with confirmation, poisoned ticket), one setting
    changed (`TSG_SCREEN_TOOL_OUTPUT=0`), and an optional Agent Search data store with document ACLs.

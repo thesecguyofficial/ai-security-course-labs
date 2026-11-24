@@ -1,4 +1,4 @@
-# Lab GC11: deploy the TSG Helpdesk on Gemini Enterprise Agent Platform: private, least privilege, logged, CMEK
+# Lab M2: deploy the TSG Helpdesk on Gemini Enterprise Agent Platform: private, least privilege, logged, CMEK
 
 Companion to lessons **11.1 to 11.6** of *AI Security Engineer* (The Sec Guy), Google Cloud stream. About 35 to 50
 minutes, **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Google Cloud
@@ -6,19 +6,19 @@ account needed**. An optional last step deploys the hardened foundation with Ter
 cost printed first and a one-command teardown.
 
 You are still the cloud security engineer at **ExampleCo** (fictional, on the documentation domain `example.com`). Its
-TSG Helpdesk chatbot from Module 10 calls Gemini on Agent Platform (formerly Vertex AI) from project
+TSG Helpdesk chatbot from Module 1 calls Gemini on Agent Platform (formerly Vertex AI) from project
 `example-chatbot-prod`, running as the service account `chatbot-runtime`. ExampleCo has EU customers, so the data
 protection officer now requires that their tickets are processed in the EU. In one sitting you will:
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Check** | Run a checker over a twin of the Helpdesk deployment and read its 16 findings | 11.1 to 11.5 |
-| **Break** | Replay five attacks and an auditor's four questions against the Helpdesk as it runs today | 11.1, 11.2, 11.4, 11.5 |
+| **Check** | Run a checker over a twin of the Helpdesk deployment and read its 16 findings | 2.1 to 2.5 |
+| **Break** | Replay five attacks and an auditor's four questions against the Helpdesk as it runs today | 2.1, 2.2, 2.4, 2.5 |
 | **Fix** | Replay them against the hardened twin, which is what `terraform/` builds | all |
-| **Dry run** | Read a week of VPC Service Controls dry-run logs before you enforce anything | 11.2 |
+| **Dry run** | Read a week of VPC Service Controls dry-run logs before you enforce anything | 2.2 |
 | **Trap** | Watch a well-meant switch to the `global` endpoint get stopped by the network, and see the bad "fix" (opening egress) | 11.5 |
-| **Challenge** | Enforce the perimeter without locking out the analysts, write rule GC11-16, close the cache gap. No solution included | 11.2, 11.3, 11.5 |
-| **Cloud (optional)** | Deploy the hardened foundation in your own project with Terraform, check it live, tear it down | 11.6 |
+| **Challenge** | Enforce the perimeter without locking out the analysts, write rule M2-M7, close the cache gap. No solution included | 2.2, 2.3, 2.5 |
+| **Cloud (optional)** | Deploy the hardened foundation in your own project with Terraform, check it live, tear it down | 2.6 |
 
 ## Get the lab files
 
@@ -100,12 +100,12 @@ if a real-looking IP, identity or key creeps in. Nothing in the offline part con
 - Mac or Linux for the `make` shortcuts. Windows: run the `python3 ...` command shown under each step, typing `py`
   or `python` in place of `python3`.
 - Optional, Step 8 only: Terraform 1.5+, the `gcloud` CLI, and **your own** sandbox project with billing and a budget
-  (lesson 0.7 and Module 10).
+  (lesson 0.7 and Module 1).
 
 ## Step 1b · Before you check: look at each piece (about 10 minutes)
 
-New to Agent Platform or Terraform? Do this before Step 1 (lesson 11.6 calls it "Before you start"). `explore.py`
-shows each idea from lesson 11.0 ("How Agent Platform works, one idea at a time") on its own. Real output below is
+New to Agent Platform or Terraform? Do this before Step 1 (lesson 2.6 calls it "Before you start"). `explore.py`
+shows each idea from lesson 2.0 ("How Agent Platform works, one idea at a time") on its own. Real output below is
 from a fresh Linux machine.
 
 Go into the lab folder first. Every command in Steps 1 to 7 runs from there:
@@ -457,16 +457,16 @@ Real output (Linux, Python 3.13):
 
 Read it by lesson:
 
-- **11.1 identity:** a JSON key for `chatbot-runtime` (GC11-01); the summarizer VM on the Compute Engine default
-  account, which holds Editor (GC11-02, GC11-03); `chatbot-runtime` holds Agent Platform User (GC11-03); no model
-  allow-list (GC11-04); Token Creator for a whole developer group on the project (GC11-15).
-- **11.2 network:** a public IP on the Helpdesk VM and Cloud NAT for the summarizer (GC11-05), no PSC endpoint
-  (GC11-06), PGA off (GC11-07), no perimeter (GC11-08).
-- **11.3 encryption:** the tickets dataset on Google default encryption (GC11-09); caching at the default, which
-  includes durable caching at rest without CMEK (GC11-11).
-- **11.4 logging:** Data Access logs off for `aiplatform.googleapis.com` (GC11-12); request-response logging off
-  (GC11-13).
-- **11.5 residency:** the `global` endpoint, against an EU-only processing rule (GC11-14).
+- **11.1 identity:** a JSON key for `chatbot-runtime` (M2-M1); the summarizer VM on the Compute Engine default
+  account, which holds Editor (M2-M2, M2-M3); `chatbot-runtime` holds Agent Platform User (M2-M3); no model
+  allow-list (M2-M4); Token Creator for a whole developer group on the project (M2-M6).
+- **11.2 network:** a public IP on the Helpdesk VM and Cloud NAT for the summarizer (M2-M5), no PSC endpoint
+  (M2-M6), PGA off (M2-M7), no perimeter (M2-M8).
+- **11.3 encryption:** the tickets dataset on Google default encryption (M2-M9); caching at the default, which
+  includes durable caching at rest without CMEK (M2-M2).
+- **11.4 logging:** Data Access logs off for `aiplatform.googleapis.com` (M2-M3); request-response logging off
+  (M2-M4).
+- **11.5 residency:** the `global` endpoint, against an EU-only processing rule (M2-M5).
 
 ## Step 2 · Break it: attacks and an auditor
 
@@ -702,8 +702,8 @@ The auditor's questions
 
 The Helpdesk and the summarizer are down, and that's the network doing its job: the only Google hosts it reaches are
 the two EU ones, so a drift to `global` fails loudly instead of sending tickets to any region. The real run showed the
-same (lesson 11.6: `000`). Under pressure, the quickest "fix" is to open egress, and EU processing is gone. The right
-fix: point the app back at `aiplatform.eu.rep.googleapis.com`. The checker's residency rule (GC11-14) catches
+same (lesson 2.6: `000`). Under pressure, the quickest "fix" is to open egress, and EU processing is gone. The right
+fix: point the app back at `aiplatform.eu.rep.googleapis.com`. The checker's residency rule (M2-M5) catches
 `global`, but nothing tells you the change also takes the Helpdesk down. That's the challenge.
 
 ## Step 7 · Your turn: `make challenge`
@@ -763,14 +763,14 @@ FAILED (failures=3)
    `bigquery.googleapis.com`. The field names follow the Terraform provider's `google_access_context_manager_*`
    resources; `terraform/perimeter.tf` already has the same ingress rule behind `office_ranges`. Then do it for real:
    change `terraform/perimeter.tf` from `spec` to `status` only after your own dry-run week is clean.
-2. **Write GC11-16 (tests 25 and 26).** In `checker.py`, `rule_model_host_private_path()` should return one
+2. **Write M2-M7 (tests 25 and 26).** In `checker.py`, `rule_model_host_private_path()` should return one
    `MEDIUM` finding when the deployment has no internet route and nothing private reaches `app.json`'s
    `endpoint_host`: no regional endpoint targets it, and (for a host that isn't `*.rep.googleapis.com`) no PSC endpoint
    for global Google APIs or Private Google Access either. It must fire on `global-endpoint` and stay quiet on `today`
    and `hardened`. `d.regional_endpoint_for(host)` does most of the work.
 3. **Close the cache gap (test 27).** ExampleCo's policy forbids customer data at rest without its own key, and
    durable caching doesn't support CMEK. In `twin/hardened/app.json`, set `cache_config` to what the project should
-   be: `{"retention_type": "EPHEMERAL"}` (in-memory caching only) or `{"disable_cache": true}`. Lesson 11.3 has the
+   be: `{"retention_type": "EPHEMERAL"}` (in-memory caching only) or `{"disable_cache": true}`. Lesson 2.3 has the
    REST call that does it for real; Terraform's `google_vertex_ai_cache_config` can only switch all caching off.
 
 When you're done, `make challenge` prints `ALL TESTS PASSED (27 run)` and `make attack-safe` ends with
@@ -781,7 +781,7 @@ When you're done, `make challenge` prints `ALL TESTS PASSED (27 run)` and `make 
 **Want to build it piece by piece?** [`GUIDED-BUILD.md`](GUIDED-BUILD.md) does the same foundation with console clicks or
 gcloud (or this Terraform), then proves it with five tests, changes one setting, and tears it down.
 
-Do this only in **your own** sandbox project, never at work, and only after Module 10's budget and spend cap are in
+Do this only in **your own** sandbox project, never at work, and only after Module 1's budget and spend cap are in
 place. Nothing here needs an organization; the allow-list and the perimeter are skipped without one.
 
 ### Cost (estimate, checked 22 Oct 2026; prices change, so check the pages)
@@ -792,7 +792,7 @@ place. Nothing here needs an organization; the allow-list and the perimeter are 
 | Cloud KMS software key version | $0.000082192 per hour (about $0.06 a month); "Scheduled for destruction" still counts as active, default 30 days ([KMS pricing](https://cloud.google.com/kms/pricing), [destroy](https://docs.cloud.google.com/kms/docs/destroy-restore)) | about $0.06 including the 30 days after `make down` |
 | KMS cryptographic operations | $0.03 per 10,000 | well under $0.01 |
 | BigQuery | first 10 GiB storage and first 1 TiB of queries per month free ([BigQuery pricing](https://cloud.google.com/bigquery/pricing)) | $0 at lab size |
-| Cloud Logging | Data Access logs count toward Cloud Logging ingestion (Module 10: 50 GiB per project per month free) | $0 at lab size |
+| Cloud Logging | Data Access logs count toward Cloud Logging ingestion (Module 1: 50 GiB per project per month free) | $0 at lab size |
 | Private DNS zone, firewall rules, service accounts, IAM | Cloud DNS charges per zone; see Cloud DNS pricing | not estimated here: check |
 | Gemini calls | a handful of short `generateContent` calls; see Agent Platform pricing for your region | fractions of a cent |
 | Optional test VM (`create_test_vm = true`) | e2-small, billed per second at your region's rate | not included: delete it after the test |
@@ -819,9 +819,9 @@ terraform/scripts/request_response_logging.sh on YOUR_PROJECT_ID eu
 - `make up`: applies the saved plan
 
 `make plan` runs the checker on your real plan with `twin/hardened/app.json`. Without an organization your plan has
-no allow-list and no perimeter, so the checker reports GC11-04 and GC11-08 (both need an organization to fix; they
+no allow-list and no perimeter, so the checker reports M2-M4 and M2-M8 (both need an organization to fix; they
 fire because `twin/requirements.json` says `"has_organization": true`, and setting that to `false` in your own copy
-silences them), and GC11-11 until you set the cache.
+silences them), and M2-M2 until you set the cache.
 
 To prove the private path, set `create_test_vm = true` and apply again. The VM has no external IP; at boot it calls
 Gemini through the PSC endpoint as `chatbot-runtime` and tries to reach `https://example.com`. Read the result:
@@ -866,11 +866,11 @@ provider version renames an argument, `make plan` tells you; please open an issu
   Step 8.
 - Tests fail after you edited a twin file: `python3 -m json.tool twin/hardened/plan.json` finds JSON typos.
 - The smoke test shows HTTP 403: Data Access logs for `aiplatform.googleapis.com` show an IAM denial; if you enforced a
-  perimeter, look in the Policy Denied logs (lesson 11.2) too.
+  perimeter, look in the Policy Denied logs (lesson 2.2) too.
 
 ## What to write in your findings notebook (lesson 0.5)
 
-- Which GC11 findings would your own AI project have today? Run `checker.py --plan` on a real plan.
+- Which M2 findings would your own AI project have today? Run `checker.py --plan` on a real plan.
 - Is `aiplatform.googleapis.com` in a perimeter, and who would a dry run show you'd lock out?
 - What location does each AI feature call, and who approved it?
 

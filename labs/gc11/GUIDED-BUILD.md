@@ -1,10 +1,10 @@
-# GC11 guided build: the hardened Helpdesk model access in your own project (least privilege, private path, CMEK, logs, region)
+# M2 guided build: the hardened Helpdesk model access in your own project (least privilege, private path, CMEK, logs, region)
 
 The offline lab (README Steps 1 to 7) checks a twin at $0, and README Step 8 deploys the Terraform in two commands.
 This guide builds the same foundation **piece by piece**, so you see every control go in and then prove it works:
 a predict-only identity with no keys, a VM with no internet route that reaches Gemini through a Private Service
 Connect endpoint, a customer-managed key on the data, Data Access and request-response logging, and a pinned
-EU multi-region endpoint. About 90 minutes in **your own** sandbox project (the GC10 project is fine). Cost: cents, plus a
+EU multi-region endpoint. About 90 minutes in **your own** sandbox project (the M1 project is fine). Cost: cents, plus a
 small VM while it runs (table at the end). Teardown is the last section: do it the same day.
 
 > **Tested for real on 12 November 2026** (`europe-west4`, a Free Trial project with no organization): `cloud/deploy.sh`
@@ -26,8 +26,8 @@ match the Terraform, so you can switch paths at any point. The model is called i
 
 ## Step 0 · Before you start (10 minutes)
 
-1. **Your own sandbox project**, never a work project. GC10's **budget alert and spend cap** in place first
-   (GC10 guided build Step 0 and 2f).
+1. **Your own sandbox project**, never a work project. M1's **budget alert and spend cap** in place first
+   (M1 guided build Step 0 and 2f).
 2. **Pick one build path and stay on it:** console (Path A), gcloud (Path B) or Terraform (Path C, README Step 8:
    `make cost`, `make plan`, `make up` with `create_test_vm = true`). Path C users skip to Step 2.
 3. **APIs** (the same list as `terraform/identity.tf`):
@@ -39,8 +39,8 @@ match the Terraform, so you can switch paths at any point. The model is called i
    ```
 
 4. **Permissions.** As project owner you can build everything except the organization pieces. The model allow-list
-   needs Organization Policy Administrator on an organization (lesson 10.3), and the VPC Service Controls perimeter
-   needs an organization and an access policy (lesson 11.2). Without one, skip 1f; the offline `make dryrun-report`
+   needs Organization Policy Administrator on an organization (lesson 1.3), and the VPC Service Controls perimeter
+   needs an organization and an access policy (lesson 2.2). Without one, skip 1f; the offline `make dryrun-report`
    and `make challenge` cover it.
 
 ## Step 1 · Build it from zero (45 minutes)
@@ -48,7 +48,7 @@ match the Terraform, so you can switch paths at any point. The model is called i
 Each part shows the console path, then the gcloud commands. Labels come from the Google page linked in each part;
 where we couldn't check a label we say "(label may differ slightly)".
 
-### 1a. Identity: two service accounts, no keys, a predict-only role (lesson 11.1)
+### 1a. Identity: two service accounts, no keys, a predict-only role (lesson 2.1)
 
 **Console.** **IAM & Admin** > **Service Accounts** > **Create service account**: `chatbot-runtime`, then
 `ticket-summariser`, no roles yet, **Create and close** (the page fills **Service account ID** from the name: clear it and
@@ -72,14 +72,14 @@ for SA in chatbot-runtime ticket-summariser; do
 done
 ```
 
-No `keys create` anywhere: the VM gets credentials from its attached account (lesson 11.1, "the preferred method for
+No `keys create` anywhere: the VM gets credentials from its attached account (lesson 2.1, "the preferred method for
 finding credentials in a production environment on Google Cloud").
 
-### 1b. Network: no internet route, one private door to the EU model host (lessons 11.2 and 11.5)
+### 1b. Network: no internet route, one private door to the EU model host (lessons 2.2 and 2.5)
 
 First, the fact that shapes this part. In our run on 12 November 2026, `gemini-3.1-flash-lite` answered only on the
 `global`, `eu` and `us` endpoints; every single region, `europe-west4` included, returned `404` "Publisher model ...
-was not found". Lesson 11.5 warned about this ("the newest model is only global or multi-region"). So the Helpdesk
+was not found". Lesson 2.5 warned about this ("the newest model is only global or multi-region"). So the Helpdesk
 calls the `eu` multi-region: host `aiplatform.eu.rep.googleapis.com`, location `eu`. Check your own model with
 `bash cloud/deploy.sh models`: it tries each candidate model once on **one** endpoint and prints the HTTP code. That
 endpoint is your region's (`europe-west4` by default), so to compare run it once per endpoint:
@@ -94,7 +94,7 @@ GC11_REGION=us bash cloud/deploy.sh models
 Ours: `404` for every model on `europe-west4`, `200` for `gemini-3.1-flash-lite` on `eu`, `us` and `global`.
 
 That host ends in `rep.googleapis.com`, which Private Google Access doesn't support and the `all-apis` bundle
-excludes (lesson 11.2). So instead of a PSC endpoint for global Google APIs, this build makes a **regional endpoint**:
+excludes (lesson 2.2). So instead of a PSC endpoint for global Google APIs, this build makes a **regional endpoint**:
 a PSC endpoint for exactly one Google host, with an address in your own subnet. We tried the global kind first: with
 the `vpc-sc` bundle in a project with no organization, the VM got `503` "VPC network mapping unavailable".
 
@@ -145,7 +145,7 @@ DNS name `aiplatform.eu.rep.googleapis.com`, network `helpdesk-vpc`; in the zone
 **Egress**; **Allow**; destination `10.10.0.10/32`; TCP `443`). Each form's **Equivalent command line** matched the
 gcloud above.
 
-### 1c. Encryption: your own key on the data, and the cache (lesson 11.3)
+### 1c. Encryption: your own key on the data, and the cache (lesson 2.3)
 
 **Console.** **Security** > **Key Management** > **Create key ring** `helpdesk-eu`, location type **Region**, your
 region; then **Create key** `helpdesk-data`, purpose symmetric encrypt/decrypt, rotation period 90 days (labels may
@@ -173,7 +173,7 @@ bq mk --dataset --location=europe-west4 --default_kms_key="$KEY" PROJECT_ID:help
 bq mk --dataset --location=europe-west4 --default_kms_key="$KEY" PROJECT_ID:ai_logs
 ```
 
-- `gcloud kms keyrings create helpdesk-eu --location=europe-west4`: key rings can't be deleted: lesson 11.3. If an
+- `gcloud kms keyrings create helpdesk-eu --location=europe-west4`: key rings can't be deleted: lesson 2.3. If an
   earlier build left `helpdesk-eu` and `helpdesk-data` in this project, both `create` commands answer "already
   exists": skip them and give the key a fresh version with `gcloud kms keys versions create --key=helpdesk-data
   --keyring=helpdesk-eu --location=europe-west4 --primary`
@@ -191,8 +191,8 @@ bq query --use_legacy_sql=false \
  'GRANT `roles/bigquery.dataEditor` ON SCHEMA `PROJECT_ID.helpdesk_tickets` TO "serviceAccount:ticket-summariser@PROJECT_ID.iam.gserviceaccount.com"'
 ```
 
-Nobody gets `ai_logs` except your incident readers (lesson 11.4). The cache: in-memory only, the challenge's answer
-(GC11-11). No console page in the sources we read, so it's the REST call from lesson 11.3:
+Nobody gets `ai_logs` except your incident readers (lesson 2.4). The cache: in-memory only, the challenge's answer
+(M2-M2). No console page in the sources we read, so it's the REST call from lesson 2.3:
 
 ```bash
 curl -s -X PATCH -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" \
@@ -200,12 +200,12 @@ curl -s -X PATCH -H "Authorization: Bearer $(gcloud auth print-access-token)" -H
   -d '{"name": "projects/PROJECT_ID/cacheConfig", "disableCache": false, "retentionConfig": {"retentionType": "EPHEMERAL"}}'
 ```
 
-### 1d. Logging: who called, and what was said (lesson 11.4)
+### 1d. Logging: who called, and what was said (lesson 2.4)
 
 **Data Access logs.** Console, from Google's
 [configure Data Access audit logs](https://docs.cloud.google.com/logging/docs/audit/configure-data-access) page:
 **IAM & Admin** > **Audit Logs**, select the Agent Platform API row (it may still say Vertex AI API), **Permission
-types**, tick **Data Read** and **Data Write**, **Save**. gcloud: as in GC10 Step 2b, add to the policy file
+types**, tick **Data Read** and **Data Write**, **Save**. gcloud: as in M1 Step 2b, add to the policy file
 
 ```json
 "auditConfigs": [{"service": "aiplatform.googleapis.com",
@@ -214,7 +214,7 @@ types**, tick **Data Read** and **Data Write**, **Save**. gcloud: as in GC10 Ste
 
 **Request-response logging.** Google's page marks it **Preview** and documents only the SDK and REST, no console.
 Our script sends `setPublisherModelConfig` (v1beta1) with `samplingRate` 1 into
-`bq://PROJECT_ID.ai_logs.request_response_logging`; "the Dataset must exist and table must not exist" (lesson 11.4):
+`bq://PROJECT_ID.ai_logs.request_response_logging`; "the Dataset must exist and table must not exist" (lesson 2.4):
 
 ```bash
 terraform/scripts/request_response_logging.sh on PROJECT_ID eu
@@ -236,17 +236,17 @@ Our response, from `on` (trimmed):
 It's an operation, not the final state, and Google says "Logging configurations can take a few minutes to take
 effect". Run `show` a few minutes later: you want `loggingConfig` with `"enabled": true`.
 
-### 1e. Region pinning (lesson 11.5)
+### 1e. Region pinning (lesson 2.5)
 
 The pin has two halves. The **host and location your code calls**: `aiplatform.eu.rep.googleapis.com` with
 `locations/eu`, never `aiplatform.googleapis.com` with `locations/global`. In this build it lives in the VM's startup
 script (1g); in a real app it's one reviewed setting, like the twin's `app.json`. And the **network** from 1b: the
 only host the VM can reach is the EU one, so a drift to global fails loudly. The KMS key ring and datasets in 1c are
 in `europe-west4`, so data at rest stays there too. With an organization, the allow-list
-(`publishers/google/models/gemini-3.1-flash-lite:predict`) is `terraform/orgpolicy.tf`, or the GC10 guided build 2g
+(`publishers/google/models/gemini-3.1-flash-lite:predict`) is `terraform/orgpolicy.tf`, or the M1 guided build 2g
 steps on your folder.
 
-### 1f. Only with an organization: the perimeter, in dry run (lesson 11.2)
+### 1f. Only with an organization: the perimeter, in dry run (lesson 2.2)
 
 ```bash
 gcloud access-context-manager perimeters dry-run create helpdesk --policy=ACCESS_POLICY_ID \
@@ -308,7 +308,7 @@ resolve line is empty or the call hangs, check the DNS record and the allow rule
 
 ### Test 2 · The workload identity can't do more than predict
 
-Lesson 11.1's A2: a stolen `chatbot-runtime` credential shouldn't be able to deploy anything. Give **yourself** Token
+Lesson 2.1's A2: a stolen `chatbot-runtime` credential shouldn't be able to deploy anything. Give **yourself** Token
 Creator on that one account (never on the project), try to create an endpoint as it, then take the grant away. Use
 your own Google account email for `YOUR_EMAIL`:
 
@@ -329,7 +329,7 @@ ERROR: (gcloud.ai.endpoints.create) PERMISSION_DENIED: Permission 'aiplatform.en
 ```
 
 Read it: the permission named is `aiplatform.endpoints.create`, which Agent Platform User would have granted
-(lesson 10.3) and your custom role doesn't. Keep the Token Creator grant for Test 3, then remove it.
+(lesson 1.3) and your custom role doesn't. Keep the Token Creator grant for Test 3, then remove it.
 
 ### Test 3 · The same identity, over the public path
 
@@ -344,7 +344,7 @@ gcloud iam service-accounts remove-iam-policy-binding "$SA" --member="user:YOUR_
   --role="roles/iam.serviceAccountTokenCreator"
 ```
 
-Without a perimeter, expect `200` (ours: `200`). That's the honest result, and the point of lesson 11.2: the private
+Without a perimeter, expect `200` (ours: `200`). That's the honest result, and the point of lesson 2.2: the private
 path keeps the **VM** off the internet, but a stolen token still works from anywhere until VPC Service Controls checks where the call
 comes from. With an **enforced** perimeter (1f, after the dry run), the same call is refused, and the record lands in
 the Policy Denied log:
@@ -400,8 +400,8 @@ Our response (12 November 2026), the VM's call, trimmed to the fields that matte
 Read it: `callerIp` isn't an address at all. For our VM with no external IP it said `gce-internal-ip`, not the
 `10.10.0.x` address Google's AuditLog reference led us to expect, so search for that string. Test 3's entry shows
 Cloud Shell's public address and a `serviceAccountDelegationInfo` naming you: that's what a stolen token used from
-outside looks like (lesson 11.1, "the workload's account calling from an address that isn't the workload's").
-`resourceName` names `locations/eu`: your residency evidence (lesson 11.5).
+outside looks like (lesson 2.1, "the workload's account calling from an address that isn't the workload's").
+`resourceName` names `locations/eu`: your residency evidence (lesson 2.5).
 
 **What was said** (request-response log, a few minutes after Test 1; Google says logging config "can take a few
 minutes to take effect", so if the table is empty, reset the VM with `gcloud compute instances reset helpdesk-vm
@@ -420,11 +420,11 @@ The column names are from Google's request-response logging page (`endpoint`, `d
 `TO_JSON_STRING`. Ours had a row about a minute after logging went on: `model` `publishers/google/models/gemini-3.1-flash-lite`,
 `api_method` `GenerateContent`, and the VM's "Reply with the single word: private" in `full_request`. The dataset is
 in `europe-west4` and the model is called in `eu`; that combination worked. That row is customer
-data in your own dataset, under your key: lesson 11.4's trade-off.
+data in your own dataset, under your key: lesson 2.4's trade-off.
 
 ### Test 5 · Your key, switched off
 
-Lesson 11.3: "if you disable or destroy the CMEK, that data can't be accessed". Disable the key version and query
+Lesson 2.3: "if you disable or destroy the CMEK, that data can't be accessed". Disable the key version and query
 `ai_logs` again:
 
 ```bash
@@ -456,7 +456,7 @@ expect a gap and check the table.
 
 ## Step 3 · Change one setting and re-run: the residency trap
 
-Lesson 11.5's trap, for real. A developer moves the Helpdesk to the global endpoint, because every SDK sample uses it
+Lesson 2.5's trap, for real. A developer moves the Helpdesk to the global endpoint, because every SDK sample uses it
 and it has the newest models first. Change only the host and location in the VM's script and restart it:
 
 ```bash
@@ -522,7 +522,7 @@ terraform/scripts/check_live.sh PROJECT_ID europe-west4
 | Cloud KMS key version | $0.000082192 per hour; versions scheduled for destruction count as active for the default 30 days ([KMS pricing](https://cloud.google.com/kms/pricing)) | about $0.06 including the 30 days |
 | KMS operations | $0.03 per 10,000 | well under $0.01 |
 | BigQuery | first 10 GiB storage and first 1 TiB of queries per month free ([pricing](https://cloud.google.com/bigquery/pricing)) | $0 |
-| Cloud Logging | first 50 GiB per project per month free (GC10) | $0 |
+| Cloud Logging | first 50 GiB per project per month free (M1) | $0 |
 | Gemini calls | a handful of very short calls | fractions of a cent |
 | `e2-small` VM and its boot disk | billed per second at your region's rate | **not estimated here**: we couldn't open Compute Engine's price page; check it, and delete the VM after Step 3 |
 
@@ -568,6 +568,6 @@ Run the `aiplatform-eu-ip` delete only if the console reserved that address for 
 
 If the key rotated while you worked, destroy every enabled version (`gcloud kms keys versions list --key=helpdesk-data
 --keyring=helpdesk-eu --location=europe-west4`). The key ring and key stay forever ("Key rings can't be deleted",
-lesson 11.3); a destroyed key costs nothing once the 30 days pass. Leave Data Access logs on if you'll do GC12 here.
+lesson 2.3); a destroyed key costs nothing once the 30 days pass. Leave Data Access logs on if you'll do M3 here.
 Delete `smoke.sh`, `smoke-global.sh` and `my-audit.json`. If the project was only for this course, `gcloud projects delete
 PROJECT_ID` is the cleanest end.

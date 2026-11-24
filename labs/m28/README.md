@@ -1,7 +1,7 @@
-# Lab M28.4: invocation logs, a redaction pipeline, Macie, two KMS keys, retention
+# Lab M21.4: invocation logs, a redaction pipeline, Macie, two KMS keys, retention
 
-Companion to lesson **28.4** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track), with pieces of 28.1
-(vectors in logs) and 28.3 (deletion). About 45 minutes, $0, all on your laptop, all on fake data. Nothing leaves this
+Companion to lesson **21.4** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track), with pieces of 21.1
+(vectors in logs) and 21.3 (deletion). About 45 minutes, $0, all on your laptop, all on fake data. Nothing leaves this
 folder: no network after setup (setup installs one package), no AWS account, no model.
 
 The TSG Helpdesk's model calls go through Amazon Bedrock with **model invocation logging** turned on, so every prompt
@@ -114,7 +114,7 @@ opens no connection and calls no AWS service. The toy encoder and the toy langua
 neural networks: the ideas carry over, the exact numbers don't. Windows: `.venv\Scripts\python explore.py ...`. The output below
 is from a fresh Ubuntu machine, checked again on 15 November 2026 (Linux, Python 3.13).
 
-**1. One model call, as invocation logging stores it (lesson 28.4).** Bedrock's model invocation logging is off by
+**1. One model call, as invocation logging stores it (lesson 21.4).** Bedrock's model invocation logging is off by
 default; once on, it keeps the prompt and the answer word for word, with who asked and when:
 
 ```bash
@@ -144,7 +144,7 @@ Stored as one object in the raw bucket:
 So the prompt and the answer are kept word for word, with who asked and when.
 ```
 
-**2. A logged vector (lesson 28.1).** With the Embedding modality ticked, an embedding call's record holds the input
+**2. A logged vector (lesson 21.1).** With the Embedding modality ticked, an embedding call's record holds the input
 text and its vector side by side:
 
 ```bash
@@ -173,7 +173,7 @@ The lab's vectors are random placeholders (no model runs). A real embedding mode
 text's meaning, which is why `explore.py invert` matters.
 ```
 
-**3. An encoder turns text into numbers (lesson 28.1).** A toy one: each word adds +1 or -1 in four of 256 places.
+**3. An encoder turns text into numbers (lesson 21.1).** A toy one: each word adds +1 or -1 in four of 256 places.
 Texts that share words get numbers that point the same way:
 
 ```bash
@@ -200,7 +200,7 @@ A and B share words (parcel, arrived, damaged, refund, order), so their numbers 
 A trained encoder would also match words that mean the same thing, like 'broken' and 'damaged'.
 ```
 
-**4. Turning a vector back into words (lesson 28.1).** The attacker has one vector and a word list, and keeps the
+**4. Turning a vector back into words (lesson 21.1).** The attacker has one vector and a word list, and keeps the
 guess whose vector comes closest. Against this toy the whole bag of words comes back:
 
 ```bash
@@ -230,7 +230,7 @@ The toy keeps no word order, so the words come back as a bag. Real attacks rebui
 Vec2Text (2023) recovered 92% of 32-token inputs exactly, from real embedding models.
 ```
 
-**5. Training, and memorization (lesson 28.2).** A toy language model counts which word followed every run of one to
+**5. Training, and memorization (lesson 21.2).** A toy language model counts which word followed every run of one to
 three words. The card number it saw once comes back word for word:
 
 ```bash
@@ -252,7 +252,7 @@ That's memorization. Real models memorize far less of what they see, but not not
 names, phone numbers and e-mail addresses out of GPT-2.
 ```
 
-**6. Differential privacy: noise, epsilon and the unit (lesson 28.2).** The same count, answered with Laplace noise.
+**6. Differential privacy: noise, epsilon and the unit (lesson 21.2).** The same count, answered with Laplace noise.
 Smaller epsilon, more noise. Protecting one PERSON instead of one record needs noise for all of her records:
 
 ```bash
@@ -281,7 +281,7 @@ And e is a budget: three questions at e = 1 each spend e = 3 in total (privacy l
 Negative answers are normal for noisy counts: the noise doesn't know a count can't go below zero. The seed is fixed,
 so you get the same numbers.
 
-**7. Hide it or remove it (lesson 28.3).** An output filter hides the card number; retraining without the record
+**7. Hide it or remove it (lesson 21.3).** An output filter hides the card number; retraining without the record
 removes it:
 
 ```bash
@@ -306,7 +306,7 @@ Retraining is easy here: 16 short texts. For a large model it costs a full train
 fine-tune the model to stop saying it instead. Lesson 28.3 shows how often that only hides it.
 ```
 
-**8. Which detector finds what (lesson 28.4).** Macie's managed identifiers (three of them, re-implemented), the first
+**8. Which detector finds what (lesson 21.4).** Macie's managed identifiers (three of them, re-implemented), the first
 draft's two patterns, and the hardened setup's custom identifiers plus the customer list:
 
 ```bash
@@ -339,7 +339,7 @@ Macie has no managed identifier for e-mail addresses: add your own (a custom dat
 The card passes the Luhn check, with the word 'card' nearby. The draft's patterns miss spaces and capitals.
 ```
 
-**9. Labels or keyed tokens (lesson 28.4).** Two ways to replace what the detectors find:
+**9. Labels or keyed tokens (lesson 21.4).** Two ways to replace what the detectors find:
 
 ```bash
 .venv/bin/python explore.py redact
@@ -362,7 +362,7 @@ The e-mail in c01 and the capitals in c12 get the SAME token: an analyst sees on
 not who. Without the key the token can't be turned back. (This demo uses a fixed key; the lab's is random.)
 ```
 
-**10. Envelope encryption and the key policy (lesson 28.4).** One record encrypted with its own data key, the data
+**10. Envelope encryption and the key policy (lesson 21.4).** One record encrypted with its own data key, the data
 key wrapped by the KMS key, and who may ask KMS to unwrap it:
 
 ```bash
@@ -604,7 +604,7 @@ Q3  (not answered yet: challenge 3, write find_raw_key_readers() in hunt.py)
 
 The fixture (`data/hunt-cloudtrail.jsonl`) is invented and uses the field names of a real CloudTrail KMS event. Two
 lines in Q1 should bother you. Someone in analytics tried the raw key three times. And a training role read four raw
-records late in the evening: somebody gave it access, and lesson 28.2 says training data should come from the
+records late in the evening: somebody gave it access, and lesson 21.2 says training data should come from the
 redacted copy. Q3 turns that into a check you can schedule.
 
 In a real account, add one more question to this hunt: who called `PutKeyPolicy` or `CreateGrant` on the raw key?
@@ -626,12 +626,12 @@ ALL TESTS PASSED (20 run)
 **Challenge** (`make challenge`, Windows `.venv\Scripts\python run_tests.py --challenge`: 4 of 24 tests fail until
 you finish; no solution included):
 
-1. **28.4:** a loyalty-card number (`TSG-LOY-` and 8 digits) appears in a new call. Add ONE custom data identifier
+1. **21.4:** a loyalty-card number (`TSG-LOY-` and 8 digits) appears in a new call. Add ONE custom data identifier
    named `TSG_LOYALTY_CARD` to `setups/hardened/identifiers.json` and its name to the Macie job in
    `setups/hardened/pipeline.json`. One definition, two uses. Check with `.venv/bin/python pipeline.py hardened --challenge`.
-2. **28.3:** write `forget()` in `forget.py`: one customer's erasure request across both buckets, every version, raw
+2. **21.3:** write `forget()` in `forget.py`: one customer's erasure request across both buckets, every version, raw
    values and tokens. Then `.venv/bin/python pipeline.py hardened && .venv/bin/python forget.py TSG-CUST-104233`.
-3. **28.4:** write `find_raw_key_readers()` in `hunt.py`: who outside the expected list called `Decrypt` on the raw
+3. **21.4:** write `find_raw_key_readers()` in `hunt.py`: who outside the expected list called `Decrypt` on the raw
    key, allowed or refused.
 
 ```output

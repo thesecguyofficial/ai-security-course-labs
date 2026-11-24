@@ -1,4 +1,4 @@
-# Lab M15: a private endpoint for an open model on SageMaker AI
+# Lab M6: a private endpoint for an open model on SageMaker AI
 
 Companion to lessons **15.0 to 15.5** of *AI Security Engineer* (The Sec Guy). About 70 minutes for Steps 1 to 8
 (plus about 10 for the optional Step 1b), **$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no model download. Step 9 is optional
@@ -14,13 +14,13 @@ summaries work". That is the **first draft**. Your job: break it, then prove the
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Check** | Review the first draft: 35 findings, 19 HIGH | 15.1 to 15.4 |
-| **Break** | 15 attacks and 6 normal requests: 15 of 15 attacks work, and every normal request works too | 15.2, 15.3 |
-| **Files** | Scan the model files: a pickle-based weights file vs safetensors, and the hashes the registry recorded | 15.3 |
-| **Harden** | The same suite against the hardened setup: 13 of 15 stopped, 6 of 6 normal requests still work | 15.2, 15.3 |
-| **Hunt** | Investigate a morning of CloudTrail records | 15.4 |
+| **Check** | Review the first draft: 35 findings, 19 HIGH | 6.1 to 6.4 |
+| **Break** | 15 attacks and 6 normal requests: 15 of 15 attacks work, and every normal request works too | 6.2, 6.3 |
+| **Files** | Scan the model files: a pickle-based weights file vs safetensors, and the hashes the registry recorded | 6.3 |
+| **Harden** | The same suite against the hardened setup: 13 of 15 stopped, 6 of 6 normal requests still work | 6.2, 6.3 |
+| **Hunt** | Investigate a morning of CloudTrail records | 6.4 |
 | **Prove** | `make test`: 20 tests | 15.5 |
-| **Challenge** | An SCP, an approval gate, a hunt query. No solution included | 15.2, 15.3, 15.4 |
+| **Challenge** | An SCP, an approval gate, a hunt query. No solution included | 6.2, 6.3, 6.4 |
 | **Cloud (optional, costs money)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): a private endpoint for an open model, from zero (CLI, plus Studio console clicks), five requests, one setting changed, auto-teardown and teardown | 15.2 to 15.4 |
 
 ## Get the lab files
@@ -78,7 +78,7 @@ cd labs/m15
 
 ## Step 1b · Before you attack: look at each piece (about 10 minutes)
 
-New to SageMaker AI? Do this before Step 1 (lesson 15.5 and its videos call it Step 1b). `explore.py` shows AnyCompany's
+New to SageMaker AI? Do this before Step 1 (lesson 6.5 and its videos call it Step 1b). `explore.py` shows AnyCompany's
 setup one piece at a time. Real output below is from a fresh Ubuntu machine.
 
 **What it really runs.** Nothing that changes anything: `explore.py` reads the JSON files in `setups/` and
@@ -468,7 +468,7 @@ make check-hardened
 make hardened
 ```
 
-- `make check-hardened`: same as `python3 checker.py hardened`. 0 HIGH, 2 MEDIUM (M15-22, M15-23: the challenge)
+- `make check-hardened`: same as `python3 checker.py hardened`. 0 HIGH, 2 MEDIUM (M6-M15, M6-M16: the challenge)
 - `make hardened`: same as `python3 evaluate.py hardened`
 
 ```output
@@ -493,11 +493,11 @@ Which change stopped which attack:
 | Attack | Stopped by (hardened file) | Lesson |
 |---|---|---|
 | A1 pickle weights | `registry.json` version 2 is safetensors only; `model.json` deploys that version | 15.3 |
-| A2 artifact swap | `iam.json` bucket policy: only `tsg-ci-deployer` writes `tsg-summariser/*`; `app.json` `deploy_verifies_hashes` | 15.3 |
+| A2 artifact swap | `iam.json` bucket policy: only `tsg-ci-deployer` writes `tsg-summariser/*`; `app.json` `deploy_verifies_hashes` | 6.3 |
 | A3 notebook to production | `iam.json`: data scientists act only on `ds-*` resources; the pipeline deploys | 15.3 |
 | A4 self-approval | `iam.json`: an explicit Deny on `UpdateModelPackage` for data scientists; only `tsg-model-approver` approves | 15.3 |
 | A5 data out of the container | `model.json` `EnableNetworkIsolation: true` (and no internet route in `network.json`) | 15.2 |
-| A6 container credentials | the same: no credentials in an isolated container; the execution role is scoped anyway | 15.2 |
+| A6 container credentials | the same: no credentials in an isolated container; the execution role is scoped anyway | 6.2 |
 | A7 stolen app keys | `iam.json`: the app may invoke only with `aws:SourceVpce` = the runtime VPC endpoint | 15.3 |
 | A8 outsider through the VPC endpoint | `iam.json` `runtime_endpoint_policy`: this account, this endpoint | 15.3 |
 | A9 SSM shell | `endpoint-config.json`: no `EnableSSMAccess`; with isolation on, SSM can't start anyway | 15.3 |
@@ -537,16 +537,16 @@ you see who called and from where, never the prompt. The records use CloudTrail'
 
 Each of these takes one edit. Run `make check-hardened` and `make hardened` after each, then undo it with `git checkout setups/`.
 
-1. In `setups/hardened/model.json`, set `"EnableNetworkIsolation": false`. M15-03 is HIGH, but A5 still says blocked:
+1. In `setups/hardened/model.json`, set `"EnableNetworkIsolation": false`. M6-M3 is HIGH, but A5 still says blocked:
    the VPC has no route out. Now add `"nat"` to the routes of the two app subnets in `network.json`
    (`subnet-0a1b2c3d4e5f60011` and `...12`). A5 comes back. A6 stays blocked only because the execution role is scoped.
 2. In `setups/hardened/network.json`, set `"s3_gateway_endpoint": null`. No attack comes back, but **N1 and N6 break**:
    the endpoint can't download its model. AWS: models in a VPC without internet access "can't connect to the Amazon S3
    buckets that contain your data unless you create a VPC endpoint that allows access"
    ([AWS](https://docs.aws.amazon.com/sagemaker/latest/dg/host-vpc.html)).
-3. In `setups/hardened/iam.json`, set `"runtime_endpoint_policy": null`. A8 comes back (M15-15 HIGH).
+3. In `setups/hardened/iam.json`, set `"runtime_endpoint_policy": null`. A8 comes back (M6-M6 HIGH).
 4. In `setups/hardened/registry.json`, version 2, delete `ModelDataSource` and add `"HF_MODEL_ID": "Qwen/Qwen3-0.6B"`
-   to its `Environment` (the container would download the model from the Hub at start). M15-19 is HIGH, and N1 and N6
+   to its `Environment` (the container would download the model from the Hub at start). M6-M12 is HIGH, and N1 and N6
    break: an isolated container can't reach the Hub. Network isolation forces you to bring the files yourself,
    through S3, where you can scan and hash them.
 

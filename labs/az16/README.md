@@ -1,4 +1,4 @@
-# Lab AZ16: build the detections, run the attack simulator, catch it, write the incident report
+# Lab M7: build the detections, run the attack simulator, catch it, write the incident report
 
 Companion to lessons **16.0 to 16.6** of the Azure stream of *AI Security Engineer* (The Sec Guy). About 75 minutes
 for Steps 1 to 9, **$0**, all on your laptop: **Python 3.11+ only**, no packages, no Azure subscription, no network.
@@ -7,7 +7,7 @@ user context, changes one setting, adds an alert rule for every AI alert, and en
 subscription.
 
 You are the cloud security engineer at **Contoso** (fictional; Contoso is the placeholder name Microsoft uses in its
-documentation). Over Modules 10 to 14 the company built a customer support bot on Microsoft Foundry (formerly Azure AI
+documentation). Over Modules 1 to 5 the company built a customer support bot on Microsoft Foundry (formerly Azure AI
 Foundry) behind an API Management AI gateway, a staff helpdesk agent with a Foundry toolbox, and a knowledge base in
 Azure AI Search. On **20 October 2026** five things went wrong on the same day. The SOC caught one of them. Your job:
 find out why, build the detections and the logging that catch all five, and write the incident report for the
@@ -15,16 +15,16 @@ expensive one.
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Simulate** | One day of telemetry, normal work plus five incidents, for two logging setups | 16.0, 16.1 |
-| **Old SOC** | The SOC's three rules on the old logs: 1 of 5 caught, 1 false alarm | 16.0, 16.2 |
-| **Old rules, new logs** | Still 1 of 5: a High-only Defender rule drops 6 of the 8 AI alerts | 16.2 |
-| **New rules, old logs** | 1 of 5: you can't detect what you didn't log | 16.1 |
-| **Both** | Rules D01 to D10 on the new logs: 3 of 5 caught and named, 2 seen but not named, 0 false alarms | 16.2, 16.4 |
-| **Inventory** | Resource Graph, Defender CSPM's AI posture, your own exposure check, and what isn't approved | 16.3 |
-| **Posture** | Five built-in Azure Policy definitions for AI services, plus five checks you have to write | 16.4 |
-| **Report** | Pivot on an entity, find the tokens nobody logged, read a worked incident report | 16.5 |
+| **Simulate** | One day of telemetry, normal work plus five incidents, for two logging setups | 7.0, 7.1 |
+| **Old SOC** | The SOC's three rules on the old logs: 1 of 5 caught, 1 false alarm | 7.0, 7.2 |
+| **Old rules, new logs** | Still 1 of 5: a High-only Defender rule drops 6 of the 8 AI alerts | 7.2 |
+| **New rules, old logs** | 1 of 5: you can't detect what you didn't log | 7.1 |
+| **Both** | Rules D01 to D10 on the new logs: 3 of 5 caught and named, 2 seen but not named, 0 false alarms | 7.2, 7.4 |
+| **Inventory** | Resource Graph, Defender CSPM's AI posture, your own exposure check, and what isn't approved | 7.3 |
+| **Posture** | Five built-in Azure Policy definitions for AI services, plus five checks you have to write | 7.4 |
+| **Report** | Pivot on an entity, find the tokens nobody logged, read a worked incident report | 7.5 |
 | **Prove** | `make test`: 18 tests | 16.6 |
-| **Challenge** | Two detections and your own incident report. No solution included | 16.4, 16.5 |
+| **Challenge** | Two detections and your own incident report. No solution included | 7.4, 7.5 |
 | **Cloud (optional)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): portal and CLI from zero, four requests, one setting changed, cost, teardown | 16.1 to 16.4 |
 
 ## Get the lab files
@@ -60,7 +60,7 @@ cd labs/az16
 | `explore.py` | **Read-only helper** (Step 1b): one idea at a time, from one day's log rows, alerts and incidents to a playbook. It builds the day in memory, sends nothing and writes nothing |
 | `data/vnet-flow-logs.json`, `data/dns-query-logs.jsonl` | **Illustrative** virtual network flow log and DNS query log lines in Microsoft's documented shapes, for `explore.py flow` and `explore.py dns` (no other file reads them) |
 | `simulate.py` | The **attack simulator**: 20 Oct 2026 at Contoso, normal work plus five incidents (S1 to S5), written as the rows each logging setup would really collect. It replays a scripted day; it never calls Azure |
-| `setups/first-draft.json`, `setups/hardened.json` | What each setup collects. First draft: the Activity log, the gateway log and a plain web log. Hardened: lesson 16.1's list (Foundry `RequestResponse` logs, the gateway's LLM log, Defender for AI services with user context, agent traces, blob logs, the agent pipeline's change log, an app log with identities) |
+| `setups/first-draft.json`, `setups/hardened.json` | What each setup collects. First draft: the Activity log, the gateway log and a plain web log. Hardened: lesson 7.1's list (Foundry `RequestResponse` logs, the gateway's LLM log, Defender for AI services with user context, agent traces, blob logs, the agent pipeline's change log, an app log with identities) |
 | `detect.py` | Two rule packs: `soc-v1` (three rules a SOC often starts with) and `az16` (D01 to D12). D11 and D12 are your challenge |
 | `evaluate.py` | Scores a pack against the five incidents: CAUGHT (an alert names who to act on), SEEN, NOT NAMED, MISSED, and false alarms |
 | `inventory.py`, `data/inventory/` | An AI inventory from Azure Resource Graph rows, a Defender CSPM AI posture export and network security group rules |
@@ -83,8 +83,8 @@ where real rows carry object IDs.
 
 ## Step 1b · Before you start: look at each idea on its own (about 15 minutes)
 
-New to detection and response? Do this before Step 1 (lesson 16.6 calls it Step 1b; lesson 16.0 explains each idea). `explore.py` shows,
-one idea at a time, the records, the rules and the response on Contoso's day, the Azure version of the AWS stream's Module 16.
+New to detection and response? Do this before Step 1 (lesson 7.6 calls it Step 1b; lesson 7.0 explains each idea). `explore.py` shows,
+one idea at a time, the records, the rules and the response on Contoso's day, the Azure version of the AWS stream's Module 7.
 Real output below is from a fresh Ubuntu machine. Run it from `labs/az16`.
 
 **What it really runs.** Nothing that changes anything: `explore.py` builds the simulated day in memory with
@@ -524,7 +524,7 @@ Caught 1 of 5 | seen but not named 0 | missed 4 | false alarms 0
 The Activity log is the only source with real content in the first draft, so the control-plane half of S1 is all
 the new rules can see. What the key did next is in resource logs the first draft never sent.
 
-## Step 5 · Both: this module's rules on lesson 16.1's logs
+## Step 5 · Both: this module's rules on lesson 7.1's logs
 
 ```bash
 make detect
@@ -594,7 +594,7 @@ Read three things in that list:
 - **D05 names the app's gateway subscription.** One customer's 300 chats look like one busy app until you join the
   app log (challenge 2).
 
-## Step 6 · The AI inventory (16.3)
+## Step 6 · The AI inventory (7.3)
 
 ```bash
 make inventory
@@ -628,7 +628,7 @@ Your check: vm-gpu-lab01 allows the internet to port 11434 (Ollama's default) in
 "Unsanctioned" only means something because `data/inventory/sanctioned.json` exists. Without a register every row is
 just a row.
 
-## Step 7 · Posture: what Azure Policy can and can't tell you (16.4)
+## Step 7 · Posture: what Azure Policy can and can't tell you (7.4)
 
 ```bash
 make posture
@@ -672,7 +672,7 @@ so it's gone). The one green line in the first draft is the lesson: `contoso-fou
 sends `Audit` only. The built-in is AuditIfNotExists and checks that a setting with logs exists, not which ones, so
 it passes while the logs S1 needed were never collected. C01 catches it.
 
-## Step 8 · From alert to report (16.5)
+## Step 8 · From alert to report (7.5)
 
 Pivot on what an alert named. A key carries no identity, so pivot on the addresses as well:
 
@@ -781,7 +781,7 @@ Same as `python3 run_tests.py --challenge`.
    `tokens_per_end_user_per_hour` in any hour, from the app log. Defender and D05 can only name the resource or the
    app's gateway subscription; you can name the user.
 3. **The S1 incident report** (16.5). `cp report/TEMPLATE.md report/INCIDENT-REPORT.md`, write it from the pivots,
-   `make cost` and the playbook in lesson 16.5, then `make report-check`. The check wants every section, five UTC
+   `make cost` and the playbook in lesson 7.5, then `make report-check`. The check wants every section, five UTC
    timestamps, three real record IDs and the facts a reviewer would ask for: both attacker addresses, the listKeys
    call, regenerating both keys, resetting the service principal's secret, switching key access off, the failed
    diagnostic-setting delete, that the calls skipped the gateway, the cost, and how the secret leaked.

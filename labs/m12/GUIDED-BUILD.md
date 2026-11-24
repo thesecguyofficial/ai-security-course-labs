@@ -1,7 +1,7 @@
-# M12 guided build: the TSG Helpdesk guardrail in your own AWS account
+# M3 guided build: the TSG Helpdesk guardrail in your own AWS account
 
 The offline lab (README Steps 1 to 7) teaches the mechanics at $0. This guide builds the real thing, step by step, in
-**your own** AWS sandbox account (the M11 account is fine), in **us-east-1** (the Region M11 used). About 60 minutes.
+**your own** AWS sandbox account (the M2 account is fine), in **us-east-1** (the Region M2 used). About 60 minutes.
 Cost: well under US$0.20 if you follow it as written (cost table at the end). Teardown is the last section: do it today.
 
 > **Read this first: about the responses shown below.** We wrote this guide without access to an AWS account, so **no
@@ -25,7 +25,7 @@ Step 1, and set them again if you open a new terminal):
 | `ACCOUNT` | your 12-digit account ID | `111122223333` |
 | `GR_ID` | the guardrail ID that `create-guardrail` returns | `tsghelpdesk01` |
 | `GR_ARN` | the guardrail ARN | `arn:aws:bedrock:us-east-1:111122223333:guardrail/tsghelpdesk01` |
-| `MODEL` | the M11 inference profile | `us.anthropic.claude-haiku-4-5-20251001-v1:0` |
+| `MODEL` | the M2 inference profile | `us.anthropic.claude-haiku-4-5-20251001-v1:0` |
 
 ## Step 0 · Before you start (10 minutes)
 
@@ -35,8 +35,8 @@ Step 1, and set them again if you open a new terminal):
    older CLIs don't know the newer guardrail fields (`tierConfig`, `crossRegionConfig`) and fail with
    `Unknown parameter`. Python 3.11+ (you already have it for the offline lab). For Step 4's suite run:
    `pip install boto3`.
-3. **Model access from M11.** Step 3's `converse` call uses the M11 model through the US inference profile. If you
-   tore M11 down, model access stays enabled; you just won't have M11's invocation logs (Step 6).
+3. **Model access from M2.** Step 3's `converse` call uses the M2 model through the US inference profile. If you
+   tore M2 down, model access stays enabled; you just won't have M2's invocation logs (Step 6).
 4. **Open a terminal in the `ai-security-course-labs` folder**, go to the lab folder and set the basics:
 
    ```bash
@@ -66,7 +66,7 @@ Step 1, and set them again if you open a new terminal):
 You'll build the **reviewed** guardrail from `guardrails/tuned.json`: Standard tier with the US guardrail profile;
 five content filters at Medium plus the prompt attack filter at Medium on input; one denied topic ("Pay of other
 people"); email and phone masked in answers, AWS keys blocked both ways, a free regex for the system-prompt canary;
-contextual grounding (0.6 / 0.1) on Standard tier. Lesson 12.1 explains every line. Pick **one** path.
+contextual grounding (0.6 / 0.1) on Standard tier. Lesson 3.1 explains every line. Pick **one** path.
 
 ### Path A: console clicks
 
@@ -112,7 +112,7 @@ Where we write "(label may differ slightly)", the docs describe the control but 
      `CANARY-M12-[A-Z0-9]{3}`, input off or **Detect (no action)**, output **Block**. Choose **Next**.
 7. **Add contextual grounding check** page: **Enable grounding check**, threshold `0.6`; **Enable relevance check**,
    threshold `0.1`; **Contextual grounding tier**: **Standard**. Choose **Next**.
-8. If the console shows an **Automated Reasoning** page, skip it (lesson 12.3: it's unsupported for enforcement).
+8. If the console shows an **Automated Reasoning** page, skip it (lesson 3.3: it's unsupported for enforcement).
 9. Review the settings, then select **Create**.
 10. **Create version 1.** Open the guardrail; in the **Versions** section select **Create** (or choose the **Working
     draft** and **Create version**), description `Reviewed in the M12 lab`, **Create version**
@@ -124,7 +124,7 @@ Where we write "(label may differ slightly)", the docs describe the control but 
     export GR_ARN=arn:aws:bedrock:us-east-1:$ACCOUNT:guardrail/$GR_ID
     ```
 
-Optional, no CLI: the guardrail page has **a test window** on the right. **Select model** (pick the M11 model),
+Optional, no CLI: the guardrail page has **a test window** on the right. **Select model** (pick the M2 model),
 **Apply**, type in the **Prompt** box, **Run**, then **View trace** to see what fired
 ([test](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-test.html)). It uses the **Working draft**
 unless you switch it to a version, and every **Run** calls the model (a small model charge).
@@ -202,7 +202,7 @@ export GR_ARN=$(cd cloud/terraform && terraform output -raw guardrail_arn)
 
 ## Step 2 · How to read every ApplyGuardrail result
 
-`ApplyGuardrail` checks text against the guardrail **without calling a model** (lesson 12.2). CLI flags from the
+`ApplyGuardrail` checks text against the guardrail **without calling a model** (lesson 3.2). CLI flags from the
 [apply-guardrail reference](https://docs.aws.amazon.com/cli/latest/reference/bedrock-runtime/apply-guardrail.html):
 `--guardrail-identifier`, `--guardrail-version`, `--source` (`INPUT` = a prompt, `OUTPUT` = a model answer),
 `--content`, optional `--output-scope` (`INTERVENTIONS`, the default, or `FULL`).
@@ -224,12 +224,12 @@ Read the response in this order (fields from the
    `sensitiveInformationPolicyUnits`, `contextualGroundingPolicyUnits`; `sensitiveInformationPolicyFreeUnits` = the
    free regex units).
 5. **`guardrailCoverage.textCharacters`**: `guarded` of `total`. If `guarded` is smaller than `total`, part of your
-   text was never checked (lesson 12.1's first-draft bug).
+   text was never checked (lesson 3.1's first-draft bug).
 
 ## Step 3 · Run six requests against version 1
 
 The labels R1 to R6 below are this guide's own six requests. They are not the six `enforce.py` requests that README
-Step 6 and lessons 12.3 and 12.5 also call R1 to R6.
+Step 6 and lessons 3.3 and 3.5 also call R1 to R6.
 
 Each command below is copy-paste ready. Cost: each call is about one text unit per configured paid policy (roughly
 US$0.0004 to US$0.0005 a call at list prices).
@@ -496,12 +496,12 @@ Example response (shape from AWS docs, values illustrative;
 
 How to read it: `topicPolicy` names **your** topic. Now try the normal question from suite case B08, `Where do I find
 my payslip in the HR portal? It won't load.` It's about pay, but not someone else's: if it comes back blocked, that's
-a false positive, and the fix is the topic definition, not a stronger filter (lesson 12.4).
+a false positive, and the fix is the topic definition, not a stronger filter (lesson 3.4).
 
 ### R6 · The same check inside a real model call (Converse with guardContent)
 
 Now through the model, the way the Helpdesk calls it. The app's own instruction stays outside `guardContent`; the
-user's question goes inside it (lesson 12.1: once a `guardContent` block exists, only `guardContent` is evaluated).
+user's question goes inside it (lesson 3.1: once a `guardContent` block exists, only `guardContent` is evaluated).
 Save the request:
 
 ```bash
@@ -583,7 +583,7 @@ answer with `stopReason` `end_turn` and non-zero `usage`.
 
 ## Step 4 · Change one setting, re-run, compare
 
-Lesson 12.4's trade-off on the real service: raise the **prompt attack** filter from `MEDIUM` to `HIGH`. HIGH blocks
+Lesson 3.4's trade-off on the real service: raise the **prompt attack** filter from `MEDIUM` to `HIGH`. HIGH blocks
 anything scored LOW, MEDIUM or HIGH, so it should catch more attacks and also block some normal questions. The offline
 twin predicts it (`make sweep`: HIGH catches 73% instead of 67% and blocks 3 of 14 normal questions instead of 1).
 
@@ -659,11 +659,11 @@ Fill in this table from your real runs:
 | Version 1 (prompt attack MEDIUM) | | | 67%, 1 of 14 |
 | Version 2 (prompt attack HIGH) | | | 73%, 3 of 14 |
 
-Then decide which version you'd ship, and write one sentence why. That sentence is the deliverable of lesson 12.4.
+Then decide which version you'd ship, and write one sentence why. That sentence is the deliverable of lesson 3.4.
 
 ## Step 5 · Enforce it: no model call without version 1
 
-A guardrail that the app may skip is a suggestion. Lesson 12.3's IAM pattern denies `bedrock:InvokeModel` and
+A guardrail that the app may skip is a suggestion. Lesson 3.3's IAM pattern denies `bedrock:InvokeModel` and
 `bedrock:InvokeModelWithResponseStream` (the actions that authorize Converse and ConverseStream too) unless the request
 names your guardrail **and** version 1. The condition key is `bedrock:GuardrailIdentifier`; AWS supports it for
 `Converse`, `ConverseStream`, `InvokeModel` and `InvokeModelWithResponseStream`
@@ -742,7 +742,7 @@ with `stopReason` `end_turn`.
 
 What this does **not** prove: that the user's text sits inside `guardContent`. AWS: "A user can bypass applying a
 guardrail in their prompt by using guardrail input tags" (same page). IAM checks the guardrail is attached, not what
-it reads. That's why Step 3 R6 checks `guardrailCoverage`, and why lesson 12.3 adds account- or organization-level
+it reads. That's why Step 3 R6 checks `guardrailCoverage`, and why lesson 3.3 adds account- or organization-level
 enforcement. (The Terraform switch `enforce_account_wide` in README Step 8 turns on account-level enforcement:
 sandbox only, and AWS warns other callers "will start seeing their calls fail with an `AccessDenied` exception".)
 
@@ -792,8 +792,8 @@ Free alternative without any model call: `make cloud-simulate` asks the real IAM
    use exactly those names and values. AWS describes these metrics in terms of the `ApplyGuardrail` operation; check
    in `list-metrics` whether your R6 Converse call shows up as well, and note what you find. Console: **CloudWatch**,
    **Metrics**, **All metrics**, then the `AWS/Bedrock/Guardrails` namespace.
-3. **Model invocation logs from M11** (only if your M11 hardened stack is still deployed, or invocation logging is on):
-   the R6 and Step 5 Converse calls are model invocations, so they land in the M11 log group:
+3. **Model invocation logs from M2** (only if your M2 hardened stack is still deployed, or invocation logging is on):
+   the R6 and Step 5 Converse calls are model invocations, so they land in the M2 log group:
 
    ```bash
    aws logs filter-log-events --log-group-name /tsg-helpdesk/bedrock/model-invocations \
@@ -804,9 +804,9 @@ Free alternative without any model call: `make cloud-simulate` asks the real IAM
    Each entry has `operation`, `modelId`, `identity.arn` and `input.inputBodyJson` / `output.outputBodyJson`
    ([invocation logging](https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html)). Look
    at the R6 entry: the blocked question is there **in plain text**, and masking doesn't apply to the logged `input`
-   (lesson 12.1). Lock that log group down like any sensitive store (M11).
+   (lesson 3.1). Lock that log group down like any sensitive store (M2).
    `ApplyGuardrail` calls are **not** model invocations, so they aren't in this log; they're CloudTrail **data
-   events** on `AWS::Bedrock::Guardrail`, which M11's trail already records into its S3 bucket
+   events** on `AWS::Bedrock::Guardrail`, which M2's trail already records into its S3 bucket
    (`tsg-helpdesk-trail-<ACCOUNT>-us-east-1`, a few minutes' delay).
 
 ## Cost (list prices, October 2026)
@@ -832,7 +832,7 @@ costs nothing.
 | CloudWatch metrics, IAM role, a few log lines | free or a fraction of a cent |
 | **Total** | **well under US$0.20** |
 
-In production the bill scales with traffic: lesson 12.4's estimate is about $66 a month at 2,000 questions a day with
+In production the bill scales with traffic: lesson 3.4's estimate is about $66 a month at 2,000 questions a day with
 `guardContent`, $90 without (`make cost`).
 
 ## Teardown (5 minutes; do it today)
@@ -866,4 +866,4 @@ rm -f create.json update.json trust.json enforce.json r6-messages.json step5-mes
 alternative: **Guardrails**, select `tsg-helpdesk`, **Delete**, type `delete`, **Delete**
 ([delete](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-delete.html)). If you turned on
 account-level enforcement with Terraform, turn it off first: by default AWS won't delete a guardrail that enforcement
-uses (lesson 12.3). Tomorrow, glance at your budget alert and at **Billing**, **Bills**: Guardrails should show cents.
+uses (lesson 3.3). Tomorrow, glance at your budget alert and at **Billing**, **Bills**: Guardrails should show cents.

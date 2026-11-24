@@ -1,4 +1,4 @@
-# M15 guided build: a private endpoint for an open model, in your own AWS account
+# M6 guided build: a private endpoint for an open model, in your own AWS account
 
 The offline lab (README Steps 1 to 8) teaches the mechanics at $0. This guide builds the real thing from zero in
 **your own** AWS sandbox account (the one from lesson 0.7, never a work account), in **us-east-1**. About 2 hours.
@@ -91,7 +91,7 @@ find in it:
 
 - `PrivateRoutes` has no route at all: no internet gateway, no NAT gateway. The only ways out are the two VPC endpoints.
 - `RuntimeEndpoint` carries a policy: `sagemaker:InvokeEndpoint`, on this one endpoint ARN, for principals in your
-  account (`aws:PrincipalAccount`). Without it, the default policy "allows full access" (lesson 15.3).
+  account (`aws:PrincipalAccount`). Without it, the default policy "allows full access" (lesson 6.3).
 - `AppFunctionRole` may invoke the endpoint only when `aws:SourceVpce` is your runtime endpoint. AWS's own example
   for this uses the same key: "To restrict access to the API to only calls made using the interface endpoint, use the
   `aws:SourceVpce` condition key" ([AWS](https://docs.aws.amazon.com/sagemaker/latest/dg/security_iam_id-based-policy-examples.html)).
@@ -286,9 +286,9 @@ aws sagemaker wait endpoint-in-service --endpoint-name tsg-summariser-lab
 
 Read `cloud/out/create-model.json` and `create-endpoint-config.json` while it starts:
 
-- **`ModelPackageName`**: the endpoint runs the approved registry version, not an S3 path (lesson 15.3).
+- **`ModelPackageName`**: the endpoint runs the approved registry version, not an S3 path (lesson 6.3).
 - **`EnableNetworkIsolation: true`** and **`VpcConfig`**: no outbound calls from the container; the model download goes
-  through your subnets and the S3 gateway endpoint (lesson 15.2).
+  through your subnets and the S3 gateway endpoint (lesson 6.2).
 - **No `KmsKeyId` on the endpoint configuration.** ml.g5.xlarge has NVMe instance storage, and AWS: "You can't use a KMS
   key on an instance type with local storage" ([AWS](https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest-nbi.html)).
   Your key protects the S3 copies instead: the model files and the data capture (its own `KmsKeyId`).
@@ -418,7 +418,7 @@ path follows AWS's layout, `{endpoint-name}/{variant-name}/yyyy/mm/dd/hh/filenam
 ([AWS](https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-data-capture-endpoint.html)), and the bucket
 expires captured files after 30 days. (AWS's data capture pages carry the note that Model Monitor is no longer open to
 new customers; if `DataCaptureConfig` is refused in a new account, remove it from the endpoint configuration and
-record prompts in the app instead. Lesson 15.4.)
+record prompts in the app instead. Lesson 6.4.)
 
 ## E4 · A burst of calls, and the metrics
 
@@ -433,7 +433,7 @@ aws cloudwatch get-metric-statistics --namespace AWS/SageMaker --metric-name Inv
 
 `Invocations` is "The number of InvokeEndpoint requests sent to a model endpoint"; `Invocation4XXErrors` counts 4xx
 answers ([AWS](https://docs.aws.amazon.com/sagemaker/latest/dg/monitoring-cloudwatch.html)). A sudden jump in either is
-the first sign of abuse or probing, and costs nothing to alarm on (lesson 15.4).
+the first sign of abuse or probing, and costs nothing to alarm on (lesson 6.4).
 
 ## E5 · The evidence in CloudTrail
 
@@ -492,7 +492,7 @@ challenge 3, on real records.
 
    One more thing to try on paper, not in your account: `aws ec2 modify-vpc-endpoint --reset-policy` puts back the
    default policy, which "allows full access". Nothing would visibly break. That's why the offline lab's checker
-   looks for it (M15-15) and attack A8 needs nothing else.
+   looks for it (M6-M6) and attack A8 needs nothing else.
 
 # Part G · Teardown (today)
 

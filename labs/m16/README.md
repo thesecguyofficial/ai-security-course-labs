@@ -1,4 +1,4 @@
-# Lab M16: build the detections, run the attack simulator, catch it, write the incident report
+# Lab M7: build the detections, run the attack simulator, catch it, write the incident report
 
 Companion to lessons **16.0 to 16.6** of *AI Security Engineer* (The Sec Guy). About 75 minutes for Steps 1 to 9
 (plus about 15 for the optional Step 1b), **$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no network. Step 10 is optional:
@@ -6,23 +6,23 @@ Companion to lessons **16.0 to 16.6** of *AI Security Engineer* (The Sec Guy). A
 **your own** sandbox account, makes a real prompt injection finding, and ends with teardown.
 
 You are the cloud security engineer at **AnyCompany** (fictional; "AnyCompany" is the placeholder name AWS uses in its
-documentation). Over Modules 10 to 14 the company built a customer support bot on Amazon Bedrock, a staff Helpdesk
+documentation). Over Modules 1 to 5 the company built a customer support bot on Amazon Bedrock, a staff Helpdesk
 agent on Amazon Bedrock AgentCore and a knowledge base. On **20 October 2026** five things went wrong on the same day.
 The SOC caught one of them. Your job: find out why, build the detections and the logging that catch all five, and
 write the incident report for the expensive one.
 
 | Part | What you do | Lesson |
 |---|---|---|
-| **Simulate** | One day of telemetry, normal work plus five incidents, for two logging setups | 16.0, 16.1 |
-| **Old SOC** | The SOC's three rules on the old logs: 1 of 5 caught, 1 false alarm | 16.0, 16.2 |
-| **Old rules, new logs** | Still 1 of 5: a "Medium and above" GuardDuty rule drops every AI Protection finding | 16.2 |
-| **New rules, old logs** | 1 of 5: you can't detect what you didn't log | 16.1 |
-| **Both** | 13 rules (D01 to D13) on the new logs: 3 of 5 caught and named, 2 seen but not named, 0 false alarms | 16.2, 16.4 |
-| **Inventory** | Managed, self-hosted and external AI, and what isn't approved | 16.3 |
-| **Posture** | The nine AWS Config managed rules for Bedrock and AgentCore, plus five you have to write | 16.4 |
-| **Report** | Pivot on an entity, estimate the cost, read a worked incident report | 16.5 |
+| **Simulate** | One day of telemetry, normal work plus five incidents, for two logging setups | 7.0, 7.1 |
+| **Old SOC** | The SOC's three rules on the old logs: 1 of 5 caught, 1 false alarm | 7.0, 7.2 |
+| **Old rules, new logs** | Still 1 of 5: a "Medium and above" GuardDuty rule drops every AI Protection finding | 7.2 |
+| **New rules, old logs** | 1 of 5: you can't detect what you didn't log | 7.1 |
+| **Both** | 13 rules (D01 to D13) on the new logs: 3 of 5 caught and named, 2 seen but not named, 0 false alarms | 7.2, 7.4 |
+| **Inventory** | Managed, self-hosted and external AI, and what isn't approved | 7.3 |
+| **Posture** | The nine AWS Config managed rules for Bedrock and AgentCore, plus five you have to write | 7.4 |
+| **Report** | Pivot on an entity, estimate the cost, read a worked incident report | 7.5 |
 | **Prove** | `make test`: 18 tests | 16.6 |
-| **Challenge** | Two detections and your own incident report. No solution included | 16.4, 16.5 |
+| **Challenge** | Two detections and your own incident report. No solution included | 7.4, 7.5 |
 | **Cloud (optional)** | [`GUIDED-BUILD.md`](GUIDED-BUILD.md): console and CLI from zero, four requests, one setting changed, cost, teardown | 16.2 to 16.4 |
 
 ## Get the lab files
@@ -58,7 +58,7 @@ cd labs/m16
 | `explore.py` | **Read-only helper** (Step 1b): one idea at a time, from one day's logs, alerts and incidents to a playbook. It builds the day in memory, sends nothing and writes nothing |
 | `data/vpc-flow-logs.txt` | Four **illustrative** VPC flow log lines in AWS's default format, for `explore.py flow` |
 | `simulate.py` | The **attack simulator**: 20 Oct 2026 at AnyCompany, normal work plus five incidents (S1 to S5), written as the files each logging setup would really collect |
-| `setups/first-draft.json`, `setups/hardened.json` | What each setup collects. First draft: CloudTrail management events and a plain web log. Hardened: lesson 16.1's list (data events, invocation logs with the end user, GuardDuty AI Protection, gateway spans, an app log with identities) |
+| `setups/first-draft.json`, `setups/hardened.json` | What each setup collects. First draft: CloudTrail management events and a plain web log. Hardened: lesson 7.1's list (data events, invocation logs with the end user, GuardDuty AI Protection, gateway spans, an app log with identities) |
 | `detect.py` | Two rule packs: `soc-v1` (three rules a SOC often starts with) and `m16` (D01 to D13). D11 and D12 are your challenge |
 | `evaluate.py` | Scores a pack against the five incidents: CAUGHT (an alert names who to act on), SEEN, NOT NAMED, MISSED, and false alarms |
 | `inventory.py`, `data/inventory/` | An AI inventory from AWS Config items, Inspector software lists and DNS logs, like Security Hub's |
@@ -85,7 +85,7 @@ you don't have to join three log groups by hand.
 
 ## Step 1b · Before you start: look at each idea on its own (about 15 minutes)
 
-New to detection and response? Do this before Step 1 (lesson 16.6 and its videos call it Step 1b). `explore.py` shows,
+New to detection and response? Do this before Step 1 (lesson 7.6 and its videos call it Step 1b). `explore.py` shows,
 one idea at a time, the records, the rules and the response that the module's videos explain, on AnyCompany's day.
 Real output below is from a fresh Ubuntu machine. Run it from `labs/m16` (the `cd` above put you there).
 
@@ -483,7 +483,7 @@ Caught 1 of 5 | seen but not named 1 | missed 3 | false alarms 0
 Good rules, no evidence. The gateway change is a management event, so D03 sees the policy engine leave `ENFORCE`,
 but nothing shows what the agent did next: gateway tracing and AgentCore data events were off.
 
-## Step 5 · Both: this module's rules on lesson 16.1's logs
+## Step 5 · Both: this module's rules on lesson 7.1's logs
 
 ```bash
 make detect
@@ -524,7 +524,7 @@ Three things to notice:
    true, and useless for containment, since blocking the role takes the bot down for everyone. D13 sees the phishing
    link in five answers but not who planted it. That's your challenge.
 
-## Step 6 · The AI inventory (16.3)
+## Step 6 · The AI inventory (7.3)
 
 ```bash
 make inventory
@@ -552,7 +552,7 @@ Inspector software inventories on EC2 and ECR, and GuardDuty DNS activity on EC2
 blind spots: DNS from Lambda and other managed compute isn't attributed, and self-hosted resources have no findings,
 so an internet-facing Ollama port is a check you write.
 
-## Step 7 · Posture: what AWS Config can and can't tell you (16.4)
+## Step 7 · Posture: what AWS Config can and can't tell you (7.4)
 
 ```bash
 make posture
@@ -581,7 +581,7 @@ The Helpdesk gateway passes the managed authorizer rule and still ran with its p
 things that decided today's five incidents (invocation logging, AI Protection, an enforced guardrail, data events,
 `ENFORCE`) have no AWS managed rule: they're C01 to C05.
 
-## Step 8 · From alert to report (16.5)
+## Step 8 · From alert to report (7.5)
 
 Pivot on the entity an alert named, and read the incident in order:
 
@@ -653,7 +653,7 @@ They fail until you finish.
 2. **D12, denial of wallet per end user** (16.1, 16.5). Write `d12_wallet_per_end_user`: one end user above
    `tokens_per_end_user_per_hour` in any hour. GuardDuty and D06 can only name the app's role; you can name the user.
 3. **The S1 incident report** (16.5). `cp report/TEMPLATE.md report/INCIDENT-REPORT.md`, write it from the pivot and
-   the playbook in lesson 16.5, then `make report-check` (same as
+   the playbook in lesson 7.5, then `make report-check` (same as
    `python3 report.py check report/INCIDENT-REPORT.md --scenario S1`; run `python3 simulate.py` once before it).
    Windows has no `cp`: copy the file with
    `python -c "import shutil; shutil.copy('report/TEMPLATE.md', 'report/INCIDENT-REPORT.md')"`. The check wants every section, five UTC timestamps, three

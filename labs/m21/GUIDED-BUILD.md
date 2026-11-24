@@ -1,6 +1,6 @@
-# M21 guided build: the refund rules on a real AgentCore Gateway
+# M14 guided build: the refund rules on a real AgentCore Gateway
 
-The offline lab (README, Steps 1 to 8) teaches the mechanics at $0. This guide puts the two rules from lesson 21.5 on
+The offline lab (README, Steps 1 to 8) teaches the mechanics at $0. This guide puts the two rules from lesson 14.5 on
 a real Amazon Bedrock AgentCore Gateway in **your own** AWS sandbox account (lesson 0.7, never a work account), in
 **us-east-1**. About 60 to 90 minutes. Nothing here uses a third-party service.
 
@@ -22,13 +22,13 @@ a real Amazon Bedrock AgentCore Gateway in **your own** AWS sandbox account (les
 **Why the approval isn't on the gateway.** "Refund over $100 unless approved" has two honest designs. Here the
 gateway refuses any refund over $100 from the agent, whoever is signed in, and the agent can only *ask* for one
 (`request_refund_approval`); a supervisor pays approved refunds through the back office, outside the agent's path.
-That is human deferral (lesson 21.4). A Dogwood policy *can* require an earlier approval in the same session, but a
+That is human deferral (lesson 14.4). A Dogwood policy *can* require an earlier approval in the same session, but a
 policy session is bound to one signed-in principal, and AWS's own example notes that `count` "cannot express
 'approved by two different people'". So the approval would come from the same person whose agent is being steered.
 The offline lab shows the other design (a signed approval bound to the exact arguments, checked by the PEP).
 
 **What this build leaves out: whose order is it?** The offline lab's hardened PEP refuses a refund on an order that
-does not belong to the ticket's customer (attacks A1 and A8, lesson 21.1). The gateway cannot make that check: it has
+does not belong to the ticket's customer (attacks A1 and A8, lesson 14.1). The gateway cannot make that check: it has
 no order database, so the Cedar policies here only see the token and the arguments. On this gateway bob can refund up
 to $100 on any customer's order. In a real system the owner check has to live in the Lambda, or in a PEP in front of
 it that can look the order up. This build does not do it.
@@ -64,7 +64,7 @@ Shell variables used throughout (set them again in a new terminal):
 
 ## A1 · Create it from zero
 
-1. Read `cloud/terraform/main.tf` first. It was adapted from the M14 build and not applied by the authors, so run a
+1. Read `cloud/terraform/main.tf` first. It was adapted from the cloud M5 build and not applied by the authors, so run a
    check before anything is created:
 
    ```bash
@@ -179,10 +179,10 @@ Money as integer minor units is what lets Part B count and compare it.
 
    Expect `isError: true`: no permit matches, so default deny.
 
-   Lesson 21.1 says to drop any argument that names a user, and this build keeps one. The difference: the
+   Lesson 14.1 says to drop any argument that names a user, and this build keeps one. The difference: the
    argument is never trusted on its own. The policy compares `caller_username` with the username in the token and
    refuses when they differ, and the Lambda only uses it to write the caller into its log line (the pattern from
-   lesson 14.5).
+   lesson cloud 5.5).
 
 5. **The amount as a string.** `"amount_cents": "4500"`. AWS doesn't document whether the gateway rejects a value that
    doesn't match the tool's input schema before Policy runs. Write down what you get, and compare it with lab A7.
@@ -310,7 +310,7 @@ different callers supplying the same session ID get isolated sessions"), and the
 
 # Part D · Evidence, then tear down
 
-1. **Traces.** Turn on tracing for the gateway (lesson 14.7). Each `AuthorizeAction` span carries
+1. **Traces.** Turn on tracing for the gateway (lesson cloud 5.7). Each `AuthorizeAction` span carries
    `aws.agentcore.policy.authorization_decision` and `aws.agentcore.policy.determining_policies`, and temporal
    evaluation adds `aws.agentcore.policy.temporal.evaluation_invoked` and `aws.agentcore.policy.temporal.latency_ms`
    ([Temporal policies, Observability](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-temporal.md)).

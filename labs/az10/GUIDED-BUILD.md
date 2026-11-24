@@ -1,8 +1,8 @@
-# AZ10 guided build: inventory your Azure AI footprint and lock it down, in your own subscription
+# M1 guided build: inventory your Azure AI footprint and lock it down, in your own subscription
 
 The offline lab (README Steps 1 to 7) teaches the mechanics at $0, on Contoso's fake estate. This guide does the same
 job on a real one: **yours**. You build a small Foundry estate the way most teams start (keys on, an app identity with
-Contributor, a Global deployment, no logs, no guardrails), inventory it with the questions from lessons 10.1 to 10.5,
+Contributor, a Global deployment, no logs, no guardrails), inventory it with the questions from lessons 1.1 to 1.5,
 lock it down, and prove every fix with a request that should now fail. About 75 minutes, most of it waiting for Azure.
 Cost: a few US cents (table in G7). Teardown is the last step: do it today.
 
@@ -29,7 +29,7 @@ Set these shell variables (again in every new terminal):
 ## Step 0 · Before you start (10 minutes)
 
 1. **A subscription you own.** Never your employer's. A free account is ideal: its spending limit stops services when
-   the credit runs out (lesson 10.5).
+   the credit runs out (lesson 1.5).
 2. **Permissions.** You need to create role assignments and policy assignments. If you created the subscription you
    are its **Owner**, which covers both. Otherwise ask for **Contributor** plus **User Access Administrator** and
    **Resource Policy Contributor** on the resource group you'll use.
@@ -57,7 +57,7 @@ Set these shell variables (again in every new terminal):
    ```
 
    Portal: **Cost Management**, **Budgets**, add a monthly budget of US$5 on the resource group with an email alert
-   (labels may differ slightly). Remember lesson 10.5: a budget alerts, it never stops anything, and cost data "is
+   (labels may differ slightly). Remember lesson 1.5: a budget alerts, it never stops anything, and cost data "is
    typically available within 8-24 hours".
 
 ## G1 · Build the "before" estate from zero
@@ -153,7 +153,7 @@ Name         Kind        ResourceGroup    Location       KeysOff    Network
 az10-ab1234  AIServices  rg-az10-ab1234   swedencentral  False      Enabled
 ```
 
-**Q2. Which models run there, of which type and size?** (lessons 10.2 and 10.5)
+**Q2. Which models run there, of which type and size?** (lessons 1.2 and 1.5)
 
 ```bash
 az cognitiveservices account deployment list -g $RG -n $AZ10_NAME \
@@ -171,7 +171,7 @@ az role assignment list --scope $FID --include-inherited \
 ```
 
 Portal: the resource's **Access control (IAM)**, **Role assignments** tab; the **Check access** tab answers the same
-question for one identity (labels may differ slightly). Read it with lessons 10.3 and 10.4:
+question for one identity (labels may differ slightly). Read it with lessons 1.3 and 1.4:
 
 | Role you find | Can call the model (Entra ID) | Can list the keys |
 |---|---|---|
@@ -225,7 +225,7 @@ No diagnostic setting means no `Audit`, `RequestResponse` or `Trace` logs exist 
 | Q5 policy assignments | | |
 | Q6 diagnostic settings, budgets | | |
 
-## G3 · Lock it down, in the order lesson 10.4 gives
+## G3 · Lock it down, in the order lesson 1.4 gives
 
 Order matters: move the callers to Entra ID before you turn the keys off, or you break your own app first.
 
@@ -263,7 +263,7 @@ within 90 minutes".
 
 ### 3. Fix the deployment type
 
-Lesson 10.2: pick the type on purpose. Contoso's standard says EU data zone. **Check your quota before you delete
+Lesson 1.2: pick the type on purpose. Contoso's standard says EU data zone. **Check your quota before you delete
 anything**:
 
 ```bash
@@ -439,7 +439,7 @@ an `Access denied due to invalid subscription key or wrong API endpoint` error".
 minute with **403** `AuthenticationTypeDisabled`. You may see `200` for a while first: the gateway "can continue to
 accept previously valid keys until its cached configuration refreshes", "typically ... within a few minutes, but it
 can take up to several hours". Still `200` after 30 minutes? Run the loop again later. That delay is exactly why
-lesson 10.4 says to regenerate both keys straight away when one has leaked.
+lesson 1.4 says to regenerate both keys straight away when one has leaked.
 
 **Example response (shape from Microsoft docs, values illustrative)**
 ([disable local auth](https://learn.microsoft.com/azure/ai-services/disable-local-auth)). The documented last line is
@@ -523,13 +523,13 @@ az monitor log-analytics query -w $WS --analytics-query "AzureDiagnostics
 ```
 
 The column names are from Microsoft's `AzureDiagnostics` table reference. Expect at least one `RequestResponse` row for
-T1, with your laptop's public address in `CallerIPAddress`. Look at one row's `properties_s` too: lesson 11.4 notes
+T1, with your laptop's public address in `CallerIPAddress`. Look at one row's `properties_s` too: lesson 2.4 notes
 that Microsoft doesn't say whether these categories hold prompt text. Does "Reply with OK" appear? Write it down. Our
 real-run table has no row for this query: we recorded the Activity Log result only.
 
 ## G5 · Change one setting and re-run: list the publisher
 
-This is the mistake Microsoft's own example parameters invite (lesson 10.3): add `"OpenAI"` to `allowedPublishers`.
+This is the mistake Microsoft's own example parameters invite (lesson 1.3): add `"OpenAI"` to `allowedPublishers`.
 
 ```bash
 cat > /tmp/az10-publisher.json <<'JSON'
@@ -554,7 +554,7 @@ So this step needs a control, and it needs hours, not minutes:
    version to the T3 command. Repeat it once an hour until the error names the policy `az10-approved-models`. A
    refusal for any other reason (no quota, not offered, terms not accepted) is not a control. If you can't get a
    policy refusal this way, you have no control: stop here and put the original assignment back.
-2. **Then the test:** run T3 again (`gpt-5-nano`). If the rule works the way lesson 10.3 reads it (publisher `notin`
+2. **Then the test:** run T3 again (`gpt-5-nano`). If the rule works the way lesson 1.3 reads it (publisher `notin`
    the list **and** no asset ID matches), `not-approved` is now **created**: the publisher alone approves every
    OpenAI model.
 
@@ -584,11 +584,11 @@ Then put the original assignment back (the two step 4 commands for `az10-approve
 
 | Lesson | Control | Where |
 |---|---|---|
-| 10.1 | Inventory across subscriptions | G2 Q1 (Resource Graph) |
-| 10.2 | Deployment type chosen on purpose | G3 step 3 |
-| 10.3 | App identity: Foundry User on one resource, no Contributor; approved models on Deny, no publishers | G3 steps 1 and 4, T1, T3, G5 |
-| 10.4 | Keys off, proved with a refused key (401 or 403), kept off with Deny | G3 steps 4 and 5, T2, T4 |
-| 10.5 | Budget, logs, and the trail to hunt in | Step 0, G3 step 2, T5 |
+| 1.1 | Inventory across subscriptions | G2 Q1 (Resource Graph) |
+| 1.2 | Deployment type chosen on purpose | G3 step 3 |
+| 1.3 | App identity: Foundry User on one resource, no Contributor; approved models on Deny, no publishers | G3 steps 1 and 4, T1, T3, G5 |
+| 1.4 | Keys off, proved with a refused key (401 or 403), kept off with Deny | G3 steps 4 and 5, T2, T4 |
+| 1.5 | Budget, logs, and the trail to hunt in | Step 0, G3 step 2, T5 |
 
 ## G7 · Cost and teardown (do it today)
 

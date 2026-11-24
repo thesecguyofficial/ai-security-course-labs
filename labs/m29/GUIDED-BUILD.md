@@ -1,4 +1,4 @@
-# M29 guided build (optional, your own AWS sandbox account): alert on a Bedrock call from an unexpected network
+# M22 guided build (optional, your own AWS sandbox account): alert on a Bedrock call from an unexpected network
 
 About 30 minutes. You test the lab's EventBridge patterns against AWS's own matcher, then deploy one rule that emails
 you when **your** IAM user calls Bedrock without going through a VPC endpoint, and measure how long the alert takes.
