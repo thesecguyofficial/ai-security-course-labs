@@ -1,5 +1,7 @@
 # Lab M20: review an agent sandbox like an auditor, then prove its egress policy
 
+> **Folder name:** this is Module 20 of *AI Security Engineer*. The folder keeps its original number (`labs/m27`), so your files and the lab videos match.
+
 Companion to lessons **20.1 to 20.4** of *AI Security Engineer* (The Sec Guy). About 30 minutes, **$0**, all on your
 laptop: **Python 3.11+ only**, no packages, no network, no model download, no cloud account.
 

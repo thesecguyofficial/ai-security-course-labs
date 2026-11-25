@@ -1,5 +1,7 @@
 # Lab M14.5: a policy enforcement point in front of the Helpdesk's tools
 
+> **Folder name:** this is Module 14 of *AI Security Engineer*. The folder keeps its original number (`labs/m21`), so your files and the lab videos match.
+
 Companion to lesson **14.5** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 45 minutes,
 $0, all on your laptop, all on fake data. Nothing leaves this folder: no network, no real payments, no real email.
 

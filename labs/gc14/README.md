@@ -1,6 +1,8 @@
 # Lab M5: who decides each tool call? Agent Runtime, Agent Identity and Agent Gateway
 
-Companion to lessons **14.0 to 14.8** of *AI Security Engineer* (The Sec Guy), Google Cloud stream. About 45 minutes,
+> **Folder name:** this is Module 5 of *AI Security on Google Cloud*. The folder keeps its original number (`labs/gc14`), and the checks print IDs that start with `GC14-`, so your files match the lab videos.
+
+Companion to lessons **5.0 to 5.8** of *AI Security on Google Cloud* (The Sec Guy). About 45 minutes,
 **$0**, all on your laptop. **Nothing to install** (Python 3.11+ standard library only) and **no Google Cloud account
 needed**. An optional guided build ([GUIDED-BUILD.md](GUIDED-BUILD.md)) deploys a small version for real in your own
 project: an agent with its own Agent Identity, behind an Agent Gateway, with one access policy rule you first run in

@@ -1,6 +1,8 @@
 # Lab M6: a private endpoint for an open model on Agent Platform
 
-Companion to lessons **15.0 to 15.5** of the Google Cloud stream of *AI Security Engineer* (The Sec Guy). About 70
+> **Folder name:** this is Module 6 of *AI Security on Google Cloud*. The folder keeps its original number (`labs/gc15`), and the checks print IDs that start with `GC15-`, so your files match the lab videos.
+
+Companion to lessons **6.0 to 6.5** of the Google Cloud stream of *AI Security on Google Cloud* (The Sec Guy). About 70
 minutes for Steps 1 to 8, **$0**, all on your laptop: **Python 3.11+ only**, no packages, no Google Cloud account, no
 model download. Step 9 is optional and **costs money every hour a model is deployed**:
 [`GUIDED-BUILD.md`](GUIDED-BUILD.md) builds a private endpoint for a small open model on CPU in **your own** sandbox

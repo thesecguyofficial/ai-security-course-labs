@@ -1,6 +1,8 @@
 # Lab M7: build the detections, run the attack simulator, catch it, write the incident report
 
-Companion to lessons **16.0 to 16.6** of *AI Security Engineer* (The Sec Guy). About 75 minutes for Steps 1 to 9
+> **Folder name:** this is Module 7 of *AI Security on AWS*. The folder keeps its original number (`labs/m16`), so your files and the lab videos match.
+
+Companion to lessons **7.0 to 7.6** of *AI Security on AWS* (The Sec Guy). About 75 minutes for Steps 1 to 9
 (plus about 15 for the optional Step 1b), **$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no network. Step 10 is optional:
 [`GUIDED-BUILD.md`](GUIDED-BUILD.md) turns on GuardDuty AI Protection, an alert, a guardrail and the AI inventory in
 **your own** sandbox account, makes a real prompt injection finding, and ends with teardown.

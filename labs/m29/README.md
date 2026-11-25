@@ -1,5 +1,7 @@
 # Lab M22.7: shadow AI, a honeytoken key, an unexpected-network alert and a responder that beats the clock
 
+> **Folder name:** this is Module 22 of *AI Security Engineer*. The folder keeps its original number (`labs/m29`), so your files and the lab videos match.
+
 Companion to lesson **22.7** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 30 minutes, $0,
 all on your laptop, all on fake data. Python 3.11+ and the standard library only. Nothing leaves this folder: no
 network, no cloud calls, no real keys.

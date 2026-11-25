@@ -1,5 +1,7 @@
 # Lab M24.3: an x402 paywall, an injected "buy" and a spend guard
 
+> **Folder name:** this is Module 24 of *AI Security Engineer*. The folder keeps its original number (`labs/m31`), so your files and the lab videos match.
+
 Companion to lesson **24.3** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 30 minutes,
 $0, all on your laptop, all on fake data. **No blockchain, no testnet, no wallet software, no faucet, no real money.**
 Nothing leaves this folder: the "chain" is a JSON file (`state/ledger.json`) and the "signatures" are HMAC with lab

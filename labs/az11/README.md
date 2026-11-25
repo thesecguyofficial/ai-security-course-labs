@@ -1,6 +1,8 @@
 # Lab M2: secure TSG Helpdesk on Microsoft Foundry: private, Entra-only, customer-managed key, logged
 
-Companion to lessons **11.0 to 11.6** of *AI Security Engineer* (The Sec Guy), Azure stream. About 60 minutes,
+> **Folder name:** this is Module 2 of *AI Security on Azure*. The folder keeps its original number (`labs/az11`), and the checks print IDs that start with `AZ11-`, so your files match the lab videos.
+
+Companion to lessons **2.0 to 2.6** of *AI Security on Azure* (The Sec Guy). About 60 minutes,
 **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Azure subscription
 needed**. An optional Step 8 builds the same setup in your own subscription with Terraform; that one costs money while
 it runs, so read its cost section first.

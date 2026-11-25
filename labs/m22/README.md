@@ -1,5 +1,7 @@
 # Lab M15.5: rebuild an email agent as dual LLM + taint-checked sinks, scored with AgentDojo
 
+> **Folder name:** this is Module 15 of *AI Security Engineer*. The folder keeps its original number (`labs/m22`), so your files and the lab videos match.
+
 Companion to lesson **15.5** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 40 minutes,
 $0, all on your laptop, all on fake data. Nothing leaves this folder: no model API, no real mail, no network.
 

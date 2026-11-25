@@ -1,5 +1,7 @@
 # Lab M12: Capstone. Secure the TSG Helpdesk end to end
 
+> **Folder name:** this is Module 12 of *AI Security Engineer*. The folder keeps its original number (`labs/m19`), so your files and the lab videos match.
+
 The graded capstone of *AI Security Engineer* (The Sec Guy), lessons **12.1 to 12.3**: 12.1 is the brief and
 rubric, 12.2 walks through Parts 0 to 4 and 12.3 through Parts 5 to 8. You get one realistic,
 deliberately vulnerable AI system and do the whole job on it: threat-model it, attack it, fix it, prove the fixes

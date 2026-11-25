@@ -1,6 +1,8 @@
 # Lab M6: a private endpoint for an open model on Azure Machine Learning
 
-Companion to lessons **15.0 to 15.5** of *AI Security Engineer* (The Sec Guy), Azure stream. About 70 minutes for
+> **Folder name:** this is Module 6 of *AI Security on Azure*. The folder keeps its original number (`labs/az15`), and the checks print IDs that start with `AZ15-`, so your files match the lab videos.
+
+Companion to lessons **6.0 to 6.5** of *AI Security on Azure* (The Sec Guy). About 70 minutes for
 Steps 1 to 8, **$0**, all on your laptop: **Python 3.11+ only**, no packages, no Azure subscription, no model download.
 Step 9 is optional and **costs money every hour**: [`GUIDED-BUILD.md`](GUIDED-BUILD.md) builds a private endpoint for
 an open model in **your own** sandbox subscription, with an auto-teardown timer created before the endpoint.

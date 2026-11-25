@@ -1,6 +1,8 @@
 # Lab M1: find the AI permission, API key and cost mistakes in a Google Cloud setup, fix them, then hunt LLMjacking in Cloud Audit Logs
 
-Companion to lessons **10.3, 10.4 and 10.5** of *AI Security Engineer* (The Sec Guy), Google Cloud stream. About 60
+> **Folder name:** this is Module 1 of *AI Security on Google Cloud*. The folder keeps its original number (`labs/gc10`), and the checks print IDs that start with `GC10-`, so your files match the lab videos.
+
+Companion to lessons **1.3, 1.4 and 1.5** of *AI Security on Google Cloud* (The Sec Guy). About 60
 minutes, **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Google Cloud
 account needed**. An optional last step runs the same ideas in your own Free Trial project.
 

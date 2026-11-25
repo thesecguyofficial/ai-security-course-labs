@@ -1,6 +1,8 @@
 # Lab M4: port the TSG Helpdesk's RAG and agent to Google Cloud without losing a single control
 
-Companion to lessons **13.0 to 13.3** of *AI Security Engineer* (The Sec Guy), Google Cloud stream. About 40 to 60
+> **Folder name:** this is Module 4 of *AI Security on Google Cloud*. The folder keeps its original number (`labs/gc13`), and the checks print IDs that start with `GC13-`, so your files match the lab videos.
+
+Companion to lessons **4.0 to 4.3** of *AI Security on Google Cloud* (The Sec Guy). About 40 to 60
 minutes, **$0**, all on your laptop. **Nothing to install** for the main lab (Python standard library only) and **no
 Google Cloud account needed**. Two optional extras: run the same agent on the **real ADK runtime** offline (one
 `pip install`), and build it in your own project with `GUIDED-BUILD.md` (RAG Engine, ADK, Model Armor; cost and

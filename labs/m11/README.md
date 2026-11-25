@@ -1,6 +1,8 @@
 # Lab M2: review TSG Helpdesk's Bedrock Terraform before it ships, then deploy the hardened version
 
-Companion to lessons **11.1 to 11.6** of *AI Security Engineer* (The Sec Guy). About 60 minutes for Steps 1 to 6,
+> **Folder name:** this is Module 2 of *AI Security on AWS*. The folder keeps its original number (`labs/m11`), and the checks print IDs that start with `M11-`, so your files match the lab videos.
+
+Companion to lessons **2.1 to 2.6** of *AI Security on AWS* (The Sec Guy). About 60 minutes for Steps 1 to 6,
 **$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no Terraform. Step 7 is optional: it
 deploys the hardened Helpdesk into **your own** sandbox account with Terraform, costs roughly $0.02 an hour while it
 runs, and ends with `make down`.

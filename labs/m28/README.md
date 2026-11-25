@@ -1,5 +1,7 @@
 # Lab M21.4: invocation logs, a redaction pipeline, Macie, two KMS keys, retention
 
+> **Folder name:** this is Module 21 of *AI Security Engineer*. The folder keeps its original number (`labs/m28`), so your files and the lab videos match.
+
 Companion to lesson **21.4** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track), with pieces of 21.1
 (vectors in logs) and 21.3 (deletion). About 45 minutes, $0, all on your laptop, all on fake data. Nothing leaves this
 folder: no network after setup (setup installs one package), no AWS account, no model.

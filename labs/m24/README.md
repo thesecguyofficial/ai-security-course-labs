@@ -1,5 +1,7 @@
 # Lab M17: trace a recorded multi-agent attack, then build the containment that holds it
 
+> **Folder name:** this is Module 17 of *AI Security Engineer*. The folder keeps its original number (`labs/m24`), so your files and the lab videos match.
+
 Companion to lessons **17.1 to 17.5** of *AI Security Engineer* (The Sec Guy). About 45 minutes, **$0**, all on
 your laptop: **Python 3.11+ only**, no packages, no network, no model download. Nothing in this lab runs the attack
 or calls out anywhere. The attack is data: a run we wrote by hand, which the lab calls the recording.

@@ -1,5 +1,7 @@
 # Lab M16: investigate a scripted AI-driven attack trace, then write the defense that catches it
 
+> **Folder name:** this is Module 16 of *AI Security Engineer*. The folder keeps its original number (`labs/m23`), so your files and the lab videos match.
+
 Companion to lessons **16.1 to 16.5** of *AI Security Engineer* (The Sec Guy). About 45 minutes, **$0**, all on
 your laptop: **Python 3.11+ only**, no packages, no network, no model download. Nothing in this lab runs the attack
 or calls out anywhere. The attack is a scripted trace: data files we wrote by hand.

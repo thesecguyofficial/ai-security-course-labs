@@ -1,5 +1,7 @@
 # Lab M11: run an AI risk assessment on TSG Helpdesk and build the evidence pack
 
+> **Folder name:** this is Module 11 of *AI Security Engineer*. The folder keeps its original number (`labs/m18`), so your files and the lab videos match.
+
 Companion to lessons **11.0 to 11.4** of *AI Security Engineer* (The Sec Guy). About 75 minutes, **$0**, all on your
 laptop: **Python 3.11+ only**, no packages, no model, no cloud account, no network.
 

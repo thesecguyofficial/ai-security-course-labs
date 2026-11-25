@@ -1,5 +1,7 @@
 # Lab M19: scan and lock down a self-hosted vLLM and Ollama stack, and isolate the prefix cache per tenant
 
+> **Folder name:** this is Module 19 of *AI Security Engineer*. The folder keeps its original number (`labs/m26`), so your files and the lab videos match.
+
 Companion to lessons **19.0 to 19.5** of *AI Security Engineer* (The Sec Guy). About 45 minutes, **$0**, all on your
 laptop: **Python 3.11+** and one pinned package (PyYAML) in this folder's own `.venv`. No GPU, no Docker, no model
 download, and no network after setup (setup installs PyYAML once): nothing here starts a container or talks to

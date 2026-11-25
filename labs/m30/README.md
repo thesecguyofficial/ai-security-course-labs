@@ -1,5 +1,7 @@
 # Lab M23: CI fails when an agent's injection resistance drops
 
+> **Folder name:** this is Module 23 of *AI Security Engineer*. The folder keeps its original number (`labs/m30`), so your files and the lab videos match.
+
 Companion to lesson **23.3** of *AI Security Engineer* (The Sec Guy). About 30 minutes, $0, on your laptop. Step 8
 (GitHub Actions) uses your own fork of this repository; standard GitHub-hosted runners are free for public
 repositories.

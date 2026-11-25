@@ -1,5 +1,7 @@
 # Lab M25: Advanced capstone. Design, attack and defend a multi-agent system
 
+> **Folder name:** this is Module 25 of *AI Security Engineer*. The folder keeps its original number (`labs/m32`), so your files and the lab videos match.
+
 The graded advanced capstone of *AI Security Engineer* (The Sec Guy), lesson **25.1**. You get one realistic,
 deliberately vulnerable **multi-agent** system and do the whole job on it: threat-model it, attack it across the
 hand-offs between agents, fix it with controls outside the model, prove the fixes with security evals in CI, write

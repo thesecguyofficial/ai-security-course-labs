@@ -1,6 +1,8 @@
 # Lab M4: port the TSG Helpdesk RAG + agent to Azure AI Search, Foundry IQ and Foundry Agent Service without losing a single control
 
-Companion to lessons **13.0 to 13.3** of *AI Security Engineer* (The Sec Guy), Azure stream. About 45 minutes,
+> **Folder name:** this is Module 4 of *AI Security on Azure*. The folder keeps its original number (`labs/az13`), and the checks print IDs that start with `AZ13-`, so your files match the lab videos.
+
+Companion to lessons **4.0 to 4.3** of *AI Security on Azure* (The Sec Guy). About 45 minutes,
 **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Azure subscription
 needed**. An optional guided build ([GUIDED-BUILD.md](GUIDED-BUILD.md)) makes the real thing in your own
 subscription: a Free-tier search index with per-user permissions, a Foundry IQ knowledge base and a prompt agent.

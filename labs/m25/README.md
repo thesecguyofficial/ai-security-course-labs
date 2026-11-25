@@ -1,5 +1,7 @@
 # Lab M18.6: sign in CI, verify at deploy, fail closed, and gate the quantized file
 
+> **Folder name:** this is Module 18 of *AI Security Engineer*. The folder keeps its original number (`labs/m25`), so your files and the lab videos match.
+
 Companion to lesson **18.6** of *AI Security Engineer* (The Sec Guy), Part 5 (advanced track). About 45 minutes,
 $0, all on your laptop. Nothing leaves this folder: the signing key is a local lab key, so nothing goes to Sigstore,
 no model is downloaded, and the "SageMaker AI registry" is a local twin. The guided build at the end is optional and

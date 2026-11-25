@@ -1,6 +1,8 @@
 # Lab M3: attack the TSG Helpdesk with and without Model Armor, and measure it honestly
 
-Companion to lessons **12.1 to 12.5** of *AI Security Engineer* (The Sec Guy), Google Cloud stream. About 30 to 45
+> **Folder name:** this is Module 3 of *AI Security on Google Cloud*. The folder keeps its original number (`labs/gc12`), and the checks print IDs that start with `GC12-`, so your files match the lab videos.
+
+Companion to lessons **3.1 to 3.5** of *AI Security on Google Cloud* (The Sec Guy). About 30 to 45
 minutes, **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Google Cloud
 account needed**. An optional last step deploys Model Armor in your own project with Terraform and runs the same
 suite against the real service, with the cost printed first and a two-command teardown.

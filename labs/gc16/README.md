@@ -1,6 +1,8 @@
 # Lab M7: build the detections, run the attack simulator, catch it, write the incident report
 
-Companion to lessons **16.0 to 16.6** of the Google Cloud stream of *AI Security Engineer* (The Sec Guy). About 75
+> **Folder name:** this is Module 7 of *AI Security on Google Cloud*. The folder keeps its original number (`labs/gc16`), so your files and the lab videos match.
+
+Companion to lessons **7.0 to 7.6** of the Google Cloud stream of *AI Security on Google Cloud* (The Sec Guy). About 75
 minutes for Steps 1 to 9, plus about 15 for Step 1b if you do it, **$0**, all on your laptop: **Python 3.11+ only**, no packages, no Google Cloud account, no
 network. Step 10 is optional: [`GUIDED-BUILD.md`](GUIDED-BUILD.md) turns on Data Access audit logs, Model Armor
 logging and three alerts in **your own** sandbox project, and ends with teardown.

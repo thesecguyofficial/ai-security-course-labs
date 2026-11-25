@@ -1,6 +1,8 @@
 # Lab M3: attack the TSG Helpdesk with and without Foundry guardrails, and measure it honestly
 
-Companion to lessons **12.0 to 12.5** of *AI Security Engineer* (The Sec Guy), Azure stream. About 60 minutes,
+> **Folder name:** this is Module 3 of *AI Security on Azure*. The folder keeps its original number (`labs/az12`), and the checks print IDs that start with `AZ12-`, so your files match the lab videos.
+
+Companion to lessons **3.0 to 3.5** of *AI Security on Azure* (The Sec Guy). About 60 minutes,
 **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Azure subscription
 needed**. An optional Step 9 is a **guided build** in your own subscription: a Content Safety resource, a custom blocklist and a
 Foundry guardrail on a `helpdesk-chat` deployment, by portal and CLI, with example requests and how to read every filter

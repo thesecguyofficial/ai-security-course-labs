@@ -1,6 +1,8 @@
 # Lab M4: port the local RAG + agent to Bedrock without losing a single control
 
-Companion to lessons **13.0 to 13.3** of *AI Security Engineer* (The Sec Guy). About 60 minutes for Steps 1 to 8,
+> **Folder name:** this is Module 4 of *AI Security on AWS*. The folder keeps its original number (`labs/m13`), and the checks print IDs that start with `M13-`, so your files match the lab videos.
+
+Companion to lessons **4.0 to 4.3** of *AI Security on AWS* (The Sec Guy). About 60 minutes for Steps 1 to 8,
 **$0**, all on your laptop: **Python 3.11+ only**, no packages, no AWS account, no model download. Step 9 is optional:
 it builds the knowledge base (and, if you want, the agent) in **your own** sandbox account, with
 [`GUIDED-BUILD.md`](GUIDED-BUILD.md) walking you through every request, and ends with teardown.

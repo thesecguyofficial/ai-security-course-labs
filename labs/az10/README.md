@@ -1,6 +1,8 @@
 # Lab M1: find the risky Azure AI settings, cut the keys and roles, allow-list models, then hunt LLMjacking
 
-Companion to lessons **10.2 to 10.5** of *AI Security Engineer* (The Sec Guy), Azure stream. About 60 minutes,
+> **Folder name:** this is Module 1 of *AI Security on Azure*. The folder keeps its original number (`labs/az10`), and the checks print IDs that start with `AZ10-`, so your files match the lab videos.
+
+Companion to lessons **1.2 to 1.5** of *AI Security on Azure* (The Sec Guy). About 60 minutes,
 **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Azure subscription
 needed**. An optional last step repeats the key and policy tests in your own Azure subscription, also at an expected
 cost of $0.

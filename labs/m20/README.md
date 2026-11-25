@@ -1,5 +1,7 @@
 # M13 lab: agent identity and delegation
 
+> **Folder name:** this is Module 13 of *AI Security Engineer*. The folder keeps its original number (`labs/m20`), so your files and the lab videos match.
+
 Three agents pass a user's request along a chain. You attack the chain eight ways, then watch a hardened version
 shrink the token at every hop and refuse a replay. Lessons 13.5 and 13.6 of the course.
 

@@ -1,5 +1,7 @@
 # Lab M10.4: promptfoo in GitHub Actions against the TSG Helpdesk
 
+> **Folder name:** this is Module 10 of *AI Security Engineer*. The folder keeps its original number (`labs/m17`), so your files and the lab videos match.
+
 Companion to lesson **10.4** of *AI Security Engineer* (The Sec Guy). About 45 minutes for Steps 1 to 7, plus about 10
 for Step 1b and 15 for Step 1c if you do them. $0, on your laptop. The GitHub part (Step 6) uses a new repository of
 your own (not a fork, so nothing you do can reach the course's repository); standard GitHub-hosted runners are free

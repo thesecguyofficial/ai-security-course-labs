@@ -1,6 +1,8 @@
 # Lab M5: deploy the TSG Helpdesk as a Foundry hosted agent, then try to hijack it
 
-Companion to lessons **14.0 to 14.8** of *AI Security Engineer* (The Sec Guy), Azure stream. About 50 minutes,
+> **Folder name:** this is Module 5 of *AI Security on Azure*. The folder keeps its original number (`labs/az14`), and the checks print IDs that start with `AZ14-`, so your files match the lab videos.
+
+Companion to lessons **5.0 to 5.8** of *AI Security on Azure* (The Sec Guy). About 50 minutes,
 **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Azure subscription
 needed**. An optional guided build ([GUIDED-BUILD.md](GUIDED-BUILD.md)) deploys the real thing in your own
 subscription: a hosted agent whose identity reads one blob container, your own MCP server behind a toolbox, approval

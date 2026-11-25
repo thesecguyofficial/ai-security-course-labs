@@ -1,6 +1,8 @@
 # Lab M2: deploy the TSG Helpdesk on Gemini Enterprise Agent Platform: private, least privilege, logged, CMEK
 
-Companion to lessons **11.1 to 11.6** of *AI Security Engineer* (The Sec Guy), Google Cloud stream. About 35 to 50
+> **Folder name:** this is Module 2 of *AI Security on Google Cloud*. The folder keeps its original number (`labs/gc11`), and the checks print IDs that start with `GC11-`, so your files match the lab videos.
+
+Companion to lessons **2.1 to 2.6** of *AI Security on Google Cloud* (The Sec Guy). About 35 to 50
 minutes, **$0**, all on your laptop. **Nothing to install** (Python standard library only) and **no Google Cloud
 account needed**. An optional last step deploys the hardened foundation with Terraform in your own project, with the
 cost printed first and a one-command teardown.

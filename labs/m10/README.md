@@ -1,6 +1,8 @@
 # Lab M1: find the over-broad AI permissions, write the SCPs that stop LLMjacking, then hunt it in CloudTrail
 
-Companion to lessons **10.3, 10.4 and 10.5** of *AI Security Engineer* (The Sec Guy). About 60 minutes, **$0**, all on
+> **Folder name:** this is Module 1 of *AI Security on AWS*. The folder keeps its original number (`labs/m10`), and the checks print IDs that start with `M10-`, so your files match the lab videos.
+
+Companion to lessons **1.3, 1.4 and 1.5** of *AI Security on AWS* (The Sec Guy). About 60 minutes, **$0**, all on
 your laptop. **Nothing to install** (Python standard library only) and **no AWS account needed**. An optional last
 step runs the same policies through free AWS tools in your own sandbox account.
 
